@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K@si Web | Barber Admin</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --admin-teal: #008080;
+            --admin-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-muted: #b0b0b0;
+        }
+
+        body { 
+            background-color: var(--admin-bg); 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+
+        .dashboard-container { 
+            padding: 30px 15px; 
+            max-width: 900px; 
+            margin: auto; 
+        }
+
+        .status-control {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status-control h3 { margin: 0; font-size: 1rem; }
+        
+        .status-select {
+            background: #252525;
+            color: white;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--admin-teal);
+        }
+
+        .stat-card h3 { margin: 0; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
+        .stat-card p { margin: 5px 0 0; font-size: 1.8rem; font-weight: bold; }
+
+        .table-wrapper {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        
+        th { 
+            background-color: #252525; 
+            padding: 15px; 
+            font-size: 0.9rem; 
+            color: var(--admin-teal); 
+        }
+
+        td { padding: 15px; border-bottom: 1px solid #333; font-size: 0.95rem; }
+
+        tr:last-child td { border-bottom: none; }
+
+        .status-btn { 
+            background: var(--admin-teal); 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .status-btn:hover { background: #006666; transform: translateY(-2px); }
+
+        .clear-btn { 
+            background: transparent; 
+            color: #ff4757; 
+            border: 1px solid #ff4757; 
+            padding: 10px 20px; 
+            margin-top: 25px; 
+            cursor: pointer; 
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .clear-btn:hover { background: #ff4757; color: white; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            table { font-size: 0.85rem; }
+            th, td { padding: 12px 8px; }
+            .stat-card p { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <header style="margin-bottom: 30px;">
+        <h1 style="margin: 0;">Barber Dashboard</h1>
+        <p style="color: var(--text-muted);">Manage your hustle for today</p>
+    </header>
+
+    <div class="status-control fade-in">
+        <h3><i class='bx bx-store'></i> Shop Status</h3>
+        <select id="shopStatusSelect" class="status-select">
+            <option value="Open">🟢 Open Now</option>
+            <option value="Busy">🔴 Busy</option>
+            <option value="Closed">⚫ Closed</option>
+        </select>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-card">
+            <h3>Total Bookings</h3>
+            <p id="totalCount">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Next Appointment</h3>
+            <p id="nextTime">--:--</p>
+        </div>
+        <div class="stat-card">
+            <h3>Est. Revenue</h3>
+            <p id="totalRevenue">R0</p>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Time</th>
+                    <th>Service</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <button class="clear-btn" onclick="clearBookings()">Clear All Appointments</button>
+    <a href="index.html" class="back-link">← Logout & Return Home</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const isOwner = localStorage.getItem('isOwner');
+    if (isOwner !== 'true') {
+        alert("Access Denied. Owners only.");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    const statusSelect = document.getElementById('shopStatusSelect');
+    const currentStatus = localStorage.getItem('shopStatus') || 'Open';
+    statusSelect.value = currentStatus;
+    
+    statusSelect.addEventListener('change', () => {
+        localStorage.setItem('shopStatus', statusSelect.value);
+        alert(`Shop status updated to: ${statusSelect.value}`);
+    });
+
+    loadBookings();
+});
+
+function loadBookings() {
+    const tableBody = document.getElementById("tableBody");
+    const totalCount = document.getElementById("totalCount");
+    const nextTime = document.getElementById("nextTime");
+    const totalRevenue = document.getElementById("totalRevenue");
+    
+    const bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+
+    bookings.sort((a, b) => a.time.localeCompare(b.time));
+
+    totalCount.innerText = bookings.length;
+    nextTime.innerText = bookings.length > 0 ? bookings[0].time : "--:--";
+    
+    let revenue = 0;
+    bookings.forEach(b => {
+        const price = parseInt(b.service.match(/R(\d+)/)?.[1] || 0);
+        revenue += price;
+    });
+    totalRevenue.innerText = `R${revenue}`;
+
+    tableBody.innerHTML = ""; 
+
+    if (bookings.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align:center; padding: 40px; color: #666;">
+                    No incoming bookings. Relax, King! 👑
+                </td>
+            </tr>`;
+        return;
+    }
+
+    bookings.forEach((b, index) => {
+        tableBody.innerHTML += `
+            <tr>
+                <td style="font-weight: bold;">${b.name}</td>
+                <td><span style="background: #333; padding: 4px 8px; border-radius: 5px;">${b.time}</span></td>
+                <td>${b.service}</td>
+                <td><button class="status-btn" onclick="removeOne(${index})">Done</button></td>
+            </tr>
+        `;
+    });
+}
+
+function removeOne(index) {
+    let bookings = JSON.parse(localStorage.getItem("allBookings"));
+    bookings.splice(index, 1);
+    localStorage.setItem("allBookings", JSON.stringify(bookings));
+    loadBookings();
+}
+
+function clearBookings() {
+    if(confirm("Are you sure you want to clear the whole list?")) {
+        localStorage.removeItem("allBookings");
+        loadBookings();
+    }
+}
+</script>
+</body>
+</html>
