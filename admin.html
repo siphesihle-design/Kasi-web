@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K@si Web | Admin Dashboard</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="header-title">Admin Dashboard</h1>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <h2>Bookings</h2>
+                <button class="secondary-btn" id="logoutBtn" style="width:auto; padding:8px 16px;">
+                    <i class='bx bx-log-out'></i> Logout
+                </button>
+            </div>
+            <p class="tagline" id="bookingCount">Checking access...</p>
+            
+            <div id="bookingsList" class="bookings-list">
+            </div>
+        </div>
+
+        <div class="nav-grid">
+            <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+            <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
+            <a href="admin.html" class="nav-item active"><i class='bx bx-grid-alt'></i><span>Admin</span></a>
+        </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAuth, onAuthStateChanged, signOut } 
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+        authDomain: "kasi-web-d073f.firebaseapp.com",
+        projectId: "kasi-web-d073f",
+        storageBucket: "kasi-web-d073f.appspot.com",
+        messagingSenderId: "471544855566",
+        appId: "1:471544855566:web:6047dd0119c5e305b6905f",
+        measurementId: "G-L6JYY1G97T"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          document.getElementById('bookingCount').textContent = 'Not logged in. Redirecting...';
+          setTimeout(() => window.location.href = 'index.html', 1200);
+        } else {
+          loadBookings();
+        }
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        signOut(auth).then(() => window.location.href = 'index.html');
+      });
+
+      function loadBookings(){
+        const bookings = JSON.parse(localStorage.getItem('kasiBookings')) || [];
+        const listEl = document.getElementById('bookingsList');
+        const countEl = document.getElementById('bookingCount');
+        
+        countEl.textContent = `${bookings.length} total booking${bookings.length !== 1 ? 's' : ''}`;
+        
+        if(bookings.length === 0){
+          listEl.innerHTML = '<p style="text-align:center; color:#888;">No bookings yet. Make a booking on salons.html first.</p>';
+          return;
+        }
+        
+        bookings.sort((a, b) => b.id - a.id);
+        
+        listEl.innerHTML = bookings.map(booking => `
+          <div class="glass-card booking-item" style="padding:15px; margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+              <div>
+                <h3 style="margin:0 0 5px 0; font-size:1rem;">${booking.name}</h3>
+                <p style="margin:0; color:#008080; font-weight:600;">${booking.service}</p>
+                <p style="margin:5px 0; color:#aaa; font-size:0.85rem;">
+                  <i class='bx bx-store'></i> ${booking.salon}<br>
+                  <i class='bx bx-time'></i> ${booking.time} • ${booking.date}<br>
+                  <i class='bx bx-envelope'></i> ${booking.email}
+                </p>
+              </div>
+              <button onclick="deleteBooking(${booking.id})" class="secondary-btn" 
+                      style="width:auto; padding:6px 12px; color:#ff4757; border-color:#ff4757;">
+                <i class='bx bx-trash'></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      window.deleteBooking = function(id){
+        if(!confirm('Delete this booking?')) return;
+        let bookings = JSON.parse(localStorage.getItem('kasiBookings')) || [];
+        bookings = bookings.filter(b => b.id !== id);
+        localStorage.setItem('kasiBookings', JSON.stringify(bookings));
+        loadBookings();
+      }
+    </script>
+</body>
+</html>
