@@ -174,88 +174,62 @@
         </table>
     </div>
 
-    <button class="clear-btn" onclick="clearBookings()">Clear All Appointments</button>
-    <a href="index.html" class="back-link">← Logout & Return Home</a>
+    <button class="clear-btn" id="clearBtn">Clear All Appointments</button>
+    <button class="clear-btn" id="logoutBtn" style="background:#333; border-color:#555; color:#fff;">Logout</button>
+    <a href="index.html" class="back-link">← Return Home</a>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const isOwner = localStorage.getItem('isOwner');
-    if (isOwner !== 'true') {
-        alert("Access Denied. Owners only.");
-        window.location.href = 'index.html';
-        return;
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getDatabase, ref, get, set, remove, onValue } 
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+    authDomain: "kasi-web-d073f.firebaseapp.com",
+    projectId: "kasi-web-d073f",
+    storageBucket: "kasi-web-d073f.appspot.com",
+    messagingSenderId: "471544855566",
+    appId: "1:471544855566:web:6047dd0119c5e305b6905f",
+    measurementId: "G-L6JYY1G97T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  // Auth check + role check
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      alert('Login first');
+      window.location.href = 'index.html';
+      return;
     }
 
+    const roleSnap = await get(ref(db, 'users/' + user.uid));
+    const role = roleSnap.exists() ? roleSnap.val().role : 'client';
+
+    if (role !== 'salon_owner' && role !== 'admin') {
+      alert('Salon owner access only');
+      await signOut(auth);
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // User is authorized, start dashboard
+    initDashboard(user.uid);
+  });
+
+  function initDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
-    const currentStatus = localStorage.getItem('shopStatus') || 'Open';
-    statusSelect.value = currentStatus;
-    
-    statusSelect.addEventListener('change', () => {
-        localStorage.setItem('shopStatus', statusSelect.value);
-        alert(`Shop status updated to: ${statusSelect.value}`);
-    });
-
-    loadBookings();
-});
-
-function loadBookings() {
     const tableBody = document.getElementById("tableBody");
     const totalCount = document.getElementById("totalCount");
     const nextTime = document.getElementById("nextTime");
     const totalRevenue = document.getElementById("totalRevenue");
-    
-    const bookings = JSON.parse(localStorage.getItem("allBookings")) || [];
+    const clearBtn = document.getElementById("clearBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    bookings.sort((a, b) => a.time.localeCompare(b.time));
-
-    totalCount.innerText = bookings.length;
-    nextTime.innerText = bookings.length > 0 ? bookings[0].time : "--:--";
-    
-    let revenue = 0;
-    bookings.forEach(b => {
-        const price = parseInt(b.service.match(/R(\d+)/)?.[1] || 0);
-        revenue += price;
-    });
-    totalRevenue.innerText = `R${revenue}`;
-
-    tableBody.innerHTML = ""; 
-
-    if (bookings.length === 0) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="4" style="text-align:center; padding: 40px; color: #666;">
-                    No incoming bookings. Relax, King! 👑
-                </td>
-            </tr>`;
-        return;
-    }
-
-    bookings.forEach((b, index) => {
-        tableBody.innerHTML += `
-            <tr>
-                <td style="font-weight: bold;">${b.name}</td>
-                <td><span style="background: #333; padding: 4px 8px; border-radius: 5px;">${b.time}</span></td>
-                <td>${b.service}</td>
-                <td><button class="status-btn" onclick="removeOne(${index})">Done</button></td>
-            </tr>
-        `;
-    });
-}
-
-function removeOne(index) {
-    let bookings = JSON.parse(localStorage.getItem("allBookings"));
-    bookings.splice(index, 1);
-    localStorage.setItem("allBookings", JSON.stringify(bookings));
-    loadBookings();
-}
-
-function clearBookings() {
-    if(confirm("Are you sure you want to clear the whole list?")) {
-        localStorage.removeItem("allBookings");
-        loadBookings();
-    }
-}
-</script>
-</body>
-</html>
+    // Load shop status
