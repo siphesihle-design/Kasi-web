@@ -152,3 +152,132 @@ if (bookingForm) {
     }
   });
 }
+// Wait for Firebase to load
+const auth = window.firebaseAuth;
+const signIn = window.signIn;
+const signUp = window.signUp;
+const onAuthState = window.onAuthState;
+const logOut = window.logOut;
+
+// DOM elements
+const emailInput = document.getElementById("userEmail");
+const passInput = document.getElementById("userPass");
+const loginBtn = document.getElementById("mainLoginBtn");
+const signupBtn = document.getElementById("signupBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const adminBtn = document.getElementById("adminBtn");
+const authMsg = document.getElementById("authMsg");
+
+// 1. Handle Login
+loginBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passInput.value.trim();
+  
+  if (!email || !password) {
+    authMsg.textContent = "Enter email and password";
+    return;
+  }
+
+  try {
+    authMsg.textContent = "Logging in...";
+    const userCredential = await signIn(auth, email, password);
+    const user = userCredential.user;
+    
+    // Get role from Firestore
+    const role = await getUserRole(user.uid);
+    redirectByRole(role);
+  } catch (error) {
+    authMsg.textContent = error.message;
+  }
+});
+
+// 2. Handle Signup - defaults to client
+signupBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passInput.value.trim();
+  
+  if (!email || !password) {
+    authMsg.textContent = "Enter email and password";
+    return;
+  }
+
+  try {
+    authMsg.textContent = "Creating account...";
+    const userCredential = await signUp(auth, email, password);
+    const user = userCredential.user;
+
+    // Save user to Firestore with role = client
+    await fetch(`https://firestore.googleapis.com/v1/projects/kasi-web-d073f/databases/(default)/documents/users/${user.uid}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fields: {
+          email: { stringValue: email },
+          role: { stringValue: "client" },
+          createdAt: { timestampValue: new Date().toISOString() }
+        }
+      })
+    });
+
+    redirectByRole("client");
+  } catch (error) {
+    authMsg.textContent = error.message;
+  }
+});
+
+// 3. Handle Logout
+logoutBtn.addEventListener("click", async () => {
+  await logOut(auth);
+  location.reload();
+});
+
+// 4. Check auth state on page load
+onAuthState(auth, async (user) => {
+  if (user) {
+    // User logged in
+    loginBtn.style.display = "none";
+    signupBtn.style.display = "none";
+    logoutBtn.style.display = "inline-flex";
+    
+    const role = await getUserRole(user.uid);
+    
+    // Hide admin button if not admin
+    if (role !== "admin") {
+      adminBtn.style.display = "none";
+    }
+  } else {
+    // Not logged in
+    loginBtn.style.display = "inline-flex";
+    signupBtn.style.display = "inline-flex";
+    logoutBtn.style.display = "none";
+    adminBtn.style.display = "inline-flex";
+  }
+});
+
+// 5. Helper: Get user role from Firestore
+async function getUserRole(uid) {
+  try {
+    const res = await fetch(`https://firestore.googleapis.com/v1/projects/kasi-web-d073f/databases/(default)/documents/users/${uid}`);
+    if (!res.ok) return "client";
+    const data = await res.json();
+    return data.fields?.role?.stringValue || "client";
+  } catch {
+    return "client";
+  }
+}
+
+// 6. Helper: Redirect based on role
+function redirectByRole(role) {
+  if (role === "admin") {
+    window.location.href = "/admin.html";
+  } else if (role === "salon_owner") {
+    window.location.href = "/owners.html";
+  } else {
+    window.location.href = "/salons.html";
+  }
+}
+
+// 7. Admin button click
+adminBtn.addEventListener("click", () => {
+  window.location.href = "/admin.html";
+});
