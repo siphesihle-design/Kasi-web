@@ -27,6 +27,7 @@
     <main class="container">
         <div class="salon-list">
             
+            <!-- Salon 1 -->
             <div class="glass-card salon-card">
                 <div class="card-media">
                     <span id="status-vaal" class="status-badge">Open Now</span>
@@ -40,3 +41,116 @@
                     </div>
                     <p class="description">Specializing in clean fades, sharp lines, and beard grooming.</p>
                     <div class="feature-tags">
+                        <span><i class='bx bx-time'></i> 15 min wait</span>
+                        <span><i class='bx bx-map'></i> 0.5km</span>
+                    </div>
+                    <button type="button" class="primary-btn openBooking" 
+                            data-salon="Vaal Fresh Barbers"
+                            data-salon-uid="PASTE_OWNER_UID_HERE">
+                        Book Appointment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Salon 2 - Duplicate and change details -->
+            <div class="glass-card salon-card">
+                <div class="card-media">
+                    <span class="status-badge busy">Busy</span>
+                    <img src="D40B322.jpeg" alt="Sharp Cuts" class="salon-img">
+                    <div class="img-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2>Sharp Cuts</h2>
+                        <div class="rating"><i class='bx bxs-star'></i> 4.7</div>
+                    </div>
+                    <p class="description">Premium cuts and hot towel shaves.</p>
+                    <div class="feature-tags">
+                        <span><i class='bx bx-time'></i> 30 min wait</span>
+                        <span><i class='bx bx-map'></i> 1.2km</span>
+                    </div>
+                    <button type="button" class="primary-btn openBooking" 
+                            data-salon="Sharp Cuts"
+                            data-salon-uid="PASTE_OWNER_UID_HERE">
+                        Book Appointment
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Book Your Cut</h3>
+                <button class="close-btn"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="bookingForm" class="form-group">
+                <input type="text" id="custName" placeholder="Your Name" required>
+                <select id="serviceType" required>
+                    <option value="">Select Service</option>
+                    <option value="Fade R150">Fade - R150</option>
+                    <option value="Beard Trim R80">Beard Trim - R80</option>
+                    <option value="Full Cut R200">Full Cut - R200</option>
+                    <option value="Line Up R50">Line Up - R50</option>
+                </select>
+                <input type="time" id="custTime" required>
+                <button type="submit" class="primary-btn">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Init -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAuth, onAuthStateChanged, signOut } 
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getDatabase, ref, get, set, push, remove, onValue }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+        authDomain: "kasi-web-d073f.firebaseapp.com",
+        projectId: "kasi-web-d073f",
+        storageBucket: "kasi-web-d073f.appspot.com",
+        messagingSenderId: "471544855566",
+        appId: "1:471544855566:web:6047dd0119c5e305b6905f",
+        measurementId: "G-L6JYY1G97T"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      
+      window.firebaseAuth = getAuth(app);
+      window.firebaseDB = getDatabase(app);
+      window.onAuthState = onAuthStateChanged;
+      window.logOut = signOut;
+      window.dbRef = ref;
+      window.dbGet = get;
+      window.dbSet = set;
+      window.push = push;
+      window.remove = remove;
+      window.onValue = onValue;
+    </script>
+    <script src="script.js"></script>
+
+    <script>
+      // Live time in header
+      function updateTime() {
+        const now = new Date();
+        const timeEl = document.getElementById('liveTime');
+        if (timeEl) {
+          timeEl.textContent = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: false 
+          });
+        }
+      }
+      updateTime();
+      setInterval(updateTime, 60000);
+    </script>
+</body>
+</html>
