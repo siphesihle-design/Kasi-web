@@ -179,12 +179,11 @@
     <a href="index.html" class="back-link">← Return Home</a>
 </div>
 
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } 
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getDatabase, ref, get, set, remove, onValue } 
+  import { getDatabase, ref, get, set, push, remove, onValue }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
   const firebaseConfig = {
@@ -198,38 +197,18 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-
-  // Auth check + role check
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      alert('Login first');
-      window.location.href = 'index.html';
-      return;
-    }
-
-    const roleSnap = await get(ref(db, 'users/' + user.uid));
-    const role = roleSnap.exists() ? roleSnap.val().role : 'client';
-
-    if (role !== 'salon_owner' && role !== 'admin') {
-      alert('Salon owner access only');
-      await signOut(auth);
-      window.location.href = 'index.html';
-      return;
-    }
-
-    // User is authorized, start dashboard
-    initDashboard(user.uid);
-  });
-
-  function initDashboard(ownerUid) {
-    const statusSelect = document.getElementById('shopStatusSelect');
-    const tableBody = document.getElementById("tableBody");
-    const totalCount = document.getElementById("totalCount");
-    const nextTime = document.getElementById("nextTime");
-    const totalRevenue = document.getElementById("totalRevenue");
-    const clearBtn = document.getElementById("clearBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    // Load shop status
+  
+  window.firebaseAuth = getAuth(app);
+  window.firebaseDB = getDatabase(app);
+  window.onAuthState = onAuthStateChanged;
+  window.logOut = signOut;
+  window.dbRef = ref;
+  window.dbGet = get;
+  window.dbSet = set;
+  window.push = push;
+  window.remove = remove;
+  window.onValue = onValue;
+</script>
+<script src="script.js"></script>
+</body>
+</html>
