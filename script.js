@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Stop if Firebase not loaded
   if (!window.firebaseAuth) return;
 
   const auth = window.firebaseAuth;
@@ -26,7 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const remove = window.remove;
   const onValue = window.onValue;
 
-  // 3. DOM elements
+  // 2. Admin credentials - only this email/pass can access admin.html
+  const ADMIN_EMAIL = 'admin@kasiweb.co.za';
+  const ADMIN_PASSWORD = 'Kasi2026';
+  
+  // 3. Owner emails for salon owners
+  const OWNER_EMAILS = ['owner1@kasiweb.com', 'owner2@kasiweb.com'];
+
   const emailInput = document.getElementById('userEmail');
   const passInput = document.getElementById('userPass');
   const loginBtn = document.getElementById('mainLoginBtn');
@@ -35,20 +40,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
-  // 4. Login
+  // Helper: decide role based on email
+  function getRoleByEmail(email) {
+    const e = email.toLowerCase();
+    if (e === ADMIN_EMAIL) return 'admin';
+    if (OWNER_EMAILS.includes(e)) return 'salon_owner';
+    return 'client';
+  }
+
+  // Helper: ensure user record exists with correct role
+  async function ensureUserRecord(user) {
+    const userRef = dbRef(db, 'users/' + user.uid);
+    const snap = await dbGet(userRef);
+
+    if (!snap.exists()) {
+      const role = getRoleByEmail(user.email);
+      await dbSet(userRef, {
+        email: user.email,
+        role,
+        createdAt: Date.now()
+      });
+      return role;
+    }
+
+    return snap.val().role || 'client';
+  }
+
+  // 4. Login - special check for admin
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value.trim();
-      if (!email ||!password) {
+      if (!email || !password) {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
 
       try {
         if (authMsg) authMsg.textContent = 'Logging in...';
+        
+        // Check if this is admin login attempt
+        if (email.toLowerCase() === ADMIN_EMAIL) {
+          if (password !== ADMIN_PASSWORD) {
+            if (authMsg) authMsg.textContent = 'Invalid admin credentials';
+            return;
+          }
+        }
+
         const cred = await signIn(auth, email, password);
-        const role = await getRole(cred.user.uid);
+        const role = await ensureUserRecord(cred.user);
+        
+        // Double check admin role
+        if (email.toLowerCase() === ADMIN_EMAIL && role !== 'admin') {
+          await dbSet(dbRef(db, 'users/' + cred.user.uid + '/role'), 'admin');
+        }
+        
         redirectByRole(role);
       } catch (err) {
         if (authMsg) authMsg.textContent = err.message;
@@ -56,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Signup
+  // 5. Signup - block admin email from signing up
   if (signupBtn) {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -66,15 +112,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      if (email.toLowerCase() === ADMIN_EMAIL) {
+        if (authMsg) authMsg.textContent = 'Cannot signup with admin email';
+        return;
+      }
+
       try {
         if (authMsg) authMsg.textContent = 'Creating account...';
         const cred = await signUp(auth, email, password);
+        const role = getRoleByEmail(email);
         await dbSet(dbRef(db, 'users/' + cred.user.uid), {
           email,
-          role: 'client',
+          role,
           createdAt: Date.now()
         });
-        redirectByRole('client');
+        redirectByRole(role);
       } catch (err) {
         if (authMsg) authMsg.textContent = err.message;
       }
@@ -89,66 +141,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. Admin login button on index.html
-  if (adminBtn) {
-    adminBtn.addEventListener('click', async () => {
-      const email = prompt('Admin email:');
-      if (!email) return;
-      const pass = prompt('Admin password:');
-      if (!pass) return;
-      try {
-        const cred = await signIn(auth, email, pass);
-        const role = await getRole(cred.user.uid);
-        if (role === 'admin') window.location.href = 'admin.html';
-        else {
-          alert('Not an admin');
-          await logOut(auth);
-        }
-      } catch (err) {
-        alert(err.message);
-      }
-    });
-  }
+  // 7. Hide admin button - not needed
+  if (adminBtn) adminBtn.style.display = 'none';
 
-  // 8. Auth state watcher - runs on all pages
+  // 8. Auth state watcher
   onAuthState(auth, async (user) => {
     const page = window.location.pathname.split('/').pop();
     const onLoginPage = page === 'index.html' || page === '';
 
     if (user) {
-      const role = await getRole(user.uid);
+      const role = await ensureUserRecord(user);
 
-      // Update UI
       if (loginBtn) loginBtn.style.display = 'none';
       if (signupBtn) signupBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
-      if (role!== 'admin' && adminBtn) adminBtn.style.display = 'none';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
-      // Redirect from login page
       if (onLoginPage) redirectByRole(role);
 
       // Protect pages
-      if (page === 'admin.html' && role!== 'admin') {
+      if (page === 'admin.html' && user.email.toLowerCase() !== ADMIN_EMAIL) {
         alert('Admin access only');
         await logOut(auth);
         window.location.href = 'index.html';
         return;
       }
-      if (page === 'owners.html' && role!== 'salon_owner' && role!== 'admin') {
+      if (page === 'owners.html' && role !== 'salon_owner' && role !== 'admin') {
         alert('Salon owner access only');
         await logOut(auth);
         window.location.href = 'index.html';
         return;
       }
 
-      // Load page-specific data
       if (page === 'admin.html') loadAdminBookings();
       if (page === 'owners.html') loadOwnerDashboard(user.uid);
       if (page === 'salons.html') initBookingModal(user);
 
     } else {
-      // Not logged in - redirect away from protected pages
       if (page === 'admin.html' || page === 'owners.html' || page === 'salons.html') {
         window.location.href = 'index.html';
       }
@@ -166,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const bookings = [];
       snap.forEach(child => bookings.push({ id: child.key,...child.val() }));
 
-      countEl.textContent = `${bookings.length} total booking${bookings.length!== 1? 's' : ''}`;
+      countEl.textContent = `${bookings.length} total booking${bookings.length !== 1 ? 's' : ''}`;
 
       if (bookings.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color:#888;">No bookings yet.</p>';
@@ -214,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearBtn = document.getElementById("clearBtn");
     if (!tableBody) return;
 
-    // Shop status
     const statusRef = dbRef(db, 'shopStatus/' + ownerUid);
     onValue(statusRef, (snap) => {
       if (snap.exists()) statusSelect.value = snap.val();
@@ -224,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
       alert(`Shop status updated to: ${statusSelect.value}`);
     });
 
-    // Bookings
     const bookingsRef = dbRef(db, 'bookings');
     onValue(bookingsRef, (snap) => {
       const bookings = [];
@@ -234,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
       myBookings.sort((a, b) => a.time.localeCompare(b.time));
 
       totalCount.textContent = myBookings.length;
-      nextTime.textContent = myBookings.length > 0? myBookings[0].time : '--:--';
+      nextTime.textContent = myBookings.length > 0 ? myBookings[0].time : '--:--';
 
       let revenue = 0;
       myBookings.forEach(b => {
@@ -262,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Clear all bookings for this owner
     clearBtn?.addEventListener('click', () => {
       if (confirm('Clear all your bookings?')) {
         onValue(dbRef(db, 'bookings'), (snap) => {
@@ -308,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
 
-      if (!name ||!time ||!service) {
+      if (!name || !time || !service) {
         alert('Fill all fields');
         return;
       }
@@ -320,36 +346,3 @@ document.addEventListener('DOMContentLoaded', () => {
         salon: selectedSalon,
         salonUid: selectedSalonUid,
         customerUid: user.uid,
-        email: user.email,
-        date: new Date().toISOString().split('T')[0],
-        createdAt: Date.now()
-      };
-
-      try {
-        await dbSet(push(dbRef(db, 'bookings')), booking);
-        alert('Booking confirmed!');
-        modal.classList.remove('active');
-        form.reset();
-      } catch (err) {
-        alert('Error saving booking: ' + err.message);
-      }
-    });
-  }
-
-  // 12. Helpers
-  async function getRole(uid) {
-    try {
-      const snap = await dbGet(dbRef(db, 'users/' + uid));
-      return snap.exists()? snap.val().role || 'client' : 'client';
-    } catch (err) {
-      console.error('Get role error:', err);
-      return 'client';
-    }
-  }
-
-  function redirectByRole(role) {
-    if (role === 'admin') window.location.href = 'admin.html';
-    else if (role === 'salon_owner') window.location.href = 'owners.html';
-    else window.location.href = 'salons.html';
-  }
-});
