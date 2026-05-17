@@ -25,13 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const remove = window.remove;
   const onValue = window.onValue;
 
-  // 2. Admin credentials - only this email/pass can access admin.html
-  const ADMIN_EMAIL = 'admin@kasiweb.co.za';
-  const ADMIN_PASSWORD = 'Kasi2026';
-  
-  // 3. Owner emails for salon owners
-  const OWNER_EMAILS = ['owner1@kasiweb.com', 'owner2@kasiweb.com'];
-
   const emailInput = document.getElementById('userEmail');
   const passInput = document.getElementById('userPass');
   const loginBtn = document.getElementById('mainLoginBtn');
@@ -40,61 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
-  // Helper: decide role based on email
-  function getRoleByEmail(email) {
-    const e = email.toLowerCase();
-    if (e === ADMIN_EMAIL) return 'admin';
-    if (OWNER_EMAILS.includes(e)) return 'salon_owner';
-    return 'client';
-  }
-
-  // Helper: ensure user record exists with correct role
-  async function ensureUserRecord(user) {
-    const userRef = dbRef(db, 'users/' + user.uid);
-    const snap = await dbGet(userRef);
-
-    if (!snap.exists()) {
-      const role = getRoleByEmail(user.email);
-      await dbSet(userRef, {
-        email: user.email,
-        role,
-        createdAt: Date.now()
-      });
-      return role;
+  // Get role from database
+  async function getRole(uid) {
+    try {
+      const snap = await dbGet(dbRef(db, 'users/' + uid));
+      return snap.exists()? snap.val().role || 'client' : 'client';
+    } catch (err) {
+      console.error('Get role error:', err);
+      return 'client';
     }
-
-    return snap.val().role || 'client';
   }
 
-  // 4. Login - special check for admin
+  // 2. Login
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value.trim();
-      if (!email || !password) {
+      if (!email ||!password) {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
 
       try {
         if (authMsg) authMsg.textContent = 'Logging in...';
-        
-        // Check if this is admin login attempt
-        if (email.toLowerCase() === ADMIN_EMAIL) {
-          if (password !== ADMIN_PASSWORD) {
-            if (authMsg) authMsg.textContent = 'Invalid admin credentials';
-            return;
-          }
-        }
-
         const cred = await signIn(auth, email, password);
-        const role = await ensureUserRecord(cred.user);
-        
-        // Double check admin role
-        if (email.toLowerCase() === ADMIN_EMAIL && role !== 'admin') {
-          await dbSet(dbRef(db, 'users/' + cred.user.uid + '/role'), 'admin');
-        }
-        
+        const role = await getRole(cred.user.uid);
         redirectByRole(role);
       } catch (err) {
         if (authMsg) authMsg.textContent = err.message;
@@ -102,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Signup - block admin email from signing up
+  // 3. Signup - always creates client role
   if (signupBtn) {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -112,28 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      if (email.toLowerCase() === ADMIN_EMAIL) {
-        if (authMsg) authMsg.textContent = 'Cannot signup with admin email';
-        return;
-      }
-
       try {
         if (authMsg) authMsg.textContent = 'Creating account...';
         const cred = await signUp(auth, email, password);
-        const role = getRoleByEmail(email);
         await dbSet(dbRef(db, 'users/' + cred.user.uid), {
           email,
-          role,
+          role: 'client',
           createdAt: Date.now()
         });
-        redirectByRole(role);
+        redirectByRole('client');
       } catch (err) {
         if (authMsg) authMsg.textContent = err.message;
       }
     });
   }
 
-  // 6. Logout
+  // 4. Logout
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       await logOut(auth);
@@ -141,16 +98,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. Hide admin button - not needed
+  // 5. Hide admin button - not used anymore
   if (adminBtn) adminBtn.style.display = 'none';
 
-  // 8. Auth state watcher
+  // 6. Auth state watcher
   onAuthState(auth, async (user) => {
     const page = window.location.pathname.split('/').pop();
     const onLoginPage = page === 'index.html' || page === '';
 
     if (user) {
-      const role = await ensureUserRecord(user);
+      const role = await getRole(user.uid);
 
       if (loginBtn) loginBtn.style.display = 'none';
       if (signupBtn) signupBtn.style.display = 'none';
@@ -159,14 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (onLoginPage) redirectByRole(role);
 
-      // Protect pages
-      if (page === 'admin.html' && user.email.toLowerCase() !== ADMIN_EMAIL) {
+      // Protect pages using role from DB
+      if (page === 'admin.html' && role!== 'admin') {
         alert('Admin access only');
         await logOut(auth);
         window.location.href = 'index.html';
         return;
       }
-      if (page === 'owners.html' && role !== 'salon_owner' && role !== 'admin') {
+      if (page === 'owners.html' && role!== 'salon_owner' && role!== 'admin') {
         alert('Salon owner access only');
         await logOut(auth);
         window.location.href = 'index.html';
@@ -184,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 9. Load all bookings for admin
+  // 7. Load all bookings for admin
   function loadAdminBookings() {
     const listEl = document.getElementById('bookingsList');
     const countEl = document.getElementById('bookingCount');
@@ -195,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const bookings = [];
       snap.forEach(child => bookings.push({ id: child.key,...child.val() }));
 
-      countEl.textContent = `${bookings.length} total booking${bookings.length !== 1 ? 's' : ''}`;
+      countEl.textContent = `${bookings.length} total booking${bookings.length!== 1? 's' : ''}`;
 
       if (bookings.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color:#888;">No bookings yet.</p>';
@@ -233,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 10. Load bookings for owner dashboard
+  // 8. Load bookings for owner dashboard
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -261,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
       myBookings.sort((a, b) => a.time.localeCompare(b.time));
 
       totalCount.textContent = myBookings.length;
-      nextTime.textContent = myBookings.length > 0 ? myBookings[0].time : '--:--';
+      nextTime.textContent = myBookings.length > 0? myBookings[0].time : '--:--';
 
       let revenue = 0;
       myBookings.forEach(b => {
@@ -300,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 11. Booking modal for salons.html
+  // 9. Booking modal for salons.html
   function initBookingModal(user) {
     const modal = document.getElementById('bookingModal');
     const openBtns = document.querySelectorAll('.openBooking');
@@ -334,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
 
-      if (!name || !time || !service) {
+      if (!name ||!time ||!service) {
         alert('Fill all fields');
         return;
       }
@@ -346,3 +303,26 @@ document.addEventListener('DOMContentLoaded', () => {
         salon: selectedSalon,
         salonUid: selectedSalonUid,
         customerUid: user.uid,
+        email: user.email,
+        date: new Date().toISOString().split('T')[0],
+        createdAt: Date.now()
+      };
+
+      try {
+        await dbSet(push(dbRef(db, 'bookings')), booking);
+        alert('Booking confirmed!');
+        modal.classList.remove('active');
+        form.reset();
+      } catch (err) {
+        alert('Error saving booking: ' + err.message);
+      }
+    });
+  }
+
+  // 10. Redirect helper
+  function redirectByRole(role) {
+    if (role === 'admin') window.location.href = 'admin.html';
+    else if (role === 'salon_owner') window.location.href = 'owners.html';
+    else window.location.href = 'salons.html';
+  }
+});
