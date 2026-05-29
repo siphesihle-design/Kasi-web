@@ -50,3 +50,50 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper
+         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <!-- Firebase SDKs - put this at bottom of body -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { 
+        getAuth, 
+        signInWithEmailAndPassword, 
+        createUserWithEmailAndPassword, 
+        onAuthStateChanged, 
+        signOut 
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getDatabase, ref, set, get, push, remove, onValue } 
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+        authDomain: "kasi-web-d073f.firebaseapp.com",
+        projectId: "kasi-web-d073f",
+        storageBucket: "kasi-web-d073f.appspot.com",
+        messagingSenderId: "471544855566",
+        appId: "1:471544855566:web:6047dd0119c5e305b6905f",
+        measurementId: "G-L6JYY1G97T"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getDatabase(app);
+      
+      // Expose to window so script.js can use them
+      window.firebaseAuth = auth;
+      window.firebaseDB = db;
+      window.signIn = signInWithEmailAndPassword;
+      window.signUp = createUserWithEmailAndPassword;
+      window.onAuthState = onAuthStateChanged;
+      window.logOut = signOut;
+      window.dbRef = ref;
+      window.dbSet = set;
+      window.dbGet = get;
+      window.push = push;
+      window.remove = remove;
+      window.onValue = onValue;
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
