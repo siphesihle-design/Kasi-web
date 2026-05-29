@@ -33,30 +33,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
-  // Get role from database + fallback for salon owners
+  // Get role from database - FAST version with timeout
   async function getRole(uid) {
     try {
       console.log('getRole called for UID:', uid);
-      const snap = await dbGet(dbRef(db, 'users/' + uid));
+
+      // Only read the role field, not whole user object = faster
+      const roleRef = dbRef(db, 'users/' + uid + '/role');
+
+      // 2 second timeout so it never hangs
+      const snap = await Promise.race([
+        dbGet(roleRef),
+        new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000))
+      ]);
+
       if (snap.exists()) {
-        console.log('User found in DB, role:', snap.val().role);
-        return snap.val().role || 'client';
+        console.log('User found in DB, role:', snap.val());
+        return snap.val();
       }
 
-      // Fallback: auto-assign salon_owner if email matches
+      // Fallback: auto-create user doc if missing
       const user = auth.currentUser;
-      if (user?.email?.endsWith('@yoursalon.com')) {
-        await dbSet(dbRef(db, 'users/' + uid), {
-          email: user.email,
-          role: 'salon_owner',
-          createdAt: Date.now()
-        });
-        return 'salon_owner';
-      }
-      console.log('User not in DB, defaulting to client');
-      return 'client';
+      const role = user?.email?.endsWith('@yoursalon.com')? 'salon_owner' : 'client';
+      await dbSet(dbRef(db, 'users/' + uid), {
+        email: user.email,
+        role: role,
+        createdAt: Date.now()
+      });
+      console.log('Created new user with role:', role);
+      return role;
+
     } catch (err) {
-      console.error('Get role error:', err);
+      console.log('getRole timeout/fallback to client:', err);
       return 'client';
     }
   }
@@ -373,16 +381,4 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.replace('salons.html');
     }
   }
-});
-const snap = await dbGet(dbRef(db, 'users/' + uid));
-const timeout = new Promise((_, reject) => 
-  setTimeout(() => reject('timeout'), 3000)
-);
-
-try {
-  const result = await Promise.race([snap, timeout]);
-  if (result.exists()) return result.val().role || 'client';
-} catch {
-  console.log('getRole timeout, defaulting to client');
-  return 'client';
-}
+}); // 
