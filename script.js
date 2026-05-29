@@ -374,3 +374,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 });
+const snap = await dbGet(dbRef(db, 'users/' + uid));
+const timeout = new Promise((_, reject) => 
+  setTimeout(() => reject('timeout'), 3000)
+);
+
+try {
+  const result = await Promise.race([snap, timeout]);
+  if (result.exists()) return result.val().role || 'client';
+} catch {
+  console.log('getRole timeout, defaulting to client');
+  return 'client';
+}
