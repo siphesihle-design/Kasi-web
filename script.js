@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. Init Swiper if on index.html
+  // 1. Init Swiper
   const swiperEl = document.querySelector('.swiper');
   if (swiperEl && window.Swiper) {
     new Swiper('.swiper', {
@@ -33,26 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
-  // Get role from database - FAST version with timeout
+  // Get role - FAST with 2s timeout
   async function getRole(uid) {
     try {
-      console.log('getRole called for UID:', uid);
-
-      // Only read the role field, not whole user object = faster
       const roleRef = dbRef(db, 'users/' + uid + '/role');
-
-      // 2 second timeout so it never hangs
       const snap = await Promise.race([
         dbGet(roleRef),
         new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000))
       ]);
+      if (snap.exists()) return snap.val();
 
-      if (snap.exists()) {
-        console.log('User found in DB, role:', snap.val());
-        return snap.val();
-      }
-
-      // Fallback: auto-create user doc if missing
       const user = auth.currentUser;
       const role = user?.email?.endsWith('@yoursalon.com')? 'salon_owner' : 'client';
       await dbSet(dbRef(db, 'users/' + uid), {
@@ -60,16 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
         role: role,
         createdAt: Date.now()
       });
-      console.log('Created new user with role:', role);
       return role;
-
-    } catch (err) {
-      console.log('getRole timeout/fallback to client:', err);
+    } catch {
       return 'client';
     }
   }
 
-  // 2. Login - FIXED with error handling
+  // Login
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -78,31 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
-
       try {
         if (authMsg) authMsg.textContent = 'Logging in...';
-        console.log('Attempting login for:', email);
         const cred = await signIn(auth, email, password);
-        console.log('Login success, UID:', cred.user.uid);
-
-        // Wrap getRole so errors don't freeze the app
-        let role = 'client';
-        try {
-          role = await getRole(cred.user.uid);
-        } catch (e) {
-          console.error('getRole failed, defaulting to client:', e);
-        }
-
-        console.log('Redirecting with role:', role);
+        const role = await getRole(cred.user.uid);
         redirectByRole(role);
       } catch (err) {
-        console.error('Login error:', err);
         if (authMsg) authMsg.textContent = err.message;
       }
     });
   }
 
-  // 3. Signup - always creates client role
+  // Signup
   if (signupBtn) {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -111,14 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
-
       try {
         if (authMsg) authMsg.textContent = 'Creating account...';
         const cred = await signUp(auth, email, password);
         await dbSet(dbRef(db, 'users/' + cred.user.uid), {
-          email,
-          role: 'client',
-          createdAt: Date.now()
+          email, role: 'client', createdAt: Date.now()
         });
         redirectByRole('client');
       } catch (err) {
@@ -127,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Logout
+  // Logout
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       await logOut(auth);
@@ -135,28 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. Hide admin button - not used anymore
   if (adminBtn) adminBtn.style.display = 'none';
 
-  // 6. Auth state watcher
+  // Auth state
   onAuthState(auth, async (user) => {
     const page = window.location.pathname.split('/').pop();
     const onLoginPage = page === 'index.html' || page === '';
 
-    console.log('Auth state changed. User:', user?.email, 'Page:', page);
-
     if (user) {
       const role = await getRole(user.uid);
-      console.log('Auth state role:', role);
-
       if (loginBtn) loginBtn.style.display = 'none';
       if (signupBtn) signupBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
-      if (onLoginPage) redirectByRole(role);
+      if (onLoginPage) {
+        redirectByRole(role);
+        return; // STOP here so it doesn't check page perms
+      }
 
-      // Protect pages using role from DB
       if (page === 'admin.html' && role!== 'admin') {
         alert('Admin access only');
         await logOut(auth);
@@ -181,17 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 7. Load all bookings for admin
+  // Admin bookings
   function loadAdminBookings() {
     const listEl = document.getElementById('bookingsList');
     const countEl = document.getElementById('bookingCount');
     if (!listEl) return;
 
-    const bookingsRef = dbRef(db, 'bookings');
-    onValue(bookingsRef, (snap) => {
+    onValue(dbRef(db, 'bookings'), (snap) => {
       const bookings = [];
       snap.forEach(child => bookings.push({ id: child.key,...child.val() }));
-
       countEl.textContent = `${bookings.length} total booking${bookings.length!== 1? 's' : ''}`;
 
       if (bookings.length === 0) {
@@ -221,16 +187,16 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
 
       document.querySelectorAll('.deleteBtn').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.onclick = () => {
           if (confirm('Delete this booking?')) {
             remove(dbRef(db, 'bookings/' + btn.dataset.id));
           }
-        });
+        };
       });
     });
   }
 
-  // 8. Load bookings for owner dashboard
+  // Owner dashboard - FIXED clearBtn
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -240,31 +206,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearBtn = document.getElementById("clearBtn");
     if (!tableBody) return;
 
-    const statusRef = dbRef(db, 'shopStatus/' + ownerUid);
-    onValue(statusRef, (snap) => {
+    onValue(dbRef(db, 'shopStatus/' + ownerUid), (snap) => {
       if (snap.exists()) statusSelect.value = snap.val();
     });
-    statusSelect?.addEventListener('change', () => {
-      dbSet(statusRef, statusSelect.value);
+    if (statusSelect) statusSelect.onchange = () => {
+      dbSet(dbRef(db, 'shopStatus/' + ownerUid), statusSelect.value);
       alert(`Shop status updated to: ${statusSelect.value}`);
-    });
+    };
 
-    const bookingsRef = dbRef(db, 'bookings');
-    onValue(bookingsRef, (snap) => {
+    onValue(dbRef(db, 'bookings'), (snap) => {
       const bookings = [];
       snap.forEach(child => bookings.push({ id: child.key,...child.val() }));
-
       const myBookings = bookings.filter(b => b.salonUid === ownerUid);
       myBookings.sort((a, b) => a.time.localeCompare(b.time));
 
       totalCount.textContent = myBookings.length;
       nextTime.textContent = myBookings.length > 0? myBookings[0].time : '--:--';
-
-      let revenue = 0;
-      myBookings.forEach(b => {
-        revenue += b.price || 0;
-      });
-      totalRevenue.textContent = `R${revenue}`;
+      totalRevenue.textContent = `R${myBookings.reduce((sum, b) => sum + (b.price || 0), 0)}`;
 
       if (myBookings.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#666;">No bookings yet. Relax, King! 👑</td></tr>`;
@@ -281,22 +239,30 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
 
       document.querySelectorAll('.doneBtn').forEach(btn => {
-        btn.addEventListener('click', () => remove(dbRef(db, 'bookings/' + btn.dataset.id)));
+        btn.onclick = () => remove(dbRef(db, 'bookings/' + btn.dataset.id));
       });
     });
 
-    clearBtn?.addEventListener('click', () => {
-      if (confirm('Clear all your bookings?')) {
-        onValue(dbRef(db, 'bookings'), (snap) => {
-          snap.forEach(child => {
-            if (child.val().salonUid === ownerUid) remove(dbRef(db, 'bookings/' + child.key));
-          });
-        }, { onlyOnce: true });
-      }
-    });
+    // FIXED: dbGet instead of onValue
+    if (clearBtn) {
+      clearBtn.onclick = async () => {
+        if (confirm('Clear all your bookings?')) {
+          try {
+            const snap = await dbGet(dbRef(db, 'bookings'));
+            snap.forEach(child => {
+              if (child.val().salonUid === ownerUid) {
+                remove(dbRef(db, 'bookings/' + child.key));
+              }
+            });
+          } catch (err) {
+            console.error("Failed to clear bookings:", err);
+          }
+        }
+      };
+    }
   }
 
-  // 9. Booking modal for salons.html
+  // Booking modal
   function initBookingModal(user) {
     const modal = document.getElementById('bookingModal');
     const openBtns = document.querySelectorAll('.openBooking');
@@ -308,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSalonUid = '';
 
     openBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.onclick = () => {
         if (!user) {
           alert('Login first to book');
           window.location.href = 'index.html';
@@ -317,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedSalon = btn.dataset.salon;
         selectedSalonUid = btn.dataset.salonUid;
         modal.classList.add('active');
-      });
+      };
     });
 
     closeBtn?.addEventListener('click', () => modal.classList.remove('active'));
@@ -325,25 +291,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const name = document.getElementById('custName').value.trim();
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
-
       if (!name ||!time ||!service) {
         alert('Fill all fields');
         return;
       }
-
-      // Extract price from service string "Haircut R150"
       const priceMatch = service.match(/R(\d+)/);
-      const price = priceMatch? parseInt(priceMatch[1]) : 0;
+      const price = priceMatch? parseInt(priceMatch[1], 10) : 0;
 
       const booking = {
-        name,
-        time,
-        service,
-        price,
+        name, time, service, price,
         salon: selectedSalon,
         salonUid: selectedSalonUid,
         customerUid: user.uid,
@@ -363,22 +322,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 10. Redirect helper - FIXED
+  // Redirect helper
   function redirectByRole(role) {
     const page = window.location.pathname.split('/').pop();
-    console.log('Current page:', page, 'Role:', role);
-
     if (role === 'admin' && page!== 'admin.html') {
-      console.log('Redirecting to admin.html');
       window.location.replace('admin.html');
     }
     else if (role === 'salon_owner' && page!== 'owners.html') {
-      console.log('Redirecting to owners.html');
       window.location.replace('owners.html');
     }
     else if (role === 'client' && page!== 'salons.html') {
-      console.log('Redirecting to salons.html');
       window.location.replace('salons.html');
     }
   }
-}); 
+});
