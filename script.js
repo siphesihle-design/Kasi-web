@@ -29,7 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const passInput = document.getElementById('userPass');
   const loginBtn = document.getElementById('mainLoginBtn');
   const signupBtn = document.getElementById('signupBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
+  // FIX: Support 3 different logout button IDs
+  const logoutBtn = document.getElementById('logoutBtn')
+                 || document.getElementById('logoutBtnOwner')
+                 || document.getElementById('logoutBtnAdmin');
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
@@ -98,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Logout
+  // 4. Logout - works for all 3 buttons
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       await logOut(auth);
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (adminBtn) adminBtn.style.display = 'none';
 
-  // 5. Auth state watcher - FIXED to prevent instant redirect
+  // 5. Auth state watcher - FINAL FIXED VERSION
   onAuthState(auth, async (user) => {
     const page = window.location.pathname.split('/').pop() || 'index.html';
     const onLoginPage = page === 'index.html' || page === '';
@@ -116,6 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Auth state changed. User:', user?.email, 'Page:', page);
 
     if (user) {
+      // Show loading while we fetch role
+      if (authMsg) authMsg.textContent = 'Loading...';
+
       const role = await getRole(user.uid);
       console.log('Auth state role:', role);
 
@@ -125,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
-      // Only redirect if on login page
+      // CRITICAL: Only redirect from login page
       if (onLoginPage) {
         redirectByRole(role);
         return;
