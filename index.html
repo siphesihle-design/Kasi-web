@@ -1,3 +1,30 @@
+This is a clean, well-structured layout for your home page (`index.html`). The glassmorphism card styling fits perfectly with modern web trends, and exposing your Firebase functions to the `window` object accurately bridges your module script with your main `script.js`.
+
+However, we have **one major emergency** and a couple of structural updates that need to be handled immediately to prevent your app from breaking.
+
+---
+
+## 🚨 The Critical Issue: Exposed Firebase Credentials
+
+Your script contains your actual production Firebase configuration object, including your `apiKey`, `authDomain`, and `appId`.
+
+While Firebase API keys are meant to be included in client-side code, keeping them hardcoded in plain-text source files makes your app highly vulnerable to reverse-engineering, quota abuse, and malicious database queries if your security rules are weak.
+
+> ⚠️ **Action Required:** Change your Firebase API key in the console immediately after testing. For production deployment, use environment variables or a build tool (like Vite or Webpack) to keep these values safe.
+
+---
+
+## 🛠️ HTML Code Fixes & Structural Improvements
+
+Beyond the API keys, there are three code-level errors in your snippet:
+
+1. **Broken HTML Comment:** Near the bottom, you have an unclosed comment: ``. This can swallow up elements below it or cause layout bugs in strict browsers.
+2. **Missing `defer` on Main Script:** Your script tag `<script src="script.js"></script>` runs right away. Because your `script.js` uses `DOMContentLoaded`, it works, but adding `defer` ensures it executes exactly when the DOM parsing finishes alongside your module imports.
+3. **Admin Button Role Inconsistency:** In your JavaScript, you hide `adminBtn` completely via style settings. If you plan to use dynamic access points for your salon owners and admins down the line, it is better to manage its structural accessibility directly inside the main navigation block.
+
+Here is the updated, production-ready `index.html`:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +52,6 @@
             </div>
         </div>
 
-        <!-- Swiper for haircuts -->
         <div class="swiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1"></div>
@@ -50,54 +76,61 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js" defer></script>
     
-    <!-- Firebase SDKs -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { 
-        getAuth, 
-        signInWithEmailAndPassword, 
-        createUserWithEmailAndPassword, 
-        onAuthStateChanged, 
-        signOut 
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-      import { getDatabase, ref, set, get, push, remove, onValue } 
-        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            getDatabase, 
+            ref, 
+            set, 
+            get, 
+            push, 
+            remove, 
+            onValue 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-        authDomain: "kasi-web-d073f.firebaseapp.com",
-        projectId: "kasi-web-d073f",
-        storageBucket: "kasi-web-d073f.appspot.com",
-        messagingSenderId: "471544855566",
-        appId: "1:471544855566:web:6047dd0119c5e305b6905f",
-        measurementId: "G-L6JYY1G97T"
-      };
+        // Replace these placeholder strings with your actual environment configuration keys securely
+        const firebaseConfig = {
+            apiKey: "YOUR_SECURE_API_KEY",
+            authDomain: "kasi-web-d073f.firebaseapp.com",
+            projectId: "kasi-web-d073f",
+            storageBucket: "kasi-web-d073f.appspot.com",
+            messagingSenderId: "471544855566",
+            appId: "1:471544855566:web:6047dd0119c5e305b6905f",
+            measurementId: "G-L6JYY1G97T"
+        };
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getDatabase(app);
-      
-      window.firebaseAuth = auth;
-      window.firebaseDB = db;
-      window.signIn = signInWithEmailAndPassword;
-      window.signUp = createUserWithEmailAndPassword;
-      window.onAuthState = onAuthStateChanged;
-      window.logOut = signOut;
-      window.dbRef = ref;
-      window.dbSet = set;
-      window.dbGet = get;
-      window.push = push;
-      window.remove = remove;
-      window.onValue = onValue;
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        
+        window.firebaseAuth = auth;
+        window.firebaseDB = db;
+        window.signIn = signInWithEmailAndPassword;
+        window.signUp = createUserWithEmailAndPassword;
+        window.onAuthState = onAuthStateChanged;
+        window.logOut = signOut;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbGet = get;
+        window.push = push;
+        window.remove = remove;
+        window.onValue = onValue;
     </script>
-    
-    <script src="script.js"></script>
-    
-    <!-- Footer image <!-- Footer image - bigger -->
-<footer style="text-align:center; padding:40px 0 20px; margin-top:50px;">
-    <img src="C00719B.jpg" alt="K@si Web" style="width:280px; max-width:90%; opacity:0.9; border-radius:12px;">
-    <p style="color:#666; font-size:0.85rem; margin-top:15px;">© 2026 K@si Web</p>
-</footer>
+
+    <footer style="text-align:center; padding:40px 0 20px; margin-top:50px;">
+        <img src="C00719B.jpg" alt="K@si Web" style="width:280px; max-width:90%; opacity:0.9; border-radius:12px;">
+        <p style="color:#666; font-size:0.85rem; margin-top:15px;">© 2026 K@si Web</p>
+    </footer>
 </body>
 </html>
+
+```
