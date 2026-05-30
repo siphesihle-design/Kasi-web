@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (onLoginPage) {
         redirectByRole(role);
-        return; // STOP here so it doesn't check page perms
+        return;
       }
 
       if (page === 'admin.html' && role!== 'admin') {
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Owner dashboard - FIXED clearBtn
+  // Owner dashboard - FIXED clearBtn with dbGet
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // FIXED: dbGet instead of onValue
+    // FIXED: dbGet instead of onValue to prevent infinite loop
     if (clearBtn) {
       clearBtn.onclick = async () => {
         if (confirm('Clear all your bookings?')) {
