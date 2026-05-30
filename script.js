@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. Init Swiper
+  // 1. Init Swiper if on index.html
   const swiperEl = document.querySelector('.swiper');
   if (swiperEl && window.Swiper) {
     new Swiper('.swiper', {
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const roleRef = dbRef(db, 'users/' + uid + '/role');
       const snap = await Promise.race([
         dbGet(roleRef),
-        new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2000))
       ]);
       if (snap.exists()) return snap.val();
 
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Login
+  // 2. Login
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Signup
+  // 3. Signup
   if (signupBtn) {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Logout
+  // 4. Logout
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       await logOut(auth);
@@ -108,23 +108,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (adminBtn) adminBtn.style.display = 'none';
 
-  // Auth state
+  // 5. Auth state watcher - FIXED to prevent instant redirect
   onAuthState(auth, async (user) => {
-    const page = window.location.pathname.split('/').pop();
+    const page = window.location.pathname.split('/').pop() || 'index.html';
     const onLoginPage = page === 'index.html' || page === '';
+
+    console.log('Auth state changed. User:', user?.email, 'Page:', page);
 
     if (user) {
       const role = await getRole(user.uid);
+      console.log('Auth state role:', role);
+
+      // Update UI
       if (loginBtn) loginBtn.style.display = 'none';
       if (signupBtn) signupBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
+      // Only redirect if on login page
       if (onLoginPage) {
         redirectByRole(role);
         return;
       }
 
+      // Protect pages - only logout if WRONG role
       if (page === 'admin.html' && role!== 'admin') {
         alert('Admin access only');
         await logOut(auth);
@@ -138,18 +145,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Load page content
       if (page === 'admin.html') loadAdminBookings();
       if (page === 'owners.html') loadOwnerDashboard(user.uid);
       if (page === 'salons.html') initBookingModal(user);
 
     } else {
-      if (page === 'admin.html' || page === 'owners.html' || page === 'salons.html') {
+      // No user logged in
+      if (loginBtn) loginBtn.style.display = 'inline-flex';
+      if (signupBtn) signupBtn.style.display = 'inline-flex';
+      if (logoutBtn) logoutBtn.style.display = 'none';
+
+      // Only redirect protected pages, let salons.html stay for browsing
+      if (page === 'admin.html' || page === 'owners.html') {
         window.location.href = 'index.html';
       }
     }
   });
 
-  // Admin bookings
+  // 6. Load all bookings for admin
   function loadAdminBookings() {
     const listEl = document.getElementById('bookingsList');
     const countEl = document.getElementById('bookingCount');
@@ -196,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Owner dashboard - FIXED clearBtn with dbGet
+  // 7. Load bookings for owner dashboard - FIXED clearBtn
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -262,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Booking modal
+  // 8. Booking modal for salons.html
   function initBookingModal(user) {
     const modal = document.getElementById('bookingModal');
     const openBtns = document.querySelectorAll('.openBooking');
@@ -322,17 +336,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Redirect helper
+  // 9. Redirect helper - FIXED to not redirect if already on correct page
   function redirectByRole(role) {
-    const page = window.location.pathname.split('/').pop();
-    if (role === 'admin' && page!== 'admin.html') {
-      window.location.replace('admin.html');
-    }
-    else if (role === 'salon_owner' && page!== 'owners.html') {
-      window.location.replace('owners.html');
-    }
-    else if (role === 'client' && page!== 'salons.html') {
-      window.location.replace('salons.html');
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    console.log('Current page:', page, 'Role:', role);
+
+    const targetPage = role === 'admin'? 'admin.html'
+                     : role === 'salon_owner'? 'owners.html'
+                     : 'salons.html';
+
+    // Only redirect if not already on target page
+    if (page!== targetPage) {
+      console.log('Redirecting to', targetPage);
+      window.location.replace(targetPage);
     }
   }
 });
