@@ -20,14 +20,13 @@
         <div class="container header-nav-box">
             <a href="index.html" class="back-link"><i class='bx bx-chevron-left'></i> Back Home</a>
             <h1 class="header-title" style="text-align:left; padding:10px 0 0 0;">Local Salons</h1>
+            <p class="tagline" id="bookingsToday" style="text-align:left;">Loading stats...</p>
             <p class="tagline" style="text-align:left;">Top-rated barbers in your area.</p>
         </div>
     </header>
 
     <main class="container">
         <div class="salon-list">
-
-            <!-- Salon 1 -->
             <div class="glass-card salon-card">
                 <div class="card-media">
                     <span id="status-vaal" class="status-badge">Open Now</span>
@@ -42,7 +41,7 @@
                     <p class="description">Specializing in clean fades, sharp lines, and beard grooming.</p>
                     <div class="feature-tags">
                         <span><i class='bx bx-time'></i> 15 min wait</span>
-                        <span><i class='bx bx-map'></i> 0.5km</span>
+                        <span id="dist-vaal"><i class='bx bx-map'></i> Calculating...</span>
                     </div>
                     <button type="button" class="primary-btn openBooking"
                             data-salon="Vaal Fresh Barbers"
@@ -52,7 +51,6 @@
                 </div>
             </div>
 
-            <!-- Salon 2 -->
             <div class="glass-card salon-card">
                 <div class="card-media">
                     <span class="status-badge busy">Busy</span>
@@ -67,7 +65,7 @@
                     <p class="description">Premium cuts and hot towel shaves.</p>
                     <div class="feature-tags">
                         <span><i class='bx bx-time'></i> 30 min wait</span>
-                        <span><i class='bx bx-map'></i> 1.2km</span>
+                        <span id="dist-sharp"><i class='bx bx-map'></i> Calculating...</span>
                     </div>
                     <button type="button" class="primary-btn openBooking"
                             data-salon="Sharp Cuts"
@@ -76,11 +74,9 @@
                     </button>
                 </div>
             </div>
-
         </div>
     </main>
 
-    <!-- Booking Modal -->
     <div class="modal" id="bookingModal">
         <div class="modal-overlay"></div>
         <div class="modal-content glass-card">
@@ -90,6 +86,7 @@
             </div>
             <form id="bookingForm" class="form-group">
                 <input type="text" id="custName" placeholder="Your Name" required>
+                <input type="tel" id="custPhone" placeholder="WhatsApp Number 071..." required>
                 <select id="serviceType" required>
                     <option value="">Select Service</option>
                     <option value="Fade R150">Fade - R150</option>
@@ -103,7 +100,6 @@
         </div>
     </div>
 
-    <!-- Firebase Init -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut }
@@ -122,7 +118,6 @@
       };
 
       const app = initializeApp(firebaseConfig);
-
       window.firebaseAuth = getAuth(app);
       window.firebaseDB = getDatabase(app);
       window.onAuthState = onAuthStateChanged;
@@ -137,7 +132,6 @@
     <script src="script.js"></script>
 
     <script>
-      // Live time in header
       function updateTime() {
         const now = new Date();
         const timeEl = document.getElementById('liveTime');
