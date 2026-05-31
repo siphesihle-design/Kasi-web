@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. Init Swiper if on index.html
+  // 1. Init Swiper
   const swiperEl = document.querySelector('.swiper');
   if (swiperEl && window.Swiper) {
     new Swiper('.swiper', {
@@ -29,14 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const passInput = document.getElementById('userPass');
   const loginBtn = document.getElementById('mainLoginBtn');
   const signupBtn = document.getElementById('signupBtn');
-  // FIX: Support 3 different logout button IDs
-  const logoutBtn = document.getElementById('logoutBtn')
-                 || document.getElementById('logoutBtnOwner')
-                 || document.getElementById('logoutBtnAdmin');
+  const logoutBtn = document.getElementById('logoutBtn') || document.getElementById('logoutBtnOwner') || document.getElementById('logoutBtnAdmin');
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
-  // Get role - FAST with 2s timeout
   async function getRole(uid) {
     try {
       const roleRef = dbRef(db, 'users/' + uid + '/role');
@@ -59,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 2. Login
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -79,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Signup
   if (signupBtn) {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
@@ -101,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Logout - works for all 3 buttons
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       await logOut(auth);
@@ -111,33 +104,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (adminBtn) adminBtn.style.display = 'none';
 
-  // 5. Auth state watcher - FINAL FIXED VERSION
+  // UPGRADE 1: Live bookings counter
+  function loadBookingsCounter() {
+    const counterEl = document.getElementById('bookingsToday');
+    if (!counterEl) return;
+    const today = new Date().toISOString().split('T')[0];
+    onValue(dbRef(db, 'bookings'), (snap) => {
+      let count = 0;
+      snap.forEach(child => {
+        if (child.val().date === today) count++;
+      });
+      counterEl.textContent = `${count} haircuts booked today 🔥`;
+    });
+  }
+
+  // UPGRADE 5: GPS Distance
+  function updateDistances() {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(pos => {
+      const userLat = pos.coords.latitude;
+      const userLng = pos.coords.longitude;
+
+      const vaalLat = -26.7086, vaalLng = 27.8785; // Replace with real coords
+      const sharpLat = -26.7000, sharpLng = 27.8700; // Replace with real coords
+
+      const distVaal = getDistance(userLat, userLng, vaalLat, vaalLng);
+      const distSharp = getDistance(userLat, userLng, sharpLat, sharpLng);
+
+      const elVaal = document.getElementById('dist-vaal');
+      const elSharp = document.getElementById('dist-sharp');
+      if (elVaal) elVaal.innerHTML = `<i class='bx bx-map'></i> ${distVaal.toFixed(1)}km`;
+      if (elSharp) elSharp.innerHTML = `<i class='bx bx-map'></i> ${distSharp.toFixed(1)}km`;
+    });
+  }
+
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2-lat1) * Math.PI/180;
+    const dLon = (lon2-lon1) * Math.PI/180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
   onAuthState(auth, async (user) => {
-    const page = window.location.pathname.split('/').pop() || 'index.html';
+    const rawPage = window.location.pathname.split('/').pop() || 'index.html';
+    const page = rawPage.toLowerCase();
     const onLoginPage = page === 'index.html' || page === '';
 
-    console.log('Auth state changed. User:', user?.email, 'Page:', page);
-
     if (user) {
-      // Show loading while we fetch role
       if (authMsg) authMsg.textContent = 'Loading...';
-
       const role = await getRole(user.uid);
-      console.log('Auth state role:', role);
 
-      // Update UI
       if (loginBtn) loginBtn.style.display = 'none';
       if (signupBtn) signupBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
-      // CRITICAL: Only redirect from login page
       if (onLoginPage) {
         redirectByRole(role);
         return;
       }
 
-      // Protect pages - only logout if WRONG role
       if (page === 'admin.html' && role!== 'admin') {
         alert('Admin access only');
         await logOut(auth);
@@ -151,25 +178,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Load page content
       if (page === 'admin.html') loadAdminBookings();
       if (page === 'owners.html') loadOwnerDashboard(user.uid);
-      if (page === 'salons.html') initBookingModal(user);
+      if (page === 'salons.html') {
+        initBookingModal(user);
+        loadBookingsCounter();
+        updateDistances();
+      }
 
     } else {
-      // No user logged in
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (signupBtn) signupBtn.style.display = 'inline-flex';
       if (logoutBtn) logoutBtn.style.display = 'none';
-
-      // Only redirect protected pages, let salons.html stay for browsing
       if (page === 'admin.html' || page === 'owners.html') {
         window.location.href = 'index.html';
       }
     }
   });
 
-  // 6. Load all bookings for admin
   function loadAdminBookings() {
     const listEl = document.getElementById('bookingsList');
     const countEl = document.getElementById('bookingCount');
@@ -195,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <p style="margin:5px 0; color:#aaa; font-size:0.85rem;">
                 <i class='bx bx-store'></i> ${b.salon}<br>
                 <i class='bx bx-time'></i> ${b.time} • ${b.date}<br>
+                <i class='bx bx-phone'></i> ${b.phone || 'No phone'}<br>
                 <i class='bx bx-envelope'></i> ${b.email}
               </p>
             </div>
@@ -216,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. Load bookings for owner dashboard - FIXED clearBtn
+  // UPGRADE 4: Skeleton loading + UPGRADE 2: WhatsApp button
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -225,6 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalRevenue = document.getElementById("totalRevenue");
     const clearBtn = document.getElementById("clearBtn");
     if (!tableBody) return;
+
+    // Skeleton while loading
+    tableBody.innerHTML = '<tr><td colspan="4"><div class="skeleton"></div><div class="skeleton"></div></td></tr>';
 
     onValue(dbRef(db, 'shopStatus/' + ownerUid), (snap) => {
       if (snap.exists()) statusSelect.value = snap.val();
@@ -254,7 +284,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <td style="font-weight: bold;">${b.name}</td>
           <td><span style="background: #333; padding: 4px 8px; border-radius: 5px;">${b.time}</span></td>
           <td>${b.service}</td>
-          <td><button class="status-btn doneBtn" data-id="${b.id}">Done</button></td>
+          <td>
+            <button class="status-btn doneBtn" data-id="${b.id}" style="margin-right:5px;">Done</button>
+            <a href="https://wa.me/${b.phone || ''}?text=Hi ${b.name}, your ${b.service} at ${b.time} is confirmed ✅"
+               target="_blank"
+               style="background:#25D366; color:white; padding:8px 12px; border-radius:8px; text-decoration:none; font-size:0.8rem;">
+               <i class='bx bxl-whatsapp'></i>
+            </a>
+          </td>
         </tr>
       `).join('');
 
@@ -263,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // FIXED: dbGet instead of onValue to prevent infinite loop
     if (clearBtn) {
       clearBtn.onclick = async () => {
         if (confirm('Clear all your bookings?')) {
@@ -282,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 8. Booking modal for salons.html
   function initBookingModal(user) {
     const modal = document.getElementById('bookingModal');
     const openBtns = document.querySelectorAll('.openBooking');
@@ -312,9 +347,10 @@ document.addEventListener('DOMContentLoaded', () => {
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
-      if (!name ||!time ||!service) {
+      if (!name ||!phone ||!time ||!service) {
         alert('Fill all fields');
         return;
       }
@@ -323,38 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const booking = {
         name, time, service, price,
+        phone, // UPGRADE 2: Save phone
         salon: selectedSalon,
-        salonUid: selectedSalonUid,
-        customerUid: user.uid,
-        email: user.email,
-        date: new Date().toISOString().split('T')[0],
-        createdAt: Date.now()
-      };
-
-      try {
-        await dbSet(push(dbRef(db, 'bookings')), booking);
-        alert('Booking confirmed!');
-        modal.classList.remove('active');
-        form.reset();
-      } catch (err) {
-        alert('Error saving booking: ' + err.message);
-      }
-    });
-  }
-
-  // 9. Redirect helper - FIXED to not redirect if already on correct page
-  function redirectByRole(role) {
-    const page = window.location.pathname.split('/').pop() || 'index.html';
-    console.log('Current page:', page, 'Role:', role);
-
-    const targetPage = role === 'admin'? 'admin.html'
-                     : role === 'salon_owner'? 'owners.html'
-                     : 'salons.html';
-
-    // Only redirect if not already on target page
-    if (page!== targetPage) {
-      console.log('Redirecting to', targetPage);
-      window.location.replace(targetPage);
-    }
-  }
-});
+        salonUid: selectedSalon
