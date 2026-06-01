@@ -135,6 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const elSharp = document.getElementById('dist-sharp');
       if (elVaal) elVaal.innerHTML = `<i class='bx bx-map'></i> ${distVaal.toFixed(1)}km`;
       if (elSharp) elSharp.innerHTML = `<i class='bx bx-map'></i> ${distSharp.toFixed(1)}km`;
+    }, () => {
+      document.getElementById('dist-vaal') && (document.getElementById('dist-vaal').innerHTML = `<i class='bx bx-map'></i> Allow location`);
+      document.getElementById('dist-sharp') && (document.getElementById('dist-sharp').innerHTML = `<i class='bx bx-map'></i> Allow location`);
     });
   }
 
@@ -361,4 +364,48 @@ document.addEventListener('DOMContentLoaded', () => {
         name, time, service, price,
         phone, // UPGRADE 2: Save phone
         salon: selectedSalon,
-        salonUid: selectedSalon
+        salonUid: selectedSalonUid,
+        customerUid: user.uid,
+        email: user.email,
+        date: new Date().toISOString().split('T')[0],
+        createdAt: Date.now()
+      };
+
+      try {
+        await dbSet(push(dbRef(db, 'bookings')), booking);
+        alert('Booking confirmed!');
+        modal.classList.remove('active');
+        form.reset();
+      } catch (err) {
+        alert('Error saving booking: ' + err.message);
+      }
+    });
+  }
+
+  function redirectByRole(role) {
+    const rawPage = window.location.pathname.split('/').pop() || 'index.html';
+    const page = rawPage.toLowerCase();
+    const targetPage = role === 'admin'? 'admin.html'
+                     : role === 'salon_owner'? 'owners.html'
+                     : 'salons.html';
+    if (page!== targetPage) {
+      window.location.replace(targetPage);
+    }
+  }
+
+  // UPGRADE 3: PWA Install button
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBtn = document.getElementById('installBtn');
+    if (installBtn) installBtn.style.display = 'block';
+  });
+  document.getElementById('installBtn')?.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    }
+  });
+});
