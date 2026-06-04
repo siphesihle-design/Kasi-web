@@ -1,8 +1,4 @@
-Here is your complete, updated `script.js` code.
 
-The contradictory redirect logic and delayed `setTimeout` traps have been completely cleaned out of `onAuthState`. Instead, the file now uses a structured role validation block that cleanly handles your clients, salon owners, and admins without causing infinite page-reload loops.
-
-```javascript
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Init Swiper
