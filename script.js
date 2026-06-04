@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
+  // FIX 1: Prevent redirect loops
+  let hasRedirected = false;
+
   async function getRole(uid) {
     try {
       const roleRef = dbRef(db, 'users/' + uid + '/role');
@@ -65,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       try {
         if (authMsg) authMsg.textContent = 'Logging in...';
+        hasRedirected = false; // Reset on new login
         const cred = await signIn(auth, email, password);
         const role = await getRole(cred.user.uid);
         redirectByRole(role);
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       try {
         if (authMsg) authMsg.textContent = 'Creating account...';
+        hasRedirected = false; // Reset on new signup
         const cred = await signUp(auth, email, password);
         await dbSet(dbRef(db, 'users/' + cred.user.uid), {
           email, role: 'client', createdAt: Date.now()
@@ -97,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
+      hasRedirected = false;
       await logOut(auth);
       window.location.href = 'index.html';
     });
@@ -158,26 +164,36 @@ document.addEventListener('DOMContentLoaded', () => {
       if (authMsg) authMsg.textContent = 'Loading...';
       const role = await getRole(user.uid);
 
+      // DEBUG: Remove this after testing
+      console.log("User UID:", user.uid, "Role:", role, "Page:", page);
+
       if (loginBtn) loginBtn.style.display = 'none';
       if (signupBtn) signupBtn.style.display = 'none';
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
-      if (onLoginPage) {
+      // FIX 1: Only redirect once from login page
+      if (onLoginPage &&!hasRedirected) {
+        hasRedirected = true;
         redirectByRole(role);
         return;
       }
 
+      // FIX 3: Delay role check on protected pages to avoid race condition
       if (page === 'admin.html' && role!== 'admin') {
-        alert('Admin access only');
-        await logOut(auth);
-        window.location.href = 'index.html';
+        setTimeout(async () => {
+          alert('Admin access only');
+          await logOut(auth);
+          window.location.href = 'index.html';
+        }, 500);
         return;
       }
       if (page === 'owners.html' && role!== 'salon_owner' && role!== 'admin') {
-        alert('Salon owner access only');
-        await logOut(auth);
-        window.location.href = 'index.html';
+        setTimeout(async () => {
+          alert('Salon owner access only');
+          await logOut(auth);
+          window.location.href = 'index.html';
+        }, 500);
         return;
       }
 
@@ -190,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
     } else {
+      hasRedirected = false;
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (signupBtn) signupBtn.style.display = 'inline-flex';
       if (logoutBtn) logoutBtn.style.display = 'none';
@@ -246,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // UPGRADE 4: Skeleton loading + UPGRADE 2: WhatsApp button
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -256,7 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearBtn = document.getElementById("clearBtn");
     if (!tableBody) return;
 
-    // Skeleton while loading
     tableBody.innerHTML = '<tr><td colspan="4"><div class="skeleton"></div><div class="skeleton"></div></td></tr>';
 
     onValue(dbRef(db, 'shopStatus/' + ownerUid), (snap) => {
@@ -362,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const booking = {
         name, time, service, price,
-        phone, // UPGRADE 2: Save phone
+        phone,
         salon: selectedSalon,
         salonUid: selectedSalonUid,
         customerUid: user.uid,
@@ -389,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
                      : role === 'salon_owner'? 'owners.html'
                      : 'salons.html';
     if (page!== targetPage) {
+      console.log("Redirecting to:", targetPage); // DEBUG
       window.location.replace(targetPage);
     }
   }
