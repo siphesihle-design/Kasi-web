@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Init Swiper
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (snap.exists()) return snap.val();
 
       const user = auth.currentUser;
-      const role = user?.email?.endsWith('@yoursalon.com') ? 'salon_owner' : 'client';
+      const role = user?.email?.endsWith('@yoursalon.com')? 'salon_owner' : 'client';
       await dbSet(dbRef(db, 'users/' + uid), {
         email: user.email,
         role: role,
@@ -63,13 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value.trim();
-      if (!email || !password) {
+      if (!email ||!password) {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
       try {
         if (authMsg) authMsg.textContent = 'Logging in...';
-        hasRedirected = false; 
+        hasRedirected = false;
         const cred = await signIn(auth, email, password);
         const role = await getRole(cred.user.uid);
         redirectByRole(role);
@@ -83,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value.trim();
-      if (!email || !password) {
+      if (!email ||!password) {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
@@ -132,8 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const userLat = pos.coords.latitude;
       const userLng = pos.coords.longitude;
 
-      const vaalLat = -26.7086, vaalLng = 27.8785; 
-      const sharpLat = -26.7000, sharpLng = 27.8700; 
+      const vaalLat = -26.7086, vaalLng = 27.8785;
+      const sharpLat = -26.7000, sharpLng = 27.8700;
 
       const distVaal = getDistance(userLat, userLng, vaalLat, vaalLng);
       const distSharp = getDistance(userLat, userLng, sharpLat, sharpLng);
@@ -172,18 +171,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
       // Map out exactly where each role belongs
-      const correctPage = role === 'admin' ? 'admin.html' 
-                        : role === 'salon_owner' ? 'owners.html' 
+      const correctPage = role === 'admin'? 'admin.html'
+                        : role === 'salon_owner'? 'owners.html'
                         : 'salons.html';
 
-      // 1. If user is on landing/login page, move them to their dashboard
-      if (onLoginPage) {
+      // 1. If user is on landing/login page, move them to their dashboard - with guard
+      if (onLoginPage &&!hasRedirected) {
+        hasRedirected = true;
         window.location.replace(correctPage);
         return;
       }
 
       // 2. Protect specific dashboards from wrong roles without logging them out
-      if (page !== correctPage) {
+      if (page!== correctPage) {
         if (role === 'client' && (page === 'admin.html' || page === 'owners.html')) {
           alert('Access denied: Clients only have access to salon booking.');
           window.location.replace('salons.html');
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (signupBtn) signupBtn.style.display = 'inline-flex';
       if (logoutBtn) logoutBtn.style.display = 'none';
       if (authMsg) authMsg.textContent = '';
-      
+
       // Kick visitors away from functional screens back to index.html
       if (page === 'admin.html' || page === 'owners.html' || page === 'salons.html') {
         window.location.replace('index.html');
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     onValue(dbRef(db, 'shopStatus/' + ownerUid), (snap) => {
       if (snap.exists() && statusSelect) statusSelect.value = snap.val();
     });
-    
+
     if (statusSelect) {
       statusSelect.onchange = () => {
         dbSet(dbRef(db, 'shopStatus/' + ownerUid), statusSelect.value);
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
       myBookings.sort((a, b) => a.time.localeCompare(b.time));
 
       if (totalCount) totalCount.textContent = myBookings.length;
-      if (nextTime) nextTime.textContent = myBookings.length > 0 ? myBookings[0].time : '--:--';
+      if (nextTime) nextTime.textContent = myBookings.length > 0? myBookings[0].time : '--:--';
       if (totalRevenue) totalRevenue.textContent = `R${myBookings.reduce((sum, b) => sum + (b.price || 0), 0)}`;
 
       if (myBookings.length === 0) {
@@ -374,12 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const phone = document.getElementById('custPhone').value.trim();
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
-      if (!name || !phone || !time || !service) {
+      if (!name ||!phone ||!time ||!service) {
         alert('Fill all fields');
         return;
       }
       const priceMatch = service.match(/R(\d+)/);
-      const price = priceMatch ? parseInt(priceMatch[1], 10) : 0;
+      const price = priceMatch? parseInt(priceMatch[1], 10) : 0;
 
       const booking = {
         name, time, service, price,
@@ -404,8 +404,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function redirectByRole(role) {
-    const targetPage = role === 'admin' ? 'admin.html'
-                     : role === 'salon_owner' ? 'owners.html'
+    const targetPage = role === 'admin'? 'admin.html'
+                     : role === 'salon_owner'? 'owners.html'
                      : 'salons.html';
     window.location.replace(targetPage);
   }
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const installBtn = document.getElementById('installBtn');
     if (installBtn) installBtn.style.display = 'block';
   });
-  
+
   document.getElementById('installBtn')?.addEventListener('click', async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
@@ -427,5 +427,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
-```
