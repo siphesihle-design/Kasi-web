@@ -9,13 +9,14 @@ body {
     color: #ffffff;
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
     overflow-x: hidden;
+    padding-bottom: env(safe-area-inset-bottom); /* iPhone home bar fix */
 }
 
 .container {
     max-width: 450px;
     margin: auto;
     padding: 20px;
-    padding-bottom: 120px;
+    padding-bottom: 140px; /* bumped from 120px for nav clearance */
 }
 
 .header-title {
@@ -26,17 +27,19 @@ body {
     font-weight: 800;
 }
 
+/* FIXED: Solid background so image doesn't bleed through + margin for nav */
 .glass-card {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(26, 26, 26, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 28px;
     padding: 25px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    margin-bottom: 25px;
-    position: relative; /* FIX: So buttons inside can layer properly */
-    z-index: 1;
+    margin: 40px auto 140px auto; /* top + bottom margin added */
+    max-width: 400px;
+    position: relative;
+    z-index: 10;
 }
 
 .typing-text { font-size: 1.6rem; margin: 0; color: #fff; }
@@ -48,13 +51,13 @@ input, select {
     padding: 14px;
     border-radius: 14px;
     border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.4);
     color: white;
     outline: none;
     width: 100%;
 }
 
-/* BUTTONS WITH SWIPE EFFECT - FIXED */
+/* BUTTON CONTROLS & VISUAL LAYERING FIXES */
 .primary-btn, .secondary-btn {
     position: relative;
     overflow: hidden;
@@ -69,7 +72,6 @@ input, select {
     z-index: 1;
 }
 
-/* Swipe layer that slides across */
 .primary-btn::before, .secondary-btn::before {
     content: '';
     position: absolute;
@@ -77,8 +79,8 @@ input, select {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: rgba(255,255,255,0.25);
-    transition: left 0.4s ease;
+    background: rgba(255, 255, 255, 0.15);
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
 }
 
@@ -90,6 +92,7 @@ input, select {
     background: #008080; 
     color: white; 
 }
+
 .secondary-btn { 
     background: transparent; 
     color: #008080; 
@@ -98,9 +101,10 @@ input, select {
 }
 
 .primary-btn:active, .secondary-btn:active { 
-    transform: scale(0.96); 
+    transform: scale(0.97); 
 }
 
+/* Swiper UI Core Styles */
 .swiper {
     width: 100%;
     height: 350px;
@@ -121,23 +125,24 @@ input, select {
     font-size: 0.95rem;
 }
 
-/* Nav Grid System */
+/* FIXED: Nav docked to bottom + higher z-index + iPhone padding */
 .nav-grid {
     position: fixed;
-    bottom: 20px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 40px);
-    max-width: 410px;
-    background: rgba(15, 15, 15, 0.85);
+    width: 100%;
+    max-width: 450px;
+    background: rgba(15, 15, 15, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px 24px 0 0;
     display: flex;
     justify-content: space-around;
-    padding: 10px;
-    z-index: 999;
+    align-items: center;
+    padding: 12px 0 calc(12px + env(safe-area-inset-bottom)) 0;
+    z-index: 9999;
 }
 
 .nav-item {
@@ -151,22 +156,25 @@ input, select {
     background: none;
     border: none;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
 .nav-item i { font-size: 1.3rem; }
-.nav-item.active { color: #008080; }
+.nav-item.active, .nav-item:hover { color: #008080; }
 
-/* Salon Cards */
+/* Salon Visual Directory Dashboard Layout Blocks */
 .salon-list { display: flex; flex-direction: column; gap: 20px; }
 .salon-card { padding: 0; overflow: hidden; }
 .card-media { position: relative; height: 180px; width: 100%; }
 .salon-img { width: 100%; height: 100%; object-fit: cover; }
+
 .img-overlay {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 60%;
     background: linear-gradient(transparent, rgba(0,0,0,0.7));
 }
+
 .status-badge {
     position: absolute;
     top: 15px; right: 15px;
@@ -179,6 +187,7 @@ input, select {
     z-index: 2;
 }
 .status-badge.busy { background: #ff4757; color: #fff; }
+
 .card-content { padding: 20px; }
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .card-header h2 { font-size: 1.2rem; margin: 0; }
@@ -186,7 +195,7 @@ input, select {
 .description { font-size: 0.85rem; color: #aaa; margin-bottom: 15px; }
 .feature-tags { display: flex; gap: 12px; margin-bottom: 15px; font-size: 0.8rem; color: #888; }
 
-/* Modal */
+/* Functional Booking Modals Framework */
 .modal {
     position: fixed;
     top: 0; left: 0;
@@ -205,16 +214,17 @@ input, select {
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-/* UPGRADE 4: Skeleton Loading */
+/* Dashboard Data Skelton Screens */
 .skeleton {
-  background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  border-radius: 12px;
-  height: 20px;
-  margin: 10px 0;
+    background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 12px;
+    height: 20px;
+    margin: 10px 0;
 }
+
 @keyframes loading {
- 0% { background-position: 200% 0; }
- 100% { background-position: -200% 0; }
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
