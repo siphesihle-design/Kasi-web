@@ -1,8 +1,3 @@
-Here is your complete, production-ready `script.js` file.
-
-I have seamlessly integrated the security query modifications, added the missing global Firebase variables (`query`, `orderByChild`, `equalTo`), and ensured all brackets and scopes line up perfectly inside your `DOMContentLoaded` wrapper.
-
-```javascript
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Init Swiper
@@ -30,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const push = window.push;
   const remove = window.remove;
   const onValue = window.onValue;
-  
-  // NEW: Query utilities extracted from window for server-side filtering
   const query = window.query;
   const orderByChild = window.orderByChild;
   const equalTo = window.equalTo;
@@ -45,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminBtn = document.getElementById('adminBtn');
   const authMsg = document.getElementById('authMsg');
 
-  // Used strictly to prevent multiple login/signup button execution fires
   let hasRedirected = false;
 
   async function getRole(uid) {
@@ -58,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (snap.exists()) return snap.val();
 
       const user = auth.currentUser;
-      const role = user?.email?.endsWith('@yoursalon.com') ? 'salon_owner' : 'client';
+      const role = user?.email?.endsWith('@yoursalon.com')? 'salon_owner' : 'client';
       await dbSet(dbRef(db, 'users/' + uid), {
         email: user.email,
         role: role,
@@ -74,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value.trim();
-      if (!email || !password) {
+      if (!email ||!password) {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
@@ -94,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     signupBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value.trim();
-      if (!email || !password) {
+      if (!email ||!password) {
         if (authMsg) authMsg.textContent = 'Enter email and password';
         return;
       }
@@ -122,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (adminBtn) adminBtn.style.display = 'none';
 
-  // UPGRADE 1: Live bookings counter
+  // Live bookings counter
   function loadBookingsCounter() {
     const counterEl = document.getElementById('bookingsToday');
     if (!counterEl) return;
@@ -136,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // UPGRADE 5: GPS Distance
+  // GPS Distance
   function updateDistances() {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(pos => {
@@ -182,20 +174,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (logoutBtn) logoutBtn.style.display = 'inline-flex';
       if (authMsg) authMsg.textContent = `Hi ${user.email.split('@')[0]}`;
 
-      // Map out exactly where each role belongs
-      const correctPage = role === 'admin' ? 'admin.html'
-                        : role === 'salon_owner' ? 'owners.html'
+      const correctPage = role === 'admin'? 'admin.html'
+                        : role === 'salon_owner'? 'owners.html'
                         : 'salons.html';
 
-      // 1. If user is on landing/login page, move them to their dashboard - with guard
-      if (onLoginPage && !hasRedirected) {
+      if (onLoginPage &&!hasRedirected) {
         hasRedirected = true;
         window.location.replace(correctPage);
         return;
       }
 
-      // 2. Protect specific dashboards from wrong roles without logging them out
-      if (page !== correctPage) {
+      if (page!== correctPage) {
         if (role === 'client' && (page === 'admin.html' || page === 'owners.html')) {
           alert('Access denied: Clients only have access to salon booking.');
           window.location.replace('salons.html');
@@ -208,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 3. Safe to initialize specific page modules now that route is verified
       if (page === 'admin.html') loadAdminBookings();
       if (page === 'owners.html') loadOwnerDashboard(user.uid);
       if (page === 'salons.html') {
@@ -218,13 +206,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
     } else {
-      // Unauthenticated state handling
       if (loginBtn) loginBtn.style.display = 'inline-flex';
       if (signupBtn) signupBtn.style.display = 'inline-flex';
       if (logoutBtn) logoutBtn.style.display = 'none';
       if (authMsg) authMsg.textContent = '';
 
-      // Kick visitors away from functional screens back to index.html
       if (page === 'admin.html' || page === 'owners.html' || page === 'salons.html') {
         window.location.replace('index.html');
       }
@@ -238,8 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     onValue(dbRef(db, 'bookings'), (snap) => {
       const bookings = [];
-      snap.forEach(child => bookings.push({ id: child.key, ...child.val() }));
-      countEl.textContent = `${bookings.length} total booking${bookings.length !== 1 ? 's' : ''}`;
+      snap.forEach(child => bookings.push({ id: child.key,...child.val() }));
+      countEl.textContent = `${bookings.length} total booking${bookings.length!== 1? 's' : ''}`;
 
       if (bookings.length === 0) {
         listEl.innerHTML = '<p style="text-align:center; color:#888;">No bookings yet.</p>';
@@ -257,7 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <i class='bx bx-store'></i> ${b.salon}<br>
                 <i class='bx bx-time'></i> ${b.time} • ${b.date}<br>
                 <i class='bx bx-phone'></i> ${b.phone || 'No phone'}<br>
-                <i class='bx bx-envelope'></i> ${b.email}
+                <i class='bx bx-envelope'></i> ${b.email}<br>
+                <i class='bx bx-id-card'></i> Client: ${b.c || 'N/A'} | Salon: ${b.s || 'N/A'}
               </p>
             </div>
             <button class="secondary-btn deleteBtn" data-id="${b.id}"
@@ -278,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // SECURED & FIXED: Load Owner Dashboard via Server-Side Queries
+  // Owner Dashboard - uses short keys 's' for salonUid
   function loadOwnerDashboard(ownerUid) {
     const statusSelect = document.getElementById('shopStatusSelect');
     const tableBody = document.getElementById("tableBody");
@@ -301,17 +288,17 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // Secure database indexing query
+    // Query using 's' instead of 'salonUid'
     const bookingsRef = dbRef(db, 'bookings');
-    const ownerBookingsQuery = query(bookingsRef, orderByChild('salonUid'), equalTo(ownerUid));
+    const ownerBookingsQuery = query(bookingsRef, orderByChild('s'), equalTo(ownerUid));
 
     onValue(ownerBookingsQuery, (snap) => {
       const myBookings = [];
-      snap.forEach(child => myBookings.push({ id: child.key, ...child.val() }));
+      snap.forEach(child => myBookings.push({ id: child.key,...child.val() }));
       myBookings.sort((a, b) => a.time.localeCompare(b.time));
 
       if (totalCount) totalCount.textContent = myBookings.length;
-      if (nextTime) nextTime.textContent = myBookings.length > 0 ? myBookings[0].time : '--:--';
+      if (nextTime) nextTime.textContent = myBookings.length > 0? myBookings[0].time : '--:--';
       if (totalRevenue) totalRevenue.textContent = `R${myBookings.reduce((sum, b) => sum + (b.price || 0), 0)}`;
 
       if (myBookings.length === 0) {
@@ -388,19 +375,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const phone = document.getElementById('custPhone').value.trim();
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
-      if (!name || !phone || !time || !service) {
+      if (!name ||!phone ||!time ||!service) {
         alert('Fill all fields');
         return;
       }
       const priceMatch = service.match(/R(\d+)/);
-      const price = priceMatch ? parseInt(priceMatch[1], 10) : 0;
+      const price = priceMatch? parseInt(priceMatch[1], 10) : 0;
 
       const booking = {
         name, time, service, price,
         phone,
         salon: selectedSalon,
-        salonUid: selectedSalonUid,
-        customerUid: user.uid,
+        s: selectedSalonUid, // CHANGED: salonUid → s
+        c: user.uid, // CHANGED: customerUid → c
         email: user.email,
         date: new Date().toISOString().split('T')[0],
         createdAt: Date.now()
@@ -418,13 +405,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function redirectByRole(role) {
-    const targetPage = role === 'admin' ? 'admin.html'
-                     : role === 'salon_owner' ? 'owners.html'
+    const targetPage = role === 'admin'? 'admin.html'
+                     : role === 'salon_owner'? 'owners.html'
                      : 'salons.html';
     window.location.replace(targetPage);
   }
 
-  // UPGRADE 3: PWA Install button
+  // PWA Install button
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -441,5 +428,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
-```
