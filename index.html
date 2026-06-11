@@ -17,7 +17,7 @@
     <h1 class="header-title">Web For Kasi People</h1>
 
     <div class="container">
-        <div class="glass-card login-section">
+        <div class="glass-card login-section" id="authSection">
             <h2 class="typing-text">K@si Web</h2>
             <p class="tagline">Hair cut made easy</p>
 
@@ -65,7 +65,7 @@
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { 
             getDatabase, ref, set, get, push, remove, onValue,
-            query, orderByChild, equalTo // Fixed: Explicitly imported missing querying tools
+            query, orderByChild, equalTo
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
@@ -82,7 +82,6 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // Bind cleanly to global window object for script.js operational scope
         window.firebaseAuth = auth;
         window.firebaseDB = db;
         window.signIn = signInWithEmailAndPassword;
@@ -95,8 +94,6 @@
         window.push = push;
         window.remove = remove;
         window.onValue = onValue;
-        
-        // Fixed: Mapped query tools to window so script.js can safely access them
         window.query = query;
         window.orderByChild = orderByChild;
         window.equalTo = equalTo;
