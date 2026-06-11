@@ -17,8 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const orderByChild = window.orderByChild;
   const equalTo = window.equalTo;
 
-  if (!query ||!orderByChild ||!equalTo) {
+  if (!query || !orderByChild || !equalTo) {
     console.error('Firebase query utils missing. Add query, orderByChild, equalTo to window in HTML');
+  }
+
+  // Fixed: Initialized Swiper slider engine so layouts transform smoothly
+  if (document.querySelector('.swiper')) {
+    new Swiper('.swiper', {
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+      }
+    });
   }
 
   let hasRedirected = false;
@@ -29,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const snap = await Promise.race([dbGet(roleRef), new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2000))]);
       if (snap.exists()) return snap.val();
       const user = auth.currentUser;
-      const role = user?.email?.endsWith('@yoursalon.com')? 'salon_owner' : 'client';
+      const role = user?.email?.endsWith('@yoursalon.com') ? 'salon_owner' : 'client';
       await dbSet(dbRef(db, 'users/' + uid), {email: user.email, role: role, createdAt: Date.now()});
       return role;
     } catch { return 'client'; }
@@ -87,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openBtns = document.querySelectorAll('.openBooking');
     const closeBtn = document.querySelector('.close-btn');
     const form = document.getElementById('bookingForm');
-    if (!modal ||!form) { console.error('Modal or form not found'); return; }
+    if (!modal || !form) { console.error('Modal or form not found'); return; }
 
     let selectedSalon = '', selectedSalonUid = '';
 
@@ -110,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const phone = document.getElementById('custPhone').value.trim();
       const time = document.getElementById('custTime').value;
       const service = document.getElementById('serviceType').value;
-      if (!name ||!phone ||!time ||!service) { alert('Fill all fields'); return; }
+      if (!name || !phone || !time || !service) { alert('Fill all fields'); return; }
       const priceMatch = service.match(/R(\d+)/);
-      const price = priceMatch? parseInt(priceMatch[1], 10) : 0;
+      const price = priceMatch ? parseInt(priceMatch[1], 10) : 0;
 
       const booking = {
         name, time, service, price, phone,
