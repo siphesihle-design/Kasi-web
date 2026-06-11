@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <header class="main-header" style="padding-top: 20px;">
         <div class="container header-nav-box">
             <h1 class="header-title" style="text-align:left; margin-top: 20px;">Local Salons</h1>
@@ -76,15 +77,17 @@
     </main>
 
     <div class="modal" id="bookingModal">
-        <div class="modal-overlay"></div>
+        <div class="modal-overlay" onclick="document.getElementById('bookingModal').classList.remove('active')"></div>
         <div class="modal-content glass-card">
             <div class="modal-header">
                 <h3>Book Your Cut</h3>
-                <button type="button" class="close-btn"><i class='bx bx-x'></i></button>
+                <button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">
+                    <i class='bx bx-x'></i>
+                </button>
             </div>
             <form id="bookingForm" class="form-group">
-                <input type="text" id="custName" placeholder="Your Name" required>
-                <input type="tel" id="custPhone" placeholder="WhatsApp Number 071..." required>
+                <input type="text" id="custName" placeholder="Your Name" required autocomplete="name">
+                <input type="tel" id="custPhone" placeholder="WhatsApp Number 071..." required autocomplete="tel">
                 <select id="serviceType" required>
                     <option value="">Select Service</option>
                     <option value="Fade R150">Fade - R150</option>
@@ -126,7 +129,7 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // Fully syncs window targets to avoid crashing script.js lookups
+        // Setting window variable contexts explicitly for script.js execution paths
         window.firebaseAuth = auth;
         window.firebaseDB = db;
         window.signIn = signInWithEmailAndPassword;
@@ -145,9 +148,5 @@
     </script>
 
     <script src="script.js"></script>
-
-    <footer style="text-align:center; padding:40px 0 20px;">
-        <p style="color:#666; font-size:0.85rem; margin-top:15px;">© 2026 K@si Web</p>
-    </footer>
 </body>
 </html>
