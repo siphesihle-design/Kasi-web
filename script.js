@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Fail-safe protection if firebase initialization hasn't cleared yet
+    // Safety check: wait for Firebase to expose modules to the window object
     if (!window.firebaseAuth) return;
 
     const auth = window.firebaseAuth;
@@ -11,26 +11,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const push = window.push;
     const onValue = window.onValue;
 
-    // DOM Target Elements
+    // DOM Target Elements from salons.html
     const bookingModal = document.getElementById('bookingModal');
     const bookingForm = document.getElementById('bookingForm');
     const adminBtn = document.getElementById('adminBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const bookingsTodayEl = document.getElementById('bookingsToday');
 
-    // State placeholders tracking current active interaction context
+    // Runtime state tracking variables
     let activeSalonName = "";
     let activeSalonUid = "";
     let currentClientUid = null;
 
-    // --- 1. SESSION / IDENTITY OBSERVATION ---
+    // --- 1. AUTHENTICATION & ROLE MANAGEMENT ---
     onAuthState(auth, async (user) => {
         if (user) {
             currentClientUid = user.uid;
             if (logoutBtn) logoutBtn.style.display = 'block';
 
-            // Verify role to determine visibility modifiers for workspace shortcuts
             try {
+                // Read user node to see if they should have access to the Admin button shortcut
                 const userSnap = await dbGet(dbRef(db, `users/${user.uid}`));
                 if (userSnap.exists()) {
                     const userData = userSnap.val();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             } catch (err) {
-                console.error("Role resolution system execution fault:", err);
+                console.error("Error fetching user role context:", err);
             }
         } else {
             currentClientUid = null;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Navigation UI Redirect Bindings
+    // Navigation Redirections
     if (adminBtn) {
         adminBtn.addEventListener('click', () => { window.location.href = 'owners.html'; });
     }
@@ -57,32 +57,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 2. MODAL ENGAGEMENT ROUTINES ---
+    // Listen globally for clicks on the "Book Appointment" buttons
     document.addEventListener('click', (e) => {
         const trigger = e.target.closest('.openBooking');
         if (!trigger) return;
 
-        // Force explicit user session requirement state before processing reservation parameters
+        // Force a valid login session before allowing a customer to book
         if (!currentClientUid) {
-            alert('Please register or log in on the home page before scheduling appointments.');
+            alert('Please sign up or log in on the home page before booking a cut.');
             window.location.href = 'index.html';
             return;
         }
 
-        // Cache parameters tied into HTML structural elements
+        // Extract metadata values embedded within the HTML data attributes
         activeSalonName = trigger.getAttribute('data-salon');
         activeSalonUid = trigger.getAttribute('data-salon-uid');
 
-        // Present UI sheet configuration
-        bookingModal.classList.add('active');
+        // Reveal the modal layout wrapper sheet
+        if (bookingModal) {
+            bookingModal.classList.add('active');
+        }
     });
 
-    // --- 3. TRANSACTION ENGINE SUBMISSION ---
+    // --- 3. BOOKING TRANSACTION HANDLER ---
     if (bookingForm) {
         bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             if (!currentClientUid) {
-                alert('Authentication expired. Re-routing back.');
+                alert('Your session expired. Re-routing back to home page.');
                 window.location.href = 'index.html';
                 return;
             }
@@ -91,47 +94,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameValue = document.getElementById('custName').value.trim();
             const phoneValue = document.getElementById('custPhone').value.trim();
             const timeValue = document.getElementById('custTime').value;
-            const todayDateStr = new Date().toISOString().split('T')[0]; // Format standard: YYYY-MM-DD
+            const todayDateStr = new Date().toISOString().split('T')[0]; // Generates local date: YYYY-MM-DD
 
-            // Isolate numeric string parameter payload definitions safely
-            const priceExtractionArray = rawService.match(/R(\d+)/);
-            const isolatedPrice = priceExtractionArray ? priceExtractionArray[1] : "0";
+            // Safely extract the payment amount number using a regex lookahead match
+            const priceMatch = rawService.match(/R(\d+)/);
+            const isolatedPrice = priceMatch ? priceMatch[1] : "0";
 
-            // Map data structure variables directly to Firebase Schema Requirements
+            // Map standard layout definitions directly onto database structural definitions
             const bookingPayload = {
-                c: currentClientUid,          // Client identity node validation variable
-                s: activeSalonUid,           // Salon owner pointer link
-                salon: activeSalonName,       // Text label for super-admin panel reference
+                c: currentClientUid,          // Client identification node (used by Security Rules validation)
+                s: activeSalonUid,           // Targeted Salon account UID link
+                salon: activeSalonName,       // Text context representation fallback
                 name: nameValue,
                 phone: phoneValue,
                 service: rawService,
-                price: isolatedPrice,         // Tracks billing validation variables
+                price: isolatedPrice,         // Stripped numeric cost value
                 time: timeValue,
                 date: todayDateStr,
-                status: "pending"             // Lifecycle state flags: pending -> confirmed -> completed
+                status: "pending"             // Lifecycle state tracker logic
             };
 
             try {
-                // Initialize unique key record path allocations inside data engine
-                const targetCollectionRef = dbRef(db, 'bookings');
-                const generatedRecordReference = push(targetCollectionRef);
+                // Point explicitly to global window instances to prevent race-condition script dropouts
+                const bookingsCollectionRef = window.dbRef(window.firebaseDB, 'bookings');
+                const uniqueKeyRef = window.push(bookingsCollectionRef);
 
-                await dbSet(generatedRecordReference, bookingPayload);
+                await window.dbSet(uniqueKeyRef, bookingPayload);
 
-                alert(`Appointment scheduled successfully with ${activeSalonName}! ✂️\nKeep an eye on WhatsApp notifications.`);
+                alert(`Success! Appointment scheduled with ${activeSalonName} ✂️\nCheck back soon for confirmation.`);
                 bookingModal.classList.remove('active');
                 bookingForm.reset();
             } catch (err) {
-                alert('Database write execution failed: ' + err.message);
-                console.error(err);
+                alert('Database write action dropped: ' + err.message);
+                console.error("Booking Write Error Log:", err);
             }
         });
     }
 
-    // --- 4. REAL-TIME DATA STREAM INTERACTION SYNC ---
-    // Monitor global dynamic booking operations count logic metrics for current day 
-    const structuralBookingsRootRef = dbRef(db, 'bookings');
-    onValue(structuralBookingsRootRef, (snapshot) => {
+    // --- 4. REAL-TIME DATA & COUNTER SYNC ---
+    // Count active appointments running today across all salons
+    const bookingsFolderRef = dbRef(db, 'bookings');
+    onValue(bookingsFolderRef, (snapshot) => {
         const todayStr = new Date().toISOString().split('T')[0];
         let runningCounter = 0;
 
@@ -145,38 +148,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Real-time status update loop mapping barber availability directly to dashboard dropdown selections
+    // Watch the 'shopStatus' node to update Open/Busy/Closed tags in real-time
     const shopStatusFolderRef = dbRef(db, 'shopStatus');
     onValue(shopStatusFolderRef, (snapshot) => {
         if (!snapshot.exists()) return;
         
-        const data = snapshot.val();
+        const statusData = snapshot.val();
 
-        // Loop dynamic checks mapping across buttons mapped dynamically inside page structure
         document.querySelectorAll('.openBooking').forEach((btn) => {
             const currentUID = btn.getAttribute('data-salon-uid');
-            if (!currentUID || !data[currentUID]) return;
+            if (!currentUID || !statusData[currentUID]) return;
 
-            const currentShopState = data[currentUID].status; // Reads 'Open', 'Busy', or 'Closed'
+            const currentShopState = statusData[currentUID].status; // Pulls 'Open', 'Busy', or 'Closed'
             const cardParent = btn.closest('.salon-card');
             if (!cardParent) return;
 
             const badgeElement = cardParent.querySelector('.status-badge');
             if (!badgeElement) return;
 
-            // Update badges live to display true state shifts instantly across screens
+            // Paint standard styling contexts cleanly across layout cards
             badgeElement.textContent = currentShopState === "Open" ? "Open Now" : currentShopState;
-            badgeElement.className = "status-badge"; // Clear classes
+            badgeElement.className = "status-badge"; // Wipe old utility tags clear
 
             if (currentShopState === "Busy") {
                 badgeElement.classList.add('busy');
-                btn.disabled = false; // Barbers can still stack items onto standard workflow queues
+                btn.disabled = false; // Keep button accessible so users can stack queues
             } else if (currentShopState === "Closed") {
-                badgeElement.classList.add('closed'); // Ensure target styling fallback rules exist inside style.css
+                badgeElement.classList.add('closed');
                 badgeElement.style.backgroundColor = "#333";
                 badgeElement.textContent = "Closed";
             } else {
-                badgeElement.style.backgroundColor = ""; // Reset baseline structural style declarations
+                badgeElement.style.backgroundColor = ""; // Reset fallback overrides
             }
         });
     });
