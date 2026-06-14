@@ -82,6 +82,7 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
+        // Safely map instances to the window scope for script.js and admin-dashboard.js
         window.firebaseAuth = auth;
         window.firebaseDB = db;
         window.signIn = signInWithEmailAndPassword;
@@ -97,6 +98,62 @@
         window.query = query;
         window.orderByChild = orderByChild;
         window.equalTo = equalTo;
+
+        // Run isolated initialization UI interactions safely
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailInput = document.getElementById('userEmail');
+            const passInput = document.getElementById('userPass');
+            const mainLoginBtn = document.getElementById('mainLoginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const authMsg = document.getElementById('authMsg');
+
+            // 1. Safe Swiper Slider Launch
+            if (typeof Swiper !== 'undefined') {
+                new Swiper('.swiper', {
+                    loop: true,
+                    autoplay: { delay: 3000, disableOnInteraction: false },
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                });
+            }
+
+            // 2. Main Login Listener Processing
+            if (mainLoginBtn) {
+                mainLoginBtn.addEventListener('click', async () => {
+                    const email = emailInput.value.trim();
+                    const password = passInput.value;
+                    if (!email || !password) return alert('Please enter both email and password details.');
+
+                    try {
+                        await signInWithEmailAndPassword(auth, email, password);
+                        if (authMsg) authMsg.textContent = "Welcome back! Access granted...";
+                        window.location.href = 'salons.html';
+                    } catch (err) {
+                        alert('Authentication Interrupted: ' + err.message);
+                    }
+                });
+            }
+
+            // 3. New User Registration Processing
+            if (signupBtn) {
+                signupBtn.addEventListener('click', async () => {
+                    const email = emailInput.value.trim();
+                    const password = passInput.value;
+                    if (!email || !password) return alert('Please enter registration requirements.');
+
+                    try {
+                        const creds = await createUserWithEmailAndPassword(auth, email, password);
+                        await set(ref(db, `users/${creds.user.uid}`), {
+                            email: email,
+                            role: 'customer'
+                        });
+                        if (authMsg) authMsg.textContent = "Registration successful! Loading salons layout...";
+                        window.location.href = 'salons.html';
+                    } catch (err) {
+                        alert('Registration Interrupted: ' + err.message);
+                    }
+                });
+            }
+        });
     </script>
 
     <script src="script.js"></script>
