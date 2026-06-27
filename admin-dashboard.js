@@ -1,14 +1,18 @@
-document.addEventListener('DOMContentLoaded', () => {
+addEventListener('DOMContentLoaded', () => {
     if (!window.firebaseAuth) return;
 
     const auth = window.firebaseAuth;
     const db = window.firebaseDB;
     const onAuthState = window.onAuthState;
     const logOut = window.logOut;
-    const dbRef = window.dbRef;
+    
+    // Cloud Firestore specific window mappings imported from index.html
+    const dbDoc = window.dbDoc;
     const dbGet = window.dbGet;
-    const remove = window.remove;
-    const onValue = window.onValue;
+    const dbSet = window.dbSet; // Maps safely to setDoc / update functionality
+    const collection = window.collection;
+    const onSnapshot = window.onSnapshot;
+    const removeDoc = window.removeDoc;
 
     // DOM UI Components Hooks
     const shopStatusSelect = document.getElementById('shopStatusSelect');
@@ -26,52 +30,63 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const roleRef = dbRef(db, 'users/' + user.uid + '/role');
-        const roleSnap = await dbGet(roleRef);
-        
-        if (!roleSnap.exists()) {
-            window.location.replace('index.html');
-            return;
-        }
-
-        const userRole = roleSnap.val();
-
-        if (userRole === 'admin') {
-            document.querySelector('header p').textContent = "Master Admin Panel — Global Overview";
-            if(document.querySelector('.status-control')) {
-                document.querySelector('.status-control').style.display = 'none';
+        try {
+            // Verified profile parameters straight from the Firestore root "users" collection
+            const roleSnap = await dbGet(dbDoc(db, "users", user.uid));
+            
+            if (!roleSnap.exists()) {
+                window.location.replace('index.html');
+                return;
             }
-            initDashboardEngine(user.uid, true);
-        } else if (userRole === 'salon_owner') {
-            initDashboardEngine(user.uid, false);
-        } else {
-            alert('Access Denied: Administrative access authorization required.');
+
+            const userData = roleSnap.data();
+            const userRole = userData ? userData.role : null;
+
+            if (userRole === 'admin') {
+                document.querySelector('header p').textContent = "Master Admin Panel — Global Overview";
+                if (document.querySelector('.status-control')) {
+                    document.querySelector('.status-control').style.display = 'none';
+                }
+                initDashboardEngine(user.uid, true);
+            } else if (userRole === 'salon_owner') {
+                initDashboardEngine(user.uid, false);
+            } else {
+                alert('Access Denied: Administrative access authorization required.');
+                window.location.replace('index.html');
+            }
+        } catch (err) {
+            console.error("Dashboard routing context error:", err);
             window.location.replace('index.html');
         }
     });
 
     // --- 2. METRICS CONTROL STREAM STORAGE MODULE ---
     function initDashboardEngine(userUid, isSuperAdmin) {
-        const bookingsRef = dbRef(db, 'bookings');
         const todayStr = new Date().toISOString().split('T')[0];
 
+        // Handles live modifications tracking for Individual Salon Owners
         if (!isSuperAdmin && shopStatusSelect) {
-            const statusNodeRef = dbRef(db, 'shopStatus/' + userUid + '/status');
-            onValue(statusNodeRef, (snap) => {
-                if (snap.exists()) shopStatusSelect.value = snap.val();
+            const statusDocRef = dbDoc(db, "shopStatus", userUid);
+            
+            // Set up document snapshot monitor loop
+            onSnapshot(statusDocRef, (snap) => {
+                if (snap.exists() && snap.data().status) {
+                    shopStatusSelect.value = snap.data().status;
+                }
             });
 
             shopStatusSelect.addEventListener('change', async () => {
                 try {
-                    await window.dbSet(statusNodeRef, shopStatusSelect.value);
+                    // Update layout payload changes into the shop's individual status doc
+                    await dbSet(statusDocRef, { status: shopStatusSelect.value }, { merge: true });
                 } catch (err) { 
                     alert('Error updating status context: ' + err.message); 
                 }
             });
         }
 
-        // Live Real-Time Dashboard Subscription Syncing
-        onValue(bookingsRef, (snapshot) => {
+        // Live Real-Time Dashboard Subscription Syncing using Firestore collection stream
+        onSnapshot(collection(db, "bookings"), (snapshot) => {
             if (!tableBody) return;
             tableBody.innerHTML = ''; 
             
@@ -79,14 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let totalRevenue = 0;
             let appointmentTimes = [];
 
-            if (!snapshot.exists()) {
+            if (snapshot.empty) {
                 resetMetrics();
                 return;
             }
 
-            snapshot.forEach((child) => {
-                const bookingId = child.key;
-                const data = child.val();
+            snapshot.forEach((docIntel) => {
+                const bookingId = docIntel.id;
+                const data = docIntel.data();
                 const matchesOwnership = isSuperAdmin || (data.s === userUid);
 
                 if (matchesOwnership && data.date === todayStr) {
@@ -113,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#666;">No pending cuts remaining today.</td></tr>`;
                 }
             }
-        });
+        }, (err) => console.error("Metrics layout pipeline streaming failure:", err));
 
         // Clear Dashboard Queue Interaction Action
         if (clearBtn) {
@@ -122,13 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!confirm(`Are you sure you want to clear the entire appointment queue for ${scopeMessage} today?`)) return;
                 
                 try {
-                    const snapshot = await dbGet(bookingsRef);
-                    if (snapshot.exists()) {
-                        snapshot.forEach((child) => {
-                            const data = child.val();
+                    // Pulls an active instance frame data view to purge entries smoothly
+                    const snapshotRef = await dbGet(collection(db, "bookings"));
+                    if (!snapshotRef.empty) {
+                        snapshotRef.forEach(async (docIntel) => {
+                            const data = docIntel.data();
                             const matchesOwnership = isSuperAdmin || (data.s === userUid);
                             if (matchesOwnership && data.date === todayStr) {
-                                remove(dbRef(db, 'bookings/' + child.key));
+                                await removeDoc(dbDoc(db, "bookings", docIntel.id));
                             }
                         });
                     }
@@ -164,7 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
         tr.querySelector('.status-btn').addEventListener('click', async () => {
             try {
                 const targetStatus = !isConfirmed ? 'confirmed' : 'completed';
-                await window.dbSet(dbRef(db, `bookings/${bookingId}/status`), targetStatus);
+                // Performs a safe structural value update mapping onto the selected row doc id
+                await dbSet(dbDoc(db, "bookings", bookingId), { status: targetStatus }, { merge: true });
             } catch (err) { 
                 alert('Action execution failed: ' + err.message); 
             }
@@ -190,3 +207,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+});
