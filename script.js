@@ -5,9 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = window.firebaseAuth;
     const db = window.firebaseDB;
     const onAuthState = window.onAuthState;
-    const dbRef = window.dbRef;
+    
+    // Cloud Firestore mapped methods
+    const dbDoc = window.dbDoc;
     const dbGet = window.dbGet;
-    const onValue = window.onValue;
+    const dbSet = window.dbSet;
+    const addDoc = window.addDoc;
+    const collection = window.collection;
+    const onSnapshot = window.onSnapshot;
 
     // DOM Target Elements Extraction Checks
     const bookingModal = document.getElementById('bookingModal');
@@ -28,9 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (logoutBtn) logoutBtn.style.display = 'block';
 
             try {
-                const userSnap = await dbGet(dbRef(db, `users/${user.uid}`));
+                // Accessing user security attributes inside the Firestore document structure
+                const userSnap = await dbGet(dbDoc(db, "users", user.uid));
                 if (userSnap.exists()) {
-                    const userData = userSnap.val();
+                    const userData = userSnap.data(); // Replaced .val() with .data()
                     if (userData.role === 'salon_owner' || userData.role === 'admin') {
                         if (adminBtn) adminBtn.style.display = 'block';
                     }
@@ -93,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const bookingPayload = {
                 c: currentClientUid,          
-                s: activeSalonUid,           
+                s: activeSalonUid,            
                 salon: activeSalonName,       
                 name: nameValue,
                 phone: phoneValue,
@@ -105,10 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                const bookingsCollectionRef = window.dbRef(window.firebaseDB, 'bookings');
-                const uniqueKeyRef = window.push(bookingsCollectionRef);
-
-                await window.dbSet(uniqueKeyRef, bookingPayload);
+                // Writing records securely using Firestore addDoc into collections path
+                await addDoc(collection(db, "bookings"), bookingPayload);
 
                 alert(`Success! Appointment scheduled with ${activeSalonName} ✂️\nCheck back soon for confirmation.`);
                 if (bookingModal) bookingModal.classList.remove('active');
@@ -120,27 +124,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 4. REAL-TIME SYNCHRONIZATION COUNTERS ---
-    const bookingsFolderRef = dbRef(db, 'bookings');
-    onValue(bookingsFolderRef, (snapshot) => {
+    // Reads a collection-wide stream from Firestore to evaluate current daily quotas
+    onSnapshot(collection(db, "bookings"), (snapshot) => {
         const todayStr = new Date().toISOString().split('T')[0];
         let runningCounter = 0;
 
-        if (snapshot.exists()) {
-            snapshot.forEach((child) => {
-                if (child.val().date === todayStr) runningCounter++;
-            });
-        }
+        snapshot.forEach((doc) => {
+            if (doc.data().date === todayStr) runningCounter++;
+        });
+
         if (bookingsTodayEl) {
             bookingsTodayEl.textContent = `⚡ ${runningCounter} appointments booked across K@si today`;
         }
-    });
+    }, (err) => console.error("Bookings stream interrupted:", err));
 
-    // Real-time Business operational Tag Painter
-    const shopStatusFolderRef = dbRef(db, 'shopStatus');
-    onValue(shopStatusFolderRef, (snapshot) => {
-        if (!snapshot.exists()) return;
-        
-        const statusData = snapshot.val();
+    // Real-time Business operational Tag Painter via Firestore snapshot streams
+    onSnapshot(collection(db, "shopStatus"), (snapshot) => {
+        // Collect mapping structure of all store documents locally 
+        const statusData = {};
+        snapshot.forEach((doc) => {
+            statusData[doc.id] = doc.data();
+        });
 
         document.querySelectorAll('.openBooking').forEach((btn) => {
             const currentUID = btn.getAttribute('data-salon-uid');
@@ -167,5 +171,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 badgeElement.style.backgroundColor = ""; 
             }
         });
-    });
+    }, (err) => console.error("Status streams execution fault: ", err));
 });
