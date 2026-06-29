@@ -68,7 +68,6 @@
             query, orderBy, where 
         } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-        // Official configuration with updated SDK parameters
         const firebaseConfig = {
             apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
             authDomain: "kasi-web-d073f.firebaseapp.com",
@@ -80,12 +79,10 @@
             measurementId: "G-Q8QVN2T54S"
         };
 
-        // Initialize Firebase services
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Exposing references to window so your external scripts (script.js) don't break
         window.firebaseAuth = auth;
         window.firebaseDB = db;
         window.signIn = signInWithEmailAndPassword;
@@ -104,7 +101,6 @@
         window.orderBy = orderBy;
         window.where = where;
 
-        // Domestic page setup operations
         document.addEventListener('DOMContentLoaded', () => {
             const emailInput = document.getElementById('userEmail');
             const passInput = document.getElementById('userPass');
@@ -112,7 +108,6 @@
             const signupBtn = document.getElementById('signupBtn');
             const authMsg = document.getElementById('authMsg');
 
-            // Swiper Layout Component Initializer
             if (typeof Swiper !== 'undefined') {
                 new Swiper('.swiper', {
                     loop: true,
@@ -121,7 +116,6 @@
                 });
             }
 
-            // User Identity Authentication (Login)
             if (mainLoginBtn) {
                 mainLoginBtn.addEventListener('click', async () => {
                     const email = emailInput.value.trim();
@@ -129,16 +123,33 @@
                     if (!email || !password) return alert('Please enter both email and password details.');
 
                     try {
-                        await signInWithEmailAndPassword(auth, email, password);
-                        if (authMsg) authMsg.textContent = "Welcome back! Access granted...";
-                        window.location.href = 'salons.html';
+                        const creds = await signInWithEmailAndPassword(auth, email, password);
+                        if (authMsg) authMsg.textContent = "Verifying profile privileges...";
+
+                        // Pull role from Cloud Firestore user document
+                        const userSnap = await getDoc(doc(db, "users", creds.user.uid));
+                        
+                        if (userSnap.exists()) {
+                            const userData = userSnap.data();
+                            
+                            // Explicit role-based destination routing
+                            if (userData.role === 'admin') {
+                                window.location.href = 'admin.html';
+                            } else if (userData.role === 'salon_owner') {
+                                window.location.href = 'owners.html';
+                            } else {
+                                window.location.href = 'salons.html';
+                            }
+                        } else {
+                            window.location.href = 'salons.html';
+                        }
                     } catch (err) {
                         alert('Authentication Interrupted: ' + err.message);
+                        if (authMsg) authMsg.textContent = "";
                     }
                 });
             }
 
-            // Account Record Construction (Sign Up with Firestore write fallback)
             if (signupBtn) {
                 signupBtn.addEventListener('click', async () => {
                     const email = emailInput.value.trim();
@@ -148,7 +159,6 @@
                     try {
                         const creds = await createUserWithEmailAndPassword(auth, email, password);
                         
-                        // Saves user information mapping safely inside Cloud Firestore
                         await setDoc(doc(db, "users", creds.user.uid), {
                             email: email,
                             role: 'customer'
@@ -163,7 +173,6 @@
             }
         });
     </script>
-
     <script src="script.js"></script>
 
     <footer style="text-align:center; padding:40px 0 20px;">
