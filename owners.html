@@ -175,31 +175,49 @@
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getDatabase, ref, get, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { 
+        getAuth, 
+        onAuthStateChanged, 
+        signOut 
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { 
+        getFirestore, doc, setDoc, getDoc, addDoc, collection, deleteDoc, onSnapshot,
+        query, orderBy, where 
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+    // Official production configuration parameters matching your project credentials
     const firebaseConfig = {
         apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
         authDomain: "kasi-web-d073f.firebaseapp.com",
+        databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
         projectId: "kasi-web-d073f",
-        storageBucket: "kasi-web-d073f.appspot.com",
+        storageBucket: "kasi-web-d073f.firebasestorage.app",
         messagingSenderId: "471544855566",
-        appId: "1:471544855566:web:6047dd0119c5e305b6905f",
-        measurementId: "G-L6JYY1G97T"
+        appId: "1:471544855566:web:aa669a968b8af0ceb6905f",
+        measurementId: "G-Q8QVN2T54S"
     };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    window.firebaseAuth = getAuth(app);
-    window.firebaseDB = getDatabase(app);
+    // Global variable mapping bindings for external script context processing
+    window.firebaseAuth = auth;
+    window.firebaseDB = db;
     window.onAuthState = onAuthStateChanged;
     window.logOut = signOut;
-    window.dbRef = ref;
-    window.dbGet = get;
-    window.dbSet = set;
-    window.remove = remove;
-    window.onValue = onValue;
+    
+    window.dbDoc = doc;
+    window.dbSet = setDoc;
+    window.dbGet = getDoc;
+    window.addDoc = addDoc;
+    window.collection = collection;
+    window.removeDoc = deleteDoc;
+    window.onSnapshot = onSnapshot;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.where = where;
 </script>
 
 <script src="admin-dashboard.js"></script>
