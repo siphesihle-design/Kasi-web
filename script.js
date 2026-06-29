@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSalonName = "";
     let activeSalonUid = "";
     let currentClientUid = null;
+    let cachedUserRole = "customer"; // Safely caches the authenticated role layout
 
     // --- 1. USER AUTH ROUTINES & PORTAL BUTTON MANAGEMENT ---
     onAuthState(auth, async (user) => {
@@ -36,9 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Accessing user security attributes inside the Firestore document structure
                 const userSnap = await dbGet(dbDoc(db, "users", user.uid));
                 if (userSnap.exists()) {
-                    const userData = userSnap.data(); // Replaced .val() with .data()
-                    if (userData.role === 'salon_owner' || userData.role === 'admin') {
-                        if (adminBtn) adminBtn.style.display = 'block';
+                    const userData = userSnap.data();
+                    cachedUserRole = userData.role; // Cache for button target routing updates
+                    
+                    if (cachedUserRole === 'salon_owner' || cachedUserRole === 'admin') {
+                        if (adminBtn) {
+                            adminBtn.style.display = 'block';
+                            // Dynamic button label updates depending on authorization context
+                            const spanEl = adminBtn.querySelector('span');
+                            if (spanEl) {
+                                spanEl.textContent = cachedUserRole === 'admin' ? 'Admin' : 'Dashboard';
+                            }
+                        }
                     }
                 }
             } catch (err) {
@@ -46,13 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             currentClientUid = null;
+            cachedUserRole = "customer";
             if (logoutBtn) logoutBtn.style.display = 'none';
             if (adminBtn) adminBtn.style.display = 'none';
         }
     });
 
     if (adminBtn) {
-        adminBtn.addEventListener('click', () => { window.location.href = 'owners.html'; });
+        adminBtn.addEventListener('click', () => { 
+            // Multi-Role structural destination routing management
+            if (cachedUserRole === 'admin') {
+                window.location.href = 'admin.html';
+            } else if (cachedUserRole === 'salon_owner') {
+                window.location.href = 'owners.html';
+            } else {
+                window.location.href = 'salons.html';
+            }
+        });
     }
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => { window.logOut(auth); });
