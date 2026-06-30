@@ -42,112 +42,47 @@
                     </button>
                 </div>
             </div>
-
-            <div class="glass-card salon-card">
-                <div class="card-media">
-                    <span class="status-badge busy">Busy</span>
-                    <img src="D40B322.jpeg" alt="Sharp Cuts" class="salon-img">
-                    <div class="img-overlay"></div>
-                </div>
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2>Sharp Cuts</h2>
-                        <div class="rating"><i class='bx bxs-star'></i> 4.7</div>
-                    </div>
-                    <p class="description">Premium cuts and hot towel shaves.</p>
-                    <div class="feature-tags">
-                        <span><i class='bx bx-time'></i> 30 min wait</span>
-                        <span id="dist-sharp"><i class='bx bx-map'></i> Calculating...</span>
-                    </div>
-                    <button type="button" class="primary-btn openBooking"
-                            data-salon="Sharp Cuts"
-                            data-salon-uid="PASTE_SHARP_OWNER_UID_HERE">
-                        Book Appointment
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="nav-grid">
-            <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
-            <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
-            <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Admin</span></button>
-            <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
         </div>
     </main>
 
     <div class="modal" id="bookingModal">
         <div class="modal-overlay" onclick="document.getElementById('bookingModal').classList.remove('active')"></div>
-        <div class="modal-content glass-card">
+        <div class="glass-card modal-content">
             <div class="modal-header">
-                <h3>Book Your Cut</h3>
-                <button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">
-                    <i class='bx bx-x'></i>
-                </button>
+                <h2 style="margin:0; font-size:1.4rem;">Secure Booking Slot</h2>
+                <button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">&times;</button>
             </div>
-            <form id="bookingForm" class="form-group">
-                <input type="text" id="custName" placeholder="Your Name" required autocomplete="name">
-                <input type="tel" id="custPhone" placeholder="WhatsApp Number 071..." required autocomplete="tel">
-                <select id="serviceType" required>
-                    <option value="">Select Service</option>
-                    <option value="Fade R150">Fade - R150</option>
-                    <option value="Beard Trim R80">Beard Trim - R80</option>
-                    <option value="Full Cut R200">Full Cut - R200</option>
-                    <option value="Line Up R50">Line Up - R50</option>
-                </select>
-                <input type="time" id="custTime" required>
-                <button type="submit" class="primary-btn">Confirm Booking</button>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label style="font-size: 0.85rem; color: #888;">Select Service</label>
+                    <select id="serviceType" required>
+                        <option value="Fresh Fade haircut (R80)">Fresh Fade (R80)</option>
+                        <option value="Chiskop Clean shave (R50)">Chiskop Shave (R50)</option>
+                        <option value="Beard Trim & Shape (R40)">Beard Trim & Shape (R40)</option>
+                        <option value="Combo Cut and Beard (R110)">Combo Cut & Beard (R110)</option>
+                    </select>
+
+                    <label style="font-size: 0.85rem; color: #888;">Your Full Name</label>
+                    <input type="text" id="custName" placeholder="e.g. Sipho" required>
+
+                    <label style="font-size: 0.85rem; color: #888;">Phone Number</label>
+                    <input type="tel" id="custPhone" placeholder="e.g. 0712345678" required>
+
+                    <label style="font-size: 0.85rem; color: #888;">Preferred Arrival Time</label>
+                    <input type="time" id="custTime" required>
+
+                    <button type="submit" class="primary-btn" style="margin-top: 10px;">Confirm Booking</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import {
-            getAuth,
-            signInWithEmailAndPassword,
-            createUserWithEmailAndPassword,
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { 
-            getFirestore, doc, setDoc, getDoc, addDoc, collection, deleteDoc, onSnapshot,
-            query, orderBy, where 
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "471544855566",
-            appId: "1:471544855566:web:aa669a968b8af0ceb6905f",
-            measurementId: "G-Q8QVN2T54S"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        window.firebaseAuth = auth;
-        window.firebaseDB = db;
-        window.signIn = signInWithEmailAndPassword;
-        window.signUp = createUserWithEmailAndPassword;
-        window.onAuthState = onAuthStateChanged;
-        window.logOut = signOut;
-        
-        window.dbDoc = doc;
-        window.dbSet = setDoc;
-        window.dbGet = getDoc;
-        window.addDoc = addDoc;
-        window.collection = collection;
-        window.removeDoc = deleteDoc;
-        window.onSnapshot = onSnapshot;
-        window.query = query;
-        window.orderBy = orderBy;
-        window.where = where;
-    </script>
+    <div class="nav-grid">
+        <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+        <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
+        <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Dashboard</span></button>
+        <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
+    </div>
 
     <script src="script.js"></script>
 </body>
