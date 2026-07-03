@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +14,14 @@
         <div class="container header-nav-box">
             <h1 class="header-title">Local Salons</h1>
             <p class="tagline" id="bookingsToday">Loading stats...</p>
-            <p class="tagline sub">Top-rated barbers in your area.</p>
+            <p class="tagline sub" style="text-align: center; color: #666; font-size: 0.85rem; margin-top: 4px;">Top-rated barbers in your area.</p>
         </div>
     </header>
 
     <main class="container">
         <div class="salon-list">
             
-            <!-- Salon Card 1: Vaal Fresh -> 9C00E0.jpeg -->
+            <!-- Salon Card 1: Vaal Fresh -->
             <div class="glass-card salon-card">
                 <div class="card-media">
                     <span id="status-vaal" class="status-badge">Open Now</span>
@@ -32,10 +33,10 @@
                         <h2>Vaal Fresh Barbers</h2>
                         <div class="rating"><i class='bx bxs-star'></i> 4.9</div>
                     </div>
-                    <p class="description">Specializing in clean fades, sharp lines, and beard grooming.</p>
+                    <p class="description">Specializing in clean fades, sharp lines, and premium beard grooming treatments.</p>
                     <div class="feature-tags">
                         <span><i class='bx bx-time'></i> 15 min wait</span>
-                        <span id="dist-vaal"><i class='bx bx-map'></i> Calculating...</span>
+                        <span id="dist-vaal"><i class='bx bx-map'></i> 1.2 km away</span>
                     </div>
                     <button type="button" class="primary-btn openBooking"
                             data-salon="Vaal Fresh Barbers"
@@ -45,10 +46,10 @@
                 </div>
             </div>
 
-            <!-- Salon Card 2: D40 Cutz -> D40B322.jpeg -->
+            <!-- Salon Card 2: D40 Cutz -->
             <div class="glass-card salon-card">
                 <div class="card-media">
-                    <span id="status-d40" class="status-badge">Open Now</span>
+                    <span id="status-d40" class="status-badge busy">Busy</span>
                     <img src="D40B322.jpeg" alt="D40 Cutz" class="salon-img">
                     <div class="img-overlay"></div>
                 </div>
@@ -57,14 +58,14 @@
                         <h2>D40 Cutz</h2>
                         <div class="rating"><i class='bx bxs-star'></i> 4.7</div>
                     </div>
-                    <p class="description">Kings of designs, lineups, and clean Chiskops.</p>
+                    <p class="description">Hot towel shaves, trending graphics patterns, and legendary cuts for all styles.</p>
                     <div class="feature-tags">
-                        <span><i class='bx bx-time'></i> 25 min wait</span>
-                        <span id="dist-d40"><i class='bx bx-map'></i> Calculating...</span>
+                        <span><i class='bx bx-time'></i> 45 min wait</span>
+                        <span id="dist-d40"><i class='bx bx-map'></i> 2.8 km away</span>
                     </div>
                     <button type="button" class="primary-btn openBooking"
                             data-salon="D40 Cutz"
-                            data-salon-uid="D40CutzOwnerABC67890">
+                            data-salon-uid="D40CutzOwnerABC98765">
                         Book Appointment
                     </button>
                 </div>
@@ -73,50 +74,43 @@
         </div>
     </main>
 
-    <!-- Booking Modal -->
+    <!-- Booking Modal Layer -->
     <div class="modal" id="bookingModal">
-        <div class="modal-overlay"></div>
-        <div class="glass-card modal-content">
+        <div class="modal-overlay" onclick="document.getElementById('bookingModal').classList.remove('active')"></div>
+        <div class="modal-content glass-card">
             <div class="modal-header">
-                <h2>Secure Booking Slot</h2>
-                <button type="button" class="close-btn">&times;</button>
+                <h2 style="font-size: 1.4rem;">Schedule Trim</h2>
+                <button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">&times;</button>
             </div>
-            <form id="bookingForm">
-                <div class="form-group">
-                    <input type="hidden" id="salonName">
-                    <input type="hidden" id="salonUid">
+            
+            <form id="bookingForm" class="form-group">
+                <label style="font-size: 0.85rem; color: #aaa; margin-bottom: -4px;">Select Cut Option</label>
+                <select id="serviceType" required>
+                    <option value="Standard Haircut (R100)">Standard Haircut — R100</option>
+                    <option value="Fade & Beard Trim (R150)">Fade &amp; Beard Trim — R150</option>
+                    <option value="Chiskop Clean Treatment (R80)">Chiskop Clean Treatment — R80</option>
+                    <option value="Kids Fresh Cut (R70)">Kids Fresh Cut — R70</option>
+                </select>
 
-                    <label for="serviceType">Select Service</label>
-                    <select id="serviceType" required>
-                        <option value="Fresh Fade haircut (R80)">Fresh Fade (R80)</option>
-                        <option value="Chiskop Clean shave (R50)">Chiskop Shave (R50)</option>
-                        <option value="Beard Trim & Shape (R40)">Beard Trim & Shape (R40)</option>
-                        <option value="Combo Cut and Beard (R110)">Combo Cut & Beard (R110)</option>
-                    </select>
+                <input type="text" id="custName" placeholder="Your Name" required autocomplete="name">
+                <input type="tel" id="custPhone" placeholder="Phone Number" required autocomplete="tel">
+                <input type="time" id="custTime" required>
 
-                    <label for="custName">Your Full Name</label>
-                    <input type="text" id="custName" placeholder="e.g. Sipho" required>
-
-                    <label for="custPhone">Phone Number</label>
-                    <input type="tel" id="custPhone" placeholder="e.g. 0712345678" pattern="0[6-8][0-9]{8}" required>
-
-                    <label for="custTime">Preferred Arrival Time</label>
-                    <input type="time" id="custTime" required>
-
-                    <button type="submit" class="primary-btn">Confirm Booking</button>
-                </div>
+                <button type="submit" class="primary-btn" style="margin-top: 10px;">Confirm &amp; Place Entry</button>
             </form>
         </div>
     </div>
 
-    <!-- Bottom Nav -->
+    <!-- Persistent Global Navigation Grid -->
     <div class="nav-grid">
         <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
         <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
-        <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Dashboard</span></button>
+        <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Admin</span></button>
         <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
     </div>
 
+    <!-- Script Application Links -->
     <script src="script.js"></script>
 </body>
 </html>
+
