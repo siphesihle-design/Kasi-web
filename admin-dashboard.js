@@ -1,210 +1,107 @@
-addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     if (!window.firebaseAuth) return;
-
     const auth = window.firebaseAuth;
     const db = window.firebaseDB;
     const onAuthState = window.onAuthState;
-    const logOut = window.logOut;
-    
-    // Cloud Firestore specific window mappings imported from index.html
-    const dbDoc = window.dbDoc;
-    const dbGet = window.dbGet;
-    const dbSet = window.dbSet; // Maps safely to setDoc / update functionality
-    const collection = window.collection;
-    const onSnapshot = window.onSnapshot;
-    const removeDoc = window.removeDoc;
+    const dbDoc = window.dbDoc; const dbGet = window.dbGet;
+    const removeDoc = window.removeDoc; const collection = window.collection;
+    const onSnapshot = window.onSnapshot; const query = window.query;
+    const where = window.where; const orderBy = window.orderBy; const getDocs = window.getDocs;
 
-    // DOM UI Components Hooks
-    const shopStatusSelect = document.getElementById('shopStatusSelect');
-    const totalCountEl = document.getElementById('totalCount');
-    const nextTimeEl = document.getElementById('nextTime');
-    const totalRevenueEl = document.getElementById('totalRevenue');
     const tableBody = document.getElementById('tableBody');
+    const totalCountEl = document.getElementById('totalCount');
+    const pendingCountEl = document.getElementById('pendingCount');
+    const completedCountEl = document.getElementById('completedCount');
+    const totalRevenueEl = document.getElementById('totalRevenue');
     const clearBtn = document.getElementById('clearBtn');
-    const logoutBtnOwner = document.getElementById('logoutBtnOwner');
+    const logoutBtnAdmin = document.getElementById('logoutBtnAdmin');
+    const dashboardTitle = document.getElementById('dashboardTitle');
 
-    // --- 1. ADMIN ROUTE VERIFICATION GUARD ---
+    let currentUserRole = null;
+    let unsubscribeBookings = null;
+
     onAuthState(auth, async (user) => {
-        if (!user) {
-            window.location.replace('index.html');
-            return;
-        }
-
-        try {
-            // Verified profile parameters straight from the Firestore root "users" collection
-            const roleSnap = await dbGet(dbDoc(db, "users", user.uid));
-            
-            if (!roleSnap.exists()) {
-                window.location.replace('index.html');
-                return;
-            }
-
-            const userData = roleSnap.data();
-            const userRole = userData ? userData.role : null;
-
-            if (userRole === 'admin') {
-                document.querySelector('header p').textContent = "Master Admin Panel — Global Overview";
-                if (document.querySelector('.status-control')) {
-                    document.querySelector('.status-control').style.display = 'none';
-                }
-                initDashboardEngine(user.uid, true);
-            } else if (userRole === 'salon_owner') {
-                initDashboardEngine(user.uid, false);
-            } else {
-                alert('Access Denied: Administrative access authorization required.');
-                window.location.replace('index.html');
-            }
-        } catch (err) {
-            console.error("Dashboard routing context error:", err);
-            window.location.replace('index.html');
-        }
+        if (user) {
+            try {
+                const userSnap = await dbGet(dbDoc(db, "users", user.uid));
+                if (userSnap.exists()) {
+                    currentUserRole = userSnap.data().role;
+                    if (currentUserRole === 'admin') {
+                        dashboardTitle.textContent = "Admin Dashboard - All Salons";
+                    }
+                    syncAdminDashboard(currentUserRole, user.uid);
+                } else { alert("No user data found."); window.location.href = 'index.html'; }
+            } catch (err) { console.error("Admin error:", err); }
+        } else { window.location.href = 'index.html'; }
     });
 
-    // --- 2. METRICS CONTROL STREAM STORAGE MODULE ---
-    function initDashboardEngine(userUid, isSuperAdmin) {
+    if (logoutBtnAdmin) {
+        logoutBtnAdmin.addEventListener('click', () => {
+            if (unsubscribeBookings) unsubscribeBookings();
+            window.logOut(auth);
+        });
+    }
+
+    function syncAdminDashboard(role, uid) {
         const todayStr = new Date().toISOString().split('T')[0];
+        const bookingsRef = collection(db, "bookings");
 
-        // Handles live modifications tracking for Individual Salon Owners
-        if (!isSuperAdmin && shopStatusSelect) {
-            const statusDocRef = dbDoc(db, "shopStatus", userUid);
-            
-            // Set up document snapshot monitor loop
-            onSnapshot(statusDocRef, (snap) => {
-                if (snap.exists() && snap.data().status) {
-                    shopStatusSelect.value = snap.data().status;
-                }
-            });
-
-            shopStatusSelect.addEventListener('change', async () => {
-                try {
-                    // Update layout payload changes into the shop's individual status doc
-                    await dbSet(statusDocRef, { status: shopStatusSelect.value }, { merge: true });
-                } catch (err) { 
-                    alert('Error updating status context: ' + err.message); 
-                }
-            });
+        // IF ADMIN: show all. IF OWNER: show only theirs
+        let q;
+        if (role === 'admin') {
+            q = query(bookingsRef, where("date", "==", todayStr), orderBy("time", "asc"));
+        } else {
+            q = query(bookingsRef, where("s", "==", uid), where("date", "==", todayStr), orderBy("time", "asc"));
         }
 
-        // Live Real-Time Dashboard Subscription Syncing using Firestore collection stream
-        onSnapshot(collection(db, "bookings"), (snapshot) => {
-            if (!tableBody) return;
-            tableBody.innerHTML = ''; 
-            
-            let totalBookings = 0;
-            let totalRevenue = 0;
-            let appointmentTimes = [];
+        unsubscribeBookings = onSnapshot(q, (snapshot) => {
+            tableBody.innerHTML = "";
+            let total = 0, pending = 0, completed = 0, revenue = 0;
 
             if (snapshot.empty) {
-                resetMetrics();
-                return;
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#666; padding: 30px;">No bookings for today.</td></tr>`;
+                totalCountEl.textContent = "0"; pendingCountEl.textContent = "0"; completedCountEl.textContent = "0"; totalRevenueEl.textContent = "R0"; return;
             }
 
-            snapshot.forEach((docIntel) => {
-                const bookingId = docIntel.id;
-                const data = docIntel.data();
-                const matchesOwnership = isSuperAdmin || (data.s === userUid);
+            snapshot.forEach((docSnap) => {
+                const item = docSnap.data(); total++;
+                const itemPrice = parseInt(item.price) || 0; revenue += itemPrice;
+                if(item.status === 'pending') pending++; else completed++;
 
-                if (matchesOwnership && data.date === todayStr) {
-                    totalBookings++;
-                    const priceValue = parseInt(data.price, 10) || 0;
-                    
-                    if (data.status !== 'completed') {
-                        appointmentTimes.push(data.time);
-                        totalRevenue += priceValue;
-                        appendBookingRow(bookingId, data, isSuperAdmin);
-                    }
-                }
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${escapeHtml(item.salon)}</strong></td>
+                    <td>${escapeHtml(item.name)}<br><small style="color:#666;">${escapeHtml(item.phone)}</small></td>
+                    <td><span style="color:#008080; font-weight:bold;">${item.time}</span></td>
+                    <td>${escapeHtml(item.service)}</td>
+                    <td><span class="status-pill ${item.status === 'completed'? 'status-completed' : 'status-pending'}">${item.status}</span></td>`;
+                tableBody.appendChild(tr);
             });
-
-            if (totalCountEl) totalCountEl.textContent = totalBookings;
-            if (totalRevenueEl) totalRevenueEl.textContent = `R${totalRevenue}`;
-            
-            if (nextTimeEl) {
-                if (appointmentTimes.length > 0) {
-                    appointmentTimes.sort();
-                    nextTimeEl.textContent = appointmentTimes[0];
-                } else {
-                    nextTimeEl.textContent = '--:--';
-                    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#666;">No pending cuts remaining today.</td></tr>`;
-                }
-            }
-        }, (err) => console.error("Metrics layout pipeline streaming failure:", err));
-
-        // Clear Dashboard Queue Interaction Action
-        if (clearBtn) {
-            clearBtn.addEventListener('click', async () => {
-                const scopeMessage = isSuperAdmin ? "ALL salons globally" : "your salon";
-                if (!confirm(`Are you sure you want to clear the entire appointment queue for ${scopeMessage} today?`)) return;
-                
-                try {
-                    // Pulls an active instance frame data view to purge entries smoothly
-                    const snapshotRef = await dbGet(collection(db, "bookings"));
-                    if (!snapshotRef.empty) {
-                        snapshotRef.forEach(async (docIntel) => {
-                            const data = docIntel.data();
-                            const matchesOwnership = isSuperAdmin || (data.s === userUid);
-                            if (matchesOwnership && data.date === todayStr) {
-                                await removeDoc(dbDoc(db, "bookings", docIntel.id));
-                            }
-                        });
-                    }
-                } catch (err) { 
-                    alert('Error clearing queue records: ' + err.message); 
-                }
-            });
-        }
-    }
-
-    // --- 3. BOOKING ROWS DOM RENDER INJECTOR ---
-    function appendBookingRow(bookingId, bData, isSuperAdmin) {
-        const tr = document.createElement('tr');
-        const isConfirmed = bData.status === 'confirmed';
-        const actionBtnLabel = isConfirmed ? "✂️ Complete Cut" : "✅ Confirm Cut";
-        const btnStyle = isConfirmed ? "background-color: #22c55e;" : "background-color: var(--admin-teal, #008080);";
-
-        const identityMeta = isSuperAdmin 
-            ? `<div style="font-size:0.75rem; color:#008080; font-weight:bold; margin-top:2px;"><i class='bx bx-cut'></i> ${bData.salon || 'Unknown Salon'}</div>` 
-            : '';
-
-        tr.innerHTML = `
-            <td>
-                <div style="font-weight:bold;">${bData.name}</div>
-                <div style="font-size:0.75rem; color:#777;">${bData.phone}</div>
-                ${identityMeta}
-            </td>
-            <td><span style="background:#252525; padding:4px 8px; border-radius:6px;">${bData.time}</span></td>
-            <td style="font-size:0.85rem; color:var(--text-muted);">${bData.service}</td>
-            <td><button class="status-btn" style="${btnStyle} color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer;">${actionBtnLabel}</button></td>
-        `;
-
-        tr.querySelector('.status-btn').addEventListener('click', async () => {
-            try {
-                const targetStatus = !isConfirmed ? 'confirmed' : 'completed';
-                // Performs a safe structural value update mapping onto the selected row doc id
-                await dbSet(dbDoc(db, "bookings", bookingId), { status: targetStatus }, { merge: true });
-            } catch (err) { 
-                alert('Action execution failed: ' + err.message); 
-            }
+            totalCountEl.textContent = total;
+            pendingCountEl.textContent = pending;
+            completedCountEl.textContent = completed;
+            totalRevenueEl.textContent = `R${revenue}`;
         });
-
-        if (tableBody) tableBody.appendChild(tr);
     }
 
-    function resetMetrics() {
-        if (totalCountEl) totalCountEl.textContent = '0';
-        if (nextTimeEl) nextTimeEl.textContent = '--:--';
-        if (totalRevenueEl) totalRevenueEl.textContent = 'R0';
-        if (tableBody) tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#666;">No appointments booked yet.</td></tr>`;
-    }
+    if (clearBtn) {
+        clearBtn.addEventListener('click', async () => {
+            if (!confirm("Clear ALL bookings for today?")) return;
+            const todayStr = new Date().toISOString().split('T')[0];
+            let q = query(collection(db, "bookings"), where("date", "==", todayStr));
 
-    if (logoutBtnOwner) {
-        logoutBtnOwner.addEventListener('click', async () => {
             try {
-                await logOut(auth);
-                window.location.replace('index.html');
-            } catch (err) { 
-                console.error("Dashboard Logout Exception Handled:", err); 
-            }
+                if (unsubscribeBookings) unsubscribeBookings();
+                const snapshot = await getDocs(q);
+                const deletes = snapshot.docs.map(d => removeDoc(dbDoc(db, "bookings", d.id)));
+                await Promise.all(deletes);
+                alert("All bookings cleared.");
+            } catch (err) { alert("Clear failed: " + err.message); }
         });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 });
