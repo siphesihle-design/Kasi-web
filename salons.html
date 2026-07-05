@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,6 +115,39 @@
         <button type="button" class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Dashboard</span></button>
         <button type="button" class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
     </nav>
+
+    <!-- FIREBASE SETUP - THIS WAS MISSING -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, addDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+            authDomain: "kasi-web-d073f.firebaseapp.com",
+            databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "kasi-web-d073f",
+            storageBucket: "kasi-web-d073f.firebasestorage.app",
+            messagingSenderId: "471544855566",
+            appId: "1:471544855566:web:aa669a968b8af0ceb6905f",
+            measurementId: "G-Q8QVN2T54S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make these global so script.js can use them
+        window.firebaseAuth = auth;
+        window.firebaseDB = db;
+        window.onAuthState = onAuthStateChanged;
+        window.logOut = signOut;
+        window.dbDoc = doc;
+        window.dbGet = getDoc;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.onSnapshot = onSnapshot;
+    </script>
 
     <!-- Global Framework Script Configuration Links -->
     <script src="script.js"></script>
