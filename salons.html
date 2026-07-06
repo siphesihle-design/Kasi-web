@@ -4,152 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K@si Salons | Find a Barber</title>
-    <!-- Boxicons for clean vector icon rendering -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Main Dynamic Metric Header -->
     <header class="main-header">
         <div class="container header-nav-box">
             <h1 class="header-title">Local Salons</h1>
-            <!-- Synced automatically by Section 4 of your script.js -->
-            <p class="tagline" id="bookingsToday">Loading metrics...</p>
+            <p class="tagline" id="bookingsToday">Loading salons...</p>
         </div>
     </header>
+    <main class="container"><div class="salon-list"></div></main>
 
-    <main class="container">
-        <div class="salon-list">
-            
-            <!-- Salon Card 1: Vaal Fresh -->
-            <div class="glass-card salon-card">
-                <div class="card-media">
-                    <span id="status-vaal" class="status-badge">Open</span>
-                    <img src="9C00E0.jpeg" alt="Vaal Fresh Barbers" class="salon-img">
-                    <div class="img-overlay"></div>
-                </div>
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2>Vaal Fresh Barbers</h2>
-                        <div class="rating"><i class='bx bxs-star'></i> 4.9</div>
-                    </div>
-                    <p class="description">Specializing in clean fades, sharp lines, and premium beard grooming treatments.</p>
-                    <div class="feature-tags">
-                        <span><i class='bx bx-time'></i> 15 min wait</span>
-                        <span id="dist-vaal"><i class='bx bx-map'></i> 1.2 km away</span>
-                    </div>
-                    <!-- CRITICAL: data attributes map directly to database queries inside your event listener -->
-                    <button type="button" class="primary-btn openBooking"
-                            data-salon="Vaal Fresh Barbers"
-                            data-salon-uid="VaalFreshBarberOwnerXYZ12345">
-                        Book Appointment
-                    </button>
-                </div>
-            </div>
-
-            <!-- Salon Card 2: D40 Cutz -->
-            <div class="glass-card salon-card">
-                <div class="card-media">
-                    <span id="status-d40" class="status-badge busy">Busy</span>
-                    <img src="D40B322.jpeg" alt="D40 Cutz" class="salon-img">
-                    <div class="img-overlay"></div>
-                </div>
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2>D40 Cutz</h2>
-                        <div class="rating"><i class='bx bxs-star'></i> 4.7</div>
-                    </div>
-                    <p class="description">Hot towel shaves, trending graphics patterns, and legendary cuts for all styles.</p>
-                    <div class="feature-tags">
-                        <span><i class='bx bx-time'></i> 45 min wait</span>
-                        <span id="dist-d40"><i class='bx bx-map'></i> 2.8 km away</span>
-                    </div>
-                    <!-- CRITICAL: data attributes map directly to database queries inside your event listener -->
-                    <button type="button" class="primary-btn openBooking"
-                            data-salon="D40 Cutz"
-                            data-salon-uid="D40CutzOwnerABC98765">
-                        Book Appointment
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- Booking Overlay Modal Layer -->
     <div class="modal" id="bookingModal">
-        <!-- Overlay close click fallback handle -->
         <div class="modal-overlay" onclick="document.getElementById('bookingModal').classList.remove('active')"></div>
         <div class="modal-content glass-card">
-            <div class="modal-header">
-                <h2>Schedule Trim</h2>
-                <button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">&times;</button>
-            </div>
-            
-            <!-- JavaScript submission engine targets this explicit ID -->
+            <div class="modal-header"><h2>Schedule Trim</h2><button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">&times;</button></div>
             <form id="bookingForm" class="form-group">
-                <label for="serviceType" style="font-size: 0.8rem; color: #888; display: block; margin-bottom: 4px;">Select Service</label>
-                <select id="serviceType" required>
-                    <!-- Pricing values use your script's regex: rawService.match(/R(\d+)/) -->
-                    <option value="Standard Haircut (R100)">Standard Haircut — R100</option>
-                    <option value="Fade & Beard Trim (R150)">Fade &amp; Beard Trim — R150</option>
-                    <option value="Chiskop Clean Treatment (R80)">Chiskop Clean Treatment — R80</option>
-                    <option value="Kids Fresh Cut (R70)">Kids Fresh Cut — R70</option>
-                </select>
-
-                <input type="text" id="custName" placeholder="Your Name" required autocomplete="name">
-                <input type="tel" id="custPhone" placeholder="Phone Number" required autocomplete="tel">
-                <input type="time" id="custTime" required>
-
+                <select id="serviceType" required><option value="Standard Haircut (R100)">Standard Haircut — R100</option><option value="Fade & Beard Trim (R150)">Fade &amp; Beard Trim — R150</option><option value="Chiskop Clean Treatment (R80)">Chiskop Clean Treatment — R80</option><option value="Kids Fresh Cut (R70)">Kids Fresh Cut — R70</option></select>
+                <input type="text" id="custName" placeholder="Your Name" required><input type="tel" id="custPhone" placeholder="Phone Number" required><input type="time" id="custTime" required>
                 <button type="submit" class="primary-btn" style="margin-top: 15px;">Confirm &amp; Place Entry</button>
             </form>
         </div>
     </div>
 
-    <!-- Persistent Bottom Navigation Grid Matrix -->
     <nav class="nav-grid">
         <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
         <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
-        <!-- Swapped systematically via Auth listener checks -->
         <button type="button" class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Dashboard</span></button>
         <button type="button" class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
     </nav>
 
-    <!-- FIREBASE SETUP - THIS WAS MISSING -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, addDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "471544855566",
-            appId: "1:471544855566:web:aa669a968b8af0ceb6905f",
-            measurementId: "G-Q8QVN2T54S"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Make these global so script.js can use them
-        window.firebaseAuth = auth;
-        window.firebaseDB = db;
-        window.onAuthState = onAuthStateChanged;
-        window.logOut = signOut;
-        window.dbDoc = doc;
-        window.dbGet = getDoc;
-        window.addDoc = addDoc;
-        window.collection = collection;
-        window.onSnapshot = onSnapshot;
+        const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",storageBucket: "kasi-web-d073f.firebasestorage.app",messagingSenderId: "471544855566",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+        window.firebaseAuth = auth; window.firebaseDB = db; window.onAuthState = onAuthStateChanged; window.logOut = signOut;
+        window.dbDoc = doc; window.dbGet = getDoc; window.addDoc = addDoc; window.collection = collection; window.onSnapshot = onSnapshot;
     </script>
-
-    <!-- Global Framework Script Configuration Links -->
+    <script type="module">
+        const db = window.firebaseDB; const onSnapshot = window.onSnapshot; const collection = window.collection;
+        const salonList = document.querySelector('.salon-list'); const bookingsTodayEl = document.getElementById('bookingsToday');
+        onSnapshot(collection(db, "salons"), (snap) => {
+            salonList.innerHTML = "";
+            if(snap.empty) {bookingsTodayEl.textContent = "No salons yet. Admin needs to add some."; return;}
+            bookingsTodayEl.textContent = `${snap.size} salons available`;
+            snap.forEach(docSnap => {
+                const s = docSnap.data();
+                salonList.innerHTML += `<div class="glass-card salon-card"><div class="card-media"><span class="status-badge open">Open</span><img src="${s.img}" alt="${s.name}" class="salon-img"><div class="img-overlay"></div></div><div class="card-content"><div class="card-header"><h2>${s.name}</h2><div class="rating"><i class='bx bxs-star'></i> ${s.rating}</div></div><p class="description">${s.desc}</p><div class="feature-tags"><span><i class='bx bx-time'></i> ${s.hours}</span><span><i class='bx bx-map'></i> ${s.location}</span></div><button type="button" class="primary-btn openBooking" data-salon="${s.name}" data-salon-uid="${s.uid}">Book Appointment</button></div></div>`;
+            });
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
