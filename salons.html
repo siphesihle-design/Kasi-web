@@ -14,16 +14,41 @@
             <p class="tagline" id="bookingsToday">Loading salons...</p>
         </div>
     </header>
-    <main class="container"><div class="salon-list"></div></main>
 
+    <main class="container">
+        <!-- ADD SALON FORM - Only Admin sees this -->
+        <div class="glass-card" id="addSalonSection" style="display:none;">
+            <h2 class="typing-text">Add New Salon</h2>
+            <form id="salonForm" class="form-group">
+                <input type="text" id="name" placeholder="Salon Name" required>
+                <input type="text" id="image" placeholder="Paste Image URL from GitHub" required>
+                <img id="imagePreview" width="100%" style="display:none; border-radius:14px; margin:10px 0;">
+                <input type="text" id="location" placeholder="Location e.g. Mayibuye" required>
+                <input type="text" id="hours" placeholder="Hours e.g. 8Am-22PM" required>
+                <input type="text" id="services" placeholder="Services e.g. Fade, Line Up" required>
+                <button type="submit" class="primary-btn">Add Salon</button>
+            </form>
+        </div>
+
+        <!-- LIST OF SALONS -->
+        <div class="salon-list" id="salonList"></div>
+    </main>
+
+    <!-- BOOKING MODAL -->
     <div class="modal" id="bookingModal">
-        <div class="modal-overlay" onclick="document.getElementById('bookingModal').classList.remove('active')"></div>
+        <div class="modal-overlay" onclick="bookingModal.classList.remove('active')"></div>
         <div class="modal-content glass-card">
-            <div class="modal-header"><h2>Schedule Trim</h2><button type="button" class="close-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">&times;</button></div>
+            <div class="modal-header"><h2>Schedule Trim</h2><button type="button" class="close-btn" onclick="bookingModal.classList.remove('active')">&times;</button></div>
             <form id="bookingForm" class="form-group">
-                <select id="serviceType" required><option value="Standard Haircut (R100)">Standard Haircut — R100</option><option value="Fade & Beard Trim (R150)">Fade &amp; Beard Trim — R150</option><option value="Chiskop Clean Treatment (R80)">Chiskop Clean Treatment — R80</option><option value="Kids Fresh Cut (R70)">Kids Fresh Cut — R70</option></select>
-                <input type="text" id="custName" placeholder="Your Name" required><input type="tel" id="custPhone" placeholder="Phone Number" required><input type="time" id="custTime" required>
-                <button type="submit" class="primary-btn" style="margin-top: 15px;">Confirm &amp; Place Entry</button>
+                <select id="serviceType" required>
+                    <option value="Standard Haircut (R100)">Standard Haircut — R100</option>
+                    <option value="Fade & Beard Trim (R150)">Fade & Beard Trim — R150</option>
+                    <option value="Chiskop Clean Treatment (R80)">Chiskop Clean Treatment — R80</option>
+                </select>
+                <input type="text" id="custName" placeholder="Your Name" required>
+                <input type="tel" id="custPhone" placeholder="Phone Number" required>
+                <input type="time" id="custTime" required>
+                <button type="submit" class="primary-btn">Confirm & Place Entry</button>
             </form>
         </div>
     </div>
@@ -38,24 +63,20 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, addDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-        const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",storageBucket: "kasi-web-d073f.firebasestorage.app",messagingSenderId: "471544855566",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
-        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
-        window.firebaseAuth = auth; window.firebaseDB = db; window.onAuthState = onAuthStateChanged; window.logOut = signOut;
-        window.dbDoc = doc; window.dbGet = getDoc; window.addDoc = addDoc; window.collection = collection; window.onSnapshot = onSnapshot;
-    </script>
-    <script type="module">
-        const db = window.firebaseDB; const onSnapshot = window.onSnapshot; const collection = window.collection;
-        const salonList = document.querySelector('.salon-list'); const bookingsTodayEl = document.getElementById('bookingsToday');
-        onSnapshot(collection(db, "salons"), (snap) => {
-            salonList.innerHTML = "";
-            if(snap.empty) {bookingsTodayEl.textContent = "No salons yet. Admin needs to add some."; return;}
-            bookingsTodayEl.textContent = `${snap.size} salons available`;
-            snap.forEach(docSnap => {
-                const s = docSnap.data();
-                salonList.innerHTML += `<div class="glass-card salon-card"><div class="card-media"><span class="status-badge open">Open</span><img src="${s.img}" alt="${s.name}" class="salon-img"><div class="img-overlay"></div></div><div class="card-content"><div class="card-header"><h2>${s.name}</h2><div class="rating"><i class='bx bxs-star'></i> ${s.rating}</div></div><p class="description">${s.desc}</p><div class="feature-tags"><span><i class='bx bx-time'></i> ${s.hours}</span><span><i class='bx bx-map'></i> ${s.location}</span></div><button type="button" class="primary-btn openBooking" data-salon="${s.name}" data-salon-uid="${s.uid}">Book Appointment</button></div></div>`;
-            });
-        });
+        import { getFirestore, doc, getDoc, addDoc, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
+        const app = initializeApp(firebaseConfig); 
+        window.firebaseAuth = getAuth(app); 
+        window.firebaseDB = getFirestore(app);
+        window.onAuthState = onAuthStateChanged; 
+        window.logOut = signOut;
+        window.dbDoc = doc; 
+        window.dbGet = getDoc; 
+        window.addDoc = addDoc; 
+        window.collection = collection; 
+        window.onSnapshot = onSnapshot;
+        window.query = query;
+        window.orderBy = orderBy;
     </script>
     <script src="script.js"></script>
 </body>
