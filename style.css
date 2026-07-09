@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #0a0a0a;
+    background-color: #080808; /* deep black */
     color: #ffffff;
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
     overflow-x: hidden;
@@ -21,20 +21,20 @@ body {
 
 .header-title {
     text-align: center;
-    color: #008080;
+    color: #FF2D55; /* KASI RED */
     margin-top: 40px;
     font-size: 1.8rem;
     font-weight: 800;
 }
 
 .glass-card {
-    background: rgba(26, 26, 26, 0.95);
+    background: rgba(20, 20, 20, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 45, 85, 0.2); /* red border */
     border-radius: 28px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(255, 45, 85, 0.15); /* red glow */
     margin: 40px auto;
     max-width: 400px;
     position: relative;
@@ -42,17 +42,21 @@ body {
 }
 
 .typing-text { font-size: 1.6rem; margin: 0; color: #fff; }
-.tagline { color: #888; margin-bottom: 20px; font-size: 0.9rem; }
+.tagline { color: #aaa; margin-bottom: 20px; font-size: 0.9rem; }
 .form-group { display: flex; flex-direction: column; gap: 12px; }
 
-input, select {
+input, select, textarea {
     padding: 14px;
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,45,85,0.2); /* red border */
     background: rgba(0,0,0,0.4);
     color: white;
     outline: none;
     width: 100%;
+    font-family: inherit;
+}
+input:focus, select:focus {
+    border: 1px solid #FF2D55; /* red focus */
 }
 
 .primary-btn,.secondary-btn {
@@ -74,14 +78,14 @@ input, select {
     position: absolute;
     top: 0; left: -100%;
     width: 100%; height: 100%;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 45, 85, 0.2); /* red shimmer */
     transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
 }
 
 .primary-btn:hover::before,.secondary-btn:hover::before { left: 0; }
-.primary-btn { background: #008080; color: white; }
-.secondary-btn { background: transparent; color: #008080; border: 1px solid #008080; margin-top: 10px; }
+.primary-btn { background: #FF2D55; color: #fff; } /* RED BUTTON */
+.secondary-btn { background: transparent; color: #FF2D55; border: 1px solid #FF2D55; margin-top: 10px; }
 .primary-btn:active,.secondary-btn:active { transform: scale(0.97); }
 
 .nav-grid {
@@ -90,10 +94,10 @@ input, select {
     transform: translateX(-50%);
     width: 100%;
     max-width: 450px;
-    background: rgba(15, 15, 15, 0.95);
+    background: rgba(10, 10, 10, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 45, 85, 0.2);
     border-radius: 24px 24px 0 0;
     display: flex;
     justify-content: space-around;
@@ -106,7 +110,7 @@ input, select {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #888;
+    color: #777;
     text-decoration: none;
     font-size: 0.75rem;
     gap: 4px;
@@ -117,29 +121,33 @@ input, select {
 }
 
 .nav-item i { font-size: 1.3rem; }
-.nav-item.active,.nav-item:hover { color: #008080; }
+.nav-item.active,.nav-item:hover { color: #FF2D55; } /* RED ACTIVE */
 
 .salon-list { display: flex; flex-direction: column; gap: 20px; }
 .salon-card { padding: 0; overflow: hidden; }
 
-/* SALON IMAGE STYLES - FIXED */
+/* SALON IMAGE STYLES - FIXED FOR FIT */
 .card-media { 
     position: relative; 
-    height: 200px; 
-    width: 100%; 
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
 }
 .salon-img { 
     width: 100%; 
     height: 100%; 
-    object-fit: cover; 
-    border-radius: 28px 28px 0 0; /* matches glass-card */
+    object-fit: cover;
+    object-position: center;
+    border-radius: 28px 28px 0 0;
+    display: block;
 }
 .img-overlay {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 60%;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
     border-radius: 28px 28px 0 0;
+    pointer-events: none;
 }
 
 .status-badge {
@@ -151,14 +159,14 @@ input, select {
     font-weight: bold;
     z-index: 2;
 }
-.status-badge.open { background: #00ff88; color: #000; }
-.status-badge.busy { background: #ffcc00; color: #000; }
-.status-badge.closed { background: #555; color: #fff; }
+.status-badge.open { background: #FF2D55; color: #fff; } /* RED OPEN */
+.status-badge.busy { background: #FF9500; color: #000; } /* ORANGE BUSY */
+.status-badge.closed { background: #444; color: #fff; }
 
 .card-content { padding: 20px; }
 .card-content h2 { font-size: 1.2rem; margin-bottom: 10px; }
 .card-content p { font-size: 0.9rem; color: #aaa; margin: 5px 0; }
-.card-content i { color: #008080; margin-right: 6px; }
+.card-content i { color: #FF2D55; margin-right: 6px; } /* RED ICONS */
 
 .modal {
     position: fixed;
