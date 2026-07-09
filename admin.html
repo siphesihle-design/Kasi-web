@@ -32,8 +32,33 @@
 <div class="container dashboard-wrapper">
     <header style="margin: 20px 0 30px 0;">
         <h1 id="dashboardTitle" class="header-title" style="text-align: left; margin-top: 0;">Admin Dashboard</h1>
-        <p id="dashboardSubtitle" class="tagline" style="text-align: left; margin-bottom: 0;">All bookings across all salons</p>
+        <p id="dashboardSubtitle" class="tagline" style="text-align: left; margin-bottom: 0;">Manage Salons + Bookings</p>
     </header>
+
+    <!-- ADD SALON SECTION WITH 1-CLICK IMAGE -->
+    <div class="glass-card">
+        <h2 class="typing-text">Add New Salon</h2>
+
+        <!-- QUICK LINK BOX -->
+        <div style="background:rgba(0,128,128,0.1); padding:15px; border-radius:14px; margin-bottom:15px;">
+            <p style="font-size:0.85rem; color:#888; margin-bottom:8px;">Vaalfresh Image Link:</p>
+            <div style="display:flex; gap:8px; margin-bottom:10px;">
+                <input type="text" id="quickLink" value="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/refs/heads/main/D40B322.jpeg" readonly style="font-size:0.8rem;">
+                <button type="button" id="copyBtn" class="secondary-btn" style="width:auto; padding:10px 12px;"><i class='bx bx-copy'></i></button>
+            </div>
+            <button type="button" id="useLinkBtn" class="primary-btn" style="width:100%; font-size:0.9rem;">Use This Image</button>
+        </div>
+
+        <form id="salonForm" class="form-group">
+            <input type="text" id="name" placeholder="Salon Name" required>
+            <input type="text" id="image" placeholder="Image URL will auto-fill" required>
+            <img id="imagePreview" width="100%" style="display:none; border-radius:14px; margin:10px 0;">
+            <input type="text" id="location" placeholder="Location e.g. Mayibuye" required>
+            <input type="text" id="hours" placeholder="Hours e.g. 8Am-22PM" required>
+            <input type="text" id="services" placeholder="Services e.g. Fade, Line Up" required>
+            <button type="submit" class="primary-btn">Add Salon</button>
+        </form>
+    </div>
 
     <div class="stats-bar">
         <div class="stat-card"><h3>Total Bookings Today</h3><p id="totalCount">0</p></div>
@@ -57,7 +82,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, query, orderBy, where, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, deleteDoc, addDoc, onSnapshot, query, orderBy, where, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
@@ -79,6 +104,7 @@
     window.dbDoc = doc;
     window.dbGet = getDoc;
     window.removeDoc = deleteDoc;
+    window.addDoc = addDoc;
     window.setDoc = setDoc;
     window.onSnapshot = onSnapshot;
     window.query = query;
