@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageInput = document.getElementById('image');
     const imagePreview = document.getElementById('imagePreview');
     const addSalonSection = document.getElementById('addSalonSection');
+    
+    // NEW BUTTONS
+    const copyBtn = document.getElementById('copyBtn');
+    const useLinkBtn = document.getElementById('useLinkBtn');
+    const quickLink = document.getElementById('quickLink');
 
     let activeSalonName = "";
     let activeSalonUid = "";
@@ -45,10 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // IMAGE PREVIEW
-    if(imageInput) imageInput.addEventListener("input", function() {
-        imagePreview.src = this.value;
-        imagePreview.style.display = this.value ? "block" : "none";
+    // COPY BUTTON
+    if(copyBtn) copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(quickLink.value);
+        copyBtn.innerHTML = "<i class='bx bx-check'></i> Copied";
+        setTimeout(() => copyBtn.innerHTML = "<i class='bx bx-copy'></i>", 1500);
+    });
+
+    // 1-CLICK USE BUTTON
+    if(useLinkBtn) useLinkBtn.addEventListener('click', () => {
+        imageInput.value = quickLink.value;
+        imagePreview.src = quickLink.value;
+        imagePreview.style.display = "block";
     });
 
     // ADD SALON - ADMIN ONLY
@@ -57,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(cachedUserRole !== 'admin') return alert("Only Admin can add salons");
         const salonData = {
             name: document.getElementById("name").value,
-            image: document.getElementById("image").value, // SAVED AS image
+            image: document.getElementById("image").value,
             location: document.getElementById("location").value,
             hours: document.getElementById("hours").value,
             services: document.getElementById("services").value,
@@ -83,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="glass-card salon-card">
                         <div class="card-media">
                             <span class="status-badge ${s.status}">${s.status}</span>
-                            <img src="${s.image}" alt="${s.name}" class="salon-img"> <!-- READS s.image -->
+                            <img src="${s.image}" alt="${s.name}" class="salon-img">
                             <div class="img-overlay"></div>
                         </div>
                         <div class="card-content">
