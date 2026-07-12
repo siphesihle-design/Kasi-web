@@ -3,11 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = window.firebaseAuth;
     const db = window.firebaseDB;
     const onAuthState = window.onAuthState;
-    const dbDoc = window.dbDoc; const dbGet = window.dbGet;
-    const addDoc = window.addDoc; const collection = window.collection;
-    const onSnapshot = window.onSnapshot; const query = window.query; const orderBy = window.orderBy; const where = window.where;
-    const setDoc = window.setDoc;
-    const updateDoc = window.updateDoc;
+    const dbDoc = window.dbDoc;
+    const dbGet = window.dbGet;
+    const addDoc = window.addDoc;
+    const collection = window.collection;
+    const onSnapshot = window.onSnapshot;
+    const query = window.query;
+    const orderBy = window.orderBy;
+    const where = window.where;
+    const setDoc = window.dbSet; // FIXED
+    const updateDoc = window.updateDoc; // ADDED
 
     // ========== GLOBAL ELEMENTS ==========
     const bookingModal = document.getElementById('bookingModal');
@@ -18,16 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const salonList = document.getElementById('salonList');
 
     // ========== ADMIN ELEMENTS ==========
-    const adminSalonForm = document.getElementById('salonForm'); // FIXED: was adminSalonForm
+    const adminSalonForm = document.getElementById('salonForm');
     const imageInput = document.getElementById('image');
     const imagePreview = document.getElementById('imagePreview');
     const bookingsList = document.getElementById('bookingsList');
-    const addSalonSection = document.getElementById('addSalonSection'); // ADDED
-    const copyBtn = document.getElementById('copyBtn'); // ADDED
-    const useLinkBtn = document.getElementById('useLinkBtn'); // ADDED
-    const quickLink = document.getElementById('quickLink'); // ADDED
+    const addSalonSection = document.getElementById('addSalonSection');
+    const copyBtn = document.getElementById('copyBtn');
+    const useLinkBtn = document.getElementById('useLinkBtn');
+    const quickLink = document.getElementById('quickLink');
 
-    // ========== NOTIFICATION SOUNDS - FIXED ==========
+    // ========== NOTIFICATION SOUNDS ==========
     const notifySound = new Audio('notify.mp3');
     const successSound = new Audio('success.mp3');
     notifySound.volume = 0.4;
@@ -36,13 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
     successSound.preload = 'auto';
     let audioUnlocked = false;
 
-    // UNLOCK AUDIO ON FIRST USER CLICK - THIS IS THE KEY FIX
+    // UNLOCK AUDIO ON FIRST USER CLICK - REQUIRED FOR MOBILE
     const unlockAudio = () => {
         if(!audioUnlocked) {
             notifySound.play().then(() => {notifySound.pause(); notifySound.currentTime = 0;}).catch(()=>{});
             successSound.play().then(() => {successSound.pause(); successSound.currentTime = 0;}).catch(()=>{});
             audioUnlocked = true;
-            console.log("Audio unlocked");
         }
     }
     document.addEventListener('click', unlockAudio, { once: true });
@@ -113,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p><i class='bx bx-time'></i> ${s.hours}</p>
                             <p><i class='bx bx-map'></i> ${s.location}</p>
                             <p><i class='bx bx-cut'></i> ${s.services}</p>
-                            <p id="queue-${salonId}" class="queue-count"><i class='bx bx-group'></i> Loading queue...</p> <!-- FIXED -->
+                            <p id="queue-${salonId}" class="queue-count"><i class='bx bx-group'></i> Loading queue...</p>
                             <button class="primary-btn openBooking" data-salon="${s.name}" data-salon-uid="${salonId}">Book Appointment</button>
                         </div>
                     </div>`;
@@ -132,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         unlockAudio();
         const trigger = e.target.closest('.openBooking');
         if (!trigger) return;
-        if (!currentClientUid) { alert('Please log in first.'); window.location.href = 'cover.html'; return; }
+        if (!currentClientUid) { alert('Please log in first.'); window.location.href = 'home.html'; return; } // FIXED
         activeSalonName = trigger.dataset.salon;
         activeSalonUid = trigger.dataset.salonUid;
         if(bookingModal) bookingModal.classList.add('active');
@@ -270,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(btn.querySelector('span')?.textContent === 'Home') {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.location.href = 'cover.html';
+                window.location.href = 'home.html'; // FIXED
             })
         }
     })
