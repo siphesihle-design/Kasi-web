@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K@si Web | Home</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#008CFF">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="style.css?v=7">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</head>
+<body>
+    <h1 class="header-title">Web For Kasi People</h1>
+    <div class="container">
+        <div class="glass-card login-section" id="authSection">
+            <h2 class="typing-text">K@si Web</h2>
+            <p class="tagline">Hair cut made easy</p>
+            <div class="form-group">
+                <input type="email" id="userEmail" placeholder="Email Address" autocomplete="email">
+                <input type="password" id="userPass" placeholder="Password" autocomplete="current-password">
+                <button type="button" id="mainLoginBtn" class="primary-btn">Login</button>
+                <button type="button" id="signupBtn" class="secondary-btn">Sign Up</button>
+                <button type="button" id="installBtn" class="secondary-btn" style="display:none;">Install K@si Web App</button>
+                <p id="authMsg" style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #008CFF;"></p>
+            </div>
+        </div>
+
+        <div class="swiper"><div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1"></div>
+            <div class="swiper-slide"><img src="7847041D.jpg" alt="Cut 2"></div>
+            <div class="swiper-slide"><img src="8627A569.jpg" alt="Cut 3"></div>
+            <div class="swiper-slide"><img src="A3886FFD.jpg" alt="Cut 4"></div>
+            <div class="swiper-slide"><img src="B307F46B.jpg" alt="Cut 5"></div>
+        </div><div class="swiper-pagination"></div></div>
+
+        <div class="mission-box"><p>We help you get your fresh haircut and save your time—because we know how it feels to stand in lines all day.</p></div>
+
+        <div class="nav-grid">
+            <a href="home.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
+            <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
+            <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Admin</span></button>
+            <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
+        </div>
+    </div>
+
+    <audio id="loginSound" src="notify.mp3" preload="auto"></audio>
+    <audio id="logoutSound" src="success.mp3" preload="auto"></audio>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+        window.firebaseAuth = auth; window.firebaseDB = db; window.signIn = signInWithEmailAndPassword; window.signUp = createUserWithEmailAndPassword;
+        window.onAuthState = onAuthStateChanged; window.logOut = signOut; window.dbDoc = doc; window.dbSet = setDoc; window.dbGet = getDoc;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const emailInput = document.getElementById('userEmail'); const passInput = document.getElementById('userPass');
+            const mainLoginBtn = document.getElementById('mainLoginBtn'); const signupBtn = document.getElementById('signupBtn');
+            const authMsg = document.getElementById('authMsg'); const adminBtn = document.getElementById('adminBtn'); const logoutBtn = document.getElementById('logoutBtn');
+            const loginSound = document.getElementById('loginSound'); const logoutSound = document.getElementById('logoutSound');
+            loginSound.volume = 0.4; logoutSound.volume = 0.4; let cachedUserRole = "customer"; let audioUnlocked = false;
+            const unlockAudio = () => { if(!audioUnlocked) { loginSound.play().then(() => {loginSound.pause(); loginSound.currentTime = 0;}).catch(()=>{}); logoutSound.play().then(() => {logoutSound.pause(); logoutSound.currentTime = 0;}).catch(()=>{}); audioUnlocked = true; }};
+            document.addEventListener('click', unlockAudio, { once: true });
+            if (typeof Swiper!== 'undefined') { new Swiper('.swiper', { loop: true, autoplay: { delay: 3000 }, pagination: { el: '.swiper-pagination' } }); }
+            onAuthStateChanged(auth, async (user) => {
+                if (user) { logoutBtn.style.display = 'block'; const userSnap = await getDoc(doc(db, "users", user.uid));
+                    if (userSnap.exists()) { cachedUserRole = userSnap.data().role; if (cachedUserRole === 'salon_owner' || cachedUserRole === 'admin') adminBtn.style.display = 'block'; }
+                } else { cachedUserRole = "customer"; logoutBtn.style.display = 'none'; adminBtn.style.display = 'none'; }
+            });
+            adminBtn.addEventListener('click', () => { if (cachedUserRole === 'admin') window.location.href = 'admin.html'; else if (cachedUserRole === 'salon_owner') window.location.href = 'owners.html'; else window.location.href = 'salons.html'; });
+            logoutBtn.addEventListener('click', () => { unlockAudio(); logoutSound.currentTime = 0; logoutSound.play().catch(e => console.log("Logout sound:", e)); setTimeout(() => signOut(auth), 400); });
+            mainLoginBtn.addEventListener('click', async () => {
+                const email = emailInput.value.trim(); const password = passInput.value; if (!email ||!password) return alert('Please enter both email and password details.');
+                const creds = await signInWithEmailAndPassword(auth, email, password); unlockAudio(); loginSound.currentTime = 0; loginSound.play().catch(e => console.log("Login sound:", e));
+                authMsg.textContent = "Verifying profile privileges..."; const userSnap = await getDoc(doc(db, "users", creds.user.uid));
+                setTimeout(() => { if (userSnap.exists()) { const role = userSnap.data().role; if (role === 'admin') window.location.href = 'admin.html'; else if (role === 'salon_owner') window.location.href = 'owners.html'; else window.location.href = 'salons.html'; } else { window.location.href = 'salons.html'; } }, 500);
+            });
+            signupBtn.addEventListener('click', async () => {
+                const email = emailInput.value.trim(); const password = passInput.value; if (!email ||!password) return alert('Please enter registration requirements.');
+                const creds = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", creds.user.uid), { email: email, role: 'customer', createdAt: new Date() });
+                unlockAudio(); loginSound.currentTime = 0; loginSound.play().catch(() => {}); authMsg.textContent = "Registration successful! Loading salons layout...";
+                setTimeout(() => window.location.href = 'salons.html', 700);
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+    <footer style="text-align:center; padding:40px 0 20px;"><img src="C00719B.jpg" alt="K@si Web" style="width:300px; max-width:80%; opacity:0.8; border-radius:12px;"><p style="color:#666; font-size:0.85rem; margin-top:15px;">© 2026 K@si Web</p></footer>
+</body>
+</html>
