@@ -4,32 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K@si Web | Welcome</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
     <style>
-       .cover-container { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; background: linear-gradient(135deg, #0a0a0a, #1a1a2e); }
-       .cover-logo { width: 300px; max-width: 80%; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 0 40px rgba(0, 140, 255, 0.3); }
-       .typing-text { font-size: 2.5rem; font-weight: 800; color: #008CFF; margin-bottom: 10px; }
-       .tagline { font-size: 1.1rem; color: #888; margin-bottom: 40px; }
-       .primary-btn { font-size: 1.1rem; padding: 16px 40px; }
+       body {
+           background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f3460 100%);
+           overflow: hidden;
+       }
+       .cover-container { 
+           display: flex; 
+           flex-direction: column; 
+           justify-content: center; 
+           align-items: center; 
+           height: 100vh; 
+           text-align: center; 
+           padding: 20px;
+           animation: fadeIn 1s ease-in;
+       }
+       @keyframes fadeIn {
+           from { opacity: 0; transform: translateY(20px); }
+           to { opacity: 1; transform: translateY(0); }
+       }
+       .cover-logo { 
+           width: 320px; 
+           max-width: 85%; 
+           border-radius: 32px; 
+           margin-bottom: 30px; 
+           box-shadow: 0 0 60px rgba(0, 140, 255, 0.4);
+           border: 2px solid rgba(0, 140, 255, 0.2);
+           animation: pulse 2s ease-in-out infinite;
+       }
+       @keyframes pulse {
+           0%, 100% { transform: scale(1); }
+           50% { transform: scale(1.03); }
+       }
+       .typing-text { 
+           font-size: 2.8rem; 
+           font-weight: 900; 
+           background: linear-gradient(90deg, #008CFF, #00C6FF);
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           margin-bottom: 12px;
+           min-height: 50px;
+       }
+       .tagline { 
+           font-size: 1.2rem; 
+           color: #B0B0D0; 
+           margin-bottom: 45px;
+           opacity: 0;
+           animation: fadeInUp 1s ease 0.5s forwards;
+       }
+       @keyframes fadeInUp {
+           from { opacity: 0; transform: translateY(10px); }
+           to { opacity: 1; transform: translateY(0); }
+       }
+       .primary-btn { 
+           font-size: 1.2rem; 
+           padding: 18px 50px; 
+           font-weight: 700;
+           border-radius: 16px;
+           box-shadow: 0 8px 30px rgba(0, 140, 255, 0.3);
+           transition: all 0.3s;
+           opacity: 0;
+           animation: fadeInUp 1s ease 0.8s forwards;
+       }
+       .primary-btn:hover {
+           transform: translateY(-3px);
+           box-shadow: 0 12px 40px rgba(0, 140, 255, 0.5);
+       }
+       .cursor {
+           display: inline-block;
+           width: 3px;
+           background: #008CFF;
+           margin-left: 5px;
+           animation: blink 0.7s infinite;
+       }
+       @keyframes blink {
+           0%, 50% { opacity: 1; }
+           51%, 100% { opacity: 0; }
+       }
     </style>
 </head>
 <body>
     <div class="cover-container">
         <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="K@si Web" class="cover-logo">
-        <h1 class="typing-text">K@si Web</h1>
+        <h1 class="typing-text" id="typingText"></h1>
         <p class="tagline">Hair cut made easy</p>
-        <button id="getStartedBtn" class="primary-btn">Get Started</button>
+        <button id="getStartedBtn" class="primary-btn">
+            <i class='bx bx-right-arrow-alt'></i> Get Started
+        </button>
     </div>
 
     <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
     <script>
+        // TYPING EFFECT
+        const text = "K@si Web";
+        const typingElement = document.getElementById('typingText');
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                typingElement.innerHTML = text.substring(0, i+1) + '<span class="cursor"></span>';
+                i++;
+                setTimeout(typeWriter, 120);
+            } else {
+                typingElement.innerHTML = text; // remove cursor
+            }
+        }
+        setTimeout(typeWriter, 500);
+
+        // INSTANT SOUND
         const getStartedBtn = document.getElementById('getStartedBtn');
         const clickSound = document.getElementById('clickSound');
         clickSound.volume = 0.6;
-        clickSound.playbackRate = 1.2; // FASTER CLICK
+        clickSound.playbackRate = 1.2; // FASTER
 
-        // UNLOCK AUDIO ON FIRST TOUCH FOR MOBILE
+        // UNLOCK AUDIO ON FIRST TOUCH
         document.addEventListener('touchstart', () => {
             clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
         }, { once: true });
@@ -38,7 +128,7 @@
             e.preventDefault();
             clickSound.currentTime = 0; // RESET
             clickSound.play().catch(e => console.log("Cover sound error:", e)); // PLAY INSTANT
-            if(navigator.vibrate) navigator.vibrate(30); // SHORTER VIBRATION
+            if(navigator.vibrate) navigator.vibrate(30);
             window.location.href = 'home.html'; // NO DELAY
         });
     </script>
