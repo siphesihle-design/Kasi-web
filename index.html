@@ -3,228 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K@si Web | Home</title>
-    <link rel="manifest" href="manifest.json">
+    <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#008CFF">
-    
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="style.css?v=3"> <!-- ONLY 1 CSS LINK NOW -->
-    
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css?v=7">
 </head>
-<body>
-    <h1 class="header-title">Web For Kasi People</h1>
+<body class="cover-page">
 
-    <div class="container">
-        <div class="glass-card login-section" id="authSection">
-            <h2 class="typing-text">K@si Web</h2>
-            <p class="tagline">Hair cut made easy</p>
-
-            <div class="form-group">
-                <input type="email" id="userEmail" placeholder="Email Address" autocomplete="email">
-                <input type="password" id="userPass" placeholder="Password" autocomplete="current-password">
-                <button type="button" id="mainLoginBtn" class="primary-btn">Login</button>
-                <button type="button" id="signupBtn" class="secondary-btn">Sign Up</button>
-                <button type="button" id="installBtn" class="secondary-btn" style="display:none;">Install K@si Web App</button>
-                <p id="authMsg" style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #008CFF;"></p>
-            </div>
+    <div class="cover-container">
+        <div class="cover-logo"><i class='bx bx-cut'></i></div>
+        <h1 class="cover-title">K@si Web</h1>
+        <div class="word-animation"><span id="typed-text"></span><span class="cursor">|</span></div>
+        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
+        <div class="cover-image">
+            <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut">
         </div>
-
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1"></div>
-                <div class="swiper-slide"><img src="7847041D.jpg" alt="Cut 2"></div>
-                <div class="swiper-slide"><img src="8627A569.jpg" alt="Cut 3"></div>
-                <div class="swiper-slide"><img src="A3886FFD.jpg" alt="Cut 4"></div>
-                <div class="swiper-slide"><img src="B307F46B.jpg" alt="Cut 5"></div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-
-        <div class="mission-box">
-            <p>We help you get your fresh haircut and save your time—because we know how it feels to stand in lines all day.</p>
-        </div>
-
-        <div class="nav-grid">
-            <a href="index.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
-            <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
-            <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Admin</span></button>
-            <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
-        </div>
+        <a href="home.html" id="getStartedBtn" class="cover-btn">
+            Get Started <i class='bx bx-right-arrow-alt'></i>
+        </a>
+        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import {
-            getAuth,
-            signInWithEmailAndPassword,
-            createUserWithEmailAndPassword,
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { 
-            getFirestore, doc, setDoc, getDoc, addDoc, collection, deleteDoc, onSnapshot,
-            query, orderBy, where 
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "471544855566",
-            appId: "1:471544855566:web:aa669a968b8af0ceb6905f",
-            measurementId: "G-Q8QVN2T54S"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        window.firebaseAuth = auth;
-        window.firebaseDB = db;
-        window.signIn = signInWithEmailAndPassword;
-        window.signUp = createUserWithEmailAndPassword;
-        window.onAuthState = onAuthStateChanged;
-        window.logOut = signOut;
-        
-        window.dbDoc = doc;
-        window.dbSet = setDoc;
-        window.dbGet = getDoc;
-        window.addDoc = addDoc;
-        window.collection = collection;
-        window.removeDoc = deleteDoc;
-        window.onSnapshot = onSnapshot;
-        window.query = query;
-        window.orderBy = orderBy;
-        window.where = where;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const emailInput = document.getElementById('userEmail');
-            const passInput = document.getElementById('userPass');
-            const mainLoginBtn = document.getElementById('mainLoginBtn');
-            const signupBtn = document.getElementById('signupBtn');
-            const authMsg = document.getElementById('authMsg');
-            const adminBtn = document.getElementById('adminBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-
-            let cachedUserRole = "customer";
-
-            if (typeof Swiper !== 'undefined') {
-                new Swiper('.swiper', {
-                    loop: true,
-                    autoplay: { delay: 3000, disableOnInteraction: false },
-                    pagination: { el: '.swiper-pagination', clickable: true },
-                });
-            }
-
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    if (logoutBtn) logoutBtn.style.display = 'block';
-                    try {
-                        const userSnap = await getDoc(doc(db, "users", user.uid));
-                        if (userSnap.exists()) {
-                            const userData = userSnap.data();
-                            cachedUserRole = userData.role;
-                            
-                            if (cachedUserRole === 'salon_owner' || cachedUserRole === 'admin') {
-                                if (adminBtn) {
-                                    adminBtn.style.display = 'block';
-                                    const spanEl = adminBtn.querySelector('span');
-                                    if (spanEl) {
-                                        spanEl.textContent = cachedUserRole === 'admin' ? 'Admin' : 'Dashboard';
-                                    }
-                                }
-                            }
-                        }
-                    } catch (err) {
-                        console.error("Auth context validation error:", err);
-                    }
-                } else {
-                    cachedUserRole = "customer";
-                    if (logoutBtn) logoutBtn.style.display = 'none';
-                    if (adminBtn) adminBtn.style.display = 'none';
-                }
-            });
-
-            if (adminBtn) {
-                adminBtn.addEventListener('click', () => {
-                    if (cachedUserRole === 'admin') {
-                        window.location.href = 'admin.html';
-                    } else if (cachedUserRole === 'salon_owner') {
-                        window.location.href = 'owners.html';
-                    } else {
-                        window.location.href = 'salons.html';
-                    }
-                });
-            }
-
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', () => { signOut(auth); });
-            }
-
-            if (mainLoginBtn) {
-                mainLoginBtn.addEventListener('click', async () => {
-                    const email = emailInput.value.trim();
-                    const password = passInput.value;
-                    if (!email || !password) return alert('Please enter both email and password details.');
-
-                    try {
-                        const creds = await signInWithEmailAndPassword(auth, email, password);
-                        if (authMsg) authMsg.textContent = "Verifying profile privileges...";
-
-                        const userSnap = await getDoc(doc(db, "users", creds.user.uid));
-                        
-                        if (userSnap.exists()) {
-                            const userData = userSnap.data();
-                            
-                            if (userData.role === 'admin') {
-                                window.location.href = 'admin.html';
-                            } else if (userData.role === 'salon_owner') {
-                                window.location.href = 'owners.html';
-                            } else {
-                                window.location.href = 'salons.html';
-                            }
-                        } else {
-                            window.location.href = 'salons.html';
-                        }
-                    } catch (err) {
-                        alert('Authentication Interrupted: ' + err.message);
-                        if (authMsg) authMsg.textContent = "";
-                    }
-                });
-            }
-
-            if (signupBtn) {
-                signupBtn.addEventListener('click', async () => {
-                    const email = emailInput.value.trim();
-                    const password = passInput.value;
-                    if (!email || !password) return alert('Please enter registration requirements.');
-
-                    try {
-                        const creds = await createUserWithEmailAndPassword(auth, email, password);
-                        
-                        await setDoc(doc(db, "users", creds.user.uid), {
-                            email: email,
-                            role: 'customer'
-                        });
-                        
-                        if (authMsg) authMsg.textContent = "Registration successful! Loading salons layout...";
-                        window.location.href = 'salons.html';
-                    } catch (err) {
-                        alert('Registration Interrupted: ' + err.message);
-                    }
-                });
-            }
-        });
-    </script>
-    <script src="script.js"></script>
-
-    <footer style="text-align:center; padding:40px 0 20px;">
-        <img src="C00719B.jpg" alt="K@si Web" style="width:300px; max-width:80%; opacity:0.8; border-radius:12px;">
-        <p style="color:#666; font-size:0.85rem; margin-top:15px;">© 2026 K@si Web</p>
-    </footer>
+<script>
+    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
+    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
+    const typedText = document.getElementById("typed-text");
+    function type() {
+        const currentWord = words[wordIndex];
+        if (isDeleting) { typedText.textContent = currentWord.substring(0, charIndex - 1); charIndex--; }
+        else { typedText.textContent = currentWord.substring(0, charIndex + 1); charIndex++; }
+        let typeSpeed = isDeleting? 80 : 120;
+        if (!isDeleting && charIndex === currentWord.length) { typeSpeed = 2000; isDeleting = true; }
+        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
+        setTimeout(type, typeSpeed);
+    }
+    document.addEventListener("DOMContentLoaded", type);
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const clickSound = document.getElementById('clickSound');
+    clickSound.volume = 0.5;
+    document.addEventListener('touchstart', () => { clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{}); }, { once: true });
+    getStartedBtn.addEventListener('click', (e) => {
+        e.preventDefault(); clickSound.currentTime = 0;
+        clickSound.play().catch(e => console.log("Cover sound error:", e));
+        if(navigator.vibrate) navigator.vibrate(50);
+        setTimeout(() => { window.location.href = 'home.html'; }, 250);
+    });
+</script>
 </body>
 </html>
