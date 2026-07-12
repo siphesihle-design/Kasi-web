@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K@si Web | Fresh Cuts, No Lines</title>
+    <meta name="theme-color" content="#008CFF">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css?v=7">
+</head>
+<body class="cover-page">
+
+    <div class="cover-container">
+        <div class="cover-logo">
+            <i class='bx bx-cut'></i>
+        </div>
+
+        <h1 class="cover-title">K@si Web</h1>
+
+        <div class="word-animation">
+            <span id="typed-text"></span><span class="cursor">|</span>
+        </div>
+
+        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
+
+        <div class="cover-image">
+            <img src="B57E654F.jpeg" alt="Fresh Cut">
+        </div>
+
+        <a href="index.html" id="getStartedBtn" class="cover-btn">
+            Get Started <i class='bx bx-right-arrow-alt'></i>
+        </a>
+
+        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
+    </div>
+
+    <!-- HIDDEN AUDIO FOR CLICK SOUND -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
+<script>
+    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typedText = document.getElementById("typed-text");
+
+    function type() {
+        const currentWord = words[wordIndex];
+        if (isDeleting) {
+            typedText.textContent = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typedText.textContent = currentWord.substring(0, charIndex + 1);
+            charIndex++;
+        }
+        let typeSpeed = isDeleting? 80 : 120;
+        if (!isDeleting && charIndex === currentWord.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            typeSpeed = 500;
+        }
+        setTimeout(type, typeSpeed);
+    }
+    document.addEventListener("DOMContentLoaded", type);
+
+    // ========== PLAY SOUND ON CLICK - FIXED ==========
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const clickSound = document.getElementById('clickSound');
+    clickSound.volume = 0.5;
+
+    // UNLOCK AUDIO ON FIRST TOUCH - for mobile
+    document.addEventListener('touchstart', () => {
+        clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
+    }, { once: true });
+
+    getStartedBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // stop instant redirect
+        clickSound.currentTime = 0;
+        clickSound.play().catch(e => console.log("Cover sound error:", e)); // play sound + log error
+
+        // VIBRATION for phones - feels premium
+        if(navigator.vibrate) navigator.vibrate(50);
+
+        // wait 250ms then go to index.html so sound plays
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 250);
+    });
+
+</script>
+
+</body>
+</html>
