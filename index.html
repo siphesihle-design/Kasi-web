@@ -3,134 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K@si Web | Welcome</title>
+    <title>K@si Web | Fresh Cuts, No Lines</title>
+    <meta name="theme-color" content="#008CFF">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css">
-    <style>
-       body {
-           background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f3460 100%);
-           overflow: hidden;
-       }
-       .cover-container { 
-           display: flex; 
-           flex-direction: column; 
-           justify-content: center; 
-           align-items: center; 
-           height: 100vh; 
-           text-align: center; 
-           padding: 20px;
-           animation: fadeIn 1s ease-in;
-       }
-       @keyframes fadeIn {
-           from { opacity: 0; transform: translateY(20px); }
-           to { opacity: 1; transform: translateY(0); }
-       }
-       .cover-logo { 
-           width: 320px; 
-           max-width: 85%; 
-           border-radius: 32px; 
-           margin-bottom: 30px; 
-           box-shadow: 0 0 60px rgba(0, 140, 255, 0.4);
-           border: 2px solid rgba(0, 140, 255, 0.2);
-           animation: pulse 2s ease-in-out infinite;
-       }
-       @keyframes pulse {
-           0%, 100% { transform: scale(1); }
-           50% { transform: scale(1.03); }
-       }
-       .typing-text { 
-           font-size: 2.8rem; 
-           font-weight: 900; 
-           background: linear-gradient(90deg, #008CFF, #00C6FF);
-           -webkit-background-clip: text;
-           -webkit-text-fill-color: transparent;
-           margin-bottom: 12px;
-           min-height: 50px;
-       }
-       .tagline { 
-           font-size: 1.2rem; 
-           color: #B0B0D0; 
-           margin-bottom: 45px;
-           opacity: 0;
-           animation: fadeInUp 1s ease 0.5s forwards;
-       }
-       @keyframes fadeInUp {
-           from { opacity: 0; transform: translateY(10px); }
-           to { opacity: 1; transform: translateY(0); }
-       }
-       .primary-btn { 
-           font-size: 1.2rem; 
-           padding: 18px 50px; 
-           font-weight: 700;
-           border-radius: 16px;
-           box-shadow: 0 8px 30px rgba(0, 140, 255, 0.3);
-           transition: all 0.3s;
-           opacity: 0;
-           animation: fadeInUp 1s ease 0.8s forwards;
-       }
-       .primary-btn:hover {
-           transform: translateY(-3px);
-           box-shadow: 0 12px 40px rgba(0, 140, 255, 0.5);
-       }
-       .cursor {
-           display: inline-block;
-           width: 3px;
-           background: #008CFF;
-           margin-left: 5px;
-           animation: blink 0.7s infinite;
-       }
-       @keyframes blink {
-           0%, 50% { opacity: 1; }
-           51%, 100% { opacity: 0; }
-       }
-    </style>
+    <link rel="stylesheet" href="style.css?v=7">
 </head>
-<body>
+<body class="cover-page">
+
     <div class="cover-container">
-        <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="K@si Web" class="cover-logo">
-        <h1 class="typing-text" id="typingText"></h1>
-        <p class="tagline">Hair cut made easy</p>
-        <button id="getStartedBtn" class="primary-btn">
-            <i class='bx bx-right-arrow-alt'></i> Get Started
-        </button>
+        <div class="cover-logo">
+            <i class='bx bx-cut'></i>
+        </div>
+
+        <h1 class="cover-title">K@si Web</h1>
+
+        <div class="word-animation">
+            <span id="typed-text"></span><span class="cursor">|</span>
+        </div>
+
+        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
+
+        <div class="cover-image">
+            <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut">
+        </div>
+
+        <a href="index.html" id="getStartedBtn" class="cover-btn">
+            Get Started <i class='bx bx-right-arrow-alt'></i>
+        </a>
+
+        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
 
-    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+    <!-- HIDDEN AUDIO FOR CLICK SOUND -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
-    <script>
-        // TYPING EFFECT
-        const text = "K@si Web";
-        const typingElement = document.getElementById('typingText');
-        let i = 0;
-        function typeWriter() {
-            if (i < text.length) {
-                typingElement.innerHTML = text.substring(0, i+1) + '<span class="cursor"></span>';
-                i++;
-                setTimeout(typeWriter, 120);
-            } else {
-                typingElement.innerHTML = text; // remove cursor
-            }
+<script>
+    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typedText = document.getElementById("typed-text");
+
+    function type() {
+        const currentWord = words[wordIndex];
+        if (isDeleting) {
+            typedText.textContent = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typedText.textContent = currentWord.substring(0, charIndex + 1);
+            charIndex++;
         }
-        setTimeout(typeWriter, 500);
+        let typeSpeed = isDeleting? 80 : 120;
+        if (!isDeleting && charIndex === currentWord.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            typeSpeed = 500;
+        }
+        setTimeout(type, typeSpeed);
+    }
+    document.addEventListener("DOMContentLoaded", type);
 
-        // INSTANT SOUND
-        const getStartedBtn = document.getElementById('getStartedBtn');
-        const clickSound = document.getElementById('clickSound');
-        clickSound.volume = 0.6;
-        clickSound.playbackRate = 1.2; // FASTER
+    // ========== PLAY SOUND ON CLICK - FIXED ==========
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const clickSound = document.getElementById('clickSound');
+    clickSound.volume = 0.5;
 
-        // UNLOCK AUDIO ON FIRST TOUCH
-        document.addEventListener('touchstart', () => {
-            clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
-        }, { once: true });
+    // UNLOCK AUDIO ON FIRST TOUCH - for mobile
+    document.addEventListener('touchstart', () => {
+        clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
+    }, { once: true });
 
-        getStartedBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            clickSound.currentTime = 0; // RESET
-            clickSound.play().catch(e => console.log("Cover sound error:", e)); // PLAY INSTANT
-            if(navigator.vibrate) navigator.vibrate(30);
-            window.location.href = 'home.html'; // NO DELAY
-        });
-    </script>
+    getStartedBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // stop instant redirect
+        clickSound.currentTime = 0;
+        clickSound.play().catch(e => console.log("Cover sound error:", e)); // play sound + log error
+
+        // VIBRATION for phones - feels premium
+        if(navigator.vibrate) navigator.vibrate(50);
+
+        // wait 250ms then go to index.html so sound plays
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 250);
+    });
+
+</script>
+
 </body>
 </html>
