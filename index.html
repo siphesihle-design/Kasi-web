@@ -6,7 +6,7 @@
     <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#008CFF">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body class="cover-page">
 
@@ -27,7 +27,7 @@
             <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut">
         </div>
 
-        <a href="index.html" id="getStartedBtn" class="cover-btn">
+        <a href="home.html" id="getStartedBtn" class="cover-btn"> <!-- CHANGED TO home.html -->
             Get Started <i class='bx bx-right-arrow-alt'></i>
         </a>
 
@@ -35,7 +35,7 @@
     </div>
 
     <!-- HIDDEN AUDIO FOR CLICK SOUND -->
-    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio> <!-- CHANGED FILE -->
 
 <script>
     const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
@@ -66,10 +66,11 @@
     }
     document.addEventListener("DOMContentLoaded", type);
 
-    // ========== PLAY SOUND ON CLICK - FIXED ==========
+    // ========== INSTANT SOUND - NO DELAY ==========
     const getStartedBtn = document.getElementById('getStartedBtn');
     const clickSound = document.getElementById('clickSound');
-    clickSound.volume = 0.5;
+    clickSound.volume = 0.6;
+    clickSound.playbackRate = 1.2; // FASTER
 
     // UNLOCK AUDIO ON FIRST TOUCH - for mobile
     document.addEventListener('touchstart', () => {
@@ -77,17 +78,11 @@
     }, { once: true });
 
     getStartedBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // stop instant redirect
+        e.preventDefault();
         clickSound.currentTime = 0;
-        clickSound.play().catch(e => console.log("Cover sound error:", e)); // play sound + log error
-
-        // VIBRATION for phones - feels premium
-        if(navigator.vibrate) navigator.vibrate(50);
-
-        // wait 250ms then go to index.html so sound plays
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 250);
+        clickSound.play().catch(e => console.log("Cover sound error:", e)); // PLAY INSTANT
+        if(navigator.vibrate) navigator.vibrate(30); // SHORTER VIBRATION
+        window.location.href = 'home.html'; // NO DELAY - GO STRAIGHT TO LOGIN
     });
 
 </script>
