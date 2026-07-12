@@ -1,49 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K@si Web | Fresh Cuts, No Lines</title>
-    <meta name="theme-color" content="#008CFF">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=7">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K@si Web | Welcome</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+       .cover-container { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; background: linear-gradient(135deg, #0a0a0a, #1a1a2e); }
+       .cover-logo { width: 300px; max-width: 80%; border-radius: 24px; margin-bottom: 30px; box-shadow: 0 0 40px rgba(0, 140, 255, 0.3); }
+       .typing-text { font-size: 2.5rem; font-weight: 800; color: #008CFF; margin-bottom: 10px; }
+       .tagline { font-size: 1.1rem; color: #888; margin-bottom: 40px; }
+       .primary-btn { font-size: 1.1rem; padding: 16px 40px; }
+    </style>
 </head>
-<body class="cover-page">
+<body>
     <div class="cover-container">
-        <div class="cover-logo"><i class='bx bx-cut'></i></div>
-        <h1 class="cover-title">K@si Web</h1>
-        <div class="word-animation"><span id="typed-text"></span><span class="cursor">|</span></div>
-        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
-        <div class="cover-image"><img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut"></div>
-        <a href="home.html" id="getStartedBtn" class="cover-btn">Get Started <i class='bx bx-right-arrow-alt'></i></a>
-        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
+        <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="K@si Web" class="cover-logo">
+        <h1 class="typing-text">K@si Web</h1>
+        <p class="tagline">Hair cut made easy</p>
+        <button id="getStartedBtn" class="primary-btn">Get Started</button>
     </div>
 
     <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
-<script>
-    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
-    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
-    const typedText = document.getElementById("typed-text");
-    function type() {
-        const currentWord = words[wordIndex];
-        if (isDeleting) { typedText.textContent = currentWord.substring(0, charIndex - 1); charIndex--; }
-        else { typedText.textContent = currentWord.substring(0, charIndex + 1); charIndex++; }
-        let typeSpeed = isDeleting? 80 : 120;
-        if (!isDeleting && charIndex === currentWord.length) { typeSpeed = 2000; isDeleting = true; }
-        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
-        setTimeout(type, typeSpeed);
-    }
-    document.addEventListener("DOMContentLoaded", type);
-    const getStartedBtn = document.getElementById('getStartedBtn');
-    const clickSound = document.getElementById('clickSound');
-    clickSound.volume = 0.5;
-    document.addEventListener('touchstart', () => { clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{}); }, { once: true });
-    getStartedBtn.addEventListener('click', (e) => {
-        e.preventDefault(); clickSound.currentTime = 0;
-        clickSound.play().catch(e => console.log("Cover sound error:", e));
-        if(navigator.vibrate) navigator.vibrate(50);
-        setTimeout(() => { window.location.href = 'home.html'; }, 250);
-    });
-</script>
+    <script>
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const clickSound = document.getElementById('clickSound');
+        clickSound.volume = 0.6;
+        clickSound.playbackRate = 1.2; // FASTER CLICK
+
+        // UNLOCK AUDIO ON FIRST TOUCH FOR MOBILE
+        document.addEventListener('touchstart', () => {
+            clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
+        }, { once: true });
+
+        getStartedBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            clickSound.currentTime = 0; // RESET
+            clickSound.play().catch(e => console.log("Cover sound error:", e)); // PLAY INSTANT
+            if(navigator.vibrate) navigator.vibrate(30); // SHORTER VIBRATION
+            window.location.href = 'home.html'; // NO DELAY
+        });
+    </script>
 </body>
 </html>
