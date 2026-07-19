@@ -5,43 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K@si Salons | Find a Barber</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
     <header class="main-header">
         <div class="container header-nav-box">
             <h1 class="header-title">Local Salons</h1>
-            <p class="tagline" id="bookingsToday">Loading salons...</p>
+            <p class="tagline" id="bookingsToday">Finding fresh cuts near you...</p>
         </div>
     </header>
 
     <main class="container">
-        <!-- ADD SALON FORM - Only Admin sees this -->
-        <div class="glass-card" id="addSalonSection" style="display:none;">
-            <h2 class="typing-text">Add New Salon</h2>
-
-            <!-- QUICK LINK BOX -->
-            <div style="background:rgba(0,128,128,0.1); padding:15px; border-radius:14px; margin-bottom:15px;">
-                <p style="font-size:0.85rem; color:#888; margin-bottom:8px;">Vaalfresh Image Link:</p>
-                <div style="display:flex; gap:8px; margin-bottom:10px;">
-                    <input type="text" id="quickLink" value="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/refs/heads/main/D40B322.jpeg" readonly style="font-size:0.8rem;">
-                    <button type="button" id="copyBtn" class="secondary-btn" style="width:auto; padding:10px 12px;"><i class='bx bx-copy'></i></button>
-                </div>
-                <button type="button" id="useLinkBtn" class="primary-btn" style="width:100%; font-size:0.9rem;">Use This Image</button>
+        <!-- SEARCH BAR -->
+        <div class="glass-card" style="padding:15px; margin-bottom:20px;">
+            <div style="display:flex; gap:8px;">
+                <input type="text" id="searchBar" placeholder="Search salons, location, services..." style="flex:1;">
+                <button id="searchBtn" class="secondary-btn" style="width:auto; padding:12px;"><i class='bx bx-search'></i></button>
             </div>
-
-            <form id="salonForm" class="form-group">
-                <input type="text" id="name" placeholder="Salon Name" required>
-                <input type="text" id="image" placeholder="Image URL will auto-fill" required>
-                <img id="imagePreview" width="100%" style="display:none; border-radius:14px; margin:10px 0;">
-                <input type="text" id="location" placeholder="Location e.g. Mayibuye" required>
-                <input type="text" id="hours" placeholder="Hours e.g. 8Am-22PM" required>
-                <input type="text" id="services" placeholder="Services e.g. Fade, Line Up" required>
-                <button type="submit" class="primary-btn">Add Salon</button>
-            </form>
         </div>
 
-        <!-- LIST OF SALONS -->
         <div class="salon-list" id="salonList"></div>
     </main>
 
@@ -65,7 +47,7 @@
     </div>
 
     <nav class="nav-grid">
-        <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+        <a href="cover.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
         <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
         <button type="button" class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Dashboard</span></button>
         <button type="button" class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
@@ -74,11 +56,20 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-        const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
+        import { getFirestore, doc, getDoc, addDoc, collection, onSnapshot, query, orderBy, where, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+            authDomain: "kasi-web-d073f.firebaseapp.com",
+            projectId: "kasi-web-d073f",
+            appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
+        };
         const app = initializeApp(firebaseConfig); 
-        window.firebaseAuth = getAuth(app); 
-        window.firebaseDB = getFirestore(app);
+        const auth = getAuth(app); 
+        const db = getFirestore(app);
+
+        window.firebaseAuth = auth; 
+        window.firebaseDB = db;
         window.onAuthState = onAuthStateChanged; 
         window.logOut = signOut;
         window.dbDoc = doc; 
@@ -88,7 +79,10 @@
         window.onSnapshot = onSnapshot;
         window.query = query;
         window.orderBy = orderBy;
+        window.where = where;
+        window.updateDoc = updateDoc;
+        window.dbSet = setDoc;
     </script>
-    <script src="script.js"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>
