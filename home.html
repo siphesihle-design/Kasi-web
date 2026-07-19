@@ -19,35 +19,26 @@
     </header>
 
     <div class="container">
-        <!-- LOGIN CARD -->
         <div id="authContainer" class="glass-card">
             <h2>Welcome Back</h2>
-            <div class="form-group">
-                <input type="email" id="email" placeholder="Email" required>
-            </div>
-            <div class="form-group">
-                <input type="password" id="password" placeholder="Password" required>
-            </div>
+            <div class="form-group"><input type="email" id="email" placeholder="Email" required></div>
+            <div class="form-group"><input type="password" id="password" placeholder="Password" required></div>
             <button id="loginBtn" class="primary-btn">Login</button>
             <button id="signupBtn" class="secondary-btn">Sign Up</button>
             <p id="authError" style="color:#ff4757; text-align:center; margin-top:10px;"></p>
         </div>
 
-        <!-- GALLERY / APP CONTENT -->
         <div id="appContent" style="display:none;">
             <div class="glass-card">
                 <h2><i class='bx bx-image'></i> Gallery</h2>
                 <p>Welcome to K@si Web. Book your next cut with top barbers in Soweto.</p>
                 <a href="salons.html" class="primary-btn" style="margin-top:15px; display:block; text-align:center;">Find Salons</a>
             </div>
-
             <div class="glass-card">
                 <h2>Recent Cuts</h2>
                 <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;">
                     <img src="https://placehold.co/200x200/008CFF/FFF?text=Fade" style="width:100%; border-radius:10px;">
                     <img src="https://placehold.co/200x200/FF4D00/FFF?text=Line+Up" style="width:100%; border-radius:10px;">
-                    <img src="https://placehold.co/200x200/1a1a2e/FFF?text=Beard" style="width:100%; border-radius:10px;">
-                    <img src="https://placehold.co/200x200/00c853/FFF?text=Full+Cut" style="width:100%; border-radius:10px;">
                 </div>
             </div>
         </div>
@@ -106,20 +97,12 @@
         signupBtn.addEventListener('click', async () => {
             try {
                 const cred = await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-                await setDoc(doc(db, "users", cred.user.uid), {
-                    email: emailInput.value,
-                    role: 'customer',
-                    createdAt: new Date()
-                });
-            } catch (err) {
-                authError.textContent = err.message;
-            }
+                await setDoc(doc(db, "users", cred.user.uid), { email: emailInput.value, role: 'customer', createdAt: new Date() });
+            } catch (err) { authError.textContent = err.message; }
         });
 
         logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = 'index.html' // Go back to cover
-            });
+            signOut(auth).then(() => { window.location.href = 'index.html' })
         });
     </script>
 </body>
