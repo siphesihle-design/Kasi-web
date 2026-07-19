@@ -24,18 +24,17 @@
         <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
 
         <div class="cover-image">
-            <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut">
+            <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" onerror="this.src='https://via.placeholder.com/400x300/008CFF/FFFFFF?text=Fresh+Cut'">
         </div>
 
-        <a href="home.html" id="getStartedBtn" class="cover-btn"> <!-- CHANGED TO home.html -->
+        <a href="index.html" id="getStartedBtn" class="cover-btn primary-btn">
             Get Started <i class='bx bx-right-arrow-alt'></i>
         </a>
 
         <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
 
-    <!-- HIDDEN AUDIO FOR CLICK SOUND -->
-    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio> <!-- CHANGED FILE -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
 <script>
     const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
@@ -66,26 +65,32 @@
     }
     document.addEventListener("DOMContentLoaded", type);
 
-    // ========== INSTANT SOUND - NO DELAY ==========
     const getStartedBtn = document.getElementById('getStartedBtn');
     const clickSound = document.getElementById('clickSound');
-    clickSound.volume = 0.6;
-    clickSound.playbackRate = 1.2; // FASTER
+    clickSound.volume = 0.5;
 
-    // UNLOCK AUDIO ON FIRST TOUCH - for mobile
-    document.addEventListener('touchstart', () => {
+    // FIX 1: Unlock audio on ANY first touch/click
+    const unlockAudio = () => {
         clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
-    }, { once: true });
+    }
+    document.addEventListener('click', unlockAudio, { once: true });
+    document.addEventListener('touchstart', unlockAudio, { once: true });
 
     getStartedBtn.addEventListener('click', (e) => {
         e.preventDefault();
         clickSound.currentTime = 0;
-        clickSound.play().catch(e => console.log("Cover sound error:", e)); // PLAY INSTANT
-        if(navigator.vibrate) navigator.vibrate(30); // SHORTER VIBRATION
-        window.location.href = 'home.html'; // NO DELAY - GO STRAIGHT TO LOGIN
+        clickSound.play().catch(e => console.log("Cover sound error:", e));
+        if(navigator.vibrate) navigator.vibrate(50); // Haptic feedback
+
+        // FIX 2: Add loading effect
+        getStartedBtn.innerHTML = `Loading... <i class='bx bx-loader-circle bx-spin'></i>`;
+        getStartedBtn.style.opacity = "0.7";
+
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 350);
     });
 
 </script>
-
 </body>
 </html>
