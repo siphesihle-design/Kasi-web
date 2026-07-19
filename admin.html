@@ -3,116 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K@si Web | Admin Dashboard</title>
+    <title>K@si Web | Admin</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=14">
     <style>
-        :root { --admin-teal: #008080; --admin-bg: #0a0a0a; --card-bg: rgba(26, 26, 26, 0.95); --text-muted: #888; }
-        body { background-color: var(--admin-bg); }
-      .dashboard-wrapper { width: 100%; max-width: 1200px!important; margin: auto; padding: 20px; }
-      .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-      .stat-card { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid var(--admin-teal); }
-      .stat-card h3 { margin: 0; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-      .stat-card p { margin: 8px 0 0; font-size: 2rem; font-weight: 800; color: #fff; }
-      .table-wrapper { background: var(--card-bg); border-radius: 24px; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 700px; }
-        th { background-color: #141414; padding: 18px 20px; font-size: 0.85rem; color: var(--admin-teal); text-transform: uppercase; letter-spacing: 0.5px; }
-        td { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
-        tr:last-child td { border-bottom: none; }
-      .status-pill { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
-      .status-pending { background: #ffcc00; color: #000; }
-      .status-completed { background: #00ff88; color: #000; }
-      .clear-btn { background: transparent; color: #ff4757; border: 1px solid #ff4757; padding: 14px; margin-top: 25px; cursor: pointer; border-radius: 14px; width: 100%; font-weight: bold; transition: 0.2s; }
-      .clear-btn:hover { background: #ff4757; color: white; }
-      .back-link { display: block; text-align: center; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
-      .primary-btn { background: var(--admin-teal); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: bold; cursor: pointer; }
+        .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:20px; }
+        .stat-card { text-align:center; padding:15px; }
+        .stat-card h3 { font-size:1.8rem; color:#7B68EE; margin:0; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { padding:12px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); }
+        .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+        .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+        .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+        .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
+        .status-btn { padding:6px 12px; border:none; border-radius:8px; background:#7B68EE; color:#fff; cursor:pointer; }
     </style>
 </head>
 <body>
-<div class="container dashboard-wrapper">
-    <header style="margin: 20px 0 30px 0;">
-        <h1 id="dashboardTitle" class="header-title" style="text-align: left; margin-top: 0;">Admin Dashboard</h1>
-        <p id="dashboardSubtitle" class="tagline" style="text-align: left; margin-bottom: 0;">Manage Salons + Bookings</p>
+    <header class="header">
+        <h1 id="dashboardTitle"><i class='bx bx-bar-chart'></i> Dashboard</h1>
+        <nav>
+            <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+            <button id="clearBtn" class="nav-item" style="background:none; border:none; color:#ff4757;"><i class='bx bx-trash'></i><span>Clear</span></button>
+            <a href="#" id="logoutBtnAdmin" class="nav-item"><i class='bx bx-log-out'></i><span>Logout</span></a>
+        </nav>
     </header>
 
-    <!-- ADD SALON SECTION WITH 1-CLICK IMAGE -->
-    <div class="glass-card">
-        <h2 class="typing-text">Add New Salon</h2>
-
-        <!-- QUICK LINK BOX -->
-        <div style="background:rgba(0,128,128,0.1); padding:15px; border-radius:14px; margin-bottom:15px;">
-            <p style="font-size:0.85rem; color:#888; margin-bottom:8px;">Vaalfresh Image Link:</p>
-            <div style="display:flex; gap:8px; margin-bottom:10px;">
-                <input type="text" id="quickLink" value="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/refs/heads/main/D40B322.jpeg" readonly style="font-size:0.8rem;">
-                <button type="button" id="copyBtn" class="secondary-btn" style="width:auto; padding:10px 12px;"><i class='bx bx-copy'></i></button>
-            </div>
-            <button type="button" id="useLinkBtn" class="primary-btn" style="width:100%; font-size:0.9rem;">Use This Image</button>
+    <div class="container">
+        <div class="stats-grid">
+            <div class="glass-card stat-card"><h3 id="totalCount">0</h3><p>Total</p></div>
+            <div class="glass-card stat-card"><h3 id="pendingCount">0</h3><p>Pending</p></div>
+            <div class="glass-card stat-card"><h3 id="completedCount">0</h3><p>Done</p></div>
+            <div class="glass-card stat-card"><h3 id="totalRevenue">R0</h3><p>Revenue</p></div>
         </div>
-
-        <form id="salonForm" class="form-group">
-            <input type="text" id="name" placeholder="Salon Name" required>
-            <input type="text" id="image" placeholder="Image URL will auto-fill" required>
-            <img id="imagePreview" width="100%" style="display:none; border-radius:14px; margin:10px 0;">
-            <input type="text" id="location" placeholder="Location e.g. Mayibuye" required>
-            <input type="text" id="hours" placeholder="Hours e.g. 8Am-22PM" required>
-            <input type="text" id="services" placeholder="Services e.g. Fade, Line Up" required>
-            <button type="submit" class="primary-btn">Add Salon</button>
-        </form>
+        <div class="glass-card">
+            <h2>Next Booking: <span id="nextTime">--:--</span></h2>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>Salon</th><th>Customer</th><th>Time</th><th>Service</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
-    <div class="stats-bar">
-        <div class="stat-card"><h3>Total Bookings Today</h3><p id="totalCount">0</p></div>
-        <div class="stat-card"><h3>Pending</h3><p id="pendingCount">0</p></div>
-        <div class="stat-card"><h3>Completed</h3><p id="completedCount">0</p></div>
-        <div class="stat-card"><h3>Total Revenue</h3><p id="totalRevenue">R0</p></div>
-    </div>
-
-    <div class="table-wrapper">
-        <table id="bookingsTable">
-            <thead><tr><th>Salon</th><th>Customer</th><th>Time</th><th>Service</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="tableBody"><tr><td colspan="6" style="text-align:center; color:#666; padding: 30px;">Loading all bookings...</td></tr></tbody>
-        </table>
-    </div>
-
-    <button class="clear-btn" id="clearBtn">Clear All Bookings Today</button>
-    <button class="clear-btn" id="logoutBtnAdmin" style="background:#1a1a1a; border-color:rgba(255,255,255,0.1); color:#fff; margin-top: 12px;">Logout</button>
-    <a href="index.html" class="back-link">← Return Home</a>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, deleteDoc, addDoc, onSnapshot, query, orderBy, where, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-        authDomain: "kasi-web-d073f.firebaseapp.com",
-        projectId: "kasi-web-d073f",
-        storageBucket: "kasi-web-d073f.firebasestorage.app",
-        messagingSenderId: "471544855566",
-        appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    window.firebaseAuth = auth;
-    window.firebaseDB = db;
-    window.onAuthState = onAuthStateChanged;
-    window.logOut = signOut;
-    window.dbDoc = doc;
-    window.dbGet = getDoc;
-    window.removeDoc = deleteDoc;
-    window.addDoc = addDoc;
-    window.setDoc = setDoc;
-    window.onSnapshot = onSnapshot;
-    window.query = query;
-    window.orderBy = orderBy;
-    window.where = where;
-    window.collection = collection;
-    window.getDocs = getDocs;
-</script>
-<script src="admin-dashboard.js"></script>
+    <script type="module" src="admin.js"></script>
 </body>
 </html>
