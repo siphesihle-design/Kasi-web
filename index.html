@@ -3,94 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K@si Web | Fresh Cuts, No Lines</title>
+    <title>K@si Web</title>
     <meta name="theme-color" content="#008CFF">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=12">
 </head>
-<body class="cover-page">
-
+<body class="cover-body">
     <div class="cover-container">
         <div class="cover-logo">
             <i class='bx bx-cut'></i>
+            <h1>K@si Web</h1>
+            <p>Book Your Next Cut. Anywhere in the Kasi.</p>
         </div>
-
-        <h1 class="cover-title">K@si Web</h1>
-
-        <div class="word-animation">
-            <span id="typed-text"></span><span class="cursor">|</span>
-        </div>
-
-        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
-
-        <div class="cover-image">
-            <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" onerror="this.src='https://via.placeholder.com/400x300/008CFF/FFFFFF?text=Fresh+Cut'">
-        </div>
-
-        <a href="index.html" id="getStartedBtn" class="cover-btn primary-btn">
+        <a href="home.html" id="getStartedBtn" class="cover-btn primary-btn">
             Get Started <i class='bx bx-right-arrow-alt'></i>
         </a>
-
-        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
-
-    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
-
-<script>
-    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    const typedText = document.getElementById("typed-text");
-
-    function type() {
-        const currentWord = words[wordIndex];
-        if (isDeleting) {
-            typedText.textContent = currentWord.substring(0, charIndex - 1);
-            charIndex--;
-        } else {
-            typedText.textContent = currentWord.substring(0, charIndex + 1);
-            charIndex++;
-        }
-        let typeSpeed = isDeleting? 80 : 120;
-        if (!isDeleting && charIndex === currentWord.length) {
-            typeSpeed = 2000;
-            isDeleting = true;
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            wordIndex = (wordIndex + 1) % words.length;
-            typeSpeed = 500;
-        }
-        setTimeout(type, typeSpeed);
-    }
-    document.addEventListener("DOMContentLoaded", type);
-
-    const getStartedBtn = document.getElementById('getStartedBtn');
-    const clickSound = document.getElementById('clickSound');
-    clickSound.volume = 0.5;
-
-    // FIX 1: Unlock audio on ANY first touch/click
-    const unlockAudio = () => {
-        clickSound.play().then(() => {clickSound.pause(); clickSound.currentTime = 0;}).catch(()=>{});
-    }
-    document.addEventListener('click', unlockAudio, { once: true });
-    document.addEventListener('touchstart', unlockAudio, { once: true });
-
-    getStartedBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        clickSound.currentTime = 0;
-        clickSound.play().catch(e => console.log("Cover sound error:", e));
-        if(navigator.vibrate) navigator.vibrate(50); // Haptic feedback
-
-        // FIX 2: Add loading effect
-        getStartedBtn.innerHTML = `Loading... <i class='bx bx-loader-circle bx-spin'></i>`;
-        getStartedBtn.style.opacity = "0.7";
-
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 350);
-    });
-
-</script>
 </body>
 </html>
