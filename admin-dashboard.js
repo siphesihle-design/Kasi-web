@@ -23,8 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUserId = null;
     let unsubscribeBookings = null;
 
-    const SERVICE_PRICES = { 'Fade': 50, 'Line Up': 40, 'Beard Trim': 30, 'Full Cut': 80, 'Dye': 100 };
-
     onAuthState(auth, async (user) => {
         if (user) {
             currentUserId = user.uid;
@@ -40,16 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     syncAdminDashboard(currentUserRole, user.uid);
                 } else { alert("No user data found."); window.location.href = 'index.html'; }
             } catch (err) { console.error("Admin error:", err); }
-        } else { window.location.href = 'index.html'; } // Not logged in = go to cover
+        } else { window.location.href = 'cover.html'; }
     });
 
-    // FIX: LOGOUT NOW GOES TO COVER
+    // LOGOUT
     if (logoutBtnAdmin) {
         logoutBtnAdmin.addEventListener('click', () => {
             if (unsubscribeBookings) unsubscribeBookings();
-            window.logOut(auth).then(() => {
-                window.location.href = 'index.html' // Cover page
-            });
+            window.logOut(auth).then(() => { window.location.href = 'cover.html' });
         });
     }
 
@@ -61,7 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (role === 'admin') {
             q = query(bookingsRef, where("date", "==", todayStr), orderBy("time", "asc"));
         } else {
-            q = query(bookingsRef, where("s", "==", uid), where("date", "==", todayStr), orderBy("time", "asc"));
+            // FIXED: changed s -> ownerId
+            q = query(bookingsRef, where("ownerId", "==", uid), where("date", "==", todayStr), orderBy("time", "asc"));
         }
 
         unsubscribeBookings = onSnapshot(q, (snapshot) => {
@@ -76,19 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             snapshot.forEach((docSnap, i) => {
                 const item = docSnap.data(); total++;
-                const itemPrice = SERVICE_PRICES[item.service] || parseInt(item.price) || 50;
+                const itemPrice = Number(item.price) || 0; // FIXED: use price from booking
                 revenue += itemPrice;
-                if(item.status === 'pending') pending++; else completed++;
+                if(item.status === 'pending') pending++;
+                else if(item.status === 'done') completed++;
                 if(i === 0 && item.status!== 'done') next = item.time;
 
-                const statusClass = item.status === 'approved'? 'status-approved' : item.status === 'done'? 'status-completed' : 'status-pending';
+                const statusClass = item.status === 'approved'? 'status-approved' : item.status === 'done'? 'status-done' : 'status-pending';
                 const statusText = item.status === 'approved'? 'Approved' : item.status === 'done'? 'Done' : 'Pending';
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${escapeHtml(item.salon)}</strong></td>
-                    <td>${escapeHtml(item.name)}<br><small style="color:#666;">${escapeHtml(item.phone)}</small></td>
-                    <td><span style="color:#008080; font-weight:bold;">${item.time}</span></td>
+                    <td>${escapeHtml(item.name)}<br><small style="color:#B0B0D0;">${escapeHtml(item.phone)}</small></td>
+                    <td><span style="color:#7B68EE; font-weight:bold;">${item.time}</span></td>
                     <td>${escapeHtml(item.service)}<br><small>R${itemPrice}</small></td>
                     <td><span class="status-pill ${statusClass}">${statusText}</span></td>
                     <td>
