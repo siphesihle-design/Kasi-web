@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K@si Salons | Find a Barber</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=10">
+    <link rel="stylesheet" href="style.css?v=22">
+    <style>
+       .salon-card { margin-bottom: 15px; }
+       .salon-card h3 { margin: 0 0 8px 0; color: #7B68EE; }
+       .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:1000; }
+       .modal.active { display:flex; align-items:center; justify-content:center; }
+       .modal-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); }
+       .modal-content { position:relative; z-index:1001; width:90%; max-width:400px; padding:20px; }
+       .close-btn { position:absolute; top:10px; right:15px; background:none; border:none; font-size:2rem; color:#fff; cursor:pointer; }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -19,35 +28,41 @@
         <!-- SEARCH BAR -->
         <div class="glass-card" style="padding:15px; margin-bottom:20px;">
             <div style="display:flex; gap:8px;">
-                <input type="text" id="searchBar" placeholder="Search salons, location, services..." style="flex:1;">
+                <input type="text" id="searchBar" placeholder="Search salons, location, services..." style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(123,104,238,0.3); color:#fff; padding:12px; border-radius:10px;">
                 <button id="searchBtn" class="secondary-btn" style="width:auto; padding:12px;"><i class='bx bx-search'></i></button>
             </div>
         </div>
 
-        <div class="salon-list" id="salonList"></div>
+        <div class="salon-list" id="salonList">
+            <p style="text-align:center;">Loading salons...</p>
+        </div>
     </main>
 
     <!-- BOOKING MODAL -->
     <div class="modal" id="bookingModal">
         <div class="modal-overlay" onclick="bookingModal.classList.remove('active')"></div>
         <div class="modal-content glass-card">
-            <div class="modal-header"><h2>Schedule Trim</h2><button type="button" class="close-btn" onclick="bookingModal.classList.remove('active')">&times;</button></div>
-            <form id="bookingForm" class="form-group">
-                <select id="serviceType" required>
+            <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2>Schedule Trim</h2>
+                <button type="button" class="close-btn" onclick="bookingModal.classList.remove('active')">&times;</button>
+            </div>
+            <form id="bookingForm" class="form-group" style="display:flex; flex-direction:column; gap:12px;">
+                <select id="serviceType" required style="padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(123,104,238,0.3);">
                     <option value="Standard Haircut (R100)">Standard Haircut — R100</option>
                     <option value="Fade & Beard Trim (R150)">Fade & Beard Trim — R150</option>
                     <option value="Chiskop Clean Treatment (R80)">Chiskop Clean Treatment — R80</option>
                 </select>
-                <input type="text" id="custName" placeholder="Your Name" required>
-                <input type="tel" id="custPhone" placeholder="Phone Number" required>
-                <input type="time" id="custTime" required>
+                <input type="text" id="custName" placeholder="Your Name" required style="padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(123,104,238,0.3);">
+                <input type="tel" id="custPhone" placeholder="Phone Number" required style="padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(123,104,238,0.3);">
+                <input type="date" id="custDate" required style="padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(123,104,238,0.3);">
+                <input type="time" id="custTime" required style="padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); color:#fff; border:1px solid rgba(123,104,238,0.3);">
                 <button type="submit" class="primary-btn">Confirm & Place Entry</button>
             </form>
         </div>
     </div>
 
     <nav class="nav-grid">
-        <a href="cover.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+        <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
         <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
         <button type="button" class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Dashboard</span></button>
         <button type="button" class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
@@ -56,33 +71,32 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, collection, onSnapshot, query, orderBy, where, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-        
+        import { getFirestore, doc, getDoc, addDoc, collection, onSnapshot, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
             authDomain: "kasi-web-d073f.firebaseapp.com",
             projectId: "kasi-web-d073f",
             appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
         };
-        const app = initializeApp(firebaseConfig); 
-        const auth = getAuth(app); 
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        window.firebaseAuth = auth; 
+        window.firebaseAuth = auth;
         window.firebaseDB = db;
-        window.onAuthState = onAuthStateChanged; 
+        window.onAuthState = onAuthStateChanged;
         window.logOut = signOut;
-        window.dbDoc = doc; 
-        window.dbGet = getDoc; 
-        window.addDoc = addDoc; 
-        window.collection = collection; 
+        window.dbDoc = doc;
+        window.dbGet = getDoc;
+        window.addDoc = addDoc;
+        window.collection = collection;
         window.onSnapshot = onSnapshot;
         window.query = query;
         window.orderBy = orderBy;
         window.where = where;
-        window.updateDoc = updateDoc;
-        window.dbSet = setDoc;
+        window.serverTimestamp = serverTimestamp;
     </script>
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>
