@@ -8,27 +8,58 @@
 <style>
   body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: #fff; margin: 0; padding: 20px; }
   h1 { text-align: center; color: #9C00E0; }
- .glass-card { background: rgba(26,26,26,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 15px; border: 1px solid #333; margin-bottom: 20px; }
- .salon-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; }
- .primary-btn { background: #9C00E0; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
- .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
- .modal.active { display: flex; }
- .modal-content { background: #1a1a1a; padding: 20px; border-radius: 16px; width: 90%; max-width: 400px; }
- .modal-content input,.modal-content select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; }
+.glass-card { background: rgba(26,26,26,0.8); backdrop-filter: blur(10px); border-radius: 16px; padding: 15px; border: 1px solid #333; margin-bottom: 20px; }
+.salon-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; }
+.primary-btn { background: #9C00E0; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 999; }
+.modal.active { display: flex; }
+.modal-content { background: #1a1a1a; padding: 20px; border-radius: 16px; width: 90%; max-width: 400px; }
+.modal-content input,.modal-content select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; }
 </style>
+
+<!-- 1. FIREBASE INIT - ADD THIS -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDoc, doc, onSnapshot, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "REPLACE_WITH_YOURS",
+    authDomain: "REPLACE_WITH_YOURS",
+    projectId: "REPLACE_WITH_YOURS",
+    storageBucket: "REPLACE_WITH_YOURS",
+    messagingSenderId: "REPLACE_WITH_YOURS",
+    appId: "REPLACE_WITH_YOURS"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  window.firebaseAuth = getAuth(app);
+  window.firebaseDB = getFirestore(app);
+  window.onAuthState = onAuthStateChanged;
+  window.dbDoc = doc;
+  window.dbGet = getDoc;
+  window.addDoc = addDoc;
+  window.collection = collection;
+  window.onSnapshot = onSnapshot;
+  window.query = query;
+  window.where = where;
+  window.orderBy = orderBy;
+  window.serverTimestamp = serverTimestamp;
+  window.logOut = signOut;
+</script>
 </head>
 <body>
 
 <h1>🔥 Book Your Kasi Cut 🔥</h1>
 
-<input id="searchBar" placeholder="Search salons..." style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px;">
+<input id="searchBar" placeholder="Search salons..." style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px; background:#1a1a1a; border:1px solid #333; color:#fff;">
 <button id="searchBtn" class="primary-btn">Search</button>
 <p id="bookingsToday" style="text-align:center; color:#9C00E0;">0 bookings today</p>
 
 <div id="salonList">Loading salons...</div>
 
-<button id="adminBtn" style="display:none;">Dashboard</button>
-<button id="logoutBtn" style="display:none;">Logout</button>
+<button id="adminBtn" style="display:none; margin-top:10px;" class="primary-btn">Dashboard</button>
+<button id="logoutBtn" style="display:none; margin-top:10px; background:#333;" class="primary-btn">Logout</button>
 
 <!-- BOOKING MODAL -->
 <div id="bookingModal" class="modal">
@@ -46,14 +77,18 @@
       <input type="date" id="custDate" required>
       <input type="time" id="custTime" required>
       <button type="submit" class="primary-btn">Confirm Booking</button>
-      <button type="button" onclick="bookingModal.classList.remove('active')">Cancel</button>
+      <button type="button" onclick="bookingModal.classList.remove('active')" style="background:#333; margin-top:8px;" class="primary-btn">Cancel</button>
     </form>
   </div>
 </div>
 
+<!-- 2. YOUR JS CODE -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    if (!window.firebaseAuth) return;
+    if (!window.firebaseAuth) {
+        document.getElementById('salonList').innerHTML = "Error: Firebase not loaded";
+        return;
+    }
     const auth = window.firebaseAuth;
     const db = window.firebaseDB;
     const onAuthState = window.onAuthState;
@@ -81,11 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     onAuthState(auth, async (user) => {
         if(user) {
-            logoutBtn.style.display = 'flex';
+            logoutBtn.style.display = 'block';
             const userSnap = await dbGet(dbDoc(db, "users", user.uid));
             if(userSnap.exists()){
                 const role = userSnap.data().role;
-                if(role === 'admin' || role === 'salon_owner') adminBtn.style.display = 'flex';
+                if(role === 'admin' || role === 'salon_owner') adminBtn.style.display = 'block';
                 adminBtn.onclick = () => window.location.href = role === 'admin'? 'admin.html' : 'owners.html';
             }
         } else {
@@ -129,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const term = searchBar.value.toLowerCase();
         salonList.innerHTML = "";
         allSalons.filter(s => s.name.toLowerCase().includes(term) || s.location?.toLowerCase().includes(term))
-            .forEach(renderSalon);
+           .forEach(renderSalon);
     }
 
     salonList.addEventListener('click', (e) => {
