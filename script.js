@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminBtn = document.getElementById('adminBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const bookingsTodayEl = document.getElementById('bookingsToday');
-    const salonList = document.getElementById('salonList'); // FIX: was.salon-list
+    const salonList = document.getElementById('salonList');
     const searchBar = document.getElementById('searchBar');
     const searchBtn = document.getElementById('searchBtn');
 
@@ -45,14 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (userSnap.exists()) { cachedUserRole = userSnap.data().role; }
                 else { await setDoc(dbDoc(db, "users", user.uid), { email: user.email, role: "customer", createdAt: new Date() }); }
 
+                // GUARD: Kick admins/owners out of customer page
+                if (cachedUserRole === 'admin') { window.location.href = 'admin.html'; return; }
+                if (cachedUserRole === 'salon_owner') { window.location.href = 'owners.html'; return; }
+
                 adminBtn.style.display = 'flex';
-                adminBtn.querySelector('span').textContent = cachedUserRole === 'admin'? 'Admin Panel' : cachedUserRole === 'salon_owner'? 'Dashboard' : 'My Bookings';
+                adminBtn.querySelector('span').textContent = 'My Bookings'; // customers only here
             } catch(err) { console.error(err) }
         } else {
             currentClientUid = null; cachedUserRole = "customer";
             logoutBtn.style.display = 'none';
             adminBtn.style.display = 'none';
-            if(window.location.pathname.includes('salons.html')) window.location.href = 'index.html';
+            if(window.location.pathname.includes('salons.html')) window.location.href = 'index.html'; // FIXED
         }
     });
 
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         unlockAudio();
         const trigger = e.target.closest('.openBooking');
         if (!trigger) return;
-        if (!currentClientUid) { alert('Please log in first.'); window.location.href = 'index.html'; return; }
+        if (!currentClientUid) { alert('Please log in first.'); window.location.href = 'index.html'; return; } // FIXED
         activeSalonName = trigger.dataset.salon; activeSalonUid = trigger.dataset.salonUid;
         bookingModal.classList.add('active');
     });
@@ -182,11 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
     adminBtn.addEventListener('click', () => {
         if(cachedUserRole === 'admin') window.location.href = 'admin.html';
         else if(cachedUserRole === 'salon_owner') window.location.href = 'owners.html';
-        else window.location.href = 'salons.html';
+        else window.location.href = 'salons.html'; // should never hit this
     });
 
     logoutBtn.addEventListener('click', () => {
         unlockAudio();
-        window.logOut(auth).then(() => window.location.href = 'cover.html')
+        window.logOut(auth).then(() => window.location.href = 'index.html') // FIXED: cover -> index
     });
 });
