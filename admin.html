@@ -2,50 +2,154 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>K@si Web | Admin</title>
+    <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="style.css?v=19">
     <style>
-        .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:20px; }
-        .stat-card { text-align:center; padding:15px; }
-        .stat-card h3 { font-size:1.8rem; color:#7B68EE; margin:0; }
-        table { width:100%; border-collapse:collapse; }
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-bottom:20px; }
+        .stat-card { text-align:center; padding:20px; }
+        .stat-card h3 { font-size:2rem; color:#7B68EE; margin:0 0 5px 0; }
+        .stat-card p { margin:0; color:#B0B0D0; }
+        table { width:100%; border-collapse:collapse; background:rgba(26,26,46,0.5); border-radius:15px; overflow:hidden; }
         th, td { padding:12px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); }
+        th { background:rgba(123,104,238,0.1); color:#7B68EE; }
         .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
         .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
         .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
-        .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
-        .status-btn { padding:6px 12px; border:none; border-radius:8px; background:#7B68EE; color:#fff; cursor:pointer; }
+        .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; } /* FIXED */
+        .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
+        .loading-box { text-align:center; padding:40px; }
+        .logout-btn { position:absolute; top:20px; right:20px; }
     </style>
 </head>
 <body>
-    <header class="header">
-        <h1 id="dashboardTitle"><i class='bx bx-bar-chart'></i> Dashboard</h1>
-        <nav>
-            <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
-            <button id="clearBtn" class="nav-item" style="background:none; border:none; color:#ff4757;"><i class='bx bx-trash'></i><span>Clear</span></button>
-            <a href="#" id="logoutBtnAdmin" class="nav-item"><i class='bx bx-log-out'></i><span>Logout</span></a>
-        </nav>
-    </header>
-
     <div class="container">
-        <div class="stats-grid">
-            <div class="glass-card stat-card"><h3 id="totalCount">0</h3><p>Total</p></div>
-            <div class="glass-card stat-card"><h3 id="pendingCount">0</h3><p>Pending</p></div>
-            <div class="glass-card stat-card"><h3 id="completedCount">0</h3><p>Done</p></div>
-            <div class="glass-card stat-card"><h3 id="totalRevenue">R0</h3><p>Revenue</p></div>
+        <button class="secondary-btn logout-btn" id="logoutBtn"><i class='bx bx-log-out'></i> Logout</button>
+        <h1 class="header-title" id="dashboardTitle">Loading Dashboard...</h1>
+
+        <div id="loadingScreen" class="glass-card loading-box">
+            <i class='bx bx-loader-circle bx-spin' style="font-size:2rem; color:#7B68EE;"></i>
+            <p>Loading Dashboard...</p>
         </div>
-        <div class="glass-card">
-            <h2>Next Booking: <span id="nextTime">--:--</span></h2>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead><tr><th>Salon</th><th>Customer</th><th>Time</th><th>Service</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
+
+        <div id="adminContent" style="display:none;">
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="glass-card stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
+                <div class="glass-card stat-card"><h3 id="pendingBookings">0</h3><p>Pending</p></div>
+                <div class="glass-card stat-card"><h3 id="totalSalons">0</h3><p>Total Salons</p></div>
+                <div class="glass-card stat-card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
+            </div>
+
+            <!-- ALL BOOKINGS TABLE -->
+            <div class="glass-card">
+                <h2>All Bookings</h2>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Customer</th><th>Salon</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="allBookingsTable"><tr><td colspan="7">Loading...</td></tr></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <script type="module" src="admin.js"></script>
+
+<audio id="clickSound" src="https://raw.githubusercontent.com/YOUR_USERNAME/kasi-web/main/click.mp3" preload="auto"></audio>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk", authDomain: "kasi-web-d073f.firebaseapp.com", projectId: "kasi-web-d073f", appId: "1:471544855566:web:aa669a968b8af0ceb6905f" };
+    const app = initializeApp(firebaseConfig); 
+    const auth = getAuth(app); 
+    const db = getFirestore(app);
+
+    // GLOBALS FOR GUARD
+    const onAuthState = onAuthStateChanged;
+    const dbDoc = doc; const dbGet = getDoc; const dbCol = collection; const dbGetAll = getDocs;
+    let currentUserId = null; let currentUserRole = null;
+
+    const loadingScreen = document.getElementById('loadingScreen');
+    const adminContent = document.getElementById('adminContent');
+    const dashboardTitle = document.getElementById('dashboardTitle');
+
+    // 1. ROLE GUARD - KICK WRONG PEOPLE OUT
+    onAuthState(auth, async (user) => {
+        if (!user) { window.location.href = 'index.html'; return; } // not logged in
+
+        currentUserId = user.uid;
+        try {
+            const userSnap = await dbGet(dbDoc(db, "users", user.uid));
+            if (!userSnap.exists()) { alert("No user data found."); window.location.href = 'index.html'; return; }
+            
+            currentUserRole = userSnap.data().role;
+
+            // GUARD: Kick non-admins out
+            if (currentUserRole !== 'admin') {
+                alert("You don't have admin access");
+                if (currentUserRole === 'salon_owner') window.location.href = 'owners.html';
+                else window.location.href = 'salons.html';
+                return;
+            }
+
+            dashboardTitle.textContent = "Admin Dashboard";
+            loadingScreen.style.display = 'none';
+            adminContent.style.display = 'block';
+            syncAdminDashboard(); // load data
+        } catch (err) { 
+            console.error("Admin error:", err); 
+            alert("Error loading dashboard"); 
+            window.location.href = 'index.html';
+        }
+    });
+
+    // 2. LOAD ALL DATA
+    async function syncAdminDashboard() {
+        // Load Stats + Bookings + Salons + Users
+        const bookingsSnap = await dbGetAll(query(dbCol(db, "bookings"), orderBy("createdAt", "desc")));
+        const salonsSnap = await dbGetAll(dbCol(db, "salons"));
+        const usersSnap = await dbGetAll(dbCol(db, "users"));
+
+        document.getElementById('totalBookings').textContent = bookingsSnap.size;
+        document.getElementById('pendingBookings').textContent = bookingsSnap.docs.filter(d => d.data().status === 'pending').length;
+        document.getElementById('totalSalons').textContent = salonsSnap.size;
+        document.getElementById('totalUsers').textContent = usersSnap.size;
+
+        // Load Table
+        const tableBody = document.getElementById('allBookingsTable');
+        tableBody.innerHTML = '';
+        bookingsSnap.forEach(docSnap => {
+            const b = docSnap.data();
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${b.name}</td>
+                    <td>${b.salon}</td>
+                    <td>${b.service}</td>
+                    <td>${b.date}</td>
+                    <td>${b.time}</td>
+                    <td><span class="status-pill status-${b.status}">${b.status}</span></td>
+                    <td><button onclick="updateStatus('${docSnap.id}', 'approved')" class="primary-btn" style="padding:5px 10px; font-size:0.8rem;">Approve</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    // 3. UPDATE STATUS
+    window.updateStatus = async (bookingId, status) => {
+        await updateDoc(dbDoc(db, "bookings", bookingId), { status });
+        syncAdminDashboard(); // refresh
+    }
+
+    // 4. LOGOUT
+    document.getElementById('logoutBtn').onclick = () => {
+        signOut(auth).then(() => { window.location.href = 'index.html'; });
+    }
+</script>
 </body>
 </html>
