@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const onSnapshot = window.onSnapshot; const query = window.query;
     const where = window.where; const orderBy = window.orderBy;
     const serverTimestamp = window.serverTimestamp;
+    const signOut = window.logOut;
 
     const salonList = document.getElementById('salonList');
     const bookingModal = document.getElementById('bookingModal');
@@ -59,13 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function renderSalon(salon){
+        const noOwner =!salon.ownerId;
         const card = document.createElement('div');
         card.className = 'glass-card salon-card';
         card.innerHTML = `
             <h3>${salon.name}</h3>
             <p><i class='bx bx-map'></i> ${salon.location || 'Soweto'}</p>
             <p><i class='bx bx-time'></i> ${salon.hours || '9AM - 6PM'}</p>
-            <button class="primary-btn bookBtn" data-id="${salon.id}">Book Now</button>
+            ${noOwner? `<small style="color:#ff4757; display:block; margin-bottom:8px;">⚠️ Not available for booking</small>` : ''}
+            <button class="primary-btn bookBtn" data-id="${salon.id}" ${noOwner? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>Book Now</button>
         `;
         salonList.appendChild(card);
     }
@@ -75,13 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const term = searchBar.value.toLowerCase();
         salonList.innerHTML = "";
         allSalons.filter(s => s.name.toLowerCase().includes(term) || s.location?.toLowerCase().includes(term))
-               .forEach(renderSalon);
+             .forEach(renderSalon);
     }
 
     // 4. OPEN BOOKING MODAL
     salonList.addEventListener('click', (e) => {
         const bookBtn = e.target.closest('.bookBtn');
         if(bookBtn){
+            if(bookBtn.disabled) return; // Block if no owner
             if(!auth.currentUser){ alert("Please login first"); window.location.href = 'index.html'; return; }
             selectedSalonId = bookBtn.dataset.id;
             selectedSalonData = allSalons.find(s => s.id === selectedSalonId);
