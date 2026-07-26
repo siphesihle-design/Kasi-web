@@ -6,23 +6,37 @@
     <title>K@si Web | Owner Dashboard</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="style.css?v=21">
+    <style>
+       .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+       .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+       .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+       .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
+       .status-declined { background:rgba(255,71,87,0.2); color:#ff4757; }
+    </style>
 </head>
 <body>
     <header class="header">
         <h1><i class='bx bx-store'></i> Owner Dashboard</h1>
         <nav>
-            <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+            <a href="home.html" class="nav-item" id="homeBtn"><i class='bx bx-home-alt'></i><span>Home</span></a>
             <a href="#" id="logoutBtn" class="nav-item"><i class='bx bx-log-out'></i><span>Logout</span></a>
         </nav>
     </header>
 
     <div class="container">
-        <div class="glass-card">
-            <h2>Today's Bookings</h2>
-            <p id="todayDate" style="color:#B0B0D0; margin-bottom:15px;"></p>
-            <div id="ownerBookings" style="display:flex; flex-direction:column; gap:15px;">
-                <p style="text-align:center; color:#888;">Loading bookings...</p>
+        <div id="loadingScreen" class="glass-card" style="text-align:center; padding:40px;">
+            <i class='bx bx-loader-circle bx-spin' style="font-size:2rem; color:#7B68EE;"></i>
+            <p>Loading your bookings...</p>
+        </div>
+
+        <div id="ownerContent" style="display:none;">
+            <div class="glass-card">
+                <h2>Today's Bookings</h2>
+                <p id="todayDate" style="color:#B0B0D0; margin-bottom:15px;"></p>
+                <div id="ownerBookings" style="display:flex; flex-direction:column; gap:15px;">
+                    <p style="text-align:center; color:#888;">Loading bookings...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -46,46 +60,60 @@
 
         const ownerBookings = document.getElementById('ownerBookings');
         const logoutBtn = document.getElementById('logoutBtn');
+        const homeBtn = document.getElementById('homeBtn');
         const todayDate = document.getElementById('todayDate');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const ownerContent = document.getElementById('ownerContent');
         const notifySound = new Audio('notify.mp3'); notifySound.volume = 0.4;
 
         todayDate.textContent = new Date().toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
         let currentOwnerUid = null;
         let ownerSalonId = null;
+        let redirecting = false; // PREVENT DOUBLE REDIRECT
 
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentOwnerUid = user.uid;
-                // 1. Check if this user is a salon_owner and get their salonId
-                const userSnap = await getDoc(doc(db, "users", user.uid));
-                if(!userSnap.exists() || userSnap.data().role!== 'salon_owner') {
-                    alert("Access Denied. You are not a salon owner.");
-                    window.location.href = 'home.html';
-                    return;
-                }
-                ownerSalonId = userSnap.data().salonId; // IMPORTANT: Add salonId to user doc in Firestore
-
-                // 2. Listen for bookings for this salon ONLY
-                const today = new Date().toISOString().split('T')[0];
-                const q = query(collection(db, "bookings"),
-                    where("s", "==", ownerSalonId),
-                    where("date", "==", today),
-                    orderBy("createdAt", "desc")
-                );
-
-                let firstLoad = true;
-                onSnapshot(q, (snapshot) => {
-                    if(!firstLoad && snapshot.docChanges().some(change => change.type === 'added')) {
-                        notifySound.play().catch(()=>{});
-                    }
-                    firstLoad = false;
-                    renderBookings(snapshot);
-                });
-
-            } else {
-                window.location.href = 'home.html';
+            if (!user &&!redirecting) { 
+                redirecting = true; 
+                window.location.href = 'index.html'; 
+                return; 
             }
+
+            // 1. Check if this user is a salon_owner and get their salonId
+            const userSnap = await getDoc(doc(db, "users", user.uid));
+            if(!userSnap.exists() || userSnap.data().role!== 'salon_owner') {
+                if(!redirecting) { redirecting = true; alert("Access Denied. You are not a salon owner."); window.location.href = 'index.html'; }
+                return;
+            }
+            
+            currentOwnerUid = user.uid;
+            ownerSalonId = userSnap.data().salonId; // IMPORTANT: Add salonId to user doc in Firestore
+
+            if(!ownerSalonId){
+                alert("Error: No salonId found for this owner account");
+                signOut(auth);
+                return;
+            }
+
+            loadingScreen.style.display = 'none';
+            ownerContent.style.display = 'block';
+
+            // 2. Listen for bookings for this salon ONLY
+            const today = new Date().toISOString().split('T')[0];
+            const q = query(collection(db, "bookings"),
+                where("ownerId", "==", currentOwnerUid), // FIXED: was "s"
+                where("date", "==", today),
+                orderBy("createdAt", "desc")
+            );
+
+            let firstLoad = true;
+            onSnapshot(q, (snapshot) => {
+                if(!firstLoad && snapshot.docChanges().some(change => change.type === 'added')) {
+                    notifySound.play().catch(()=>{});
+                }
+                firstLoad = false;
+                renderBookings(snapshot);
+            });
         });
 
         function renderBookings(snapshot) {
@@ -97,15 +125,15 @@
             snapshot.forEach(docSnap => {
                 const b = docSnap.data();
                 const id = docSnap.id;
-                const statusColor = b.status === 'approved'? '#00c853' : b.status === 'pending'? '#FFA500' : '#ff4757';
+                const statusClass = `status-${b.status}`;
 
                 ownerBookings.innerHTML += `
-                <div class="glass-card" style="padding:15px; border-left:4px solid ${statusColor};">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="glass-card" style="padding:15px; border-left:4px solid var(--accent-color);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                         <h3 style="margin:0;">${b.name}</h3>
-                        <span style="background:${statusColor}; padding:4px 10px; border-radius:20px; font-size:0.8rem; font-weight:700;">${b.status.toUpperCase()}</span>
+                        <span class="status-pill ${statusClass}">${b.status.toUpperCase()}</span>
                     </div>
-                    <p><i class='bx bx-cut'></i> ${b.service}</p>
+                    <p><i class='bx bx-cut'></i> ${b.service} - R${b.price}</p>
                     <p><i class='bx bx-time'></i> ${b.time}</p>
                     <p><i class='bx bx-phone'></i> ${b.phone}</p>
 
@@ -129,11 +157,15 @@
 
             if(approveBtn) await updateDoc(doc(db, "bookings", approveBtn.dataset.id), { status: "approved" });
             if(declineBtn) await updateDoc(doc(db, "bookings", declineBtn.dataset.id), { status: "declined" });
-            if(doneBtn) await updateDoc(doc(db, "bookings", doneBtn.dataset.id), { status: "done" });
+            if(doneBtn) await updateDoc(doc(db, "bookings", doneBtn.dataset.id), { status: "completed" }); // FIXED: done -> completed
+        });
+
+        homeBtn.addEventListener('click', () => {
+            window.location.href = 'home.html';
         });
 
         logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => window.location.href = 'index.html')
+            signOut(auth).then(() => window.location.href = 'index.html') // Goes back to cover
         });
     </script>
 </body>
