@@ -20,13 +20,21 @@
       <h2 class="text-2xl font-bold mb-4 text-purple-500">Book Appointment</h2>
       
       <label class="text-sm text-gray-400">Your Name</label>
-      <input id="clientName" type="text" placeholder="e.g. Sipho Dlamini" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border-gray-700 focus:border-purple-500 outline-none">
+      <input id="clientName" type="text" placeholder="e.g. Sipho Dlamini" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
       
       <label class="text-sm text-gray-400">Your Number</label>
-      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border-gray-700 focus:border-purple-500 outline-none">
-      
+      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+
+      <label class="text-sm text-gray-400">Select Service</label>
+      <select id="serviceSelect" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+        <option value="">-- Choose a service --</option>
+      </select>
+
+      <label class="text-sm text-gray-400">Preferred Date</label>
+      <input id="bookingDate" type="date" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+
       <label class="text-sm text-gray-400">Preferred Time</label>
-      <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+      <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-lg bg-gray-800 border-gray-700 focus:border-purple-500 outline-none">
       
       <button id="confirmBooking" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold mb-2">Confirm Booking</button>
       <button onclick="closeModal()" class="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded-lg">Cancel</button>
@@ -55,6 +63,7 @@
   let currentUser = null;
   let selectedSalonId = null;
   let selectedSalonName = null;
+  let selectedSalonServices = [];
   
   // CHECK IF USER IS LOGGED IN
   onAuthStateChanged(auth, (user) => {
@@ -78,7 +87,6 @@
       const s = doc.data();
       const salonId = doc.id;
 
-      // FIXED: Loop through services objects properly
       let servicesList = '<p class="text-sm text-gray-500">No services listed</p>';
       if(s.services && s.services.length > 0){
         servicesList = s.services.map(svc => 
@@ -87,7 +95,7 @@
       }
       
       html += `
-        <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-purple-600 transition">
+        <div class="bg-gray-900 p-6 rounded-xl border-gray-800 hover:border-purple-600 transition">
           <img src="${s.image || 'https://via.placeholder.com/400x200/111/fff?text=Salon'}" class="w-full h-48 object-cover rounded-lg mb-4">
           <h2 class="text-2xl font-bold mb-2 text-purple-400">${s.name || 'No Name'}</h2>
           <p class="text-gray-400">📍 ${s.location || 'No location'}</p>
@@ -98,7 +106,7 @@
             ${servicesList}
           </div>
           
-          <button onclick="openModal('${salonId}', '${s.name}')" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold">
+          <button onclick='openModal("${salonId}", "${s.name}", ${JSON.stringify(s.services || [])})' class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold">
             Book Now
           </button>
         </div>
@@ -108,13 +116,22 @@
   }
 
   // OPEN BOOKING POPUP
-  window.openModal = function(salonId, salonName) {
+  window.openModal = function(salonId, salonName, services) {
     if(!currentUser){
       alert("Please login first!");
       return;
     }
     selectedSalonId = salonId;
     selectedSalonName = salonName;
+    selectedSalonServices = services;
+
+    // Populate service dropdown
+    const serviceSelect = document.getElementById("serviceSelect");
+    serviceSelect.innerHTML = `<option value="">-- Choose a service --</option>`;
+    services.forEach(svc => {
+      serviceSelect.innerHTML += `<option value="${svc.name}|R${svc.price}">${svc.name} - R${svc.price}</option>`;
+    });
+
     document.getElementById("bookingModal").classList.remove("hidden");
   }
 
@@ -123,6 +140,8 @@
     document.getElementById("bookingModal").classList.add("hidden");
     document.getElementById("clientName").value = "";
     document.getElementById("clientNumber").value = "";
+    document.getElementById("serviceSelect").value = "";
+    document.getElementById("bookingDate").value = "";
     document.getElementById("bookingTime").value = "";
   }
 
@@ -130,12 +149,16 @@
   document.getElementById("confirmBooking").addEventListener("click", async () => {
     const name = document.getElementById("clientName").value.trim();
     const number = document.getElementById("clientNumber").value.trim();
+    const service = document.getElementById("serviceSelect").value;
+    const date = document.getElementById("bookingDate").value;
     const time = document.getElementById("bookingTime").value;
 
-    if(!name || !number || !time){
-      alert("Please fill all 3 fields: Name, Number, Time");
+    if(!name || !number || !service || !date || !time){
+      alert("Please fill all fields: Name, Number, Service, Date, Time");
       return;
     }
+
+    const [serviceName, servicePrice] = service.split('|');
 
     try {
       await addDoc(collection(db, "bookings"), {
@@ -145,12 +168,15 @@
         clientEmail: currentUser.email,
         name: name,
         number: number,
+        service: serviceName,
+        price: servicePrice,
+        date: date,
         time: time,
         status: "pending",
         createdAt: new Date()
       });
 
-      alert(`Booking request sent to ${selectedSalonName}! 🔥`);
+      alert(`Booking request for ${serviceName} sent to ${selectedSalonName}! 🔥`);
       closeModal();
     } catch(error) {
       alert("Error: " + error.message);
