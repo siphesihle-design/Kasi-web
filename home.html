@@ -1,34 +1,119 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>K@si Web | Home</title>
-    <link rel="stylesheet" href="style.css?v=27">
+    <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="style.css?v=29">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
     <div class="header">
         <h1><i class='bx bxs-scissors'></i> K@si Web</h1>
         <nav>
-            <a href="login.html" class="nav-item" id="loginNavBtn"><i class='bx bx-log-in'></i> Login</a>
             <a href="#" class="nav-item" id="logoutNavBtn" style="display:none;"><i class='bx bx-log-out'></i> Logout</a>
         </nav>
     </div>
 
     <div class="container" style="padding-top:80px;">
         <h1 class="header-title">Web For Kasi People</h1>
-        <div class="glass-card" style="text-align:center;">
+        
+        <!-- SWIPING PICS -->
+        <div class="swiper glass-card" style="padding:0; margin-bottom:20px;">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1" onerror="this.src='https://via.placeholder.com/400x250/7B68EE/FFFFFF?text=Fresh+Cut+1'"></div>
+                <div class="swiper-slide"><img src="7847041D.jpg" alt="Cut 2" onerror="this.src='https://via.placeholder.com/400x250/7B68EE/FFFFFF?text=Fresh+Cut+2'"></div>
+                <div class="swiper-slide"><img src="8627A569.jpg" alt="Cut 3" onerror="this.src='https://via.placeholder.com/400x250/7B68EE/FFFFFF?text=Fresh+Cut+3'"></div>
+                <div class="swiper-slide"><img src="A3886FFD.jpg" alt="Cut 4" onerror="this.src='https://via.placeholder.com/400x250/7B68EE/FFFFFF?text=Fresh+Cut+4'"></div>
+                <div class="swiper-slide"><img src="B307F46B.jpg" alt="Cut 5" onerror="this.src='https://via.placeholder.com/400x250/7B68EE/FFFFFF?text=Fresh+Cut+5'"></div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- MAIN HERO -->
+        <div class="glass-card" style="text-align:center;" id="heroCard">
             <h2>Get Your Fresh Cut</h2>
             <p class="tagline">No lines. No waiting. Book in 10 seconds.</p>
             <a href="salons.html" class="primary-btn" style="text-decoration:none; display:block; margin-top:15px;"><i class='bx bx-cut'></i> Book Now</a>
-            <a href="login.html" class="secondary-btn" style="text-decoration:none; display:block;"><i class='bx bx-user'></i> Admin / Owner Login</a>
+            <button id="showAuthBtn" class="secondary-btn"><i class='bx bx-user'></i> Admin / Owner Login</button>
         </div>
+
+        <!-- LOGIN/SIGNUP CARD - HIDDEN -->
+        <div class="glass-card" id="authCard" style="display:none;">
+            <button id="closeAuthBtn" style="background:none;border:none;color:#888;float:right;font-size:1.5rem;"><i class='bx bx-x'></i></button>
+            
+            <div id="loginCard">
+                <h2 style="text-align:center; margin-bottom:20px;">Welcome Back</h2>
+                <form id="loginForm" class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit" class="primary-btn"><i class='bx bx-log-in'></i> Login</button>
+                </form>
+                <button id="showSignup" class="secondary-btn">New? Create Account</button>
+            </div>
+
+            <div id="signupCard" style="display:none;">
+                <h2 style="text-align:center; margin-bottom:20px;">Join K@si Web</h2>
+                <form id="signupForm" class="form-group">
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                    <input type="password" id="signupPassword" placeholder="Password - min 6 chars" required minlength="6">
+                    <select id="signupRole" required><option value="customer">I'm a Customer</option><option value="salon_owner">I'm a Salon Owner</option></select>
+                    <small style="color:#B0B0D0;">Admin accounts are created manually</small>
+                    <button type="submit" class="primary-btn"><i class='bx bx-user-plus'></i> Sign Up</button>
+                </form>
+                <button id="showLogin" class="secondary-btn">Already have account?</button>
+            </div>
+        </div>
+
         <div class="mission-box"><p>We help you save time—because we know how it feels to stand in lines all day.</p></div>
+
         <div class="nav-grid">
             <a href="home.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
             <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
         </div>
     </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    
+    const app = initializeApp({apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",storageBucket: "kasi-web-d073f.firebasestorage.app",messagingSenderId: "471544855566",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"});
+    const auth = getAuth(app); const db = getFirestore(app);
+
+    // SWIPER
+    new Swiper('.swiper', { loop: true, autoplay: { delay: 3000 }, pagination: { el: '.swiper-pagination', clickable: true } });
+
+    // SHOW/HIDE LOGIN POPUP
+    document.getElementById('showAuthBtn').onclick = () => { authCard.style.display = 'block'; heroCard.style.display = 'none'; }
+    document.getElementById('closeAuthBtn').onclick = () => { authCard.style.display = 'none'; heroCard.style.display = 'block'; }
+    document.getElementById('showSignup').onclick = () => {loginCard.style.display = 'none'; signupCard.style.display = 'block';}
+    document.getElementById('showLogin').onclick = () => {signupCard.style.display = 'none'; loginCard.style.display = 'block';}
+
+    // AUTO REDIRECT ON LOGIN
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userSnap = await getDoc(doc(db, "users", user.uid));
+            const role = userSnap.exists()? userSnap.data().role : "customer";
+            document.getElementById('logoutNavBtn').style.display = 'flex';
+            document.getElementById('showAuthBtn').style.display = 'none';
+            
+            setTimeout(() => {
+                if(role === 'admin') window.location.href = 'admin.html';
+                else if(role === 'salon_owner') window.location.href = 'dashboard.html';
+                else window.location.href = 'salons.html';
+            }, 1000);
+        } else {
+            document.getElementById('logoutNavBtn').style.display = 'none';
+            document.getElementById('showAuthBtn').style.display = 'block';
+        }
+    });
+
+    document.getElementById('loginForm').onsubmit = async (e) => {e.preventDefault(); await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value); }
+    document.getElementById('signupForm').onsubmit = async (e) => {e.preventDefault(); const cred = await createUserWithEmailAndPassword(auth, signupEmail.value, signupPassword.value); await setDoc(doc(db, "users", cred.user.uid), { email: signupEmail.value, role: signupRole.value, createdAt: serverTimestamp() }); }
+    document.getElementById('logoutNavBtn').onclick = () => signOut(auth);
+</script>
 </body>
 </html>
