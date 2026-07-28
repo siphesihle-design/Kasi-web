@@ -18,6 +18,7 @@
             <div class="form-group">
                 <input type="email" id="userEmail" placeholder="Email Address" required>
                 <input type="password" id="userPass" placeholder="Password" required>
+                <!-- ADDED: Role selector for owners -->
                 <select id="userRole" style="display:none; margin-bottom:15px; background:#2c2c4a; border:1px solid #444; color:#fff; padding:15px; border-radius:12px;">
                     <option value="customer">I'm a Customer</option>
                     <option value="salon_owner">I'm a Salon Owner</option>
@@ -81,6 +82,9 @@
             showRoleBtn.textContent = isOwnerSignup ? 'Sign up as Customer?' : 'Sign up as Salon Owner?';
         }
 
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.style.display = 'block'; });
+        installBtn.addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') installBtn.style.display = 'none'; deferredPrompt = null; } });
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('authSection').style.display = 'none'; logoutBtn.style.display = 'flex';
@@ -92,7 +96,7 @@
                 const justLoggedIn = sessionStorage.getItem('justLoggedIn');
                 if(justLoggedIn === 'true') {
                     sessionStorage.removeItem('justLoggedIn');
-                    // FIXED: NO owners.html
+                    // FIXED: dashboard.html not owners.html
                     setTimeout(() => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'dashboard.html' : 'salons.html'; }, 800);
                 } else { authMsg.textContent = `Welcome back ${user.email.split('@')[0]}`; }
             } else { cachedUserRole = "customer"; document.getElementById('authSection').style.display = 'block'; logoutBtn.style.display = 'none'; adminBtn.style.display = 'none'; authMsg.textContent = ""; }
@@ -119,10 +123,10 @@
             } catch (err) { sessionStorage.removeItem('justLoggedIn'); alert('Signup Failed: ' + err.message); setLoading(signupBtn, false, "Sign Up"); }
         });
 
-        // FIXED: NO owners.html
+        // FIXED: dashboard.html not owners.html
         adminBtn.addEventListener('click', () => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'dashboard.html' : 'salons.html'; });
         
-        // FIXED: Logout goes to index.html
+        // FIXED: index.html not cover.html
         logoutBtn.addEventListener('click', () => { logoutSound.play().catch(()=>{}); sessionStorage.clear(); setTimeout(() => { signOut(auth).then(() => { window.location.href = 'index.html' }) }, 400); });
     });
 </script>
