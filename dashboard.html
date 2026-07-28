@@ -1,0 +1,198 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>K@si Web | Dashboard</title>
+    <meta name="theme-color" content="#7B68EE">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css?v=21">
+    <style>
+       .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-bottom:20px; }
+       .stat-card { text-align:center; padding:20px; }
+       .stat-card h3 { font-size:2rem; color:#7B68EE; margin:0 0 5px 0; }
+       .stat-card p { margin:0; color:#B0B0D0; }
+        table { width:100%; border-collapse:collapse; background:rgba(26,26,46,0.5); border-radius:15px; overflow:hidden; }
+        th, td { padding:12px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); }
+        th { background:rgba(123,104,238,0.1); color:#7B68EE; }
+       .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+       .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+       .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+       .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
+       .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
+       .status-busy { background:rgba(255,140,0,0.2); color:#FF8C00; }
+       .loading-box { text-align:center; padding:40px; }
+       .logout-btn { position:absolute; top:20px; right:20px; }
+       .action-btn { padding:5px 10px; font-size:0.8rem; border:none; border-radius:8px; color:white; cursor:pointer; margin-right:5px; }
+       .btn-approve { background:#00c853; }
+       .btn-cancel { background:#FF4444; }
+       .btn-complete { background:#7B68EE; }
+       .btn-busy { background:#FF8C00; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="secondary-btn logout-btn" id="logoutBtn"><i class='bx bx-log-out'></i> Logout</button>
+        <h1 class="header-title" id="dashboardTitle">Loading Dashboard...</h1>
+        <p id="userRole" style="color:#B0B0D0; margin-top:-10px;"></p>
+
+        <div id="loadingScreen" class="glass-card loading-box">
+            <i class='bx bx-loader-circle bx-spin' style="font-size:2rem; color:#7B68EE;"></i>
+            <p>Loading Dashboard...</p>
+        </div>
+
+        <div id="dashboardContent" style="display:none;">
+            <!-- STATS - Only show for admin -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="glass-card stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
+                <div class="glass-card stat-card"><h3 id="pendingBookings">0</h3><p>Pending</p></div>
+                <div class="glass-card stat-card"><h3 id="totalSalons">0</h3><p>Total Salons</p></div>
+                <div class="glass-card stat-card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
+            </div>
+
+            <!-- BOOKINGS TABLE -->
+            <div class="glass-card">
+                <h2 id="tableTitle">All Bookings</h2>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Customer</th><th>Salon</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="bookingsTable"><tr><td colspan="7">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = { 
+      apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk", 
+      authDomain: "kasi-web-d073f.firebaseapp.com", 
+      projectId: "kasi-web-d073f", 
+      storageBucket: "kasi-web-d073f.firebasestorage.app",
+      messagingSenderId: "471544855566",
+      appId: "1:471544855566:web:aa669a968b8af0ceb6905f" 
+    };
+    const app = initializeApp(firebaseConfig); 
+    const auth = getAuth(app); 
+    const db = getFirestore(app);
+
+    let userRole = "client";
+    let mySalonId = null;
+
+    // 1. ROLE GUARD + AUTO DETECT
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) { window.location.href = 'index.html'; return; }
+
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        if (!userSnap.exists()) { alert("No user data found."); window.location.href = 'index.html'; return; }
+        
+        userRole = userSnap.data().role || "client";
+
+        // Check if owner
+        if(userRole!== "admin"){
+            const salonSnap = await getDocs(query(collection(db, "salons"), where("ownerId", "==", user.uid)));
+            if(!salonSnap.empty){
+                userRole = "salon_owner";
+                mySalonId = salonSnap.docs[0].id;
+            }
+        }
+
+        // Kick clients out
+        if(userRole === "client"){
+            alert("Clients use the booking page");
+            window.location.href = 'salons.html';
+            return;
+        }
+
+        document.getElementById('userRole').textContent = `Logged in as: ${userRole.toUpperCase()}`;
+        dashboardTitle.textContent = userRole === "admin"? "Admin Dashboard - GOD MODE" : "Owner Dashboard";
+        if(userRole === "salon_owner") document.getElementById('statsGrid').style.display = 'none';
+        if(userRole === "salon_owner") document.getElementById('tableTitle').textContent = "My Salon Bookings";
+
+        loadingScreen.style.display = 'none';
+        dashboardContent.style.display = 'block';
+        syncDashboard();
+    });
+
+    // 2. LOAD DATA BASED ON ROLE
+    async function syncDashboard() {
+        let bookingsQuery;
+        if(userRole === "admin"){
+            bookingsQuery = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+            // Load stats
+            const salonsSnap = await getDocs(collection(db, "salons"));
+            const usersSnap = await getDocs(collection(db, "users"));
+            document.getElementById('totalSalons').textContent = salonsSnap.size;
+            document.getElementById('totalUsers').textContent = usersSnap.size;
+        } else {
+            // Owner only sees their salon
+            bookingsQuery = query(collection(db, "bookings"), where("salonId", "==", mySalonId), orderBy("createdAt", "desc"));
+        }
+
+        const bookingsSnap = await getDocs(bookingsQuery);
+
+        document.getElementById('totalBookings').textContent = bookingsSnap.size;
+        document.getElementById('pendingBookings').textContent = bookingsSnap.docs.filter(d => d.data().status === 'pending').length;
+
+        // Load Table
+        const tableBody = document.getElementById('bookingsTable');
+        tableBody.innerHTML = '';
+        if(bookingsSnap.empty){
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No bookings yet</td></tr>`;
+            return;
+        }
+
+        bookingsSnap.forEach(docSnap => {
+            const b = docSnap.data();
+            
+            // Dynamic action buttons
+            let actions = '-';
+            if(userRole === "admin" && b.status === 'pending') {
+                actions = `<button onclick="updateStatus('${docSnap.id}', 'approved')" class="action-btn btn-approve">Approve</button>
+                           <button onclick="updateStatus('${docSnap.id}', 'cancelled')" class="action-btn btn-cancel">Cancel</button>`;
+            }
+            if((userRole === "admin" || userRole === "salon_owner") && b.status === 'approved') {
+                actions = `<button onclick="updateStatus('${docSnap.id}', 'completed')" class="action-btn btn-complete">Complete</button>
+                           <button onclick="updateStatus('${docSnap.id}', 'busy')" class="action-btn btn-busy">Busy</button>`;
+            }
+            if(userRole === "admin" && b.status === 'busy') {
+                actions = `<button onclick="updateStatus('${docSnap.id}', 'completed')" class="action-btn btn-complete">Complete</button>`;
+            }
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${b.name || 'N/A'}</td>
+                    <td>${b.salonName || b.salon || 'N/A'}</td>
+                    <td>${b.service || 'N/A'} - R${b.price || 0}</td>
+                    <td>${b.date || 'N/A'}</td>
+                    <td>${b.time || 'N/A'}</td>
+                    <td><span class="status-pill status-${b.status}">${b.status}</span></td>
+                    <td>${actions}</td>
+                </tr>
+            `;
+        });
+    }
+
+    // 3. UPDATE STATUS
+    window.updateStatus = async (bookingId, status) => {
+        try {
+            await updateDoc(doc(db, "bookings", bookingId), { status });
+            syncDashboard();
+        } catch(err) {
+            alert("Failed to update: " + err.message);
+        }
+    }
+
+    // 4. LOGOUT
+    document.getElementById('logoutBtn').onclick = () => {
+        signOut(auth).then(() => { window.location.href = 'index.html'; });
+    }
+</script>
+</body>
+</html>
