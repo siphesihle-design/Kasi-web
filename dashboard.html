@@ -6,34 +6,39 @@
     <title>K@si Web | Dashboard</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=22"> <!-- LINK YOUR CSS -->
+    <link rel="stylesheet" href="style.css?v=23">
     <style>
-      .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-bottom:20px; }
-      .stat-card { text-align:center; padding:20px; }
-      .stat-card h3 { font-size:2rem; color:#7B68EE; margin:0 0 5px 0; }
-      .stat-card p { margin:0; color:#B0B0D0; }
-        table { width:100%; border-collapse:collapse; background:rgba(26,26,46,0.5); border-radius:15px; overflow:hidden; }
-        th, td { padding:12px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); }
-        th { background:rgba(123,104,238,0.1); color:#7B68EE; }
-      .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; text-transform:capitalize; }
-      .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
-      .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
-      .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
-      .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
-      .status-busy { background:rgba(255,140,0,0.2); color:#FF8C00; }
-      .loading-box { text-align:center; padding:40px; }
-      .action-btn { padding:5px 10px; font-size:0.8rem; border:none; border-radius:8px; color:white; cursor:pointer; margin-right:5px; }
-      .btn-approve { background:#00c853; }
-      .btn-cancel { background:#FF4444; }
-      .btn-complete { background:#7B68EE; }
-      .btn-busy { background:#FF8C00; }
+     .stats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-bottom:20px; }
+     .stat-card { text-align:center; padding:20px; }
+     .stat-card h3 { font-size:2rem; color:#7B68EE; margin:0 0 5px 0; }
+     .stat-card p { margin:0; color:#B0B0D0; font-size:0.8rem; }
 
-       /* OVERRIDE CONTAINER FOR DASHBOARD DESKTOP */
-      .container { max-width:1200px; padding-top:100px; }
+        /* FIX: MAKE TABLE SCROLL ON MOBILE */
+     .table-wrapper { overflow-x:auto; -webkit-overflow-scrolling: touch; }
+        table { width:100%; min-width:700px; border-collapse:collapse; background:rgba(26,26,46,0.5); border-radius:15px; overflow:hidden; }
+        th, td { padding:12px 8px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); font-size:0.85rem; white-space:nowrap; }
+        th { background:rgba(123,104,238,0.1); color:#7B68EE; }
+
+     .status-pill { padding:5px 10px; border-radius:20px; font-size:0.75rem; font-weight:700; text-transform:capitalize; }
+     .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+     .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+     .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
+     .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
+     .status-busy { background:rgba(255,140,0,0.2); color:#FF8C00; }
+     .loading-box { text-align:center; padding:40px; }
+
+     .action-btn { padding:6px 10px; font-size:0.7rem; border:none; border-radius:8px; color:white; cursor:pointer; margin:2px; }
+     .btn-approve { background:#00c853; }
+     .btn-cancel { background:#FF4444; }
+     .btn-complete { background:#7B68EE; }
+     .btn-busy { background:#FF8C00; }
+
+       /* OVERRIDE CONTAINER FOR DASHBOARD */
+     .container { max-width:1200px; padding-top:90px; }
     </style>
 </head>
 <body>
-    <!-- USE YOUR EXISTING.header CLASS FROM style.css -->
+    <!-- HEADER USING YOUR style.css -->
     <div class="header">
         <h1><i class='bx bxs-scissors'></i> K@si Web</h1>
         <nav>
@@ -63,10 +68,19 @@
             <!-- BOOKINGS TABLE -->
             <div class="glass-card">
                 <h2 id="tableTitle">All Bookings</h2>
-                <div style="overflow-x:auto;">
+                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">← Swipe to see more →</p>
+                <div class="table-wrapper"> <!-- ADDED THIS WRAPPER -->
                     <table>
                         <thead>
-                            <tr><th>Customer</th><th>Salon</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Salon</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody id="bookingsTable"><tr><td colspan="7">Loading...</td></tr></tbody>
                     </table>
@@ -118,7 +132,7 @@
         }
 
         document.getElementById('userRole').textContent = `Logged in as: ${userRole.toUpperCase()}`;
-        document.getElementById('dashboardTitle').textContent = userRole === "admin"? "Admin Dashboard - GOD MODE" : "Owner Dashboard";
+        document.getElementById('dashboardTitle').textContent = userRole === "admin"? "Admin Dashboard" : "Owner Dashboard";
         if(userRole === "salon_owner") document.getElementById('statsGrid').style.display = 'none';
         if(userRole === "salon_owner") document.getElementById('tableTitle').textContent = "My Salon Bookings";
 
@@ -170,7 +184,7 @@
             tableBody.innerHTML += `
                 <tr>
                     <td>${b.name || 'N/A'}</td>
-                    <td>${b.salonName || b.salon || 'N/A'}</td>
+                    <td>${b.salonName || 'N/A'}</td>
                     <td>${b.service || 'N/A'} - ${b.price || 'R0'}</td>
                     <td>${b.date || 'N/A'}</td>
                     <td>${b.time || 'N/A'}</td>
