@@ -9,12 +9,13 @@
 
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold text-center mb-6 text-purple-500">🔥 Book Your Kasi Cut 🔥</h1>
+    <div id="loginStatus" class="text-center mb-4 text-gray-400">Checking login...</div>
     <div id="salonsList" class="grid gap-6"></div>
   </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
@@ -31,8 +32,12 @@
   const auth = getAuth(app);
 
   let currentUser = null;
+  
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
+    document.getElementById("loginStatus").innerHTML = user 
+      ? `Logged in as: ${user.email}` 
+      : `Please login first`;
     loadSalons();
   });
 
@@ -42,13 +47,14 @@
     
     snapshot.forEach((doc) => {
       const s = doc.data();
+      const salonId = doc.id;
       const isOwner = currentUser && s.ownerId === currentUser.uid;
       const servicesList = s.services ? s.services.map(svc => `<p class="text-sm">• ${svc}</p>`).join('') : '';
       
       html += `
         <div class="bg-gray-900 p-6 rounded-xl border-gray-800">
           <img src="${s.image}" class="w-full h-48 object-cover rounded-lg mb-4">
-          <h2 class="text-2xl font-bold mb-2">${s.name}</h2>
+          <h2 class="text-2xl font-bold mb-2">${s.name || 'No Name'}</h2>
           <p class="text-gray-400">📍 ${s.location}</p>
           <p class="text-gray-400 mb-3">🕒 ${s.hours}</p>
           
@@ -57,14 +63,23 @@
             ${servicesList}
           </div>
           
-          <button class="w-full ${isOwner ? 'bg-purple-600 hover:bg-purple-700' : 'bg-gray-700'} p-3 rounded-lg font-bold">
-            Book Now
+          <button onclick="bookSalon('${salonId}')" class="w-full ${isOwner ? 'bg-purple-600 hover:bg-purple-700' : 'bg-gray-700'} p-3 rounded-lg font-bold">
+            ${currentUser ? 'Book Now' : 'Login to Book'}
           </button>
         </div>
       `;
     });
     document.getElementById("salonsList").innerHTML = html;
   }
+
+  window.bookSalon = async function(salonId) {
+    if(!currentUser){
+      alert("Please login first!");
+      return;
+    }
+    alert("Booking request sent! We will add the booking form next 💈");
+  }
+
 </script>
 
 </body>
