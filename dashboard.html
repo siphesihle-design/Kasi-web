@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,53 +6,80 @@
     <title>K@si Web | Dashboard</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=21">
     <style>
-       .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-bottom:20px; }
-       .stat-card { text-align:center; padding:20px; }
-       .stat-card h3 { font-size:2rem; color:#7B68EE; margin:0 0 5px 0; }
-       .stat-card p { margin:0; color:#B0B0D0; }
-        table { width:100%; border-collapse:collapse; background:rgba(26,26,46,0.5); border-radius:15px; overflow:hidden; }
-        th, td { padding:12px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); }
-        th { background:rgba(123,104,238,0.1); color:#7B68EE; }
-       .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
-       .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
-       .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
-       .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
-       .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
-       .status-busy { background:rgba(255,140,0,0.2); color:#FF8C00; }
-       .loading-box { text-align:center; padding:40px; }
-       .logout-btn { position:absolute; top:20px; right:20px; }
-       .action-btn { padding:5px 10px; font-size:0.8rem; border:none; border-radius:8px; color:white; cursor:pointer; margin-right:5px; }
-       .btn-approve { background:#00c853; }
-       .btn-cancel { background:#FF4444; }
-       .btn-complete { background:#7B68EE; }
-       .btn-busy { background:#FF8C00; }
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 100%);
+            color:white; font-family: 'Segoe UI', sans-serif; margin:0;
+        }
+      .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 17, 0.7); border: 1px solid rgba(139, 92, 246, 0.2); }
+       .container { max-width: 1200px; margin:0 auto; padding:20px; padding-top:100px; }
+       .header-title { font-size:2.5rem; font-weight:800; background:linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+      .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin-bottom:30px; }
+      .stat-card { text-align:center; padding:25px; border-radius:20px; transition:0.3s; }
+      .stat-card:hover { transform:translateY(-5px); box-shadow:0 0 20px rgba(139, 92, 246, 0.3); }
+      .stat-card h3 { font-size:2.5rem; color:#a855f7; margin:0 0 5px 0; }
+      .stat-card p { margin:0; color:#B0B0D0; }
+
+        table { width:100%; border-collapse:collapse; border-radius:15px; overflow:hidden; }
+        th, td { padding:15px; text-align:left; border-bottom:1px solid rgba(139, 92, 246, 0.2); }
+        th { background:rgba(139, 92, 246, 0.1); color:#a855f7; }
+      .status-pill { padding:6px 12px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+      .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+      .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+      .status-completed { background:rgba(139,92,246,0.2); color:#a855f7; }
+      .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
+      .status-busy { background:rgba(255,140,0,0.2); color:#FF8C00; }
+      .loading-box { text-align:center; padding:40px; border-radius:20px; }
+
+       /* NAVBAR */
+        nav { position:fixed; top:0; left:0; right:0; z-index:50; padding:15px 30px; display:flex; justify-content:space-between; align-items:center; }
+      .nav-logo { font-size:1.5rem; font-weight:800; background:linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+      .nav-btn { padding:10px 18px; border-radius:12px; font-weight:600; border:none; cursor:pointer; transition:0.2s; color:white; }
+       .home-btn { background:#374151; }
+       .home-btn:hover { background:#4B5563; }
+       .logout-btn { background:linear-gradient(90deg, #dc2626, #b91c1c); }
+       .logout-btn:hover { transform:scale(1.05); }
+
+      .action-btn { padding:8px 14px; font-size:0.8rem; border:none; border-radius:10px; color:white; cursor:pointer; margin-right:8px; transition:0.2s; }
+       .action-btn:hover { transform:scale(1.05); }
+      .btn-approve { background:#00c853; }
+      .btn-cancel { background:#FF4444; }
+      .btn-complete { background:#a855f7; }
+      .btn-busy { background:#FF8C00; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="secondary-btn logout-btn" id="logoutBtn"><i class='bx bx-log-out'></i> Logout</button>
-        <h1 class="header-title" id="dashboardTitle">Loading Dashboard...</h1>
-        <p id="userRole" style="color:#B0B0D0; margin-top:-10px;"></p>
+    <!-- NAVBAR WITH HOME BUTTON -->
+    <nav class="glass">
+        <div class="nav-logo">K@si Web</div>
+        <div style="display:flex; gap:10px;">
+            <a href="index.html"><button class="nav-btn home-btn"><i class='bx bx-home'></i> Home</button></a>
+            <button class="nav-btn logout-btn" id="logoutBtn"><i class='bx bx-log-out'></i> Logout</button>
+        </div>
+    </nav>
 
-        <div id="loadingScreen" class="glass-card loading-box">
-            <i class='bx bx-loader-circle bx-spin' style="font-size:2rem; color:#7B68EE;"></i>
+    <div class="container">
+        <h1 class="header-title" id="dashboardTitle">Loading Dashboard...</h1>
+        <p id="userRole" style="color:#B0B0D0; margin-top:-10px; margin-bottom:20px;"></p>
+
+        <div id="loadingScreen" class="glass loading-box">
+            <i class='bx bx-loader-circle bx-spin' style="font-size:2rem; color:#a855f7;"></i>
             <p>Loading Dashboard...</p>
         </div>
 
         <div id="dashboardContent" style="display:none;">
             <!-- STATS - Only show for admin -->
             <div class="stats-grid" id="statsGrid">
-                <div class="glass-card stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
-                <div class="glass-card stat-card"><h3 id="pendingBookings">0</h3><p>Pending</p></div>
-                <div class="glass-card stat-card"><h3 id="totalSalons">0</h3><p>Total Salons</p></div>
-                <div class="glass-card stat-card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
+                <div class="glass stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
+                <div class="glass stat-card"><h3 id="pendingBookings">0</h3><p>Pending</p></div>
+                <div class="glass stat-card"><h3 id="totalSalons">0</h3><p>Total Salons</p></div>
+                <div class="glass stat-card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
             </div>
 
             <!-- BOOKINGS TABLE -->
-            <div class="glass-card">
-                <h2 id="tableTitle">All Bookings</h2>
+            <div class="glass" style="padding:20px; border-radius:20px;">
+                <h2 id="tableTitle" style="margin-bottom:15px;">All Bookings</h2>
                 <div style="overflow-x:auto;">
                     <table>
                         <thead>
@@ -70,16 +97,16 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-    const firebaseConfig = { 
-      apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk", 
-      authDomain: "kasi-web-d073f.firebaseapp.com", 
-      projectId: "kasi-web-d073f", 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+      authDomain: "kasi-web-d073f.firebaseapp.com",
+      projectId: "kasi-web-d073f",
       storageBucket: "kasi-web-d073f.firebasestorage.app",
       messagingSenderId: "471544855566",
-      appId: "1:471544855566:web:aa669a968b8af0ceb6905f" 
+      appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
     };
-    const app = initializeApp(firebaseConfig); 
-    const auth = getAuth(app); 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
 
     let userRole = "client";
@@ -91,7 +118,7 @@
 
         const userSnap = await getDoc(doc(db, "users", user.uid));
         if (!userSnap.exists()) { alert("No user data found."); window.location.href = 'index.html'; return; }
-        
+
         userRole = userSnap.data().role || "client";
 
         // Check if owner
@@ -125,13 +152,11 @@
         let bookingsQuery;
         if(userRole === "admin"){
             bookingsQuery = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
-            // Load stats
             const salonsSnap = await getDocs(collection(db, "salons"));
             const usersSnap = await getDocs(collection(db, "users"));
             document.getElementById('totalSalons').textContent = salonsSnap.size;
             document.getElementById('totalUsers').textContent = usersSnap.size;
         } else {
-            // Owner only sees their salon
             bookingsQuery = query(collection(db, "bookings"), where("salonId", "==", mySalonId), orderBy("createdAt", "desc"));
         }
 
@@ -140,7 +165,6 @@
         document.getElementById('totalBookings').textContent = bookingsSnap.size;
         document.getElementById('pendingBookings').textContent = bookingsSnap.docs.filter(d => d.data().status === 'pending').length;
 
-        // Load Table
         const tableBody = document.getElementById('bookingsTable');
         tableBody.innerHTML = '';
         if(bookingsSnap.empty){
@@ -150,8 +174,7 @@
 
         bookingsSnap.forEach(docSnap => {
             const b = docSnap.data();
-            
-            // Dynamic action buttons
+
             let actions = '-';
             if(userRole === "admin" && b.status === 'pending') {
                 actions = `<button onclick="updateStatus('${docSnap.id}', 'approved')" class="action-btn btn-approve">Approve</button>
@@ -169,7 +192,7 @@
                 <tr>
                     <td>${b.name || 'N/A'}</td>
                     <td>${b.salonName || b.salon || 'N/A'}</td>
-                    <td>${b.service || 'N/A'} - R${b.price || 0}</td>
+                    <td>${b.service || 'N/A'} - ${b.price || 'R0'}</td>
                     <td>${b.date || 'N/A'}</td>
                     <td>${b.time || 'N/A'}</td>
                     <td><span class="status-pill status-${b.status}">${b.status}</span></td>
