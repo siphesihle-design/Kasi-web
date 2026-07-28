@@ -5,39 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Your Kasi Cut</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 100%); }
+   .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 17, 0.7); border: 1px solid rgba(139, 92, 246, 0.2); }
+   .glow:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+  </style>
 </head>
-<body class="bg-black text-white min-h-screen">
+<body class="text-white min-h-screen">
 
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold text-center mb-6 text-purple-500">🔥 Book Your Kasi Cut 🔥</h1>
-    <div id="loginStatus" class="text-center mb-4 text-gray-400">Checking login...</div>
-    <div id="salonsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <h1 class="text-5xl font-extrabold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">🔥 Book Your Kasi Cut 🔥</h1>
+    <p class="text-center text-gray-400 mb-8">Find the best barbers near you in Soweto</p>
+
+    <div id="loginStatus" class="text-center mb-6 px-4 py-2 rounded-lg glass max-w-md mx-auto"></div>
+
+    <div id="salonsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </div>
 
   <!-- BOOKING POPUP -->
-  <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-50">
-    <div class="bg-gray-900 p-6 rounded-xl w-full max-w-md border-purple-700">
-      <h2 class="text-2xl font-bold mb-4 text-purple-500">Book Appointment</h2>
-      
-      <label class="text-sm text-gray-400">Your Name</label>
-      <input id="clientName" type="text" placeholder="e.g. Sipho Dlamini" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
-      
-      <label class="text-sm text-gray-400">Your Number</label>
-      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+  <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="glass p-8 rounded-2xl w-full max-w-md glow">
+      <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Book Appointment</h2>
 
-      <label class="text-sm text-gray-400">Select Service</label>
-      <select id="serviceSelect" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+      <label class="text-sm text-gray-300 mb-1 block">Your Name</label>
+      <input id="clientName" type="text" placeholder="e.g. Sipho Dlamini" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border border-gray-700 focus:border-purple-500 outline-none transition">
+
+      <label class="text-sm text-gray-300 mb-1 block">Your Number</label>
+      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
+
+      <label class="text-sm text-gray-300 mb-1 block">Select Service</label>
+      <select id="serviceSelect" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
         <option value="">-- Choose a service --</option>
       </select>
 
-      <label class="text-sm text-gray-400">Preferred Date</label>
-      <input id="bookingDate" type="date" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-purple-500 outline-none">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm text-gray-300 mb-1 block">Date</label>
+          <input id="bookingDate" type="date" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
+        </div>
+        <div>
+          <label class="text-sm text-gray-300 mb-1 block">Time</label>
+          <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
+        </div>
+      </div>
 
-      <label class="text-sm text-gray-400">Preferred Time</label>
-      <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-lg bg-gray-800 border-gray-700 focus:border-purple-500 outline-none">
-      
-      <button id="confirmBooking" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold mb-2">Confirm Booking</button>
-      <button onclick="closeModal()" class="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded-lg">Cancel</button>
+      <button id="confirmBooking" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-4 rounded-xl font-bold mb-3 transition transform hover:scale-105">Confirm Booking 🔥</button>
+      <button onclick="closeModal()" class="w-full bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition">Cancel</button>
     </div>
   </div>
 
@@ -46,7 +59,6 @@
   import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  // YOUR FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
     authDomain: "kasi-web-d073f.firebaseapp.com",
@@ -63,24 +75,21 @@
   let currentUser = null;
   let selectedSalonId = null;
   let selectedSalonName = null;
-  let selectedSalonServices = [];
-  
-  // CHECK IF USER IS LOGGED IN
+
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
-    document.getElementById("loginStatus").innerHTML = user 
-      ? `Logged in as: ${user.email}` 
-      : `Please login first to book`;
+    document.getElementById("loginStatus").innerHTML = user
+     ? `👋 Welcome back, ${user.email}`
+      : `⚠️ Please login first to book`;
     loadSalons();
   });
 
-  // LOAD SALONS FROM FIRESTORE
   async function loadSalons() {
     const snapshot = await getDocs(collection(db, "salons"));
     let html = "";
-    
+
     if(snapshot.empty){
-      html = `<p class="text-center text-gray-500 col-span-3">No salons found yet</p>`;
+      html = `<p class="text-center text-gray-500 col-span-3 glass p-8 rounded-2xl">No salons found yet</p>`;
     }
 
     snapshot.forEach((doc) => {
@@ -89,24 +98,27 @@
 
       let servicesList = '<p class="text-sm text-gray-500">No services listed</p>';
       if(s.services && s.services.length > 0){
-        servicesList = s.services.map(svc => 
-          `<p class="text-sm text-gray-300">• ${svc.name} - R${svc.price} - ${svc.duration}min</p>`
+        servicesList = s.services.map(svc =>
+          `<div class="flex justify-between text-sm py-1 border-b border-gray-800">
+            <span>${svc.name}</span>
+            <span class="text-purple-400">R${svc.price} • ${svc.duration}min</span>
+          </div>`
         ).join('');
       }
-      
+
       html += `
-        <div class="bg-gray-900 p-6 rounded-xl border-gray-800 hover:border-purple-600 transition">
-          <img src="${s.image || 'https://via.placeholder.com/400x200/111/fff?text=Salon'}" class="w-full h-48 object-cover rounded-lg mb-4">
+        <div class="glass rounded-2xl p-6 glow transition transform hover:-translate-y-1">
+          <img src="${s.image || 'https://via.placeholder.com/400x200/1a0a2e/8b5cf6?text=Kasi+Cut'}" class="w-full h-48 object-cover rounded-xl mb-4">
           <h2 class="text-2xl font-bold mb-2 text-purple-400">${s.name || 'No Name'}</h2>
-          <p class="text-gray-400">📍 ${s.location || 'No location'}</p>
-          <p class="text-gray-400 mb-3">🕒 ${s.hours || 'No hours'}</p>
-          
-          <div class="mb-4 bg-gray-800 p-3 rounded-lg">
-            <h3 class="font-bold text-purple-400 mb-2">Services:</h3>
+          <p class="text-gray-400 mb-1">📍 ${s.location || 'No location'}</p>
+          <p class="text-gray-400 mb-4">🕒 ${s.hours || 'Open by appointment'}</p>
+
+          <div class="mb-5 bg-gray-900/30 p-4 rounded-xl">
+            <h3 class="font-bold text-purple-400 mb-3">Services:</h3>
             ${servicesList}
           </div>
-          
-          <button onclick='openModal("${salonId}", "${s.name}", ${JSON.stringify(s.services || [])})' class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold">
+
+          <button onclick='openModal("${salonId}", "${s.name}", ${JSON.stringify(s.services || [])})' class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-4 rounded-xl font-bold transition transform hover:scale-105">
             Book Now
           </button>
         </div>
@@ -115,7 +127,6 @@
     document.getElementById("salonsList").innerHTML = html;
   }
 
-  // OPEN BOOKING POPUP
   window.openModal = function(salonId, salonName, services) {
     if(!currentUser){
       alert("Please login first!");
@@ -123,19 +134,18 @@
     }
     selectedSalonId = salonId;
     selectedSalonName = salonName;
-    selectedSalonServices = services;
 
-    // Populate service dropdown
     const serviceSelect = document.getElementById("serviceSelect");
     serviceSelect.innerHTML = `<option value="">-- Choose a service --</option>`;
     services.forEach(svc => {
       serviceSelect.innerHTML += `<option value="${svc.name}|R${svc.price}">${svc.name} - R${svc.price}</option>`;
     });
 
+    // Set min date to today
+    document.getElementById("bookingDate").min = new Date().toISOString().split("T")[0];
     document.getElementById("bookingModal").classList.remove("hidden");
   }
 
-  // CLOSE POPUP
   window.closeModal = function() {
     document.getElementById("bookingModal").classList.add("hidden");
     document.getElementById("clientName").value = "";
@@ -145,7 +155,6 @@
     document.getElementById("bookingTime").value = "";
   }
 
-  // SAVE BOOKING TO FIRESTORE
   document.getElementById("confirmBooking").addEventListener("click", async () => {
     const name = document.getElementById("clientName").value.trim();
     const number = document.getElementById("clientNumber").value.trim();
@@ -153,8 +162,8 @@
     const date = document.getElementById("bookingDate").value;
     const time = document.getElementById("bookingTime").value;
 
-    if(!name || !number || !service || !date || !time){
-      alert("Please fill all fields: Name, Number, Service, Date, Time");
+    if(!name ||!number ||!service ||!date ||!time){
+      alert("Please fill all fields");
       return;
     }
 
@@ -176,7 +185,7 @@
         createdAt: new Date()
       });
 
-      alert(`Booking request for ${serviceName} sent to ${selectedSalonName}! 🔥`);
+      alert(`✅ Booking request for ${serviceName} sent to ${selectedSalonName}!`);
       closeModal();
     } catch(error) {
       alert("Error: " + error.message);
