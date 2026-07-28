@@ -14,11 +14,10 @@
     <h1 class="header-title">Web For Kasi People</h1>
     <div class="container">
         <div class="glass-card login-section" id="authSection">
-            <h2 class="typing-text">K@si Web</h2><p class="tagline">Hair cut made easy</p>
+            <h2 style="text-align:center; font-size:2rem; font-weight:800; color:#7B68EE;">K@si Web</h2><p class="tagline">Hair cut made easy</p>
             <div class="form-group">
                 <input type="email" id="userEmail" placeholder="Email Address" required>
                 <input type="password" id="userPass" placeholder="Password" required>
-                <!-- ADDED: Role selector for owners -->
                 <select id="userRole" style="display:none; margin-bottom:15px; background:#2c2c4a; border:1px solid #444; color:#fff; padding:15px; border-radius:12px;">
                     <option value="customer">I'm a Customer</option>
                     <option value="salon_owner">I'm a Salon Owner</option>
@@ -31,25 +30,23 @@
             </div>
         </div>
         
-        <!-- SWIPING PICS -->
         <div class="swiper"><div class="swiper-wrapper">
             <div class="swiper-slide"><img data-src="37BA0E35.jpg" class="swiper-lazy" alt="Cut 1" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+1'"><div class="swiper-lazy-preloader"></div></div>
             <div class="swiper-slide"><img data-src="7847041D.jpg" class="swiper-lazy" alt="Cut 2" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+2'"><div class="swiper-lazy-preloader"></div></div>
-            <div class="swiper-slide"><img data-src="8627A569.jpg" class="swiper-lazy" alt="Cut 3" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+3'"><div class="swiper-lazy-preloader"></div></div>
-            <div class="swiper-slide"><img data-src="A3886FFD.jpg" class="swiper-lazy" alt="Cut 4" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+4'"><div class="swiper-lazy-preloader"></div></div>
-            <div class="swiper-slide"><img data-src="B307F46B.jpg" class="swiper-lazy" alt="Cut 5" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+5'"><div class="swiper-lazy-preloader"></div></div>
+            <div class="swiper-slide"><img data-src="A3886FFD.jpg" class="swiper-lazy" alt="Cut 3" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+3'"><div class="swiper-lazy-preloader"></div></div>
+            <div class="swiper-slide"><img data-src="B307F46B.jpg" class="swiper-lazy" alt="Cut 4" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+4'"><div class="swiper-lazy-preloader"></div></div>
         </div><div class="swiper-pagination"></div></div>
 
         <div class="mission-box"><p>We help you get your fresh haircut and save your time—because we know how it feels to stand in lines all day.</p></div>
         
         <a href="salons.html" style="text-decoration: none;">
         <div class="glass-card elite-showcase">
-            <img src="C00719B.jpeg" alt="Elite Cut" onerror="this.src='https://via.placeholder.com/400x220/7B68EE/FFFFFF?text=Elite+Cut'">
+            <img src="C00719B.jpg" alt="Elite Cut" onerror="this.src='https://via.placeholder.com/400x220/7B68EE/FFFFFF?text=Elite+Cut'">
             <div class="elite-text"><h3><i class='bx bx-crown'></i> ELITE CUTS ONLY <i class='bx bx-right-arrow-alt'></i></h3><p>Book the freshest fades in the Kasi. No lines. No waiting.</p></div>
         </div></a>
         
         <div class="nav-grid">
-            <a href="index.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
+            <a href="home.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
             <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
             <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Admin</span></button>
             <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
@@ -75,7 +72,6 @@
         loginSound.volume = 0.4; logoutSound.volume = 0.4;
         new Swiper('.swiper', { loop: true, lazy: true, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true } });
         
-        // TOGGLE OWNER SIGNUP
         showRoleBtn.onclick = () => {
             isOwnerSignup = !isOwnerSignup;
             userRole.style.display = isOwnerSignup ? 'block' : 'none';
@@ -96,8 +92,7 @@
                 const justLoggedIn = sessionStorage.getItem('justLoggedIn');
                 if(justLoggedIn === 'true') {
                     sessionStorage.removeItem('justLoggedIn');
-                    // FIXED: dashboard.html not owners.html
-                    setTimeout(() => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'dashboard.html' : 'salons.html'; }, 800);
+                    setTimeout(() => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'owners.html' : 'salons.html'; }, 800);
                 } else { authMsg.textContent = `Welcome back ${user.email.split('@')[0]}`; }
             } else { cachedUserRole = "customer"; document.getElementById('authSection').style.display = 'block'; logoutBtn.style.display = 'none'; adminBtn.style.display = 'none'; authMsg.textContent = ""; }
         });
@@ -123,10 +118,7 @@
             } catch (err) { sessionStorage.removeItem('justLoggedIn'); alert('Signup Failed: ' + err.message); setLoading(signupBtn, false, "Sign Up"); }
         });
 
-        // FIXED: dashboard.html not owners.html
-        adminBtn.addEventListener('click', () => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'dashboard.html' : 'salons.html'; });
-        
-        // FIXED: index.html not cover.html
+        adminBtn.addEventListener('click', () => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'owners.html' : 'salons.html'; });
         logoutBtn.addEventListener('click', () => { logoutSound.play().catch(()=>{}); sessionStorage.clear(); setTimeout(() => { signOut(auth).then(() => { window.location.href = 'index.html' }) }, 400); });
     });
 </script>
