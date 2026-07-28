@@ -3,129 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>K@si Web | Login</title>
+    <title>K@si Web</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=19">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="style.css?v=27">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
-<body>
+<body class="cover-page">
+    <div class="cover-container">
+        <div class="cover-logo"><i class='bx bxs-scissors'></i></div>
+        <h1 class="cover-title">K@si Web</h1>
+        <p class="cover-subtext">Hair cut made easy</p>
 
-    <div class="container">
-        <h1 class="header-title">K@si Web</h1>
-        <p class="tagline">Fresh cuts. No lines.</p>
-
-        <!-- LOGIN CARD -->
-        <div class="glass-card" id="loginCard">
-            <h2 class="typing-text" style="text-align:center; margin-bottom:20px;">Welcome Back</h2>
-            <form id="loginForm" class="form-group">
-                <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginPassword" placeholder="Password" required>
-                <button type="submit" class="primary-btn"><i class='bx bx-log-in'></i> Login</button>
-            </form>
-            <button id="showSignup" class="secondary-btn">New? Create Account</button>
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1" onerror="this.src='https://via.placeholder.com/400x300/7B68EE/FFFFFF?text=Fresh+Cut'"></div>
+                <div class="swiper-slide"><img src="7847041D.jpg" alt="Cut 2" onerror="this.src='https://via.placeholder.com/400x300/7B68EE/FFFFFF?text=Fresh+Cut'"></div>
+                <div class="swiper-slide"><img src="8627A569.jpg" alt="Cut 3" onerror="this.src='https://via.placeholder.com/400x300/7B68EE/FFFFFF?text=Fresh+Cut'"></div>
+                <div class="swiper-slide"><img src="A3886FFD.jpg" alt="Cut 4" onerror="this.src='https://via.placeholder.com/400x300/7B68EE/FFFFFF?text=Fresh+Cut'"></div>
+                <div class="swiper-slide"><img src="B307F46B.jpg" alt="Cut 5" onerror="this.src='https://via.placeholder.com/400x300/7B68EE/FFFFFF?text=Fresh+Cut'"></div>
+            </div>
+            <div class="swiper-pagination"></div>
         </div>
 
-        <!-- SIGNUP CARD -->
-        <div class="glass-card" id="signupCard" style="display:none;">
-            <h2 class="typing-text" style="text-align:center; margin-bottom:20px;">Join K@si Web</h2>
-            <form id="signupForm" class="form-group">
-                <input type="email" id="signupEmail" placeholder="Email" required>
-                <input type="password" id="signupPassword" placeholder="Password - min 6 chars" required minlength="6">
-                
-                <!-- ROLE SELECTOR -->
-                <select id="signupRole" required>
-                    <option value="customer">I'm a Customer</option>
-                    <option value="salon_owner">I'm a Salon Owner</option>
-                </select>
-                <small style="color:#B0B0D0; text-align:center;">Admin accounts are created manually</small>
+        <a href="home.html" class="cover-btn">
+            <i class='bx bx-right-arrow-alt'></i> Get Started
+        </a>
 
-                <button type="submit" class="primary-btn"><i class='bx bx-user-plus'></i> Sign Up</button>
-            </form>
-            <button id="showLogin" class="secondary-btn">Already have an account?</button>
-        </div>
-
-        <div style="text-align:center; margin-top:20px;">
-            <a href="index.html" style="color:#7B68EE; text-decoration:none;"><i class='bx bx-arrow-back'></i> Back to Home</a>
-        </div>
+        <p class="cover-footer">© 2026 K@si Web. For The Kasi, By The Kasi.</p>
     </div>
-
-    <audio id="successSound" src="https://raw.githubusercontent.com/YOUR_USERNAME/kasi-web/main/success.mp3" preload="auto"></audio>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-        authDomain: "kasi-web-d073f.firebaseapp.com",
-        projectId: "kasi-web-d073f",
-        appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
-    };
-    const app = initializeApp(firebaseConfig); 
-    const auth = getAuth(app); 
-    const db = getFirestore(app);
-
-    // GLOBAL EXPORTS FOR OTHER FILES
-    window.firebaseAuth = auth; 
-    window.firebaseDB = db;
-    window.onAuthState = onAuthStateChanged; 
-    window.logOut = signOut;
-    window.dbDoc = doc; 
-    window.dbGet = getDoc; 
-    window.dbSet = setDoc;
-
-    const successSound = document.getElementById('successSound');
-    successSound.volume = 0.4;
-
-    // TOGGLE LOGIN/SIGNUP
-    document.getElementById('showSignup').onclick = () => {
-        loginCard.style.display = 'none'; signupCard.style.display = 'block';
-    }
-    document.getElementById('showLogin').onclick = () => {
-        signupCard.style.display = 'none'; loginCard.style.display = 'block';
-    }
-
-    // AUTO REDIRECT ON LOGIN
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const userSnap = await getDoc(doc(db, "users", user.uid));
-            if(userSnap.exists()){
-                const role = userSnap.data().role;
-                successSound.play().catch(()=>{});
-                // REDIRECT BASED ON ROLE
-                if(role === 'admin') window.location.href = 'admin.html';
-                else if(role === 'salon_owner') window.location.href = 'owners.html';
-                else window.location.href = 'salons.html'; // customers
-            } else {
-                // First time login - default to customer
-                await setDoc(doc(db, "users", user.uid), { email: user.email, role: "customer", createdAt: serverTimestamp() });
-                window.location.href = 'salons.html';
-            }
-        }
-    });
-
-    // LOGIN FORM
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-        } catch(err){ alert("Login failed: " + err.message) }
-    });
-
-    // SIGNUP FORM
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
-        const role = document.getElementById('signupRole').value;
-        try {
-            const userCred = await createUserWithEmailAndPassword(auth, email, password);
-            await setDoc(doc(db, "users", userCred.user.uid), { email, role, createdAt: serverTimestamp() });
-        } catch(err){ alert("Signup failed: " + err.message) }
-    });
-</script>
+<script> new Swiper('.swiper', { loop: true, autoplay: { delay: 3000 }, pagination: { el: '.swiper-pagination', clickable: true } }); </script>
 </body>
 </html>
