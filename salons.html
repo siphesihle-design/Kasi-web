@@ -9,8 +9,20 @@
 
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold text-center mb-6 text-purple-500">🔥 Book Your Kasi Cut 🔥</h1>
-    <div id="loginStatus" class="text-center mb-4 text-gray-400">Checking login...</div>
+    <div id="loginStatus" class="text-center mb-4 text-gray-400"></div>
     <div id="salonsList" class="grid gap-6"></div>
+  </div>
+
+  <!-- BOOKING POPUP -->
+  <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4">
+    <div class="bg-gray-900 p-6 rounded-xl w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-4 text-purple-500">Book Appointment</h2>
+      <input id="clientName" type="text" placeholder="Your Name" class="w-full p-3 mb-3 rounded-lg bg-gray-800">
+      <input id="clientNumber" type="tel" placeholder="Your Number" class="w-full p-3 mb-3 rounded-lg bg-gray-800">
+      <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-lg bg-gray-800">
+      <button id="confirmBooking" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold mb-2">Confirm Booking</button>
+      <button onclick="closeModal()" class="w-full bg-gray-700 p-3 rounded-lg">Cancel</button>
+    </div>
   </div>
 
 <script type="module">
@@ -32,6 +44,7 @@
   const auth = getAuth(app);
 
   let currentUser = null;
+  let selectedSalonId = null;
   
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
@@ -48,13 +61,12 @@
     snapshot.forEach((doc) => {
       const s = doc.data();
       const salonId = doc.id;
-      const isOwner = currentUser && s.ownerId === currentUser.uid;
       const servicesList = s.services ? s.services.map(svc => `<p class="text-sm">• ${svc}</p>`).join('') : '';
       
       html += `
         <div class="bg-gray-900 p-6 rounded-xl border-gray-800">
           <img src="${s.image}" class="w-full h-48 object-cover rounded-lg mb-4">
-          <h2 class="text-2xl font-bold mb-2">${s.name || 'No Name'}</h2>
+          <h2 class="text-2xl font-bold mb-2">${s.name}</h2>
           <p class="text-gray-400">📍 ${s.location}</p>
           <p class="text-gray-400 mb-3">🕒 ${s.hours}</p>
           
@@ -63,8 +75,8 @@
             ${servicesList}
           </div>
           
-          <button onclick="bookSalon('${salonId}')" class="w-full ${isOwner ? 'bg-purple-600 hover:bg-purple-700' : 'bg-gray-700'} p-3 rounded-lg font-bold">
-            ${currentUser ? 'Book Now' : 'Login to Book'}
+          <button onclick="openModal('${salonId}')" class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold">
+            Book Now
           </button>
         </div>
       `;
@@ -72,13 +84,43 @@
     document.getElementById("salonsList").innerHTML = html;
   }
 
-  window.bookSalon = async function(salonId) {
+  window.openModal = function(salonId) {
     if(!currentUser){
       alert("Please login first!");
       return;
     }
-    alert("Booking request sent! We will add the booking form next 💈");
+    selectedSalonId = salonId;
+    document.getElementById("bookingModal").classList.remove("hidden");
   }
+
+  window.closeModal = function() {
+    document.getElementById("bookingModal").classList.add("hidden");
+  }
+
+  document.getElementById("confirmBooking").addEventListener("click", async () => {
+    const name = document.getElementById("clientName").value;
+    const number = document.getElementById("clientNumber").value;
+    const time = document.getElementById("bookingTime").value;
+
+    if(!name || !number || !time){
+      alert("Please fill all fields");
+      return;
+    }
+
+    await addDoc(collection(db, "bookings"), {
+      salonId: selectedSalonId,
+      clientId: currentUser.uid,
+      clientEmail: currentUser.email,
+      name: name,
+      number: number,
+      time: time,
+      status: "pending",
+      createdAt: new Date()
+    });
+
+    alert("Booking sent! 🔥");
+    closeModal();
+  });
 
 </script>
 
