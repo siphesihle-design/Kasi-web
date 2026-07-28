@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>K@si Web | Welcome</title>
-    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css?v=29">
@@ -11,26 +11,49 @@
 <body class="cover-page">
     <div class="cover-container">
         <div class="cover-logo"><i class='bx bx-cut'></i></div>
-        <h1 class="typing-text">K@si Web</h1>
-        <p class="cover-tagline">Hair cut made easy</p>
-        <p class="cover-sub">Book fresh fades. Skip the lines. Support Kasi barbers.</p>
-        <a href="home.html" class="primary-btn cover-btn">Get Started <i class='bx bx-right-arrow-alt'></i></a>
-    </div>
+        <h1 class="cover-title">K@si Web</h1>
+        <div class="word-animation"><span id="typed-text"></span><span class="cursor">|</span></div>
+        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
 
-    <script>
-        // TYPING EFFECT
-        const text = "K@si Web";
-        const typingElement = document.querySelector('.typing-text');
-        let i = 0;
-        typingElement.textContent = '';
-        function typeWriter() {
-            if (i < text.length) {
-                typingElement.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 150);
-            }
-        }
-        window.onload = typeWriter;
-    </script>
+        <div class="cover-image glass-card" style="padding:0; margin:30px 0;">
+           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Kasi+Web'">
+        </div>
+
+        <a href="home.html" id="getStartedBtn" class="cover-btn primary-btn">Get Started <i class='bx bx-right-arrow-alt'></i></a>
+        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
+    </div>
+    <audio id="clickSound" src="notify.mp3" preload="auto"></audio>
+<script>
+    // WORD ANIMATION FOR THE SENTENCE
+    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
+    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
+    const typedText = document.getElementById("typed-text");
+    function type() {
+        const currentWord = words[wordIndex];
+        typedText.textContent = isDeleting? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
+        isDeleting? charIndex-- : charIndex++;
+        let typeSpeed = isDeleting? 80 : 120;
+        if (!isDeleting && charIndex === currentWord.length) { typeSpeed = 2000; isDeleting = true; }
+        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
+        setTimeout(type, typeSpeed);
+    }
+    document.addEventListener("DOMContentLoaded", type);
+
+    // BUTTON CLICK EFFECT WITH LOADING
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const clickSound = document.getElementById('clickSound');
+    clickSound.volume = 0.5;
+
+    getStartedBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        clickSound.currentTime = 0;
+        clickSound.play().catch(()=>{});
+        if(navigator.vibrate) navigator.vibrate(50);
+        getStartedBtn.innerHTML = `Loading... <i class='bx bx-loader-circle bx-spin'></i>`;
+        getStartedBtn.style.opacity = "0.7";
+        getStartedBtn.style.pointerEvents = "none";
+        setTimeout(() => { window.location.href = 'home.html'; }, 350);
+    });
+</script>
 </body>
 </html>
