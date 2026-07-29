@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="style.css?v=30">
+    <link rel="stylesheet" href="style.css?v=31">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
@@ -30,8 +30,8 @@
                 <p id="authMsg" style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #00c853;"></p>
             </div>
         </div>
-        
-        <!-- SWIPER WITH YOUR 4 IMAGES -->
+
+        <!-- SWIPER -->
         <div class="swiper"><div class="swiper-wrapper">
             <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+1'"></div>
             <div class="swiper-slide"><img src="7847041D.jpg" alt="Cut 2" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+2'"></div>
@@ -40,14 +40,14 @@
         </div><div class="swiper-pagination"></div></div>
 
         <div class="mission-box"><p>We help you get your fresh haircut and save your time—because we know how it feels to stand in lines all day.</p></div>
-        
-        <!-- ELITE CARD WITH YOUR IMAGE -->
+
+        <!-- ELITE CARD -->
         <a href="salons.html" style="text-decoration: none;">
         <div class="glass-card elite-showcase">
             <img src="C00719B.jpg" alt="Elite Cut" onerror="this.src='https://via.placeholder.com/400x220/7B68EE/FFFFFF?text=Elite+Cut'">
             <div class="elite-text"><h3><i class='bx bx-crown'></i> ELITE CUTS ONLY <i class='bx bx-right-arrow-alt'></i></h3><p>Book the freshest fades in the Kasi. No lines. No waiting.</p></div>
         </div></a>
-        
+
         <div class="nav-grid">
             <a href="index.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
             <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
@@ -55,14 +55,18 @@
             <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
         </div>
     </div>
-    <audio id="loginSound" src="notify.mp3" preload="auto"></audio><audio id="logoutSound" src="success.mp3" preload="auto"></audio>
+
+    <!-- MIXKIT SOUNDS -->
+    <audio id="loginSound" src="mixkit-modern-technology-select-3124.wav" preload="auto"></audio>
+    <audio id="logoutSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
     const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",storageBucket: "kasi-web-d073f.firebasestorage.app",messagingSenderId: "471544855566",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
     const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
-    
+
     document.addEventListener('DOMContentLoaded', () => {
         const emailInput = document.getElementById('userEmail'); const passInput = document.getElementById('userPass');
         const mainLoginBtn = document.getElementById('mainLoginBtn'); const signupBtn = document.getElementById('signupBtn');
@@ -71,14 +75,14 @@
         const logoutBtn = document.getElementById('logoutBtn'); const loginSound = document.getElementById('loginSound');
         const logoutSound = document.getElementById('logoutSound'); const installBtn = document.getElementById('installBtn');
         let cachedUserRole = "customer"; let deferredPrompt; let isOwnerSignup = false;
-        
+
         loginSound.volume = 0.4; logoutSound.volume = 0.4;
         new Swiper('.swiper', { loop: true, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true } });
-        
+
         showRoleBtn.onclick = () => {
-            isOwnerSignup = !isOwnerSignup;
-            userRole.style.display = isOwnerSignup ? 'block' : 'none';
-            showRoleBtn.textContent = isOwnerSignup ? 'Sign up as Customer?' : 'Sign up as Salon Owner?';
+            isOwnerSignup =!isOwnerSignup;
+            userRole.style.display = isOwnerSignup? 'block' : 'none';
+            showRoleBtn.textContent = isOwnerSignup? 'Sign up as Customer?' : 'Sign up as Salon Owner?';
         }
 
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.style.display = 'block'; });
@@ -101,7 +105,7 @@
         });
 
         const setLoading = (btn, loading, text) => { btn.innerHTML = loading? `<i class='bx bx-loader bx-spin'></i> ${text}` : text; btn.disabled = loading }
-        
+
         mainLoginBtn.addEventListener('click', async () => {
             const email = emailInput.value.trim(); const password = passInput.value;
             if (!email ||!password) return alert('Please enter both email and password.');
