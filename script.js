@@ -23,6 +23,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSalonData = null;
     let allSalons = [];
 
+    // ========== CLICK SOUND SETUP ==========
+    const clickSound = document.getElementById('clickSound');
+    if(clickSound) clickSound.volume = 0.4;
+    function playClick() {
+        if(clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(()=>{});
+        }
+        if(navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // CLICK SOUND ON ALL BUTTONS
+    document.addEventListener('click', (e) => {
+        if(e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            playClick();
+        }
+    });
+
     // Set min date to today
     document.getElementById('custDate').min = new Date().toISOString().split('T')[0];
 
@@ -78,14 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const term = searchBar.value.toLowerCase();
         salonList.innerHTML = "";
         allSalons.filter(s => s.name.toLowerCase().includes(term) || s.location?.toLowerCase().includes(term))
-             .forEach(renderSalon);
+            .forEach(renderSalon);
     }
 
     // 4. OPEN BOOKING MODAL
     salonList.addEventListener('click', (e) => {
         const bookBtn = e.target.closest('.bookBtn');
         if(bookBtn){
-            if(bookBtn.disabled) return; // Block if no owner
+            if(bookBtn.disabled) return;
             if(!auth.currentUser){ alert("Please login first"); window.location.href = 'index.html'; return; }
             selectedSalonId = bookBtn.dataset.id;
             selectedSalonData = allSalons.find(s => s.id === selectedSalonId);
@@ -93,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 5. SUBMIT BOOKING - THE IMPORTANT FIX
+    // 5. SUBMIT BOOKING
     bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if(!auth.currentUser) return;
@@ -104,8 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await addDoc(collection(db, "bookings"), {
-                userId: auth.currentUser.uid, // Customer
-                ownerId: selectedSalonData.ownerId, // Salon Owner - THIS MAKES IT SHOW IN OWNER/ADMIN
+                userId: auth.currentUser.uid,
+                ownerId: selectedSalonData.ownerId,
                 salonId: selectedSalonId,
                 salon: selectedSalonData.name,
                 name: document.getElementById('custName').value,
@@ -113,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 service: service,
                 price: price,
                 status: "pending",
-                date: document.getElementById('custDate').value, // "2026-07-26"
+                date: document.getElementById('custDate').value,
                 time: document.getElementById('custTime').value,
                 createdAt: serverTimestamp()
             });
@@ -140,4 +158,26 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.onclick = () => {
         signOut(auth).then(() => window.location.href = 'index.html');
     }
+
+    // ========== 8. COOKIE BANNER LOGIC ==========
+    const banner = document.getElementById('cookieBanner');
+    const acceptAll = document.getElementById('acceptAllCookies');
+    const essential = document.getElementById('essentialCookies');
+    const closeBtn = document.getElementById('cookieClose');
+
+    const cookieChoice = localStorage.getItem('kasiCookieChoice');
+    if(!cookieChoice) {
+        setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500);
+    }
+
+    function saveChoice(choice) {
+        playClick();
+        localStorage.setItem('kasiCookieChoice', choice);
+        if(banner) banner.style.display = 'none';
+        console.log(choice === 'all'? "All cookies accepted" : "Essential cookies only");
+    }
+
+    acceptAll?.addEventListener('click', () => saveChoice('all'));
+    essential?.addEventListener('click', () => saveChoice('essential'));
+    closeBtn?.addEventListener('click', () => saveChoice('essential'));
 });
