@@ -23,8 +23,27 @@
         <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
 
+    <!-- COOKIE BANNER -->
+    <div id="cookieBanner" class="cookie-banner" style="display:none;">
+      <div class="cookie-box glass-card">
+        <div class="cookie-icon">🍪</div>
+        <div class="cookie-text">
+          <h4>COOKIES & DATA CHOICE</h4>
+          <p>We use cookies and local storage to save your bookings, remember your salon, and make K@si Web faster for you. We don't sell your data.</p>
+        </div>
+        <button class="cookie-close" id="cookieClose">×</button>
+
+        <div class="cookie-btns">
+          <button id="acceptAllCookies" class="primary-btn">Accept All</button>
+          <button id="essentialCookies" class="secondary-btn">Essential Only</button>
+        </div>
+      </div>
+    </div>
+
     <!-- MIXKIT SOUND -->
     <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+    <audio id="notifSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+
 <script>
     // WORD ANIMATION
     const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
@@ -41,21 +60,53 @@
     }
     document.addEventListener("DOMContentLoaded", type);
 
-    // BUTTON CLICK WITH SOUND + VIBRATE
-    const getStartedBtn = document.getElementById('getStartedBtn');
+    // CLICK SOUND + VIBRATE FUNCTION
     const clickSound = document.getElementById('clickSound');
     clickSound.volume = 0.4;
-
-    getStartedBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+    function playClick() {
         clickSound.currentTime = 0;
         clickSound.play().catch(()=>{});
         if(navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // BUTTON CLICK WITH SOUND + VIBRATE
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    getStartedBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        playClick();
         getStartedBtn.innerHTML = `Loading... <i class='bx bx-loader-circle bx-spin'></i>`;
         getStartedBtn.style.opacity = "0.7";
         getStartedBtn.style.pointerEvents = "none";
         setTimeout(() => { window.location.href = 'home.html'; }, 350);
     });
+
+    // ========== COOKIE BANNER LOGIC ==========
+    const banner = document.getElementById('cookieBanner');
+    const acceptAll = document.getElementById('acceptAllCookies');
+    const essential = document.getElementById('essentialCookies');
+    const closeBtn = document.getElementById('cookieClose');
+
+    // Check if user already chose
+    const cookieChoice = localStorage.getItem('kasiCookieChoice');
+    if(!cookieChoice) {
+        setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500); // show after 1.5s
+    }
+
+    function saveChoice(choice) {
+        playClick(); // SOUND ON CLICK
+        localStorage.setItem('kasiCookieChoice', choice);
+        if(banner) banner.style.display = 'none';
+
+        if(choice === 'all') {
+            console.log("All cookies accepted - Enable OneSignal + Analytics");
+        } else {
+            console.log("Essential cookies only - Bookings only");
+        }
+    }
+
+    acceptAll?.addEventListener('click', () => saveChoice('all'));
+    essential?.addEventListener('click', () => saveChoice('essential'));
+    closeBtn?.addEventListener('click', () => saveChoice('essential'));
 </script>
 </body>
 </html>
