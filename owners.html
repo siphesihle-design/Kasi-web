@@ -6,13 +6,46 @@
     <title>K@si Web | Owner Dashboard</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=21">
+    <link rel="stylesheet" href="style.css?v=32">
     <style>
-       .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
-       .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
-       .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
-       .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
-       .status-declined { background:rgba(255,71,87,0.2); color:#ff4757; }
+      .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+      .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+      .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+      .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
+      .status-declined { background:rgba(255,71,87,0.2); color:#ff4757; }
+
+        /* COOKIE BANNER CSS */
+       .cookie-banner {
+            position: fixed; bottom: 20px; left: 10px; right: 10px;
+            z-index: 9999; display: flex; justify-content: center;
+        }
+       .cookie-box {
+            position: relative; max-width: 500px; width: 100%; padding: 20px;
+            background: rgba(20,20,30,0.95); backdrop-filter: blur(10px);
+            border: 1px solid rgba(123,104,238,0.4); border-radius: 15px;
+            color: #fff; box-shadow: 0 0 20px rgba(123,104,238,0.3);
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+       .cookie-icon { font-size: 2rem; margin-bottom: 10px; text-align: center; }
+       .cookie-text h4 { color: #7B68EE; margin: 0 0 8px 0; font-size: 1rem; text-align: center; }
+       .cookie-text p { font-size: 0.85rem; color: #B0B0D0; margin: 0 0 15px 0; line-height: 1.4; text-align: center; }
+       .cookie-close {
+            position: absolute; top: 8px; right: 12px;
+            background: none; border: none; color: #B0B0D0;
+            font-size: 1.5rem; cursor: pointer; transition: 0.2s;
+        }
+       .cookie-close:hover { color: #7B68EE; }
+       .cookie-btns { display: flex; gap: 10px; }
+       .cookie-btns button {
+            flex: 1; padding: 12px; font-size: 0.9rem;
+            border-radius: 10px; border: none; cursor: pointer;
+            font-weight: bold; transition: 0.2s;
+        }
+       .cookie-btns button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -41,6 +74,26 @@
         </div>
     </div>
 
+    <!-- COOKIE BANNER -->
+    <div id="cookieBanner" class="cookie-banner" style="display:none;">
+      <div class="cookie-box glass-card">
+        <div class="cookie-icon">🍪</div>
+        <div class="cookie-text">
+          <h4>COOKIES & DATA CHOICE</h4>
+          <p>We use cookies to save your bookings and send you push notifications. We don't sell your data.</p>
+        </div>
+        <button class="cookie-close" id="cookieClose">×</button>
+        <div class="cookie-btns">
+          <button id="acceptAllCookies" class="primary-btn">Accept All</button>
+          <button id="essentialCookies" class="secondary-btn">Essential Only</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOUNDS -->
+    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+    <audio id="notifySound" src="notify.mp3" preload="auto"></audio>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
@@ -64,30 +117,45 @@
         const todayDate = document.getElementById('todayDate');
         const loadingScreen = document.getElementById('loadingScreen');
         const ownerContent = document.getElementById('ownerContent');
-        const notifySound = new Audio('notify.mp3'); notifySound.volume = 0.4;
+        const clickSound = document.getElementById('clickSound');
+        const notifySound = document.getElementById('notifySound');
+
+        clickSound.volume = 0.4; notifySound.volume = 0.4;
+
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(()=>{});
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
 
         todayDate.textContent = new Date().toLocaleDateString('en-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
         let currentOwnerUid = null;
         let ownerSalonId = null;
-        let redirecting = false; // PREVENT DOUBLE REDIRECT
+        let redirecting = false;
+
+        // CLICK SOUND ON ALL BUTTONS
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('.nav-item')) {
+                playClick();
+            }
+        });
 
         onAuthStateChanged(auth, async (user) => {
-            if (!user &&!redirecting) { 
-                redirecting = true; 
-                window.location.href = 'index.html'; 
-                return; 
+            if (!user &&!redirecting) {
+                redirecting = true;
+                window.location.href = 'index.html';
+                return;
             }
 
-            // 1. Check if this user is a salon_owner and get their salonId
             const userSnap = await getDoc(doc(db, "users", user.uid));
             if(!userSnap.exists() || userSnap.data().role!== 'salon_owner') {
                 if(!redirecting) { redirecting = true; alert("Access Denied. You are not a salon owner."); window.location.href = 'index.html'; }
                 return;
             }
-            
+
             currentOwnerUid = user.uid;
-            ownerSalonId = userSnap.data().salonId; // IMPORTANT: Add salonId to user doc in Firestore
+            ownerSalonId = userSnap.data().salonId;
 
             if(!ownerSalonId){
                 alert("Error: No salonId found for this owner account");
@@ -98,10 +166,9 @@
             loadingScreen.style.display = 'none';
             ownerContent.style.display = 'block';
 
-            // 2. Listen for bookings for this salon ONLY
             const today = new Date().toISOString().split('T')[0];
             const q = query(collection(db, "bookings"),
-                where("ownerId", "==", currentOwnerUid), // FIXED: was "s"
+                where("ownerId", "==", currentOwnerUid),
                 where("date", "==", today),
                 orderBy("createdAt", "desc")
             );
@@ -110,6 +177,7 @@
             onSnapshot(q, (snapshot) => {
                 if(!firstLoad && snapshot.docChanges().some(change => change.type === 'added')) {
                     notifySound.play().catch(()=>{});
+                    if(navigator.vibrate) navigator.vibrate([200, 100, 200]); // VIBRATE ON NEW BOOKING
                 }
                 firstLoad = false;
                 renderBookings(snapshot);
@@ -157,7 +225,7 @@
 
             if(approveBtn) await updateDoc(doc(db, "bookings", approveBtn.dataset.id), { status: "approved" });
             if(declineBtn) await updateDoc(doc(db, "bookings", declineBtn.dataset.id), { status: "declined" });
-            if(doneBtn) await updateDoc(doc(db, "bookings", doneBtn.dataset.id), { status: "completed" }); // FIXED: done -> completed
+            if(doneBtn) await updateDoc(doc(db, "bookings", doneBtn.dataset.id), { status: "completed" });
         });
 
         homeBtn.addEventListener('click', () => {
@@ -165,8 +233,30 @@
         });
 
         logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => window.location.href = 'index.html') // Goes back to cover
+            signOut(auth).then(() => window.location.href = 'index.html')
         });
+
+        // ========== COOKIE BANNER LOGIC ==========
+        const banner = document.getElementById('cookieBanner');
+        const acceptAll = document.getElementById('acceptAllCookies');
+        const essential = document.getElementById('essentialCookies');
+        const closeBtn = document.getElementById('cookieClose');
+
+        const cookieChoice = localStorage.getItem('kasiCookieChoice');
+        if(!cookieChoice) {
+            setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500);
+        }
+
+        function saveChoice(choice) {
+            playClick();
+            localStorage.setItem('kasiCookieChoice', choice);
+            if(banner) banner.style.display = 'none';
+            console.log(choice === 'all'? "All cookies accepted - Enable OneSignal" : "Essential cookies only");
+        }
+
+        acceptAll?.addEventListener('click', () => saveChoice('all'));
+        essential?.addEventListener('click', () => saveChoice('essential'));
+        closeBtn?.addEventListener('click', () => saveChoice('essential'));
     </script>
 </body>
 </html>
