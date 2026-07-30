@@ -6,7 +6,7 @@
     <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=31">
+    <link rel="stylesheet" href="style.css?v=32">
 </head>
 <body class="cover-page">
     <div class="cover-container">
@@ -42,7 +42,6 @@
 
     <!-- MIXKIT SOUND -->
     <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
-    <audio id="notifSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
 <script>
     // WORD ANIMATION
@@ -69,32 +68,33 @@
         if(navigator.vibrate) navigator.vibrate(50);
     }
 
-    // BUTTON CLICK WITH SOUND + VIBRATE
+    // CLICK SOUND ON ALL BUTTONS + LINKS
+    document.addEventListener('click', (e) => {
+        if(e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
+            playClick();
+        }
+    });
+
     const getStartedBtn = document.getElementById('getStartedBtn');
     getStartedBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        playClick();
         getStartedBtn.innerHTML = `Loading... <i class='bx bx-loader-circle bx-spin'></i>`;
         getStartedBtn.style.opacity = "0.7";
         getStartedBtn.style.pointerEvents = "none";
         setTimeout(() => { window.location.href = 'home.html'; }, 350);
     });
 
-    // ========== COOKIE BANNER LOGIC ==========
+    // ========== COOKIE BANNER LOGIC - SHOWS EVERY TIME ==========
     const banner = document.getElementById('cookieBanner');
     const acceptAll = document.getElementById('acceptAllCookies');
     const essential = document.getElementById('essentialCookies');
     const closeBtn = document.getElementById('cookieClose');
 
-    // Check if user already chose
-    const cookieChoice = localStorage.getItem('kasiCookieChoice');
-    if(!cookieChoice) {
-        setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500); // show after 1.5s
-    }
+    // SHOW EVERY TIME - NO localStorage check
+    setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1000);
 
     function saveChoice(choice) {
-        playClick(); // SOUND ON CLICK
-        localStorage.setItem('kasiCookieChoice', choice);
+        playClick();
         if(banner) banner.style.display = 'none';
 
         if(choice === 'all') {
