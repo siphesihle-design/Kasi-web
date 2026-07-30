@@ -9,6 +9,41 @@
     body { background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 100%); }
    .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 17, 0.7); border: 1px solid rgba(139, 92, 246, 0.2); }
    .glow:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+
+    /* COOKIE BANNER CSS */
+   .cookie-banner {
+        position: fixed; bottom: 20px; left: 10px; right: 10px;
+        z-index: 9999; display: flex; justify-content: center;
+    }
+   .cookie-box {
+        position: relative; max-width: 500px; width: 100%; padding: 20px;
+        background: rgba(20,20,30,0.95); backdrop-filter: blur(10px);
+        border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 15px;
+        color: #fff; box-shadow: 0 0 20px rgba(139,92,246,0.3);
+        animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+        from { transform: translateY(100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+   .cookie-icon { font-size: 2rem; margin-bottom: 10px; text-align: center; }
+   .cookie-text h4 { color: #8b5cf6; margin: 0 0 8px 0; font-size: 1rem; text-align: center; }
+   .cookie-text p { font-size: 0.85rem; color: #B0B0D0; margin: 0 0 15px 0; line-height: 1.4; text-align: center; }
+   .cookie-close {
+        position: absolute; top: 8px; right: 12px;
+        background: none; border: none; color: #B0B0D0;
+        font-size: 1.5rem; cursor: pointer; transition: 0.2s;
+    }
+   .cookie-close:hover { color: #8b5cf6; }
+   .cookie-btns { display: flex; gap: 10px; }
+   .cookie-btns button {
+        flex: 1; padding: 12px; font-size: 0.9rem;
+        border-radius: 10px; border: none; cursor: pointer;
+        font-weight: bold; transition: 0.2s;
+    }
+   .cookie-btns button:active { transform: scale(0.95); }
+   .cookie-primary { background: #8b5cf6; color: #fff; }
+   .cookie-secondary { background: #333; color: #fff; }
   </style>
 </head>
 <body class="text-white min-h-screen">
@@ -40,7 +75,7 @@
       <input id="clientName" type="text" placeholder="e.g. Sipho Dlamini" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
 
       <label class="text-sm text-gray-300 mb-1 block">Your Number</label>
-      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border border-gray-700 focus:border-purple-500 outline-none transition">
+      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
 
       <label class="text-sm text-gray-300 mb-1 block">Select Service</label>
       <select id="serviceSelect" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border border-gray-700 focus:border-purple-500 outline-none transition">
@@ -50,7 +85,7 @@
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="text-sm text-gray-300 mb-1 block">Date</label>
-          <input id="bookingDate" type="date" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border border-gray-700 focus:border-purple-500 outline-none transition">
+          <input id="bookingDate" type="date" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
         </div>
         <div>
           <label class="text-sm text-gray-300 mb-1 block">Time</label>
@@ -62,6 +97,25 @@
       <button onclick="closeModal()" class="w-full bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition">Cancel</button>
     </div>
   </div>
+
+  <!-- COOKIE BANNER -->
+  <div id="cookieBanner" class="cookie-banner" style="display:none;">
+    <div class="cookie-box">
+      <div class="cookie-icon">🍪</div>
+      <div class="cookie-text">
+        <h4>COOKIES & DATA CHOICE</h4>
+        <p>We use cookies to remember your bookings and make K@si Web faster. We don't sell your data.</p>
+      </div>
+      <button class="cookie-close" id="cookieClose">×</button>
+      <div class="cookie-btns">
+        <button id="acceptAllCookies" class="cookie-primary">Accept All</button>
+        <button id="essentialCookies" class="cookie-secondary">Essential Only</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOUND -->
+  <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -84,6 +138,22 @@
   let currentUser = null;
   let selectedSalonId = null;
   let selectedSalonName = null;
+
+  // SOUND SETUP
+  const clickSound = document.getElementById('clickSound');
+  clickSound.volume = 0.4;
+  function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(()=>{});
+      if(navigator.vibrate) navigator.vibrate(50);
+  }
+
+  // CLICK SOUND ON ALL BUTTONS
+  document.addEventListener('click', (e) => {
+      if(e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
+          playClick();
+      }
+  });
 
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
@@ -210,6 +280,28 @@
       alert("Error: " + error.message);
     }
   });
+
+  // ========== COOKIE BANNER LOGIC ==========
+  const banner = document.getElementById('cookieBanner');
+  const acceptAll = document.getElementById('acceptAllCookies');
+  const essential = document.getElementById('essentialCookies');
+  const closeBtn = document.getElementById('cookieClose');
+
+  const cookieChoice = localStorage.getItem('kasiCookieChoice');
+  if(!cookieChoice) {
+      setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500);
+  }
+
+  function saveChoice(choice) {
+      playClick();
+      localStorage.setItem('kasiCookieChoice', choice);
+      if(banner) banner.style.display = 'none';
+      console.log(choice === 'all'? "All cookies accepted" : "Essential cookies only");
+  }
+
+  acceptAll?.addEventListener('click', () => saveChoice('all'));
+  essential?.addEventListener('click', () => saveChoice('essential'));
+  closeBtn?.addEventListener('click', () => saveChoice('essential'));
 
 </script>
 
