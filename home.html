@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="style.css?v=31">
+    <link rel="stylesheet" href="style.css?v=32">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
@@ -56,7 +56,24 @@
         </div>
     </div>
 
+    <!-- COOKIE BANNER -->
+    <div id="cookieBanner" class="cookie-banner" style="display:none;">
+      <div class="cookie-box glass-card">
+        <div class="cookie-icon">🍪</div>
+        <div class="cookie-text">
+          <h4>COOKIES & DATA CHOICE</h4>
+          <p>We use cookies to save your login and bookings. We don't sell your data.</p>
+        </div>
+        <button class="cookie-close" id="cookieClose">×</button>
+        <div class="cookie-btns">
+          <button id="acceptAllCookies" class="primary-btn">Accept All</button>
+          <button id="essentialCookies" class="secondary-btn">Essential Only</button>
+        </div>
+      </div>
+    </div>
+
     <!-- MIXKIT SOUNDS -->
+    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
     <audio id="loginSound" src="mixkit-modern-technology-select-3124.wav" preload="auto"></audio>
     <audio id="logoutSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
@@ -74,10 +91,25 @@
         const authMsg = document.getElementById('authMsg'); const adminBtn = document.getElementById('adminBtn');
         const logoutBtn = document.getElementById('logoutBtn'); const loginSound = document.getElementById('loginSound');
         const logoutSound = document.getElementById('logoutSound'); const installBtn = document.getElementById('installBtn');
+        const clickSound = document.getElementById('clickSound');
         let cachedUserRole = "customer"; let deferredPrompt; let isOwnerSignup = false;
 
-        loginSound.volume = 0.4; logoutSound.volume = 0.4;
+        clickSound.volume = 0.4; loginSound.volume = 0.4; logoutSound.volume = 0.4;
+        
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(()=>{});
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
+
         new Swiper('.swiper', { loop: true, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true } });
+
+        // CLICK SOUND ON ALL BUTTONS
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                playClick();
+            }
+        });
 
         showRoleBtn.onclick = () => {
             isOwnerSignup =!isOwnerSignup;
@@ -127,6 +159,27 @@
 
         adminBtn.addEventListener('click', () => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'owners.html' : 'salons.html'; });
         logoutBtn.addEventListener('click', () => { logoutSound.play().catch(()=>{}); sessionStorage.clear(); setTimeout(() => { signOut(auth).then(() => { window.location.href = 'index.html' }) }, 400); });
+
+        // ========== COOKIE BANNER LOGIC ==========
+        const banner = document.getElementById('cookieBanner');
+        const acceptAll = document.getElementById('acceptAllCookies');
+        const essential = document.getElementById('essentialCookies');
+        const closeBtn = document.getElementById('cookieClose');
+
+        const cookieChoice = localStorage.getItem('kasiCookieChoice');
+        if(!cookieChoice) {
+            setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500);
+        }
+
+        function saveChoice(choice) {
+            localStorage.setItem('kasiCookieChoice', choice);
+            if(banner) banner.style.display = 'none';
+            console.log(choice === 'all' ? "All cookies accepted" : "Essential cookies only");
+        }
+
+        acceptAll?.addEventListener('click', () => saveChoice('all'));
+        essential?.addEventListener('click', () => saveChoice('essential'));
+        closeBtn?.addEventListener('click', () => saveChoice('essential'));
     });
 </script>
 </body>
