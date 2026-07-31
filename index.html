@@ -6,16 +6,10 @@
     <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=36">
 
-    <!-- ONESIGNAL WEB SDK -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        window.OneSignalInstance = OneSignal;
-      });
-    </script>
+    <!-- ONESIGNAL SDK v15 -->
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
 </head>
 <body class="cover-page">
     <div class="cover-container">
@@ -25,7 +19,7 @@
         <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
 
         <div class="cover-image glass-card" style="padding:0; margin:30px 0;">
-           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Kasi+Web'">
+           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut">
         </div>
 
         <a href="home.html" id="getStartedBtn" class="cover-btn primary-btn">Get Started <i class='bx bx-right-arrow-alt'></i></a>
@@ -53,7 +47,7 @@
     <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
 <script>
-    // ========== WORD ANIMATION + SOUND ==========
+    // WORD ANIMATION
     const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
     let wordIndex = 0; let charIndex = 0; let isDeleting = false;
     const typedText = document.getElementById('typed-text');
@@ -67,13 +61,20 @@
     }
     document.addEventListener('DOMContentLoaded', type);
 
+    // SOUND - FIXED THE } HERE
     const clickSound = document.getElementById('clickSound');
-    function playClick() { if(clickSound) { clickSound.currentTime = 0; clickSound.play().catch(e=>{}); }
+    function playClick() { 
+        if(clickSound) { 
+            clickSound.currentTime = 0; 
+            clickSound.play().catch(e=>{}); 
+        }
+    } // <-- THIS WAS MISSING
+    
     document.querySelectorAll('.primary-btn,.secondary-btn,.cover-btn').forEach(btn => {
         btn.addEventListener('click', playClick);
     });
 
-    // ========== ONESIGNAL + COOKIE BANNER ==========
+    // COOKIE + ONESIGNAL
     const banner = document.getElementById('cookieBanner');
     const acceptAll = document.getElementById('acceptAllCookies');
     const essential = document.getElementById('essentialCookies');
@@ -81,21 +82,23 @@
 
     setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
 
-    async function initOneSignal() {
-        if(!window.OneSignalInstance) return;
-        await OneSignalInstance.init({
-            appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0", // YOUR WEB APP ID
-            allowLocalhostAsSecureOrigin: true,
+    // ONESIGNAL v15 INIT
+    window.OneSignal = window.OneSignal || [];
+    function initOneSignal() {
+        OneSignal.push(function() {
+            OneSignal.init({
+                appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0",
+            });
+            console.log("OneSignal Initialized");
+            OneSignal.showNativePrompt(); // shows "Allow K@si Web to send notifications?"
         });
-        console.log("OneSignal Initialized");
-        await OneSignalInstance.Slidedown.promptPush(); // This shows "Allow K@si Web to send notifications?"
     }
 
     function saveChoice(choice) {
         playClick();
         if(banner) banner.style.display = 'none';
         if(choice === 'all') {
-            initOneSignal();
+            setTimeout(initOneSignal, 500);
         }
     }
 
