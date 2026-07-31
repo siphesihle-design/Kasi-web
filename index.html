@@ -6,7 +6,16 @@
     <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=33">
+    <link rel="stylesheet" href="style.css?v=35">
+
+    <!-- ONESIGNAL WEB SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        window.OneSignalInstance = OneSignal;
+      });
+    </script>
 </head>
 <body class="cover-page">
     <div class="cover-container">
@@ -23,14 +32,14 @@
         <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
 
-    <!-- COOKIE BANNER - BOTTOM SHEET LIKE LOCALEATS -->
+    <!-- COOKIE BANNER -->
     <div id="cookieBanner" class="cookie-banner" style="display:none;">
       <div class="cookie-box">
         <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:15px;">
             <div class="cookie-icon">🍪</div>
             <div class="cookie-text" style="flex:1;">
-                <h4>COOKIES & DATA CHOICE</h4>
-                <p>We use cookies and local storage to save your bookings, remember your salon, and make K@si Web faster for you. We don't sell your data.</p>
+                <h4>COOKIES & NOTIFICATIONS</h4>
+                <p>We use cookies to save your bookings. Allow notifications so barbers get instant alerts.</p>
             </div>
             <button class="cookie-close" id="cookieClose">×</button>
         </div>
@@ -41,67 +50,52 @@
       </div>
     </div>
 
-    <!-- MIXKIT SOUND -->
     <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
 <script>
-    // WORD ANIMATION
-    const words = ["Hair cuts made easy", "Skip the line", "Book in seconds", "Stay fresh"];
+    // ========== WORD ANIMATION + SOUND ==========
+    const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
     let wordIndex = 0; let charIndex = 0; let isDeleting = false;
-    const typedText = document.getElementById("typed-text");
+    const typedText = document.getElementById('typed-text');
     function type() {
         const currentWord = words[wordIndex];
-        typedText.textContent = isDeleting? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
-        isDeleting? charIndex-- : charIndex++;
-        let typeSpeed = isDeleting? 80 : 120;
-        if (!isDeleting && charIndex === currentWord.length) { typeSpeed = 2000; isDeleting = true; }
-        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
-        setTimeout(type, typeSpeed);
+        if (isDeleting) { typedText.textContent = currentWord.substring(0, charIndex--); } 
+        else { typedText.textContent = currentWord.substring(0, charIndex++); }
+        if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(type, 1500); return; } 
+        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
+        setTimeout(type, isDeleting? 80 : 120);
     }
-    document.addEventListener("DOMContentLoaded", type);
+    document.addEventListener('DOMContentLoaded', type);
 
-    // CLICK SOUND + VIBRATE FUNCTION
     const clickSound = document.getElementById('clickSound');
-    clickSound.volume = 0.4;
-    function playClick() {
-        clickSound.currentTime = 0;
-        clickSound.play().catch(()=>{});
-        if(navigator.vibrate) navigator.vibrate(50);
-    }
-
-    // CLICK SOUND ON ALL BUTTONS + LINKS
-    document.addEventListener('click', (e) => {
-        if(e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
-            playClick();
-        }
+    function playClick() { if(clickSound) { clickSound.currentTime = 0; clickSound.play().catch(e=>{}); }
+    document.querySelectorAll('.primary-btn,.secondary-btn,.cover-btn').forEach(btn => {
+        btn.addEventListener('click', playClick);
     });
 
-    const getStartedBtn = document.getElementById('getStartedBtn');
-    getStartedBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        getStartedBtn.innerHTML = `Loading... <i class='bx bx-loader-circle bx-spin'></i>`;
-        getStartedBtn.style.opacity = "0.7";
-        getStartedBtn.style.pointerEvents = "none";
-        setTimeout(() => { window.location.href = 'home.html'; }, 350);
-    });
-
-    // ========== COOKIE BANNER LOGIC - SHOWS EVERY TIME ==========
+    // ========== ONESIGNAL + COOKIE BANNER ==========
     const banner = document.getElementById('cookieBanner');
     const acceptAll = document.getElementById('acceptAllCookies');
     const essential = document.getElementById('essentialCookies');
     const closeBtn = document.getElementById('cookieClose');
 
-    // SHOW EVERY TIME - NO localStorage check
     setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
+
+    async function initOneSignal() {
+        if(!window.OneSignalInstance) return;
+        await OneSignalInstance.init({
+            appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0", // YOUR WEB APP ID
+            allowLocalhostAsSecureOrigin: true,
+        });
+        console.log("OneSignal Initialized");
+        await OneSignalInstance.Slidedown.promptPush(); // This shows "Allow K@si Web to send notifications?"
+    }
 
     function saveChoice(choice) {
         playClick();
         if(banner) banner.style.display = 'none';
-
         if(choice === 'all') {
-            console.log("All cookies accepted - Enable OneSignal + Analytics");
-        } else {
-            console.log("Essential cookies only - Bookings only");
+            initOneSignal();
         }
     }
 
