@@ -1,114 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>K@si Web | Fresh Cuts, No Lines</title>
-    <meta name="theme-color" content="#7B68EE">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=37">
-
-    <!-- ONESIGNAL SDK v16 - UPDATED -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0",
-        });
-      });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K@si Web - Fresh Cut</title>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f1a;
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 20px;
+    }
+    h1 {
+      font-size: 36px;
+      color: #3b82f6;
+      margin: 0;
+    }
+    h2 {
+      font-size: 20px;
+      color: #8b5cf6;
+      margin: 10px 0;
+    }
+    p {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+    #subscribe-btn {
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+    #subscribe-btn:active {
+      transform: scale(0.97);
+    }
+    /* Cookie Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: #1a1a2e;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: left;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+    .cookie-banner h3 {
+      color: #8b5cf6;
+      margin: 0 0 10px;
+    }
+    .cookie-banner button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .accept {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+    }
+    .essential {
+      background: transparent;
+      color: #8b5cf6;
+    }
+  </style>
 </head>
-<body class="cover-page">
-    <div class="cover-container">
-        <div class="cover-logo"><i class='bx bx-cut'></i></div>
-        <h1 class="cover-title">K@si Web</h1>
-        <div class="word-animation"><span id="typed-text"></span><span class="cursor">|</span></div>
-        <p class="cover-subtext">Book your barber. Skip the queue. Get fresh.</p>
+<body>
 
-        <div class="cover-image glass-card" style="padding:0; margin:30px 0;">
-           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut">
-        </div>
+  <div class="logo">✂️</div>
+  <h1>K@si Web</h1>
+  <h2>Fresh Cut</h2>
+  <p>Book your barber. Skip the queue. Get fresh.</p>
 
-        <a href="home.html" id="getStartedBtn" class="cover-btn primary-btn">Get Started <i class='bx bx-right-arrow-alt'></i></a>
-        <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
-    </div>
+  <img src="your-barbershop-image.jpg" alt="Barbershop" style="width:100%; max-width:400px; border-radius:16px; margin-bottom:20px;">
 
-    <!-- COOKIE BANNER -->
-    <div id="cookieBanner" class="cookie-banner" style="display:none;">
-      <div class="cookie-box">
-        <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:15px;">
-            <div class="cookie-icon">🍪</div>
-            <div class="cookie-text" style="flex:1;">
-                <h4>COOKIES & NOTIFICATIONS</h4>
-                <p>We use cookies to save your bookings. Allow notifications so barbers get instant alerts.</p>
-            </div>
-            <button class="cookie-close" id="cookieClose">×</button>
-        </div>
-        <div class="cookie-btns">
-          <button id="acceptAllCookies" class="primary-btn">Accept All</button>
-          <button id="essentialCookies" class="secondary-btn">Essential Only</button>
-        </div>
-      </div>
-    </div>
+  <!-- NEW SUBSCRIBE BUTTON -->
+  <button id="subscribe-btn">🔔 Get Booking Alerts</button>
 
-    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner">
+    <h3>🍪 COOKIES & NOTIFICATIONS</h3>
+    <p>We use cookies to save your bookings. Allow notifications so barbers get instant alerts.</p>
+    <button class="accept">Accept All</button>
+    <button class="essential">Essential Only</button>
+  </div>
 
-<script>
-    // WORD ANIMATION
-    const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
-    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
-    const typedText = document.getElementById('typed-text');
-    function type() {
-        const currentWord = words[wordIndex];
-        if (isDeleting) { typedText.textContent = currentWord.substring(0, charIndex--); } 
-        else { typedText.textContent = currentWord.substring(0, charIndex++); }
-        if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(type, 1500); return; } 
-        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
-        setTimeout(type, isDeleting? 80 : 120);
-    }
-    document.addEventListener('DOMContentLoaded', type);
 
-    // SOUND
-    const clickSound = document.getElementById('clickSound');
-    function playClick() { 
-        if(clickSound) { 
-            clickSound.currentTime = 0; 
-            clickSound.play().catch(e=>{}); 
-        }
-    }
-    
-    document.querySelectorAll('.primary-btn,.secondary-btn,.cover-btn').forEach(btn => {
-        btn.addEventListener('click', playClick);
+  <!-- ONESIGNAL CODE -->
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0",
+      });
+
+      // Trigger prompt only when user clicks the button
+      const btn = document.getElementById("subscribe-btn");
+      btn.addEventListener("click", async () => {
+        await OneSignal.showNativePrompt();
+      });
     });
+  </script>
 
-    // COOKIE + ONESIGNAL
-    const banner = document.getElementById('cookieBanner');
-    const acceptAll = document.getElementById('acceptAllCookies');
-    const essential = document.getElementById('essentialCookies');
-    const closeBtn = document.getElementById('cookieClose');
-
-    setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
-
-    // ONESIGNAL v16 INIT - UPDATED
-    function initOneSignal() {
-        OneSignalDeferred.push(async function(OneSignal) {
-            console.log("OneSignal Initialized");
-            await OneSignal.showNativePrompt(); // shows "Allow K@si Web to send notifications?"
-        });
-    }
-
-    function saveChoice(choice) {
-        playClick();
-        if(banner) banner.style.display = 'none';
-        if(choice === 'all') {
-            setTimeout(initOneSignal, 500);
-        }
-    }
-
-    acceptAll?.addEventListener('click', () => saveChoice('all'));
-    essential?.addEventListener('click', () => saveChoice('essential'));
-    closeBtn?.addEventListener('click', () => saveChoice('essential'));
-</script>
 </body>
 </html>
