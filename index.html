@@ -8,7 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css?v=37">
 
-    <!-- ONESIGNAL SDK v16 - UPDATED -->
+    <!-- ONESIGNAL SDK v16 -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -31,6 +31,12 @@
         </div>
 
         <a href="home.html" id="getStartedBtn" class="cover-btn primary-btn">Get Started <i class='bx bx-right-arrow-alt'></i></a>
+        
+        <!-- NEW BUTTON FOR IPHONE -->
+        <button id="subscribe-btn" class="cover-btn primary-btn" style="margin-top:15px; background:linear-gradient(135deg, #7B68EE, #3b82f6);">
+          🔔 Get Booking Alerts
+        </button>
+
         <p class="cover-footer">© 2026 K@si Web • Made for Kasi People</p>
     </div>
 
@@ -82,33 +88,32 @@
         btn.addEventListener('click', playClick);
     });
 
-    // COOKIE + ONESIGNAL
+    // COOKIE + ONESIGNAL FIXED
     const banner = document.getElementById('cookieBanner');
     const acceptAll = document.getElementById('acceptAllCookies');
     const essential = document.getElementById('essentialCookies');
     const closeBtn = document.getElementById('cookieClose');
+    const subBtn = document.getElementById('subscribe-btn');
 
     setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
-
-    // ONESIGNAL v16 INIT - UPDATED
-    function initOneSignal() {
-        OneSignalDeferred.push(async function(OneSignal) {
-            console.log("OneSignal Initialized");
-            await OneSignal.showNativePrompt(); // shows "Allow K@si Web to send notifications?"
-        });
-    }
 
     function saveChoice(choice) {
         playClick();
         if(banner) banner.style.display = 'none';
-        if(choice === 'all') {
-            setTimeout(initOneSignal, 500);
-        }
+        // NO prompt here anymore
     }
 
     acceptAll?.addEventListener('click', () => saveChoice('all'));
     essential?.addEventListener('click', () => saveChoice('essential'));
     closeBtn?.addEventListener('click', () => saveChoice('essential'));
+
+    // DIRECT CLICK FOR APPLE
+    subBtn?.addEventListener('click', async () => {
+        playClick();
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.showNativePrompt(); // Fires instantly from click
+        });
+    });
 </script>
 </body>
 </html>
