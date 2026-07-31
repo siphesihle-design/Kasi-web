@@ -6,10 +6,18 @@
     <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=36">
+    <link rel="stylesheet" href="style.css?v=37">
 
-    <!-- ONESIGNAL SDK v15 -->
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
+    <!-- ONESIGNAL SDK v16 - UPDATED -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0",
+        });
+      });
+    </script>
 </head>
 <body class="cover-page">
     <div class="cover-container">
@@ -61,14 +69,14 @@
     }
     document.addEventListener('DOMContentLoaded', type);
 
-    // SOUND - FIXED THE } HERE
+    // SOUND
     const clickSound = document.getElementById('clickSound');
     function playClick() { 
         if(clickSound) { 
             clickSound.currentTime = 0; 
             clickSound.play().catch(e=>{}); 
         }
-    } // <-- THIS WAS MISSING
+    }
     
     document.querySelectorAll('.primary-btn,.secondary-btn,.cover-btn').forEach(btn => {
         btn.addEventListener('click', playClick);
@@ -82,15 +90,11 @@
 
     setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
 
-    // ONESIGNAL v15 INIT
-    window.OneSignal = window.OneSignal || [];
+    // ONESIGNAL v16 INIT - UPDATED
     function initOneSignal() {
-        OneSignal.push(function() {
-            OneSignal.init({
-                appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0",
-            });
+        OneSignalDeferred.push(async function(OneSignal) {
             console.log("OneSignal Initialized");
-            OneSignal.showNativePrompt(); // shows "Allow K@si Web to send notifications?"
+            await OneSignal.showNativePrompt(); // shows "Allow K@si Web to send notifications?"
         });
     }
 
