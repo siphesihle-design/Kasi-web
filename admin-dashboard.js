@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('tableBody');
     const totalCountEl = document.getElementById('totalCount');
     const pendingCountEl = document.getElementById('pendingCount');
-    const completedCountEl = document.getElementById('completedCount'); // CHANGED from done
+    const completedCountEl = document.getElementById('completedCount');
     const totalRevenueEl = document.getElementById('totalRevenue');
     const clearBtn = document.getElementById('clearBtn');
     const logoutBtnAdmin = document.getElementById('logoutBtnAdmin');
@@ -25,14 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ROLE GUARD + LOAD
     onAuthState(auth, async (user) => {
-        if (!user) { window.location.href = 'index.html'; return; } // FIXED: cover -> index
+        if (!user) { window.location.href = 'index.html'; return; }
 
         currentUserId = user.uid;
         try {
             const userSnap = await dbGet(dbDoc(db, "users", user.uid));
             if (!userSnap.exists()) { alert("No user data found."); window.location.href = 'index.html'; return; }
 
-            currentUserRole = userSnap.data().role;
+            const userData = userSnap.data();
+            currentUserRole = userData.role;
 
             // GUARD
             const page = window.location.pathname.split("/").pop();
@@ -49,10 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (currentUserRole === 'admin') {
                 dashboardTitle.textContent = "Admin Dashboard - All Salons";
+                syncAdminDashboard(currentUserRole, user.uid, null);
             } else if (currentUserRole === 'salon_owner') {
                 dashboardTitle.textContent = "Owner Dashboard - My Salon";
+                // GET salonId from user doc
+                const salonId = userData.salonId;
+                if (!salonId) {
+                    alert("Error: No salonId found for this owner account. Please contact admin.");
+                    return;
+                }
+                syncAdminDashboard(currentUserRole, user.uid, salonId);
             }
-            syncAdminDashboard(currentUserRole, user.uid);
         } catch (err) { console.error("Admin error:", err); }
     });
 
@@ -60,11 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtnAdmin) {
         logoutBtnAdmin.addEventListener('click', () => {
             if (unsubscribeBookings) unsubscribeBookings();
-            window.logOut(auth).then(() => { window.location.href = 'index.html' }); // FIXED
+            window.logOut(auth).then(() => { window.location.href = 'index.html' });
         });
     }
 
-    function syncAdminDashboard(role, uid) {
+    async function syncAdminDashboard(role, uid, salonId) {
         const todayStr = new Date().toISOString().split('T')[0];
         const bookingsRef = collection(db, "bookings");
 
@@ -72,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (role === 'admin') {
             q = query(bookingsRef, where("date", "==", todayStr), orderBy("time", "asc"));
         } else {
-            q = query(bookingsRef, where("ownerId", "==", uid), where("date", "==", todayStr), orderBy("time", "asc"));
+            // OWNER: query by salonId
+            q = query(bookingsRef, where("salonId", "==", salonId), where("date", "==", todayStr), orderBy("time", "asc"));
         }
 
         unsubscribeBookings = onSnapshot(q, (snapshot) => {
@@ -90,11 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemPrice = Number(item.price) || 0;
                 revenue += itemPrice;
                 if(item.status === 'pending') pending++;
-                else if(item.status === 'completed') completed++; // CHANGED from 'done'
-                if(i === 0 && item.status!== 'completed') next = item.time; // CHANGED
+                else if(item.status === 'completed') completed++;
+                if(i === 0 && item.status!== 'completed') next = item.time;
 
-                const statusClass = item.status === 'approved'? 'status-approved' : item.status === 'completed'? 'status-completed' : 'status-pending'; // CHANGED
-                const statusText = item.status === 'approved'? 'Approved' : item.status === 'completed'? 'Completed' : 'Pending'; // CHANGED
+                const statusClass = item.status === 'approved'? 'status-approved' : item.status === 'completed'? 'status-completed' : 'status-pending';
+                const statusText = item.status === 'approved'? 'Approved' : item.status === 'completed'? 'Completed' : 'Pending';
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -128,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await updateDoc(dbDoc(db, "bookings", approveBtn.dataset.id), { status: 'approved' });
         }
         if(doneBtn) {
-            await updateDoc(dbDoc(db, "bookings", doneBtn.dataset.done), { status: 'completed' }); // CHANGED to completed
+            await updateDoc(dbDoc(db, "bookings", doneBtn.dataset.done), { status: 'completed' });
         }
         if(delBtn && currentUserRole === 'admin') {
             if(confirm("Delete this booking?")) await removeDoc(dbDoc(db, "bookings", delBtn.dataset.del));
