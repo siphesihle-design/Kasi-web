@@ -50,17 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (currentUserRole === 'admin') {
                 dashboardTitle.textContent = "Admin Dashboard - All Salons";
-                syncAdminDashboard(currentUserRole, user.uid, null);
             } else if (currentUserRole === 'salon_owner') {
                 dashboardTitle.textContent = "Owner Dashboard - My Salon";
-                // GET salonId from user doc
-                const salonId = userData.salonId;
-                if (!salonId) {
-                    alert("Error: No salonId found for this owner account. Please contact admin.");
-                    return;
-                }
-                syncAdminDashboard(currentUserRole, user.uid, salonId);
             }
+            syncAdminDashboard(currentUserRole, user.uid);
         } catch (err) { console.error("Admin error:", err); }
     });
 
@@ -72,15 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function syncAdminDashboard(role, uid, salonId) {
+    async function syncAdminDashboard(role, uid) {
         const todayStr = new Date().toISOString().split('T')[0];
         const bookingsRef = collection(db, "bookings");
 
         let q;
         if (role === 'admin') {
+            // Admin sees all salons today
             q = query(bookingsRef, where("date", "==", todayStr), orderBy("time", "asc"));
         } else {
-            // OWNER: query by salonId
+            // Owner sees only their salon today
+            const userSnap = await dbGet(dbDoc(db, "users", uid));
+            const salonId = userSnap.data().salonId;
+            if (!salonId) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ff4757; padding: 30px;">No salon linked to this account. Add 'salonId' in your user doc.</td></tr>`;
+                return;
+            }
             q = query(bookingsRef, where("salonId", "==", salonId), where("date", "==", todayStr), orderBy("time", "asc"));
         }
 
@@ -91,11 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (snapshot.empty) {
                 tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#666; padding: 30px;">No bookings for today.</td></tr>`;
-                totalCountEl.textContent = "0"; pendingCountEl.textContent = "0"; completedCountEl.textContent = "0"; totalRevenueEl.textContent = "R0"; if(nextTimeEl) nextTimeEl.textContent = "--:--"; return;
+                totalCountEl.textContent = "0";
+                pendingCountEl.textContent = "0";
+                completedCountEl.textContent = "0";
+                totalRevenueEl.textContent = "R0";
+                if(nextTimeEl) nextTimeEl.textContent = "--:--";
+                return;
             }
 
             snapshot.forEach((docSnap, i) => {
-                const item = docSnap.data(); total++;
+                const item = docSnap.data();
+                total++;
                 const itemPrice = Number(item.price) || 0;
                 revenue += itemPrice;
                 if(item.status === 'pending') pending++;
