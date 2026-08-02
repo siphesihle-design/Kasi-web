@@ -1,86 +1,186 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>K@si Web | Salons</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 100%); }
-   .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 17, 0.7); border: 1px solid rgba(139, 92, 246, 0.2); }
-   .glow:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-  </style>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>K@si Web | Home</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7B68EE">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="style.css?v=39"> <!-- BUMPED TO 39 TO CLEAR CACHE -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
-<body class="text-white min-h-screen">
+<body>
+    <h1 class="header-title">Web For Kasi People</h1>
+    <div class="container">
+        <div class="glass-card login-section" id="authSection">
+            <h2 style="text-align:center; font-size:2rem; font-weight:800; color:#7B68EE;">K@si Web</h2>
+            <p class="tagline">Hair cut made easy</p>
+            <div class="form-group">
+                <input type="email" id="userEmail" placeholder="Email Address" required>
+                <input type="password" id="userPass" placeholder="Password" required>
+                <select id="userRole" style="display:none; margin-bottom:15px; background:#2c2c4a; border:1px solid #444; color:#fff; padding:15px; border-radius:12px;">
+                    <option value="customer">I'm a Customer</option>
+                    <option value="salon_owner">I'm a Salon Owner</option>
+                </select>
+                <button type="button" id="mainLoginBtn" class="primary-btn">Login</button>
+                <button type="button" id="signupBtn" class="secondary-btn">Sign Up</button>
+                <button type="button" id="showRoleBtn" class="secondary-btn" style="font-size:0.8rem;">Sign up as Salon Owner?</button>
+                <button type="button" id="installBtn" class="secondary-btn" style="display:none;"><i class='bx bx-download'></i> Install App</button>
+                <p id="authMsg" style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #00c853;"></p>
+            </div>
+        </div>
 
-  <!-- NAVBAR -->
-  <nav class="glass sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
-    <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Kasi Cut</h2>
-    <div class="flex gap-3">
-      <a href="index.html" class="bg-gray-800 hover:bg-gray-700 px-5 py-2 rounded-xl font-semibold">🏠 Home</a>
-      <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl font-semibold hidden">Logout</button>
+        <!-- SWIPER -->
+        <div class="swiper"><div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="37BA0E35.jpg" alt="Cut 1" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+1'"></div>
+            <div class="swiper-slide"><img src="7847041D.jpg" alt="Cut 2" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+2'"></div>
+            <div class="swiper-slide"><img src="A3886FFD.jpg" alt="Cut 3" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+3'"></div>
+            <div class="swiper-slide"><img src="B307F46B.jpg" alt="Cut 4" onerror="this.src='https://via.placeholder.com/400x220/1a1a2e/7B68EE?text=Cut+4'"></div>
+        </div><div class="swiper-pagination"></div></div>
+
+        <div class="mission-box"><p>We help you get your fresh haircut and save your time—because we know how it feels to stand in lines all day.</p></div>
+
+        <!-- ELITE CARD -->
+        <a href="salons.html" style="text-decoration: none;">
+        <div class="glass-card elite-showcase">
+            <img src="C00719B.jpg" alt="Elite Cut" onerror="this.src='https://via.placeholder.com/400x220/7B68EE/FFFFFF?text=Elite+Cut'">
+            <div class="elite-text"><h3><i class='bx bx-crown'></i> ELITE CUTS ONLY <i class='bx bx-right-arrow-alt'></i></h3><p>Book the freshest fades in the Kasi. No lines. No waiting.</p></div>
+        </div></a>
+
+        <div class="nav-grid">
+            <a href="index.html" class="nav-item active"><i class='bx bx-home-alt'></i><span>Home</span></a>
+            <a href="salons.html" class="nav-item"><i class='bx bx-cut'></i><span>Salons</span></a>
+            <button class="nav-item cta-btn" id="adminBtn" style="display: none;"><i class='bx bx-grid-alt'></i><span>Admin</span></button>
+            <button class="nav-item" id="logoutBtn" style="display: none;"><i class='bx bx-log-out'></i><span>Logout</span></button>
+        </div>
     </div>
-  </nav>
 
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-5xl font-extrabold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">🔥 Book Your Kasi Cut 🔥</h1>
-    <p class="text-center text-gray-400 mb-8">Find the best barbers near you in Soweto</p>
-    <div id="loginStatus" class="text-center mb-6 px-4 py-2 rounded-lg glass max-w-md mx-auto"></div>
-    <div id="salonsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-  </div>
+    <!-- COOKIE BANNER -->
+    <div id="cookieBanner" class="cookie-banner" style="display:none;">
+      <div class="cookie-box glass-card">
+        <div class="cookie-icon">🍪</div>
+        <div class="cookie-text">
+          <h4>COOKIES & DATA CHOICE</h4>
+          <p>We use cookies to save your login and bookings. We don't sell your data.</p>
+        </div>
+        <button class="cookie-close" id="cookieClose">×</button>
+        <div class="cookie-btns">
+          <button id="acceptAllCookies" class="primary-btn">Accept All</button>
+          <button id="essentialCookies" class="secondary-btn">Essential Only</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIXKIT SOUNDS -->
+    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+    <audio id="loginSound" src="mixkit-modern-technology-select-3124.wav" preload="auto"></audio>
+    <audio id="logoutSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+    const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",storageBucket: "kasi-web-d073f.firebasestorage.app",messagingSenderId: "471544855566",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
+    const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-  const firebaseConfig = {apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",authDomain: "kasi-web-d073f.firebaseapp.com",projectId: "kasi-web-d073f",storageBucket: "kasi-web-d073f.firebasestorage.app",messagingSenderId: "471544855566",appId: "1:471544855566:web:aa669a968b8af0ceb6905f"};
-  const app = initializeApp(firebaseConfig); const db = getFirestore(app); const auth = getAuth(app);
-  let currentUser = null;
+    document.addEventListener('DOMContentLoaded', () => {
+        const emailInput = document.getElementById('userEmail'); const passInput = document.getElementById('userPass');
+        const mainLoginBtn = document.getElementById('mainLoginBtn'); const signupBtn = document.getElementById('signupBtn');
+        const showRoleBtn = document.getElementById('showRoleBtn'); const userRole = document.getElementById('userRole');
+        const authMsg = document.getElementById('authMsg'); const adminBtn = document.getElementById('adminBtn');
+        const logoutBtn = document.getElementById('logoutBtn'); const loginSound = document.getElementById('loginSound');
+        const logoutSound = document.getElementById('logoutSound'); const installBtn = document.getElementById('installBtn');
+        const clickSound = document.getElementById('clickSound');
+        let cachedUserRole = "customer"; let deferredPrompt; let isOwnerSignup = false;
 
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    const logoutBtn = document.getElementById("logoutBtn");
-    if(user){
-      document.getElementById("loginStatus").innerHTML = `👋 Welcome back, ${user.email}`;
-      logoutBtn.classList.remove("hidden");
-    } else {
-      document.getElementById("loginStatus").innerHTML = `⚠️ Please login on index page first to book`;
-      logoutBtn.classList.add("hidden");
-    }
-    loadSalons();
-  });
+        clickSound.volume = 0.4; loginSound.volume = 0.4; logoutSound.volume = 0.4;
+        
+        function playClick() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(()=>{});
+            if(navigator.vibrate) navigator.vibrate(50);
+        }
 
-  document.getElementById("logoutBtn").addEventListener("click", async () => { await signOut(auth); window.location.href = "index.html"; });
+        new Swiper('.swiper', { loop: true, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true } });
 
-  async function loadSalons() {
-    const snapshot = await getDocs(collection(db, "salons"));
-    let html = "";
-    if(snapshot.empty){ html = `<p class="text-center text-gray-500 col-span-3 glass p-8 rounded-2xl">No salons found yet</p>`; }
-    snapshot.forEach((doc) => {
-      const s = doc.data();
-      const location = s.location || s['location '] || 'No location'; // fixes space bug
-      let servicesList = '<p class="text-sm text-gray-500">No services listed</p>';
-      if(s.services && s.services.length > 0){
-        servicesList = s.services.map(svc =>
-          `<div class="flex justify-between text-sm py-1 border-b border-gray-800">
-            <span>${svc.name}</span>
-            <span class="text-purple-400">R${svc.price || 0} • ${svc.duration || 30}min</span>
-          </div>`
-        ).join('');
-      }
-      html += `
-        <div class="glass rounded-2xl p-6 glow transition transform hover:-translate-y-1">
-          <img src="${s.image || 'https://via.placeholder.com/400x200/1a0a2e/8b5cf6'}" class="w-full h-48 object-cover rounded-xl mb-4">
-          <h2 class="text-2xl font-bold mb-2 text-purple-400">${s.name}</h2>
-          <p class="text-gray-400 mb-1">📍 ${location}</p>
-          <div class="mb-5 bg-gray-900/30 p-4 rounded-xl"><h3 class="font-bold text-purple-400 mb-3">Services:</h3>${servicesList}</div>
-          <a href="book.html?salonId=${doc.id}" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl font-bold block text-center">Book Now</a>
-        </div>
-      `;
+        // CLICK SOUND ON ALL BUTTONS + LINKS
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
+                playClick();
+            }
+        });
+
+        showRoleBtn.onclick = () => {
+            isOwnerSignup =!isOwnerSignup;
+            userRole.style.display = isOwnerSignup? 'block' : 'none';
+            showRoleBtn.textContent = isOwnerSignup? 'Sign up as Customer?' : 'Sign up as Salon Owner?';
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBtn.style.display = 'block'; });
+        installBtn.addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') installBtn.style.display = 'none'; deferredPrompt = null; } });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('authSection').style.display = 'none'; logoutBtn.style.display = 'flex';
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                cachedUserRole = userSnap.exists()? userSnap.data().role : "customer";
+                if(!userSnap.exists()) await setDoc(doc(db, "users", user.uid), { email: user.email, role: "customer", createdAt: new Date() });
+                adminBtn.style.display = 'flex';
+                adminBtn.querySelector('span').textContent = cachedUserRole === 'admin'? 'Admin Panel' : cachedUserRole === 'salon_owner'? 'Dashboard' : 'My Bookings';
+                const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+                if(justLoggedIn === 'true') {
+                    sessionStorage.removeItem('justLoggedIn');
+                    setTimeout(() => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'owners.html' : 'salons.html'; }, 800);
+                } else { authMsg.textContent = `Welcome back ${user.email.split('@')[0]}`; }
+            } else { cachedUserRole = "customer"; document.getElementById('authSection').style.display = 'block'; logoutBtn.style.display = 'none'; adminBtn.style.display = 'none'; authMsg.textContent = ""; }
+        });
+
+        const setLoading = (btn, loading, text) => { btn.innerHTML = loading? `<i class='bx bx-loader bx-spin'></i> ${text}` : text; btn.disabled = loading }
+
+        mainLoginBtn.addEventListener('click', async () => {
+            const email = emailInput.value.trim(); const password = passInput.value;
+            if (!email ||!password) return alert('Please enter both email and password.');
+            setLoading(mainLoginBtn, true, "Logging in..."); sessionStorage.setItem('justLoggedIn', 'true');
+            try { await signInWithEmailAndPassword(auth, email, password); loginSound.play().catch(()=>{}); authMsg.textContent = "Login successful! Redirecting...";
+            } catch (err) { sessionStorage.removeItem('justLoggedIn'); alert('Login Failed: ' + err.message); setLoading(mainLoginBtn, false, "Login"); }
+        });
+
+        signupBtn.addEventListener('click', async () => {
+            const email = emailInput.value.trim(); const password = passInput.value; const role = userRole.value;
+            if (!email ||!password) return alert('Please enter email and password.');
+            if(password.length < 6) return alert('Password must be at least 6 characters');
+            setLoading(signupBtn, true, "Creating..."); sessionStorage.setItem('justLoggedIn', 'true');
+            try { const creds = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", creds.user.uid), { email: email, role: role, createdAt: new Date() });
+                loginSound.play().catch(()=>{}); authMsg.textContent = "Account created! Redirecting...";
+            } catch (err) { sessionStorage.removeItem('justLoggedIn'); alert('Signup Failed: ' + err.message); setLoading(signupBtn, false, "Sign Up"); }
+        });
+
+        adminBtn.addEventListener('click', () => { window.location.href = cachedUserRole === 'admin'? 'admin.html' : cachedUserRole === 'salon_owner'? 'owners.html' : 'salons.html'; });
+        logoutBtn.addEventListener('click', () => { logoutSound.play().catch(()=>{}); sessionStorage.clear(); setTimeout(() => { signOut(auth).then(() => { window.location.href = 'index.html' }) }, 400); });
+
+        // COOKIE BANNER LOGIC
+        const banner = document.getElementById('cookieBanner');
+        const acceptAll = document.getElementById('acceptAllCookies');
+        const essential = document.getElementById('essentialCookies');
+        const closeBtn = document.getElementById('cookieClose');
+
+        const cookieChoice = localStorage.getItem('kasiCookieChoice');
+        if(!cookieChoice) {
+            setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500);
+        }
+
+        function saveChoice(choice) {
+            playClick();
+            localStorage.setItem('kasiCookieChoice', choice);
+            if(banner) banner.style.display = 'none';
+        }
+
+        acceptAll?.addEventListener('click', () => saveChoice('all'));
+        essential?.addEventListener('click', () => saveChoice('essential'));
+        closeBtn?.addEventListener('click', () => saveChoice('essential'));
     });
-    document.getElementById("salonsList").innerHTML = html;
-  }
 </script>
 </body>
 </html>
