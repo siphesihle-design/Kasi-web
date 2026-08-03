@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,20 +6,20 @@
     <title>K@si Web | Owner Dashboard</title>
     <meta name="theme-color" content="#7B68EE">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=32">
+    <link rel="stylesheet" href="style.css?v=39">
     <style>
-      .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
-      .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
-      .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
-      .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
-      .status-declined { background:rgba(255,71,87,0.2); color:#ff4757; }
+     .status-pill { padding:5px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
+     .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
+     .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
+     .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
+     .status-declined { background:rgba(255,71,87,0.2); color:#ff4757; }
 
         /* COOKIE BANNER CSS */
-       .cookie-banner {
+      .cookie-banner {
             position: fixed; bottom: 20px; left: 10px; right: 10px;
             z-index: 9999; display: flex; justify-content: center;
         }
-       .cookie-box {
+      .cookie-box {
             position: relative; max-width: 500px; width: 100%; padding: 20px;
             background: rgba(20,20,30,0.95); backdrop-filter: blur(10px);
             border: 1px solid rgba(123,104,238,0.4); border-radius: 15px;
@@ -30,22 +30,22 @@
             from { transform: translateY(100px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-       .cookie-icon { font-size: 2rem; margin-bottom: 10px; text-align: center; }
-       .cookie-text h4 { color: #7B68EE; margin: 0 0 8px 0; font-size: 1rem; text-align: center; }
-       .cookie-text p { font-size: 0.85rem; color: #B0B0D0; margin: 0 0 15px 0; line-height: 1.4; text-align: center; }
-       .cookie-close {
+      .cookie-icon { font-size: 2rem; margin-bottom: 10px; text-align: center; }
+      .cookie-text h4 { color: #7B68EE; margin: 0 0 8px 0; font-size: 1rem; text-align: center; }
+      .cookie-text p { font-size: 0.85rem; color: #B0B0D0; margin: 0 0 15px 0; line-height: 1.4; text-align: center; }
+      .cookie-close {
             position: absolute; top: 8px; right: 12px;
             background: none; border: none; color: #B0B0D0;
             font-size: 1.5rem; cursor: pointer; transition: 0.2s;
         }
-       .cookie-close:hover { color: #7B68EE; }
-       .cookie-btns { display: flex; gap: 10px; }
-       .cookie-btns button {
+      .cookie-close:hover { color: #7B68EE; }
+      .cookie-btns { display: flex; gap: 10px; }
+      .cookie-btns button {
             flex: 1; padding: 12px; font-size: 0.9rem;
             border-radius: 10px; border: none; cursor: pointer;
             font-weight: bold; transition: 0.2s;
         }
-       .cookie-btns button:active { transform: scale(0.95); }
+      .cookie-btns button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -148,40 +148,46 @@
                 return;
             }
 
-            const userSnap = await getDoc(doc(db, "users", user.uid));
-            if(!userSnap.exists() || userSnap.data().role!== 'salon_owner') {
-                if(!redirecting) { redirecting = true; alert("Access Denied. You are not a salon owner."); window.location.href = 'index.html'; }
-                return;
-            }
-
-            currentOwnerUid = user.uid;
-            ownerSalonId = userSnap.data().salonId;
-
-            if(!ownerSalonId){
-                alert("Error: No salonId found for this owner account");
-                signOut(auth);
-                return;
-            }
-
-            loadingScreen.style.display = 'none';
-            ownerContent.style.display = 'block';
-
-            const today = new Date().toISOString().split('T')[0];
-            const q = query(collection(db, "bookings"),
-                where("ownerId", "==", currentOwnerUid),
-                where("date", "==", today),
-                orderBy("createdAt", "desc")
-            );
-
-            let firstLoad = true;
-            onSnapshot(q, (snapshot) => {
-                if(!firstLoad && snapshot.docChanges().some(change => change.type === 'added')) {
-                    notifySound.play().catch(()=>{});
-                    if(navigator.vibrate) navigator.vibrate([200, 100, 200]); // VIBRATE ON NEW BOOKING
+            try {
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                if(!userSnap.exists() || userSnap.data().role!== 'salon_owner') {
+                    if(!redirecting) { redirecting = true; alert("Access Denied. You are not a salon owner."); window.location.href = 'index.html'; }
+                    return;
                 }
-                firstLoad = false;
-                renderBookings(snapshot);
-            });
+
+                currentOwnerUid = user.uid;
+                ownerSalonId = userSnap.data().salonId; // lowercase d
+
+                if(!ownerSalonId){
+                    alert("Error: No salonId found for this owner account. Please contact admin.");
+                    signOut(auth);
+                    return;
+                }
+
+                loadingScreen.style.display = 'none';
+                ownerContent.style.display = 'block';
+
+                const today = new Date().toISOString().split('T')[0];
+                // FIX: Query by salonId not ownerId
+                const q = query(collection(db, "bookings"),
+                    where("salonId", "==", ownerSalonId),
+                    where("date", "==", today),
+                    orderBy("createdAt", "desc")
+                );
+
+                let firstLoad = true;
+                onSnapshot(q, (snapshot) => {
+                    if(!firstLoad && snapshot.docChanges().some(change => change.type === 'added')) {
+                        notifySound.play().catch(()=>{});
+                        if(navigator.vibrate) navigator.vibrate([200, 100, 200]); // VIBRATE ON NEW BOOKING
+                    }
+                    firstLoad = false;
+                    renderBookings(snapshot);
+                });
+            } catch(err) {
+                console.error(err);
+                alert("Error loading dashboard: " + err.message);
+            }
         });
 
         function renderBookings(snapshot) {
@@ -196,7 +202,7 @@
                 const statusClass = `status-${b.status}`;
 
                 ownerBookings.innerHTML += `
-                <div class="glass-card" style="padding:15px; border-left:4px solid var(--accent-color);">
+                <div class="glass-card" style="padding:15px; border-left:4px solid #7B68EE;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                         <h3 style="margin:0;">${b.name}</h3>
                         <span class="status-pill ${statusClass}">${b.status.toUpperCase()}</span>
@@ -223,9 +229,13 @@
             const declineBtn = e.target.closest('.declineBtn');
             const doneBtn = e.target.closest('.doneBtn');
 
-            if(approveBtn) await updateDoc(doc(db, "bookings", approveBtn.dataset.id), { status: "approved" });
-            if(declineBtn) await updateDoc(doc(db, "bookings", declineBtn.dataset.id), { status: "declined" });
-            if(doneBtn) await updateDoc(doc(db, "bookings", doneBtn.dataset.id), { status: "completed" });
+            try {
+                if(approveBtn) await updateDoc(doc(db, "bookings", approveBtn.dataset.id), { status: "approved" });
+                if(declineBtn) await updateDoc(doc(db, "bookings", declineBtn.dataset.id), { status: "declined" });
+                if(doneBtn) await updateDoc(doc(db, "bookings", doneBtn.dataset.id), { status: "completed" });
+            } catch(err) {
+                alert("Error updating booking: " + err.message);
+            }
         });
 
         homeBtn.addEventListener('click', () => {
