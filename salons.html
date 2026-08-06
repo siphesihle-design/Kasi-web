@@ -9,46 +9,10 @@
     body { background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 100%); }
    .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 17, 0.7); border: 1px solid rgba(139, 92, 246, 0.2); }
    .glow:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-
-    /* COOKIE BANNER CSS */
-   .cookie-banner {
-        position: fixed; bottom: 20px; left: 10px; right: 10px;
-        z-index: 9999; display: flex; justify-content: center;
-    }
-   .cookie-box {
-        position: relative; max-width: 500px; width: 100%; padding: 20px;
-        background: rgba(20,20,30,0.95); backdrop-filter: blur(10px);
-        border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 15px;
-        color: #fff; box-shadow: 0 0 20px rgba(139,92,246,0.3);
-        animation: slideUp 0.4s ease;
-    }
-    @keyframes slideUp {
-        from { transform: translateY(100px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-   .cookie-icon { font-size: 2rem; margin-bottom: 10px; text-align: center; }
-   .cookie-text h4 { color: #8b5cf6; margin: 0 0 8px 0; font-size: 1rem; text-align: center; }
-   .cookie-text p { font-size: 0.85rem; color: #B0B0D0; margin: 0 0 15px 0; line-height: 1.4; text-align: center; }
-   .cookie-close {
-        position: absolute; top: 8px; right: 12px;
-        background: none; border: none; color: #B0B0D0;
-        font-size: 1.5rem; cursor: pointer; transition: 0.2s;
-    }
-   .cookie-close:hover { color: #8b5cf6; }
-   .cookie-btns { display: flex; gap: 10px; }
-   .cookie-btns button {
-        flex: 1; padding: 12px; font-size: 0.9rem;
-        border-radius: 10px; border: none; cursor: pointer;
-        font-weight: bold; transition: 0.2s;
-    }
-   .cookie-btns button:active { transform: scale(0.95); }
-   .cookie-primary { background: #8b5cf6; color: #fff; }
-   .cookie-secondary { background: #333; color: #fff; }
   </style>
 </head>
 <body class="text-white min-h-screen">
 
-  <!-- NAVBAR WITH HOME BUTTON -->
   <nav class="glass sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
     <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Kasi Cut</h2>
     <div class="flex gap-3">
@@ -60,9 +24,7 @@
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-5xl font-extrabold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">🔥 Book Your Kasi Cut 🔥</h1>
     <p class="text-center text-gray-400 mb-8">Find the best barbers near you in Soweto</p>
-
     <div id="loginStatus" class="text-center mb-6 px-4 py-2 rounded-lg glass max-w-md mx-auto"></div>
-
     <div id="salonsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
   </div>
 
@@ -70,52 +32,17 @@
   <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="glass p-8 rounded-2xl w-full max-w-md glow">
       <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Book Appointment</h2>
-
-      <label class="text-sm text-gray-300 mb-1 block">Your Name</label>
-      <input id="clientName" type="text" placeholder="e.g. Sipho Dlamini" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
-
-      <label class="text-sm text-gray-300 mb-1 block">Your Number</label>
-      <input id="clientNumber" type="tel" placeholder="e.g. 0711234567" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
-
-      <label class="text-sm text-gray-300 mb-1 block">Select Service</label>
-      <select id="serviceSelect" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border border-gray-700 focus:border-purple-500 outline-none transition">
-        <option value="">-- Choose a service --</option>
-      </select>
-
+      <input id="clientName" type="text" placeholder="Your Name" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
+      <input id="clientNumber" type="tel" placeholder="Your Number" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
+      <select id="serviceSelect" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none"></select>
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="text-sm text-gray-300 mb-1 block">Date</label>
-          <input id="bookingDate" type="date" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
-        </div>
-        <div>
-          <label class="text-sm text-gray-300 mb-1 block">Time</label>
-          <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 focus:border-purple-500 outline-none transition">
-        </div>
+        <input id="bookingDate" type="date" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
+        <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
       </div>
-
-      <button id="confirmBooking" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-4 rounded-xl font-bold mb-3 transition transform hover:scale-105">Confirm Booking 🔥</button>
-      <button onclick="closeModal()" class="w-full bg-gray-800 hover:bg-gray-700 p-3 rounded-xl transition">Cancel</button>
+      <button id="confirmBooking" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl font-bold mb-3">Confirm Booking 🔥</button>
+      <button onclick="closeModal()" class="w-full bg-gray-800 p-3 rounded-xl">Cancel</button>
     </div>
   </div>
-
-  <!-- COOKIE BANNER -->
-  <div id="cookieBanner" class="cookie-banner" style="display:none;">
-    <div class="cookie-box">
-      <div class="cookie-icon">🍪</div>
-      <div class="cookie-text">
-        <h4>COOKIES & DATA CHOICE</h4>
-        <p>We use cookies to remember your bookings and make K@si Web faster. We don't sell your data.</p>
-      </div>
-      <button class="cookie-close" id="cookieClose">×</button>
-      <div class="cookie-btns">
-        <button id="acceptAllCookies" class="cookie-primary">Accept All</button>
-        <button id="essentialCookies" class="cookie-secondary">Essential Only</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SOUND -->
-  <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -134,26 +61,8 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
-
   let currentUser = null;
   let selectedSalonId = null;
-  let selectedSalonName = null;
-
-  // SOUND SETUP
-  const clickSound = document.getElementById('clickSound');
-  clickSound.volume = 0.4;
-  function playClick() {
-      clickSound.currentTime = 0;
-      clickSound.play().catch(()=>{});
-      if(navigator.vibrate) navigator.vibrate(50);
-  }
-
-  // CLICK SOUND ON ALL BUTTONS
-  document.addEventListener('click', (e) => {
-      if(e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
-          playClick();
-      }
-  });
 
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
@@ -168,7 +77,6 @@
     loadSalons();
   });
 
-  // LOGOUT BUTTON
   document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "index.html";
@@ -177,40 +85,14 @@
   async function loadSalons() {
     const snapshot = await getDocs(collection(db, "salons"));
     let html = "";
-
-    if(snapshot.empty){
-      html = `<p class="text-center text-gray-500 col-span-3 glass p-8 rounded-2xl">No salons found yet</p>`;
-    }
-
     snapshot.forEach((doc) => {
       const s = doc.data();
-      const salonId = doc.id;
-
-      let servicesList = '<p class="text-sm text-gray-500">No services listed</p>';
-      if(s.services && s.services.length > 0){
-        servicesList = s.services.map(svc =>
-          `<div class="flex justify-between text-sm py-1 border-b border-gray-800">
-            <span>${svc.name}</span>
-            <span class="text-purple-400">R${svc.price} • ${svc.duration}min</span>
-          </div>`
-        ).join('');
-      }
-
       html += `
-        <div class="glass rounded-2xl p-6 glow transition transform hover:-translate-y-1">
-          <img src="${s.image || 'https://via.placeholder.com/400x200/1a0a2e/8b5cf6?text=Kasi+Cut'}" class="w-full h-48 object-cover rounded-xl mb-4">
-          <h2 class="text-2xl font-bold mb-2 text-purple-400">${s.name || 'No Name'}</h2>
-          <p class="text-gray-400 mb-1">📍 ${s.location || 'No location'}</p>
-          <p class="text-gray-400 mb-4">🕒 ${s.hours || 'Open by appointment'}</p>
-
-          <div class="mb-5 bg-gray-900/30 p-4 rounded-xl">
-            <h3 class="font-bold text-purple-400 mb-3">Services:</h3>
-            ${servicesList}
-          </div>
-
-          <button onclick='openModal("${salonId}", "${s.name}", ${JSON.stringify(s.services || [])})' class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-4 rounded-xl font-bold transition transform hover:scale-105">
-            Book Now
-          </button>
+        <div class="glass rounded-2xl p-6 glow">
+          <img src="${s.image || 'https://via.placeholder.com/400x200'}" class="w-full h-48 object-cover rounded-xl mb-4">
+          <h2 class="text-2xl font-bold mb-2 text-purple-400">${s.name}</h2>
+          <p class="text-gray-400 mb-4">📍 ${s.location}</p>
+          <button onclick='openModal("${doc.id}", "${s.name}", ${JSON.stringify(s.services || [])})' class="w-full bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl font-bold">Book Now</button>
         </div>
       `;
     });
@@ -218,92 +100,43 @@
   }
 
   window.openModal = function(salonId, salonName, services) {
-    if(!currentUser){
-      alert("Please login first!");
-      return;
-    }
+    if(!currentUser){ alert("Please login first!"); return; }
     selectedSalonId = salonId;
-    selectedSalonName = salonName;
-
     const serviceSelect = document.getElementById("serviceSelect");
     serviceSelect.innerHTML = `<option value="">-- Choose a service --</option>`;
     services.forEach(svc => {
-      serviceSelect.innerHTML += `<option value="${svc.name}|R${svc.price}">${svc.name} - R${svc.price}</option>`;
+      serviceSelect.innerHTML += `<option value="${svc.name}|${svc.price}">${svc.name} - R${svc.price}</option>`;
     });
-
     document.getElementById("bookingDate").min = new Date().toISOString().split("T")[0];
     document.getElementById("bookingModal").classList.remove("hidden");
   }
 
   window.closeModal = function() {
     document.getElementById("bookingModal").classList.add("hidden");
-    document.getElementById("clientName").value = "";
-    document.getElementById("clientNumber").value = "";
-    document.getElementById("serviceSelect").value = "";
-    document.getElementById("bookingDate").value = "";
-    document.getElementById("bookingTime").value = "";
   }
 
   document.getElementById("confirmBooking").addEventListener("click", async () => {
-    const name = document.getElementById("clientName").value.trim();
-    const number = document.getElementById("clientNumber").value.trim();
-    const service = document.getElementById("serviceSelect").value;
+    const name = document.getElementById("clientName").value;
+    const number = document.getElementById("clientNumber").value;
+    const [serviceName, servicePrice] = document.getElementById("serviceSelect").value.split('|');
     const date = document.getElementById("bookingDate").value;
     const time = document.getElementById("bookingTime").value;
 
-    if(!name ||!number ||!service ||!date ||!time){
-      alert("Please fill all fields");
-      return;
-    }
-
-    const [serviceName, servicePrice] = service.split('|');
-
-    try {
-      await addDoc(collection(db, "bookings"), {
-        salonId: selectedSalonId,
-        salonName: selectedSalonName,
-        clientId: currentUser.uid,
-        clientEmail: currentUser.email,
-        name: name,
-        number: number,
-        service: serviceName,
-        price: servicePrice,
-        date: date,
-        time: time,
-        status: "pending",
-        createdAt: new Date()
-      });
-
-      alert(`✅ Booking request for ${serviceName} sent to ${selectedSalonName}!`);
-      closeModal();
-    } catch(error) {
-      alert("Error: " + error.message);
-    }
+    await addDoc(collection(db, "bookings"), {
+      salonId: selectedSalonId,
+      clientId: currentUser.uid,
+      name: name,
+      number: number,
+      service: serviceName,
+      price: servicePrice,
+      date: date,
+      time: time,
+      status: "pending",
+      createdAt: new Date()
+    });
+    alert(`✅ Booking sent!`);
+    closeModal();
   });
-
-  // ========== COOKIE BANNER LOGIC ==========
-  const banner = document.getElementById('cookieBanner');
-  const acceptAll = document.getElementById('acceptAllCookies');
-  const essential = document.getElementById('essentialCookies');
-  const closeBtn = document.getElementById('cookieClose');
-
-  const cookieChoice = localStorage.getItem('kasiCookieChoice');
-  if(!cookieChoice) {
-      setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 1500);
-  }
-
-  function saveChoice(choice) {
-      playClick();
-      localStorage.setItem('kasiCookieChoice', choice);
-      if(banner) banner.style.display = 'none';
-      console.log(choice === 'all'? "All cookies accepted" : "Essential cookies only");
-  }
-
-  acceptAll?.addEventListener('click', () => saveChoice('all'));
-  essential?.addEventListener('click', () => saveChoice('essential'));
-  closeBtn?.addEventListener('click', () => saveChoice('essential'));
-
 </script>
-
 </body>
 </html>
