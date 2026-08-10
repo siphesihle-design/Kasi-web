@@ -1,213 +1,800 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>K@si Web | Dashboard</title>
-    <meta name="theme-color" content="#7B68EE">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style.css?v=23">
-    <style>
-     .stats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-bottom:20px; }
-     .stat-card { text-align:center; padding:20px; }
-     .stat-card h3 { font-size:2rem; color:#7B68EE; margin:0 0 5px 0; }
-     .stat-card p { margin:0; color:#B0B0D0; font-size:0.8rem; }
 
-        /* FIX: MAKE TABLE SCROLL ON MOBILE */
-     .table-wrapper { overflow-x:auto; -webkit-overflow-scrolling: touch; }
-        table { width:100%; min-width:700px; border-collapse:collapse; background:rgba(26,26,46,0.5); border-radius:15px; overflow:hidden; }
-        th, td { padding:12px 8px; text-align:left; border-bottom:1px solid rgba(123,104,238,0.2); font-size:0.85rem; white-space:nowrap; }
-        th { background:rgba(123,104,238,0.1); color:#7B68EE; }
+    <script src="https://cdn.tailwindcss.com"></script>
 
-     .status-pill { padding:5px 10px; border-radius:20px; font-size:0.75rem; font-weight:700; text-transform:capitalize; }
-     .status-pending { background:rgba(255,165,0,0.2); color:#FFA500; }
-     .status-approved { background:rgba(0,200,83,0.2); color:#00c853; }
-     .status-completed { background:rgba(123,104,238,0.2); color:#7B68EE; }
-     .status-cancelled { background:rgba(255,0,0,0.2); color:#FF4444; }
-     .status-busy { background:rgba(255,140,0,0.2); color:#FF8C00; }
-     .loading-box { text-align:center; padding:40px; }
-
-     .action-btn { padding:6px 10px; font-size:0.7rem; border:none; border-radius:8px; color:white; cursor:pointer; margin:2px; }
-     .btn-approve { background:#00c853; }
-     .btn-cancel { background:#FF4444; }
-     .btn-complete { background:#7B68EE; }
-     .btn-busy { background:#FF8C00; }
-
-       /* OVERRIDE CONTAINER FOR DASHBOARD */
-     .container { max-width:1200px; padding-top:90px; }
-    </style>
 </head>
-<body>
-    <!-- HEADER USING YOUR style.css -->
-    <div class="header">
-        <h1><i class='bx bxs-scissors'></i> K@si Web</h1>
-        <nav>
-            <a href="index.html" class="nav-item"><i class='bx bx-home'></i> Home</a>
-            <a href="#" class="nav-item" id="logoutBtn"><i class='bx bx-log-out'></i> Logout</a>
-        </nav>
-    </div>
 
-    <div class="container">
-        <h1 class="header-title" id="dashboardTitle">Loading Dashboard...</h1>
-        <p id="userRole" style="color:#B0B0D0; margin-top:-10px; text-align:center;"></p>
 
-        <div id="loadingScreen" class="glass-card loading-box">
-            <i class='bx bx-loader-circle bx-spin' style="font-size:2rem; color:#7B68EE;"></i>
-            <p>Loading Dashboard...</p>
+<body class="bg-gray-950 text-white min-h-screen">
+
+
+<header
+    class="bg-gray-900 border-b border-gray-800 sticky top-0 z-40"
+>
+
+    <div
+        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
+    >
+
+        <h1 class="text-2xl font-bold">
+            📊 K@si Dashboard
+        </h1>
+
+
+        <div class="flex gap-2">
+
+            <a
+                href="home.html"
+                class="bg-gray-800 px-4 py-2 rounded-lg"
+            >
+                Home
+            </a>
+
+            <button
+                id="logoutBtn"
+                class="bg-red-600 px-4 py-2 rounded-lg"
+            >
+                Logout
+            </button>
+
         </div>
 
-        <div id="dashboardContent" style="display:none;">
-            <!-- STATS - Only show for admin -->
-            <div class="stats-grid" id="statsGrid">
-                <div class="glass-card stat-card"><h3 id="totalBookings">0</h3><p>Total Bookings</p></div>
-                <div class="glass-card stat-card"><h3 id="pendingBookings">0</h3><p>Pending</p></div>
-                <div class="glass-card stat-card"><h3 id="totalSalons">0</h3><p>Total Salons</p></div>
-                <div class="glass-card stat-card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
+    </div>
+
+</header>
+
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+
+
+    <div
+        id="loading"
+        class="text-center py-20"
+    >
+        Loading...
+    </div>
+
+
+    <section
+        id="content"
+        class="hidden"
+    >
+
+
+        <!-- STATS -->
+
+        <div
+            class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+        >
+
+            <div class="bg-gray-900 p-5 rounded-xl">
+                <p class="text-gray-400">
+                    Total Bookings
+                </p>
+
+                <h2
+                    id="totalBookings"
+                    class="text-3xl font-bold mt-2"
+                >
+                    0
+                </h2>
             </div>
 
-            <!-- BOOKINGS TABLE -->
-            <div class="glass-card">
-                <h2 id="tableTitle">All Bookings</h2>
-                <p style="font-size:0.8rem; color:#888; margin-bottom:10px;">← Swipe to see more →</p>
-                <div class="table-wrapper"> <!-- ADDED THIS WRAPPER -->
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Customer</th>
-                                <th>Salon</th>
-                                <th>Service</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bookingsTable"><tr><td colspan="7">Loading...</td></tr></tbody>
-                    </table>
-                </div>
+
+            <div class="bg-gray-900 p-5 rounded-xl">
+                <p class="text-gray-400">
+                    Pending
+                </p>
+
+                <h2
+                    id="pendingBookings"
+                    class="text-3xl font-bold mt-2"
+                >
+                    0
+                </h2>
             </div>
+
+
+            <div class="bg-gray-900 p-5 rounded-xl">
+                <p class="text-gray-400">
+                    Salons
+                </p>
+
+                <h2
+                    id="totalSalons"
+                    class="text-3xl font-bold mt-2"
+                >
+                    0
+                </h2>
+            </div>
+
+
+            <div class="bg-gray-900 p-5 rounded-xl">
+                <p class="text-gray-400">
+                    Users
+                </p>
+
+                <h2
+                    id="totalUsers"
+                    class="text-3xl font-bold mt-2"
+                >
+                    0
+                </h2>
+            </div>
+
         </div>
-    </div>
+
+
+        <!-- BOOKINGS -->
+
+        <div
+            class="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden"
+        >
+
+            <div class="p-5 border-b border-gray-800">
+
+                <h2 class="text-2xl font-bold">
+                    All Bookings
+                </h2>
+
+            </div>
+
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full">
+
+                    <thead>
+
+                        <tr class="bg-gray-800">
+
+                            <th class="p-3 text-left">
+                                Customer
+                            </th>
+
+                            <th class="p-3 text-left">
+                                Salon
+                            </th>
+
+                            <th class="p-3 text-left">
+                                Service
+                            </th>
+
+                            <th class="p-3 text-left">
+                                Date
+                            </th>
+
+                            <th class="p-3 text-left">
+                                Time
+                            </th>
+
+                            <th class="p-3 text-left">
+                                Status
+                            </th>
+
+                            <th class="p-3 text-left">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="bookingsTable"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</main>
+
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-      authDomain: "kasi-web-d073f.firebaseapp.com",
-      projectId: "kasi-web-d073f",
-      storageBucket: "kasi-web-d073f.firebasestorage.app",
-      messagingSenderId: "471544855566",
-      appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
-    let userRole = "client";
-    let mySalonId = null;
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) { window.location.href = 'index.html'; return; }
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    updateDoc,
+    query,
+    orderBy,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-        const userSnap = await getDoc(doc(db, "users", user.uid));
-        if (!userSnap.exists()) { alert("No user data found."); window.location.href = 'index.html'; return; }
 
-        userRole = userSnap.data().role || "client";
+/* =========================================================
+   FIREBASE
+========================================================= */
 
-        if(userRole!== "admin"){
-            const salonSnap = await getDocs(query(collection(db, "salons"), where("ownerId", "==", user.uid)));
-            if(!salonSnap.empty){
-                userRole = "salon_owner";
-                mySalonId = salonSnap.docs[0].id;
-            }
-        }
+const firebaseConfig = {
 
-        if(userRole === "client"){
-            alert("Clients use the booking page");
-            window.location.href = 'salons.html';
+    apiKey:
+        "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
+
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
+
+    projectId:
+        "kasi-web-d073f",
+
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
+
+    messagingSenderId:
+        "471544855566",
+
+    appId:
+        "1:471544855566:web:aa669a968b8af0ceb6905f"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
+
+const db =
+    getFirestore(app);
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+onAuthStateChanged(
+    auth,
+    async user => {
+
+        if (!user) {
+
+            window.location.href =
+                "index.html";
+
             return;
         }
 
-        document.getElementById('userRole').textContent = `Logged in as: ${userRole.toUpperCase()}`;
-        document.getElementById('dashboardTitle').textContent = userRole === "admin"? "Admin Dashboard" : "Owner Dashboard";
-        if(userRole === "salon_owner") document.getElementById('statsGrid').style.display = 'none';
-        if(userRole === "salon_owner") document.getElementById('tableTitle').textContent = "My Salon Bookings";
 
-        document.getElementById('loadingScreen').style.display = 'none';
-        document.getElementById('dashboardContent').style.display = 'block';
-        syncDashboard();
-    });
-
-    async function syncDashboard() {
-        let bookingsQuery;
-        if(userRole === "admin"){
-            bookingsQuery = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
-            const salonsSnap = await getDocs(collection(db, "salons"));
-            const usersSnap = await getDocs(collection(db, "users"));
-            document.getElementById('totalSalons').textContent = salonsSnap.size;
-            document.getElementById('totalUsers').textContent = usersSnap.size;
-        } else {
-            bookingsQuery = query(collection(db, "bookings"), where("salonId", "==", mySalonId), orderBy("createdAt", "desc"));
-        }
-
-        const bookingsSnap = await getDocs(bookingsQuery);
-
-        document.getElementById('totalBookings').textContent = bookingsSnap.size;
-        document.getElementById('pendingBookings').textContent = bookingsSnap.docs.filter(d => d.data().status === 'pending').length;
-
-        const tableBody = document.getElementById('bookingsTable');
-        tableBody.innerHTML = '';
-        if(bookingsSnap.empty){
-            tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No bookings yet</td></tr>`;
-            return;
-        }
-
-        bookingsSnap.forEach(docSnap => {
-            const b = docSnap.data();
-
-            let actions = '-';
-            if(userRole === "admin" && b.status === 'pending') {
-                actions = `<button onclick="updateStatus('${docSnap.id}', 'approved')" class="action-btn btn-approve">Approve</button>
-                           <button onclick="updateStatus('${docSnap.id}', 'cancelled')" class="action-btn btn-cancel">Cancel</button>`;
-            }
-            if((userRole === "admin" || userRole === "salon_owner") && b.status === 'approved') {
-                actions = `<button onclick="updateStatus('${docSnap.id}', 'completed')" class="action-btn btn-complete">Complete</button>
-                           <button onclick="updateStatus('${docSnap.id}', 'busy')" class="action-btn btn-busy">Busy</button>`;
-            }
-            if(userRole === "admin" && b.status === 'busy') {
-                actions = `<button onclick="updateStatus('${docSnap.id}', 'completed')" class="action-btn btn-complete">Complete</button>`;
-            }
-
-            tableBody.innerHTML += `
-                <tr>
-                    <td>${b.name || 'N/A'}</td>
-                    <td>${b.salonName || 'N/A'}</td>
-                    <td>${b.service || 'N/A'} - ${b.price || 'R0'}</td>
-                    <td>${b.date || 'N/A'}</td>
-                    <td>${b.time || 'N/A'}</td>
-                    <td><span class="status-pill status-${b.status}">${b.status}</span></td>
-                    <td>${actions}</td>
-                </tr>
-            `;
-        });
-    }
-
-    window.updateStatus = async (bookingId, status) => {
         try {
-            await updateDoc(doc(db, "bookings", bookingId), { status });
-            syncDashboard();
-        } catch(err) {
-            alert("Failed to update: " + err.message);
+
+            const userSnap =
+                await getDoc(
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    )
+                );
+
+
+            if (!userSnap.exists()) {
+
+                alert(
+                    "User profile not found."
+                );
+
+                await signOut(auth);
+
+                window.location.href =
+                    "index.html";
+
+                return;
+            }
+
+
+            const userData =
+                userSnap.data();
+
+
+            if (
+                userData.role !==
+                "admin"
+            ) {
+
+                if (
+                    userData.role ===
+                    "salon_owner"
+                ) {
+
+                    window.location.href =
+                        "owners.html";
+
+                } else {
+
+                    window.location.href =
+                        "salons.html";
+                }
+
+                return;
+            }
+
+
+            document.getElementById(
+                "loading"
+            ).classList.add("hidden");
+
+
+            document.getElementById(
+                "content"
+            ).classList.remove("hidden");
+
+
+            loadDashboard();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "loading"
+            ).innerHTML = `
+                <p class="text-red-400">
+                    ${escapeHtml(error.message)}
+                </p>
+            `;
+
         }
+
+    }
+);
+
+
+/* =========================================================
+   LOAD DASHBOARD
+========================================================= */
+
+async function loadDashboard() {
+
+    try {
+
+        const bookingsQuery =
+            query(
+                collection(
+                    db,
+                    "bookings"
+                ),
+                orderBy(
+                    "createdAt",
+                    "desc"
+                )
+            );
+
+
+        const bookingsSnap =
+            await getDocs(
+                bookingsQuery
+            );
+
+
+        const salonsSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "salons"
+                )
+            );
+
+
+        const usersSnap =
+            await getDocs(
+                collection(
+                    db,
+                    "users"
+                )
+            );
+
+
+        document.getElementById(
+            "totalBookings"
+        ).textContent =
+            bookingsSnap.size;
+
+
+        document.getElementById(
+            "pendingBookings"
+        ).textContent =
+            bookingsSnap.docs.filter(
+                item =>
+                    item.data().status ===
+                    "pending"
+            ).length;
+
+
+        document.getElementById(
+            "totalSalons"
+        ).textContent =
+            salonsSnap.size;
+
+
+        document.getElementById(
+            "totalUsers"
+        ).textContent =
+            usersSnap.size;
+
+
+        renderBookings(
+            bookingsSnap
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Dashboard error: " +
+            error.message
+        );
+
     }
 
-    document.getElementById('logoutBtn').onclick = (e) => {
-        e.preventDefault();
-        signOut(auth).then(() => { window.location.href = 'index.html'; });
+}
+
+
+/* =========================================================
+   RENDER BOOKINGS
+========================================================= */
+
+function renderBookings(
+    snapshot
+) {
+
+    const table =
+        document.getElementById(
+            "bookingsTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if (snapshot.empty) {
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    class="p-8 text-center text-gray-500"
+                >
+                    No bookings found.
+                </td>
+            </tr>
+        `;
+
+        return;
     }
+
+
+    snapshot.forEach(
+        bookingDoc => {
+
+            const b =
+                bookingDoc.data();
+
+
+            const id =
+                bookingDoc.id;
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.className =
+                "border-t border-gray-800";
+
+
+            row.innerHTML = `
+
+                <td class="p-3">
+                    ${escapeHtml(
+                        b.customerName ||
+                        "Customer"
+                    )}
+                </td>
+
+
+                <td class="p-3">
+                    ${escapeHtml(
+                        b.salonName ||
+                        "Salon"
+                    )}
+                </td>
+
+
+                <td class="p-3">
+                    ${escapeHtml(
+                        b.service ||
+                        "Service"
+                    )}
+
+                    <br>
+
+                    <span class="text-gray-500">
+                        R${Number(
+                            b.price || 0
+                        )}
+                    </span>
+                </td>
+
+
+                <td class="p-3">
+                    ${escapeHtml(
+                        b.date || "-"
+                    )}
+                </td>
+
+
+                <td class="p-3">
+                    ${escapeHtml(
+                        b.time || "-"
+                    )}
+                </td>
+
+
+                <td class="p-3">
+                    <span
+                        class="px-2 py-1 rounded-lg text-xs ${statusClass(
+                            b.status
+                        )}"
+                    >
+                        ${escapeHtml(
+                            b.status ||
+                            "pending"
+                        )}
+                    </span>
+                </td>
+
+
+                <td class="p-3">
+
+                    ${
+                        b.status === "pending"
+                        ? `
+
+                            <button
+                                class="approve bg-green-600 px-3 py-1 rounded mr-1"
+                                data-id="${id}"
+                            >
+                                Approve
+                            </button>
+
+                            <button
+                                class="decline bg-red-600 px-3 py-1 rounded"
+                                data-id="${id}"
+                            >
+                                Decline
+                            </button>
+
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                        b.status === "approved"
+                        ? `
+
+                            <button
+                                class="complete bg-purple-600 px-3 py-1 rounded"
+                                data-id="${id}"
+                            >
+                                Complete
+                            </button>
+
+                        `
+                        : ""
+                    }
+
+                </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE BOOKING
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const approve =
+            event.target.closest(
+                ".approve"
+            );
+
+
+        const decline =
+            event.target.closest(
+                ".decline"
+            );
+
+
+        const complete =
+            event.target.closest(
+                ".complete"
+            );
+
+
+        let id = null;
+
+        let status = null;
+
+
+        if (approve) {
+
+            id =
+                approve.dataset.id;
+
+            status =
+                "approved";
+
+        }
+
+
+        if (decline) {
+
+            id =
+                decline.dataset.id;
+
+            status =
+                "declined";
+
+        }
+
+
+        if (complete) {
+
+            id =
+                complete.dataset.id;
+
+            status =
+                "completed";
+
+        }
+
+
+        if (!id || !status) return;
+
+
+        try {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "bookings",
+                    id
+                ),
+                {
+
+                    status:
+                        status,
+
+                    updatedAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+            loadDashboard();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Could not update booking: " +
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document.getElementById(
+    "logoutBtn"
+).addEventListener(
+    "click",
+    async () => {
+
+        await signOut(auth);
+
+        window.location.href =
+            "index.html";
+
+    }
+);
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function statusClass(status) {
+
+    if (status === "approved")
+        return "bg-green-900 text-green-300";
+
+    if (status === "declined")
+        return "bg-red-900 text-red-300";
+
+    if (status === "completed")
+        return "bg-purple-900 text-purple-300";
+
+    return "bg-yellow-900 text-yellow-300";
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
 </script>
+
 </body>
 </html>
