@@ -1,142 +1,833 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book Your Kasi Cut</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background: linear-gradient(135deg, #0f0f0f 0%, #1a0a2e 100%); }
-   .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 17, 0.7); border: 1px solid rgba(139, 92, 246, 0.2); }
-   .glow:hover { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-  </style>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>K@si Web | Salons</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body class="text-white min-h-screen">
 
-  <nav class="glass sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
-    <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Kasi Cut</h2>
-    <div class="flex gap-3">
-      <a href="index.html" class="bg-gray-800 hover:bg-gray-700 px-5 py-2 rounded-xl font-semibold transition">🏠 Home</a>
-      <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl font-semibold transition hidden">Logout</button>
+
+<body class="bg-gray-950 text-white min-h-screen">
+
+
+<header
+    class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur border-b border-gray-800"
+>
+
+    <div
+        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
+    >
+
+        <h1 class="text-2xl font-bold">
+            ✂️ K@si Web
+        </h1>
+
+
+        <div class="flex gap-2">
+
+            <a
+                href="home.html"
+                class="bg-gray-800 px-4 py-2 rounded-lg"
+            >
+                Home
+            </a>
+
+            <button
+                id="logoutBtn"
+                class="hidden bg-red-600 px-4 py-2 rounded-lg"
+            >
+                Logout
+            </button>
+
+        </div>
+
     </div>
-  </nav>
 
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-5xl font-extrabold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">🔥 Book Your Kasi Cut 🔥</h1>
-    <p class="text-center text-gray-400 mb-8">Find the best barbers near you in Soweto</p>
-    <div id="loginStatus" class="text-center mb-6 px-4 py-2 rounded-lg glass max-w-md mx-auto"></div>
-    <div id="salonsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-  </div>
+</header>
 
-  <!-- BOOKING POPUP -->
-  <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="glass p-8 rounded-2xl w-full max-w-md glow">
-      <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Book Appointment</h2>
-      <input id="clientName" type="text" placeholder="Your Name" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
-      <input id="clientNumber" type="tel" placeholder="Your Number" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
-      <select id="serviceSelect" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none"></select>
-      <div class="grid grid-cols-2 gap-4">
-        <input id="bookingDate" type="date" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
-        <input id="bookingTime" type="time" class="w-full p-3 mb-4 rounded-xl bg-gray-900/50 border-gray-700 outline-none">
-      </div>
-      <button id="confirmBooking" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl font-bold mb-3">Confirm Booking 🔥</button>
-      <button onclick="closeModal()" class="w-full bg-gray-800 p-3 rounded-xl">Cancel</button>
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+
+
+    <div class="text-center mb-10">
+
+        <h2
+            class="text-4xl md:text-5xl font-black mb-3"
+        >
+            🔥 Find Your Barber
+        </h2>
+
+        <p class="text-gray-400">
+            Fresh cuts without standing in line.
+        </p>
+
     </div>
-  </div>
+
+
+    <div
+        id="loginStatus"
+        class="text-center mb-8"
+    >
+        Checking login...
+    </div>
+
+
+    <div
+        id="salonsList"
+        class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+
+        <div class="text-center col-span-full">
+            Loading salons...
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     BOOKING MODAL
+===================================================== -->
+
+<div
+    id="bookingModal"
+    class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+>
+
+    <div
+        class="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md"
+    >
+
+        <h2 class="text-2xl font-bold mb-5">
+            Book Appointment
+        </h2>
+
+
+        <p
+            id="selectedSalonName"
+            class="text-purple-400 mb-5"
+        ></p>
+
+
+        <input
+            id="customerName"
+            type="text"
+            placeholder="Your full name"
+            class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700"
+        >
+
+
+        <input
+            id="customerPhone"
+            type="tel"
+            placeholder="Phone number"
+            class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700"
+        >
+
+
+        <select
+            id="serviceSelect"
+            class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700"
+        >
+
+            <option value="">
+                Choose service
+            </option>
+
+        </select>
+
+
+        <div class="grid grid-cols-2 gap-3">
+
+            <input
+                id="bookingDate"
+                type="date"
+                class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700"
+            >
+
+            <input
+                id="bookingTime"
+                type="time"
+                class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700"
+            >
+
+        </div>
+
+
+        <div class="flex gap-3 mt-5">
+
+            <button
+                id="confirmBooking"
+                class="flex-1 bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold"
+            >
+                Confirm
+            </button>
+
+            <button
+                id="cancelBooking"
+                class="flex-1 bg-gray-700 p-3 rounded-lg"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-    authDomain: "kasi-web-d073f.firebaseapp.com",
-    projectId: "kasi-web-d073f",
-    storageBucket: "kasi-web-d073f.firebasestorage.app",
-    messagingSenderId: "471544855566",
-    appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
-  };
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  let currentUser = null;
-  let selectedSalonId = null;
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    const logoutBtn = document.getElementById("logoutBtn");
-    if(user){
-      document.getElementById("loginStatus").innerHTML = `👋 Welcome back, ${user.email}`;
-      logoutBtn.classList.remove("hidden");
-    } else {
-      document.getElementById("loginStatus").innerHTML = `⚠️ Please login first to book`;
-      logoutBtn.classList.add("hidden");
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc,
+    doc,
+    getDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
+
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
+
+    projectId:
+        "kasi-web-d073f",
+
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
+
+    messagingSenderId:
+        "471544855566",
+
+    appId:
+        "1:471544855566:web:aa669a968b8af0ceb6905f"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
+
+const db =
+    getFirestore(app);
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+
+let selectedSalon = null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const salonsList =
+    document.getElementById("salonsList");
+
+const modal =
+    document.getElementById("bookingModal");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+const loginStatus =
+    document.getElementById("loginStatus");
+
+const serviceSelect =
+    document.getElementById("serviceSelect");
+
+
+/* =========================================================
+   SOUTH AFRICAN DATE
+========================================================= */
+
+function getTodaySouthAfrica() {
+
+    return new Intl.DateTimeFormat(
+        "en-CA",
+        {
+            timeZone: "Africa/Johannesburg",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }
+    ).format(
+        new Date()
+    );
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+onAuthStateChanged(
+    auth,
+    user => {
+
+        currentUser = user;
+
+
+        if (user) {
+
+            loginStatus.innerHTML =
+                `👋 Logged in as <b>${escapeHtml(user.email)}</b>`;
+
+            logoutBtn.classList.remove(
+                "hidden"
+            );
+
+        } else {
+
+            loginStatus.innerHTML =
+                `⚠️ Login is required before booking.`;
+
+            logoutBtn.classList.add(
+                "hidden"
+            );
+
+        }
+
     }
-    loadSalons();
-  });
+);
 
-  document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "index.html";
-  });
 
-  async function loadSalons() {
-    const snapshot = await getDocs(collection(db, "salons"));
-    let html = "";
-    snapshot.forEach((doc) => {
-      const s = doc.data();
-      html += `
-        <div class="glass rounded-2xl p-6 glow">
-          <img src="${s.image || 'https://via.placeholder.com/400x200'}" class="w-full h-48 object-cover rounded-xl mb-4">
-          <h2 class="text-2xl font-bold mb-2 text-purple-400">${s.name}</h2>
-          <p class="text-gray-400 mb-4">📍 ${s.location}</p>
-          <button onclick='openModal("${doc.id}", "${s.name}", ${JSON.stringify(s.services || [])})' class="w-full bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl font-bold">Book Now</button>
-        </div>
-      `;
-    });
-    document.getElementById("salonsList").innerHTML = html;
-  }
+/* =========================================================
+   LOGOUT
+========================================================= */
 
-  window.openModal = function(salonId, salonName, services) {
-    if(!currentUser){ alert("Please login first!"); return; }
-    selectedSalonId = salonId;
-    const serviceSelect = document.getElementById("serviceSelect");
-    serviceSelect.innerHTML = `<option value="">-- Choose a service --</option>`;
-    services.forEach(svc => {
-      serviceSelect.innerHTML += `<option value="${svc.name}|${svc.price}">${svc.name} - R${svc.price}</option>`;
-    });
-    document.getElementById("bookingDate").min = new Date().toISOString().split("T")[0];
-    document.getElementById("bookingModal").classList.remove("hidden");
-  }
+logoutBtn.addEventListener(
+    "click",
+    async () => {
 
-  window.closeModal = function() {
-    document.getElementById("bookingModal").classList.add("hidden");
-  }
+        await signOut(auth);
 
-  document.getElementById("confirmBooking").addEventListener("click", async () => {
-    const name = document.getElementById("clientName").value;
-    const number = document.getElementById("clientNumber").value;
-    const [serviceName, servicePrice] = document.getElementById("serviceSelect").value.split('|');
-    const date = document.getElementById("bookingDate").value;
-    const time = document.getElementById("bookingTime").value;
+        window.location.href =
+            "index.html";
 
-    await addDoc(collection(db, "bookings"), {
-      salonId: selectedSalonId,
-      clientId: currentUser.uid,
-      name: name,
-      number: number,
-      service: serviceName,
-      price: servicePrice,
-      date: date,
-      time: time,
-      status: "pending",
-      createdAt: new Date()
-    });
-    alert(`✅ Booking sent!`);
-    closeModal();
-  });
+    }
+);
+
+
+/* =========================================================
+   LOAD SALONS
+========================================================= */
+
+async function loadSalons() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "salons")
+            );
+
+
+        salonsList.innerHTML = "";
+
+
+        if (snapshot.empty) {
+
+            salonsList.innerHTML = `
+                <div class="col-span-full text-center text-gray-400">
+                    No salons are registered yet.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        snapshot.forEach(
+            salonDoc => {
+
+                const salon =
+                    salonDoc.data();
+
+                renderSalon(
+                    salonDoc.id,
+                    salon
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        salonsList.innerHTML = `
+            <div class="col-span-full text-center text-red-400">
+                Unable to load salons.
+                <br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER SALON
+========================================================= */
+
+function renderSalon(id, salon) {
+
+    const services =
+        Array.isArray(salon.services)
+            ? salon.services
+            : [];
+
+
+    const card =
+        document.createElement("div");
+
+
+    card.className =
+        "bg-gray-900 border border-gray-800 rounded-2xl p-5";
+
+
+    const image =
+        salon.image ||
+        "https://via.placeholder.com/600x300?text=Kasi+Salon";
+
+
+    card.innerHTML = `
+
+        <img
+            src="${escapeHtml(image)}"
+            class="w-full h-48 object-cover rounded-xl mb-4"
+            alt="${escapeHtml(salon.name || "Salon")}"
+        >
+
+        <h3 class="text-2xl font-bold mb-2">
+            ${escapeHtml(salon.name || "Unnamed Salon")}
+        </h3>
+
+        <p class="text-gray-400 mb-2">
+            📍 ${escapeHtml(salon.location || "Location not provided")}
+        </p>
+
+        <p class="text-gray-400 mb-4">
+            🕐 ${escapeHtml(salon.hours || "Hours not provided")}
+        </p>
+
+        <button
+            class="bookBtn w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-xl font-bold"
+        >
+            Book Appointment
+        </button>
+
+    `;
+
+
+    card
+        .querySelector(".bookBtn")
+        .addEventListener(
+            "click",
+            () => openBooking(id, salon)
+        );
+
+
+    salonsList.appendChild(card);
+
+}
+
+
+/* =========================================================
+   OPEN BOOKING
+========================================================= */
+
+function openBooking(
+    salonId,
+    salon
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login before booking."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    selectedSalon = {
+
+        id: salonId,
+
+        ...salon
+
+    };
+
+
+    document.getElementById(
+        "selectedSalonName"
+    ).textContent =
+        salon.name || "Selected Salon";
+
+
+    serviceSelect.innerHTML =
+        `<option value="">Choose service</option>`;
+
+
+    const services =
+        Array.isArray(salon.services)
+            ? salon.services
+            : [];
+
+
+    services.forEach(
+        service => {
+
+            const option =
+                document.createElement("option");
+
+
+            const name =
+                service.name ||
+                "Service";
+
+
+            const price =
+                Number(service.price) || 0;
+
+
+            option.value =
+                JSON.stringify({
+                    name,
+                    price
+                });
+
+
+            option.textContent =
+                `${name} - R${price}`;
+
+
+            serviceSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "bookingDate"
+    ).min =
+        getTodaySouthAfrica();
+
+
+    document.getElementById(
+        "bookingDate"
+    ).value =
+        getTodaySouthAfrica();
+
+
+    modal.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+document.getElementById(
+    "cancelBooking"
+).addEventListener(
+    "click",
+    closeModal
+);
+
+
+function closeModal() {
+
+    modal.classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   CONFIRM BOOKING
+========================================================= */
+
+document.getElementById(
+    "confirmBooking"
+).addEventListener(
+    "click",
+    async () => {
+
+        if (!currentUser) {
+
+            alert(
+                "Please login again."
+            );
+
+            return;
+        }
+
+
+        if (!selectedSalon) {
+
+            alert(
+                "Please select a salon."
+            );
+
+            return;
+        }
+
+
+        const customerName =
+            document
+                .getElementById("customerName")
+                .value
+                .trim();
+
+
+        const phone =
+            document
+                .getElementById("customerPhone")
+                .value
+                .trim();
+
+
+        const serviceValue =
+            serviceSelect.value;
+
+
+        const date =
+            document
+                .getElementById("bookingDate")
+                .value;
+
+
+        const time =
+            document
+                .getElementById("bookingTime")
+                .value;
+
+
+        if (
+            !customerName ||
+            !phone ||
+            !serviceValue ||
+            !date ||
+            !time
+        ) {
+
+            alert(
+                "Please complete all fields."
+            );
+
+            return;
+        }
+
+
+        const selectedService =
+            JSON.parse(
+                serviceValue
+            );
+
+
+        const confirmButton =
+            document.getElementById(
+                "confirmBooking"
+            );
+
+
+        confirmButton.disabled = true;
+
+        confirmButton.textContent =
+            "Booking...";
+
+
+        try {
+
+            /*
+             Check the owner/user relationship.
+             */
+
+            let ownerId =
+                selectedSalon.ownerId || "";
+
+
+            /*
+             If the salon document doesn't contain
+             ownerId, the booking will still be stored,
+             but the owner dashboard cannot securely
+             identify the owner.
+             */
+
+            await addDoc(
+                collection(db, "bookings"),
+                {
+
+                    userId:
+                        currentUser.uid,
+
+                    ownerId:
+                        ownerId,
+
+                    salonId:
+                        selectedSalon.id,
+
+                    salonName:
+                        selectedSalon.name ||
+                        "Kasi Salon",
+
+                    customerName:
+                        customerName,
+
+                    phone:
+                        phone,
+
+                    service:
+                        selectedService.name,
+
+                    price:
+                        Number(
+                            selectedService.price
+                        ) || 0,
+
+                    date:
+                        date,
+
+                    time:
+                        time,
+
+                    status:
+                        "pending",
+
+                    createdAt:
+                        serverTimestamp(),
+
+                    updatedAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+            alert(
+                "✅ Booking sent successfully!"
+            );
+
+
+            document.getElementById(
+                "customerName"
+            ).value = "";
+
+
+            document.getElementById(
+                "customerPhone"
+            ).value = "";
+
+
+            serviceSelect.value = "";
+
+
+            closeModal();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Booking failed: " +
+                error.message
+            );
+
+        } finally {
+
+            confirmButton.disabled =
+                false;
+
+            confirmButton.textContent =
+                "Confirm";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadSalons();
+
 </script>
+
 </body>
 </html>
