@@ -3,129 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Kasi Salons | Book Local Stylists</title>
-    <!-- Boxicons for UI Icons -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>K@si Web | Fresh Cuts, No Lines</title>
+    <meta name="theme-color" content="#3B82F6">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a3e 100%); }
+    .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 30, 0.7); border: 1px solid rgba(59, 130, 246, 0.3); }
+    .glow:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+    .cursor { animation: blink 1s infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+    .cookie-banner { position: fixed; bottom: 20px; left: 10px; right: 10px; z-index: 9999; display: flex; justify-content: center; }
+    .cookie-box { position: relative; max-width: 500px; width: 100%; padding: 20px; background: rgba(15,15,30,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 15px; color: #fff; box-shadow: 0 0 20px rgba(59,130,246,0.3); animation: slideUp 0.4s ease; }
+      @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; }
+    </style>
+
+    <!-- ONESIGNAL SDK v16 -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({ appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0" });
+      });
+    </script>
 </head>
-<body>
+<body class="text-white min-h-screen flex items-center justify-center">
+    <div class="text-center px-4 max-w-lg">
+        <div class="text-8xl mb-4"><i class='bx bx-cut text-blue-500'></i></div>
+        <h1 class="text-5xl font-extrabold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">K@si Web</h1>
+        <div class="text-2xl h-10 mb-2"><span id="typed-text" class="text-blue-400"></span><span class="cursor text-blue-400">|</span></div>
+        <p class="text-gray-400 mb-8">Book your barber. Skip the queue. Get fresh.</p>
 
-    <!-- TOP FIXED HEADER -->
-    <header class="header">
-        <h1><i class='bx bx-cut'></i> Kasi Salons</h1>
-        <nav>
-            <button id="adminBtn" class="nav-item" style="display: none; background:none; border:none; cursor:pointer;">
-                <i class='bx bx-shield-quarter'></i> Dashboard
-            </button>
-            <button id="logoutBtn" class="nav-item" style="display: none; background:none; border:none; cursor:pointer;">
-                <i class='bx bx-log-out'></i> Logout
-            </button>
-        </nav>
-    </header>
+        <div class="glass rounded-2xl p-0 mb-8 overflow-hidden glow">
+           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" class="w-full h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x250/1a0a3e/3b82f6?text=Fresh+Cut'">
+        </div>
 
-    <!-- MAIN APP CONTAINER -->
-    <main class="container">
+        <a href="home.html" id="getStartedBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-4 rounded-xl font-bold mb-3 block transition transform hover:scale-105">Get Started <i class='bx bx-right-arrow-alt'></i></a>
         
-        <!-- TITLE & TAGLINE -->
-        <h2 class="header-title">Find & Book Top Stylists</h2>
-        <p class="tagline">Fresh cuts and hair styling right in your neighborhood</p>
-
-        <!-- SEARCH BAR -->
-        <div class="glass-card" style="padding: 15px; margin-bottom: 20px;">
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="searchBar" placeholder="Search salon name or area..." style="margin-bottom: 0;">
-                <button id="searchBtn" class="primary-btn" style="width: 80px; margin-bottom: 0;">
-                    <i class='bx bx-search' style="font-size: 1.2rem;"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- STATS / TODAY'S BOOKINGS -->
-        <div class="stats-grid">
-            <div class="glass-card stat-card" style="margin: 0; grid-column: span 2;">
-                <h3 id="bookingsToday">0 bookings today</h3>
-                <p>Live activity across local salons</p>
-            </div>
-        </div>
-
-        <!-- SALON LISTING SECTION -->
-        <h3 style="margin: 20px 0 10px 5px; color: #7B68EE;">Available Salons</h3>
-        <div id="salonList">
-            <div class="loading-box">
-                <p style="color: #888;">Loading local salons...</p>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- BOOKING MODAL -->
-    <div id="bookingModal" class="glass-card" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10001; width: 90%; max-width: 400px; margin: 0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="color: #7B68EE;">Book Appointment</h3>
-            <button onclick="document.getElementById('bookingModal').classList.remove('active')" style="background:none; border:none; color:#B0B0D0; font-size:1.5rem; cursor:pointer;">&times;</button>
-        </div>
-
-        <form id="bookingForm">
-            <input type="text" id="custName" placeholder="Your Full Name" required>
-            <input type="tel" id="custPhone" placeholder="Phone Number" required>
-            
-            <select id="serviceType" required>
-                <option value="" disabled selected>Select Service</option>
-                <option value="Fade Haircut — R80">Fade Haircut — R80</option>
-                <option value="Beard Trim & Shape — R50">Beard Trim & Shape — R50</option>
-                <option value="Hair Wash & Combo — R120">Hair Wash & Combo — R120</option>
-                <option value="Ladies Hair Wash & Blowout — R180">Ladies Hair Wash & Blowout — R180</option>
-                <option value="Full Dreadlocks Maintenance — R250">Full Dreadlocks Maintenance — R250</option>
-            </select>
-
-            <div style="display: flex; gap: 10px;">
-                <input type="date" id="custDate" required>
-                <input type="time" id="custTime" required>
-            </div>
-
-            <button type="submit" class="primary-btn" style="margin-top: 10px;">Confirm Booking</button>
-            <button type="button" class="secondary-btn" onclick="document.getElementById('bookingModal').classList.remove('active')">Cancel</button>
-        </form>
+        <button id="subscribe-btn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 p-4 rounded-xl font-bold">🔔 Get Booking Alerts</button>
+        <p class="text-gray-500 text-sm mt-6">© 2026 K@si Web • Made for Kasi People</p>
     </div>
-
-    <!-- BOTTOM FIXED NAVIGATION -->
-    <nav class="nav-grid">
-        <a href="index.html" class="nav-item active">
-            <i class='bx bx-store-alt'></i>
-            <span>Salons</span>
-        </a>
-        <a href="#searchBar" class="nav-item">
-            <i class='bx bx-search'></i>
-            <span>Search</span>
-        </a>
-        <button id="adminBtnMobile" class="nav-item" style="display:none;" onclick="document.getElementById('adminBtn').click()">
-            <i class='bx bx-dashboard'></i>
-            <span>Manage</span>
-        </button>
-    </nav>
 
     <!-- COOKIE BANNER -->
-    <div id="cookieBanner" class="cookie-banner" style="display: none;">
-        <div class="cookie-box">
-            <button id="cookieClose" class="cookie-close">&times;</button>
-            <div style="display: flex; align-items: flex-start;">
-                <span class="cookie-icon">🍪</span>
-                <div class="cookie-text">
-                    <h4>Cookie Preferences</h4>
-                    <p>We use essential cookies to keep you signed in and store local booking details.</p>
-                </div>
-            </div>
-            <div class="cookie-btns">
-                <button id="essentialCookies" class="secondary-btn" style="margin: 0;">Essential Only</button>
-                <button id="acceptAllCookies" class="primary-btn" style="margin: 0;">Accept All</button>
-            </div>
+    <div id="cookieBanner" class="cookie-banner" style="display:none;">
+      <div class="cookie-box">
+        <div class="text-4xl text-center mb-2">🍪</div>
+        <h4 class="text-blue-400 text-center font-bold mb-2">COOKIES & NOTIFICATIONS</h4>
+        <p class="text-gray-400 text-sm text-center mb-4">We use cookies to save your bookings. Owners get instant alerts when you book.</p>
+        <button class="absolute top-2 right-3 text-gray-400 hover:text-blue-400" id="cookieClose">×</button>
+        <div class="flex gap-3">
+          <button id="acceptAllCookies" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl font-bold">Accept All</button>
+          <button id="essentialCookies" class="flex-1 bg-gray-700 hover:bg-gray-600 p-3 rounded-xl font-bold">Essential Only</button>
         </div>
+      </div>
     </div>
 
-    <!-- SOUND EFFECT -->
-    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+<script>
+    // WORD ANIMATION
+    const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
+    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
+    const typedText = document.getElementById('typed-text');
+    function type() {
+        const currentWord = words[wordIndex];
+        if (isDeleting) { typedText.textContent = currentWord.substring(0, charIndex--); } 
+        else { typedText.textContent = currentWord.substring(0, charIndex++); }
+        if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(type, 1500); return; } 
+        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
+        setTimeout(type, isDeleting? 80 : 120);
+    }
+    document.addEventListener('DOMContentLoaded', type);
 
-    <!-- FIREBASE INITIALIZATION & MAIN LOGIC -->
-    <script src="app.js"></script>
+    // COOKIE + ONESIGNAL
+    const banner = document.getElementById('cookieBanner');
+    const acceptAll = document.getElementById('acceptAllCookies');
+    const essential = document.getElementById('essentialCookies');
+    const closeBtn = document.getElementById('cookieClose');
+    const subBtn = document.getElementById('subscribe-btn');
+
+    setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
+
+    function saveChoice(choice) {
+        localStorage.setItem('kasiCookieChoice', choice);
+        if(banner) banner.style.display = 'none';
+    }
+
+    acceptAll?.addEventListener('click', () => {
+        saveChoice('all');
+        OneSignalDeferred.push(async function(OneSignal) { 
+            await OneSignal.showNativePrompt();
+            await OneSignal.registerForPushNotifications();
+        });
+    });
+    essential?.addEventListener('click', () => saveChoice('essential'));
+    closeBtn?.addEventListener('click', () => saveChoice('essential'));
+    
+    subBtn?.addEventListener('click', async () => {
+        const choice = localStorage.getItem('kasiCookieChoice');
+        if(choice!== 'all'){
+            alert("Please accept all cookies first to enable notifications 🍪");
+            if(banner) banner.style.display = 'flex';
+            return;
+        }
+        OneSignalDeferred.push(async function(OneSignal) { await OneSignal.showNativePrompt(); });
+    });
+</script>
 </body>
 </html>
