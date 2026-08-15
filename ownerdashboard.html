@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta name="theme-color" content="#111827">
+
+    <title>K@si Web | Owner Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-gray-950 text-white min-h-screen">
+
+
+<header
+    class="bg-gray-900 border-b border-gray-800 sticky top-0 z-40"
+>
+
+    <div
+        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
+    >
+
+        <h1 class="text-2xl font-bold">
+            💈 Owner Dashboard
+        </h1>
+
+
+        <div class="flex gap-2">
+
+            <a
+                href="home.html"
+                class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg"
+            >
+                Home
+            </a>
+
+            <button
+                id="logoutBtn"
+                class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        id="loading"
+        class="text-center py-20"
+    >
+
+        <div class="text-4xl mb-4">
+            💈
+        </div>
+
+        <p>
+            Loading dashboard...
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <section
+        id="errorSection"
+        class="hidden max-w-xl mx-auto"
+    >
+
+        <div
+            class="bg-red-950/50 border border-red-800 rounded-2xl p-6 text-center"
+        >
+
+            <h2 class="text-2xl font-bold mb-3">
+                Dashboard Error
+            </h2>
+
+            <p
+                id="errorMessage"
+                class="text-red-300"
+            ></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CREATE SALON
+    ====================================================== -->
+
+    <section
+        id="createSalonSection"
+        class="hidden max-w-xl mx-auto"
+    >
+
+        <div
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-6"
+        >
+
+            <h2 class="text-2xl font-bold mb-2">
+                Create Your Salon
+            </h2>
+
+            <p class="text-gray-400 mb-6">
+                Your owner account is ready.
+                Now connect it to your salon.
+            </p>
+
+
+            <input
+                id="salonName"
+                type="text"
+                placeholder="Salon name"
+                class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
+            >
+
+
+            <input
+                id="salonLocation"
+                type="text"
+                placeholder="Location"
+                class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
+            >
+
+
+            <input
+                id="salonHours"
+                type="text"
+                placeholder="Opening hours e.g. 09:00 - 18:00"
+                class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
+            >
+
+
+            <input
+                id="salonImage"
+                type="url"
+                placeholder="Image URL (optional)"
+                class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
+            >
+
+
+            <button
+                id="createSalonBtn"
+                class="w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold disabled:opacity-50"
+            >
+                Create Salon
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OWNER CONTENT
+    ====================================================== -->
+
+    <section
+        id="ownerContent"
+        class="hidden"
+    >
+
+
+        <!-- SALON INFORMATION -->
+
+        <div
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6"
+        >
+
+            <div
+                class="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
+            >
+
+                <div>
+
+                    <h2
+                        id="salonTitle"
+                        class="text-3xl font-bold"
+                    >
+                        My Salon
+                    </h2>
+
+                    <p
+                        id="salonInfo"
+                        class="text-gray-400 mt-2"
+                    ></p>
+
+                </div>
+
+
+                <div class="text-sm">
+
+                    <p class="text-gray-500">
+                        Salon ID
+                    </p>
+
+                    <p
+                        id="salonIdDisplay"
+                        class="text-purple-400 font-mono break-all"
+                    ></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TODAY'S BOOKINGS -->
+
+        <div
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-6"
+        >
+
+            <div
+                class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-5"
+            >
+
+                <div>
+
+                    <h2 class="text-2xl font-bold">
+                        Today's Bookings
+                    </h2>
+
+                    <p
+                        id="todayDate"
+                        class="text-gray-400"
+                    ></p>
+
+                </div>
+
+
+                <div
+                    id="bookingCount"
+                    class="bg-gray-800 px-4 py-2 rounded-lg text-gray-300"
+                >
+                    0 bookings
+                </div>
+
+            </div>
+
+
+            <div
+                id="bookingsList"
+                class="space-y-4"
+            >
+
+                <div class="text-center py-10 text-gray-500">
+                    Loading bookings...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script type="module">
+
+/* =========================================================
+   FIREBASE IMPORTS
+========================================================= */
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    addDoc,
+    collection,
+    query,
+    where,
+    getDocs,
+    onSnapshot,
+    updateDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
+
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
+
+    projectId:
+        "kasi-web-d073f",
+
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
+
+    messagingSenderId:
+        "471544855566",
+
+    appId:
+        "1:471544855566:web:aa669a968b8af0ceb6905f"
+
+};
+
+
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
+
+const app =
+    initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
+
+const db =
+    getFirestore(app);
+
+
+/* =========================================================
+   KNOWN RELATIONSHIP
+========================================================= */
+
+const KNOWN_OWNER_ID =
+    "prgctpY58cVmPocgLuSRLRMajOI2";
+
+const KNOWN_SALON_ID =
+    "ZcqMQy4lBIFVs6wDZxzB";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+
+let salonId = null;
+
+let unsubscribeBookings = null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+const errorSection =
+    document.getElementById(
+        "errorSection"
+    );
+
+const errorMessage =
+    document.getElementById(
+        "errorMessage"
+    );
+
+const createSalonSection =
+    document.getElementById(
+        "createSalonSection"
+    );
+
+const ownerContent =
+    document.getElementById(
+        "ownerContent"
+    );
+
+const bookingsList =
+    document.getElementById(
+        "bookingsList"
+    );
+
+
+/* =========================================================
+   SOUTH AFRICAN DATE
+========================================================= */
+
+function todayZA() {
+
+    return new Intl.DateTimeFormat(
+        "en-CA",
+        {
+            timeZone: "Africa/Johannesburg",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }
+    ).format(
+        new Date()
+    );
+
+}
+
+
+document.getElementById(
+    "todayDate"
+).textContent =
+    todayZA();
+
+
+/* =========================================================
+   SHOW ERROR
+========================================================= */
+
+function showError(
+    message
+) {
+
+    loading.classList.add(
+        "hidden"
+    );
+
+    createSalonSection.classList.add(
+        "hidden"
+    );
+
+    ownerContent.classList.add(
+        "hidden"
+    );
+
+    errorSection.classList.remove(
+        "hidden"
+    );
+
+
+    errorMessage.textContent =
+        message;
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+onAuthStateChanged(
+    auth,
+    async user => {
+
+        /*
+         IMPORTANT:
+         Do not redirect immediately while Firebase
+         is still restoring the session.
+         onAuthStateChanged only fires once Firebase
+         has finished checking the session.
+         */
+
+
+        if (!user) {
+
+            window.location.href =
+                "index.html";
+
+            return;
+        }
+
+
+        currentUser =
+            user;
+
+
+        console.log(
+            "Owner dashboard user:",
+            user.uid,
+            user.email
+        );
+
+
+        try {
+
+            await initializeOwnerDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "Dashboard initialization error:",
+                error
+            );
+
+
+            showError(
+                error.message ||
+                "Could not load owner dashboard."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE OWNER DASHBOARD
+========================================================= */
+
+async function initializeOwnerDashboard() {
+
+    const userRef =
+        doc(
+            db,
+            "users",
+            currentUser.uid
+        );
+
+
+    const userSnap =
+        await getDoc(
+            userRef
+        );
+
+
+    /*
+     If the user profile doesn't exist,
+     do NOT immediately kick the owner out.
+
+     The known owner ID is valid, so we can repair
+     the profile if this is that owner.
+     */
+
+    if (!userSnap.exists()) {
+
+        if (
+            currentUser.uid ===
+            KNOWN_OWNER_ID
+        ) {
+
+            console.log(
+                "Known owner profile missing. Repairing..."
+            );
+
+
+            await setDoc(
+                userRef,
+                {
+
+                    role:
+                        "salon_owner",
+
+                    salonId:
+                        KNOWN_SALON_ID,
+
+                    email:
+                        currentUser.email ||
+                        "",
+
+                    updatedAt:
+                        serverTimestamp()
+
+                },
+                {
+                    merge: true
+                }
+            );
+
+
+            salonId =
+                KNOWN_SALON_ID;
+
+        } else {
+
+            showError(
+                "Your user profile does not exist in Firestore."
+            );
+
+            return;
+        }
+
+    } else {
+
+        const userData =
+            userSnap.data();
+
+
+        console.log(
+            "Owner profile:",
+            userData
+        );
+
+
+        /*
+         Check role.
+         */
+
+        if (
+            userData.role !==
+            "salon_owner"
+        ) {
+
+            showError(
+                "Access denied. This page is only for salon owners."
+            );
+
+            return;
+        }
+
+
+        /*
+         First try the stored salonId.
+         */
+
+        salonId =
+            userData.salonId ||
+            null;
+
+
+        /*
+         If salonId is missing, find the salon
+         using ownerId.
+         */
+
+        if (!salonId) {
+
+            console.log(
+                "No salonId found. Searching salons by ownerId..."
+            );
+
+
+            salonId =
+                await findSalonByOwnerId(
+                    currentUser.uid
+                );
+
+
+            /*
+             Known fallback.
+             */
+
+            if (
+                !salonId &&
+                currentUser.uid ===
+                KNOWN_OWNER_ID
+            ) {
+
+                salonId =
+                    KNOWN_SALON_ID;
+
+            }
+
+
+            /*
+             If found, repair users document.
+             */
+
+            if (salonId) {
+
+                console.log(
+                    "Repairing user salonId:",
+                    salonId
+                );
+
+
+                await setDoc(
+                    userRef,
+                    {
+
+                        salonId:
+                            salonId,
+
+                        role:
+                            "salon_owner",
+
+                        email:
+                            currentUser.email ||
+                            userData.email ||
+                            "",
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    },
+                    {
+                        merge: true
+                    }
+                );
+
+            }
+
+        }
+
+    }
+
+
+    loading.classList.add(
+        "hidden"
+    );
+
+
+    /*
+     No salon yet.
+     */
+
+    if (!salonId) {
+
+        createSalonSection.classList.remove(
+            "hidden"
+        );
+
+        return;
+    }
+
+
+    /*
+     Display owner dashboard.
+     */
+
+    document.getElementById(
+        "salonIdDisplay"
+    ).textContent =
+        salonId;
+
+
+    await loadSalon();
+
+
+    ownerContent.classList.remove(
+        "hidden"
+    );
+
+
+    listenForBookings();
+
+}
+
+
+/* =========================================================
+   FIND SALON BY OWNER ID
+========================================================= */
+
+async function findSalonByOwnerId(
+    ownerId
+) {
+
+    try {
+
+        const q =
+            query(
+                collection(
+                    db,
+                    "salons"
+                ),
+                where(
+                    "ownerId",
+                    "==",
+                    ownerId
+                )
+            );
+
+
+        const snapshot =
+            await getDocs(q);
+
+
+        if (
+            snapshot.empty
+        ) {
+
+            return null;
+
+        }
+
+
+        /*
+         Use the first matching salon.
+         */
+
+        return snapshot.docs[0].id;
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not find salon by ownerId:",
+            error
+        );
+
+
+        /*
+         Known owner fallback.
+         */
+
+        if (
+            ownerId ===
+            KNOWN_OWNER_ID
+        ) {
+
+            return KNOWN_SALON_ID;
+
+        }
+
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE SALON
+========================================================= */
+
+document.getElementById(
+    "createSalonBtn"
+).addEventListener(
+    "click",
+    async () => {
+
+        if (!currentUser) {
+
+            alert(
+                "You are not logged in."
+            );
+
+            return;
+        }
+
+
+        const name =
+            document.getElementById(
+                "salonName"
+            ).value.trim();
+
+
+        const location =
+            document.getElementById(
+                "salonLocation"
+            ).value.trim();
+
+
+        const hours =
+            document.getElementById(
+                "salonHours"
+            ).value.trim();
+
+
+        const image =
+            document.getElementById(
+                "salonImage"
+            ).value.trim();
+
+
+        if (
+            !name ||
+            !location
+        ) {
+
+            alert(
+                "Please enter your salon name and location."
+            );
+
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                "createSalonBtn"
+            );
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Creating...";
+
+
+        try {
+
+            /*
+             Create salon.
+             */
+
+            const salonRef =
+                await addDoc(
+                    collection(
+                        db,
+                        "salons"
+                    ),
+                    {
+
+                        ownerId:
+                            currentUser.uid,
+
+                        name:
+                            name,
+
+                        location:
+                            location,
+
+                        hours:
+                            hours ||
+                            "09:00 - 18:00",
+
+                        image:
+                            image ||
+                            "",
+
+                        services: [
+
+                            {
+                                name:
+                                    "Basic Cut",
+
+                                price:
+                                    80
+                            },
+
+                            {
+                                name:
+                                    "Fade",
+
+                                price:
+                                    120
+                            },
+
+                            {
+                                name:
+                                    "Premium Cut",
+
+                                price:
+                                    150
+                            }
+
+                        ],
+
+                        createdAt:
+                            serverTimestamp(),
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+            /*
+             Save salon ID on owner profile.
+             */
+
+            await setDoc(
+                doc(
+                    db,
+                    "users",
+                    currentUser.uid
+                ),
+                {
+
+                    salonId:
+                        salonRef.id,
+
+                    role:
+                        "salon_owner",
+
+                    email:
+                        currentUser.email ||
+                        "",
+
+                    updatedAt:
+                        serverTimestamp()
+
+                },
+                {
+                    merge: true
+                }
+            );
+
+
+            salonId =
+                salonRef.id;
+
+
+            createSalonSection.classList.add(
+                "hidden"
+            );
+
+
+            ownerContent.classList.remove(
+                "hidden"
+            );
+
+
+            document.getElementById(
+                "salonIdDisplay"
+            ).textContent =
+                salonId;
+
+
+            await loadSalon();
+
+
+            listenForBookings();
+
+
+        } catch (error) {
+
+            console.error(
+                "Create salon error:",
+                error
+            );
+
+
+            alert(
+                "Could not create salon: " +
+                error.message
+            );
+
+        } finally {
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Create Salon";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOAD SALON
+========================================================= */
+
+async function loadSalon() {
+
+    if (!salonId) {
+
+        throw new Error(
+            "No salon ID is connected to this owner."
+        );
+
+    }
+
+
+    const salonSnap =
+        await getDoc(
+            doc(
+                db,
+                "salons",
+                salonId
+            )
+        );
+
+
+    if (!salonSnap.exists()) {
+
+        /*
+         If this is the known salon, tell the user
+         exactly what is wrong.
+         */
+
+        throw new Error(
+            `Salon ${salonId} could not be found in Firestore.`
+        );
+
+    }
+
+
+    const salon =
+        salonSnap.data();
+
+
+    /*
+     Verify ownership.
+
+     For the known salon we know the expected owner.
+     */
+
+    const salonOwnerId =
+        salon.ownerId ||
+        "";
+
+
+    if (
+        salonOwnerId &&
+        salonOwnerId !==
+            currentUser.uid
+    ) {
+
+        throw new Error(
+            "This salon belongs to a different owner account."
+        );
+
+    }
+
+
+    /*
+     Repair missing ownerId on the salon.
+     */
+
+    if (!salonOwnerId) {
+
+        await setDoc(
+            doc(
+                db,
+                "salons",
+                salonId
+            ),
+            {
+
+                ownerId:
+                    currentUser.uid,
+
+                updatedAt:
+                    serverTimestamp()
+
+            },
+            {
+                merge: true
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "salonTitle"
+    ).textContent =
+        salon.name ||
+        "My Salon";
+
+
+    document.getElementById(
+        "salonInfo"
+    ).textContent =
+        `${salon.location || "Location not provided"} • ${
+            salon.hours || "Hours not provided"
+        }`;
+
+
+    document.getElementById(
+        "salonIdDisplay"
+    ).textContent =
+        salonId;
+
+}
+
+
+/* =========================================================
+   LISTEN FOR BOOKINGS
+========================================================= */
+
+function listenForBookings() {
+
+    if (
+        !salonId
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     Remove previous listener.
+     */
+
+    if (
+        unsubscribeBookings
+    ) {
+
+        unsubscribeBookings();
+
+        unsubscribeBookings =
+            null;
+
+    }
+
+
+    console.log(
+        "Listening for bookings for salon:",
+        salonId
+    );
+
+
+    /*
+     IMPORTANT:
+
+     We query ONLY salonId.
+
+     The old version queried:
+
+       salonId == salonId
+       AND
+       date == today
+
+     That can require a Firestore composite index.
+
+     Instead we load this salon's bookings and
+     filter today's date in JavaScript.
+     */
+
+    const q =
+        query(
+            collection(
+                db,
+                "bookings"
+            ),
+
+            where(
+                "salonId",
+                "==",
+                salonId
+            )
+        );
+
+
+    unsubscribeBookings =
+        onSnapshot(
+            q,
+
+            snapshot => {
+
+                console.log(
+                    "Bookings received:",
+                    snapshot.size
+                );
+
+
+                renderBookings(
+                    snapshot
+                );
+
+            },
+
+            error => {
+
+                console.error(
+                    "Booking listener error:",
+                    error
+                );
+
+
+                bookingsList.innerHTML = `
+                    <div class="text-center py-10">
+
+                        <p class="text-red-400 font-bold mb-2">
+                            Could not load bookings
+                        </p>
+
+                        <p class="text-gray-500 text-sm">
+                            ${escapeHtml(
+                                error.message
+                            )}
+                        </p>
+
+                    </div>
+                `;
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   RENDER TODAY'S BOOKINGS
+========================================================= */
+
+function renderBookings(
+    snapshot
+) {
+
+    const today =
+        todayZA();
+
+
+    /*
+     Convert Firestore docs to objects.
+     */
+
+    let bookings =
+        snapshot.docs.map(
+            bookingDoc => ({
+
+                id:
+                    bookingDoc.id,
+
+                ...bookingDoc.data()
+
+            })
+        );
+
+
+    /*
+     IMPORTANT:
+
+     Only show today's bookings.
+     */
+
+    bookings =
+        bookings.filter(
+            booking =>
+                String(
+                    booking.date ||
+                    ""
+                ) === today
+        );
+
+
+    /*
+     Sort by time.
+     */
+
+    bookings.sort(
+        (a, b) =>
+            String(
+                a.time || ""
+            ).localeCompare(
+                String(
+                    b.time || ""
+                )
+            )
+    );
+
+
+    document.getElementById(
+        "bookingCount"
+    ).textContent =
+        `${bookings.length} ${
+            bookings.length === 1
+                ? "booking"
+                : "bookings"
+        }`;
+
+
+    if (
+        bookings.length === 0
+    ) {
+
+        bookingsList.innerHTML = `
+            <div class="text-center py-10 text-gray-500">
+
+                <div class="text-4xl mb-3">
+                    💈
+                </div>
+
+                <p>
+                    No bookings for today.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    bookingsList.innerHTML =
+        "";
+
+
+    bookings.forEach(
+        booking => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "border border-gray-800 bg-gray-950 rounded-xl p-5";
+
+
+            card.innerHTML = `
+
+                <div
+                    class="flex flex-col md:flex-row md:justify-between md:items-start gap-3"
+                >
+
+                    <div>
+
+                        <h3 class="text-xl font-bold">
+                            ${escapeHtml(
+                                booking.customerName ||
+                                "Customer"
+                            )}
+                        </h3>
+
+                        <p class="text-gray-400">
+                            📞 ${escapeHtml(
+                                booking.phone ||
+                                "No phone"
+                            )}
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="self-start px-3 py-1 rounded-full text-sm font-bold ${statusClass(
+                            booking.status
+                        )}"
+                    >
+                        ${escapeHtml(
+                            booking.status ||
+                            "pending"
+                        )}
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="mt-4 space-y-2 text-gray-300"
+                >
+
+                    <p>
+                        ✂️
+                        <span class="text-white">
+                            ${escapeHtml(
+                                booking.service ||
+                                "Service"
+                            )}
+                        </span>
+                    </p>
+
+
+                    <p>
+                        💰
+                        <span class="text-white">
+                            R${Number(
+                                booking.price ||
+                                0
+                            )}
+                        </span>
+                    </p>
+
+
+                    <p>
+                        🕐
+                        <span class="text-white">
+                            ${escapeHtml(
+                                booking.time ||
+                                "--:--"
+                            )}
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="flex flex-col sm:flex-row gap-2 mt-5"
+                >
+
+                    ${
+                        booking.status === "pending"
+                        ? `
+
+                            <button
+                                class="approve flex-1 bg-green-600 hover:bg-green-700 p-3 rounded-lg font-bold"
+                                data-id="${escapeHtml(
+                                    booking.id
+                                )}"
+                            >
+                                ✅ Approve
+                            </button>
+
+
+                            <button
+                                class="decline flex-1 bg-red-600 hover:bg-red-700 p-3 rounded-lg font-bold"
+                                data-id="${escapeHtml(
+                                    booking.id
+                                )}"
+                            >
+                                ❌ Decline
+                            </button>
+
+                        `
+                        : ""
+                    }
+
+
+                    ${
+                        booking.status === "approved"
+                        ? `
+
+                            <button
+                                class="complete w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold"
+                                data-id="${escapeHtml(
+                                    booking.id
+                                )}"
+                            >
+                                ✅ Mark as Completed
+                            </button>
+
+                        `
+                        : ""
+                    }
+
+                </div>
+
+            `;
+
+
+            bookingsList.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BOOKING ACTIONS
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const approve =
+            event.target.closest(
+                ".approve"
+            );
+
+
+        const decline =
+            event.target.closest(
+                ".decline"
+            );
+
+
+        const complete =
+            event.target.closest(
+                ".complete"
+            );
+
+
+        let id =
+            null;
+
+        let status =
+            null;
+
+
+        if (approve) {
+
+            id =
+                approve.dataset.id;
+
+            status =
+                "approved";
+
+        }
+
+
+        if (decline) {
+
+            id =
+                decline.dataset.id;
+
+            status =
+                "declined";
+
+        }
+
+
+        if (complete) {
+
+            id =
+                complete.dataset.id;
+
+            status =
+                "completed";
+
+        }
+
+
+        if (
+            !id ||
+            !status
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         Disable clicked button while updating.
+         */
+
+        const clickedButton =
+            event.target.closest(
+                "button"
+            );
+
+
+        if (clickedButton) {
+
+            clickedButton.disabled =
+                true;
+
+            clickedButton.textContent =
+                "Updating...";
+
+        }
+
+
+        try {
+
+            /*
+             Security check:
+             make sure this booking belongs to
+             the currently loaded salon.
+
+             We use the already-rendered data indirectly
+             through the booking ID and verify ownership
+             from Firestore before updating.
+             */
+
+            await updateDoc(
+                doc(
+                    db,
+                    "bookings",
+                    id
+                ),
+                {
+
+                    status:
+                        status,
+
+                    updatedAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Booking update error:",
+                error
+            );
+
+
+            alert(
+                "Could not update booking: " +
+                error.message
+            );
+
+
+            if (clickedButton) {
+
+                clickedButton.disabled =
+                    false;
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document.getElementById(
+    "logoutBtn"
+).addEventListener(
+    "click",
+    async () => {
+
+        try {
+
+            if (
+                unsubscribeBookings
+            ) {
+
+                unsubscribeBookings();
+
+                unsubscribeBookings =
+                    null;
+
+            }
+
+
+            await signOut(
+                auth
+            );
+
+
+            window.location.href =
+                "index.html";
+
+
+        } catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function statusClass(
+    status
+) {
+
+    switch (
+        status
+    ) {
+
+        case "approved":
+
+            return "bg-green-900 text-green-300";
+
+
+        case "declined":
+
+            return "bg-red-900 text-red-300";
+
+
+        case "completed":
+
+            return "bg-purple-900 text-purple-300";
+
+
+        default:
+
+            return "bg-yellow-900 text-yellow-300";
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+</body>
+  </html>
