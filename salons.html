@@ -468,7 +468,7 @@ const db = getFirestore(app);
 ========================================================= */
 
 const KNOWN_SALON_ID =
-    "ZcqMQy4lBIFVs6wDZxzB";
+    "OleEsl79wihSXIHynsVw";
 
 
 const KNOWN_OWNER_ID =
@@ -702,17 +702,6 @@ async function loadSalons() {
             }
 
 
-            /*
-             * Important:
-             *
-             * We DO NOT require ownerId to display
-             * the salon.
-             *
-             * ownerId is only required when making
-             * a booking.
-             */
-
-
             renderSalon(
                 id,
                 salon
@@ -805,30 +794,13 @@ async function loadSalons() {
 
 function renderSalon(id, salon) {
 
-    /*
-     * IMPORTANT:
-     *
-     * Use the Firestore document ID.
-     *
-     * Your salon:
-     *
-     * ZcqMQy4lBIFVs6wDZxzB
-     */
-
-
     const salonId =
         id;
 
 
-    /*
-     * Use ownerId from Firestore.
-     *
-     * If it is the known salon and ownerId is
-     * missing, use your existing owner ID.
-     */
-
     const ownerId =
         salon.ownerId ||
+        salon.OwnerId ||
         (
             salonId === KNOWN_SALON_ID
                 ? KNOWN_OWNER_ID
@@ -1100,6 +1072,7 @@ function openBooking(
         ownerId:
             ownerId ||
             salon.ownerId ||
+            salon.OwnerId ||
             (
                 salonId === KNOWN_SALON_ID
                     ? KNOWN_OWNER_ID
@@ -1359,12 +1332,9 @@ confirmBooking.addEventListener(
 
         let ownerId =
             selectedSalon.ownerId ||
+            selectedSalon.OwnerId ||
             "";
 
-
-        /*
-         * YOUR EXISTING SALON
-         */
 
         if (
             salonId === KNOWN_SALON_ID &&
