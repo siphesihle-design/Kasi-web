@@ -2,1192 +2,389 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#111827">
-
     <title>K@si Web | Salons</title>
-
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <style>
+        body {
+            padding-bottom: 90px;
+        }
+        .nav-grid {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(55, 65, 81, 0.5);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 9998;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+        .nav-item.active, .nav-item:hover {
+            color: #a855f7;
+        }
+    </style>
 </head>
-
 
 <body class="bg-gray-950 text-white min-h-screen">
 
-
-<header
-    class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur border-b border-gray-800"
->
-
-    <div
-        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
-    >
-
-        <h1 class="text-2xl font-bold">
-            ✂️ K@si Web
+<header class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold flex items-center gap-2">
+            <i class='bx bx-cut text-purple-500'></i> K@si Web
         </h1>
 
-
         <div class="flex gap-2">
-
-            <a
-                href="home.html"
-                class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg"
-            >
+            <a href="home.html" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition">
                 Home
             </a>
-
-            <button
-                id="logoutBtn"
-                class="hidden bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg"
-            >
+            <button id="logoutBtn" class="hidden bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition">
                 Logout
             </button>
-
         </div>
-
     </div>
-
 </header>
 
-
 <main class="max-w-7xl mx-auto px-4 py-8">
-
-
     <div class="text-center mb-10">
-
-        <h2
-            class="text-4xl md:text-5xl font-black mb-3"
-        >
+        <h2 class="text-4xl md:text-5xl font-black mb-3 bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent">
             🔥 Find Your Barber
         </h2>
-
         <p class="text-gray-400">
             Fresh cuts without standing in line.
         </p>
-
     </div>
 
-
-    <div
-        id="loginStatus"
-        class="text-center mb-8"
-    >
+    <div id="loginStatus" class="text-center mb-8 text-sm text-gray-400">
         Checking login...
     </div>
 
-
-    <div
-        id="salonsList"
-        class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-
+    <div id="salonsList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="text-center col-span-full text-gray-400">
             Loading salons...
         </div>
-
     </div>
-
 </main>
 
-
-<!-- =====================================================
-     BOOKING MODAL
-===================================================== -->
-
-<div
-    id="bookingModal"
-    class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
->
-
-    <div
-        class="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
-    >
-
-        <h2 class="text-2xl font-bold mb-5">
+<!-- BOOKING MODAL -->
+<div id="bookingModal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+        <h2 class="text-2xl font-bold mb-1">
             Book Appointment
         </h2>
+        <p id="selectedSalonName" class="text-purple-400 mb-5 font-semibold text-lg"></p>
 
+        <label class="block text-xs font-semibold text-gray-400 mb-1">Full Name</label>
+        <input id="customerName" type="text" placeholder="e.g. Siphesihle" autocomplete="name" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500 text-white">
 
-        <p
-            id="selectedSalonName"
-            class="text-purple-400 mb-5 font-semibold"
-        ></p>
+        <label class="block text-xs font-semibold text-gray-400 mb-1">Phone Number</label>
+        <input id="customerPhone" type="tel" placeholder="e.g. 0812345678" autocomplete="tel" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500 text-white">
 
-
-        <input
-            id="customerName"
-            type="text"
-            placeholder="Your full name"
-            autocomplete="name"
-            class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
-        >
-
-
-        <input
-            id="customerPhone"
-            type="tel"
-            placeholder="Phone number"
-            autocomplete="tel"
-            class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
-        >
-
-
-        <select
-            id="serviceSelect"
-            class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
-        >
-
-            <option value="">
-                Choose service
-            </option>
-
+        <label class="block text-xs font-semibold text-gray-400 mb-1">Select Service</label>
+        <select id="serviceSelect" class="w-full p-3 mb-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500 text-white">
+            <option value="">Choose service</option>
         </select>
 
-
-        <div class="grid grid-cols-2 gap-3">
-
-            <input
-                id="bookingDate"
-                type="date"
-                class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
-            >
-
-            <input
-                id="bookingTime"
-                type="time"
-                class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500"
-            >
-
+        <div class="grid grid-cols-2 gap-3 mb-5">
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Date</label>
+                <input id="bookingDate" type="date" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500 text-white">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Time</label>
+                <input id="bookingTime" type="time" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-purple-500 text-white">
+            </div>
         </div>
 
-
-        <div class="flex gap-3 mt-5">
-
-            <button
-                id="confirmBooking"
-                class="flex-1 bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold disabled:opacity-50"
-            >
+        <div class="flex gap-3">
+            <button id="confirmBooking" class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 p-3 rounded-lg font-bold transition disabled:opacity-50">
                 Confirm
             </button>
-
-            <button
-                id="cancelBooking"
-                class="flex-1 bg-gray-700 hover:bg-gray-600 p-3 rounded-lg"
-            >
+            <button id="cancelBooking" class="flex-1 bg-gray-800 hover:bg-gray-700 p-3 rounded-lg font-semibold transition">
                 Cancel
             </button>
-
         </div>
-
     </div>
-
 </div>
 
+<!-- BOTTOM NAVIGATION -->
+<div class="nav-grid">
+    <a href="index.html" class="nav-item"><i class='bx bx-home-alt'></i><span>Home</span></a>
+    <a href="home.html" class="nav-item"><i class='bx bx-user'></i><span>Account</span></a>
+    <a href="salons.html" class="nav-item active"><i class='bx bx-cut'></i><span>Salons</span></a>
+</div>
 
 <script type="module">
-
-/* =========================================================
-   FIREBASE IMPORTS
-========================================================= */
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-
-import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    addDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
-
-    authDomain:
-        "kasi-web-d073f.firebaseapp.com",
-
-    projectId:
-        "kasi-web-d073f",
-
-    storageBucket:
-        "kasi-web-d073f.firebasestorage.app",
-
-    messagingSenderId:
-        "471544855566",
-
-    appId:
-        "1:471544855566:web:aa669a968b8af0ceb6905f"
-
+    apiKey: "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
+    authDomain: "kasi-web-d073f.firebaseapp.com",
+    projectId: "kasi-web-d073f",
+    storageBucket: "kasi-web-d073f.firebasestorage.app",
+    messagingSenderId: "471544855566",
+    appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-/* =========================================================
-   INITIALIZE FIREBASE
-========================================================= */
-
-const app =
-    initializeApp(firebaseConfig);
-
-const auth =
-    getAuth(app);
-
-const db =
-    getFirestore(app);
-
-
-/* =========================================================
-   KNOWN OWNER / SALON
-   These are used only as a safety fallback.
-========================================================= */
-
-const KNOWN_OWNER_ID =
-    "prgctpY58cVmPocgLuSRLRMajOI2";
-
-const KNOWN_SALON_ID =
-    "ZcqMQy4lBIFVs6wDZxzB";
-
-
-/* =========================================================
-   STATE
-========================================================= */
+const KNOWN_OWNER_ID = "prgctpY58cVmPocgLuSRLRMajOI2";
+const KNOWN_SALON_ID = "ZcqMQy4lBIFVs6wDZxzB";
 
 let currentUser = null;
-
 let selectedSalon = null;
 
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const salonsList =
-    document.getElementById(
-        "salonsList"
-    );
-
-const modal =
-    document.getElementById(
-        "bookingModal"
-    );
-
-const logoutBtn =
-    document.getElementById(
-        "logoutBtn"
-    );
-
-const loginStatus =
-    document.getElementById(
-        "loginStatus"
-    );
-
-const serviceSelect =
-    document.getElementById(
-        "serviceSelect"
-    );
-
-const confirmBooking =
-    document.getElementById(
-        "confirmBooking"
-    );
-
-
-/* =========================================================
-   SOUTH AFRICAN DATE
-========================================================= */
+const salonsList = document.getElementById("salonsList");
+const modal = document.getElementById("bookingModal");
+const logoutBtn = document.getElementById("logoutBtn");
+const loginStatus = document.getElementById("loginStatus");
+const serviceSelect = document.getElementById("serviceSelect");
+const confirmBooking = document.getElementById("confirmBooking");
 
 function getTodaySouthAfrica() {
-
-    return new Intl.DateTimeFormat(
-        "en-CA",
-        {
-            timeZone: "Africa/Johannesburg",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit"
-        }
-    ).format(
-        new Date()
-    );
-
+    return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Africa/Johannesburg",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    }).format(new Date());
 }
 
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-onAuthStateChanged(
-    auth,
-    user => {
-
-        currentUser =
-            user || null;
-
-
-        if (user) {
-
-            loginStatus.innerHTML = `
-                👋 Logged in as
-                <b>${escapeHtml(
-                    user.email || "User"
-                )}</b>
-            `;
-
-            logoutBtn.classList.remove(
-                "hidden"
-            );
-
-        } else {
-
-            loginStatus.innerHTML = `
-                ⚠️ Login is required before booking.
-            `;
-
-            logoutBtn.classList.add(
-                "hidden"
-            );
-
-        }
-
+onAuthStateChanged(auth, user => {
+    currentUser = user || null;
+    if (user) {
+        loginStatus.innerHTML = `👋 Logged in as <b class="text-purple-400">${escapeHtml(user.email || "User")}</b>`;
+        logoutBtn.classList.remove("hidden");
+    } else {
+        loginStatus.innerHTML = `⚠️ <span class="text-yellow-400">Login is required before booking.</span>`;
+        logoutBtn.classList.add("hidden");
     }
-);
+});
 
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-logoutBtn.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            await signOut(auth);
-
-            window.location.href =
-                "index.html";
-
-        } catch (error) {
-
-            console.error(
-                "Logout error:",
-                error
-            );
-
-        }
-
+logoutBtn.addEventListener("click", async () => {
+    try {
+        await signOut(auth);
+        window.location.href = "index.html";
+    } catch (error) {
+        console.error("Logout error:", error);
     }
-);
-
-
-/* =========================================================
-   LOAD SALONS
-========================================================= */
+});
 
 async function loadSalons() {
-
-    salonsList.innerHTML = `
-        <div class="text-center col-span-full text-gray-400">
-            Loading salons...
-        </div>
-    `;
-
+    salonsList.innerHTML = `<div class="text-center col-span-full text-gray-400">Loading salons...</div>`;
 
     try {
-
-        const snapshot =
-            await getDocs(
-                collection(
-                    db,
-                    "salons"
-                )
-            );
-
-
+        const snapshot = await getDocs(collection(db, "salons"));
         salonsList.innerHTML = "";
 
-
         if (snapshot.empty) {
-
-            salonsList.innerHTML = `
-                <div class="col-span-full text-center text-gray-400 py-10">
-                    No salons are registered yet.
-                </div>
-            `;
-
+            salonsList.innerHTML = `<div class="col-span-full text-center text-gray-400 py-10">No salons registered yet.</div>`;
             return;
         }
 
-
         let count = 0;
-
-
-        snapshot.forEach(
-            salonDoc => {
-
-                const salon =
-                    salonDoc.data();
-
-
-                /*
-                 Ignore malformed salon documents.
-                 */
-
-                if (!salon) {
-                    return;
-                }
-
-
-                renderSalon(
-                    salonDoc.id,
-                    salon
-                );
-
-
-                count++;
-
-            }
-        );
-
+        snapshot.forEach(salonDoc => {
+            const salon = salonDoc.data();
+            if (!salon) return;
+            renderSalon(salonDoc.id, salon);
+            count++;
+        });
 
         if (count === 0) {
-
-            salonsList.innerHTML = `
-                <div class="col-span-full text-center text-gray-400">
-                    No valid salons found.
-                </div>
-            `;
-
+            salonsList.innerHTML = `<div class="col-span-full text-center text-gray-400">No valid salons found.</div>`;
         }
-
-
     } catch (error) {
-
-        console.error(
-            "Load salons error:",
-            error
-        );
-
-
+        console.error("Load salons error:", error);
         salonsList.innerHTML = `
             <div class="col-span-full text-center text-red-400 py-10">
-
-                <p class="font-bold mb-2">
-                    Unable to load salons.
-                </p>
-
-                <p class="text-sm">
-                    ${escapeHtml(
-                        error.message
-                    )}
-                </p>
-
-            </div>
-        `;
-
+                <p class="font-bold mb-2">Unable to load salons.</p>
+                <p class="text-sm">${escapeHtml(error.message)}</p>
+            </div>`;
     }
-
 }
 
+function renderSalon(id, salon) {
+    const services = Array.isArray(salon.services) ? salon.services : [];
+    const card = document.createElement("div");
+    card.className = "bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-purple-600 transition flex flex-col justify-between";
 
-/* =========================================================
-   RENDER SALON
-========================================================= */
-
-function renderSalon(
-    id,
-    salon
-) {
-
-    const services =
-        Array.isArray(
-            salon.services
-        )
-            ? salon.services
-            : [];
-
-
-    const card =
-        document.createElement(
-            "div"
-        );
-
-
-    card.className =
-        "bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-purple-600 transition";
-
-
-    const image =
-        salon.image ||
-        "https://via.placeholder.com/600x300?text=Kasi+Salon";
-
-
-    const ownerId =
-        salon.ownerId ||
-        (
-            id === KNOWN_SALON_ID
-                ? KNOWN_OWNER_ID
-                : ""
-        );
-
+    const image = salon.image || "https://via.placeholder.com/600x300?text=Kasi+Salon";
+    const ownerId = salon.ownerId || (id === KNOWN_SALON_ID ? KNOWN_OWNER_ID : "");
 
     card.innerHTML = `
-
-        <img
-            src="${escapeHtml(image)}"
-            class="w-full h-48 object-cover rounded-xl mb-4"
-            alt="${escapeHtml(
-                salon.name ||
-                "Salon"
-            )}"
-            onerror="this.src='https://via.placeholder.com/600x300?text=Kasi+Salon'"
-        >
-
-
-        <h3 class="text-2xl font-bold mb-2">
-            ${escapeHtml(
-                salon.name ||
-                "Unnamed Salon"
-            )}
-        </h3>
-
-
-        <p class="text-gray-400 mb-2">
-            📍 ${escapeHtml(
-                salon.location ||
-                "Location not provided"
-            )}
-        </p>
-
-
-        <p class="text-gray-400 mb-4">
-            🕐 ${escapeHtml(
-                salon.hours ||
-                "Hours not provided"
-            )}
-        </p>
-
-
-        ${
-            services.length
-                ? `
-                    <p class="text-gray-500 text-sm mb-4">
-                        ${services.length}
-                        service${services.length === 1 ? "" : "s"}
-                        available
-                    </p>
-                `
-                : `
-                    <p class="text-yellow-500 text-sm mb-4">
-                        No services listed
-                    </p>
-                `
-        }
-
-
-        <button
-            class="bookBtn w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-xl font-bold transition"
-        >
+        <div>
+            <img src="${escapeHtml(image)}" class="w-full h-48 object-cover rounded-xl mb-4" alt="${escapeHtml(salon.name || "Salon")}" onerror="this.src='https://via.placeholder.com/600x300?text=Kasi+Salon'">
+            <h3 class="text-2xl font-bold mb-2">${escapeHtml(salon.name || "Unnamed Salon")}</h3>
+            <p class="text-gray-400 mb-1 flex items-center gap-1"><i class='bx bx-map text-purple-400'></i> ${escapeHtml(salon.location || "Location not provided")}</p>
+            <p class="text-gray-400 mb-4 flex items-center gap-1"><i class='bx bx-time text-purple-400'></i> ${escapeHtml(salon.hours || "Hours not provided")}</p>
+            ${
+                services.length
+                    ? `<p class="text-purple-400 text-sm mb-4 font-semibold">${services.length} service${services.length === 1 ? "" : "s"} available</p>`
+                    : `<p class="text-yellow-500 text-sm mb-4">No services listed</p>`
+            }
+        </div>
+        <button class="bookBtn w-full bg-purple-600 hover:bg-purple-700 p-3 rounded-xl font-bold transition">
             Book Appointment
         </button>
-
     `;
 
+    card.querySelector(".bookBtn").addEventListener("click", () => {
+        openBooking(id, salon, ownerId);
+    });
 
-    const bookButton =
-        card.querySelector(
-            ".bookBtn"
-        );
-
-
-    bookButton.addEventListener(
-        "click",
-        () => {
-
-            openBooking(
-                id,
-                salon,
-                ownerId
-            );
-
-        }
-    );
-
-
-    salonsList.appendChild(
-        card
-    );
-
+    salonsList.appendChild(card);
 }
 
-
-/* =========================================================
-   OPEN BOOKING
-========================================================= */
-
-function openBooking(
-    salonId,
-    salon,
-    ownerId
-) {
-
+function openBooking(salonId, salon, ownerId) {
     if (!currentUser) {
-
-        alert(
-            "Please login before booking."
-        );
-
-        window.location.href =
-            "index.html";
-
+        alert("Please login before booking.");
+        window.location.href = "home.html";
         return;
     }
 
-
-    /*
-     IMPORTANT:
-     Keep the ownerId attached to the selected salon.
-     */
-
     selectedSalon = {
-
-        id:
-            salonId,
-
-        ownerId:
-            ownerId ||
-            salon.ownerId ||
-            (
-                salonId === KNOWN_SALON_ID
-                    ? KNOWN_OWNER_ID
-                    : ""
-            ),
-
+        id: salonId,
+        ownerId: ownerId || salon.ownerId || (salonId === KNOWN_SALON_ID ? KNOWN_OWNER_ID : ""),
         ...salon
-
     };
 
+    document.getElementById("selectedSalonName").textContent = salon.name || "Selected Salon";
+    serviceSelect.innerHTML = `<option value="">Choose service</option>`;
 
-    document.getElementById(
-        "selectedSalonName"
-    ).textContent =
-        salon.name ||
-        "Selected Salon";
+    const services = Array.isArray(salon.services) ? salon.services : [];
+    services.forEach(service => {
+        if (!service || typeof service !== "object") return;
 
+        const option = document.createElement("option");
+        const name = service.name || "Service";
+        const price = Number(service.price) || 0;
 
-    serviceSelect.innerHTML =
-        `<option value="">
-            Choose service
-        </option>`;
+        option.value = JSON.stringify({ name, price });
+        option.textContent = `${name} - R${price}`;
+        serviceSelect.appendChild(option);
+    });
 
+    const today = getTodaySouthAfrica();
+    const dateInput = document.getElementById("bookingDate");
+    dateInput.min = today;
+    dateInput.value = today;
+    document.getElementById("bookingTime").value = "";
 
-    const services =
-        Array.isArray(
-            salon.services
-        )
-            ? salon.services
-            : [];
-
-
-    services.forEach(
-        service => {
-
-            if (
-                !service ||
-                typeof service !== "object"
-            ) {
-                return;
-            }
-
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            const name =
-                service.name ||
-                "Service";
-
-
-            const price =
-                Number(
-                    service.price
-                ) || 0;
-
-
-            option.value =
-                JSON.stringify({
-                    name:
-                        name,
-                    price:
-                        price
-                });
-
-
-            option.textContent =
-                `${name} - R${price}`;
-
-
-            serviceSelect.appendChild(
-                option
-            );
-
-        }
-    );
-
-
-    const today =
-        getTodaySouthAfrica();
-
-
-    const dateInput =
-        document.getElementById(
-            "bookingDate"
-        );
-
-
-    dateInput.min =
-        today;
-
-
-    dateInput.value =
-        today;
-
-
-    document.getElementById(
-        "bookingTime"
-    ).value = "";
-
-
-    modal.classList.remove(
-        "hidden"
-    );
-
+    modal.classList.remove("hidden");
 }
 
+document.getElementById("cancelBooking").addEventListener("click", closeModal);
+function closeModal() { modal.classList.add("hidden"); }
+modal.addEventListener("click", event => { if (event.target === modal) closeModal(); });
 
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
+confirmBooking.addEventListener("click", async () => {
+    if (!currentUser) { alert("Please login again."); return; }
+    if (!selectedSalon) { alert("Please select a salon."); return; }
 
-document.getElementById(
-    "cancelBooking"
-).addEventListener(
-    "click",
-    closeModal
-);
+    const customerName = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const serviceValue = serviceSelect.value;
+    const date = document.getElementById("bookingDate").value;
+    const time = document.getElementById("bookingTime").value;
 
-
-function closeModal() {
-
-    modal.classList.add(
-        "hidden"
-    );
-
-}
-
-
-/* Close modal when clicking backdrop */
-
-modal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target === modal
-        ) {
-
-            closeModal();
-
-        }
-
+    if (!customerName || !phone || !serviceValue || !date || !time) {
+        alert("Please complete all fields.");
+        return;
     }
-);
 
-
-/* =========================================================
-   CONFIRM BOOKING
-========================================================= */
-
-confirmBooking.addEventListener(
-    "click",
-    async () => {
-
-        if (!currentUser) {
-
-            alert(
-                "Please login again."
-            );
-
-            return;
-        }
-
-
-        if (!selectedSalon) {
-
-            alert(
-                "Please select a salon."
-            );
-
-            return;
-        }
-
-
-        const customerName =
-            document
-                .getElementById(
-                    "customerName"
-                )
-                .value
-                .trim();
-
-
-        const phone =
-            document
-                .getElementById(
-                    "customerPhone"
-                )
-                .value
-                .trim();
-
-
-        const serviceValue =
-            serviceSelect.value;
-
-
-        const date =
-            document
-                .getElementById(
-                    "bookingDate"
-                )
-                .value;
-
-
-        const time =
-            document
-                .getElementById(
-                    "bookingTime"
-                )
-                .value;
-
-
-        if (
-            !customerName ||
-            !phone ||
-            !serviceValue ||
-            !date ||
-            !time
-        ) {
-
-            alert(
-                "Please complete all fields."
-            );
-
-            return;
-        }
-
-
-        let selectedService;
-
-
-        try {
-
-            selectedService =
-                JSON.parse(
-                    serviceValue
-                );
-
-        } catch (error) {
-
-            alert(
-                "Please select a valid service."
-            );
-
-            return;
-
-        }
-
-
-        /*
-         IMPORTANT RELATIONSHIP
-
-         Owner:
-         prgctpY58cVmPocgLuSRLRMajOI2
-
-         Salon:
-         ZcqMQy4lBIFVs6wDZxzB
-        */
-
-        let ownerId =
-            selectedSalon.ownerId ||
-            "";
-
-
-        let salonId =
-            selectedSalon.id ||
-            "";
-
-
-        /*
-         Safety fallback for the known salon.
-         */
-
-        if (
-            salonId === KNOWN_SALON_ID &&
-            !ownerId
-        ) {
-
-            ownerId =
-                KNOWN_OWNER_ID;
-
-        }
-
-
-        if (!salonId) {
-
-            alert(
-                "This salon does not have a valid salon ID."
-            );
-
-            return;
-        }
-
-
-        if (!ownerId) {
-
-            alert(
-                "This salon is not connected to a salon owner yet."
-            );
-
-            console.error(
-                "Missing ownerId for salon:",
-                salonId
-            );
-
-            return;
-        }
-
-
-        confirmBooking.disabled =
-            true;
-
-
-        confirmBooking.textContent =
-            "Booking...";
-
-
-        try {
-
-            const bookingData = {
-
-                /*
-                 Customer
-                 */
-
-                userId:
-                    currentUser.uid,
-
-                customerName:
-                    customerName,
-
-                phone:
-                    phone,
-
-
-                /*
-                 Salon / owner relationship
-                 */
-
-                salonId:
-                    salonId,
-
-                ownerId:
-                    ownerId,
-
-                salonName:
-                    selectedSalon.name ||
-                    "Kasi Salon",
-
-
-                /*
-                 Appointment
-                 */
-
-                service:
-                    selectedService.name,
-
-                price:
-                    Number(
-                        selectedService.price
-                    ) || 0,
-
-                date:
-                    date,
-
-                time:
-                    time,
-
-
-                /*
-                 Status
-                 */
-
-                status:
-                    "pending",
-
-
-                /*
-                 Timestamps
-                 */
-
-                createdAt:
-                    serverTimestamp(),
-
-                updatedAt:
-                    serverTimestamp()
-
-            };
-
-
-            console.log(
-                "Creating booking:",
-                bookingData
-            );
-
-
-            await addDoc(
-                collection(
-                    db,
-                    "bookings"
-                ),
-                bookingData
-            );
-
-
-            alert(
-                "✅ Booking sent successfully!"
-            );
-
-
-            document.getElementById(
-                "customerName"
-            ).value = "";
-
-
-            document.getElementById(
-                "customerPhone"
-            ).value = "";
-
-
-            serviceSelect.value =
-                "";
-
-
-            document.getElementById(
-                "bookingTime"
-            ).value =
-                "";
-
-
-            closeModal();
-
-
-        } catch (error) {
-
-            console.error(
-                "Booking error:",
-                error
-            );
-
-
-            alert(
-                "Booking failed: " +
-                error.message
-            );
-
-        } finally {
-
-            confirmBooking.disabled =
-                false;
-
-
-            confirmBooking.textContent =
-                "Confirm";
-
-        }
-
+    let selectedService;
+    try {
+        selectedService = JSON.parse(serviceValue);
+    } catch (error) {
+        alert("Please select a valid service.");
+        return;
     }
-);
 
+    let ownerId = selectedSalon.ownerId || "";
+    let salonId = selectedSalon.id || "";
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+    if (salonId === KNOWN_SALON_ID && !ownerId) ownerId = KNOWN_OWNER_ID;
 
-function escapeHtml(
-    value
-) {
+    if (!salonId || !ownerId) {
+        alert("This salon is not configured correctly.");
+        return;
+    }
 
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    confirmBooking.disabled = true;
+    confirmBooking.textContent = "Booking...";
 
+    try {
+        const bookingData = {
+            userId: currentUser.uid,
+            customerName: customerName,
+            phone: phone,
+            salonId: salonId,
+            ownerId: ownerId,
+            salonName: selectedSalon.name || "Kasi Salon",
+            service: selectedService.name,
+            price: Number(selectedService.price) || 0,
+            date: date,
+            time: time,
+            status: "pending",
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        };
+
+        await addDoc(collection(db, "bookings"), bookingData);
+
+        alert("✅ Booking sent successfully!");
+        document.getElementById("customerName").value = "";
+        document.getElementById("customerPhone").value = "";
+        serviceSelect.value = "";
+        document.getElementById("bookingTime").value = "";
+        closeModal();
+
+    } catch (error) {
+        console.error("Booking error:", error);
+        alert("Booking failed: " + error.message);
+    } finally {
+        confirmBooking.disabled = false;
+        confirmBooking.textContent = "Confirm";
+    }
+});
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
-
-
-/* =========================================================
-   START
-========================================================= */
 
 loadSalons();
-
 </script>
 
 </body>
-    </html>
+</html>
