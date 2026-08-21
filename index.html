@@ -49,15 +49,6 @@
             cursor: pointer;
         }
 
-        .nav-item i, .nav-item span, button * {
-            pointer-events: none;
-        }
-
-        .nav-item i {
-            font-size: 1.7rem;
-            margin-bottom: 2px;
-        }
-
         .nav-item.active {
             color: #a855f7;
             background: rgba(126, 34, 206, 0.13);
@@ -116,7 +107,7 @@
             </h1>
 
             <div class="flex gap-2">
-                <button id="headerAuthBtn" class="bg-purple-600 hover:bg-purple-700 text-xs px-4 py-2 rounded-xl font-bold flex items-center gap-1">
+                <button type="button" id="headerAuthBtn" class="bg-purple-600 hover:bg-purple-700 text-xs px-4 py-2 rounded-xl font-bold flex items-center gap-1">
                     <i class='bx bx-log-in'></i> Login
                 </button>
             </div>
@@ -138,7 +129,7 @@
         </p>
 
         <!-- GET STARTED BUTTON -->
-        <button id="getStartedBtn" class="primary-btn text-lg px-8 py-4 rounded-2xl shadow-lg shadow-purple-500/25">
+        <button type="button" id="getStartedBtn" class="primary-btn text-lg px-8 py-4 rounded-2xl shadow-lg shadow-purple-500/25">
             <span>Get Started</span>
             <i class='bx bx-right-arrow-alt text-2xl'></i>
         </button>
@@ -147,7 +138,7 @@
     <!-- AUTH MODAL -->
     <div id="authModal" class="modal">
         <div class="bg-gray-950 p-6 rounded-2xl border border-purple-500/40 w-full max-w-md relative shadow-2xl">
-            <button id="closeAuthModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✕</button>
+            <button type="button" id="closeAuthModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✕</button>
             <h3 id="modalTitle" class="text-xl font-bold text-purple-400 mb-4">Login to K@si Web</h3>
 
             <form id="authForm" class="space-y-4">
@@ -165,7 +156,7 @@
 
             <div class="text-center mt-4 text-xs text-gray-400">
                 <span id="toggleAuthText">Don't have an account?</span>
-                <button id="toggleAuthBtn" class="text-purple-400 font-bold ml-1 hover:underline bg-transparent border-0">Sign Up</button>
+                <button type="button" id="toggleAuthBtn" class="text-purple-400 font-bold ml-1 hover:underline bg-transparent border-0">Sign Up</button>
             </div>
         </div>
     </div>
@@ -245,95 +236,102 @@
             }
         });
 
-        // FIXED GET STARTED BUTTON CLICK ACTION
-        getStartedBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            playClick();
+        // Modal Helpers
+        function openModal() {
+            if (authModal) authModal.classList.add('active');
+        }
 
-            if (currentUser) {
-                // If logged in -> Go directly to Salons page
-                window.location.href = 'salons.html';
-            } else {
-                // If logged out -> Open Auth Modal
-                openModal();
-            }
-        });
+        function closeModal() {
+            if (authModal) authModal.classList.remove('active');
+        }
+
+        // Action for Get Started Button
+        if (getStartedBtn) {
+            getStartedBtn.onclick = (e) => {
+                e.preventDefault();
+                playClick();
+                if (currentUser) {
+                    window.location.href = 'salons.html';
+                } else {
+                    openModal();
+                }
+            };
+        }
 
         // Header Login / Account Button
-        headerAuthBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            playClick();
-            if (currentUser) {
-                window.location.href = 'home.html';
-            } else {
-                openModal();
-            }
-        });
+        if (headerAuthBtn) {
+            headerAuthBtn.onclick = (e) => {
+                e.preventDefault();
+                playClick();
+                if (currentUser) {
+                    window.location.href = 'home.html';
+                } else {
+                    openModal();
+                }
+            };
+        }
 
-        // Navigation Bar Explicit Redirection Fix
+        if (closeAuthModal) {
+            closeAuthModal.onclick = closeModal;
+        }
+
+        // Navigation Bar Explicit Redirection
         document.querySelectorAll('.nav-item').forEach(navItem => {
-            navItem.addEventListener('click', (e) => {
+            navItem.onclick = (e) => {
                 e.preventDefault();
                 playClick();
                 const targetHref = navItem.getAttribute('href');
                 if (targetHref) {
                     window.location.href = targetHref;
                 }
-            });
+            };
         });
-
-        // Modal Helpers
-        function openModal() {
-            authModal.classList.add('active');
-        }
-
-        function closeModal() {
-            authModal.classList.remove('active');
-        }
-
-        closeAuthModal.addEventListener('click', closeModal);
 
         // Toggle Login vs Signup
-        toggleAuthBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            isSignUpMode = !isSignUpMode;
-            if (isSignUpMode) {
-                modalTitle.textContent = "Create K@si Web Account";
-                submitAuthBtn.textContent = "Sign Up";
-                toggleAuthText.textContent = "Already have an account?";
-                toggleAuthBtn.textContent = "Login";
-            } else {
-                modalTitle.textContent = "Login to K@si Web";
-                submitAuthBtn.textContent = "Login";
-                toggleAuthText.textContent = "Don't have an account?";
-                toggleAuthBtn.textContent = "Sign Up";
-            }
-        });
+        if (toggleAuthBtn) {
+            toggleAuthBtn.onclick = (e) => {
+                e.preventDefault();
+                isSignUpMode = !isSignUpMode;
+                if (isSignUpMode) {
+                    modalTitle.textContent = "Create K@si Web Account";
+                    submitAuthBtn.textContent = "Sign Up";
+                    toggleAuthText.textContent = "Already have an account?";
+                    toggleAuthBtn.textContent = "Login";
+                } else {
+                    modalTitle.textContent = "Login to K@si Web";
+                    submitAuthBtn.textContent = "Login";
+                    toggleAuthText.textContent = "Don't have an account?";
+                    toggleAuthBtn.textContent = "Sign Up";
+                }
+            };
+        }
 
         // Handle Login/Signup Form Submission
-        authForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
+        if (authForm) {
+            authForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('authEmail').value.trim();
+                const password = document.getElementById('authPassword').value.trim();
 
-            try {
-                if (isSignUpMode) {
-                    const res = await auth.createUserWithEmailAndPassword(email, password);
-                    await window.firebaseDB.collection('users').doc(res.user.uid).set({
-                        email: email,
-                        role: 'client',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    alert("Account created successfully!");
-                } else {
-                    await auth.signInWithEmailAndPassword(email, password);
+                try {
+                    if (isSignUpMode) {
+                        const res = await auth.createUserWithEmailAndPassword(email, password);
+                        await window.firebaseDB.collection('users').doc(res.user.uid).set({
+                            email: email,
+                            role: 'client',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        alert("Account created successfully!");
+                    } else {
+                        await auth.signInWithEmailAndPassword(email, password);
+                    }
+                    closeModal();
+                    window.location.href = 'salons.html';
+                } catch (err) {
+                    alert("Auth Error: " + err.message);
                 }
-                closeModal();
-                window.location.href = 'salons.html';
-            } catch (err) {
-                alert("Auth Error: " + err.message);
-            }
-        });
+            };
+        }
     });
     </script>
 </body>
