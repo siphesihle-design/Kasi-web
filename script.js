@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loop: true,
             speed: 800,
             autoplay: {
-                delay: 2200, // Slides automatically every 2.2 seconds without touching
-                disableOnInteraction: false, // Continues auto-swiping after manual user interaction
+                delay: 2200,
+                disableOnInteraction: false,
                 pauseOnMouseEnter: false
             },
             pagination: {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* WORD ANIMATION */
+    // 1. TYPEWRITER WORD ANIMATION
     const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
     let wordIndex = 0;
     let charIndex = 0;
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     type();
 
-    // 1. SAFE ACCESS TO GLOBAL FIREBASE UTILITIES
+    // 2. SAFE ACCESS TO GLOBAL FIREBASE UTILITIES
     if (!window.firebaseAuth || !window.firebaseDB) {
         console.error("Firebase services not found on window object.");
         return;
@@ -106,11 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // SET DATE INPUT RANGE (TODAY TO +30 DAYS)
     if (custDateInput) {
-        custDateInput.min = new Date().toISOString().split('T')[0];
+        const today = new Date();
+        const maxDate = new Date();
+        maxDate.setDate(today.getDate() + 30);
+        
+        custDateInput.min = today.toISOString().split('T')[0];
+        custDateInput.max = maxDate.toISOString().split('T')[0];
     }
 
-    // 2. AUTHENTICATION STATE & ROLE ROUTING
+    // 3. AUTHENTICATION STATE & ROLE ROUTING
     onAuthState(auth, async (user) => {
         if (user) {
             if (logoutBtn) logoutBtn.style.display = 'flex';
@@ -134,49 +140,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. LOAD & RENDER SALONS
-    const qSalons = query(collection(db, "salons"), orderBy("name"));
-    
-    onSnapshot(qSalons, (snapshot) => {
-        allSalons = [];
-        if (!salonList) return;
-        salonList.innerHTML = "";
+    // 4. LOAD & RENDER SALONS
+    if (salonList) {
+        const qSalons = query(collection(db, "salons"), orderBy("name"));
+        
+        onSnapshot(qSalons, (snapshot) => {
+            allSalons = [];
+            salonList.innerHTML = "";
 
-        if (snapshot.empty) {
-            salonList.innerHTML = `
-                <div style="text-align:center; padding: 40px 20px; color:#888;">
-                    <i class='bx bx-store-alt' style='font-size: 3rem; margin-bottom: 10px;'></i>
-                    <p style="font-size: 1.1rem; font-weight: 600;">No salons registered yet</p>
-                    <p style="font-size: 0.9rem;">The salons collection is empty.</p>
-                </div>`;
-            return;
-        }
+            if (snapshot.empty) {
+                salonList.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color:#888;">
+                        <i class='bx bx-store-alt' style='font-size: 3rem; margin-bottom: 10px;'></i>
+                        <p style="font-size: 1.1rem; font-weight: 600;">No salons registered yet</p>
+                        <p style="font-size: 0.9rem;">The salons collection is empty.</p>
+                    </div>`;
+                return;
+            }
 
-        snapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            const salon = { 
-                id: docSnap.id, 
-                salonId: data.salonId || docSnap.id,
-                ownerId: data.ownerId || data.OwnerId || null,
-                ...data 
-            };
-            allSalons.push(salon);
-            renderSalon(salon);
-        });
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const salon = { 
+                    id: docSnap.id, 
+                    salonId: data.salonId || docSnap.id,
+                    ownerId: data.ownerId || data.OwnerId || null,
+                    ...data 
+                };
+                allSalons.push(salon);
+                renderSalon(salon);
+            });
 
-        updateBookingCount();
+            updateBookingCount();
 
-    }, (error) => {
-        console.error("Firestore Salons Error:", error);
-        if (salonList) {
+        }, (error) => {
+            console.error("Firestore Salons Error:", error);
             salonList.innerHTML = `
                 <div style="text-align:center; padding: 30px; color:#ff4757;">
                     <i class='bx bx-error-circle' style='font-size: 2.5rem;'></i>
                     <p style="margin-top:10px; font-weight:bold;">Failed to load salons</p>
                     <small style="color:#aaa;">${escapeHtml(error.message)}</small>
                 </div>`;
-        }
-    });
+        });
+    }
 
     function renderSalon(salon) {
         const noOwner = !salon.ownerId;
@@ -192,9 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
         salonList.appendChild(card);
     }
 
-    // 4. SEARCH FUNCTIONALITY
+    // 5. SEARCH FUNCTIONALITY
     if (searchBtn && searchBar) {
-        searchBtn.onclick = () => {
+        const executeSearch = () => {
             const term = searchBar.value.toLowerCase().trim();
             if (!salonList) return;
             salonList.innerHTML = "";
@@ -211,9 +216,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             filtered.forEach(renderSalon);
         };
+
+        searchBtn.onclick = executeSearch;
+        searchBar.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') executeSearch();
+        });
     }
 
-    // 5. OPEN & CLOSE BOOKING MODAL
+    // 6. BOOKING MODAL
     if (salonList) {
         salonList.addEventListener('click', (e) => {
             const bookBtn = e.target.closest('.bookBtn');
@@ -238,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. SUBMIT BOOKING
+    // 7. SUBMIT BOOKING
     if (bookingForm) {
         bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -249,8 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let service = serviceVal;
             let price = 0;
+
             if (serviceVal.includes('— R')) {
                 const parts = serviceVal.split('— R');
+                service = parts[0].trim();
+                price = Number(parts[1]) || 0;
+            } else if (serviceVal.includes('R')) {
+                const parts = serviceVal.split('R');
                 service = parts[0].trim();
                 price = Number(parts[1]) || 0;
             }
@@ -261,8 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ownerId: selectedSalonData.ownerId,
                     salonId: selectedSalonId,
                     salon: selectedSalonData.name,
-                    name: document.getElementById('custName')?.value || '',
-                    phone: document.getElementById('custPhone')?.value || '',
+                    name: document.getElementById('custName')?.value.trim() || '',
+                    phone: document.getElementById('custPhone')?.value.trim() || '',
                     service: service,
                     price: price,
                     status: "pending",
@@ -281,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 7. TODAY'S BOOKING COUNTER
+    // 8. TODAY'S BOOKING COUNTER
     function updateBookingCount() {
         if (!bookingsToday) return;
         const todayStr = new Date().toISOString().split('T')[0];
@@ -294,12 +309,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 8. LOGOUT ACTION
+    // 9. LOGOUT ACTION
     if (logoutBtn) {
         logoutBtn.onclick = () => signOut(auth).then(() => window.location.href = 'index.html');
     }
 
-    // 9. COOKIE & CONSENT BANNER LOGIC
+    // 10. COOKIE & ONESIGNAL CONSENT BANNER LOGIC
     const banner = document.getElementById('cookieBanner');
     const acceptAll = document.getElementById('acceptAllCookies');
     const essential = document.getElementById('essentialCookies');
