@@ -9,10 +9,6 @@
     
     <link rel="manifest" href="manifest.json">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    
-    <!-- SWIPER CSS (REQUIRED FOR AUTOPLAY CAROUSEL) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -86,22 +82,9 @@
             min-height: 250px;
         }
 
-        /* Swiper custom styling */
-        .swiper {
-            width: 100%;
-            height: 260px;
-            border-radius: 1rem;
-        }
-
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         @media (max-width: 480px) {
-            .landing-image, .swiper {
-                height: 220px;
+            .landing-image {
+                min-height: 220px;
             }
         }
     </style>
@@ -145,22 +128,9 @@
             Book your barber. Skip the queue. Get fresh.
         </p>
 
-        <!-- AUTOMATIC SWIPING CAROUSEL -->
+        <!-- COVER IMAGE -->
         <div class="glass rounded-2xl p-0 mb-8 overflow-hidden glow">
-            <div class="swiper elite-swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut 1" onerror="this.src='https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80'">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=800&q=80" alt="Fresh Cut 2">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=800&q=80" alt="Fresh Cut 3">
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
+            <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh haircut" class="landing-image w-full h-64 object-cover" onerror="this.src='https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80'">
         </div>
 
         <!-- ENTER K@SI WEB -->
@@ -201,8 +171,94 @@
         </div>
     </div>
 
-    <!-- SWIPER JS LIBRARY -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="app.js"></script>
+    <script>
+        /* WORD ANIMATION */
+        const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typedText = document.getElementById("typed-text");
+
+        function type() {
+            if (!typedText) return;
+            const currentWord = words[wordIndex];
+
+            if (isDeleting) {
+                typedText.textContent = currentWord.substring(0, charIndex--);
+            } else {
+                typedText.textContent = currentWord.substring(0, charIndex++);
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(type, 1500);
+                return;
+            }
+
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+            }
+
+            setTimeout(type, isDeleting ? 80 : 120);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            type();
+
+            /* COOKIE SYSTEM */
+            const banner = document.getElementById("cookieBanner");
+            const acceptAll = document.getElementById("acceptAllCookies");
+            const essential = document.getElementById("essentialCookies");
+            const closeBtn = document.getElementById("cookieClose");
+            const subBtn = document.getElementById("subscribe-btn");
+
+            function saveChoice(choice) {
+                localStorage.setItem("kasiCookieChoice", choice);
+                if (banner) banner.style.display = "none";
+            }
+
+            const existingChoice = localStorage.getItem("kasiCookieChoice");
+            if (!existingChoice && banner) {
+                setTimeout(() => { banner.style.display = "flex"; }, 800);
+            }
+
+            acceptAll?.addEventListener("click", () => {
+                saveChoice("all");
+                if (window.OneSignalDeferred) {
+                    OneSignalDeferred.push(async function (OneSignal) {
+                        try {
+                            await OneSignal.showNativePrompt();
+                            await OneSignal.registerForPushNotifications();
+                        } catch (error) {
+                            console.error("Notification permission error:", error);
+                        }
+                    });
+                }
+            });
+
+            essential?.addEventListener("click", () => saveChoice("essential"));
+            closeBtn?.addEventListener("click", () => saveChoice("essential"));
+
+            subBtn?.addEventListener("click", () => {
+                const choice = localStorage.getItem("kasiCookieChoice");
+                if (choice !== "all") {
+                    alert("Please accept all cookies first to enable notifications 🍪");
+                    if (banner) banner.style.display = "flex";
+                    return;
+                }
+
+                if (window.OneSignalDeferred) {
+                    OneSignalDeferred.push(async function (OneSignal) {
+                        try {
+                            await OneSignal.showNativePrompt();
+                        } catch (error) {
+                            console.error("Notification prompt error:", error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
