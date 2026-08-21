@@ -73,8 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // SET DATE INPUT RANGE (TODAY TO +30 DAYS)
     if (custDateInput) {
-        custDateInput.min = new Date().toISOString().split('T')[0];
+        const today = new Date();
+        const maxDate = new Date();
+        maxDate.setDate(today.getDate() + 30);
+        
+        custDateInput.min = today.toISOString().split('T')[0];
+        custDateInput.max = maxDate.toISOString().split('T')[0];
     }
 
     // AUTHENTICATION & ROLE ROUTING
@@ -160,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // SEARCH
     if (searchBtn && searchBar) {
-        searchBtn.onclick = () => {
+        const executeSearch = () => {
             const term = searchBar.value.toLowerCase().trim();
             if (!salonList) return;
             salonList.innerHTML = "";
@@ -177,6 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             filtered.forEach(renderSalon);
         };
+
+        searchBtn.onclick = executeSearch;
+        searchBar.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') executeSearch();
+        });
     }
 
     // BOOKING MODAL
@@ -215,8 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let service = serviceVal;
             let price = 0;
+
             if (serviceVal.includes('— R')) {
                 const parts = serviceVal.split('— R');
+                service = parts[0].trim();
+                price = Number(parts[1]) || 0;
+            } else if (serviceVal.includes('R')) {
+                const parts = serviceVal.split('R');
                 service = parts[0].trim();
                 price = Number(parts[1]) || 0;
             }
@@ -227,8 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ownerId: selectedSalonData.ownerId,
                     salonId: selectedSalonId,
                     salon: selectedSalonData.name,
-                    name: document.getElementById('custName')?.value || '',
-                    phone: document.getElementById('custPhone')?.value || '',
+                    name: document.getElementById('custName')?.value.trim() || '',
+                    phone: document.getElementById('custPhone')?.value.trim() || '',
                     service: service,
                     price: price,
                     status: "pending",
