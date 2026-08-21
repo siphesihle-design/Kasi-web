@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const salonList = document.getElementById('salonList');
     const bookingModal = document.getElementById('bookingModal');
     const bookingForm = document.getElementById('bookingForm');
+    const closeModalBtn = document.getElementById('closeModalBtn'); // Modal close trigger
     const adminBtn = document.getElementById('adminBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const searchBar = document.getElementById('searchBar');
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. LOAD & RENDER SALONS (WITH SAFE FALLBACKS & ERROR HANDLING)
+    // 3. LOAD & RENDER SALONS
     const qSalons = query(collection(db, "salons"), orderBy("name"));
     
     onSnapshot(qSalons, (snapshot) => {
@@ -104,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
             
-            // Normalize mapping for casing mismatches (OwnerId vs ownerId) & missing salonId
             const salon = { 
                 id: docSnap.id, 
                 salonId: data.salonId || docSnap.id,
@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             renderSalon(salon);
         });
 
-        // Update daily booking counter independently
         updateBookingCount();
 
     }, (error) => {
@@ -166,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 5. OPEN BOOKING MODAL
+    // 5. OPEN & CLOSE BOOKING MODAL
     if (salonList) {
         salonList.addEventListener('click', (e) => {
             const bookBtn = e.target.closest('.bookBtn');
@@ -185,15 +184,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            if (bookingModal) bookingModal.classList.remove('active');
+        });
+    }
+
     // 6. SUBMIT BOOKING
     if (bookingForm) {
         bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!auth.currentUser || !selectedSalonData) return;
 
-            const serviceVal = document.getElementById('serviceType').value;
-            const [service, priceStr] = serviceVal.split(' — R');
-            const price = Number(priceStr) || 0;
+            const serviceElem = document.getElementById('serviceType');
+            const serviceVal = serviceElem ? serviceElem.value : '';
+            
+            // Safe extraction of service name and numeric price
+            let service = serviceVal;
+            let price = 0;
+            if (serviceVal.includes('— R')) {
+                const parts = serviceVal.split('— R');
+                service = parts[0].trim();
+                price = Number(parts[1]) || 0;
+            }
 
             try {
                 await addDoc(collection(db, "bookings"), {
@@ -201,13 +214,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     ownerId: selectedSalonData.ownerId,
                     salonId: selectedSalonId,
                     salon: selectedSalonData.name,
-                    name: document.getElementById('custName').value,
-                    phone: document.getElementById('custPhone').value,
-                    service: service.trim(),
+                    name: document.getElementById('custName')?.value || '',
+                    phone: document.getElementById('custPhone')?.value || '',
+                    service: service,
                     price: price,
                     status: "pending",
-                    date: document.getElementById('custDate').value,
-                    time: document.getElementById('custTime').value,
+                    date: document.getElementById('custDate')?.value || '',
+                    time: document.getElementById('custTime')?.value || '',
                     createdAt: serverTimestamp()
                 });
 
