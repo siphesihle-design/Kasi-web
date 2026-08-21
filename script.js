@@ -1,4 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // 0. INITIALIZE AUTOMATIC PICTURE SWIPER
+    if (typeof Swiper !== 'undefined' && document.querySelector('.elite-swiper')) {
+        new Swiper('.elite-swiper', {
+            loop: true,
+            speed: 800,
+            autoplay: {
+                delay: 2200, // Slides automatically every 2.2 seconds without touching
+                disableOnInteraction: false, // Continues auto-swiping after manual user interaction
+                pauseOnMouseEnter: false
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    }
+
+    /* WORD ANIMATION */
+    const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typedText = document.getElementById("typed-text");
+
+    function type() {
+        if (!typedText) return;
+        const currentWord = words[wordIndex];
+
+        if (isDeleting) {
+            typedText.textContent = currentWord.substring(0, charIndex--);
+        } else {
+            typedText.textContent = currentWord.substring(0, charIndex++);
+        }
+
+        if (!isDeleting && charIndex === currentWord.length) {
+            isDeleting = true;
+            setTimeout(type, 1500);
+            return;
+        }
+
+        if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+        }
+
+        setTimeout(type, isDeleting ? 80 : 120);
+    }
+
+    type();
+
     // 1. SAFE ACCESS TO GLOBAL FIREBASE UTILITIES
     if (!window.firebaseAuth || !window.firebaseDB) {
         console.error("Firebase services not found on window object.");
@@ -25,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const salonList = document.getElementById('salonList');
     const bookingModal = document.getElementById('bookingModal');
     const bookingForm = document.getElementById('bookingForm');
-    const closeModalBtn = document.getElementById('closeModalBtn'); // Modal close trigger
+    const closeModalBtn = document.getElementById('closeModalBtn');
     const adminBtn = document.getElementById('adminBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const searchBar = document.getElementById('searchBar');
@@ -55,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // SET MINIMUM BOOKING DATE TO TODAY
     if (custDateInput) {
         custDateInput.min = new Date().toISOString().split('T')[0];
     }
@@ -104,14 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
-            
             const salon = { 
                 id: docSnap.id, 
                 salonId: data.salonId || docSnap.id,
                 ownerId: data.ownerId || data.OwnerId || null,
                 ...data 
             };
-            
             allSalons.push(salon);
             renderSalon(salon);
         });
@@ -199,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const serviceElem = document.getElementById('serviceType');
             const serviceVal = serviceElem ? serviceElem.value : '';
             
-            // Safe extraction of service name and numeric price
             let service = serviceVal;
             let price = 0;
             if (serviceVal.includes('— R')) {
@@ -257,10 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const acceptAll = document.getElementById('acceptAllCookies');
     const essential = document.getElementById('essentialCookies');
     const closeBtn = document.getElementById('cookieClose');
+    const subBtn = document.getElementById('subscribe-btn');
 
     const cookieChoice = localStorage.getItem('kasiCookieChoice');
     if (!cookieChoice && banner) {
-        setTimeout(() => { banner.style.display = 'flex'; }, 1500);
+        setTimeout(() => { banner.style.display = 'flex'; }, 1000);
     }
 
     function saveChoice(choice) {
@@ -269,11 +317,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (banner) banner.style.display = 'none';
     }
 
-    acceptAll?.addEventListener('click', () => saveChoice('all'));
+    acceptAll?.addEventListener('click', () => {
+        saveChoice('all');
+        if (window.OneSignalDeferred) {
+            OneSignalDeferred.push(async function (OneSignal) {
+                try {
+                    await OneSignal.showNativePrompt();
+                    await OneSignal.registerForPushNotifications();
+                } catch (error) {
+                    console.error("Notification permission error:", error);
+                }
+            });
+        }
+    });
+
     essential?.addEventListener('click', () => saveChoice('essential'));
     closeBtn?.addEventListener('click', () => saveChoice('essential'));
 
-    // SECURITY HELPER
+    subBtn?.addEventListener('click', () => {
+        const choice = localStorage.getItem('kasiCookieChoice');
+        if (choice !== 'all') {
+            alert('Please accept all cookies first to enable notifications 🍪');
+            if (banner) banner.style.display = 'flex';
+            return;
+        }
+
+        if (window.OneSignalDeferred) {
+            OneSignalDeferred.push(async function (OneSignal) {
+                try {
+                    await OneSignal.showNativePrompt();
+                } catch (error) {
+                    console.error("Notification prompt error:", error);
+                }
+            });
+        }
+    });
+
     function escapeHtml(str) {
         if (!str) return '';
         return str.toString()
