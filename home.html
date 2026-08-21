@@ -2,682 +2,221 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>K@si Web | Home</title>
-
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>K@si Web | Fresh Cuts, No Lines</title>
     <meta name="theme-color" content="#3B82F6">
-
-    <!-- Icons & Third-Party Libraries -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="style.css?v=40">
-
+    
+    <!-- CSS & Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* BLUE THEME OVERRIDE FOR COOKIE */
-        .cookie-box {
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        body { 
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a3e 100%); 
         }
-
-        .cookie-text h4 {
-            color: #3B82F6;
+        .glass { 
+            backdrop-filter: blur(12px); 
+            background: rgba(17, 17, 30, 0.7); 
+            border: 1px solid rgba(59, 130, 246, 0.3); 
         }
-
-        .cookie-close:hover {
-            color: #3B82F6;
+        .glow:hover { 
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); 
         }
-
-        .primary-btn {
-            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+        .cursor { 
+            animation: blink 1s infinite; 
         }
-
-        .primary-btn:hover {
-            background: linear-gradient(90deg, #2563EB, #7C3AED);
+        @keyframes blink { 
+            50% { opacity: 0; } 
         }
-
-        .role-select {
-            display: none;
-            margin-bottom: 15px;
-            background: #2c2c4a;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            width: 100%;
+        .cookie-banner { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 10px; 
+            right: 10px; 
+            z-index: 9999; 
+            display: flex; 
+            justify-content: center; 
         }
-
-        /* 3D COVERFLOW SLIDER CUSTOM STYLES */
-        .tranding-slider {
-            padding: 20px 0 50px 0;
-            overflow: hidden;
+        .cookie-box { 
+            position: relative; 
+            max-width: 500px; 
+            width: 100%; 
+            padding: 20px; 
+            background: rgba(15,15,30,0.95); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(59, 130, 246, 0.4); 
+            border-radius: 15px; 
+            color: #fff; 
+            box-shadow: 0 0 20px rgba(59,130,246,0.3); 
+            animation: slideUp 0.4s ease; 
         }
-
-        .tranding-slide {
-            width: 280px !important;
-            height: 360px !important;
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            background: #1a1a2e;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .tranding-slide-img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .tranding-slide-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-        }
-
-        .tranding-slide-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
-            color: #fff;
-        }
-
-        .tranding-slide-content h4 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .price-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(59, 130, 246, 0.9);
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            backdrop-filter: blur(5px);
-        }
-
-        .tranding-slide-content-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5px;
-        }
-
-        .rating {
-            color: #fbbf24;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 600;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: #3B82F6 !important;
-            width: 22px !important;
-            border-radius: 5px !important;
-        }
-
-        /* ELITE SWIPER STYLES */
-        .elite-swiper .swiper-slide {
-            height: 250px;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-
-        .elite-swiper .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        @keyframes slideUp { 
+            from { transform: translateY(100px); opacity: 0; } 
+            to { transform: translateY(0); opacity: 1; } 
         }
     </style>
-</head>
 
-<body>
-
-    <h1 class="header-title">Web For Kasi People</h1>
-
-    <div class="container">
-
-        <!-- AUTHENTICATION SECTION -->
-        <div class="glass-card login-section" id="authSection">
-            <h2 style="text-align:center; font-size:2rem; font-weight:800; color:#3B82F6;">
-                K@si Web
-            </h2>
-            <p class="tagline">Hair cut made easy</p>
-
-            <div class="form-group">
-                <input type="email" id="userEmail" placeholder="Email Address" required>
-                <input type="password" id="userPass" placeholder="Password" required>
-
-                <select id="userRole" class="role-select">
-                    <option value="customer">I'm a Customer</option>
-                    <option value="salon_owner">I'm a Salon Owner</option>
-                </select>
-
-                <button type="button" id="mainLoginBtn" class="primary-btn">Login</button>
-                <button type="button" id="signupBtn" class="secondary-btn">Sign Up</button>
-                <button type="button" id="showRoleBtn" class="secondary-btn" style="font-size:0.8rem;">
-                    Sign up as Salon Owner?
-                </button>
-                <button type="button" id="installBtn" class="secondary-btn" style="display:none;">
-                    <i class='bx bx-download'></i> Install App
-                </button>
-
-                <p id="authMsg" style="text-align:center; margin-top:10px; font-size:0.9rem; color:#3B82F6;"></p>
-            </div>
-        </div>
-
-        <!-- 3D COVERFLOW SWIPER -->
-        <div class="tranding-slider swiper">
-            <div class="swiper-wrapper">
-
-                <!-- Slide 1 -->
-                <div class="swiper-slide tranding-slide">
-                    <div class="tranding-slide-img">
-                        <img src="37BA0E35.jpg" alt="Fade Cut 1" onerror="this.src='https://via.placeholder.com/400x400/1a1a2e/3B82F6?text=Fresh+Fade'">
-                    </div>
-                    <span class="price-badge">R120</span>
-                    <div class="tranding-slide-content">
-                        <h4>Kasi Taper Fade</h4>
-                        <div class="tranding-slide-content-bottom">
-                            <div class="rating">
-                                <span>4.8</span>
-                                <i class='bx bxs-star'></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="swiper-slide tranding-slide">
-                    <div class="tranding-slide-img">
-                        <img src="7847041D.jpg" alt="Cut 2" onerror="this.src='https://via.placeholder.com/400x400/1a1a2e/3B82F6?text=Burst+Fade'">
-                    </div>
-                    <span class="price-badge">R150</span>
-                    <div class="tranding-slide-content">
-                        <h4>Burst Fade & Beard</h4>
-                        <div class="tranding-slide-content-bottom">
-                            <div class="rating">
-                                <span>4.9</span>
-                                <i class='bx bxs-star'></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="swiper-slide tranding-slide">
-                    <div class="tranding-slide-img">
-                        <img src="A3886FFD.jpg" alt="Cut 3" onerror="this.src='https://via.placeholder.com/400x400/1a1a2e/3B82F6?text=Chiskop'">
-                    </div>
-                    <span class="price-badge">R80</span>
-                    <div class="tranding-slide-content">
-                        <h4>Classic Clean Cut</h4>
-                        <div class="tranding-slide-content-bottom">
-                            <div class="rating">
-                                <span>4.7</span>
-                                <i class='bx bxs-star'></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 4 -->
-                <div class="swiper-slide tranding-slide">
-                    <div class="tranding-slide-img">
-                        <img src="B307F46B.jpg" alt="Cut 4" onerror="this.src='https://via.placeholder.com/400x400/1a1a2e/3B82F6?text=Design+Cut'">
-                    </div>
-                    <span class="price-badge">R180</span>
-                    <div class="tranding-slide-content">
-                        <h4>Line Design Cut</h4>
-                        <div class="tranding-slide-content-bottom">
-                            <div class="rating">
-                                <span>5.0</span>
-                                <i class='bx bxs-star'></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-
-        <!-- MISSION STATEMENT -->
-        <div class="mission-box">
-            <p>
-                We help you get your fresh haircut and save your time—because we know how it feels to stand in lines all day.
-            </p>
-        </div>
-
-        <!-- ELITE SWIPER CAROUSEL -->
-        <div class="glass rounded-2xl p-0 mb-8 overflow-hidden glow">
-            <div class="swiper elite-swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut 1" onerror="this.src='https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80'">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=800&q=80" alt="Fresh Cut 2">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=800&q=80" alt="Fresh Cut 3">
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-
-        <!-- FEATURED BANNER -->
-        <a href="salons.html" style="text-decoration:none;">
-            <div class="glass-card elite-showcase">
-                <img src="C00719B.jpg" alt="Elite Cut" onerror="this.src='https://via.placeholder.com/400x220/3B82F6/FFFFFF?text=Elite+Cut'">
-                <div class="elite-text">
-                    <h3>
-                        <i class='bx bx-crown'></i>
-                        ELITE CUTS ONLY
-                        <i class='bx bx-right-arrow-alt'></i>
-                    </h3>
-                    <p>Book the freshest fades in the Kasi. No lines. No waiting.</p>
-                </div>
-            </div>
-        </a>
-
-        <!-- BOTTOM NAVIGATION -->
-        <div class="nav-grid">
-            <a href="index.html" class="nav-item active">
-                <i class='bx bx-home-alt'></i>
-                <span>Home</span>
-            </a>
-            <a href="salons.html" class="nav-item">
-                <i class='bx bx-cut'></i>
-                <span>Salons</span>
-            </a>
-            <button class="nav-item cta-btn" id="adminBtn" style="display:none;">
-                <i class='bx bx-grid-alt'></i>
-                <span>Admin</span>
-            </button>
-            <button class="nav-item" id="logoutBtn" style="display:none;">
-                <i class='bx bx-log-out'></i>
-                <span>Logout</span>
-            </button>
-        </div>
-
-    </div>
-
-    <!-- COOKIE BANNER -->
-    <div id="cookieBanner" class="cookie-banner" style="display:none;">
-        <div class="cookie-box glass-card">
-            <div class="cookie-icon">🍪</div>
-            <div class="cookie-text">
-                <h4>COOKIES & DATA CHOICE</h4>
-                <p>We use cookies to save your login and bookings. Owners get instant alerts when you book.</p>
-            </div>
-            <button class="cookie-close" id="cookieClose">×</button>
-            <div class="cookie-btns">
-                <button id="acceptAllCookies" class="primary-btn">Accept All</button>
-                <button id="essentialCookies" class="secondary-btn">Essential Only</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUDIO ASSETS -->
-    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
-    <audio id="loginSound" src="mixkit-modern-technology-select-3124.wav" preload="auto"></audio>
-    <audio id="logoutSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
-
-    <!-- THIRD-PARTY SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-    <!-- FIREBASE & CORE LOGIC -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            onAuthStateChanged, 
-            signOut 
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc 
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "471544855566",
-            appId: "1:471544855566:web:aa669a968b8af0ceb6905f"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const emailInput = document.getElementById('userEmail');
-            const passInput = document.getElementById('userPass');
-            const mainLoginBtn = document.getElementById('mainLoginBtn');
-            const signupBtn = document.getElementById('signupBtn');
-            const showRoleBtn = document.getElementById('showRoleBtn');
-            const userRole = document.getElementById('userRole');
-            const authMsg = document.getElementById('authMsg');
-            const adminBtn = document.getElementById('adminBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const loginSound = document.getElementById('loginSound');
-            const logoutSound = document.getElementById('logoutSound');
-            const clickSound = document.getElementById('clickSound');
-            const installBtn = document.getElementById('installBtn');
-
-            let cachedUserRole = "customer";
-            let deferredPrompt = null;
-            let isOwnerSignup = false;
-
-            // Audio Configuration
-            if (clickSound) clickSound.volume = 0.4;
-            if (loginSound) loginSound.volume = 0.4;
-            if (logoutSound) logoutSound.volume = 0.4;
-
-            function playClick() {
-                if (clickSound) {
-                    clickSound.currentTime = 0;
-                    clickSound.play().catch(() => {});
-                }
-                if (navigator.vibrate) navigator.vibrate(50);
-            }
-
-            // 3D COVERFLOW SWIPER INITIALIZATION (WITH AUTOPLAY ADDED)
-            new Swiper('.tranding-slider', {
-                effect: 'coverflow',
-                grabCursor: true,
-                centeredSlides: true,
-                loop: true,
-                slidesPerView: 'auto',
-                autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
-                },
-                coverflowEffect: {
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 2.5,
-                },
-                pagination: {
-                    el: '.tranding-slider .swiper-pagination',
-                    clickable: true,
-                }
-            });
-
-            // ELITE SWIPER INITIALIZATION
-            new Swiper('.elite-swiper', {
-                loop: true,
-                autoplay: {
-                    delay: 3500,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: '.elite-swiper .swiper-pagination',
-                    clickable: true,
-                },
-            });
-
-            // Global Click Feedback
-            document.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('a')) {
-                    playClick();
-                }
-            });
-
-            // Owner Role Toggle
-            showRoleBtn.onclick = () => {
-                isOwnerSignup = !isOwnerSignup;
-                userRole.style.display = isOwnerSignup ? 'block' : 'none';
-                showRoleBtn.textContent = isOwnerSignup ? 'Sign up as Customer?' : 'Sign up as Salon Owner?';
-            };
-
-            // PWA Installation Handler
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installBtn.style.display = 'block';
-            });
-
-            installBtn.addEventListener('click', async () => {
-                if (!deferredPrompt) return;
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') installBtn.style.display = 'none';
-                deferredPrompt = null;
-            });
-
-            // Auto-provision Salon Record for Owners
-            async function ensureSalonForOwner(user, existingUserData = {}) {
-                let salonId = existingUserData.salonId;
-                if (salonId) return salonId;
-
-                salonId = `salon_${user.uid}`;
-
-                await setDoc(doc(db, "salons", salonId), {
-                    ownerId: user.uid,
-                    ownerEmail: user.email || "",
-                    name: existingUserData.salonName || `${user.email?.split('@')[0] || 'My'} Kasi Salon`,
-                    location: existingUserData.location || "Location not provided",
-                    hours: existingUserData.hours || "Hours not provided",
-                    image: existingUserData.image || "",
-                    services: Array.isArray(existingUserData.services) ? existingUserData.services : [],
-                    createdAt: existingUserData.createdAt || new Date(),
-                    updatedAt: new Date()
-                }, { merge: true });
-
-                await setDoc(doc(db, "users", user.uid), {
-                    email: user.email || "",
-                    role: "salon_owner",
-                    salonId: salonId,
-                    updatedAt: new Date()
-                }, { merge: true });
-
-                return salonId;
-            }
-
-            // Auth State Listener
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    document.getElementById('authSection').style.display = 'none';
-                    logoutBtn.style.display = 'flex';
-
-                    let userSnap = await getDoc(doc(db, "users", user.uid));
-                    let userData = userSnap.exists() ? userSnap.data() : null;
-
-                    if (!userSnap.exists()) {
-                        userData = { email: user.email, role: "customer", createdAt: new Date() };
-                        await setDoc(doc(db, "users", user.uid), userData);
-                    }
-
-                    cachedUserRole = userData.role || "customer";
-
-                    if (cachedUserRole === 'salon_owner') {
-                        try {
-                            userData.salonId = await ensureSalonForOwner(user, userData);
-                        } catch (error) {
-                            console.error("Salon setup error:", error);
-                            authMsg.textContent = "Unable to set up your salon.";
-                            alert("We couldn't set up your salon.\n\n" + error.message);
-                            return;
-                        }
-                    }
-
-                    adminBtn.style.display = 'flex';
-                    adminBtn.querySelector('span').textContent = 
-                        cachedUserRole === 'admin' ? 'Admin Panel' :
-                        cachedUserRole === 'salon_owner' ? 'Dashboard' : 'My Bookings';
-
-                    if (sessionStorage.getItem('justLoggedIn') === 'true') {
-                        sessionStorage.removeItem('justLoggedIn');
-                        setTimeout(() => {
-                            if (cachedUserRole === 'admin') window.location.href = 'admin.html';
-                            else if (cachedUserRole === 'salon_owner') window.location.href = 'owners.html';
-                            else window.location.href = 'salons.html';
-                        }, 800);
-                    } else {
-                        authMsg.textContent = `Welcome back ${user.email.split('@')[0]}`;
-                    }
-
-                } else {
-                    cachedUserRole = "customer";
-                    document.getElementById('authSection').style.display = 'block';
-                    logoutBtn.style.display = 'none';
-                    adminBtn.style.display = 'none';
-                    authMsg.textContent = "";
-                }
-            });
-
-            const setLoading = (btn, loading, text) => {
-                btn.innerHTML = loading ? `<i class='bx bx-loader bx-spin'></i> ${text}` : text;
-                btn.disabled = loading;
-            };
-
-            // Login Trigger
-            mainLoginBtn.addEventListener('click', async () => {
-                const email = emailInput.value.trim();
-                const password = passInput.value;
-
-                if (!email || !password) {
-                    alert('Please enter both email and password.');
-                    return;
-                }
-
-                setLoading(mainLoginBtn, true, "Logging in...");
-                sessionStorage.setItem('justLoggedIn', 'true');
-
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    if (loginSound) loginSound.play().catch(() => {});
-                    authMsg.textContent = "Login successful! Redirecting...";
-                } catch (err) {
-                    sessionStorage.removeItem('justLoggedIn');
-                    alert('Login Failed: ' + err.message);
-                    setLoading(mainLoginBtn, false, "Login");
-                }
-            });
-
-            // Registration Trigger
-            signupBtn.addEventListener('click', async () => {
-                const email = emailInput.value.trim();
-                const password = passInput.value;
-                const role = isOwnerSignup ? 'salon_owner' : 'customer';
-
-                if (!email || !password) {
-                    alert('Please enter email and password.');
-                    return;
-                }
-
-                if (password.length < 6) {
-                    alert('Password must be at least 6 characters');
-                    return;
-                }
-
-                setLoading(signupBtn, true, "Creating...");
-                sessionStorage.setItem('justLoggedIn', 'true');
-
-                try {
-                    const creds = await createUserWithEmailAndPassword(auth, email, password);
-
-                    if (role === 'customer') {
-                        await setDoc(doc(db, "users", creds.user.uid), {
-                            email: email,
-                            role: "customer",
-                            createdAt: new Date()
-                        });
-                    } else if (role === 'salon_owner') {
-                        const salonId = `salon_${creds.user.uid}`;
-                        await setDoc(doc(db, "users", creds.user.uid), {
-                            email: email,
-                            role: "salon_owner",
-                            salonId: salonId,
-                            createdAt: new Date(),
-                            updatedAt: new Date()
-                        });
-
-                        await setDoc(doc(db, "salons", salonId), {
-                            ownerId: creds.user.uid,
-                            ownerEmail: email,
-                            name: `${email.split('@')[0]} Kasi Salon`,
-                            location: "Location not provided",
-                            hours: "Hours not provided",
-                            image: "",
-                            services: [],
-                            createdAt: new Date(),
-                            updatedAt: new Date()
-                        });
-                    }
-
-                    if (loginSound) loginSound.play().catch(() => {});
-                    authMsg.textContent = role === 'salon_owner' ? "Salon owner account created! Redirecting..." : "Account created! Redirecting...";
-
-                } catch (err) {
-                    sessionStorage.removeItem('justLoggedIn');
-                    console.error("Signup error:", err);
-                    alert('Signup Failed: ' + err.message);
-                    setLoading(signupBtn, false, "Sign Up");
-                }
-            });
-
-            // Dashboard Routing
-            adminBtn.addEventListener('click', () => {
-                if (cachedUserRole === 'admin') window.location.href = 'admin.html';
-                else if (cachedUserRole === 'salon_owner') window.location.href = 'owners.html';
-                else window.location.href = 'salons.html';
-            });
-
-            // Logout Handler
-            logoutBtn.addEventListener('click', () => {
-                if (logoutSound) logoutSound.play().catch(() => {});
-                sessionStorage.clear();
-
-                setTimeout(() => {
-                    signOut(auth).then(() => {
-                        window.location.href = 'index.html';
-                    }).catch(console.error);
-                }, 400);
-            });
-
-            // Cookie Preferences
-            const banner = document.getElementById('cookieBanner');
-            const acceptAll = document.getElementById('acceptAllCookies');
-            const essential = document.getElementById('essentialCookies');
-            const closeBtn = document.getElementById('cookieClose');
-
-            if (!localStorage.getItem('kasiCookieChoice')) {
-                setTimeout(() => { if (banner) banner.style.display = 'flex'; }, 1500);
-            }
-
-            function saveChoice(choice) {
-                playClick();
-                localStorage.setItem('kasiCookieChoice', choice);
-                if (banner) banner.style.display = 'none';
-            }
-
-            acceptAll?.addEventListener('click', () => saveChoice('all'));
-            essential?.addEventListener('click', () => saveChoice('essential'));
-            closeBtn?.addEventListener('click', () => saveChoice('essential'));
+    <!-- ONESIGNAL SDK v16 -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({ appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0" });
         });
     </script>
+</head>
+<body class="text-white min-h-screen flex items-center justify-center p-4">
 
+    <div class="text-center w-full max-w-lg">
+        <!-- Brand Header -->
+        <div class="text-7xl sm:text-8xl mb-3"><i class='bx bx-cut text-blue-500'></i></div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">K@si Web</h1>
+        
+        <!-- Typewriter Subtitle -->
+        <div class="text-xl sm:text-2xl h-10 mb-2 font-medium">
+            <span id="typed-text" class="text-blue-400"></span><span class="cursor text-blue-400">|</span>
+        </div>
+        <p class="text-gray-400 text-sm sm:text-base mb-6">Book your barber. Skip the queue. Get fresh.</p>
+
+        <!-- Image Card -->
+        <div class="glass rounded-2xl p-0 mb-6 overflow-hidden glow transition duration-300">
+           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" class="w-full h-56 sm:h-64 object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x250/1a0a3e/3b82f6?text=Fresh+Cut';">
+        </div>
+
+        <!-- Primary Action Buttons -->
+        <a href="home.html" id="getStartedBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-4 rounded-xl font-bold mb-3 block transition transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-blue-500/20">
+            Get Started <i class='bx bx-right-arrow-alt align-middle text-xl'></i>
+        </a>
+        
+        <button id="subscribe-btn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 p-4 rounded-xl font-bold transition transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-indigo-500/20">
+            🔔 Get Booking Alerts
+        </button>
+
+        <p class="text-gray-500 text-xs sm:text-sm mt-6">© 2026 K@si Web • Made for Kasi People</p>
+    </div>
+
+    <!-- Audio Element for Feedback -->
+    <audio id="clickSound" src="mixkit-select-click-1109.wav" preload="auto"></audio>
+
+    <!-- COOKIE & CONSENT BANNER -->
+    <div id="cookieBanner" class="cookie-banner" style="display:none;">
+      <div class="cookie-box">
+        <div class="text-3xl text-center mb-1">🍪</div>
+        <h4 class="text-blue-400 text-center font-bold mb-1 text-base sm:text-lg">COOKIES & NOTIFICATIONS</h4>
+        <p class="text-gray-400 text-xs sm:text-sm text-center mb-4 leading-relaxed">
+            We use cookies to save your bookings. Owners get instant alerts when you book.
+        </p>
+        <button class="absolute top-2 right-3 text-gray-400 hover:text-blue-400 text-2xl font-bold leading-none" id="cookieClose">&times;</button>
+        <div class="flex gap-3">
+          <button id="acceptAllCookies" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-3 rounded-xl font-bold text-sm transition active:scale-95">Accept All</button>
+          <button id="essentialCookies" class="flex-1 bg-gray-700 hover:bg-gray-600 p-3 rounded-xl font-bold text-sm transition active:scale-95">Essential Only</button>
+        </div>
+      </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // 1. SOUND & HAPTIC FEEDBACK
+        const clickSound = document.getElementById('clickSound');
+        if (clickSound) clickSound.volume = 0.4;
+
+        function playClick() {
+            if (clickSound) {
+                clickSound.currentTime = 0;
+                clickSound.play().catch(() => {});
+            }
+            if (navigator.vibrate) navigator.vibrate(30);
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('a')) {
+                playClick();
+            }
+        });
+
+        // 2. TYPEWRITER WORD ANIMATION
+        const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
+        let wordIndex = 0; 
+        let charIndex = 0; 
+        let isDeleting = false;
+        const typedText = document.getElementById('typed-text');
+
+        function type() {
+            if (!typedText) return;
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) { 
+                typedText.textContent = currentWord.substring(0, charIndex--); 
+            } else { 
+                typedText.textContent = currentWord.substring(0, charIndex++); 
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) { 
+                isDeleting = true; 
+                setTimeout(type, 1500); 
+                return; 
+            } else if (isDeleting && charIndex === 0) { 
+                isDeleting = false; 
+                wordIndex = (wordIndex + 1) % words.length; 
+            }
+
+            setTimeout(type, isDeleting ? 80 : 120);
+        }
+
+        type();
+
+        // 3. COOKIE & ONESIGNAL CONSENT LOGIC
+        const banner = document.getElementById('cookieBanner');
+        const acceptAll = document.getElementById('acceptAllCookies');
+        const essential = document.getElementById('essentialCookies');
+        const closeBtn = document.getElementById('cookieClose');
+        const subBtn = document.getElementById('subscribe-btn');
+
+        const cookieChoice = localStorage.getItem('kasiCookieChoice');
+        if (!cookieChoice && banner) {
+            setTimeout(() => { banner.style.display = 'flex'; }, 800);
+        }
+
+        function saveChoice(choice) {
+            localStorage.setItem('kasiCookieChoice', choice);
+            if (banner) banner.style.display = 'none';
+        }
+
+        acceptAll?.addEventListener('click', () => {
+            saveChoice('all');
+            if (window.OneSignalDeferred) {
+                OneSignalDeferred.push(async function(OneSignal) { 
+                    try {
+                        await OneSignal.showNativePrompt();
+                        await OneSignal.registerForPushNotifications();
+                    } catch (err) {
+                        console.error("OneSignal error:", err);
+                    }
+                });
+            }
+        });
+
+        essential?.addEventListener('click', () => saveChoice('essential'));
+        closeBtn?.addEventListener('click', () => saveChoice('essential'));
+        
+        subBtn?.addEventListener('click', async () => {
+            const choice = localStorage.getItem('kasiCookieChoice');
+            if (choice !== 'all') {
+                alert("Please accept all cookies first to enable notifications 🍪");
+                if (banner) banner.style.display = 'flex';
+                return;
+            }
+            if (window.OneSignalDeferred) {
+                OneSignalDeferred.push(async function(OneSignal) { 
+                    try {
+                        await OneSignal.showNativePrompt(); 
+                    } catch (err) {
+                        console.error("OneSignal error:", err);
+                    }
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
