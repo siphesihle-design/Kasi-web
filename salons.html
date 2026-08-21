@@ -184,11 +184,8 @@
                 </div>
                 <div>
                     <label class="text-xs text-gray-400 block mb-1">Select Service</label>
-                    <select id="serviceType" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none">
-                        <option value="Fresh Cut — R80">Fresh Cut — R80</option>
-                        <option value="Cut & Beard — R120">Cut & Beard — R120</option>
-                        <option value="Dye & Design — R150">Dye & Design — R150</option>
-                        <option value="Kids Cut — R50">Kids Cut — R50</option>
+                    <select id="serviceType" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none">
+                        <!-- Populated dynamically from salon services array -->
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -267,24 +264,6 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        // 0. INITIALIZE AUTOMATIC PICTURE SWIPER (FOR home.html)
-        if (typeof Swiper !== 'undefined' && document.querySelector('.elite-swiper')) {
-            new Swiper('.elite-swiper', {
-                loop: true,
-                speed: 800,
-                autoplay: {
-                    delay: 2200,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: false
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-            });
-        }
-
-        // 1. SAFE ACCESS TO GLOBAL FIREBASE UTILITIES
         if (!window.firebaseAuth || !window.firebaseDB) {
             console.error("Firebase services not found on window object.");
             return;
@@ -417,17 +396,24 @@
             });
         }
 
+        // RENDER SALON CARD
         function renderSalon(salon) {
             const noOwner = !salon.ownerId;
             const card = document.createElement('div');
-            card.className = 'salon-card p-5 flex flex-col justify-between';
+            card.className = 'salon-card flex flex-col justify-between overflow-hidden';
+            
+            const imageUrl = salon.image || 'https://via.placeholder.com/400x200?text=No+Image';
+
             card.innerHTML = `
                 <div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-400">${escapeHtml(salon.name)}</h3>
-                    <p class="text-sm text-gray-300 mb-1"><i class='bx bx-map text-purple-400'></i> ${escapeHtml(salon.location || 'Soweto')}</p>
-                    <p class="text-sm text-gray-400 mb-4"><i class='bx bx-time text-purple-400'></i> ${escapeHtml(salon.hours || '9AM - 6PM')}</p>
+                    <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(salon.name)}" class="salon-image">
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold mb-2 text-blue-400">${escapeHtml(salon.name)}</h3>
+                        <p class="text-sm text-gray-300 mb-1"><i class='bx bx-map text-purple-400'></i> ${escapeHtml(salon.location || 'Soweto')}</p>
+                        <p class="text-sm text-gray-400 mb-4"><i class='bx bx-time text-purple-400'></i> ${escapeHtml(salon.hours || '9AM - 6PM')}</p>
+                    </div>
                 </div>
-                <div>
+                <div class="px-5 pb-5">
                     ${noOwner ? `<small style="color:#ff4757; display:block; margin-bottom:8px;">⚠️ Not available for booking</small>` : ''}
                     <button class="primary-btn bookBtn" data-id="${salon.id}" ${noOwner ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>Book Now</button>
                 </div>
@@ -461,7 +447,7 @@
             });
         }
 
-        // BOOKING MODAL
+        // BOOKING MODAL LISTENERS & DYNAMIC SERVICE LOADING
         if (salonList) {
             salonList.addEventListener('click', (e) => {
                 const bookBtn = e.target.closest('.bookBtn');
@@ -472,9 +458,30 @@
                         window.location.href = 'index.html'; 
                         return; 
                     }
+
                     selectedSalonId = bookBtn.dataset.id;
                     selectedSalonData = allSalons.find(s => s.id === selectedSalonId);
                     
+                    if (!selectedSalonData) return;
+
+                    // Dynamically populate services drop-down using the salon's services array
+                    const serviceSelect = document.getElementById('serviceType');
+                    if (serviceSelect) {
+                        serviceSelect.innerHTML = '';
+                        const servicesList = selectedSalonData.services || [];
+
+                        if (servicesList.length === 0) {
+                            serviceSelect.innerHTML = '<option value="">No services available</option>';
+                        } else {
+                            servicesList.forEach(srv => {
+                                const option = document.createElement('option');
+                                option.value = JSON.stringify({ name: srv.name, price: Number(srv.price) || 0 });
+                                option.textContent = `${srv.name} — R${srv.price}`;
+                                serviceSelect.appendChild(option);
+                            });
+                        }
+                    }
+
                     if (bookingModal) bookingModal.classList.add('active');
                 }
             });
@@ -493,19 +500,17 @@
                 if (!auth.currentUser || !selectedSalonData) return;
 
                 const serviceElem = document.getElementById('serviceType');
-                const serviceVal = serviceElem ? serviceElem.value : '';
-                
-                let service = serviceVal;
-                let price = 0;
+                let serviceName = "General Service";
+                let servicePrice = 0;
 
-                if (serviceVal.includes('— R')) {
-                    const parts = serviceVal.split('— R');
-                    service = parts[0].trim();
-                    price = Number(parts[1]) || 0;
-                } else if (serviceVal.includes('R')) {
-                    const parts = serviceVal.split('R');
-                    service = parts[0].trim();
-                    price = Number(parts[1]) || 0;
+                if (serviceElem && serviceElem.value) {
+                    try {
+                        const parsedService = JSON.parse(serviceElem.value);
+                        serviceName = parsedService.name;
+                        servicePrice = parsedService.price;
+                    } catch (err) {
+                        console.error("Error parsing service data:", err);
+                    }
                 }
 
                 try {
@@ -516,8 +521,8 @@
                         salon: selectedSalonData.name,
                         name: document.getElementById('custName')?.value.trim() || '',
                         phone: document.getElementById('custPhone')?.value.trim() || '',
-                        service: service,
-                        price: price,
+                        service: serviceName,
+                        price: servicePrice,
                         status: "pending",
                         date: document.getElementById('custDate')?.value || '',
                         time: document.getElementById('custTime')?.value || '',
