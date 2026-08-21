@@ -83,11 +83,11 @@
         </div>
 
         <!-- Primary Action Buttons -->
-        <a href="home.html" id="getStartedBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-4 rounded-xl font-bold mb-3 block transition transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-blue-500/20">
+        <a href="home.html" id="getStartedBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-4 rounded-xl font-bold mb-3 block transition transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-blue-500/20 cursor-pointer">
             Get Started <i class='bx bx-right-arrow-alt align-middle text-xl'></i>
         </a>
         
-        <button id="subscribe-btn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 p-4 rounded-xl font-bold transition transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-indigo-500/20">
+        <button id="subscribe-btn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-purple-700 p-4 rounded-xl font-bold transition transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-indigo-500/20">
             🔔 Get Booking Alerts
         </button>
 
@@ -115,7 +115,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        
         // 1. SOUND & HAPTIC FEEDBACK
         const clickSound = document.getElementById('clickSound');
         if (clickSound) clickSound.volume = 0.4;
@@ -128,8 +127,19 @@
             if (navigator.vibrate) navigator.vibrate(30);
         }
 
+        // Dedicated Get Started Click Handler
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        if (getStartedBtn) {
+            getStartedBtn.addEventListener('click', (e) => {
+                playClick();
+                // Explicitly enforce navigation to home.html
+                window.location.href = 'home.html';
+            });
+        }
+
+        // Generic Button Feedback
         document.addEventListener('click', (e) => {
-            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('a')) {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
                 playClick();
             }
         });
@@ -182,39 +192,33 @@
             if (banner) banner.style.display = 'none';
         }
 
+        async function triggerPushPrompt() {
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    await OneSignal.Notifications.requestPermission();
+                } catch (err) {
+                    console.error("OneSignal Error:", err);
+                }
+            });
+        }
+
         acceptAll?.addEventListener('click', () => {
             saveChoice('all');
-            if (window.OneSignalDeferred) {
-                OneSignalDeferred.push(async function(OneSignal) { 
-                    try {
-                        await OneSignal.showNativePrompt();
-                        await OneSignal.registerForPushNotifications();
-                    } catch (err) {
-                        console.error("OneSignal error:", err);
-                    }
-                });
-            }
+            triggerPushPrompt();
         });
 
         essential?.addEventListener('click', () => saveChoice('essential'));
         closeBtn?.addEventListener('click', () => saveChoice('essential'));
-        
-        subBtn?.addEventListener('click', async () => {
+
+        subBtn?.addEventListener('click', () => {
             const choice = localStorage.getItem('kasiCookieChoice');
             if (choice !== 'all') {
-                alert("Please accept all cookies first to enable notifications 🍪");
+                alert("Please accept all cookies first to enable push notifications 🍪");
                 if (banner) banner.style.display = 'flex';
                 return;
             }
-            if (window.OneSignalDeferred) {
-                OneSignalDeferred.push(async function(OneSignal) { 
-                    try {
-                        await OneSignal.showNativePrompt(); 
-                    } catch (err) {
-                        console.error("OneSignal error:", err);
-                    }
-                });
-            }
+            triggerPushPrompt();
         });
     });
 </script>
