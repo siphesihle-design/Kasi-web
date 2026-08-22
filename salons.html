@@ -185,7 +185,7 @@
                 <div>
                     <label class="text-xs text-gray-400 block mb-1">Select Service</label>
                     <select id="serviceType" required class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none">
-                        <!-- Populated dynamically from salon services array -->
+                        <!-- Populated dynamically -->
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -221,7 +221,7 @@
 
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
 
-    <!-- FIREBASE COMPAT LIBRARIES & BINDINGS -->
+    <!-- FIREBASE COMPAT LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -240,7 +240,6 @@
 
       firebase.initializeApp(firebaseConfig);
 
-      // Global window helpers
       window.firebaseAuth = firebase.auth();
       window.firebaseDB = firebase.firestore();
       window.onAuthState = (auth, cb) => auth.onAuthStateChanged(cb);
@@ -255,7 +254,6 @@
           return q;
       };
       window.where = (field, op, val) => (q) => q.where(field, op, val);
-      window.orderBy = (field, dir = 'asc') => (q) => q.orderBy(field, dir);
       window.serverTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
       window.logOut = (auth) => auth.signOut();
     </script>
@@ -280,7 +278,6 @@
             onSnapshot, 
             query, 
             where, 
-            orderBy, 
             serverTimestamp, 
             logOut: signOut 
         } = window;
@@ -301,7 +298,7 @@
         let selectedSalonData = null;
         let allSalons = [];
 
-        // AUDIO & HAPTIC FEEDBACK
+        // AUDIO & HAPTICS
         const clickSound = document.getElementById('clickSound');
         if (clickSound) clickSound.volume = 0.4;
         
@@ -319,7 +316,7 @@
             }
         });
 
-        // SET DATE INPUT RANGE (TODAY TO +30 DAYS)
+        // DATE RANGE CONTROL
         if (custDateInput) {
             const today = new Date();
             const maxDate = new Date();
@@ -329,7 +326,7 @@
             custDateInput.max = maxDate.toISOString().split('T')[0];
         }
 
-        // AUTHENTICATION & ROLE ROUTING
+        // AUTH & DASHBOARD ROUTING
         onAuthState(auth, async (user) => {
             if (user) {
                 if (logoutBtn) logoutBtn.style.display = 'flex';
@@ -345,7 +342,7 @@
                         }
                     }
                 } catch (e) { 
-                    console.error("User document fetch error:", e); 
+                    console.error("User fetch error:", e); 
                 }
             } else {
                 if (logoutBtn) logoutBtn.style.display = 'none';
@@ -353,11 +350,11 @@
             }
         });
 
-        // LOAD & RENDER SALONS
+        // LOAD SALONS (Direct query on /salons without orderBy)
         if (salonList) {
-            const qSalons = query(collection(db, "salons"), orderBy("name"));
+            const salonsRef = collection(db, "salons");
             
-            onSnapshot(qSalons, (snapshot) => {
+            onSnapshot(salonsRef, (snapshot) => {
                 allSalons = [];
                 salonList.innerHTML = "";
 
@@ -366,7 +363,7 @@
                         <div style="text-align:center; padding: 40px 20px; color:#888;" class="col-span-full">
                             <i class='bx bx-store-alt' style='font-size: 3rem; margin-bottom: 10px;'></i>
                             <p style="font-size: 1.1rem; font-weight: 600;">No salons registered yet</p>
-                            <p style="font-size: 0.9rem;">The salons collection is empty.</p>
+                            <p style="font-size: 0.9rem;">The salons collection is currently empty.</p>
                         </div>`;
                     return;
                 }
@@ -375,13 +372,20 @@
                     const data = docSnap.data();
                     const salon = { 
                         id: docSnap.id, 
-                        salonId: data.salonId || docSnap.id,
-                        ownerId: data.ownerId || null,
+                        name: data.name || "Unnamed Salon",
+                        ownerId: data.ownerId || data.OwnerId || null,
+                        location: data.location || "Location unavailable",
+                        hours: data.hours || data.time || "09:00 - 18:00",
+                        image: data.image || "https://via.placeholder.com/400x200?text=No+Image",
+                        services: data.services || [],
                         ...data 
                     };
                     allSalons.push(salon);
-                    renderSalon(salon);
                 });
+
+                // Client-side sort by name
+                allSalons.sort((a, b) => a.name.localeCompare(b.name));
+                allSalons.forEach(renderSalon);
 
                 updateBookingCount();
 
@@ -396,21 +400,19 @@
             });
         }
 
-        // RENDER SALON CARD
+        // CARD RENDER
         function renderSalon(salon) {
             const noOwner = !salon.ownerId;
             const card = document.createElement('div');
             card.className = 'salon-card flex flex-col justify-between overflow-hidden';
-            
-            const imageUrl = salon.image || 'https://via.placeholder.com/400x200?text=No+Image';
 
             card.innerHTML = `
                 <div>
-                    <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(salon.name)}" class="salon-image">
+                    <img src="${escapeHtml(salon.image)}" alt="${escapeHtml(salon.name)}" class="salon-image">
                     <div class="p-5">
                         <h3 class="text-xl font-bold mb-2 text-blue-400">${escapeHtml(salon.name)}</h3>
-                        <p class="text-sm text-gray-300 mb-1"><i class='bx bx-map text-purple-400'></i> ${escapeHtml(salon.location || 'Soweto')}</p>
-                        <p class="text-sm text-gray-400 mb-4"><i class='bx bx-time text-purple-400'></i> ${escapeHtml(salon.hours || salon.time || '9:00 - 18:00')}</p>
+                        <p class="text-sm text-gray-300 mb-1"><i class='bx bx-map text-purple-400'></i> ${escapeHtml(salon.location)}</p>
+                        <p class="text-sm text-gray-400 mb-4"><i class='bx bx-time text-purple-400'></i> ${escapeHtml(salon.hours)}</p>
                     </div>
                 </div>
                 <div class="px-5 pb-5">
@@ -447,7 +449,7 @@
             });
         }
 
-        // BOOKING MODAL LISTENERS & DYNAMIC SERVICE LOADING
+        // BOOKING MODAL
         if (salonList) {
             salonList.addEventListener('click', (e) => {
                 const bookBtn = e.target.closest('.bookBtn');
@@ -464,7 +466,6 @@
                     
                     if (!selectedSalonData) return;
 
-                    // Dynamically populate services drop-down using the salon's services array
                     const serviceSelect = document.getElementById('serviceType');
                     if (serviceSelect) {
                         serviceSelect.innerHTML = '';
