@@ -540,6 +540,7 @@
 
                 <button
                     id="adminBtn"
+                    type="button"
                     class="hidden bg-purple-600 hover:bg-purple-700 text-xs px-3 py-2 rounded-xl font-bold items-center gap-1"
                 >
 
@@ -554,6 +555,7 @@
 
                 <button
                     id="logoutBtn"
+                    type="button"
                     class="hidden bg-red-600 hover:bg-red-700 px-3 py-2 rounded-xl text-xs font-bold items-center gap-1"
                 >
 
@@ -687,11 +689,27 @@
             </button>
 
 
-            <h2
-                class="text-xl font-bold mb-4 text-blue-400"
-            >
-                Book Appointment
-            </h2>
+            <div class="mb-5 pr-8">
+
+                <p
+                    class="text-xs text-gray-500 mb-1"
+                >
+                    Booking at
+                </p>
+
+                <h2
+                    id="bookingSalonName"
+                    class="text-xl font-bold text-blue-400"
+                >
+                    Book Appointment
+                </h2>
+
+                <p
+                    id="bookingSalonLocation"
+                    class="text-xs text-gray-400 mt-1"
+                ></p>
+
+            </div>
 
 
             <form
@@ -979,7 +997,6 @@
                 const EXPECTED_SALON_ID =
                     "Sv4zu4jERDR65IuURdss";
 
-
                 const EXPECTED_OWNER_ID =
                     "prgctpY58cVmPocgLuSRLRMajOI2";
 
@@ -993,78 +1010,90 @@
                         "salonList"
                     );
 
-
                 const bookingModal =
                     document.getElementById(
                         "bookingModal"
                     );
-
 
                 const bookingForm =
                     document.getElementById(
                         "bookingForm"
                     );
 
-
                 const closeModalBtn =
                     document.getElementById(
                         "closeModalBtn"
                     );
-
 
                 const adminBtn =
                     document.getElementById(
                         "adminBtn"
                     );
 
-
                 const logoutBtn =
                     document.getElementById(
                         "logoutBtn"
                     );
-
 
                 const searchBar =
                     document.getElementById(
                         "searchBar"
                     );
 
-
                 const searchBtn =
                     document.getElementById(
                         "searchBtn"
                     );
-
 
                 const bookingsToday =
                     document.getElementById(
                         "bookingsToday"
                     );
 
-
                 const custDateInput =
                     document.getElementById(
                         "custDate"
                     );
 
+                const custTimeInput =
+                    document.getElementById(
+                        "custTime"
+                    );
+
+                const custNameInput =
+                    document.getElementById(
+                        "custName"
+                    );
+
+                const custPhoneInput =
+                    document.getElementById(
+                        "custPhone"
+                    );
 
                 const serviceSelect =
                     document.getElementById(
                         "serviceType"
                     );
 
-
                 const confirmBookingBtn =
                     document.getElementById(
                         "confirmBookingBtn"
                     );
 
+                const bookingSalonName =
+                    document.getElementById(
+                        "bookingSalonName"
+                    );
+
+                const bookingSalonLocation =
+                    document.getElementById(
+                        "bookingSalonLocation"
+                    );
 
                 const firebaseStatus =
                     document.getElementById(
                         "firebaseStatus"
                     );
-
 
                 const debugPanel =
                     document.getElementById(
@@ -1079,26 +1108,87 @@
                 let selectedSalonId =
                     null;
 
-
                 let selectedSalonData =
                     null;
-
 
                 let allSalons =
                     [];
 
-
                 let salonsUnsubscribe =
                     null;
-
 
                 let bookingsUnsubscribe =
                     null;
 
 
                 /* ============================
-                   STATUS
+                   HELPERS
                 ============================ */
+
+                function escapeHtml(
+                    value
+                ) {
+
+                    if (
+                        value === null ||
+                        value === undefined
+                    ) {
+
+                        return "";
+
+                    }
+
+                    return String(value)
+                        .replace(
+                            /&/g,
+                            "&amp;"
+                        )
+                        .replace(
+                            /</g,
+                            "&lt;"
+                        )
+                        .replace(
+                            />/g,
+                            "&gt;"
+                        )
+                        .replace(
+                            /"/g,
+                            "&quot;"
+                        )
+                        .replace(
+                            /'/g,
+                            "&#039;"
+                        );
+
+                }
+
+
+                function getLocalDateString(
+                    date = new Date()
+                ) {
+
+                    return [
+
+                        date.getFullYear(),
+
+                        String(
+                            date.getMonth() + 1
+                        ).padStart(
+                            2,
+                            "0"
+                        ),
+
+                        String(
+                            date.getDate()
+                        ).padStart(
+                            2,
+                            "0"
+                        )
+
+                    ].join("-");
+
+                }
+
 
                 function showFirebaseStatus(
                     message,
@@ -1109,16 +1199,15 @@
                         return;
                     }
 
-
                     firebaseStatus.textContent =
                         message;
-
 
                     firebaseStatus.style.display =
                         "block";
 
-
-                    if (type === "error") {
+                    if (
+                        type === "error"
+                    ) {
 
                         firebaseStatus.style.color =
                             "#fca5a5";
@@ -1136,11 +1225,9 @@
 
                     }
 
-
                     clearTimeout(
                         firebaseStatus._timer
                     );
-
 
                     firebaseStatus._timer =
                         setTimeout(
@@ -1156,58 +1243,6 @@
                 }
 
 
-                /* ============================
-                   ESCAPE HTML
-                ============================ */
-
-                function escapeHtml(
-                    value
-                ) {
-
-                    if (
-                        value === null ||
-                        value === undefined
-                    ) {
-
-                        return "";
-
-                    }
-
-
-                    return String(value)
-
-                        .replace(
-                            /&/g,
-                            "&amp;"
-                        )
-
-                        .replace(
-                            /</g,
-                            "&lt;"
-                        )
-
-                        .replace(
-                            />/g,
-                            "&gt;"
-                        )
-
-                        .replace(
-                            /"/g,
-                            "&quot;"
-                        )
-
-                        .replace(
-                            /'/g,
-                            "&#039;"
-                        );
-
-                }
-
-
-                /* ============================
-                   DEBUG
-                ============================ */
-
                 function updateDebug(
                     data
                 ) {
@@ -1216,10 +1251,8 @@
                         return;
                     }
 
-
                     debugPanel.style.display =
                         "block";
-
 
                     debugPanel.innerHTML = `
 
@@ -1266,10 +1299,7 @@
 
                         <br><br>
 
-                        ${
-                            data ||
-                            "Checking Firestore..."
-                        }
+                        ${data || "Checking Firestore..."}
 
                     `;
 
@@ -1285,12 +1315,9 @@
                         "clickSound"
                     );
 
-
                 if (clickSound) {
-
                     clickSound.volume =
                         0.4;
-
                 }
 
 
@@ -1308,7 +1335,6 @@
                             );
 
                     }
-
 
                     if (
                         navigator.vibrate
@@ -1342,7 +1368,7 @@
 
 
                 /* ============================
-                   DATE LIMIT
+                   DATE LIMITS
                 ============================ */
 
                 if (custDateInput) {
@@ -1350,52 +1376,26 @@
                     const today =
                         new Date();
 
-
                     const maxDate =
                         new Date();
-
 
                     maxDate.setDate(
                         today.getDate() + 30
                     );
 
-
-                    function formatDate(
-                        date
-                    ) {
-
-                        return [
-
-                            date.getFullYear(),
-
-                            String(
-                                date.getMonth() + 1
-                            ).padStart(
-                                2,
-                                "0"
-                            ),
-
-                            String(
-                                date.getDate()
-                            ).padStart(
-                                2,
-                                "0"
-                            )
-
-                        ].join("-");
-
-                    }
-
-
                     custDateInput.min =
-                        formatDate(
+                        getLocalDateString(
                             today
                         );
 
-
                     custDateInput.max =
-                        formatDate(
+                        getLocalDateString(
                             maxDate
+                        );
+
+                    custDateInput.value =
+                        getLocalDateString(
+                            today
                         );
 
                 }
@@ -1415,7 +1415,6 @@
                                 : "Not logged in"
                         );
 
-
                         if (!user) {
 
                             logoutBtn.style.display =
@@ -1424,14 +1423,16 @@
                             adminBtn.style.display =
                                 "none";
 
+                            listenForBookings(
+                                null
+                            );
+
                             return;
 
                         }
 
-
                         logoutBtn.style.display =
                             "flex";
-
 
                         try {
 
@@ -1445,7 +1446,6 @@
                                     )
                                     .get();
 
-
                             if (
                                 !userSnap.exists
                             ) {
@@ -1455,24 +1455,29 @@
                                     user.uid
                                 );
 
+                                adminBtn.style.display =
+                                    "none";
+
+                                listenForBookings(
+                                    user.uid
+                                );
+
                                 return;
 
                             }
 
-
                             const userData =
-                                userSnap.data();
-
+                                userSnap.data() ||
+                                {};
 
                             const role =
-                                userData.role;
-
+                                userData.role ||
+                                "customer";
 
                             console.log(
                                 "USER DATA:",
                                 userData
                             );
-
 
                             if (
                                 role === "admin" ||
@@ -1482,20 +1487,16 @@
                                 adminBtn.style.display =
                                     "flex";
 
-
                                 adminBtn.innerHTML =
                                     role === "admin"
-
                                         ? `
                                             <i class="bx bx-shield-alt-2"></i>
                                             Admin
                                           `
-
                                         : `
                                             <i class="bx bx-store"></i>
                                             Owner Dashboard
                                           `;
-
 
                                 adminBtn.onclick =
                                     () => {
@@ -1516,13 +1517,60 @@
 
                                     };
 
+                            } else {
+
+                                adminBtn.style.display =
+                                    "none";
+
                             }
+
+                            listenForBookings(
+                                user.uid
+                            );
 
                         } catch (error) {
 
                             console.error(
                                 "User fetch error:",
                                 error
+                            );
+
+                            listenForBookings(
+                                user.uid
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                /* ============================
+                   LOGOUT
+                ============================ */
+
+                logoutBtn.addEventListener(
+                    "click",
+                    async () => {
+
+                        try {
+
+                            await auth.signOut();
+
+                            showFirebaseStatus(
+                                "Logged out successfully"
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "Logout error:",
+                                error
+                            );
+
+                            showFirebaseStatus(
+                                "Logout failed",
+                                "error"
                             );
 
                         }
@@ -1533,12 +1581,6 @@
 
                 /* =====================================================
                    DIRECT SALON DOCUMENT TEST
-
-                   This tests:
-
-                   /salons/Sv4zu4jERDR65IuURdss
-
-                   independently from the collection query.
                 ====================================================== */
 
                 async function testExpectedSalon() {
@@ -1567,7 +1609,6 @@
                         "================================"
                     );
 
-
                     try {
 
                         const snap =
@@ -1583,32 +1624,28 @@
                                         "server"
                                 });
 
-
                         console.log(
                             "DIRECT DOCUMENT EXISTS:",
                             snap.exists
                         );
-
 
                         if (
                             snap.exists
                         ) {
 
                             const data =
-                                snap.data();
-
+                                snap.data() ||
+                                {};
 
                             console.log(
                                 "DIRECT SALON DATA:",
                                 data
                             );
 
-
                             const ownerId =
                                 data.ownerId ||
                                 data.OwnerId ||
                                 null;
-
 
                             updateDebug(`
 
@@ -1619,7 +1656,6 @@
                                 <br><br>
 
                                 Path:
-
                                 <strong>
                                     /salons/${escapeHtml(
                                         EXPECTED_SALON_ID
@@ -1663,6 +1699,7 @@
                                 Hours:
                                 ${escapeHtml(
                                     data.hours ||
+                                    data.time ||
                                     "Missing"
                                 )}
 
@@ -1692,13 +1729,11 @@
                                 ${
                                     ownerId ===
                                     EXPECTED_OWNER_ID
-
                                         ? `
                                             <strong class="debug-ok">
                                                 YES ✓
                                             </strong>
                                           `
-
                                         : `
                                             <strong class="debug-error">
                                                 NO ✗
@@ -1742,7 +1777,6 @@
                             error
                         );
 
-
                         updateDebug(`
 
                             <strong class="debug-error">
@@ -1752,7 +1786,6 @@
                             <br><br>
 
                             Error code:
-
                             ${escapeHtml(
                                 error.code ||
                                 "unknown"
@@ -1761,7 +1794,6 @@
                             <br>
 
                             Error message:
-
                             ${escapeHtml(
                                 error.message ||
                                 "Unknown Firestore error"
@@ -1776,8 +1808,6 @@
 
                 /* =====================================================
                    LOAD SALONS
-
-                   This separately tests the entire /salons collection.
                 ====================================================== */
 
                 function loadSalons() {
@@ -1785,7 +1815,6 @@
                     if (!salonList) {
                         return;
                     }
-
 
                     if (
                         salonsUnsubscribe
@@ -1795,16 +1824,13 @@
 
                     }
 
-
                     console.log(
                         "Reading Firestore /salons..."
                     );
 
-
                     updateDebug(
                         "Reading <strong>/salons</strong> collection..."
                     );
-
 
                     salonsUnsubscribe =
                         db
@@ -1819,12 +1845,10 @@
                                         "SALONS SNAPSHOT"
                                     );
 
-
                                     console.log(
                                         "Number of salons:",
                                         snapshot.size
                                     );
-
 
                                     if (
                                         snapshot.empty
@@ -1843,20 +1867,17 @@
                                             <strong>
                                                 0
                                             </strong>
-
                                             document(s) found.
 
                                             <br><br>
 
-                                            The direct document test is running
-                                            separately above.
+                                            The direct document test
+                                            is running separately.
 
                                         `);
 
-
                                         allSalons =
                                             [];
-
 
                                         salonList.innerHTML = `
 
@@ -1864,7 +1885,9 @@
                                                 class="empty-state col-span-full"
                                             >
 
-                                                <i class="bx bx-store-alt"></i>
+                                                <i
+                                                    class="bx bx-store-alt"
+                                                ></i>
 
                                                 <h3>
                                                     No salons registered yet
@@ -1894,28 +1917,24 @@
 
                                         `;
 
-
                                         showFirebaseStatus(
                                             "Firestore returned 0 salons",
                                             "error"
                                         );
 
-
                                         return;
 
                                     }
 
-
                                     allSalons =
                                         [];
-
 
                                     snapshot.forEach(
                                         docSnap => {
 
                                             const data =
-                                                docSnap.data();
-
+                                                docSnap.data() ||
+                                                {};
 
                                             console.log(
                                                 "SALON DOCUMENT:",
@@ -1923,6 +1942,43 @@
                                                 data
                                             );
 
+                                            const services =
+                                                Array.isArray(
+                                                    data.services
+                                                )
+                                                    ? data.services
+                                                    : [];
+
+                                            const normalizedServices =
+                                                services.map(
+                                                    service => {
+
+                                                        if (
+                                                            typeof service ===
+                                                            "string"
+                                                        ) {
+
+                                                            return {
+                                                                name:
+                                                                    service,
+                                                                price:
+                                                                    0
+                                                            };
+
+                                                        }
+
+                                                        return {
+                                                            name:
+                                                                service?.name ||
+                                                                "Service",
+                                                            price:
+                                                                Number(
+                                                                    service?.price
+                                                                ) || 0
+                                                        };
+
+                                                    }
+                                                );
 
                                             const salon = {
 
@@ -1940,6 +1996,7 @@
 
                                                 email:
                                                     data.email ||
+                                                    data.ownerEmail ||
                                                     "",
 
                                                 location:
@@ -1956,14 +2013,9 @@
                                                     "https://via.placeholder.com/600x350?text=K%40si+Web",
 
                                                 services:
-                                                    Array.isArray(
-                                                        data.services
-                                                    )
-                                                        ? data.services
-                                                        : []
+                                                    normalizedServices
 
                                             };
-
 
                                             allSalons.push(
                                                 salon
@@ -1971,7 +2023,6 @@
 
                                         }
                                     );
-
 
                                     allSalons.sort(
                                         (
@@ -1983,14 +2034,18 @@
                                             )
                                     );
 
-
                                     renderSalonList(
                                         allSalons
                                     );
 
-
                                     updateBookingCount();
 
+                                    const expectedFound =
+                                        allSalons.some(
+                                            salon =>
+                                                salon.id ===
+                                                EXPECTED_SALON_ID
+                                        );
 
                                     updateDebug(`
 
@@ -2001,30 +2056,21 @@
                                         <br><br>
 
                                         Firestore /salons:
-
                                         <strong>
                                             ${snapshot.size}
                                         </strong>
-
                                         document(s) found.
 
                                         <br><br>
 
                                         Expected salon:
-
                                         ${
-                                            allSalons.some(
-                                                salon =>
-                                                    salon.id ===
-                                                    EXPECTED_SALON_ID
-                                            )
-
+                                            expectedFound
                                                 ? `
                                                     <strong class="debug-ok">
                                                         FOUND ✓
                                                     </strong>
                                                   `
-
                                                 : `
                                                     <strong class="debug-warning">
                                                         NOT FOUND
@@ -2033,7 +2079,6 @@
                                         }
 
                                     `);
-
 
                                     showFirebaseStatus(
                                         `${allSalons.length} salon${allSalons.length === 1 ? "" : "s"} loaded`
@@ -2048,7 +2093,6 @@
                                         error
                                     );
 
-
                                     updateDebug(`
 
                                         <strong class="debug-error">
@@ -2058,7 +2102,6 @@
                                         <br><br>
 
                                         Error code:
-
                                         ${escapeHtml(
                                             error.code ||
                                             "unknown"
@@ -2067,7 +2110,6 @@
                                         <br>
 
                                         Error message:
-
                                         ${escapeHtml(
                                             error.message ||
                                             "Unknown Firestore error"
@@ -2075,14 +2117,15 @@
 
                                     `);
 
-
                                     salonList.innerHTML = `
 
                                         <div
                                             class="error-state col-span-full"
                                         >
 
-                                            <i class="bx bx-error-circle"></i>
+                                            <i
+                                                class="bx bx-error-circle"
+                                            ></i>
 
                                             <p>
                                                 Failed to load salons
@@ -2090,14 +2133,14 @@
 
                                             <small>
                                                 ${escapeHtml(
-                                                    error.message
+                                                    error.message ||
+                                                    "Firestore error"
                                                 )}
                                             </small>
 
                                         </div>
 
                                     `;
-
 
                                     showFirebaseStatus(
                                         "Firestore error",
@@ -2122,7 +2165,6 @@
                     salonList.innerHTML =
                         "";
 
-
                     if (
                         !salons.length
                     ) {
@@ -2133,7 +2175,9 @@
                                 class="empty-state col-span-full"
                             >
 
-                                <i class="bx bx-search-alt"></i>
+                                <i
+                                    class="bx bx-search-alt"
+                                ></i>
 
                                 <h3>
                                     No salons found
@@ -2147,11 +2191,9 @@
 
                         `;
 
-
                         return;
 
                     }
-
 
                     salons.forEach(
                         salon =>
@@ -2176,10 +2218,8 @@
                             "div"
                         );
 
-
                     card.className =
                         "salon-card flex flex-col justify-between";
-
 
                     const services =
                         Array.isArray(
@@ -2188,10 +2228,8 @@
                             ? salon.services
                             : [];
 
-
                     const servicePreview =
                         services.length
-
                             ? services
                                 .slice(
                                     0,
@@ -2204,12 +2242,10 @@
                                             service?.name ||
                                             "Service";
 
-
                                         const price =
                                             Number(
                                                 service?.price
                                             ) || 0;
-
 
                                         return `
 
@@ -2218,7 +2254,7 @@
                                                     name
                                                 )}
                                                 —
-                                                R${price}
+                                                R${price.toFixed(2)}
                                             </div>
 
                                         `;
@@ -2226,22 +2262,18 @@
                                     }
                                 )
                                 .join("")
-
                             : `
                                 <div>
                                     Services available when booking
                                 </div>
                               `;
 
-
                     const hasOwner =
                         !!salon.ownerId;
-
 
                     const image =
                         salon.image ||
                         "https://via.placeholder.com/600x350?text=K%40si+Web";
-
 
                     card.innerHTML = `
 
@@ -2262,7 +2294,6 @@
                                 "
                             >
 
-
                             <div class="p-5">
 
                                 <h3
@@ -2272,7 +2303,6 @@
                                         salon.name
                                     )}
                                 </h3>
-
 
                                 <p
                                     class="text-sm text-gray-300 mb-1"
@@ -2288,7 +2318,6 @@
 
                                 </p>
 
-
                                 <p
                                     class="text-sm text-gray-400 mb-4"
                                 >
@@ -2303,7 +2332,6 @@
 
                                 </p>
 
-
                                 <div
                                     class="text-xs text-gray-400 leading-6"
                                 >
@@ -2312,54 +2340,44 @@
 
                                 </div>
 
-
                                 ${
                                     salon.id ===
                                     EXPECTED_SALON_ID
-
                                         ? `
-
                                             <div
                                                 class="mt-3 text-[10px] text-blue-400"
                                             >
                                                 ✓ Expected salon found
                                             </div>
-
                                           `
-
                                         : ""
+                                }
+
+                                ${
+                                    hasOwner
+                                        ? `
+                                            <div
+                                                class="mt-2 text-[10px] text-green-400"
+                                            >
+                                                ✓ Owner connected
+                                            </div>
+                                          `
+                                        : `
+                                            <div
+                                                class="mt-2 text-[10px] text-red-400"
+                                            >
+                                                ⚠ Owner connection missing
+                                            </div>
+                                          `
                                 }
 
                             </div>
 
                         </div>
 
-
                         <div
                             class="px-5 pb-5"
                         >
-
-                            ${
-                                !hasOwner
-
-                                    ? `
-
-                                        <small
-                                            style="
-                                                color:#ff4757;
-                                                display:block;
-                                                margin-bottom:8px;
-                                                font-weight:700;
-                                            "
-                                        >
-                                            ⚠️ Owner connection missing
-                                        </small>
-
-                                      `
-
-                                    : ""
-                            }
-
 
                             <button
                                 class="primary-btn bookBtn"
@@ -2385,7 +2403,6 @@
 
                     `;
 
-
                     salonList.appendChild(
                         card
                     );
@@ -2406,7 +2423,771 @@
                                 .trim()
                             : "";
 
+                    if (!term) {
+
+                        renderSalonList(
+                            allSalons
+                        );
+
+                        return;
+
+                    }
 
                     const filtered =
                         allSalons.filter(
-                            salon
+                            salon => {
+
+                                const name =
+                                    String(
+                                        salon.name ||
+                                        ""
+                                    ).toLowerCase();
+
+                                const location =
+                                    String(
+                                        salon.location ||
+                                        ""
+                                    ).toLowerCase();
+
+                                const email =
+                                    String(
+                                        salon.email ||
+                                        ""
+                                    ).toLowerCase();
+
+                                return (
+                                    name.includes(
+                                        term
+                                    ) ||
+                                    location.includes(
+                                        term
+                                    ) ||
+                                    email.includes(
+                                        term
+                                    )
+                                );
+
+                            }
+                        );
+
+                    renderSalonList(
+                        filtered
+                    );
+
+                }
+
+
+                if (searchBtn) {
+
+                    searchBtn.addEventListener(
+                        "click",
+                        executeSearch
+                    );
+
+                }
+
+
+                if (searchBar) {
+
+                    searchBar.addEventListener(
+                        "input",
+                        executeSearch
+                    );
+
+                    searchBar.addEventListener(
+                        "keydown",
+                        event => {
+
+                            if (
+                                event.key ===
+                                "Enter"
+                            ) {
+
+                                event.preventDefault();
+
+                                executeSearch();
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                /* ============================
+                   OPEN BOOKING MODAL
+                ============================ */
+
+                function openBooking(
+                    salonId
+                ) {
+
+                    const salon =
+                        allSalons.find(
+                            item =>
+                                item.id ===
+                                salonId
+                        );
+
+                    if (!salon) {
+
+                        showFirebaseStatus(
+                            "Salon could not be found",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+                    if (
+                        !salon.ownerId
+                    ) {
+
+                        showFirebaseStatus(
+                            "This salon is not connected to an owner",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+                    selectedSalonId =
+                        salon.id;
+
+                    selectedSalonData =
+                        salon;
+
+                    bookingSalonName.textContent =
+                        salon.name;
+
+                    bookingSalonLocation.textContent =
+                        salon.location;
+
+                    populateServices(
+                        salon.services
+                    );
+
+                    if (
+                        !custDateInput.value
+                    ) {
+
+                        custDateInput.value =
+                            getLocalDateString();
+
+                    }
+
+                    bookingModal.classList.add(
+                        "active"
+                    );
+
+                    document.body.style.overflow =
+                        "hidden";
+
+                }
+
+
+                /* ============================
+                   SERVICES
+                ============================ */
+
+                function populateServices(
+                    services
+                ) {
+
+                    serviceSelect.innerHTML =
+                        "";
+
+                    if (
+                        !Array.isArray(
+                            services
+                        ) ||
+                        !services.length
+                    ) {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value =
+                            "";
+
+                        option.textContent =
+                            "No services available";
+
+                        serviceSelect.appendChild(
+                            option
+                        );
+
+                        return;
+
+                    }
+
+                    services.forEach(
+                        service => {
+
+                            const name =
+                                service?.name ||
+                                "Service";
+
+                            const price =
+                                Number(
+                                    service?.price
+                                ) || 0;
+
+                            const option =
+                                document.createElement(
+                                    "option"
+                                );
+
+                            option.value =
+                                name;
+
+                            option.dataset.price =
+                                String(
+                                    price
+                                );
+
+                            option.textContent =
+                                `${name} — R${price.toFixed(2)}`;
+
+                            serviceSelect.appendChild(
+                                option
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                /* ============================
+                   CLOSE MODAL
+                ============================ */
+
+                function closeBookingModal() {
+
+                    bookingModal.classList.remove(
+                        "active"
+                    );
+
+                    document.body.style.overflow =
+                        "";
+
+                    selectedSalonId =
+                        null;
+
+                    selectedSalonData =
+                        null;
+
+                }
+
+
+                closeModalBtn.addEventListener(
+                    "click",
+                    closeBookingModal
+                );
+
+
+                bookingModal.addEventListener(
+                    "click",
+                    event => {
+
+                        if (
+                            event.target ===
+                            bookingModal
+                        ) {
+
+                            closeBookingModal();
+
+                        }
+
+                    }
+                );
+
+
+                document.addEventListener(
+                    "keydown",
+                    event => {
+
+                        if (
+                            event.key ===
+                            "Escape" &&
+                            bookingModal.classList.contains(
+                                "active"
+                            )
+                        ) {
+
+                            closeBookingModal();
+
+                        }
+
+                    }
+                );
+
+
+                /* ============================
+                   BOOK BUTTONS
+                ============================ */
+
+                salonList.addEventListener(
+                    "click",
+                    event => {
+
+                        const button =
+                            event.target.closest(
+                                ".bookBtn"
+                            );
+
+                        if (!button) {
+                            return;
+                        }
+
+                        if (
+                            button.disabled
+                        ) {
+                            return;
+                        }
+
+                        const salonId =
+                            button.dataset.id;
+
+                        openBooking(
+                            salonId
+                        );
+
+                    }
+                );
+
+
+                /* ============================
+                   CREATE BOOKING
+                ============================ */
+
+                bookingForm.addEventListener(
+                    "submit",
+                    async event => {
+
+                        event.preventDefault();
+
+                        const user =
+                            auth.currentUser;
+
+                        if (!user) {
+
+                            showFirebaseStatus(
+                                "Please log in before booking",
+                                "error"
+                            );
+
+                            window.location.href =
+                                "home.html";
+
+                            return;
+
+                        }
+
+                        if (
+                            !selectedSalonId ||
+                            !selectedSalonData
+                        ) {
+
+                            showFirebaseStatus(
+                                "Please select a salon first",
+                                "error"
+                            );
+
+                            return;
+
+                        }
+
+                        const customerName =
+                            custNameInput.value.trim();
+
+                        const phone =
+                            custPhoneInput.value.trim();
+
+                        const date =
+                            custDateInput.value;
+
+                        const time =
+                            custTimeInput.value;
+
+                        const selectedOption =
+                            serviceSelect.options[
+                                serviceSelect.selectedIndex
+                            ];
+
+                        const serviceName =
+                            selectedOption
+                                ? selectedOption.value
+                                : "";
+
+                        const price =
+                            selectedOption
+                                ? Number(
+                                    selectedOption.dataset.price
+                                ) || 0
+                                : 0;
+
+                        if (
+                            !customerName ||
+                            !phone ||
+                            !date ||
+                            !time ||
+                            !serviceName
+                        ) {
+
+                            showFirebaseStatus(
+                                "Please complete all booking fields",
+                                "error"
+                            );
+
+                            return;
+
+                        }
+
+                        if (
+                            !selectedSalonData.ownerId
+                        ) {
+
+                            showFirebaseStatus(
+                                "This salon has no ownerId",
+                                "error"
+                            );
+
+                            return;
+
+                        }
+
+                        if (
+                            date <
+                            getLocalDateString()
+                        ) {
+
+                            showFirebaseStatus(
+                                "Please select today or a future date",
+                                "error"
+                            );
+
+                            return;
+
+                        }
+
+                        confirmBookingBtn.disabled =
+                            true;
+
+                        confirmBookingBtn.innerHTML = `
+                            <i class="bx bx-loader-alt bx-spin"></i>
+                            Saving Booking...
+                        `;
+
+                        try {
+
+                            /*
+                             * IMPORTANT:
+                             * ownerId comes directly from
+                             * the salon Firestore document.
+                             */
+
+                            const bookingData = {
+
+                                userId:
+                                    user.uid,
+
+                                ownerId:
+                                    selectedSalonData.ownerId,
+
+                                salonId:
+                                    selectedSalonId,
+
+                                salonName:
+                                    selectedSalonData.name,
+
+                                customerName:
+                                    customerName,
+
+                                phone:
+                                    phone,
+
+                                service:
+                                    serviceName,
+
+                                price:
+                                    price,
+
+                                date:
+                                    date,
+
+                                time:
+                                    time,
+
+                                status:
+                                    "pending",
+
+                                createdAt:
+                                    firebase.firestore
+                                        .FieldValue
+                                        .serverTimestamp(),
+
+                                updatedAt:
+                                    firebase.firestore
+                                        .FieldValue
+                                        .serverTimestamp()
+
+                            };
+
+                            console.log(
+                                "CREATING BOOKING:",
+                                bookingData
+                            );
+
+                            const bookingRef =
+                                await db
+                                    .collection(
+                                        "bookings"
+                                    )
+                                    .add(
+                                        bookingData
+                                    );
+
+                            console.log(
+                                "BOOKING CREATED:",
+                                bookingRef.id
+                            );
+
+                            showFirebaseStatus(
+                                "Booking confirmed successfully"
+                            );
+
+                            bookingForm.reset();
+
+                            custDateInput.value =
+                                getLocalDateString();
+
+                            closeBookingModal();
+
+                            updateBookingCount();
+
+                        } catch (error) {
+
+                            console.error(
+                                "BOOKING ERROR:",
+                                error
+                            );
+
+                            updateDebug(`
+
+                                <strong class="debug-error">
+                                    BOOKING ERROR
+                                </strong>
+
+                                <br><br>
+
+                                Error code:
+                                ${escapeHtml(
+                                    error.code ||
+                                    "unknown"
+                                )}
+
+                                <br>
+
+                                Error message:
+                                ${escapeHtml(
+                                    error.message ||
+                                    "Unknown booking error"
+                                )}
+
+                            `);
+
+                            showFirebaseStatus(
+                                error.message ||
+                                "Booking could not be saved",
+                                "error"
+                            );
+
+                        } finally {
+
+                            confirmBookingBtn.disabled =
+                                false;
+
+                            confirmBookingBtn.innerHTML =
+                                "Confirm Booking";
+
+                        }
+
+                    }
+                );
+
+
+                /* =====================================================
+                   BOOKING COUNT
+                ====================================================== */
+
+                function listenForBookings(
+                    uid
+                ) {
+
+                    if (
+                        bookingsUnsubscribe
+                    ) {
+
+                        bookingsUnsubscribe();
+
+                        bookingsUnsubscribe =
+                            null;
+
+                    }
+
+                    if (!uid) {
+
+                        if (bookingsToday) {
+
+                            bookingsToday.textContent =
+                                "0 bookings today";
+
+                        }
+
+                        return;
+
+                    }
+
+                    /*
+                     * No orderBy is used here so this
+                     * listener does not require a composite
+                     * Firestore index.
+                     */
+
+                    bookingsUnsubscribe =
+                        db
+                            .collection(
+                                "bookings"
+                            )
+                            .onSnapshot(
+
+                                snapshot => {
+
+                                    const today =
+                                        getLocalDateString();
+
+                                    let count =
+                                        0;
+
+                                    snapshot.forEach(
+                                        docSnap => {
+
+                                            const data =
+                                                docSnap.data() ||
+                                                {};
+
+                                            if (
+                                                data.date ===
+                                                today
+                                            ) {
+
+                                                count++;
+
+                                            }
+
+                                        }
+                                    );
+
+                                    bookingsToday.textContent =
+                                        `${count} booking${count === 1 ? "" : "s"} today`;
+
+                                },
+
+                                error => {
+
+                                    console.error(
+                                        "BOOKING COUNT ERROR:",
+                                        error
+                                    );
+
+                                    /*
+                                     * Do not replace a successful
+                                     * salon screen with a booking
+                                     * count permission error.
+                                     */
+
+                                    bookingsToday.textContent =
+                                        "Bookings today";
+
+                                }
+
+                            );
+
+                }
+
+
+                async function updateBookingCount() {
+
+                    /*
+                     * This function is intentionally lightweight.
+                     * The real-time listener above keeps the header
+                     * current whenever the user is authenticated.
+                     */
+
+                    const user =
+                        auth.currentUser;
+
+                    if (
+                        user
+                    ) {
+
+                        listenForBookings(
+                            user.uid
+                        );
+
+                    }
+
+                }
+
+
+                /* ============================
+                   INITIAL LOAD
+                ============================ */
+
+                testExpectedSalon();
+
+                loadSalons();
+
+
+                /* ============================
+                   CLEANUP
+                ============================ */
+
+                window.addEventListener(
+                    "beforeunload",
+                    () => {
+
+                        if (
+                            salonsUnsubscribe
+                        ) {
+
+                            salonsUnsubscribe();
+
+                        }
+
+                        if (
+                            bookingsUnsubscribe
+                        ) {
+
+                            bookingsUnsubscribe();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+
+    </html>
