@@ -3,109 +3,789 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
     <title>K@si Web | Fresh Cuts, No Lines</title>
+
     <meta name="theme-color" content="#3B82F6">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="K@si Web - Book your barber, skip the queue and get fresh.">
+
+    <link
+        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+        rel="stylesheet"
+    >
+
+    <link rel="manifest" href="manifest.json">
+
     <style>
-      body { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a3e 100%); }
-    .glass { backdrop-filter: blur(12px); background: rgba(17, 17, 30, 0.7); border: 1px solid rgba(59, 130, 246, 0.3); }
-    .glow:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-    .cursor { animation: blink 1s infinite; }
-      @keyframes blink { 50% { opacity: 0; } }
-    .cookie-banner { position: fixed; bottom: 20px; left: 10px; right: 10px; z-index: 9999; display: flex; justify-content: center; }
-    .cookie-box { position: relative; max-width: 500px; width: 100%; padding: 20px; background: rgba(15,15,30,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 15px; color: #fff; box-shadow: 0 0 20px rgba(59,130,246,0.3); animation: slideUp 0.4s ease; }
-      @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; }
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: linear-gradient(
+                135deg,
+                #0a0a1a 0%,
+                #1a0a3e 100%
+            );
+
+            color: white;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+        }
+
+        .logo-icon {
+            font-size: 80px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon i {
+            color: #3B82F6;
+            filter:
+                drop-shadow(0 0 12px rgba(59,130,246,0.5));
+        }
+
+        .title {
+            font-size: clamp(2.5rem, 12vw, 4rem);
+            font-weight: 900;
+            margin: 0 0 8px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #60a5fa,
+                    #a78bfa
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .typed-wrapper {
+            min-height: 45px;
+            font-size: clamp(1.4rem, 6vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        #typed-text {
+            color: #60a5fa;
+        }
+
+        .cursor {
+            color: #60a5fa;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            margin: 0 0 30px;
+            font-size: 1rem;
+        }
+
+        .glass {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            background: rgba(17,17,30,0.7);
+
+            border:
+                1px solid
+                rgba(59,130,246,0.3);
+
+            border-radius: 20px;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 270px;
+
+            object-fit: cover;
+
+            display: block;
+
+            border-radius: 20px;
+        }
+
+        .image-card {
+            overflow: hidden;
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,0.4);
+        }
+
+        .glow:hover {
+            box-shadow:
+                0 0 25px
+                rgba(59,130,246,0.5);
+        }
+
+        .main-button,
+        .subscribe-button {
+            width: 100%;
+            border: none;
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            font-size: 1rem;
+            font-weight: 800;
+
+            color: white;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                opacity 0.2s ease;
+
+            margin-bottom: 12px;
+        }
+
+        .main-button {
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #7c3aed
+                );
+        }
+
+        .subscribe-button {
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #2563eb
+                );
+        }
+
+        .main-button:hover,
+        .subscribe-button:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 10px 25px
+                rgba(59,130,246,0.3);
+        }
+
+        .main-button:active,
+        .subscribe-button:active {
+            transform: scale(0.98);
+        }
+
+        .footer {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* COOKIE */
+
+        .cookie-banner {
+            position: fixed;
+
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+
+            z-index: 9999;
+
+            display: none;
+            justify-content: center;
+        }
+
+        .cookie-box {
+            position: relative;
+
+            width: 100%;
+            max-width: 500px;
+
+            padding: 20px;
+
+            background:
+                rgba(15,15,30,0.96);
+
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+
+            border:
+                1px solid
+                rgba(59,130,246,0.4);
+
+            border-radius: 18px;
+
+            color: white;
+
+            box-shadow:
+                0 0 25px
+                rgba(59,130,246,0.3);
+
+            animation:
+                slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .cookie-icon {
+            font-size: 38px;
+            text-align: center;
+        }
+
+        .cookie-title {
+            color: #60a5fa;
+            text-align: center;
+            font-weight: 800;
+            margin: 5px 0 8px;
+        }
+
+        .cookie-description {
+            color: #9ca3af;
+            text-align: center;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .cookie-close {
+            position: absolute;
+            top: 7px;
+            right: 12px;
+
+            border: none;
+            background: transparent;
+
+            color: #9ca3af;
+
+            font-size: 28px;
+
+            cursor: pointer;
+        }
+
+        .cookie-close:hover {
+            color: #3B82F6;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cookie-buttons button {
+            flex: 1;
+
+            border: none;
+
+            padding: 12px;
+
+            border-radius: 12px;
+
+            color: white;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        #acceptAllCookies {
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #7c3aed
+                );
+        }
+
+        #essentialCookies {
+            background: #374151;
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .hero-image {
+                height: 230px;
+            }
+
+            .cookie-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 
-    <!-- ONESIGNAL SDK v16 -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <!-- ONESIGNAL -->
+    <script
+        src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+        defer>
+    </script>
+
     <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({ appId: "9a85cfba-e375-4527-a9d3-a772dc9c0fa0" });
-      });
+        window.OneSignalDeferred =
+            window.OneSignalDeferred || [];
+
+        OneSignalDeferred.push(async function(OneSignal) {
+
+            try {
+
+                await OneSignal.init({
+                    appId:
+                        "9a85cfba-e375-4527-a9d3-a772dc9c0fa0"
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "OneSignal initialization error:",
+                    error
+                );
+
+            }
+
+        });
     </script>
 </head>
-<body class="text-white min-h-screen flex items-center justify-center">
-    <div class="text-center px-4 max-w-lg">
-        <div class="text-8xl mb-4"><i class='bx bx-cut text-blue-500'></i></div>
-        <h1 class="text-5xl font-extrabold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">K@si Web</h1>
-        <div class="text-2xl h-10 mb-2"><span id="typed-text" class="text-blue-400"></span><span class="cursor text-blue-400">|</span></div>
-        <p class="text-gray-400 mb-8">Book your barber. Skip the queue. Get fresh.</p>
 
-        <div class="glass rounded-2xl p-0 mb-8 overflow-hidden glow">
-           <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Fresh Cut" class="w-full h-64 object-cover" onerror="this.src='https://via.placeholder.com/400x250/1a0a3e/3b82f6?text=Fresh+Cut'">
-        </div>
+<body>
 
-        <a href="home.html" id="getStartedBtn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-4 rounded-xl font-bold mb-3 block transition transform hover:scale-105">Get Started <i class='bx bx-right-arrow-alt'></i></a>
-        
-        <button id="subscribe-btn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 p-4 rounded-xl font-bold">🔔 Get Booking Alerts</button>
-        <p class="text-gray-500 text-sm mt-6">© 2026 K@si Web • Made for Kasi People</p>
+<div class="page">
+
+    <div class="logo-icon">
+        <i class="bx bx-cut"></i>
     </div>
 
-    <!-- COOKIE BANNER -->
-    <div id="cookieBanner" class="cookie-banner" style="display:none;">
-      <div class="cookie-box">
-        <div class="text-4xl text-center mb-2">🍪</div>
-        <h4 class="text-blue-400 text-center font-bold mb-2">COOKIES & NOTIFICATIONS</h4>
-        <p class="text-gray-400 text-sm text-center mb-4">We use cookies to save your bookings. Owners get instant alerts when you book.</p>
-        <button class="absolute top-2 right-3 text-gray-400 hover:text-blue-400" id="cookieClose">×</button>
-        <div class="flex gap-3">
-          <button id="acceptAllCookies" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl font-bold">Accept All</button>
-          <button id="essentialCookies" class="flex-1 bg-gray-700 hover:bg-gray-600 p-3 rounded-xl font-bold">Essential Only</button>
-        </div>
-      </div>
+    <h1 class="title">
+        K@si Web
+    </h1>
+
+    <div class="typed-wrapper">
+        <span id="typed-text"></span>
+        <span class="cursor">|</span>
     </div>
+
+    <p class="subtitle">
+        Book your barber. Skip the queue. Get fresh.
+    </p>
+
+    <div class="glass image-card glow">
+
+        <img
+            src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
+            alt="Fresh Cut"
+            class="hero-image"
+            onerror="
+                this.src='https://via.placeholder.com/500x300/1a0a3e/3b82f6?text=Fresh+Cut'
+            "
+        >
+
+    </div>
+
+    <a
+        href="home.html"
+        id="getStartedBtn"
+        class="main-button"
+        style="
+            display:block;
+            text-decoration:none;
+        "
+    >
+        Get Started
+        <i class="bx bx-right-arrow-alt"></i>
+    </a>
+
+    <button
+        id="subscribe-btn"
+        class="subscribe-button"
+        type="button"
+    >
+        🔔 Get Booking Alerts
+    </button>
+
+    <p class="footer">
+        © 2026 K@si Web • Made for Kasi People
+    </p>
+
+</div>
+
+
+<!-- COOKIE BANNER -->
+
+<div
+    id="cookieBanner"
+    class="cookie-banner"
+>
+
+    <div class="cookie-box">
+
+        <div class="cookie-icon">
+            🍪
+        </div>
+
+        <h4 class="cookie-title">
+            COOKIES & NOTIFICATIONS
+        </h4>
+
+        <p class="cookie-description">
+            We use cookies to save your preferences.
+            Owners can receive instant booking alerts.
+        </p>
+
+        <button
+            id="cookieClose"
+            class="cookie-close"
+            type="button"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <div class="cookie-buttons">
+
+            <button
+                id="acceptAllCookies"
+                type="button"
+            >
+                Accept All
+            </button>
+
+            <button
+                id="essentialCookies"
+                type="button"
+            >
+                Essential Only
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
-    // WORD ANIMATION
-    const words = ["Fresh Cuts", "No Lines", "Kasi Prices"];
-    let wordIndex = 0; let charIndex = 0; let isDeleting = false;
-    const typedText = document.getElementById('typed-text');
-    function type() {
-        const currentWord = words[wordIndex];
-        if (isDeleting) { typedText.textContent = currentWord.substring(0, charIndex--); } 
-        else { typedText.textContent = currentWord.substring(0, charIndex++); }
-        if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; setTimeout(type, 1500); return; } 
-        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
-        setTimeout(type, isDeleting? 80 : 120);
-    }
-    document.addEventListener('DOMContentLoaded', type);
 
-    // COOKIE + ONESIGNAL
-    const banner = document.getElementById('cookieBanner');
-    const acceptAll = document.getElementById('acceptAllCookies');
-    const essential = document.getElementById('essentialCookies');
-    const closeBtn = document.getElementById('cookieClose');
-    const subBtn = document.getElementById('subscribe-btn');
+    /* ================================
+       TYPING ANIMATION
+    ================================= */
 
-    setTimeout(() => { if(banner) banner.style.display = 'flex'; }, 800);
+    const words = [
+        "Fresh Cuts",
+        "No Lines",
+        "Kasi Prices"
+    ];
 
-    function saveChoice(choice) {
-        localStorage.setItem('kasiCookieChoice', choice);
-        if(banner) banner.style.display = 'none';
-    }
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
 
-    acceptAll?.addEventListener('click', () => {
-        saveChoice('all');
-        OneSignalDeferred.push(async function(OneSignal) { 
-            await OneSignal.showNativePrompt();
-            await OneSignal.registerForPushNotifications();
-        });
-    });
-    essential?.addEventListener('click', () => saveChoice('essential'));
-    closeBtn?.addEventListener('click', () => saveChoice('essential'));
-    
-    subBtn?.addEventListener('click', async () => {
-        const choice = localStorage.getItem('kasiCookieChoice');
-        if(choice!== 'all'){
-            alert("Please accept all cookies first to enable notifications 🍪");
-            if(banner) banner.style.display = 'flex';
+    const typedText =
+        document.getElementById("typed-text");
+
+    function typeText() {
+
+        if (!typedText) return;
+
+        const word =
+            words[wordIndex];
+
+        if (deleting) {
+
+            charIndex--;
+
+        } else {
+
+            charIndex++;
+
+        }
+
+        typedText.textContent =
+            word.substring(0, charIndex);
+
+        if (
+            !deleting &&
+            charIndex >= word.length
+        ) {
+
+            deleting = true;
+
+            setTimeout(
+                typeText,
+                1500
+            );
+
             return;
         }
-        OneSignalDeferred.push(async function(OneSignal) { await OneSignal.showNativePrompt(); });
-    });
+
+        if (
+            deleting &&
+            charIndex <= 0
+        ) {
+
+            deleting = false;
+
+            wordIndex =
+                (wordIndex + 1) %
+                words.length;
+        }
+
+        setTimeout(
+            typeText,
+            deleting ? 80 : 120
+        );
+    }
+
+    typeText();
+
+
+    /* ================================
+       COOKIE SYSTEM
+    ================================= */
+
+    const banner =
+        document.getElementById(
+            "cookieBanner"
+        );
+
+    const acceptAll =
+        document.getElementById(
+            "acceptAllCookies"
+        );
+
+    const essential =
+        document.getElementById(
+            "essentialCookies"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "cookieClose"
+        );
+
+    const subscribeButton =
+        document.getElementById(
+            "subscribe-btn"
+        );
+
+
+    function hideBanner() {
+
+        if (banner) {
+
+            banner.style.display =
+                "none";
+        }
+    }
+
+
+    function showBanner() {
+
+        if (banner) {
+
+            banner.style.display =
+                "flex";
+        }
+    }
+
+
+    function saveCookieChoice(choice) {
+
+        localStorage.setItem(
+            "kasiCookieChoice",
+            choice
+        );
+
+        hideBanner();
+    }
+
+
+    const savedChoice =
+        localStorage.getItem(
+            "kasiCookieChoice"
+        );
+
+    if (!savedChoice) {
+
+        setTimeout(
+            showBanner,
+            1000
+        );
+    }
+
+
+    acceptAll?.addEventListener(
+        "click",
+        async () => {
+
+            saveCookieChoice("all");
+
+            try {
+
+                if (
+                    window.OneSignalDeferred
+                ) {
+
+                    OneSignalDeferred.push(
+                        async function(OneSignal) {
+
+                            try {
+
+                                await OneSignal.showNativePrompt();
+
+                                await OneSignal
+                                    .registerForPushNotifications();
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Notification permission error:",
+                                    error
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        }
+    );
+
+
+    essential?.addEventListener(
+        "click",
+        () => {
+
+            saveCookieChoice(
+                "essential"
+            );
+
+        }
+    );
+
+
+    closeButton?.addEventListener(
+        "click",
+        () => {
+
+            saveCookieChoice(
+                "essential"
+            );
+
+        }
+    );
+
+
+    /* ================================
+       BOOKING ALERT BUTTON
+    ================================= */
+
+    subscribeButton?.addEventListener(
+        "click",
+        () => {
+
+            const choice =
+                localStorage.getItem(
+                    "kasiCookieChoice"
+                );
+
+            if (choice !== "all") {
+
+                showBanner();
+
+                alert(
+                    "Please choose Accept All first to enable booking alerts 🍪"
+                );
+
+                return;
+            }
+
+            if (
+                window.OneSignalDeferred
+            ) {
+
+                OneSignalDeferred.push(
+                    async function(OneSignal) {
+
+                        try {
+
+                            await OneSignal
+                                .showNativePrompt();
+
+                            await OneSignal
+                                .registerForPushNotifications();
+
+                        } catch (error) {
+
+                            console.error(
+                                "OneSignal error:",
+                                error
+                            );
+
+                            alert(
+                                "Notification setup could not be completed."
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
 </script>
+
 </body>
-</html>
+                </html>
