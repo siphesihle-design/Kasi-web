@@ -15,8 +15,8 @@
     <title>K@si Web | Salons</title>
 
     <link
-        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
+        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
     >
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -49,9 +49,9 @@
             min-height: 100vh;
         }
 
-        /* ================================
+        /* =================================
            BOTTOM NAV
-        ================================ */
+        ================================= */
 
         .nav-grid {
             position: fixed;
@@ -128,9 +128,9 @@
             color: #a855f7;
         }
 
-        /* ================================
+        /* =================================
            SALON CARD
-        ================================ */
+        ================================= */
 
         .salon-card {
             transition:
@@ -171,9 +171,9 @@
                 #111827;
         }
 
-        /* ================================
+        /* =================================
            BUTTON
-        ================================ */
+        ================================= */
 
         .primary-btn {
             background:
@@ -213,9 +213,9 @@
             transform: none;
         }
 
-        /* ================================
+        /* =================================
            MODAL
-        ================================ */
+        ================================= */
 
         .modal {
             display: none;
@@ -244,9 +244,9 @@
             display: flex;
         }
 
-        /* ================================
+        /* =================================
            LOADING
-        ================================ */
+        ================================= */
 
         .loading-box {
             text-align: center;
@@ -270,9 +270,9 @@
                 12px;
         }
 
-        /* ================================
+        /* =================================
            EMPTY
-        ================================ */
+        ================================= */
 
         .empty-state {
             text-align: center;
@@ -316,9 +316,9 @@
                 0.95rem;
         }
 
-        /* ================================
+        /* =================================
            ERROR
-        ================================ */
+        ================================= */
 
         .error-state {
             text-align: center;
@@ -357,9 +357,9 @@
                 break-word;
         }
 
-        /* ================================
+        /* =================================
            FIREBASE STATUS
-        ================================ */
+        ================================= */
 
         #firebaseStatus {
             position: fixed;
@@ -404,9 +404,9 @@
                 rgba(0, 0, 0, 0.3);
         }
 
-        /* ================================
-           DEBUG PANEL
-        ================================ */
+        /* =================================
+           DIAGNOSTICS
+        ================================= */
 
         #debugPanel {
             display: none;
@@ -440,7 +440,7 @@
                 break-word;
 
             line-height:
-                1.7;
+                1.75;
         }
 
         #debugPanel strong {
@@ -448,9 +448,18 @@
                 #60a5fa;
         }
 
-        /* ================================
-           DIAGNOSTIC BADGES
-        ================================ */
+        .debug-section {
+            padding:
+                12px 0;
+
+            border-bottom:
+                1px solid
+                rgba(75, 85, 99, 0.3);
+        }
+
+        .debug-section:last-child {
+            border-bottom: none;
+        }
 
         .debug-ok {
             color: #4ade80 !important;
@@ -464,9 +473,9 @@
             color: #fbbf24 !important;
         }
 
-        /* ================================
+        /* =================================
            MOBILE
-        ================================ */
+        ================================= */
 
         @media (max-width: 640px) {
 
@@ -496,7 +505,7 @@
 <body>
 
 
-    <!-- ================================
+    <!-- =================================
          HEADER
     ================================= -->
 
@@ -574,14 +583,14 @@
     </header>
 
 
-    <!-- ================================
-         STATUS
+    <!-- =================================
+         FIREBASE STATUS
     ================================= -->
 
     <div id="firebaseStatus"></div>
 
 
-    <!-- ================================
+    <!-- =================================
          MAIN
     ================================= -->
 
@@ -599,7 +608,9 @@
                 🔥 Find Your Barber
             </h2>
 
-            <p class="text-gray-400">
+            <p
+                class="text-gray-400"
+            >
                 Fresh cuts without standing in line.
             </p>
 
@@ -635,7 +646,7 @@
         </div>
 
 
-        <!-- DEBUG -->
+        <!-- FIREBASE DEBUG -->
 
         <div id="debugPanel"></div>
 
@@ -666,7 +677,7 @@
     </main>
 
 
-    <!-- ================================
+    <!-- =================================
          BOOKING MODAL
     ================================= -->
 
@@ -689,7 +700,9 @@
             </button>
 
 
-            <div class="mb-5 pr-8">
+            <div
+                class="mb-5 pr-8"
+            >
 
                 <p
                     class="text-xs text-gray-500 mb-1"
@@ -829,11 +842,13 @@
     </div>
 
 
-    <!-- ================================
+    <!-- =================================
          BOTTOM NAV
     ================================= -->
 
-    <div class="nav-grid">
+    <div
+        class="nav-grid"
+    >
 
         <a
             href="index.html"
@@ -885,8 +900,8 @@
     </div>
 
 
-    <!-- ================================
-         AUDIO
+    <!-- =================================
+         CLICK SOUND
     ================================= -->
 
     <audio
@@ -896,9 +911,9 @@
     ></audio>
 
 
-    <!-- =====================================================
+    <!-- =================================
          FIREBASE COMPAT SDK
-    ====================================================== -->
+    ================================= -->
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 
@@ -907,9 +922,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
 
-    <!-- =====================================================
+    <!-- =================================
          FIREBASE INITIALIZATION
-    ====================================================== -->
+    ================================= -->
 
     <script>
 
@@ -942,47 +957,85 @@
         };
 
 
-        if (!firebase.apps.length) {
+        /*
+         * Use this page's Firebase configuration.
+         */
 
-            firebase.initializeApp(
-                firebaseConfig
-            );
+        let firebaseApp;
+
+        if (
+            firebase.apps.length
+        ) {
+
+            firebaseApp =
+                firebase.apps[0];
+
+        } else {
+
+            firebaseApp =
+                firebase.initializeApp(
+                    firebaseConfig
+                );
 
         }
 
 
         const auth =
-            firebase.auth();
+            firebase.auth(
+                firebaseApp
+            );
 
 
         const db =
-            firebase.firestore();
+            firebase.firestore(
+                firebaseApp
+            );
 
 
         window.firebaseAuth =
             auth;
-
 
         window.firebaseDB =
             db;
 
 
         console.log(
-            "Firebase initialized:",
-            firebase.app().options.projectId
+            "================================="
         );
 
+        console.log(
+            "K@SI WEB FIREBASE"
+        );
 
         console.log(
-            "Firestore initialized successfully"
+            "================================="
+        );
+
+        console.log(
+            "Project:",
+            firebaseApp.options.projectId
+        );
+
+        console.log(
+            "Auth Domain:",
+            firebaseApp.options.authDomain
+        );
+
+        console.log(
+            "Firestore Database:",
+            "(default)"
+        );
+
+        console.log(
+            "================================="
         );
 
     </script>
 
 
-    <!-- =====================================================
+    <!-- =================================
          MAIN APPLICATION
-    ====================================================== -->
+    ================================= -->
 
     <script>
 
@@ -990,9 +1043,9 @@
             "DOMContentLoaded",
             () => {
 
-                /* ============================
+                /* =================================
                    CONSTANTS
-                ============================ */
+                ================================= */
 
                 const EXPECTED_SALON_ID =
                     "Sv4zu4jERDR65IuURdss";
@@ -1001,9 +1054,9 @@
                     "prgctpY58cVmPocgLuSRLRMajOI2";
 
 
-                /* ============================
+                /* =================================
                    DOM
-                ============================ */
+                ================================= */
 
                 const salonList =
                     document.getElementById(
@@ -1050,27 +1103,27 @@
                         "bookingsToday"
                     );
 
-                const custDateInput =
+                const custDate =
                     document.getElementById(
                         "custDate"
                     );
 
-                const custTimeInput =
+                const custTime =
                     document.getElementById(
                         "custTime"
                     );
 
-                const custNameInput =
+                const custName =
                     document.getElementById(
                         "custName"
                     );
 
-                const custPhoneInput =
+                const custPhone =
                     document.getElementById(
                         "custPhone"
                     );
 
-                const serviceSelect =
+                const serviceType =
                     document.getElementById(
                         "serviceType"
                     );
@@ -1101,18 +1154,18 @@
                     );
 
 
-                /* ============================
-                   VARIABLES
-                ============================ */
+                /* =================================
+                   STATE
+                ================================= */
+
+                let allSalons =
+                    [];
 
                 let selectedSalonId =
                     null;
 
                 let selectedSalonData =
                     null;
-
-                let allSalons =
-                    [];
 
                 let salonsUnsubscribe =
                     null;
@@ -1121,9 +1174,38 @@
                     null;
 
 
-                /* ============================
+                /*
+                 * Diagnostics are kept separately.
+                 * This prevents one async test from
+                 * overwriting another.
+                 */
+
+                const diagnostic = {
+
+                    project:
+                        firebaseApp.options.projectId,
+
+                    collectionCount:
+                        null,
+
+                    collectionError:
+                        null,
+
+                    directExists:
+                        null,
+
+                    directData:
+                        null,
+
+                    directError:
+                        null
+
+                };
+
+
+                /* =================================
                    HELPERS
-                ============================ */
+                ================================= */
 
                 function escapeHtml(
                     value
@@ -1163,7 +1245,7 @@
                 }
 
 
-                function getLocalDateString(
+                function formatDate(
                     date = new Date()
                 ) {
 
@@ -1190,7 +1272,7 @@
                 }
 
 
-                function showFirebaseStatus(
+                function showStatus(
                     message,
                     type = "info"
                 ) {
@@ -1243,72 +1325,510 @@
                 }
 
 
-                function updateDebug(
-                    data
-                ) {
+                /* =================================
+                   DIAGNOSTIC PANEL
+                ================================= */
+
+                function renderDiagnostics() {
 
                     if (!debugPanel) {
                         return;
                     }
 
-                    debugPanel.style.display =
-                        "block";
+                    let directHtml = "";
+
+                    if (
+                        diagnostic.directExists ===
+                        true
+                    ) {
+
+                        const data =
+                            diagnostic.directData ||
+                            {};
+
+                        const ownerId =
+                            data.ownerId ||
+                            data.OwnerId ||
+                            "";
+
+                        directHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-ok">
+                                    DIRECT DOCUMENT TEST ✓
+                                </strong>
+
+                                <br><br>
+
+                                Path:
+                                <strong>
+                                    /salons/${escapeHtml(
+                                        EXPECTED_SALON_ID
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                Exists:
+                                <strong class="debug-ok">
+                                    YES
+                                </strong>
+
+                                <br>
+
+                                Name:
+                                ${escapeHtml(
+                                    data.name ||
+                                    "Missing"
+                                )}
+
+                                <br>
+
+                                Owner ID:
+                                ${escapeHtml(
+                                    ownerId ||
+                                    "Missing"
+                                )}
+
+                                <br>
+
+                                Owner match:
+                                ${
+                                    ownerId ===
+                                    EXPECTED_OWNER_ID
+                                        ? `
+                                            <strong class="debug-ok">
+                                                YES ✓
+                                            </strong>
+                                          `
+                                        : `
+                                            <strong class="debug-error">
+                                                NO ✗
+                                            </strong>
+                                          `
+                                }
+
+                                <br>
+
+                                Location:
+                                ${escapeHtml(
+                                    data.location ||
+                                    "Missing"
+                                )}
+
+                                <br>
+
+                                Email:
+                                ${escapeHtml(
+                                    data.email ||
+                                    "Missing"
+                                )}
+
+                                <br>
+
+                                Services:
+                                ${
+                                    Array.isArray(
+                                        data.services
+                                    )
+                                        ? data.services.length
+                                        : 0
+                                }
+
+                            </div>
+
+                        `;
+
+                    } else if (
+                        diagnostic.directExists ===
+                        false
+                    ) {
+
+                        directHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-error">
+                                    DIRECT DOCUMENT TEST ✗
+                                </strong>
+
+                                <br><br>
+
+                                Path:
+                                <strong>
+                                    /salons/${escapeHtml(
+                                        EXPECTED_SALON_ID
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                Exists:
+                                <strong class="debug-error">
+                                    NO
+                                </strong>
+
+                                <br><br>
+
+                                The browser cannot see this
+                                exact document in the
+                                <strong>(default)</strong>
+                                database.
+
+                            </div>
+
+                        `;
+
+                    } else if (
+                        diagnostic.directError
+                    ) {
+
+                        directHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-error">
+                                    DIRECT DOCUMENT TEST ERROR
+                                </strong>
+
+                                <br><br>
+
+                                Code:
+                                ${escapeHtml(
+                                    diagnostic.directError.code ||
+                                    "unknown"
+                                )}
+
+                                <br>
+
+                                Message:
+                                ${escapeHtml(
+                                    diagnostic.directError.message ||
+                                    "Unknown error"
+                                )}
+
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        directHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong>
+                                    DIRECT DOCUMENT TEST
+                                </strong>
+
+                                <br><br>
+
+                                Checking:
+                                <strong>
+                                    /salons/${escapeHtml(
+                                        EXPECTED_SALON_ID
+                                    )}
+                                </strong>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    let collectionHtml = "";
+
+                    if (
+                        diagnostic.collectionError
+                    ) {
+
+                        collectionHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-error">
+                                    COLLECTION TEST ERROR
+                                </strong>
+
+                                <br><br>
+
+                                Code:
+                                ${escapeHtml(
+                                    diagnostic.collectionError.code ||
+                                    "unknown"
+                                )}
+
+                                <br>
+
+                                Message:
+                                ${escapeHtml(
+                                    diagnostic.collectionError.message ||
+                                    "Unknown error"
+                                )}
+
+                            </div>
+
+                        `;
+
+                    } else if (
+                        diagnostic.collectionCount !==
+                        null
+                    ) {
+
+                        collectionHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                ${
+                                    diagnostic.collectionCount > 0
+                                        ? `
+                                            <strong class="debug-ok">
+                                                COLLECTION TEST ✓
+                                            </strong>
+                                          `
+                                        : `
+                                            <strong class="debug-warning">
+                                                COLLECTION TEST
+                                            </strong>
+                                          `
+                                }
+
+                                <br><br>
+
+                                Firestore:
+                                <strong>
+                                    /salons
+                                </strong>
+
+                                <br>
+
+                                Documents found:
+                                <strong
+                                    class="${
+                                        diagnostic.collectionCount > 0
+                                            ? "debug-ok"
+                                            : "debug-warning"
+                                    }"
+                                >
+                                    ${diagnostic.collectionCount}
+                                </strong>
+
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        collectionHtml = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong>
+                                    COLLECTION TEST
+                                </strong>
+
+                                <br><br>
+
+                                Checking:
+                                <strong>
+                                    /salons
+                                </strong>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    let conclusion =
+                        "";
+
+                    if (
+                        diagnostic.directExists ===
+                            true &&
+                        diagnostic.collectionCount ===
+                            0
+                    ) {
+
+                        conclusion = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-warning">
+                                    ⚠️ IMPORTANT
+                                </strong>
+
+                                <br><br>
+
+                                The exact salon document is
+                                visible to the browser, but the
+                                collection read returned 0.
+
+                                <br><br>
+
+                                This points to a Firestore
+                                read/query issue rather than
+                                missing salon data.
+
+                            </div>
+
+                        `;
+
+                    } else if (
+                        diagnostic.directExists ===
+                            true &&
+                        diagnostic.collectionCount >
+                            0
+                    ) {
+
+                        conclusion = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-ok">
+                                    ✅ FIRESTORE CONNECTION IS WORKING
+                                </strong>
+
+                                <br><br>
+
+                                The website can see the salon
+                                document and the salons collection.
+
+                            </div>
+
+                        `;
+
+                    } else if (
+                        diagnostic.directExists ===
+                            false &&
+                        diagnostic.collectionCount ===
+                            0
+                    ) {
+
+                        conclusion = `
+
+                            <div
+                                class="debug-section"
+                            >
+
+                                <strong class="debug-error">
+                                    ❌ SALON NOT VISIBLE TO WEBSITE
+                                </strong>
+
+                                <br><br>
+
+                                The browser cannot read either
+                                the expected document or the
+                                collection.
+
+                                <br><br>
+
+                                Check Firestore Rules and the
+                                active Firebase project.
+
+                            </div>
+
+                        `;
+
+                    }
+
 
                     debugPanel.innerHTML = `
 
-                        <strong>
-                            Firebase Diagnostic
-                        </strong>
+                        <div class="debug-section">
 
-                        <br><br>
+                            <strong>
+                                Firebase Diagnostic
+                            </strong>
 
-                        Project:
-                        ${escapeHtml(
-                            firebase.app()
-                                .options
-                                .projectId
-                        )}
+                            <br><br>
 
-                        <br>
+                            Project:
+                            <strong>
+                                ${escapeHtml(
+                                    firebaseApp.options.projectId
+                                )}
+                            </strong>
 
-                        Firestore Database:
-                        <strong>
-                            (default)
-                        </strong>
+                            <br>
 
-                        <br>
+                            Firestore Database:
+                            <strong>
+                                (default)
+                            </strong>
 
-                        Salon collection:
-                        <strong>
-                            salons
-                        </strong>
+                            <br>
 
-                        <br>
+                            Database Location:
+                            <strong>
+                                africa-south1
+                            </strong>
 
-                        Expected Salon ID:
-                        ${escapeHtml(
-                            EXPECTED_SALON_ID
-                        )}
+                            <br>
 
-                        <br>
+                            Collection:
+                            <strong>
+                                salons
+                            </strong>
 
-                        Expected Owner ID:
-                        ${escapeHtml(
-                            EXPECTED_OWNER_ID
-                        )}
+                            <br>
 
-                        <br><br>
+                            Expected Salon ID:
+                            <strong>
+                                ${escapeHtml(
+                                    EXPECTED_SALON_ID
+                                )}
+                            </strong>
 
-                        ${data || "Checking Firestore..."}
+                            <br>
+
+                            Expected Owner ID:
+                            <strong>
+                                ${escapeHtml(
+                                    EXPECTED_OWNER_ID
+                                )}
+                            </strong>
+
+                        </div>
+
+                        ${directHtml}
+
+                        ${collectionHtml}
+
+                        ${conclusion}
 
                     `;
+
+                    debugPanel.style.display =
+                        "block";
 
                 }
 
 
-                /* ============================
+                /* =================================
                    AUDIO
-                ============================ */
+                ================================= */
 
                 const clickSound =
                     document.getElementById(
@@ -1316,8 +1836,10 @@
                     );
 
                 if (clickSound) {
+
                     clickSound.volume =
                         0.4;
+
                 }
 
 
@@ -1367,43 +1889,39 @@
                 );
 
 
-                /* ============================
-                   DATE LIMITS
-                ============================ */
+                /* =================================
+                   DATE SETUP
+                ================================= */
 
-                if (custDateInput) {
+                const today =
+                    new Date();
 
-                    const today =
-                        new Date();
+                const maxDate =
+                    new Date();
 
-                    const maxDate =
-                        new Date();
+                maxDate.setDate(
+                    today.getDate() + 30
+                );
 
-                    maxDate.setDate(
-                        today.getDate() + 30
+                custDate.min =
+                    formatDate(
+                        today
                     );
 
-                    custDateInput.min =
-                        getLocalDateString(
-                            today
-                        );
+                custDate.max =
+                    formatDate(
+                        maxDate
+                    );
 
-                    custDateInput.max =
-                        getLocalDateString(
-                            maxDate
-                        );
-
-                    custDateInput.value =
-                        getLocalDateString(
-                            today
-                        );
-
-                }
+                custDate.value =
+                    formatDate(
+                        today
+                    );
 
 
-                /* ============================
+                /* =================================
                    AUTH
-                ============================ */
+                ================================= */
 
                 auth.onAuthStateChanged(
                     async user => {
@@ -1423,16 +1941,25 @@
                             adminBtn.style.display =
                                 "none";
 
-                            listenForBookings(
-                                null
-                            );
+                            if (
+                                bookingsToday
+                            ) {
+
+                                bookingsToday.textContent =
+                                    "0 bookings today";
+
+                            }
+
+                            stopBookingListener();
 
                             return;
 
                         }
 
+
                         logoutBtn.style.display =
                             "flex";
+
 
                         try {
 
@@ -1444,14 +1971,18 @@
                                     .doc(
                                         user.uid
                                     )
-                                    .get();
+                                    .get({
+                                        source:
+                                            "server"
+                                    });
+
 
                             if (
                                 !userSnap.exists
                             ) {
 
                                 console.warn(
-                                    "No users document:",
+                                    "No users document for:",
                                     user.uid
                                 );
 
@@ -1466,6 +1997,7 @@
 
                             }
 
+
                             const userData =
                                 userSnap.data() ||
                                 {};
@@ -1474,46 +2006,51 @@
                                 userData.role ||
                                 "customer";
 
+
                             console.log(
                                 "USER DATA:",
                                 userData
                             );
 
+
                             if (
-                                role === "admin" ||
-                                role === "salon_owner"
+                                role === "admin"
                             ) {
 
                                 adminBtn.style.display =
                                     "flex";
 
-                                adminBtn.innerHTML =
-                                    role === "admin"
-                                        ? `
-                                            <i class="bx bx-shield-alt-2"></i>
-                                            Admin
-                                          `
-                                        : `
-                                            <i class="bx bx-store"></i>
-                                            Owner Dashboard
-                                          `;
+                                adminBtn.innerHTML = `
+                                    <i class="bx bx-shield-alt-2"></i>
+                                    Admin
+                                `;
 
                                 adminBtn.onclick =
                                     () => {
 
-                                        if (
-                                            role === "admin"
-                                        ) {
+                                        window.location.href =
+                                            "admin.html";
 
-                                            window.location.href =
-                                                "admin.html";
+                                    };
 
-                                        } else {
+                            } else if (
+                                role ===
+                                "salon_owner"
+                            ) {
 
-                                            window.location.href =
-                                                "owners.html";
+                                adminBtn.style.display =
+                                    "flex";
 
-                                        }
+                                adminBtn.innerHTML = `
+                                    <i class="bx bx-store"></i>
+                                    Owner Dashboard
+                                `;
+
+                                adminBtn.onclick =
+                                    () => {
+
+                                        window.location.href =
+                                            "owners.html";
 
                                     };
 
@@ -1524,16 +2061,21 @@
 
                             }
 
+
                             listenForBookings(
                                 user.uid
                             );
 
+
                         } catch (error) {
 
                             console.error(
-                                "User fetch error:",
+                                "USER FETCH ERROR:",
                                 error
                             );
+
+                            adminBtn.style.display =
+                                "none";
 
                             listenForBookings(
                                 user.uid
@@ -1545,9 +2087,9 @@
                 );
 
 
-                /* ============================
+                /* =================================
                    LOGOUT
-                ============================ */
+                ================================= */
 
                 logoutBtn.addEventListener(
                     "click",
@@ -1557,18 +2099,19 @@
 
                             await auth.signOut();
 
-                            showFirebaseStatus(
+                            showStatus(
                                 "Logged out successfully"
                             );
 
                         } catch (error) {
 
                             console.error(
-                                "Logout error:",
+                                "LOGOUT ERROR:",
                                 error
                             );
 
-                            showFirebaseStatus(
+                            showStatus(
+                                error.message ||
                                 "Logout failed",
                                 "error"
                             );
@@ -1579,35 +2122,32 @@
                 );
 
 
-                /* =====================================================
-                   DIRECT SALON DOCUMENT TEST
-                ====================================================== */
+                /* =================================
+                   DIRECT DOCUMENT TEST
+                ================================= */
 
                 async function testExpectedSalon() {
 
+                    diagnostic.directExists =
+                        null;
+
+                    diagnostic.directData =
+                        null;
+
+                    diagnostic.directError =
+                        null;
+
+                    renderDiagnostics();
+
+
                     console.log(
-                        "================================"
+                        "DIRECT DOCUMENT TEST:"
                     );
 
                     console.log(
-                        "DIRECT FIRESTORE TEST"
+                        `/salons/${EXPECTED_SALON_ID}`
                     );
 
-                    console.log(
-                        "Project:",
-                        firebase.app()
-                            .options
-                            .projectId
-                    );
-
-                    console.log(
-                        "Testing document:",
-                        `salons/${EXPECTED_SALON_ID}`
-                    );
-
-                    console.log(
-                        "================================"
-                    );
 
                     try {
 
@@ -1624,197 +2164,125 @@
                                         "server"
                                 });
 
-                        console.log(
-                            "DIRECT DOCUMENT EXISTS:",
-                            snap.exists
-                        );
+
+                        diagnostic.directExists =
+                            snap.exists;
+
 
                         if (
                             snap.exists
                         ) {
 
-                            const data =
+                            diagnostic.directData =
                                 snap.data() ||
                                 {};
 
                             console.log(
-                                "DIRECT SALON DATA:",
-                                data
+                                "DIRECT SALON FOUND:",
+                                diagnostic.directData
                             );
-
-                            const ownerId =
-                                data.ownerId ||
-                                data.OwnerId ||
-                                null;
-
-                            updateDebug(`
-
-                                <strong class="debug-ok">
-                                    DIRECT DOCUMENT EXISTS ✓
-                                </strong>
-
-                                <br><br>
-
-                                Path:
-                                <strong>
-                                    /salons/${escapeHtml(
-                                        EXPECTED_SALON_ID
-                                    )}
-                                </strong>
-
-                                <br>
-
-                                Salon name:
-                                ${escapeHtml(
-                                    data.name ||
-                                    "Missing"
-                                )}
-
-                                <br>
-
-                                Owner ID:
-                                ${escapeHtml(
-                                    ownerId ||
-                                    "Missing"
-                                )}
-
-                                <br>
-
-                                Location:
-                                ${escapeHtml(
-                                    data.location ||
-                                    "Missing"
-                                )}
-
-                                <br>
-
-                                Email:
-                                ${escapeHtml(
-                                    data.email ||
-                                    "Missing"
-                                )}
-
-                                <br>
-
-                                Hours:
-                                ${escapeHtml(
-                                    data.hours ||
-                                    data.time ||
-                                    "Missing"
-                                )}
-
-                                <br>
-
-                                Image:
-                                ${
-                                    data.image
-                                        ? "Present ✓"
-                                        : "Missing"
-                                }
-
-                                <br>
-
-                                Services:
-                                ${
-                                    Array.isArray(
-                                        data.services
-                                    )
-                                        ? data.services.length
-                                        : 0
-                                }
-
-                                <br>
-
-                                Expected owner match:
-                                ${
-                                    ownerId ===
-                                    EXPECTED_OWNER_ID
-                                        ? `
-                                            <strong class="debug-ok">
-                                                YES ✓
-                                            </strong>
-                                          `
-                                        : `
-                                            <strong class="debug-error">
-                                                NO ✗
-                                            </strong>
-                                          `
-                                }
-
-                            `);
 
                         } else {
 
-                            updateDebug(`
-
-                                <strong class="debug-error">
-                                    DIRECT DOCUMENT DOES NOT EXIST ✗
-                                </strong>
-
-                                <br><br>
-
-                                Firestore checked:
-
-                                <strong>
-                                    /salons/${escapeHtml(
-                                        EXPECTED_SALON_ID
-                                    )}
-                                </strong>
-
-                                <br><br>
-
-                                This means the live website cannot
-                                see the exact salon document.
-
-                            `);
+                            console.warn(
+                                "DIRECT SALON NOT FOUND"
+                            );
 
                         }
 
+
                     } catch (error) {
 
+                        diagnostic.directError =
+                            error;
+
                         console.error(
-                            "DIRECT DOCUMENT ERROR:",
+                            "DIRECT TEST ERROR:",
                             error
                         );
 
-                        updateDebug(`
-
-                            <strong class="debug-error">
-                                DIRECT DOCUMENT ERROR
-                            </strong>
-
-                            <br><br>
-
-                            Error code:
-                            ${escapeHtml(
-                                error.code ||
-                                "unknown"
-                            )}
-
-                            <br>
-
-                            Error message:
-                            ${escapeHtml(
-                                error.message ||
-                                "Unknown Firestore error"
-                            )}
-
-                        `);
-
                     }
+
+
+                    renderDiagnostics();
 
                 }
 
 
-                /* =====================================================
-                   LOAD SALONS
-                ====================================================== */
+                /* =================================
+                   COLLECTION TEST
+                ================================= */
+
+                async function testSalonCollection() {
+
+                    diagnostic.collectionCount =
+                        null;
+
+                    diagnostic.collectionError =
+                        null;
+
+                    renderDiagnostics();
+
+
+                    try {
+
+                        const snapshot =
+                            await db
+                                .collection(
+                                    "salons"
+                                )
+                                .get({
+                                    source:
+                                        "server"
+                                });
+
+
+                        diagnostic.collectionCount =
+                            snapshot.size;
+
+
+                        console.log(
+                            "COLLECTION COUNT:",
+                            snapshot.size
+                        );
+
+
+                        snapshot.forEach(
+                            docSnap => {
+
+                                console.log(
+                                    "SERVER SALON:",
+                                    docSnap.id,
+                                    docSnap.data()
+                                );
+
+                            }
+                        );
+
+
+                    } catch (error) {
+
+                        diagnostic.collectionError =
+                            error;
+
+                        console.error(
+                            "COLLECTION TEST ERROR:",
+                            error
+                        );
+
+                    }
+
+
+                    renderDiagnostics();
+
+                }
+
+
+                /* =================================
+                   LOAD SALONS REALTIME
+                ================================= */
 
                 function loadSalons() {
-
-                    if (!salonList) {
-                        return;
-                    }
 
                     if (
                         salonsUnsubscribe
@@ -1822,15 +2290,30 @@
 
                         salonsUnsubscribe();
 
+                        salonsUnsubscribe =
+                            null;
+
                     }
 
-                    console.log(
-                        "Reading Firestore /salons..."
-                    );
 
-                    updateDebug(
-                        "Reading <strong>/salons</strong> collection..."
-                    );
+                    salonList.innerHTML = `
+
+                        <div
+                            class="loading-box col-span-full"
+                        >
+
+                            <i
+                                class="bx bx-loader-alt bx-spin"
+                            ></i>
+
+                            <p>
+                                Loading salons near you...
+                            </p>
+
+                        </div>
+
+                    `;
+
 
                     salonsUnsubscribe =
                         db
@@ -1842,92 +2325,14 @@
                                 snapshot => {
 
                                     console.log(
-                                        "SALONS SNAPSHOT"
-                                    );
-
-                                    console.log(
-                                        "Number of salons:",
+                                        "REALTIME SALONS:",
                                         snapshot.size
                                     );
 
-                                    if (
-                                        snapshot.empty
-                                    ) {
-
-                                        updateDebug(`
-
-                                            <strong class="debug-warning">
-                                                COLLECTION QUERY RETURNED 0 DOCUMENTS
-                                            </strong>
-
-                                            <br><br>
-
-                                            Firestore /salons:
-
-                                            <strong>
-                                                0
-                                            </strong>
-                                            document(s) found.
-
-                                            <br><br>
-
-                                            The direct document test
-                                            is running separately.
-
-                                        `);
-
-                                        allSalons =
-                                            [];
-
-                                        salonList.innerHTML = `
-
-                                            <div
-                                                class="empty-state col-span-full"
-                                            >
-
-                                                <i
-                                                    class="bx bx-store-alt"
-                                                ></i>
-
-                                                <h3>
-                                                    No salons registered yet
-                                                </h3>
-
-                                                <p>
-                                                    Firestore returned 0 documents
-                                                    from the salons collection.
-                                                </p>
-
-                                                <p
-                                                    style="
-                                                        margin-top:15px;
-                                                        color:#60a5fa;
-                                                        font-size:11px;
-                                                    "
-                                                >
-                                                    Project:
-                                                    ${escapeHtml(
-                                                        firebase.app()
-                                                            .options
-                                                            .projectId
-                                                    )}
-                                                </p>
-
-                                            </div>
-
-                                        `;
-
-                                        showFirebaseStatus(
-                                            "Firestore returned 0 salons",
-                                            "error"
-                                        );
-
-                                        return;
-
-                                    }
 
                                     allSalons =
                                         [];
+
 
                                     snapshot.forEach(
                                         docSnap => {
@@ -1936,11 +2341,6 @@
                                                 docSnap.data() ||
                                                 {};
 
-                                            console.log(
-                                                "SALON DOCUMENT:",
-                                                docSnap.id,
-                                                data
-                                            );
 
                                             const services =
                                                 Array.isArray(
@@ -1948,6 +2348,7 @@
                                                 )
                                                     ? data.services
                                                     : [];
+
 
                                             const normalizedServices =
                                                 services.map(
@@ -1959,28 +2360,37 @@
                                                         ) {
 
                                                             return {
+
                                                                 name:
                                                                     service,
+
                                                                 price:
                                                                     0
+
                                                             };
 
                                                         }
 
+
                                                         return {
+
                                                             name:
                                                                 service?.name ||
                                                                 "Service",
+
                                                             price:
                                                                 Number(
                                                                     service?.price
-                                                                ) || 0
+                                                                ) ||
+                                                                0
+
                                                         };
 
                                                     }
                                                 );
 
-                                            const salon = {
+
+                                            allSalons.push({
 
                                                 id:
                                                     docSnap.id,
@@ -2015,14 +2425,11 @@
                                                 services:
                                                     normalizedServices
 
-                                            };
-
-                                            allSalons.push(
-                                                salon
-                                            );
+                                            });
 
                                         }
                                     );
+
 
                                     allSalons.sort(
                                         (
@@ -2034,88 +2441,39 @@
                                             )
                                     );
 
+
                                     renderSalonList(
                                         allSalons
                                     );
 
-                                    updateBookingCount();
 
-                                    const expectedFound =
-                                        allSalons.some(
-                                            salon =>
-                                                salon.id ===
-                                                EXPECTED_SALON_ID
+                                    if (
+                                        allSalons.length >
+                                        0
+                                    ) {
+
+                                        showStatus(
+                                            `${allSalons.length} salon${allSalons.length === 1 ? "" : "s"} loaded`
                                         );
 
-                                    updateDebug(`
+                                    } else {
 
-                                        <strong class="debug-ok">
-                                            COLLECTION QUERY SUCCESS ✓
-                                        </strong>
+                                        showStatus(
+                                            "Firestore returned 0 salons",
+                                            "error"
+                                        );
 
-                                        <br><br>
-
-                                        Firestore /salons:
-                                        <strong>
-                                            ${snapshot.size}
-                                        </strong>
-                                        document(s) found.
-
-                                        <br><br>
-
-                                        Expected salon:
-                                        ${
-                                            expectedFound
-                                                ? `
-                                                    <strong class="debug-ok">
-                                                        FOUND ✓
-                                                    </strong>
-                                                  `
-                                                : `
-                                                    <strong class="debug-warning">
-                                                        NOT FOUND
-                                                    </strong>
-                                                  `
-                                        }
-
-                                    `);
-
-                                    showFirebaseStatus(
-                                        `${allSalons.length} salon${allSalons.length === 1 ? "" : "s"} loaded`
-                                    );
+                                    }
 
                                 },
 
                                 error => {
 
                                     console.error(
-                                        "FIRESTORE SALON ERROR:",
+                                        "REALTIME SALON ERROR:",
                                         error
                                     );
 
-                                    updateDebug(`
-
-                                        <strong class="debug-error">
-                                            FIRESTORE COLLECTION ERROR
-                                        </strong>
-
-                                        <br><br>
-
-                                        Error code:
-                                        ${escapeHtml(
-                                            error.code ||
-                                            "unknown"
-                                        )}
-
-                                        <br>
-
-                                        Error message:
-                                        ${escapeHtml(
-                                            error.message ||
-                                            "Unknown Firestore error"
-                                        )}
-
-                                    `);
 
                                     salonList.innerHTML = `
 
@@ -2134,7 +2492,17 @@
                                             <small>
                                                 ${escapeHtml(
                                                     error.message ||
-                                                    "Firestore error"
+                                                    "Unknown Firestore error"
+                                                )}
+                                            </small>
+
+                                            <br>
+
+                                            <small>
+                                                Code:
+                                                ${escapeHtml(
+                                                    error.code ||
+                                                    "unknown"
                                                 )}
                                             </small>
 
@@ -2142,7 +2510,8 @@
 
                                     `;
 
-                                    showFirebaseStatus(
+
+                                    showStatus(
                                         "Firestore error",
                                         "error"
                                     );
@@ -2154,9 +2523,9 @@
                 }
 
 
-                /* ============================
-                   RENDER LIST
-                ============================ */
+                /* =================================
+                   RENDER SALON LIST
+                ================================= */
 
                 function renderSalonList(
                     salons
@@ -2164,6 +2533,7 @@
 
                     salonList.innerHTML =
                         "";
+
 
                     if (
                         !salons.length
@@ -2176,7 +2546,7 @@
                             >
 
                                 <i
-                                    class="bx bx-search-alt"
+                                    class="bx bx-store-alt"
                                 ></i>
 
                                 <h3>
@@ -2184,7 +2554,17 @@
                                 </h3>
 
                                 <p>
-                                    Try another salon or location.
+                                    No salon documents are
+                                    currently visible.
+                                </p>
+
+                                <p
+                                    class="mt-4 text-xs text-blue-400"
+                                >
+                                    Project:
+                                    ${escapeHtml(
+                                        firebaseApp.options.projectId
+                                    )}
                                 </p>
 
                             </div>
@@ -2195,19 +2575,23 @@
 
                     }
 
+
                     salons.forEach(
-                        salon =>
+                        salon => {
+
                             renderSalon(
                                 salon
-                            )
+                            );
+
+                        }
                     );
 
                 }
 
 
-                /* ============================
+                /* =================================
                    RENDER SALON
-                ============================ */
+                ================================= */
 
                 function renderSalon(
                     salon
@@ -2218,8 +2602,10 @@
                             "div"
                         );
 
+
                     card.className =
                         "salon-card flex flex-col justify-between";
+
 
                     const services =
                         Array.isArray(
@@ -2227,6 +2613,7 @@
                         )
                             ? salon.services
                             : [];
+
 
                     const servicePreview =
                         services.length
@@ -2238,23 +2625,24 @@
                                 .map(
                                     service => {
 
-                                        const name =
-                                            service?.name ||
-                                            "Service";
-
                                         const price =
                                             Number(
                                                 service?.price
-                                            ) || 0;
+                                            ) ||
+                                            0;
 
                                         return `
 
                                             <div>
+
                                                 ${escapeHtml(
-                                                    name
+                                                    service?.name ||
+                                                    "Service"
                                                 )}
+
                                                 —
                                                 R${price.toFixed(2)}
+
                                             </div>
 
                                         `;
@@ -2268,12 +2656,15 @@
                                 </div>
                               `;
 
+
                     const hasOwner =
                         !!salon.ownerId;
+
 
                     const image =
                         salon.image ||
                         "https://via.placeholder.com/600x350?text=K%40si+Web";
+
 
                     card.innerHTML = `
 
@@ -2294,7 +2685,10 @@
                                 "
                             >
 
-                            <div class="p-5">
+
+                            <div
+                                class="p-5"
+                            >
 
                                 <h3
                                     class="text-xl font-bold mb-2 text-blue-400"
@@ -2303,6 +2697,7 @@
                                         salon.name
                                     )}
                                 </h3>
+
 
                                 <p
                                     class="text-sm text-gray-300 mb-1"
@@ -2318,6 +2713,7 @@
 
                                 </p>
 
+
                                 <p
                                     class="text-sm text-gray-400 mb-4"
                                 >
@@ -2332,6 +2728,7 @@
 
                                 </p>
 
+
                                 <div
                                     class="text-xs text-gray-400 leading-6"
                                 >
@@ -2339,6 +2736,7 @@
                                     ${servicePreview}
 
                                 </div>
+
 
                                 ${
                                     salon.id ===
@@ -2352,6 +2750,7 @@
                                           `
                                         : ""
                                 }
+
 
                                 ${
                                     hasOwner
@@ -2375,11 +2774,13 @@
 
                         </div>
 
+
                         <div
                             class="px-5 pb-5"
                         >
 
                             <button
+                                type="button"
                                 class="primary-btn bookBtn"
                                 data-id="${escapeHtml(
                                     salon.id
@@ -2403,6 +2804,7 @@
 
                     `;
 
+
                     salonList.appendChild(
                         card
                     );
@@ -2410,18 +2812,17 @@
                 }
 
 
-                /* ============================
+                /* =================================
                    SEARCH
-                ============================ */
+                ================================= */
 
                 function executeSearch() {
 
                     const term =
-                        searchBar
-                            ? searchBar.value
-                                .toLowerCase()
-                                .trim()
-                            : "";
+                        searchBar.value
+                            .toLowerCase()
+                            .trim();
+
 
                     if (!term) {
 
@@ -2432,6 +2833,7 @@
                         return;
 
                     }
+
 
                     const filtered =
                         allSalons.filter(
@@ -2455,20 +2857,26 @@
                                         ""
                                     ).toLowerCase();
 
+
                                 return (
+
                                     name.includes(
                                         term
                                     ) ||
+
                                     location.includes(
                                         term
                                     ) ||
+
                                     email.includes(
                                         term
                                     )
+
                                 );
 
                             }
                         );
+
 
                     renderSalonList(
                         filtered
@@ -2477,47 +2885,40 @@
                 }
 
 
-                if (searchBtn) {
-
-                    searchBtn.addEventListener(
-                        "click",
-                        executeSearch
-                    );
-
-                }
+                searchBtn.addEventListener(
+                    "click",
+                    executeSearch
+                );
 
 
-                if (searchBar) {
+                searchBar.addEventListener(
+                    "input",
+                    executeSearch
+                );
 
-                    searchBar.addEventListener(
-                        "input",
-                        executeSearch
-                    );
 
-                    searchBar.addEventListener(
-                        "keydown",
-                        event => {
+                searchBar.addEventListener(
+                    "keydown",
+                    event => {
 
-                            if (
-                                event.key ===
-                                "Enter"
-                            ) {
+                        if (
+                            event.key ===
+                            "Enter"
+                        ) {
 
-                                event.preventDefault();
+                            event.preventDefault();
 
-                                executeSearch();
-
-                            }
+                            executeSearch();
 
                         }
-                    );
 
-                }
+                    }
+                );
 
 
-                /* ============================
-                   OPEN BOOKING MODAL
-                ============================ */
+                /* =================================
+                   OPEN BOOKING
+                ================================= */
 
                 function openBooking(
                     salonId
@@ -2530,29 +2931,32 @@
                                 salonId
                         );
 
+
                     if (!salon) {
 
-                        showFirebaseStatus(
-                            "Salon could not be found",
+                        showStatus(
+                            "Salon not found",
                             "error"
                         );
 
                         return;
 
                     }
+
 
                     if (
                         !salon.ownerId
                     ) {
 
-                        showFirebaseStatus(
-                            "This salon is not connected to an owner",
+                        showStatus(
+                            "This salon has no ownerId",
                             "error"
                         );
 
                         return;
 
                     }
+
 
                     selectedSalonId =
                         salon.id;
@@ -2560,28 +2964,23 @@
                     selectedSalonData =
                         salon;
 
+
                     bookingSalonName.textContent =
                         salon.name;
 
                     bookingSalonLocation.textContent =
                         salon.location;
 
+
                     populateServices(
                         salon.services
                     );
 
-                    if (
-                        !custDateInput.value
-                    ) {
-
-                        custDateInput.value =
-                            getLocalDateString();
-
-                    }
 
                     bookingModal.classList.add(
                         "active"
                     );
+
 
                     document.body.style.overflow =
                         "hidden";
@@ -2589,16 +2988,51 @@
                 }
 
 
-                /* ============================
+                /* =================================
+                   BOOK BUTTON
+                ================================= */
+
+                salonList.addEventListener(
+                    "click",
+                    event => {
+
+                        const button =
+                            event.target.closest(
+                                ".bookBtn"
+                            );
+
+
+                        if (!button) {
+                            return;
+                        }
+
+
+                        if (
+                            button.disabled
+                        ) {
+                            return;
+                        }
+
+
+                        openBooking(
+                            button.dataset.id
+                        );
+
+                    }
+                );
+
+
+                /* =================================
                    SERVICES
-                ============================ */
+                ================================= */
 
                 function populateServices(
                     services
                 ) {
 
-                    serviceSelect.innerHTML =
+                    serviceType.innerHTML =
                         "";
+
 
                     if (
                         !Array.isArray(
@@ -2618,13 +3052,14 @@
                         option.textContent =
                             "No services available";
 
-                        serviceSelect.appendChild(
+                        serviceType.appendChild(
                             option
                         );
 
                         return;
 
                     }
+
 
                     services.forEach(
                         service => {
@@ -2636,25 +3071,31 @@
                             const price =
                                 Number(
                                     service?.price
-                                ) || 0;
+                                ) ||
+                                0;
+
 
                             const option =
                                 document.createElement(
                                     "option"
                                 );
 
+
                             option.value =
                                 name;
+
 
                             option.dataset.price =
                                 String(
                                     price
                                 );
 
+
                             option.textContent =
                                 `${name} — R${price.toFixed(2)}`;
 
-                            serviceSelect.appendChild(
+
+                            serviceType.appendChild(
                                 option
                             );
 
@@ -2664,11 +3105,11 @@
                 }
 
 
-                /* ============================
-                   CLOSE MODAL
-                ============================ */
+                /* =================================
+                   CLOSE BOOKING
+                ================================= */
 
-                function closeBookingModal() {
+                function closeBooking() {
 
                     bookingModal.classList.remove(
                         "active"
@@ -2688,7 +3129,7 @@
 
                 closeModalBtn.addEventListener(
                     "click",
-                    closeBookingModal
+                    closeBooking
                 );
 
 
@@ -2701,7 +3142,7 @@
                             bookingModal
                         ) {
 
-                            closeBookingModal();
+                            closeBooking();
 
                         }
 
@@ -2715,13 +3156,10 @@
 
                         if (
                             event.key ===
-                            "Escape" &&
-                            bookingModal.classList.contains(
-                                "active"
-                            )
+                            "Escape"
                         ) {
 
-                            closeBookingModal();
+                            closeBooking();
 
                         }
 
@@ -2729,43 +3167,9 @@
                 );
 
 
-                /* ============================
-                   BOOK BUTTONS
-                ============================ */
-
-                salonList.addEventListener(
-                    "click",
-                    event => {
-
-                        const button =
-                            event.target.closest(
-                                ".bookBtn"
-                            );
-
-                        if (!button) {
-                            return;
-                        }
-
-                        if (
-                            button.disabled
-                        ) {
-                            return;
-                        }
-
-                        const salonId =
-                            button.dataset.id;
-
-                        openBooking(
-                            salonId
-                        );
-
-                    }
-                );
-
-
-                /* ============================
+                /* =================================
                    CREATE BOOKING
-                ============================ */
+                ================================= */
 
                 bookingForm.addEventListener(
                     "submit",
@@ -2773,12 +3177,14 @@
 
                         event.preventDefault();
 
+
                         const user =
                             auth.currentUser;
 
+
                         if (!user) {
 
-                            showFirebaseStatus(
+                            showStatus(
                                 "Please log in before booking",
                                 "error"
                             );
@@ -2790,13 +3196,14 @@
 
                         }
 
+
                         if (
                             !selectedSalonId ||
                             !selectedSalonData
                         ) {
 
-                            showFirebaseStatus(
-                                "Please select a salon first",
+                            showStatus(
+                                "Please select a salon",
                                 "error"
                             );
 
@@ -2804,27 +3211,45 @@
 
                         }
 
+
+                        if (
+                            !selectedSalonData.ownerId
+                        ) {
+
+                            showStatus(
+                                "Salon owner connection is missing",
+                                "error"
+                            );
+
+                            return;
+
+                        }
+
+
                         const customerName =
-                            custNameInput.value.trim();
+                            custName.value.trim();
 
                         const phone =
-                            custPhoneInput.value.trim();
+                            custPhone.value.trim();
 
                         const date =
-                            custDateInput.value;
+                            custDate.value;
 
                         const time =
-                            custTimeInput.value;
+                            custTime.value;
+
 
                         const selectedOption =
-                            serviceSelect.options[
-                                serviceSelect.selectedIndex
+                            serviceType.options[
+                                serviceType.selectedIndex
                             ];
 
-                        const serviceName =
+
+                        const service =
                             selectedOption
                                 ? selectedOption.value
                                 : "";
+
 
                         const price =
                             selectedOption
@@ -2833,16 +3258,17 @@
                                 ) || 0
                                 : 0;
 
+
                         if (
                             !customerName ||
                             !phone ||
                             !date ||
                             !time ||
-                            !serviceName
+                            !service
                         ) {
 
-                            showFirebaseStatus(
-                                "Please complete all booking fields",
+                            showStatus(
+                                "Please complete all fields",
                                 "error"
                             );
 
@@ -2850,48 +3276,35 @@
 
                         }
 
-                        if (
-                            !selectedSalonData.ownerId
-                        ) {
-
-                            showFirebaseStatus(
-                                "This salon has no ownerId",
-                                "error"
-                            );
-
-                            return;
-
-                        }
 
                         if (
                             date <
-                            getLocalDateString()
+                            formatDate()
                         ) {
 
-                            showFirebaseStatus(
-                                "Please select today or a future date",
+                            showStatus(
+                                "Please select a valid date",
                                 "error"
                             );
 
                             return;
 
                         }
+
 
                         confirmBookingBtn.disabled =
                             true;
 
+
                         confirmBookingBtn.innerHTML = `
-                            <i class="bx bx-loader-alt bx-spin"></i>
+                            <i
+                                class="bx bx-loader-alt bx-spin"
+                            ></i>
                             Saving Booking...
                         `;
 
-                        try {
 
-                            /*
-                             * IMPORTANT:
-                             * ownerId comes directly from
-                             * the salon Firestore document.
-                             */
+                        try {
 
                             const bookingData = {
 
@@ -2914,7 +3327,7 @@
                                     phone,
 
                                 service:
-                                    serviceName,
+                                    service,
 
                                 price:
                                     price,
@@ -2940,10 +3353,12 @@
 
                             };
 
+
                             console.log(
-                                "CREATING BOOKING:",
+                                "BOOKING DATA:",
                                 bookingData
                             );
+
 
                             const bookingRef =
                                 await db
@@ -2954,21 +3369,27 @@
                                         bookingData
                                     );
 
+
                             console.log(
                                 "BOOKING CREATED:",
                                 bookingRef.id
                             );
 
-                            showFirebaseStatus(
+
+                            showStatus(
                                 "Booking confirmed successfully"
                             );
 
+
                             bookingForm.reset();
 
-                            custDateInput.value =
-                                getLocalDateString();
 
-                            closeBookingModal();
+                            custDate.value =
+                                formatDate();
+
+
+                            closeBooking();
+
 
                             updateBookingCount();
 
@@ -2979,40 +3400,22 @@
                                 error
                             );
 
-                            updateDebug(`
 
-                                <strong class="debug-error">
-                                    BOOKING ERROR
-                                </strong>
-
-                                <br><br>
-
-                                Error code:
-                                ${escapeHtml(
-                                    error.code ||
-                                    "unknown"
-                                )}
-
-                                <br>
-
-                                Error message:
-                                ${escapeHtml(
-                                    error.message ||
-                                    "Unknown booking error"
-                                )}
-
-                            `);
-
-                            showFirebaseStatus(
+                            showStatus(
                                 error.message ||
-                                "Booking could not be saved",
+                                "Booking failed",
                                 "error"
                             );
+
+
+                            renderDiagnostics();
+
 
                         } finally {
 
                             confirmBookingBtn.disabled =
                                 false;
+
 
                             confirmBookingBtn.innerHTML =
                                 "Confirm Booking";
@@ -3023,13 +3426,11 @@
                 );
 
 
-                /* =====================================================
+                /* =================================
                    BOOKING COUNT
-                ====================================================== */
+                ================================= */
 
-                function listenForBookings(
-                    uid
-                ) {
+                function stopBookingListener() {
 
                     if (
                         bookingsUnsubscribe
@@ -3042,23 +3443,29 @@
 
                     }
 
+                }
+
+
+                function listenForBookings(
+                    uid
+                ) {
+
+                    stopBookingListener();
+
+
                     if (!uid) {
 
-                        if (bookingsToday) {
-
-                            bookingsToday.textContent =
-                                "0 bookings today";
-
-                        }
+                        bookingsToday.textContent =
+                            "0 bookings today";
 
                         return;
 
                     }
 
+
                     /*
-                     * No orderBy is used here so this
-                     * listener does not require a composite
-                     * Firestore index.
+                     * We use only the date field here.
+                     * No composite index is required.
                      */
 
                     bookingsUnsubscribe =
@@ -3071,10 +3478,11 @@
                                 snapshot => {
 
                                     const today =
-                                        getLocalDateString();
+                                        formatDate();
 
                                     let count =
                                         0;
+
 
                                     snapshot.forEach(
                                         docSnap => {
@@ -3082,6 +3490,7 @@
                                             const data =
                                                 docSnap.data() ||
                                                 {};
+
 
                                             if (
                                                 data.date ===
@@ -3095,6 +3504,7 @@
                                         }
                                     );
 
+
                                     bookingsToday.textContent =
                                         `${count} booking${count === 1 ? "" : "s"} today`;
 
@@ -3107,11 +3517,6 @@
                                         error
                                     );
 
-                                    /*
-                                     * Do not replace a successful
-                                     * salon screen with a booking
-                                     * count permission error.
-                                     */
 
                                     bookingsToday.textContent =
                                         "Bookings today";
@@ -3123,16 +3528,11 @@
                 }
 
 
-                async function updateBookingCount() {
-
-                    /*
-                     * This function is intentionally lightweight.
-                     * The real-time listener above keeps the header
-                     * current whenever the user is authenticated.
-                     */
+                function updateBookingCount() {
 
                     const user =
                         auth.currentUser;
+
 
                     if (
                         user
@@ -3147,18 +3547,34 @@
                 }
 
 
-                /* ============================
-                   INITIAL LOAD
-                ============================ */
+                /* =================================
+                   INITIALIZE
+                ================================= */
+
+                console.log(
+                    "Starting Firestore diagnostics..."
+                );
+
+
+                /*
+                 * Run both tests independently.
+                 */
 
                 testExpectedSalon();
+
+                testSalonCollection();
+
+
+                /*
+                 * Then start realtime loading.
+                 */
 
                 loadSalons();
 
 
-                /* ============================
+                /* =================================
                    CLEANUP
-                ============================ */
+                ================================= */
 
                 window.addEventListener(
                     "beforeunload",
@@ -3190,4 +3606,4 @@
 
 </body>
 
-    </html>
+        </html>
