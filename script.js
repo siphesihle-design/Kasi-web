@@ -1,32 +1,168 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================
-    // 0. AUTOMATIC PICTURE SWIPER
+    // 0. AUTOMATIC + TOUCH PICTURE SWIPER
     // =========================================================
-    if (
-        typeof Swiper !== 'undefined' &&
-        document.querySelector('.elite-swiper')
-    ) {
-        new Swiper('.elite-swiper', {
-            loop: true,
-            speed: 800,
 
-            autoplay: {
-                delay: 2200,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: false
-            },
+    function initializeSwiper() {
 
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true
-            }
-        });
+        const swiperElement =
+            document.querySelector('.elite-swiper');
+
+        if (!swiperElement) {
+            console.warn(
+                'K@si Web: .elite-swiper was not found.'
+            );
+            return;
+        }
+
+        if (typeof Swiper === 'undefined') {
+            console.error(
+                'K@si Web: Swiper library was not loaded.'
+            );
+            return;
+        }
+
+        const wrapper =
+            swiperElement.querySelector('.swiper-wrapper');
+
+        const slides =
+            swiperElement.querySelectorAll('.swiper-slide');
+
+        if (!wrapper || slides.length === 0) {
+            console.error(
+                'K@si Web: Swiper requires .swiper-wrapper and at least one .swiper-slide.'
+            );
+            return;
+        }
+
+        const pagination =
+            swiperElement.querySelector('.swiper-pagination');
+
+        try {
+
+            const eliteSwiper = new Swiper(
+                swiperElement,
+                {
+                    // -------------------------------------------------
+                    // Basic
+                    // -------------------------------------------------
+                    loop: slides.length > 1,
+                    speed: 800,
+
+                    slidesPerView: 1,
+                    slidesPerGroup: 1,
+                    spaceBetween: 0,
+
+                    // -------------------------------------------------
+                    // MOBILE TOUCH SWIPING
+                    // -------------------------------------------------
+                    allowTouchMove: true,
+
+                    touchRatio: 1,
+
+                    touchAngle: 45,
+
+                    threshold: 5,
+
+                    resistance: true,
+
+                    resistanceRatio: 0.85,
+
+                    grabCursor: true,
+
+                    simulateTouch: true,
+
+                    followFinger: true,
+
+                    shortSwipes: true,
+
+                    longSwipes: true,
+
+                    longSwipesRatio: 0.5,
+
+                    longSwipesMs: 300,
+
+                    // -------------------------------------------------
+                    // Automatic slideshow
+                    // -------------------------------------------------
+                    autoplay: {
+                        delay: 2200,
+
+                        disableOnInteraction: false,
+
+                        pauseOnMouseEnter: false
+                    },
+
+                    // -------------------------------------------------
+                    // Pagination dots
+                    // -------------------------------------------------
+                    pagination: pagination
+                        ? {
+                            el: pagination,
+
+                            clickable: true
+                        }
+                        : undefined,
+
+                    // -------------------------------------------------
+                    // Prevent Swiper from interfering with normal
+                    // vertical page scrolling
+                    // -------------------------------------------------
+                    touchStartPreventDefault: false,
+
+                    passiveListeners: true
+                }
+            );
+
+            console.log(
+                'K@si Web: Swiper initialized successfully.',
+                eliteSwiper
+            );
+
+            // ---------------------------------------------------------
+            // Extra protection for Android touch devices
+            // ---------------------------------------------------------
+
+            swiperElement.style.touchAction =
+                'pan-y';
+
+            wrapper.style.touchAction =
+                'pan-y';
+
+        } catch (error) {
+
+            console.error(
+                'K@si Web: Swiper initialization failed:',
+                error
+            );
+        }
     }
+
+    /*
+     * Initialize after the page has rendered.
+     * This also gives the Swiper CDN a little extra time to load.
+     */
+    if (typeof Swiper !== 'undefined') {
+
+        initializeSwiper();
+
+    } else {
+
+        window.addEventListener(
+            'load',
+            () => {
+                initializeSwiper();
+            },
+            { once: true }
+        );
+    }
+
 
     // =========================================================
     // 1. TYPEWRITER WORD ANIMATION
     // =========================================================
+
     const words = [
         "Fresh Cuts",
         "No Lines",
@@ -37,50 +173,86 @@ document.addEventListener('DOMContentLoaded', () => {
     let charIndex = 0;
     let isDeleting = false;
 
-    const typedText = document.getElementById('typed-text');
+    const typedText =
+        document.getElementById('typed-text');
 
     function type() {
+
         if (!typedText) return;
 
-        const currentWord = words[wordIndex];
+        const currentWord =
+            words[wordIndex];
 
         if (isDeleting) {
+
             typedText.textContent =
-                currentWord.substring(0, charIndex--);
+                currentWord.substring(
+                    0,
+                    charIndex--
+                );
+
         } else {
+
             typedText.textContent =
-                currentWord.substring(0, charIndex++);
+                currentWord.substring(
+                    0,
+                    charIndex++
+                );
         }
 
         // Finished typing
-        if (!isDeleting && charIndex === currentWord.length) {
+        if (
+            !isDeleting &&
+            charIndex === currentWord.length
+        ) {
+
             isDeleting = true;
 
-            setTimeout(type, 1500);
+            setTimeout(
+                type,
+                1500
+            );
+
             return;
         }
 
         // Finished deleting
-        if (isDeleting && charIndex === 0) {
+        if (
+            isDeleting &&
+            charIndex === 0
+        ) {
+
             isDeleting = false;
-            wordIndex = (wordIndex + 1) % words.length;
+
+            wordIndex =
+                (wordIndex + 1) %
+                words.length;
         }
 
         setTimeout(
             type,
-            isDeleting ? 80 : 120
+            isDeleting
+                ? 80
+                : 120
         );
     }
 
     type();
 
+
     // =========================================================
     // 2. FIREBASE SAFETY CHECK
     // =========================================================
-    if (!window.firebaseAuth || !window.firebaseDB) {
+
+    if (
+        !window.firebaseAuth ||
+        !window.firebaseDB
+    ) {
+
         console.error(
             'Firebase services not found on window object.'
         );
+
         return;
     }
 
@@ -99,65 +271,106 @@ document.addEventListener('DOMContentLoaded', () => {
         logOut: signOut
     } = window;
 
+
     // =========================================================
     // 3. DOM ELEMENTS
     // =========================================================
+
     const salonList =
-        document.getElementById('salonList');
+        document.getElementById(
+            'salonList'
+        );
 
     const bookingModal =
-        document.getElementById('bookingModal');
+        document.getElementById(
+            'bookingModal'
+        );
 
     const bookingForm =
-        document.getElementById('bookingForm');
+        document.getElementById(
+            'bookingForm'
+        );
 
     const closeModalBtn =
-        document.getElementById('closeModalBtn');
+        document.getElementById(
+            'closeModalBtn'
+        );
 
     const adminBtn =
-        document.getElementById('adminBtn');
+        document.getElementById(
+            'adminBtn'
+        );
 
     const logoutBtn =
-        document.getElementById('logoutBtn');
+        document.getElementById(
+            'logoutBtn'
+        );
 
     const searchBar =
-        document.getElementById('searchBar');
+        document.getElementById(
+            'searchBar'
+        );
 
     const searchBtn =
-        document.getElementById('searchBtn');
+        document.getElementById(
+            'searchBtn'
+        );
 
     const bookingsToday =
-        document.getElementById('bookingsToday');
+        document.getElementById(
+            'bookingsToday'
+        );
 
     const custDateInput =
-        document.getElementById('custDate');
+        document.getElementById(
+            'custDate'
+        );
+
 
     let selectedSalonId = null;
+
     let selectedSalonData = null;
+
     let allSalons = [];
+
 
     // =========================================================
     // 4. AUDIO + HAPTIC FEEDBACK
     // =========================================================
+
     const clickSound =
-        document.getElementById('clickSound');
+        document.getElementById(
+            'clickSound'
+        );
 
     if (clickSound) {
         clickSound.volume = 0.4;
     }
 
     function playClick() {
+
         if (clickSound) {
+
             try {
+
                 clickSound.currentTime = 0;
 
-                const playPromise = clickSound.play();
+                const playPromise =
+                    clickSound.play();
 
-                if (playPromise &&
-                    typeof playPromise.catch === 'function') {
-                    playPromise.catch(() => {});
+                if (
+                    playPromise &&
+                    typeof playPromise.catch ===
+                    'function'
+                ) {
+
+                    playPromise.catch(
+                        () => {}
+                    );
                 }
+
             } catch (error) {
+
                 console.warn(
                     'Click sound could not play:',
                     error
@@ -166,155 +379,233 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (navigator.vibrate) {
+
             try {
+
                 navigator.vibrate(30);
+
             } catch (error) {
+
                 // Ignore vibration errors
             }
         }
     }
 
-    document.addEventListener('click', (event) => {
-        const button = event.target.closest('button');
 
-        if (button) {
-            playClick();
+    document.addEventListener(
+        'click',
+        (event) => {
+
+            const button =
+                event.target.closest(
+                    'button'
+                );
+
+            if (button) {
+                playClick();
+            }
         }
-    });
+    );
+
 
     // =========================================================
     // 5. DATE INPUT RANGE
-    // TODAY -> 30 DAYS FROM TODAY
+    // TODAY -> 30 DAYS
     // =========================================================
-    if (custDateInput) {
-        const today = new Date();
 
-        const maxDate = new Date();
-        maxDate.setDate(today.getDate() + 30);
+    if (custDateInput) {
+
+        const today =
+            new Date();
+
+        const maxDate =
+            new Date();
+
+        maxDate.setDate(
+            today.getDate() + 30
+        );
 
         const todayString =
-            today.toISOString().split('T')[0];
+            today
+                .toISOString()
+                .split('T')[0];
 
         const maxDateString =
-            maxDate.toISOString().split('T')[0];
+            maxDate
+                .toISOString()
+                .split('T')[0];
 
-        custDateInput.min = todayString;
-        custDateInput.max = maxDateString;
+        custDateInput.min =
+            todayString;
+
+        custDateInput.max =
+            maxDateString;
     }
+
 
     // =========================================================
     // 6. AUTHENTICATION + ROLE ROUTING
     // =========================================================
-    if (typeof onAuthState === 'function') {
-        onAuthState(auth, async (user) => {
 
-            if (user) {
-                if (logoutBtn) {
-                    logoutBtn.style.display = 'flex';
-                }
+    if (
+        typeof onAuthState ===
+        'function'
+    ) {
 
-                try {
-                    const userRef =
-                        dbDoc(db, 'users', user.uid);
+        onAuthState(
+            auth,
+            async (user) => {
 
-                    const userSnap =
-                        await dbGet(userRef);
+                if (user) {
 
-                    if (!userSnap.exists()) {
-                        console.warn(
-                            'No user document found for:',
-                            user.uid
+                    if (logoutBtn) {
+
+                        logoutBtn.style.display =
+                            'flex';
+                    }
+
+                    try {
+
+                        const userRef =
+                            dbDoc(
+                                db,
+                                'users',
+                                user.uid
+                            );
+
+                        const userSnap =
+                            await dbGet(
+                                userRef
+                            );
+
+                        if (
+                            !userSnap.exists()
+                        ) {
+
+                            console.warn(
+                                'No user document found for:',
+                                user.uid
+                            );
+
+                            if (adminBtn) {
+
+                                adminBtn.style.display =
+                                    'none';
+                            }
+
+                            return;
+                        }
+
+                        const userData =
+                            userSnap.data() ||
+                            {};
+
+                        const role =
+                            userData.role ||
+                            'customer';
+
+                        console.log(
+                            'Logged in user:',
+                            user.uid,
+                            'Role:',
+                            role
+                        );
+
+
+                        // ADMIN
+                        if (
+                            role === 'admin' &&
+                            adminBtn
+                        ) {
+
+                            adminBtn.style.display =
+                                'flex';
+
+                            adminBtn.onclick =
+                                () => {
+
+                                    window.location.href =
+                                        'admin.html';
+                                };
+                        }
+
+
+                        // SALON OWNER
+                        else if (
+                            role === 'salon_owner' &&
+                            adminBtn
+                        ) {
+
+                            adminBtn.style.display =
+                                'flex';
+
+                            adminBtn.onclick =
+                                () => {
+
+                                    window.location.href =
+                                        'owners.html';
+                                };
+                        }
+
+
+                        // CUSTOMER
+                        else if (adminBtn) {
+
+                            adminBtn.style.display =
+                                'none';
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            'User document fetch error:',
+                            error
                         );
 
                         if (adminBtn) {
-                            adminBtn.style.display = 'none';
+
+                            adminBtn.style.display =
+                                'none';
                         }
-
-                        return;
                     }
 
-                    const userData = userSnap.data() || {};
+                } else {
 
-                    const role =
-                        userData.role || 'customer';
+                    if (logoutBtn) {
 
-                    console.log(
-                        'Logged in user:',
-                        user.uid,
-                        'Role:',
-                        role
-                    );
-
-                    // Admin
-                    if (
-                        role === 'admin' &&
-                        adminBtn
-                    ) {
-                        adminBtn.style.display = 'flex';
-
-                        adminBtn.onclick = () => {
-                            window.location.href =
-                                'admin.html';
-                        };
+                        logoutBtn.style.display =
+                            'none';
                     }
-
-                    // Salon Owner
-                    else if (
-                        role === 'salon_owner' &&
-                        adminBtn
-                    ) {
-                        adminBtn.style.display = 'flex';
-
-                        adminBtn.onclick = () => {
-                            window.location.href =
-                                'owners.html';
-                        };
-                    }
-
-                    // Normal Customer
-                    else if (adminBtn) {
-                        adminBtn.style.display = 'none';
-                    }
-
-                } catch (error) {
-                    console.error(
-                        'User document fetch error:',
-                        error
-                    );
 
                     if (adminBtn) {
-                        adminBtn.style.display = 'none';
+
+                        adminBtn.style.display =
+                            'none';
                     }
                 }
-
-            } else {
-
-                if (logoutBtn) {
-                    logoutBtn.style.display = 'none';
-                }
-
-                if (adminBtn) {
-                    adminBtn.style.display = 'none';
-                }
             }
-        });
+        );
+
     } else {
+
         console.error(
             'onAuthState function is missing from window.'
         );
     }
 
+
     // =========================================================
     // 7. LOAD SALONS FROM FIRESTORE
     // =========================================================
+
     if (salonList) {
 
         const salonsCollection =
-            collection(db, 'salons');
+            collection(
+                db,
+                'salons'
+            );
 
-        // Deliberately avoid orderBy("name") here.
-        // We sort locally to prevent Firestore ordering/index
-        // issues from stopping all salons from loading.
         onSnapshot(
             salonsCollection,
 
@@ -327,6 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (snapshot.empty) {
 
                     salonList.innerHTML = `
+
                         <div
                             style="
                                 text-align:center;
@@ -334,12 +626,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 color:#888;
                             "
                         >
+
                             <i
-                                class='bx bx-store-alt'
-                                style='
+                                class="bx bx-store-alt"
+                                style="
                                     font-size:3rem;
                                     margin-bottom:10px;
-                                '
+                                "
                             ></i>
 
                             <p
@@ -359,6 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             >
                                 The salons collection is empty.
                             </p>
+
                         </div>
                     `;
 
@@ -367,75 +661,94 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                snapshot.forEach((docSnap) => {
 
-                    const data =
-                        docSnap.data() || {};
+                snapshot.forEach(
+                    (docSnap) => {
 
-                    /*
-                     * IMPORTANT:
-                     * Spread Firestore data FIRST.
-                     * Then explicitly set id, salonId and ownerId
-                     * so unexpected Firestore values cannot overwrite
-                     * our normalized values.
-                     */
-                    const ownerId =
-                        data.ownerId ||
-                        data.OwnerId ||
-                        null;
+                        const data =
+                            docSnap.data() ||
+                            {};
 
-                    const salon = {
-                        ...data,
+                        const ownerId =
+                            data.ownerId ||
+                            data.OwnerId ||
+                            null;
 
-                        id: docSnap.id,
+                        const salon = {
 
-                        salonId:
-                            data.salonId ||
-                            docSnap.id,
+                            ...data,
 
-                        ownerId: ownerId,
+                            id:
+                                docSnap.id,
 
-                        name:
-                            data.name ||
-                            'Unnamed Salon',
+                            salonId:
+                                data.salonId ||
+                                docSnap.id,
 
-                        location:
-                            data.location ||
-                            'Soweto',
+                            ownerId:
+                                ownerId,
 
-                        hours:
-                            data.hours ||
-                            '9AM - 6PM',
+                            name:
+                                data.name ||
+                                'Unnamed Salon',
 
-                        image:
-                            data.image ||
-                            '',
+                            location:
+                                data.location ||
+                                'Soweto',
 
-                        services:
-                            Array.isArray(data.services)
-                                ? data.services
-                                : []
-                    };
+                            hours:
+                                data.hours ||
+                                '9AM - 6PM',
 
-                    allSalons.push(salon);
-                });
+                            image:
+                                data.image ||
+                                '',
 
-                // Sort salons locally
-                allSalons.sort((a, b) => {
-                    return String(a.name || '')
-                        .localeCompare(
-                            String(b.name || '')
+                            services:
+                                Array.isArray(
+                                    data.services
+                                )
+                                    ? data.services
+                                    : []
+                        };
+
+                        allSalons.push(
+                            salon
                         );
-                });
+                    }
+                );
+
+
+                // Sort salons
+                allSalons.sort(
+                    (a, b) => {
+
+                        return String(
+                            a.name || ''
+                        ).localeCompare(
+                            String(
+                                b.name || ''
+                            )
+                        );
+                    }
+                );
+
 
                 console.log(
                     'Loaded salons:',
                     allSalons
                 );
 
-                allSalons.forEach((salon) => {
-                    renderSalon(salon);
-                });
+
+                allSalons.forEach(
+                    (salon) => {
+
+                        renderSalon(
+                            salon
+                        );
+                    }
+                );
+
 
                 updateBookingCount();
             },
@@ -448,6 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
 
                 salonList.innerHTML = `
+
                     <div
                         style="
                             text-align:center;
@@ -455,9 +769,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             color:#ff4757;
                         "
                     >
+
                         <i
-                            class='bx bx-error-circle'
-                            style='font-size:2.5rem;'
+                            class="bx bx-error-circle"
+                            style="
+                                font-size:2.5rem;
+                            "
                         ></i>
 
                         <p
@@ -475,34 +792,49 @@ document.addEventListener('DOMContentLoaded', () => {
                                 word-break:break-word;
                             "
                         >
-                            ${escapeHtml(error.message)}
+                            ${escapeHtml(
+                                error.message
+                            )}
                         </small>
+
                     </div>
                 `;
             }
         );
     }
 
+
     // =========================================================
     // 8. RENDER SALON CARD
     // =========================================================
+
     function renderSalon(salon) {
 
-        const noOwner = !salon.ownerId;
+        const noOwner =
+            !salon.ownerId;
 
         const card =
-            document.createElement('div');
+            document.createElement(
+                'div'
+            );
 
         card.className =
             'glass-card salon-card';
 
+
         const salonImage =
             salon.image
                 ? `
+
                     <img
-                        src="${escapeHtml(salon.image)}"
-                        alt="${escapeHtml(salon.name)}"
+                        src="${escapeHtml(
+                            salon.image
+                        )}"
+                        alt="${escapeHtml(
+                            salon.name
+                        )}"
                         loading="lazy"
+
                         style="
                             width:100%;
                             height:180px;
@@ -510,37 +842,46 @@ document.addEventListener('DOMContentLoaded', () => {
                             border-radius:15px;
                             margin-bottom:12px;
                         "
+
                         onerror="
                             this.style.display='none';
                         "
                     >
+
                 `
                 : '';
 
+
         card.innerHTML = `
+
             ${salonImage}
 
             <h3>
-                ${escapeHtml(salon.name)}
+                ${escapeHtml(
+                    salon.name
+                )}
             </h3>
 
             <p>
-                <i class='bx bx-map'></i>
+                <i class="bx bx-map"></i>
                 ${escapeHtml(
-                    salon.location || 'Soweto'
+                    salon.location ||
+                    'Soweto'
                 )}
             </p>
 
             <p>
-                <i class='bx bx-time'></i>
+                <i class="bx bx-time"></i>
                 ${escapeHtml(
-                    salon.hours || '9AM - 6PM'
+                    salon.hours ||
+                    '9AM - 6PM'
                 )}
             </p>
 
             ${
                 noOwner
                     ? `
+
                         <small
                             style="
                                 color:#ff4757;
@@ -552,17 +893,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             ⚠️ This salon is not available
                             for online booking.
                         </small>
+
                     `
                     : ''
             }
 
+
             <button
                 class="primary-btn bookBtn"
-                data-id="${escapeHtml(salon.id)}"
+                data-id="${escapeHtml(
+                    salon.id
+                )}"
+
                 ${
                     noOwner
                         ? `
                             disabled
+
                             style="
                                 opacity:0.5;
                                 cursor:not-allowed;
@@ -575,90 +922,133 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         `;
 
-        salonList.appendChild(card);
+
+        salonList.appendChild(
+            card
+        );
     }
+
 
     // =========================================================
     // 9. SEARCH FUNCTIONALITY
     // =========================================================
-    if (searchBtn && searchBar) {
 
-        const executeSearch = () => {
+    if (
+        searchBtn &&
+        searchBar
+    ) {
 
-            const term =
-                searchBar.value
-                    .toLowerCase()
-                    .trim();
+        const executeSearch =
+            () => {
 
-            if (!salonList) return;
+                const term =
+                    searchBar.value
+                        .toLowerCase()
+                        .trim();
 
-            salonList.innerHTML = '';
+                if (!salonList) {
+                    return;
+                }
 
-            const filtered =
-                allSalons.filter((salon) => {
+                salonList.innerHTML = '';
 
-                    const name =
-                        String(
-                            salon.name || ''
-                        ).toLowerCase();
+                const filtered =
+                    allSalons.filter(
+                        (salon) => {
 
-                    const location =
-                        String(
-                            salon.location || ''
-                        ).toLowerCase();
+                            const name =
+                                String(
+                                    salon.name ||
+                                    ''
+                                ).toLowerCase();
 
-                    return (
-                        name.includes(term) ||
-                        location.includes(term)
+                            const location =
+                                String(
+                                    salon.location ||
+                                    ''
+                                ).toLowerCase();
+
+                            return (
+                                name.includes(
+                                    term
+                                ) ||
+                                location.includes(
+                                    term
+                                )
+                            );
+                        }
                     );
-                });
 
-            if (filtered.length === 0) {
 
-                salonList.innerHTML = `
-                    <p
-                        style="
-                            text-align:center;
-                            color:#888;
-                            padding:20px;
-                        "
-                    >
-                        No salons matching
-                        "${escapeHtml(term)}"
-                    </p>
-                `;
+                if (
+                    filtered.length === 0
+                ) {
 
-                return;
-            }
+                    salonList.innerHTML = `
 
-            filtered.forEach((salon) => {
-                renderSalon(salon);
-            });
-        };
+                        <p
+                            style="
+                                text-align:center;
+                                color:#888;
+                                padding:20px;
+                            "
+                        >
+                            No salons matching
+                            "${escapeHtml(
+                                term
+                            )}"
+                        </p>
 
-        searchBtn.onclick = executeSearch;
+                    `;
+
+                    return;
+                }
+
+
+                filtered.forEach(
+                    (salon) => {
+
+                        renderSalon(
+                            salon
+                        );
+                    }
+                );
+            };
+
+
+        searchBtn.onclick =
+            executeSearch;
+
 
         searchBar.addEventListener(
             'keyup',
             (event) => {
-                if (event.key === 'Enter') {
+
+                if (
+                    event.key ===
+                    'Enter'
+                ) {
+
                     executeSearch();
                 }
             }
         );
 
-        // Optional live search
+
         searchBar.addEventListener(
             'input',
             () => {
+
                 executeSearch();
             }
         );
     }
 
+
     // =========================================================
     // 10. OPEN BOOKING MODAL
     // =========================================================
+
     if (salonList) {
 
         salonList.addEventListener(
@@ -666,15 +1056,19 @@ document.addEventListener('DOMContentLoaded', () => {
             (event) => {
 
                 const bookBtn =
-                    event.target.closest('.bookBtn');
+                    event.target.closest(
+                        '.bookBtn'
+                    );
 
-                if (!bookBtn) return;
+                if (!bookBtn) {
+                    return;
+                }
 
                 if (bookBtn.disabled) {
                     return;
                 }
 
-                // Require login
+
                 if (!auth.currentUser) {
 
                     alert(
@@ -687,14 +1081,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+
                 selectedSalonId =
                     bookBtn.dataset.id;
+
 
                 selectedSalonData =
                     allSalons.find(
                         (salon) =>
-                            salon.id === selectedSalonId
+                            salon.id ===
+                            selectedSalonId
                     );
+
 
                 if (!selectedSalonData) {
 
@@ -710,8 +1108,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Prevent booking if ownerId missing
-                if (!selectedSalonData.ownerId) {
+
+                if (
+                    !selectedSalonData.ownerId
+                ) {
 
                     alert(
                         'This salon is not configured for online booking yet.'
@@ -720,94 +1120,142 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+
                 console.log(
                     'Selected salon:',
                     selectedSalonData
                 );
 
+
                 if (bookingModal) {
-                    bookingModal.classList.add('active');
+
+                    bookingModal.classList.add(
+                        'active'
+                    );
                 }
 
-                // Populate service list if available
-                populateServices(selectedSalonData);
+
+                populateServices(
+                    selectedSalonData
+                );
             }
         );
     }
 
+
     // =========================================================
     // 11. POPULATE SERVICES
     // =========================================================
-    function populateServices(salon) {
+
+    function populateServices(
+        salon
+    ) {
 
         const serviceElem =
-            document.getElementById('serviceType');
+            document.getElementById(
+                'serviceType'
+            );
 
-        if (!serviceElem) return;
-
-        const services =
-            Array.isArray(salon.services)
-                ? salon.services
-                : [];
-
-        if (services.length === 0) {
+        if (!serviceElem) {
             return;
         }
 
+
+        const services =
+            Array.isArray(
+                salon.services
+            )
+                ? salon.services
+                : [];
+
+
+        if (
+            services.length === 0
+        ) {
+
+            return;
+        }
+
+
         serviceElem.innerHTML = `
+
             <option value="">
                 Select a service
             </option>
+
         `;
 
-        services.forEach((item) => {
 
-            let serviceName = '';
-            let servicePrice = 0;
+        services.forEach(
+            (item) => {
 
-            if (
-                typeof item === 'object' &&
-                item !== null
-            ) {
-
-                serviceName =
-                    item.name ||
-                    item.service ||
+                let serviceName =
                     '';
 
-                servicePrice =
-                    Number(
-                        item.price || 0
+                let servicePrice =
+                    0;
+
+
+                if (
+                    typeof item ===
+                        'object' &&
+                    item !== null
+                ) {
+
+                    serviceName =
+                        item.name ||
+                        item.service ||
+                        '';
+
+                    servicePrice =
+                        Number(
+                            item.price ||
+                            0
+                        );
+
+                } else {
+
+                    serviceName =
+                        String(item);
+
+                    servicePrice =
+                        0;
+                }
+
+
+                if (!serviceName) {
+                    return;
+                }
+
+
+                const option =
+                    document.createElement(
+                        'option'
                     );
 
-            } else {
 
-                serviceName =
-                    String(item);
+                option.value =
+                    `${serviceName} — R${servicePrice}`;
 
-                servicePrice = 0;
+
+                option.textContent =
+                    servicePrice > 0
+                        ? `${serviceName} — R${servicePrice}`
+                        : serviceName;
+
+
+                serviceElem.appendChild(
+                    option
+                );
             }
-
-            if (!serviceName) return;
-
-            const option =
-                document.createElement('option');
-
-            option.value =
-                `${serviceName} — R${servicePrice}`;
-
-            option.textContent =
-                servicePrice > 0
-                    ? `${serviceName} — R${servicePrice}`
-                    : serviceName;
-
-            serviceElem.appendChild(option);
-        });
+        );
     }
+
 
     // =========================================================
     // 12. CLOSE BOOKING MODAL
     // =========================================================
+
     if (closeModalBtn) {
 
         closeModalBtn.addEventListener(
@@ -815,18 +1263,22 @@ document.addEventListener('DOMContentLoaded', () => {
             () => {
 
                 if (bookingModal) {
+
                     bookingModal.classList.remove(
                         'active'
                     );
                 }
 
-                selectedSalonId = null;
-                selectedSalonData = null;
+                selectedSalonId =
+                    null;
+
+                selectedSalonData =
+                    null;
             }
         );
     }
 
-    // Close when clicking outside modal
+
     if (bookingModal) {
 
         bookingModal.addEventListener(
@@ -834,22 +1286,29 @@ document.addEventListener('DOMContentLoaded', () => {
             (event) => {
 
                 if (
-                    event.target === bookingModal
+                    event.target ===
+                    bookingModal
                 ) {
+
                     bookingModal.classList.remove(
                         'active'
                     );
 
-                    selectedSalonId = null;
-                    selectedSalonData = null;
+                    selectedSalonId =
+                        null;
+
+                    selectedSalonData =
+                        null;
                 }
             }
         );
     }
 
+
     // =========================================================
     // 13. SUBMIT BOOKING
     // =========================================================
+
     if (bookingForm) {
 
         bookingForm.addEventListener(
@@ -857,6 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             async (event) => {
 
                 event.preventDefault();
+
 
                 if (!auth.currentUser) {
 
@@ -870,6 +1330,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+
                 if (!selectedSalonData) {
 
                     alert(
@@ -879,8 +1340,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Owner ID is required
-                if (!selectedSalonData.ownerId) {
+
+                if (
+                    !selectedSalonData.ownerId
+                ) {
 
                     alert(
                         'This salon is not configured correctly for bookings.'
@@ -894,43 +1357,53 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // -------------------------------------------------
-                // Customer fields
-                // -------------------------------------------------
+
                 const customerName =
                     document
-                        .getElementById('custName')
+                        .getElementById(
+                            'custName'
+                        )
                         ?.value
                         .trim() || '';
+
 
                 const phone =
                     document
-                        .getElementById('custPhone')
+                        .getElementById(
+                            'custPhone'
+                        )
                         ?.value
                         .trim() || '';
 
+
                 const date =
                     document
-                        .getElementById('custDate')
+                        .getElementById(
+                            'custDate'
+                        )
                         ?.value || '';
+
 
                 const time =
                     document
-                        .getElementById('custTime')
+                        .getElementById(
+                            'custTime'
+                        )
                         ?.value || '';
 
+
                 const serviceElem =
-                    document
-                        .getElementById('serviceType');
+                    document.getElementById(
+                        'serviceType'
+                    );
+
 
                 const serviceVal =
                     serviceElem
                         ? serviceElem.value.trim()
                         : '';
 
-                // -------------------------------------------------
-                // Validation
-                // -------------------------------------------------
+
                 if (!customerName) {
 
                     alert(
@@ -939,6 +1412,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     return;
                 }
+
 
                 if (!phone) {
 
@@ -949,6 +1423,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+
                 if (!serviceVal) {
 
                     alert(
@@ -957,6 +1432,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     return;
                 }
+
 
                 if (!date) {
 
@@ -967,6 +1443,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+
                 if (!time) {
 
                     alert(
@@ -976,32 +1453,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // -------------------------------------------------
-                // Parse service + price
-                // -------------------------------------------------
-                let service = serviceVal;
-                let price = 0;
 
-                if (serviceVal.includes('— R')) {
+                let service =
+                    serviceVal;
 
-                    const parts =
-                        serviceVal.split('— R');
+                let price =
+                    0;
 
-                    service =
-                        parts[0].trim();
 
-                    price =
-                        Number(
-                            parts[1]
-                                ?.replace(/[^\d.]/g, '')
-                        ) || 0;
-
-                } else if (
-                    serviceVal.includes(' - R')
+                if (
+                    serviceVal.includes(
+                        '— R'
+                    )
                 ) {
 
                     const parts =
-                        serviceVal.split(' - R');
+                        serviceVal.split(
+                            '— R'
+                        );
 
                     service =
                         parts[0].trim();
@@ -1009,7 +1478,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     price =
                         Number(
                             parts[1]
-                                ?.replace(/[^\d.]/g, '')
+                                ?.replace(
+                                    /[^\d.]/g,
+                                    ''
+                                )
+                        ) || 0;
+
+                } else if (
+                    serviceVal.includes(
+                        ' - R'
+                    )
+                ) {
+
+                    const parts =
+                        serviceVal.split(
+                            ' - R'
+                        );
+
+                    service =
+                        parts[0].trim();
+
+                    price =
+                        Number(
+                            parts[1]
+                                ?.replace(
+                                    /[^\d.]/g,
+                                    ''
+                                )
                         ) || 0;
 
                 } else if (
@@ -1025,35 +1520,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     price =
                         Number(
                             parts[1]
-                                ?.replace(/[^\d.]/g, '')
+                                ?.replace(
+                                    /[^\d.]/g,
+                                    ''
+                                )
                         ) || 0;
                 }
 
-                // -------------------------------------------------
-                // Booking data
-                // -------------------------------------------------
+
                 const bookingData = {
 
-                    // Logged-in customer
                     userId:
                         auth.currentUser.uid,
 
-                    // REQUIRED FOR OWNER DASHBOARD
                     ownerId:
                         selectedSalonData.ownerId,
 
-                    // Firestore salon document ID
                     salonId:
                         selectedSalonId,
 
-                    // Keep both names for compatibility
                     salonName:
                         selectedSalonData.name,
 
                     salon:
                         selectedSalonData.name,
 
-                    // Keep both customer fields for compatibility
                     customerName:
                         customerName,
 
@@ -1085,10 +1576,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         serverTimestamp()
                 };
 
+
                 console.log(
                     'Creating booking:',
                     bookingData
                 );
+
 
                 try {
 
@@ -1100,20 +1593,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         bookingData
                     );
 
+
                     alert(
                         'Booking placed! Owner will approve soon 💈'
                     );
 
+
                     if (bookingModal) {
+
                         bookingModal.classList.remove(
                             'active'
                         );
                     }
 
+
                     bookingForm.reset();
 
-                    selectedSalonId = null;
-                    selectedSalonData = null;
+
+                    selectedSalonId =
+                        null;
+
+                    selectedSalonData =
+                        null;
 
                 } catch (error) {
 
@@ -1124,40 +1625,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     alert(
                         'Booking failed: ' +
-                        (error.message ||
-                            'Unknown error')
+                        (
+                            error.message ||
+                            'Unknown error'
+                        )
                     );
                 }
             }
         );
     }
 
+
     // =========================================================
     // 14. TODAY'S BOOKING COUNTER
     // =========================================================
+
     function updateBookingCount() {
 
-        if (!bookingsToday) return;
+        if (!bookingsToday) {
+            return;
+        }
+
 
         const todayStr =
             new Date()
                 .toISOString()
                 .split('T')[0];
 
+
         try {
 
             const bookingsCollection =
-                collection(db, 'bookings');
+                collection(
+                    db,
+                    'bookings'
+                );
+
 
             const qBookings =
                 query(
                     bookingsCollection,
+
                     where(
                         'date',
                         '==',
                         todayStr
                     )
                 );
+
 
             onSnapshot(
                 qBookings,
@@ -1175,10 +1690,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         error
                     );
 
-                    /*
-                     * Do not break the rest of the page
-                     * if public booking reads are denied.
-                     */
                     bookingsToday.textContent =
                         'Bookings today';
                 }
@@ -1196,38 +1707,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
     // =========================================================
     // 15. LOGOUT
     // =========================================================
+
     if (logoutBtn) {
 
-        logoutBtn.onclick = async () => {
+        logoutBtn.onclick =
+            async () => {
 
-            try {
+                try {
 
-                await signOut(auth);
+                    await signOut(
+                        auth
+                    );
 
-                window.location.href =
-                    'index.html';
+                    window.location.href =
+                        'index.html';
 
-            } catch (error) {
+                } catch (error) {
 
-                console.error(
-                    'Logout error:',
-                    error
-                );
+                    console.error(
+                        'Logout error:',
+                        error
+                    );
 
-                alert(
-                    'Logout failed: ' +
-                    error.message
-                );
-            }
-        };
+                    alert(
+                        'Logout failed: ' +
+                        error.message
+                    );
+                }
+            };
     }
+
 
     // =========================================================
     // 16. COOKIE + ONESIGNAL CONSENT
     // =========================================================
+
     const banner =
         document.getElementById(
             'cookieBanner'
@@ -1253,44 +1771,62 @@ document.addEventListener('DOMContentLoaded', () => {
             'subscribe-btn'
         );
 
+
     const cookieChoice =
         localStorage.getItem(
             'kasiCookieChoice'
         );
 
-    if (!cookieChoice && banner) {
 
-        setTimeout(() => {
+    if (
+        !cookieChoice &&
+        banner
+    ) {
 
-            banner.style.display =
-                'flex';
+        setTimeout(
+            () => {
 
-        }, 1000);
+                banner.style.display =
+                    'flex';
+
+            },
+            1000
+        );
     }
 
-    function saveChoice(choice) {
+
+    function saveChoice(
+        choice
+    ) {
 
         playClick();
+
 
         localStorage.setItem(
             'kasiCookieChoice',
             choice
         );
 
+
         if (banner) {
+
             banner.style.display =
                 'none';
         }
     }
 
-    // Accept all
+
+    // ACCEPT ALL
     if (acceptAll) {
 
         acceptAll.addEventListener(
             'click',
             () => {
 
-                saveChoice('all');
+                saveChoice(
+                    'all'
+                );
+
 
                 if (
                     window.OneSignalDeferred
@@ -1321,29 +1857,38 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
-    // Essential only
+
+    // ESSENTIAL ONLY
     if (essential) {
 
         essential.addEventListener(
             'click',
             () => {
-                saveChoice('essential');
+
+                saveChoice(
+                    'essential'
+                );
             }
         );
     }
 
-    // Close banner
+
+    // CLOSE
     if (closeBtn) {
 
         closeBtn.addEventListener(
             'click',
             () => {
-                saveChoice('essential');
+
+                saveChoice(
+                    'essential'
+                );
             }
         );
     }
 
-    // Subscribe button
+
+    // SUBSCRIBE
     if (subBtn) {
 
         subBtn.addEventListener(
@@ -1355,19 +1900,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         'kasiCookieChoice'
                     );
 
-                if (choice !== 'all') {
+
+                if (
+                    choice !== 'all'
+                ) {
 
                     alert(
                         'Please accept all cookies first to enable notifications 🍪'
                     );
 
+
                     if (banner) {
+
                         banner.style.display =
                             'flex';
                     }
 
                     return;
                 }
+
 
                 if (
                     window.OneSignalDeferred
@@ -1396,35 +1947,46 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+
     // =========================================================
     // 17. HTML ESCAPE
     // =========================================================
-    function escapeHtml(value) {
+
+    function escapeHtml(
+        value
+    ) {
 
         if (
             value === null ||
             value === undefined
         ) {
+
             return '';
         }
 
+
         return String(value)
+
             .replace(
                 /&/g,
                 '&amp;'
             )
+
             .replace(
                 /</g,
                 '&lt;'
             )
+
             .replace(
                 />/g,
                 '&gt;'
             )
+
             .replace(
                 /"/g,
                 '&quot;'
             )
+
             .replace(
                 /'/g,
                 '&#039;'
