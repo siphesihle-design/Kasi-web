@@ -29,6 +29,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
+
     <style>
 
         * {
@@ -56,7 +57,6 @@
             color: #fff;
 
             min-height: 100vh;
-
         }
 
 
@@ -98,7 +98,6 @@
                     4px +
                     env(safe-area-inset-bottom)
                 );
-
         }
 
 
@@ -126,7 +125,6 @@
 
             transition:
                 all 0.2s ease;
-
         }
 
 
@@ -135,7 +133,6 @@
             font-size: 1.7rem;
 
             margin-bottom: 2px;
-
         }
 
 
@@ -145,14 +142,12 @@
 
             background:
                 rgba(126, 34, 206, 0.13);
-
         }
 
 
         .nav-item:hover {
 
             color: #a855f7;
-
         }
 
 
@@ -179,7 +174,6 @@
             border-radius: 1rem;
 
             overflow: hidden;
-
         }
 
 
@@ -190,7 +184,6 @@
 
             border-color:
                 #9333ea;
-
         }
 
 
@@ -206,7 +199,6 @@
 
             background:
                 #111827;
-
         }
 
 
@@ -241,7 +233,6 @@
 
             transition:
                 all 0.2s ease;
-
         }
 
 
@@ -251,7 +242,6 @@
 
             transform:
                 translateY(-2px);
-
         }
 
 
@@ -262,7 +252,6 @@
             cursor: not-allowed;
 
             transform: none;
-
         }
 
 
@@ -298,14 +287,12 @@
             padding: 1rem;
 
             overflow-y: auto;
-
         }
 
 
         .modal.active {
 
             display: flex;
-
         }
 
 
@@ -322,7 +309,6 @@
 
             color:
                 #9ca3af;
-
         }
 
 
@@ -337,7 +323,6 @@
 
             margin-bottom:
                 12px;
-
         }
 
 
@@ -354,7 +339,6 @@
 
             color:
                 #9ca3af;
-
         }
 
 
@@ -367,7 +351,6 @@
 
             margin-bottom:
                 15px;
-
         }
 
 
@@ -384,7 +367,6 @@
 
             margin-bottom:
                 8px;
-
         }
 
 
@@ -395,7 +377,6 @@
 
             font-size:
                 0.95rem;
-
         }
 
 
@@ -412,7 +393,6 @@
 
             color:
                 #ff4757;
-
         }
 
 
@@ -423,7 +403,6 @@
 
             margin-bottom:
                 10px;
-
         }
 
 
@@ -434,7 +413,6 @@
 
             margin-bottom:
                 6px;
-
         }
 
 
@@ -448,7 +426,6 @@
 
             word-break:
                 break-word;
-
         }
 
 
@@ -501,7 +478,6 @@
 
             text-align:
                 center;
-
         }
 
 
@@ -515,7 +491,6 @@
 
                 padding-top:
                     28px;
-
             }
 
 
@@ -523,7 +498,6 @@
 
                 height:
                     200px;
-
             }
 
 
@@ -531,7 +505,6 @@
 
                 width:
                     88px;
-
             }
 
 
@@ -539,7 +512,6 @@
 
                 top:
                     85px;
-
             }
 
         }
@@ -1451,6 +1423,12 @@ document.addEventListener(
 
 
                     console.log(
+                        "USER UID:",
+                        user.uid
+                    );
+
+
+                    console.log(
                         "USER ROLE:",
                         role
                     );
@@ -1643,6 +1621,12 @@ document.addEventListener(
                                         doc.data() || {};
 
 
+                                    /*
+                                     * =================================
+                                     * SERVICES
+                                     * =================================
+                                     */
+
                                     const rawServices =
                                         Array.isArray(
                                             data.services
@@ -1690,29 +1674,35 @@ document.addEventListener(
                                         );
 
 
+                                    /*
+                                     * =================================
+                                     * SALON OBJECT
+                                     * =================================
+                                     *
+                                     * CURRENT FIRESTORE DOCUMENT:
+                                     *
+                                     * salons/
+                                     * x6PAOuL1w4W13yg5xIWC
+                                     *
+                                     * ownerId:
+                                     * prgctpY58cVmPocgLuSRLRMajOI2
+                                     *
+                                     * We use the Firestore document ID
+                                     * as salonId when no salonId field
+                                     * exists inside the document.
+                                     */
+
                                     const salon = {
 
-                                        /*
-                                         * Firestore
-                                         * document ID.
-                                         */
                                         id:
                                             doc.id,
 
 
-                                        /*
-                                         * Explicit salonId
-                                         * stored in document.
-                                         */
                                         salonId:
                                             data.salonId ||
                                             doc.id,
 
 
-                                        /*
-                                         * Firebase Auth
-                                         * UID of owner.
-                                         */
                                         ownerId:
                                             data.ownerId ||
                                             data.OwnerId ||
@@ -1753,7 +1743,19 @@ document.addEventListener(
 
 
                                     console.log(
-                                        "SALON:",
+                                        "SALON DOCUMENT ID:",
+                                        doc.id
+                                    );
+
+
+                                    console.log(
+                                        "SALON OWNER ID:",
+                                        salon.ownerId
+                                    );
+
+
+                                    console.log(
+                                        "SALON DATA:",
                                         salon
                                     );
 
@@ -2244,6 +2246,12 @@ document.addEventListener(
                 salon;
 
 
+            console.log(
+                "SELECTED SALON:",
+                selectedSalon
+            );
+
+
             bookingSalonName.textContent =
                 salon.name;
 
@@ -2587,20 +2595,22 @@ document.addEventListener(
 
                     /*
                      * =================================
-                     * IMPORTANT BOOKING STRUCTURE
+                     * IMPORTANT
                      * =================================
                      *
-                     * ownerId comes directly from:
+                     * Current salon:
                      *
-                     * salons/{salonDocumentId}
+                     * Firestore document:
+                     * x6PAOuL1w4W13yg5xIWC
                      *
-                     * For your current salon:
-                     *
-                     * salonId:
-                     * 8ogid785395jsYpuzumS
-                     *
-                     * ownerId:
+                     * Owner UID:
                      * prgctpY58cVmPocgLuSRLRMajOI2
+                     *
+                     * salonId is taken from:
+                     * selectedSalon.salonId
+                     *
+                     * ownerId is taken from:
+                     * selectedSalon.ownerId
                      */
 
                     const bookingData = {
@@ -2665,8 +2675,53 @@ document.addEventListener(
 
 
                     console.log(
-                        "CREATING BOOKING:",
-                        bookingData
+                        "================================="
+                    );
+
+
+                    console.log(
+                        "CREATING BOOKING"
+                    );
+
+
+                    console.log(
+                        "Customer UID:",
+                        user.uid
+                    );
+
+
+                    console.log(
+                        "Salon ID:",
+                        bookingData.salonId
+                    );
+
+
+                    console.log(
+                        "Salon Name:",
+                        bookingData.salonName
+                    );
+
+
+                    console.log(
+                        "Owner ID:",
+                        bookingData.ownerId
+                    );
+
+
+                    console.log(
+                        "Service:",
+                        bookingData.service
+                    );
+
+
+                    console.log(
+                        "Price:",
+                        bookingData.price
+                    );
+
+
+                    console.log(
+                        "================================="
                     );
 
 
