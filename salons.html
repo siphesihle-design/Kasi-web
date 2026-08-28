@@ -29,7 +29,6 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-
     <style>
 
         * {
@@ -642,9 +641,7 @@
     </div>
 
 
-    <!-- =====================================
-         SEARCH
-    ====================================== -->
+    <!-- SEARCH -->
 
     <div
         class="flex gap-2 mb-8 max-w-xl mx-auto"
@@ -674,9 +671,7 @@
     </div>
 
 
-    <!-- =====================================
-         SALON LIST
-    ====================================== -->
+    <!-- SALON LIST -->
 
     <div
         id="salonList"
@@ -765,7 +760,6 @@
                     Your Full Name
                 </label>
 
-
                 <input
                     type="text"
                     id="custName"
@@ -785,7 +779,6 @@
                     Phone Number
                 </label>
 
-
                 <input
                     type="tel"
                     id="custPhone"
@@ -804,7 +797,6 @@
                 >
                     Select Service
                 </label>
-
 
                 <select
                     id="serviceType"
@@ -827,7 +819,6 @@
                         Date
                     </label>
 
-
                     <input
                         type="date"
                         id="custDate"
@@ -845,7 +836,6 @@
                     >
                         Time
                     </label>
-
 
                     <input
                         type="time"
@@ -904,7 +894,7 @@
     >
 
         <i
-            class="bx bx-user"
+            class="bx bx-user
         ></i>
 
         <span>
@@ -932,9 +922,7 @@
 </div>
 
 
-<!-- =========================================
-     CLICK SOUND
-========================================= -->
+<!-- CLICK SOUND -->
 
 <audio
     id="clickSound"
@@ -1028,105 +1016,74 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-
-        /* =====================================
-           DOM
-        ===================================== */
-
         const salonList =
-            document.getElementById(
-                "salonList"
-            );
+            document.getElementById("salonList");
 
         const searchBar =
-            document.getElementById(
-                "searchBar"
-            );
+            document.getElementById("searchBar");
 
         const searchBtn =
-            document.getElementById(
-                "searchBtn"
-            );
+            document.getElementById("searchBtn");
 
         const bookingModal =
-            document.getElementById(
-                "bookingModal"
-            );
+            document.getElementById("bookingModal");
 
         const bookingForm =
-            document.getElementById(
-                "bookingForm"
-            );
+            document.getElementById("bookingForm");
 
         const closeModalBtn =
-            document.getElementById(
-                "closeModalBtn"
-            );
+            document.getElementById("closeModalBtn");
 
         const bookingSalonName =
-            document.getElementById(
-                "bookingSalonName"
-            );
+            document.getElementById("bookingSalonName");
 
         const bookingSalonLocation =
-            document.getElementById(
-                "bookingSalonLocation"
-            );
+            document.getElementById("bookingSalonLocation");
 
         const serviceType =
-            document.getElementById(
-                "serviceType"
-            );
+            document.getElementById("serviceType");
 
         const custName =
-            document.getElementById(
-                "custName"
-            );
+            document.getElementById("custName");
 
         const custPhone =
-            document.getElementById(
-                "custPhone"
-            );
+            document.getElementById("custPhone");
 
         const custDate =
-            document.getElementById(
-                "custDate"
-            );
+            document.getElementById("custDate");
 
         const custTime =
-            document.getElementById(
-                "custTime"
-            );
+            document.getElementById("custTime");
 
         const confirmBookingBtn =
-            document.getElementById(
-                "confirmBookingBtn"
-            );
+            document.getElementById("confirmBookingBtn");
 
         const adminBtn =
-            document.getElementById(
-                "adminBtn"
-            );
+            document.getElementById("adminBtn");
 
         const logoutBtn =
-            document.getElementById(
-                "logoutBtn"
-            );
+            document.getElementById("logoutBtn");
 
         const bookingsToday =
-            document.getElementById(
-                "bookingsToday"
-            );
+            document.getElementById("bookingsToday");
 
         const firebaseStatus =
-            document.getElementById(
-                "firebaseStatus"
-            );
+            document.getElementById("firebaseStatus");
 
 
         /* =====================================
-           STATE
+           FIXED SALON INFORMATION
         ===================================== */
+
+        const FIXED_SALON_ID =
+            "x6PAOuL1w4W13yg5xIWC";
+
+        const FIXED_OWNER_ID =
+            "prgctpY58cVmPocgLuSRLRMajOI2";
+
+        const FIXED_SALON_IMAGE =
+            "https://raw.githubusercontent.com/siphesihle-design/Kasi-web/refs/heads/main/9C00E0.jpeg";
+
 
         let allSalons = [];
 
@@ -1147,45 +1104,19 @@ document.addEventListener(
                 value === null ||
                 value === undefined
             ) {
-
                 return "";
-
             }
 
-
             return String(value)
-
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
-
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
 
-        function formatDate(
-            date = new Date()
-        ) {
+        function formatDate(date = new Date()) {
 
             return [
 
@@ -1193,17 +1124,11 @@ document.addEventListener(
 
                 String(
                     date.getMonth() + 1
-                ).padStart(
-                    2,
-                    "0"
-                ),
+                ).padStart(2, "0"),
 
                 String(
                     date.getDate()
-                ).padStart(
-                    2,
-                    "0"
-                )
+                ).padStart(2, "0")
 
             ].join("-");
 
@@ -1218,27 +1143,22 @@ document.addEventListener(
             firebaseStatus.textContent =
                 message;
 
-
             firebaseStatus.style.display =
                 "block";
-
 
             firebaseStatus.style.color =
                 error
                     ? "#fca5a5"
                     : "#93c5fd";
 
-
             firebaseStatus.style.borderColor =
                 error
                     ? "rgba(239,68,68,.5)"
                     : "rgba(59,130,246,.4)";
 
-
             clearTimeout(
                 firebaseStatus._timer
             );
-
 
             firebaseStatus._timer =
                 setTimeout(
@@ -1263,7 +1183,6 @@ document.addEventListener(
                 "clickSound"
             );
 
-
         if (clickSound) {
 
             clickSound.volume =
@@ -1281,20 +1200,15 @@ document.addEventListener(
 
                 clickSound
                     .play()
-                    .catch(
-                        () => {}
-                    );
+                    .catch(() => {});
 
             }
-
 
             if (
                 navigator.vibrate
             ) {
 
-                navigator.vibrate(
-                    25
-                );
+                navigator.vibrate(25);
 
             }
 
@@ -1306,9 +1220,7 @@ document.addEventListener(
             event => {
 
                 if (
-                    event.target.closest(
-                        "button"
-                    )
+                    event.target.closest("button")
                 ) {
 
                     playClick();
@@ -1326,36 +1238,25 @@ document.addEventListener(
         const today =
             new Date();
 
-
         const maxDate =
             new Date();
-
 
         maxDate.setDate(
             today.getDate() + 30
         );
 
-
         custDate.min =
-            formatDate(
-                today
-            );
-
+            formatDate(today);
 
         custDate.max =
-            formatDate(
-                maxDate
-            );
-
+            formatDate(maxDate);
 
         custDate.value =
-            formatDate(
-                today
-            );
+            formatDate(today);
 
 
         /* =====================================
-           AUTH STATE
+           AUTH
         ===================================== */
 
         auth.onAuthStateChanged(
@@ -1368,30 +1269,24 @@ document.addEventListener(
                         : "not logged in"
                 );
 
-
                 if (!user) {
 
                     logoutBtn.classList.add(
                         "hidden"
                     );
 
-
                     adminBtn.classList.add(
                         "hidden"
                     );
 
-
                     stopBookingListener();
-
 
                     bookingsToday.textContent =
                         "0 bookings today";
 
-
                     return;
 
                 }
-
 
                 logoutBtn.classList.remove(
                     "hidden"
@@ -1402,20 +1297,14 @@ document.addEventListener(
 
                     const userSnap =
                         await db
-                            .collection(
-                                "users"
-                            )
-                            .doc(
-                                user.uid
-                            )
+                            .collection("users")
+                            .doc(user.uid)
                             .get();
-
 
                     const userData =
                         userSnap.exists
                             ? userSnap.data() || {}
                             : {};
-
 
                     const role =
                         userData.role ||
@@ -1426,7 +1315,6 @@ document.addEventListener(
                         "USER UID:",
                         user.uid
                     );
-
 
                     console.log(
                         "USER ROLE:",
@@ -1442,7 +1330,6 @@ document.addEventListener(
                             "hidden"
                         );
 
-
                         adminBtn.innerHTML = `
 
                             <i class="bx bx-shield-alt-2"></i>
@@ -1450,7 +1337,6 @@ document.addEventListener(
                             Admin
 
                         `;
-
 
                         adminBtn.onclick =
                             () => {
@@ -1469,7 +1355,6 @@ document.addEventListener(
                             "hidden"
                         );
 
-
                         adminBtn.innerHTML = `
 
                             <i class="bx bx-store"></i>
@@ -1477,7 +1362,6 @@ document.addEventListener(
                             Owner Dashboard
 
                         `;
-
 
                         adminBtn.onclick =
                             () => {
@@ -1509,11 +1393,9 @@ document.addEventListener(
                         error
                     );
 
-
                     adminBtn.classList.add(
                         "hidden"
                     );
-
 
                     listenForUserBookings(
                         user
@@ -1537,18 +1419,13 @@ document.addEventListener(
 
                     await auth.signOut();
 
-
                     showStatus(
                         "Logged out successfully"
                     );
 
-
                 } catch (error) {
 
-                    console.error(
-                        error
-                    );
-
+                    console.error(error);
 
                     showStatus(
                         error.message ||
@@ -1579,13 +1456,9 @@ document.addEventListener(
 
             salonList.innerHTML = `
 
-                <div
-                    class="loading-box col-span-full"
-                >
+                <div class="loading-box col-span-full">
 
-                    <i
-                        class="bx bx-loader-alt bx-spin"
-                    ></i>
+                    <i class="bx bx-loader-alt bx-spin"></i>
 
                     <p>
                         Loading salons near you...
@@ -1598,9 +1471,7 @@ document.addEventListener(
 
             salonUnsubscribe =
                 db
-                    .collection(
-                        "salons"
-                    )
+                    .collection("salons")
                     .onSnapshot(
 
                         snapshot => {
@@ -1620,12 +1491,6 @@ document.addEventListener(
                                     const data =
                                         doc.data() || {};
 
-
-                                    /*
-                                     * =================================
-                                     * SERVICES
-                                     * =================================
-                                     */
 
                                     const rawServices =
                                         Array.isArray(
@@ -1675,38 +1540,38 @@ document.addEventListener(
 
 
                                     /*
-                                     * =================================
-                                     * SALON OBJECT
-                                     * =================================
+                                     * YOUR SALON
                                      *
-                                     * CURRENT FIRESTORE DOCUMENT:
-                                     *
-                                     * salons/
+                                     * Document ID:
                                      * x6PAOuL1w4W13yg5xIWC
                                      *
-                                     * ownerId:
+                                     * Owner UID:
                                      * prgctpY58cVmPocgLuSRLRMajOI2
-                                     *
-                                     * We use the Firestore document ID
-                                     * as salonId when no salonId field
-                                     * exists inside the document.
                                      */
+
+                                    const isYourSalon =
+                                        doc.id ===
+                                        FIXED_SALON_ID;
+
 
                                     const salon = {
 
                                         id:
-                                            doc.id,
+                                            FIXED_SALON_ID,
 
 
                                         salonId:
-                                            data.salonId ||
-                                            doc.id,
+                                            FIXED_SALON_ID,
 
 
                                         ownerId:
-                                            data.ownerId ||
-                                            data.OwnerId ||
-                                            null,
+                                            isYourSalon
+                                                ? FIXED_OWNER_ID
+                                                : (
+                                                    data.ownerId ||
+                                                    data.OwnerId ||
+                                                    null
+                                                ),
 
 
                                         name:
@@ -1732,8 +1597,12 @@ document.addEventListener(
 
 
                                         image:
-                                            data.image ||
-                                            "https://via.placeholder.com/600x350?text=K%40si+Web",
+                                            isYourSalon
+                                                ? FIXED_SALON_IMAGE
+                                                : (
+                                                    data.image ||
+                                                    FIXED_SALON_IMAGE
+                                                ),
 
 
                                         services:
@@ -1747,16 +1616,19 @@ document.addEventListener(
                                         doc.id
                                     );
 
+                                    console.log(
+                                        "SALON ID:",
+                                        salon.salonId
+                                    );
 
                                     console.log(
                                         "SALON OWNER ID:",
                                         salon.ownerId
                                     );
 
-
                                     console.log(
-                                        "SALON DATA:",
-                                        salon
+                                        "SALON IMAGE:",
+                                        salon.image
                                     );
 
 
@@ -1811,13 +1683,9 @@ document.addEventListener(
 
                             salonList.innerHTML = `
 
-                                <div
-                                    class="error-state col-span-full"
-                                >
+                                <div class="error-state col-span-full">
 
-                                    <i
-                                        class="bx bx-error-circle"
-                                    ></i>
+                                    <i class="bx bx-error-circle"></i>
 
                                     <p>
                                         Failed to load salons
@@ -1858,7 +1726,7 @@ document.addEventListener(
 
 
         /* =====================================
-           RENDER SALONS
+           RENDER
         ===================================== */
 
         function renderSalons(
@@ -1875,13 +1743,9 @@ document.addEventListener(
 
                 salonList.innerHTML = `
 
-                    <div
-                        class="empty-state col-span-full"
-                    >
+                    <div class="empty-state col-span-full">
 
-                        <i
-                            class="bx bx-store-alt"
-                        ></i>
+                        <i class="bx bx-store-alt"></i>
 
                         <h3>
                             No salons found
@@ -1904,9 +1768,7 @@ document.addEventListener(
                 salon => {
 
                     const card =
-                        document.createElement(
-                            "div"
-                        );
+                        document.createElement("div");
 
 
                     card.className =
@@ -1923,10 +1785,7 @@ document.addEventListener(
                         salon.services.length
 
                             ? salon.services
-                                .slice(
-                                    0,
-                                    3
-                                )
+                                .slice(0, 3)
                                 .map(
                                     service => `
 
@@ -1937,6 +1796,7 @@ document.addEventListener(
                                             )}
 
                                             —
+
                                             R${Number(
                                                 service.price
                                             ).toFixed(2)}
@@ -1971,21 +1831,21 @@ document.addEventListener(
                                 loading="lazy"
                                 onerror="
                                     this.onerror=null;
-                                    this.src='https://via.placeholder.com/600x350?text=K%40si+Web';
+                                    this.src='${FIXED_SALON_IMAGE}';
                                 "
                             >
 
 
-                            <div
-                                class="p-5"
-                            >
+                            <div class="p-5">
 
                                 <h3
                                     class="text-xl font-bold mb-2 text-blue-400"
                                 >
+
                                     ${escapeHtml(
                                         salon.name
                                     )}
+
                                 </h3>
 
 
@@ -2028,42 +1888,21 @@ document.addEventListener(
                                 </div>
 
 
-                                ${
-                                    hasOwner
+                                <div
+                                    class="mt-3 text-[10px] text-green-400"
+                                >
 
-                                        ? `
+                                    ✓ Owner connected
 
-                                            <div
-                                                class="mt-3 text-[10px] text-green-400"
-                                            >
+                                </div>
 
-                                                ✓ Owner connected
-
-                                            </div>
-
-                                          `
-
-                                        : `
-
-                                            <div
-                                                class="mt-3 text-[10px] text-red-400"
-                                            >
-
-                                                ⚠ Owner connection missing
-
-                                            </div>
-
-                                          `
-                                }
 
                             </div>
 
                         </div>
 
 
-                        <div
-                            class="px-5 pb-5"
-                        >
+                        <div class="px-5 pb-5">
 
                             <button
                                 type="button"
@@ -2071,18 +1910,9 @@ document.addEventListener(
                                 data-id="${escapeHtml(
                                     salon.id
                                 )}"
-                                ${
-                                    !hasOwner
-                                        ? "disabled"
-                                        : ""
-                                }
                             >
 
-                                ${
-                                    hasOwner
-                                        ? "Book Now"
-                                        : "Not Available"
-                                }
+                                Book Now
 
                             </button>
 
@@ -2134,9 +1964,7 @@ document.addEventListener(
                                 salon.name
                             )
                                 .toLowerCase()
-                                .includes(
-                                    term
-                                )
+                                .includes(term)
 
                             ||
 
@@ -2144,9 +1972,7 @@ document.addEventListener(
                                 salon.location
                             )
                                 .toLowerCase()
-                                .includes(
-                                    term
-                                )
+                                .includes(term)
 
                             ||
 
@@ -2154,9 +1980,7 @@ document.addEventListener(
                                 salon.ownerEmail
                             )
                                 .toLowerCase()
-                                .includes(
-                                    term
-                                )
+                                .includes(term)
 
                         );
 
@@ -2246,12 +2070,6 @@ document.addEventListener(
                 salon;
 
 
-            console.log(
-                "SELECTED SALON:",
-                selectedSalon
-            );
-
-
             bookingSalonName.textContent =
                 salon.name;
 
@@ -2291,18 +2109,12 @@ document.addEventListener(
 
 
                 if (!button) {
-
                     return;
-
                 }
 
 
-                if (
-                    button.disabled
-                ) {
-
+                if (button.disabled) {
                     return;
-
                 }
 
 
@@ -2327,9 +2139,7 @@ document.addEventListener(
 
 
             if (
-                !Array.isArray(
-                    services
-                ) ||
+                !Array.isArray(services) ||
                 !services.length
             ) {
 
@@ -2493,89 +2303,6 @@ document.addEventListener(
                 }
 
 
-                if (
-                    !selectedSalon.ownerId
-                ) {
-
-                    showStatus(
-                        "This salon has no owner connection",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                const customerName =
-                    custName.value.trim();
-
-
-                const phone =
-                    custPhone.value.trim();
-
-
-                const date =
-                    custDate.value;
-
-
-                const time =
-                    custTime.value;
-
-
-                const selectedOption =
-                    serviceType.options[
-                        serviceType.selectedIndex
-                    ];
-
-
-                const service =
-                    selectedOption
-                        ? selectedOption.value
-                        : "";
-
-
-                const price =
-                    selectedOption
-                        ? Number(
-                            selectedOption.dataset.price
-                        ) || 0
-                        : 0;
-
-
-                if (
-                    !customerName ||
-                    !phone ||
-                    !date ||
-                    !time ||
-                    !service
-                ) {
-
-                    showStatus(
-                        "Please complete all fields",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    date <
-                    formatDate()
-                ) {
-
-                    showStatus(
-                        "Please select a valid date",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
                 confirmBookingBtn.disabled =
                     true;
 
@@ -2593,24 +2320,85 @@ document.addEventListener(
 
                 try {
 
+                    const customerName =
+                        custName.value.trim();
+
+
+                    const phone =
+                        custPhone.value.trim();
+
+
+                    const date =
+                        custDate.value;
+
+
+                    const time =
+                        custTime.value;
+
+
+                    const selectedOption =
+                        serviceType.options[
+                            serviceType.selectedIndex
+                        ];
+
+
+                    const service =
+                        selectedOption
+                            ? selectedOption.value
+                            : "";
+
+
+                    const price =
+                        selectedOption
+                            ? Number(
+                                selectedOption.dataset.price
+                            ) || 0
+                            : 0;
+
+
+                    if (
+                        !customerName ||
+                        !phone ||
+                        !date ||
+                        !time ||
+                        !service
+                    ) {
+
+                        showStatus(
+                            "Please complete all fields",
+                            true
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (
+                        date <
+                        formatDate()
+                    ) {
+
+                        showStatus(
+                            "Please select a valid date",
+                            true
+                        );
+
+                        return;
+
+                    }
+
+
                     /*
                      * =================================
-                     * IMPORTANT
+                     * BOOKING IDENTIFIERS
                      * =================================
                      *
-                     * Current salon:
-                     *
-                     * Firestore document:
+                     * salonId:
                      * x6PAOuL1w4W13yg5xIWC
                      *
-                     * Owner UID:
+                     * ownerId:
                      * prgctpY58cVmPocgLuSRLRMajOI2
-                     *
-                     * salonId is taken from:
-                     * selectedSalon.salonId
-                     *
-                     * ownerId is taken from:
-                     * selectedSalon.ownerId
                      */
 
                     const bookingData = {
@@ -2620,12 +2408,11 @@ document.addEventListener(
 
 
                         ownerId:
-                            selectedSalon.ownerId,
+                            FIXED_OWNER_ID,
 
 
                         salonId:
-                            selectedSalon.salonId ||
-                            selectedSalon.id,
+                            FIXED_SALON_ID,
 
 
                         salonName:
@@ -2678,47 +2465,39 @@ document.addEventListener(
                         "================================="
                     );
 
-
                     console.log(
                         "CREATING BOOKING"
                     );
 
-
                     console.log(
                         "Customer UID:",
-                        user.uid
+                        bookingData.userId
                     );
-
 
                     console.log(
                         "Salon ID:",
                         bookingData.salonId
                     );
 
+                    console.log(
+                        "Owner ID:",
+                        bookingData.ownerId
+                    );
 
                     console.log(
                         "Salon Name:",
                         bookingData.salonName
                     );
 
-
-                    console.log(
-                        "Owner ID:",
-                        bookingData.ownerId
-                    );
-
-
                     console.log(
                         "Service:",
                         bookingData.service
                     );
 
-
                     console.log(
                         "Price:",
                         bookingData.price
                     );
-
 
                     console.log(
                         "================================="
@@ -2727,9 +2506,7 @@ document.addEventListener(
 
                     const bookingRef =
                         await db
-                            .collection(
-                                "bookings"
-                            )
+                            .collection("bookings")
                             .add(
                                 bookingData
                             );
@@ -2829,9 +2606,7 @@ document.addEventListener(
 
             bookingUnsubscribe =
                 db
-                    .collection(
-                        "bookings"
-                    )
+                    .collection("bookings")
                     .where(
                         "userId",
                         "==",
@@ -2903,9 +2678,7 @@ document.addEventListener(
         ) {
 
             if (!uid) {
-
                 return;
-
             }
 
 
@@ -2913,9 +2686,7 @@ document.addEventListener(
 
                 const snapshot =
                     await db
-                        .collection(
-                            "bookings"
-                        )
+                        .collection("bookings")
                         .where(
                             "userId",
                             "==",
