@@ -79,10 +79,6 @@
             width: 100%;
         }
 
-        /* ==========================
-           SWIPER
-        ========================== */
-
         .tranding-slider {
             padding: 20px 0 50px 0;
             overflow: hidden;
@@ -196,9 +192,7 @@
     <div class="container">
 
 
-        <!-- ==========================
-             AUTHENTICATION
-        =========================== -->
+        <!-- AUTHENTICATION -->
 
         <div
             class="glass-card login-section"
@@ -310,16 +304,12 @@
         </div>
 
 
-        <!-- ==========================
-             SWIPER
-        =========================== -->
+        <!-- SWIPER -->
 
         <div class="tranding-slider swiper">
 
             <div class="swiper-wrapper">
 
-
-                <!-- SLIDE 1 -->
 
                 <div class="swiper-slide tranding-slide">
 
@@ -348,13 +338,8 @@
                         <div class="tranding-slide-content-bottom">
 
                             <div class="rating">
-
-                                <span>
-                                    4.8
-                                </span>
-
+                                <span>4.8</span>
                                 <i class="bx bxs-star"></i>
-
                             </div>
 
                         </div>
@@ -363,8 +348,6 @@
 
                 </div>
 
-
-                <!-- SLIDE 2 -->
 
                 <div class="swiper-slide tranding-slide">
 
@@ -393,13 +376,8 @@
                         <div class="tranding-slide-content-bottom">
 
                             <div class="rating">
-
-                                <span>
-                                    4.9
-                                </span>
-
+                                <span>4.9</span>
                                 <i class="bx bxs-star"></i>
-
                             </div>
 
                         </div>
@@ -408,8 +386,6 @@
 
                 </div>
 
-
-                <!-- SLIDE 3 -->
 
                 <div class="swiper-slide tranding-slide">
 
@@ -438,13 +414,8 @@
                         <div class="tranding-slide-content-bottom">
 
                             <div class="rating">
-
-                                <span>
-                                    4.7
-                                </span>
-
+                                <span>4.7</span>
                                 <i class="bx bxs-star"></i>
-
                             </div>
 
                         </div>
@@ -453,8 +424,6 @@
 
                 </div>
 
-
-                <!-- SLIDE 4 -->
 
                 <div class="swiper-slide tranding-slide">
 
@@ -483,13 +452,8 @@
                         <div class="tranding-slide-content-bottom">
 
                             <div class="rating">
-
-                                <span>
-                                    5.0
-                                </span>
-
+                                <span>5.0</span>
                                 <i class="bx bxs-star"></i>
-
                             </div>
 
                         </div>
@@ -501,15 +465,12 @@
 
             </div>
 
-
             <div class="swiper-pagination"></div>
 
         </div>
 
 
-        <!-- ==========================
-             MISSION
-        =========================== -->
+        <!-- MISSION -->
 
         <div class="mission-box">
 
@@ -522,9 +483,7 @@
         </div>
 
 
-        <!-- ==========================
-             BOTTOM FEATURED IMAGE
-        =========================== -->
+        <!-- FEATURED -->
 
         <a
             href="salons.html"
@@ -565,9 +524,7 @@
         </a>
 
 
-        <!-- ==========================
-             NAVIGATION
-        =========================== -->
+        <!-- NAVIGATION -->
 
         <div class="nav-grid">
 
@@ -622,13 +579,10 @@
 
         </div>
 
-
     </div>
 
 
-    <!-- ==========================
-         COOKIE
-    =========================== -->
+    <!-- COOKIE -->
 
     <div
         id="cookieBanner"
@@ -693,9 +647,7 @@
     </div>
 
 
-    <!-- ==========================
-         AUDIO
-    =========================== -->
+    <!-- AUDIO -->
 
     <audio
         id="clickSound"
@@ -716,18 +668,12 @@
     ></audio>
 
 
-    <!-- ==========================
-         SWIPER JS
-    =========================== -->
-
     <script
         src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
     ></script>
 
 
-    <!-- ==========================
-         FIREBASE
-    =========================== -->
+    <!-- FIREBASE -->
 
     <script type="module">
 
@@ -752,6 +698,10 @@
             doc,
             setDoc,
             getDoc,
+            getDocs,
+            collection,
+            query,
+            where,
             serverTimestamp
         } from
         "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
@@ -876,6 +826,9 @@
 
                 let cachedUserRole =
                     "customer";
+
+                let cachedSalonId =
+                    null;
 
                 let deferredPrompt =
                     null;
@@ -1027,7 +980,7 @@
 
 
                 /* ==========================
-                   PWA INSTALL
+                   PWA
                 =========================== */
 
                 window.addEventListener(
@@ -1074,226 +1027,99 @@
                 );
 
 
-                /* ==========================
-                   CREATE / REPAIR SALON
-                =========================== */
+                /* ==================================================
+                   FIND EXISTING SALON
+                   ==================================================
 
-                async function ensureSalonForOwner(
-                    user,
-                    existingUserData = {}
+                   IMPORTANT:
+
+                   We DO NOT create a new salon during login.
+
+                   We search:
+
+                   salons.ownerId == Firebase Auth UID
+
+                   This matches your Firestore structure.
+                */
+
+                async function findOwnerSalon(
+                    user
                 ) {
 
-                    let salonId =
-                        existingUserData.salonId;
-
-
-                    /*
-                     * Existing salon ID
-                     */
-
-                    if (salonId) {
-
-                        const salonRef =
-                            doc(
+                    const salonQuery =
+                        query(
+                            collection(
                                 db,
-                                "salons",
-                                salonId
-                            );
-
-                        const salonSnap =
-                            await getDoc(
-                                salonRef
-                            );
-
-
-                        if (
-                            salonSnap.exists()
-                        ) {
-
-                            const salonData =
-                                salonSnap.data();
-
-
-                            /*
-                             * Repair missing /
-                             * incorrect ownerId
-                             */
-
-                            if (
-                                salonData.ownerId !==
+                                "salons"
+                            ),
+                            where(
+                                "ownerId",
+                                "==",
                                 user.uid
-                            ) {
-
-                                await setDoc(
-                                    salonRef,
-                                    {
-
-                                        ownerId:
-                                            user.uid,
-
-                                        ownerEmail:
-                                            user.email || "",
-
-                                        updatedAt:
-                                            serverTimestamp()
-
-                                    },
-                                    {
-                                        merge: true
-                                    }
-                                );
-
-                            }
+                            )
+                        );
 
 
-                            /*
-                             * Make sure users
-                             * document contains
-                             * the salon ID.
-                             */
-
-                            await setDoc(
-                                doc(
-                                    db,
-                                    "users",
-                                    user.uid
-                                ),
-                                {
-
-                                    salonId:
-                                        salonId,
-
-                                    role:
-                                        "salon_owner",
-
-                                    email:
-                                        user.email || "",
-
-                                    updatedAt:
-                                        serverTimestamp()
-
-                                },
-                                {
-                                    merge: true
-                                }
-                            );
+                    const salonSnapshot =
+                        await getDocs(
+                            salonQuery
+                        );
 
 
-                            return salonId;
+                    if (
+                        salonSnapshot.empty
+                    ) {
 
-                        }
+                        console.warn(
+                            "No salon found for owner:",
+                            user.uid
+                        );
+
+                        return null;
 
                     }
 
 
                     /*
-                     * Create standard salon ID
+                     * Use the first matching salon.
                      */
 
-                    salonId =
-                        `salon_${user.uid}`;
+                    const salonDoc =
+                        salonSnapshot.docs[0];
 
 
-                    const salonRef =
-                        doc(
-                            db,
-                            "salons",
-                            salonId
-                        );
+                    return {
 
+                        id:
+                            salonDoc.id,
 
-                    await setDoc(
-                        salonRef,
-                        {
+                        data:
+                            salonDoc.data()
 
-                            ownerId:
-                                user.uid,
-
-                            ownerEmail:
-                                user.email || "",
-
-                            name:
-                                existingUserData.salonName ||
-                                `${user.email?.split("@")[0] || "My"} Kasi Salon`,
-
-                            location:
-                                existingUserData.location ||
-                                "Location not provided",
-
-                            hours:
-                                existingUserData.hours ||
-                                "Hours not provided",
-
-                            image:
-                                existingUserData.image ||
-                                "",
-
-                            services:
-                                Array.isArray(
-                                    existingUserData.services
-                                )
-                                    ? existingUserData.services
-                                    : [],
-
-                            createdAt:
-                                serverTimestamp(),
-
-                            updatedAt:
-                                serverTimestamp()
-
-                        },
-
-                        {
-                            merge: true
-                        }
-                    );
-
-
-                    await setDoc(
-                        doc(
-                            db,
-                            "users",
-                            user.uid
-                        ),
-                        {
-
-                            email:
-                                user.email || "",
-
-                            role:
-                                "salon_owner",
-
-                            salonId:
-                                salonId,
-
-                            updatedAt:
-                                serverTimestamp()
-
-                        },
-
-                        {
-                            merge: true
-                        }
-                    );
-
-
-                    return salonId;
+                    };
 
                 }
 
 
-                /* ==========================
+                /* ==================================================
                    AUTH STATE
-                =========================== */
+                   ================================================== */
 
                 onAuthStateChanged(
                     auth,
                     async user => {
 
+                        /*
+                         * NO USER
+                         */
+
                         if (!user) {
 
                             cachedUserRole =
                                 "customer";
+
+                            cachedSalonId =
+                                null;
 
                             authSection.style.display =
                                 "block";
@@ -1314,20 +1140,15 @@
 
                         try {
 
-                            /*
-                             * Hide login
-                             */
-
-                            authSection.style.display =
-                                "none";
-
-
-                            logoutButton.style.display =
-                                "flex";
+                            console.log(
+                                "AUTH USER:",
+                                user.uid,
+                                user.email
+                            );
 
 
                             /*
-                             * Get user document
+                             * Get users/{uid}
                              */
 
                             const userRef =
@@ -1344,87 +1165,153 @@
                                 );
 
 
-                            let userData;
-
-
                             /*
-                             * Existing user
+                             * If the user document
+                             * does not exist, create
+                             * a CUSTOMER account.
                              */
 
                             if (
-                                userSnap.exists()
+                                !userSnap.exists()
                             ) {
-
-                                userData =
-                                    userSnap.data();
-
-                            }
-
-
-                            /*
-                             * Missing user
-                             */
-
-                            else {
-
-                                userData = {
-
-                                    email:
-                                        user.email || "",
-
-                                    role:
-                                        "customer",
-
-                                    createdAt:
-                                        serverTimestamp(),
-
-                                    updatedAt:
-                                        serverTimestamp()
-
-                                };
-
 
                                 await setDoc(
                                     userRef,
-                                    userData,
+                                    {
+
+                                        email:
+                                            user.email || "",
+
+                                        role:
+                                            "customer",
+
+                                        createdAt:
+                                            serverTimestamp(),
+
+                                        updatedAt:
+                                            serverTimestamp()
+
+                                    },
                                     {
                                         merge: true
                                     }
                                 );
 
-                            }
 
+                                cachedUserRole =
+                                    "customer";
 
-                            cachedUserRole =
-                                userData.role ||
-                                "customer";
-
-
-                            /* ==========================
-                               OWNER REPAIR
-                            =========================== */
-
-                            if (
-                                cachedUserRole ===
-                                "salon_owner"
-                            ) {
-
-                                const salonId =
-                                    await ensureSalonForOwner(
-                                        user,
-                                        userData
-                                    );
-
-
-                                userData.salonId =
-                                    salonId;
+                                cachedSalonId =
+                                    null;
 
                             }
 
+                            else {
 
-                            /* ==========================
-                               DASHBOARD BUTTON
-                            =========================== */
+                                const userData =
+                                    userSnap.data();
+
+
+                                cachedUserRole =
+                                    userData.role ||
+                                    "customer";
+
+
+                                cachedSalonId =
+                                    userData.salonId ||
+                                    null;
+
+
+                                /*
+                                 * OWNER
+                                 */
+
+                                if (
+                                    cachedUserRole ===
+                                    "salon_owner"
+                                ) {
+
+                                    /*
+                                     * Find salon using
+                                     * ownerId.
+                                     */
+
+                                    const salon =
+                                        await findOwnerSalon(
+                                            user
+                                        );
+
+
+                                    if (salon) {
+
+                                        cachedSalonId =
+                                            salon.id;
+
+
+                                        /*
+                                         * Repair only the
+                                         * users salonId.
+                                         *
+                                         * We do NOT modify
+                                         * the salon.
+                                         */
+
+                                        if (
+                                            userData.salonId !==
+                                            salon.id
+                                        ) {
+
+                                            await setDoc(
+                                                userRef,
+                                                {
+
+                                                    salonId:
+                                                        salon.id,
+
+                                                    updatedAt:
+                                                        serverTimestamp()
+
+                                                },
+                                                {
+                                                    merge: true
+                                                }
+                                            );
+
+                                        }
+
+                                    }
+
+                                    else {
+
+                                        console.error(
+                                            "OWNER HAS NO SALON"
+                                        );
+
+                                        authMessage.textContent =
+                                            "Your owner account has no salon linked.";
+
+                                    }
+
+                                }
+
+                            }
+
+
+                            /*
+                             * Hide login
+                             */
+
+                            authSection.style.display =
+                                "none";
+
+
+                            logoutButton.style.display =
+                                "flex";
+
+
+                            /*
+                             * DASHBOARD BUTTON
+                             */
 
                             if (
                                 cachedUserRole ===
@@ -1464,9 +1351,9 @@
                             }
 
 
-                            /* ==========================
-                               REDIRECT AFTER LOGIN
-                            =========================== */
+                            /*
+                             * REDIRECT
+                             */
 
                             if (
                                 sessionStorage.getItem(
@@ -1510,11 +1397,10 @@
                                         }
 
                                     },
-                                    500
+                                    300
                                 );
 
                             }
-
 
                             else {
 
@@ -1536,14 +1422,27 @@
                                 error
                             );
 
+
+                            /*
+                             * IMPORTANT:
+                             *
+                             * Do NOT sign the user out
+                             * just because Firestore
+                             * temporarily failed.
+                             */
+
                             authSection.style.display =
                                 "block";
 
                             logoutButton.style.display =
                                 "none";
 
+                            adminButton.style.display =
+                                "none";
+
+
                             authMessage.textContent =
-                                "Unable to load your account.";
+                                "Unable to load your account. Check your connection and Firestore rules.";
 
                         }
 
@@ -1552,7 +1451,7 @@
 
 
                 /* ==========================
-                   BUTTON LOADING
+                   LOADING
                 =========================== */
 
                 function setLoading(
@@ -1591,9 +1490,9 @@
                 }
 
 
-                /* ==========================
+                /* ==================================================
                    LOGIN
-                =========================== */
+                   ================================================== */
 
                 loginButton.addEventListener(
                     "click",
@@ -1627,18 +1526,61 @@
                         );
 
 
-                        sessionStorage.setItem(
-                            "justLoggedIn",
-                            "true"
-                        );
+                        authMessage.textContent =
+                            "Signing in...";
 
 
                         try {
 
-                            await signInWithEmailAndPassword(
-                                auth,
-                                email,
-                                password
+                            /*
+                             * Firebase Authentication
+                             */
+
+                            const credentials =
+                                await signInWithEmailAndPassword(
+                                    auth,
+                                    email,
+                                    password
+                                );
+
+
+                            const user =
+                                credentials.user;
+
+
+                            /*
+                             * VERY IMPORTANT:
+                             *
+                             * Firebase Auth UID must
+                             * match Firestore:
+                             *
+                             * users/{uid}
+                             *
+                             * and:
+                             *
+                             * salons.ownerId == uid
+                             */
+
+                            console.log(
+                                "LOGIN SUCCESS",
+                                {
+                                    uid:
+                                        user.uid,
+
+                                    email:
+                                        user.email
+                                }
+                            );
+
+
+                            /*
+                             * Redirect is handled by
+                             * onAuthStateChanged.
+                             */
+
+                            sessionStorage.setItem(
+                                "justLoggedIn",
+                                "true"
                             );
 
 
@@ -1652,10 +1594,9 @@
 
 
                             authMessage.textContent =
-                                "Login successful! Redirecting...";
+                                "Login successful! Checking your account...";
 
                         }
-
 
                         catch (error) {
 
@@ -1670,10 +1611,93 @@
                             );
 
 
+                            let message =
+                                "Login failed.";
+
+
+                            switch (
+                                error.code
+                            ) {
+
+                                case
+                                "auth/invalid-credential":
+
+                                    message =
+                                        "Incorrect email or password.";
+
+                                    break;
+
+
+                                case
+                                "auth/user-not-found":
+
+                                    message =
+                                        "No account exists with this email.";
+
+                                    break;
+
+
+                                case
+                                "auth/wrong-password":
+
+                                    message =
+                                        "Incorrect password.";
+
+                                    break;
+
+
+                                case
+                                "auth/invalid-email":
+
+                                    message =
+                                        "Please enter a valid email address.";
+
+                                    break;
+
+
+                                case
+                                "auth/user-disabled":
+
+                                    message =
+                                        "This account has been disabled.";
+
+                                    break;
+
+
+                                case
+                                "auth/too-many-requests":
+
+                                    message =
+                                        "Too many login attempts. Please try again later.";
+
+                                    break;
+
+
+                                case
+                                "auth/network-request-failed":
+
+                                    message =
+                                        "Network error. Check your internet connection.";
+
+                                    break;
+
+
+                                default:
+
+                                    message =
+                                        error.message ||
+                                        "Unable to login.";
+
+                            }
+
+
                             alert(
-                                "Login Failed: " +
-                                error.message
+                                message
                             );
+
+
+                            authMessage.textContent =
+                                message;
 
 
                             setLoading(
@@ -1688,9 +1712,9 @@
                 );
 
 
-                /* ==========================
+                /* ==================================================
                    SIGNUP
-                =========================== */
+                   ================================================== */
 
                 signupButton.addEventListener(
                     "click",
@@ -1743,16 +1767,10 @@
                         );
 
 
-                        sessionStorage.setItem(
-                            "justLoggedIn",
-                            "true"
-                        );
-
-
                         try {
 
                             /*
-                             * CREATE FIREBASE AUTH USER
+                             * Create Firebase Auth
                              */
 
                             const credentials =
@@ -1775,21 +1793,52 @@
                                 );
 
 
-                            /* ==========================
-                               SALON OWNER
-                            =========================== */
+                            /*
+                             * CUSTOMER
+                             */
 
                             if (
                                 role ===
-                                "salon_owner"
+                                "customer"
                             ) {
+
+                                await setDoc(
+                                    userRef,
+                                    {
+
+                                        email:
+                                            email,
+
+                                        role:
+                                            "customer",
+
+                                        createdAt:
+                                            serverTimestamp(),
+
+                                        updatedAt:
+                                            serverTimestamp()
+
+                                    },
+                                    {
+                                        merge: true
+                                    }
+                                );
+
+                            }
+
+
+                            /*
+                             * SALON OWNER
+                             */
+
+                            else {
 
                                 const salonId =
                                     `salon_${user.uid}`;
 
 
                                 /*
-                                 * Create user document
+                                 * Create owner user
                                  */
 
                                 await setDoc(
@@ -1819,10 +1868,7 @@
 
 
                                 /*
-                                 * Create salon document
-                                 *
-                                 * IMPORTANT:
-                                 * ownerId is included.
+                                 * Create salon
                                  */
 
                                 await setDoc(
@@ -1869,35 +1915,15 @@
                             }
 
 
-                            /* ==========================
-                               CUSTOMER
-                            =========================== */
+                            /*
+                             * Redirect through
+                             * auth state handler.
+                             */
 
-                            else {
-
-                                await setDoc(
-                                    userRef,
-                                    {
-
-                                        email:
-                                            email,
-
-                                        role:
-                                            "customer",
-
-                                        createdAt:
-                                            serverTimestamp(),
-
-                                        updatedAt:
-                                            serverTimestamp()
-
-                                    },
-                                    {
-                                        merge: true
-                                    }
-                                );
-
-                            }
+                            sessionStorage.setItem(
+                                "justLoggedIn",
+                                "true"
+                            );
 
 
                             if (loginSound) {
@@ -1916,7 +1942,6 @@
 
                         }
 
-
                         catch (error) {
 
                             sessionStorage.removeItem(
@@ -1932,7 +1957,10 @@
 
                             alert(
                                 "Signup Failed: " +
-                                error.message
+                                (
+                                    error.message ||
+                                    "Unable to create account."
+                                )
                             );
 
 
@@ -1948,9 +1976,9 @@
                 );
 
 
-                /* ==========================
+                /* ==================================================
                    DASHBOARD BUTTON
-                =========================== */
+                   ================================================== */
 
                 adminButton.addEventListener(
                     "click",
@@ -1980,9 +2008,9 @@
                 );
 
 
-                /* ==========================
+                /* ==================================================
                    LOGOUT
-                =========================== */
+                   ================================================== */
 
                 logoutButton.addEventListener(
                     "click",
@@ -2002,7 +2030,9 @@
 
                         try {
 
-                            await signOut(auth);
+                            await signOut(
+                                auth
+                            );
 
                             window.location.href =
                                 "index.html";
@@ -2022,9 +2052,9 @@
                 );
 
 
-                /* ==========================
+                /* ==================================================
                    COOKIE SYSTEM
-                =========================== */
+                   ================================================== */
 
                 const banner =
                     document.getElementById(
@@ -2129,4 +2159,5 @@
     </script>
 
 </body>
+
     </html>
