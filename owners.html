@@ -52,6 +52,7 @@
 </header>
 
 
+
 <main class="max-w-md mx-auto px-4 py-10">
 
 
@@ -75,7 +76,7 @@
 
         <div
             id="loginError"
-            class="hidden bg-red-900/40 border border-red-700 text-red-300 p-3 rounded-lg mb-4"
+            class="hidden bg-red-900/40 border border-red-700 text-red-300 p-3 rounded-lg mb-4 break-words"
         ></div>
 
 
@@ -157,7 +158,7 @@
 
         <div
             id="registerError"
-            class="hidden bg-red-900/40 border border-red-700 text-red-300 p-3 rounded-lg mb-4"
+            class="hidden bg-red-900/40 border border-red-700 text-red-300 p-3 rounded-lg mb-4 break-words"
         ></div>
 
 
@@ -252,6 +253,7 @@
 
 <script type="module">
 
+
 /* =========================================================
    FIREBASE IMPORTS
 ========================================================= */
@@ -260,6 +262,7 @@ import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
+
 import {
     getAuth,
     onAuthStateChanged,
@@ -267,6 +270,7 @@ import {
     createUserWithEmailAndPassword,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
 
 import {
     getFirestore,
@@ -281,17 +285,21 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 
+
 /* =========================================================
-   FIREBASE CONFIG
+   FIREBASE CONFIGURATION
 ========================================================= */
 
 const firebaseConfig = {
 
     apiKey:
-        "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
+        "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
 
     authDomain:
         "kasi-web-d073f.firebaseapp.com",
+
+    databaseURL:
+        "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
 
     projectId:
         "kasi-web-d073f",
@@ -303,23 +311,61 @@ const firebaseConfig = {
         "471544855566",
 
     appId:
-        "1:471544855566:web:aa669a968b8af0ceb6905f"
+        "1:471544855566:web:aa669a968b8af0ceb6905f",
+
+    measurementId:
+        "G-Q8QVN2T54S"
 
 };
+
 
 
 /* =========================================================
    INITIALIZE FIREBASE
 ========================================================= */
 
-const app =
-    initializeApp(firebaseConfig);
+let app = null;
 
-const auth =
-    getAuth(app);
+let auth = null;
 
-const db =
-    getFirestore(app);
+let db = null;
+
+
+try {
+
+    app =
+        initializeApp(
+            firebaseConfig
+        );
+
+
+    auth =
+        getAuth(app);
+
+
+    db =
+        getFirestore(app);
+
+
+    console.log(
+        "Firebase initialized successfully."
+    );
+
+
+    console.log(
+        "Firebase project:",
+        firebaseConfig.projectId
+    );
+
+
+} catch (error) {
+
+    console.error(
+        "Firebase initialization failed:",
+        error
+    );
+
+}
 
 
 
@@ -332,30 +378,36 @@ const loginSection =
         "loginSection"
     );
 
+
 const registerSection =
     document.getElementById(
         "registerSection"
     );
+
 
 const loginBtn =
     document.getElementById(
         "loginBtn"
     );
 
+
 const registerBtn =
     document.getElementById(
         "registerBtn"
     );
+
 
 const loginError =
     document.getElementById(
         "loginError"
     );
 
+
 const registerError =
     document.getElementById(
         "registerError"
     );
+
 
 const pageLoading =
     document.getElementById(
@@ -365,11 +417,28 @@ const pageLoading =
 
 
 /* =========================================================
+   CHECK FIREBASE
+========================================================= */
+
+function firebaseReady() {
+
+    return (
+        auth !== null &&
+        db !== null
+    );
+
+}
+
+
+
+/* =========================================================
    LOGIN / REGISTER TOGGLE
 ========================================================= */
 
 document
-    .getElementById("showRegisterBtn")
+    .getElementById(
+        "showRegisterBtn"
+    )
     .addEventListener(
         "click",
         () => {
@@ -378,9 +447,11 @@ document
                 "hidden"
             );
 
+
             registerSection.classList.remove(
                 "hidden"
             );
+
 
             clearErrors();
 
@@ -389,7 +460,9 @@ document
 
 
 document
-    .getElementById("showLoginBtn")
+    .getElementById(
+        "showLoginBtn"
+    )
     .addEventListener(
         "click",
         () => {
@@ -398,9 +471,11 @@ document
                 "hidden"
             );
 
+
             loginSection.classList.remove(
                 "hidden"
             );
+
 
             clearErrors();
 
@@ -419,6 +494,7 @@ loginBtn.addEventListener(
 );
 
 
+
 async function loginOwner() {
 
     const email =
@@ -429,6 +505,7 @@ async function loginOwner() {
             .value
             .trim()
             .toLowerCase();
+
 
     const password =
         document
@@ -441,7 +518,10 @@ async function loginOwner() {
     clearErrors();
 
 
-    if (!email || !password) {
+    if (
+        !email ||
+        !password
+    ) {
 
         showLoginError(
             "Please enter your email and password."
@@ -452,7 +532,20 @@ async function loginOwner() {
     }
 
 
-    loginBtn.disabled = true;
+    if (!firebaseReady()) {
+
+        showLoginError(
+            "Firebase could not be initialized. Please check the Firebase configuration."
+        );
+
+        return;
+
+    }
+
+
+    loginBtn.disabled =
+        true;
+
 
     loginBtn.textContent =
         "Logging in...";
@@ -460,9 +553,9 @@ async function loginOwner() {
 
     try {
 
-        /* -------------------------------------------------
-           FIREBASE AUTH LOGIN
-        ------------------------------------------------- */
+        /* =================================================
+           AUTHENTICATE
+        ================================================= */
 
         const credential =
             await signInWithEmailAndPassword(
@@ -477,14 +570,15 @@ async function loginOwner() {
 
 
         console.log(
-            "Authenticated user:",
+            "Authenticated UID:",
             user.uid
         );
 
 
-        /* -------------------------------------------------
-           LOAD USER DOCUMENT
-        ------------------------------------------------- */
+
+        /* =================================================
+           GET USERS DOCUMENT
+        ================================================= */
 
         const userRef =
             doc(
@@ -501,41 +595,72 @@ async function loginOwner() {
 
 
         /*
-         * The account must have a users document.
+         * If the Firebase Auth account exists but
+         * the users document does not exist, create
+         * the owner profile.
+         *
+         * This prevents the user from being
+         * unnecessarily kicked out.
          */
 
-        if (!userSnap.exists()) {
+        if (
+            !userSnap.exists()
+        ) {
 
-            await signOut(auth);
+            await setDoc(
+                userRef,
+                {
 
-            showLoginError(
-                "This account does not have a K@si Web owner profile."
+                    email:
+                        user.email ||
+                        email,
+
+                    role:
+                        "salon_owner",
+
+                    salonId:
+                        null,
+
+                    createdAt:
+                        serverTimestamp(),
+
+                    updatedAt:
+                        serverTimestamp()
+
+                },
+                {
+                    merge: true
+                }
             );
 
-            return;
+
+            console.log(
+                "Owner profile created."
+            );
 
         }
 
 
+        const freshUserSnap =
+            await getDoc(
+                userRef
+            );
+
+
         const userData =
-            userSnap.data();
+            freshUserSnap.data() || {};
 
-
-        console.log(
-            "User profile:",
-            userData
-        );
-
-
-        /* -------------------------------------------------
-           CHECK OWNER ROLE
-        ------------------------------------------------- */
 
         const role =
             userData.role ||
             userData.Role ||
             null;
 
+
+        /*
+         * Only salon_owner is allowed into
+         * this page.
+         */
 
         if (
             role !==
@@ -544,18 +669,21 @@ async function loginOwner() {
 
             await signOut(auth);
 
+
             showLoginError(
                 "This account is not registered as a salon owner."
             );
+
 
             return;
 
         }
 
 
-        /* -------------------------------------------------
+
+        /* =================================================
            FIND SALON
-        ------------------------------------------------- */
+        ================================================= */
 
         let salonId =
             userData.salonId ||
@@ -563,8 +691,7 @@ async function loginOwner() {
 
 
         /*
-         * If the user document already contains
-         * salonId, verify that the salon actually exists.
+         * First verify the saved salon ID.
          */
 
         if (salonId) {
@@ -583,12 +710,15 @@ async function loginOwner() {
                 );
 
 
-            if (!salonSnap.exists()) {
+            if (
+                !salonSnap.exists()
+            ) {
 
                 console.warn(
-                    "Stored salonId does not exist:",
+                    "Saved salonId does not exist:",
                     salonId
                 );
+
 
                 salonId =
                     null;
@@ -598,9 +728,10 @@ async function loginOwner() {
         }
 
 
+
         /*
-         * If salonId is missing or invalid,
-         * search salons using ownerId.
+         * If no valid salonId was found,
+         * search by ownerId.
          */
 
         if (!salonId) {
@@ -613,94 +744,133 @@ async function loginOwner() {
         }
 
 
-        /* -------------------------------------------------
-           REPAIR USER DOCUMENT
-        ------------------------------------------------- */
 
-        if (salonId) {
+        /*
+         * If still no salon exists, create a
+         * predictable salon document.
+         *
+         * This is useful for newly registered
+         * owners.
+         */
 
-            console.log(
-                "Salon found:",
-                salonId
-            );
+        if (!salonId) {
 
-
-            /*
-             * Make sure the salon also has
-             * the correct ownerId.
-             */
-
-            try {
-
-                const salonRef =
-                    doc(
-                        db,
-                        "salons",
-                        salonId
-                    );
+            salonId =
+                `salon_${user.uid}`;
 
 
-                const salonSnap =
-                    await getDoc(
-                        salonRef
-                    );
-
-
-                if (
-                    salonSnap.exists()
-                ) {
-
-                    const salonData =
-                        salonSnap.data();
-
-
-                    if (
-                        !salonData.ownerId
-                    ) {
-
-                        await setDoc(
-                            salonRef,
-                            {
-                                ownerId:
-                                    user.uid,
-
-                                updatedAt:
-                                    serverTimestamp()
-                            },
-                            {
-                                merge: true
-                            }
-                        );
-
-                    }
-
-                }
-
-            } catch (salonRepairError) {
-
-                console.warn(
-                    "Salon ownerId repair skipped:",
-                    salonRepairError
+            const salonRef =
+                doc(
+                    db,
+                    "salons",
+                    salonId
                 );
 
-            }
 
+            const salonSnap =
+                await getDoc(
+                    salonRef
+                );
 
-            /*
-             * Save salonId back to user profile.
-             */
 
             if (
-                userData.salonId !==
-                salonId
+                !salonSnap.exists()
             ) {
 
                 await setDoc(
-                    userRef,
+                    salonRef,
                     {
 
                         salonId:
                             salonId,
+
+                        ownerId:
+                            user.uid,
+
+                        ownerEmail:
+                            user.email ||
+                            email,
+
+                        name:
+                            "My Salon",
+
+                        location:
+                            "",
+
+                        hours:
+                            "",
+
+                        services:
+                            [],
+
+                        createdAt:
+                            serverTimestamp(),
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+                console.log(
+                    "New salon created:",
+                    salonId
+                );
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           ENSURE SALON BELONGS TO THIS OWNER
+        ================================================= */
+
+        const salonRef =
+            doc(
+                db,
+                "salons",
+                salonId
+            );
+
+
+        const salonSnap =
+            await getDoc(
+                salonRef
+            );
+
+
+        if (
+            salonSnap.exists()
+        ) {
+
+            const salonData =
+                salonSnap.data();
+
+
+            /*
+             * If ownerId is missing, repair it.
+             *
+             * NEVER overwrite a different existing
+             * ownerId.
+             */
+
+            if (
+                !salonData.ownerId
+            ) {
+
+                await setDoc(
+                    salonRef,
+                    {
+
+                        ownerId:
+                            user.uid,
+
+                        ownerEmail:
+                            user.email ||
+                            email,
 
                         updatedAt:
                             serverTimestamp()
@@ -711,35 +881,83 @@ async function loginOwner() {
                     }
                 );
 
+
+                console.log(
+                    "Missing ownerId repaired."
+                );
+
             }
 
-        } else {
 
             /*
-             * No salon exists yet.
-             *
-             * This is NOT an error.
-             *
-             * The owner dashboard can allow
-             * the owner to create the salon.
+             * If another owner already owns this
+             * salon, do not take it over.
              */
 
-            console.log(
-                "No salon found. New owner can create one."
-            );
+            else if (
+                salonData.ownerId !==
+                user.uid
+            ) {
+
+                console.error(
+                    "Salon belongs to another owner."
+                );
+
+
+                await signOut(auth);
+
+
+                showLoginError(
+                    "This salon is already linked to another owner account."
+                );
+
+
+                return;
+
+            }
 
         }
 
 
-        /* -------------------------------------------------
-           SAVE LOGIN STATE
-        ------------------------------------------------- */
 
-        sessionStorage.setItem(
-            "justLoggedIn",
-            "true"
+        /* =================================================
+           SAVE SALON ID TO USERS
+        ================================================= */
+
+        await setDoc(
+            userRef,
+            {
+
+                email:
+                    user.email ||
+                    email,
+
+                role:
+                    "salon_owner",
+
+                salonId:
+                    salonId,
+
+                updatedAt:
+                    serverTimestamp()
+
+            },
+            {
+                merge: true
+            }
         );
 
+
+        console.log(
+            "Owner profile linked to salon:",
+            salonId
+        );
+
+
+
+        /* =================================================
+           SAVE SESSION
+        ================================================= */
 
         sessionStorage.setItem(
             "ownerUid",
@@ -747,49 +965,52 @@ async function loginOwner() {
         );
 
 
-        if (salonId) {
-
-            sessionStorage.setItem(
-                "ownerSalonId",
-                salonId
-            );
-
-        } else {
-
-            sessionStorage.removeItem(
-                "ownerSalonId"
-            );
-
-        }
+        sessionStorage.setItem(
+            "ownerSalonId",
+            salonId
+        );
 
 
-        /* -------------------------------------------------
+        sessionStorage.setItem(
+            "justLoggedIn",
+            "true"
+        );
+
+
+
+        /* =================================================
            REDIRECT
-        ------------------------------------------------- */
+        ================================================= */
 
         window.location.replace(
             "ownerdashboard.html"
         );
 
+    }
 
-    } catch (error) {
+
+    catch (error) {
 
         console.error(
-            "Owner login error:",
+            "Owner login failed:",
             error
         );
 
 
         showLoginError(
-            getFirebaseErrorMessage(
+            firebaseErrorMessage(
                 error
             )
         );
 
-    } finally {
+    }
+
+
+    finally {
 
         loginBtn.disabled =
             false;
+
 
         loginBtn.textContent =
             "Login";
@@ -801,45 +1022,92 @@ async function loginOwner() {
 
 
 /* =========================================================
-   ENTER KEY LOGIN
+   FIND SALON BY OWNER ID
 ========================================================= */
 
-document
-    .getElementById("loginEmail")
-    .addEventListener(
-        "keydown",
-        event => {
+async function findSalonForOwner(
+    ownerId
+) {
 
-            if (
-                event.key ===
-                "Enter"
-            ) {
+    try {
 
-                loginOwner();
+        console.log(
+            "Searching salons where ownerId =",
+            ownerId
+        );
 
-            }
+
+        const salonQuery =
+            query(
+                collection(
+                    db,
+                    "salons"
+                ),
+                where(
+                    "ownerId",
+                    "==",
+                    ownerId
+                )
+            );
+
+
+        const snapshot =
+            await getDocs(
+                salonQuery
+            );
+
+
+        if (
+            snapshot.empty
+        ) {
+
+            console.log(
+                "No salon found using ownerId."
+            );
+
+
+            return null;
 
         }
-    );
 
 
-document
-    .getElementById("loginPassword")
-    .addEventListener(
-        "keydown",
-        event => {
+        /*
+         * Return the first matching salon.
+         */
 
-            if (
-                event.key ===
-                "Enter"
-            ) {
+        const salonDoc =
+            snapshot.docs[0];
 
-                loginOwner();
 
-            }
+        console.log(
+            "Salon found:",
+            salonDoc.id
+        );
 
-        }
-    );
+
+        return salonDoc.id;
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Salon search failed:",
+            error
+        );
+
+
+        /*
+         * Permission errors should not crash
+         * the entire login flow.
+         */
+
+        return null;
+
+    }
+
+}
 
 
 
@@ -853,6 +1121,7 @@ registerBtn.addEventListener(
 );
 
 
+
 async function registerOwner() {
 
     const email =
@@ -864,12 +1133,14 @@ async function registerOwner() {
             .trim()
             .toLowerCase();
 
+
     const password =
         document
             .getElementById(
                 "registerPassword"
             )
             .value;
+
 
     const confirmPassword =
         document
@@ -892,6 +1163,7 @@ async function registerOwner() {
             "Please complete all fields."
         );
 
+
         return;
 
     }
@@ -905,6 +1177,7 @@ async function registerOwner() {
         showRegisterError(
             "Password must contain at least 6 characters."
         );
+
 
         return;
 
@@ -920,6 +1193,19 @@ async function registerOwner() {
             "Passwords do not match."
         );
 
+
+        return;
+
+    }
+
+
+    if (!firebaseReady()) {
+
+        showRegisterError(
+            "Firebase could not be initialized."
+        );
+
+
         return;
 
     }
@@ -928,15 +1214,16 @@ async function registerOwner() {
     registerBtn.disabled =
         true;
 
+
     registerBtn.textContent =
         "Creating account...";
 
 
     try {
 
-        /* -------------------------------------------------
-           CREATE FIREBASE AUTH ACCOUNT
-        ------------------------------------------------- */
+        /* =================================================
+           CREATE FIREBASE AUTH USER
+        ================================================= */
 
         const credential =
             await createUserWithEmailAndPassword(
@@ -951,21 +1238,26 @@ async function registerOwner() {
 
 
         console.log(
-            "New owner UID:",
+            "Created owner UID:",
             user.uid
         );
 
 
-        /* -------------------------------------------------
-           CREATE USER PROFILE
-        ------------------------------------------------- */
 
-        await setDoc(
+        /* =================================================
+           CREATE USER DOCUMENT
+        ================================================= */
+
+        const userRef =
             doc(
                 db,
                 "users",
                 user.uid
-            ),
+            );
+
+
+        await setDoc(
+            userRef,
             {
 
                 email:
@@ -983,22 +1275,94 @@ async function registerOwner() {
                 updatedAt:
                     serverTimestamp()
 
+            },
+            {
+                merge: true
             }
         );
 
 
-        /*
-         * New owner does not have a salon yet.
-         *
-         * The owner dashboard should show
-         * the Create Salon screen.
-         */
 
-        sessionStorage.setItem(
-            "justLoggedIn",
-            "true"
+        /* =================================================
+           CREATE SALON
+        ================================================= */
+
+        const salonId =
+            `salon_${user.uid}`;
+
+
+        const salonRef =
+            doc(
+                db,
+                "salons",
+                salonId
+            );
+
+
+        await setDoc(
+            salonRef,
+            {
+
+                salonId:
+                    salonId,
+
+                ownerId:
+                    user.uid,
+
+                ownerEmail:
+                    email,
+
+                name:
+                    "My Salon",
+
+                location:
+                    "",
+
+                hours:
+                    "",
+
+                services:
+                    [],
+
+                createdAt:
+                    serverTimestamp(),
+
+                updatedAt:
+                    serverTimestamp()
+
+            },
+            {
+                merge: true
+            }
         );
 
+
+
+        /* =================================================
+           LINK SALON TO USER
+        ================================================= */
+
+        await setDoc(
+            userRef,
+            {
+
+                salonId:
+                    salonId,
+
+                updatedAt:
+                    serverTimestamp()
+
+            },
+            {
+                merge: true
+            }
+        );
+
+
+
+        /* =================================================
+           SESSION
+        ================================================= */
 
         sessionStorage.setItem(
             "ownerUid",
@@ -1006,34 +1370,52 @@ async function registerOwner() {
         );
 
 
-        sessionStorage.removeItem(
-            "ownerSalonId"
+        sessionStorage.setItem(
+            "ownerSalonId",
+            salonId
         );
 
+
+        sessionStorage.setItem(
+            "justLoggedIn",
+            "true"
+        );
+
+
+
+        /* =================================================
+           GO TO DASHBOARD
+        ================================================= */
 
         window.location.replace(
             "ownerdashboard.html"
         );
 
+    }
 
-    } catch (error) {
+
+    catch (error) {
 
         console.error(
-            "Owner registration error:",
+            "Owner registration failed:",
             error
         );
 
 
         showRegisterError(
-            getFirebaseErrorMessage(
+            firebaseErrorMessage(
                 error
             )
         );
 
-    } finally {
+    }
+
+
+    finally {
 
         registerBtn.disabled =
             false;
+
 
         registerBtn.textContent =
             "Create Owner Account";
@@ -1045,7 +1427,54 @@ async function registerOwner() {
 
 
 /* =========================================================
-   ENTER KEY REGISTER
+   ENTER KEY — LOGIN
+========================================================= */
+
+document
+    .getElementById(
+        "loginEmail"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                loginOwner();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "loginPassword"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                loginOwner();
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+   ENTER KEY — REGISTER
 ========================================================= */
 
 document
@@ -1074,112 +1503,26 @@ document
    AUTH STATE
 ========================================================= */
 
-let authStateChecking =
-    true;
+if (auth && db) {
 
-
-onAuthStateChanged(
-    auth,
-    async user => {
-
-        /*
-         * Do not redirect while the page
-         * is still determining authentication.
-         */
-
-        if (!user) {
-
-            authStateChecking =
-                false;
-
-            pageLoading.classList.add(
-                "hidden"
-            );
-
-            return;
-
-        }
-
-
-        try {
+    onAuthStateChanged(
+        auth,
+        async user => {
 
             console.log(
-                "Existing Firebase session:",
-                user.uid
+                "Auth state:",
+                user
+                    ? user.uid
+                    : "signed out"
             );
 
 
-            const userRef =
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                );
-
-
-            const userSnap =
-                await getDoc(
-                    userRef
-                );
-
-
-            if (
-                !userSnap.exists()
-            ) {
-
-                console.log(
-                    "Authenticated user has no profile."
-                );
-
-                await signOut(auth);
-
-                authStateChecking =
-                    false;
+            if (!user) {
 
                 pageLoading.classList.add(
                     "hidden"
                 );
 
-                return;
-
-            }
-
-
-            const userData =
-                userSnap.data();
-
-
-            if (
-                userData.role ===
-                "salon_owner"
-            ) {
-
-                /*
-                 * If already logged in as an owner,
-                 * go directly to dashboard.
-                 */
-
-                sessionStorage.setItem(
-                    "ownerUid",
-                    user.uid
-                );
-
-
-                if (
-                    userData.salonId
-                ) {
-
-                    sessionStorage.setItem(
-                        "ownerSalonId",
-                        userData.salonId
-                    );
-
-                }
-
-
-                window.location.replace(
-                    "ownerdashboard.html"
-                );
 
                 return;
 
@@ -1187,118 +1530,144 @@ onAuthStateChanged(
 
 
             /*
-             * Authenticated but not an owner.
+             * If we already have a logged-in owner,
+             * don't keep showing the login page.
              */
 
-            await signOut(auth);
+            try {
 
-        } catch (error) {
+                const userRef =
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    );
 
-            console.error(
-                "Auth state error:",
-                error
+
+                const userSnap =
+                    await getDoc(
+                        userRef
+                    );
+
+
+                if (
+                    !userSnap.exists()
+                ) {
+
+                    /*
+                     * Repair missing profile.
+                     */
+
+                    await setDoc(
+                        userRef,
+                        {
+
+                            email:
+                                user.email ||
+                                "",
+
+                            role:
+                                "salon_owner",
+
+                            salonId:
+                                null,
+
+                            createdAt:
+                                serverTimestamp(),
+
+                            updatedAt:
+                                serverTimestamp()
+
+                        },
+                        {
+                            merge: true
+                        }
+                    );
+
+
+                    pageLoading.classList.add(
+                        "hidden"
+                    );
+
+
+                    return;
+
+                }
+
+
+                const data =
+                    userSnap.data();
+
+
+                const role =
+                    data.role ||
+                    data.Role ||
+                    null;
+
+
+                if (
+                    role ===
+                    "salon_owner"
+                ) {
+
+                    /*
+                     * Only redirect if this page was
+                     * opened with a valid owner session.
+                     */
+
+                    const justLoggedIn =
+                        sessionStorage.getItem(
+                            "justLoggedIn"
+                        );
+
+
+                    if (
+                        justLoggedIn ===
+                        "true"
+                    ) {
+
+                        sessionStorage.removeItem(
+                            "justLoggedIn"
+                        );
+
+
+                        window.location.replace(
+                            "ownerdashboard.html"
+                        );
+
+
+                        return;
+
+                    }
+
+                }
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Auth state check failed:",
+                    error
+                );
+
+            }
+
+
+            pageLoading.classList.add(
+                "hidden"
             );
 
         }
-
-
-        authStateChecking =
-            false;
-
-        pageLoading.classList.add(
-            "hidden"
-        );
-
-    }
-);
-
-
-
-/* =========================================================
-   FIND SALON FOR OWNER
-========================================================= */
-
-async function findSalonForOwner(
-    ownerId
-) {
-
-    try {
-
-        console.log(
-            "Searching salons for owner:",
-            ownerId
-        );
-
-
-        const q =
-            query(
-                collection(
-                    db,
-                    "salons"
-                ),
-                where(
-                    "ownerId",
-                    "==",
-                    ownerId
-                )
-            );
-
-
-        const snapshot =
-            await getDocs(q);
-
-
-        if (
-            snapshot.empty
-        ) {
-
-            console.log(
-                "No salon found for owner."
-            );
-
-            return null;
-
-        }
-
-
-        /*
-         * Use the first matching salon.
-         */
-
-        const salonDoc =
-            snapshot.docs[0];
-
-
-        console.log(
-            "Matching salon:",
-            salonDoc.id
-        );
-
-
-        return salonDoc.id;
-
-    } catch (error) {
-
-        console.error(
-            "Could not find salon:",
-            error
-        );
-
-        /*
-         * Do not block owner login just because
-         * the salon lookup failed.
-         */
-
-        return null;
-
-    }
+    );
 
 }
 
 
 
 /* =========================================================
-   ERROR HELPERS
+   CLEAR ERRORS
 ========================================================= */
 
 function clearErrors() {
@@ -1307,12 +1676,15 @@ function clearErrors() {
         "hidden"
     );
 
+
     registerError.classList.add(
         "hidden"
     );
 
+
     loginError.textContent =
         "";
+
 
     registerError.textContent =
         "";
@@ -1321,12 +1693,17 @@ function clearErrors() {
 
 
 
+/* =========================================================
+   SHOW LOGIN ERROR
+========================================================= */
+
 function showLoginError(
     message
 ) {
 
     loginError.textContent =
         message;
+
 
     loginError.classList.remove(
         "hidden"
@@ -1336,12 +1713,17 @@ function showLoginError(
 
 
 
+/* =========================================================
+   SHOW REGISTER ERROR
+========================================================= */
+
 function showRegisterError(
     message
 ) {
 
     registerError.textContent =
         message;
+
 
     registerError.classList.remove(
         "hidden"
@@ -1352,16 +1734,36 @@ function showRegisterError(
 
 
 /* =========================================================
-   FIREBASE ERROR MESSAGES
+   FIREBASE ERROR HANDLER
 ========================================================= */
 
-function getFirebaseErrorMessage(
+function firebaseErrorMessage(
     error
 ) {
+
+    console.error(
+        "Firebase error code:",
+        error.code
+    );
+
 
     switch (
         error.code
     ) {
+
+        case "auth/api-key-not-valid":
+
+            return (
+                "Firebase rejected the API key. Make sure this page is using the Web App configuration from the kasi-web-d073f Firebase project."
+            );
+
+
+        case "auth/invalid-api-key":
+
+            return (
+                "The Firebase API key is invalid."
+            );
+
 
         case "auth/invalid-credential":
 
@@ -1380,7 +1782,7 @@ function getFirebaseErrorMessage(
         case "auth/user-not-found":
 
             return (
-                "No account was found with this email."
+                "No Firebase account was found with this email."
             );
 
 
@@ -1401,7 +1803,7 @@ function getFirebaseErrorMessage(
         case "auth/weak-password":
 
             return (
-                "Password is too weak. Use at least 6 characters."
+                "Password must contain at least 6 characters."
             );
 
 
@@ -1415,21 +1817,28 @@ function getFirebaseErrorMessage(
         case "auth/too-many-requests":
 
             return (
-                "Too many login attempts. Please try again later."
+                "Too many attempts. Please try again later."
             );
 
 
         case "auth/user-disabled":
 
             return (
-                "This account has been disabled."
+                "This Firebase account has been disabled."
             );
 
 
         case "auth/operation-not-allowed":
 
             return (
-                "Email/password login is not enabled in Firebase Authentication."
+                "Email/password authentication is not enabled in Firebase Authentication."
+            );
+
+
+        case "permission-denied":
+
+            return (
+                "Firestore permission denied. Check your Firestore security rules."
             );
 
 
@@ -1443,6 +1852,7 @@ function getFirebaseErrorMessage(
     }
 
 }
+
 
 </script>
 
