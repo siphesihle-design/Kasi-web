@@ -1,689 +1,806 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+
+«»
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
+name="theme-color"
+content="#111827"
+
+«»
 
 <meta
-    name="theme-color"
-    content="#111827"
->
+name="description"
+content="K@si Web - Find salons and book your next haircut."
 
-<meta
-    name="description"
-    content="K@si Web - Find salons and book your next haircut."
->
+«»
 
-<title>K@si Web | Salons</title>
-
-<link
+<title>K@si Web | Salons</title><link
     rel="stylesheet"
     href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
->
+><script src="https://cdn.tailwindcss.com"></script><style>
 
-<script src="https://cdn.tailwindcss.com"></script>
+* {
+    box-sizing: border-box;
+}
 
-<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
 
-    * {
-        box-sizing: border-box;
-    }
+body {
+    padding-bottom:
+        calc(95px + env(safe-area-inset-bottom));
 
-    html,
-    body {
-        margin: 0;
-        padding: 0;
-        min-height: 100%;
-    }
+    background:
+        linear-gradient(
+            135deg,
+            #0a0a1a 0%,
+            #1a0a3e 100%
+        );
 
-    body {
-        padding-bottom:
-            calc(95px + env(safe-area-inset-bottom));
+    color: #fff;
+    min-height: 100vh;
+}
 
-        background:
-            linear-gradient(
-                135deg,
-                #0a0a1a 0%,
-                #1a0a3e 100%
-            );
+header {
+    z-index: 9990 !important;
+}
 
-        color: #fff;
-        min-height: 100vh;
-    }
+.nav-grid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 78px;
 
-    header {
-        z-index: 9990 !important;
-    }
+    background:
+        rgba(17, 24, 39, 0.98);
 
-    .nav-grid {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        min-height: 78px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 
-        background:
-            rgba(17, 24, 39, 0.98);
+    border-top:
+        1px solid
+        rgba(75, 85, 99, 0.45);
 
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
-        border-top:
-            1px solid
-            rgba(75, 85, 99, 0.45);
+    z-index: 9998;
 
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
+    padding:
+        5px
+        8px
+        calc(
+            5px +
+            env(safe-area-inset-bottom)
+        );
+}
 
-        z-index: 9998;
+.nav-item {
+    flex: 1;
+    max-width: 110px;
+    height: 68px;
 
-        padding:
-            5px
-            8px
-            calc(
-                5px +
-                env(safe-area-inset-bottom)
-            );
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    .nav-item {
-        flex: 1;
-        max-width: 110px;
-        height: 68px;
+    color: #9ca3af;
+    text-decoration: none;
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
 
-        color: #9ca3af;
-        text-decoration: none;
+    border-radius: 18px;
+    transition: all 0.2s ease;
+}
 
-        font-size: 0.78rem;
-        font-weight: 700;
+.nav-item i {
+    font-size: 1.9rem;
+    line-height: 1;
+    margin-bottom: 5px;
+}
 
-        border-radius: 18px;
-        transition: all 0.2s ease;
-    }
+.nav-item span {
+    line-height: 1;
+}
 
-    .nav-item i {
-        font-size: 1.9rem;
-        line-height: 1;
-        margin-bottom: 5px;
-    }
+.nav-item.active {
+    color: #a855f7;
 
-    .nav-item span {
-        line-height: 1;
-    }
+    background:
+        rgba(
+            126,
+            34,
+            206,
+            0.13
+        );
+}
 
-    .nav-item.active {
-        color: #a855f7;
+.nav-item:hover {
+    color: #a855f7;
+}
 
-        background:
-            rgba(
-                126,
-                34,
-                206,
-                0.13
-            );
-    }
+.salon-card {
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
 
-    .nav-item:hover {
-        color: #a855f7;
-    }
+    background:
+        rgba(
+            17,
+            17,
+            30,
+            0.82
+        );
 
-    .salon-card {
-        transition:
-            transform 0.2s ease,
-            border-color 0.2s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
-        background:
-            rgba(
-                17,
-                17,
-                30,
-                0.82
-            );
+    border:
+        1px solid
+        rgba(
+            59,
+            130,
+            246,
+            0.3
+        );
 
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    overflow: hidden;
+}
 
-        border:
-            1px solid
-            rgba(
-                59,
-                130,
-                246,
-                0.3
-            );
+.salon-card:hover {
+    transform: translateY(-3px);
+    border-color: #9333ea;
+}
 
-        border-radius: 1rem;
-        overflow: hidden;
-    }
+.salon-image {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    background: #111827;
+}
 
-    .salon-card:hover {
-        transform: translateY(-3px);
-        border-color: #9333ea;
+.primary-btn {
+    background:
+        linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6
+        );
+
+    border: none;
+    color: white;
+
+    padding:
+        0.9rem 1.25rem;
+
+    border-radius: 0.75rem;
+    font-weight: bold;
+    width: 100%;
+
+    cursor: pointer;
+
+    transition:
+        all 0.2s ease;
+}
+
+.primary-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.82
+        );
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 10000;
+
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.loading-box {
+    text-align: center;
+    padding: 50px 20px;
+    color: #9ca3af;
+}
+
+.loading-box i {
+    display: block;
+    font-size: 3rem;
+    color: #3b82f6;
+    margin-bottom: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #8b8b98;
+    margin-bottom: 15px;
+}
+
+.empty-state h3 {
+    color: #c7c7d1;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #888895;
+    font-size: 0.95rem;
+}
+
+.error-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #ff4757;
+}
+
+.error-state i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.error-state p {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.error-state small {
+    color: #aaa;
+    display: block;
+    word-break: break-word;
+}
+
+#firebaseStatus {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 9990;
+
+    display: none;
+
+    max-width: 90%;
+
+    padding:
+        8px 14px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    background:
+        rgba(
+            17,
+            24,
+            39,
+            0.95
+        );
+
+    border:
+        1px solid
+        rgba(
+            59,
+            130,
+            246,
+            0.4
+        );
+
+    color: #93c5fd;
+
+    box-shadow:
+        0 10px 30px
+        rgba(
+            0,
+            0,
+            0,
+            0.3
+        );
+
+    text-align: center;
+}
+
+/* LOGIN REQUIRED */
+
+.login-required-box {
+    text-align: center;
+    padding: 25px 10px 10px;
+}
+
+.login-required-icon {
+    width: 72px;
+    height: 72px;
+
+    margin:
+        0 auto 16px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.18),
+            rgba(139,92,246,.18)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.35);
+}
+
+.login-required-icon i {
+    font-size: 2.4rem;
+    color: #a78bfa;
+}
+
+.login-required-box h3 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.login-required-box p {
+    color: #9ca3af;
+    font-size: .9rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.login-required-note {
+    background:
+        rgba(59,130,246,.08);
+
+    border:
+        1px solid
+        rgba(59,130,246,.18);
+
+    border-radius: 12px;
+
+    padding: 12px;
+
+    margin-bottom: 18px;
+
+    color: #bfdbfe;
+
+    font-size: .8rem;
+}
+
+.login-btn {
+    width: 100%;
+
+    padding: .9rem 1rem;
+
+    border-radius: .75rem;
+
+    border: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6
+        );
+
+    color: white;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    opacity: .92;
+}
+
+.cancel-btn {
+    width: 100%;
+
+    margin-top: 9px;
+
+    padding: .75rem 1rem;
+
+    border-radius: .75rem;
+
+    background: transparent;
+
+    border:
+        1px solid
+        rgba(107,114,128,.4);
+
+    color: #9ca3af;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    color: white;
+    border-color: #6b7280;
+}
+
+.booking-login-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding:
+        10px 12px;
+
+    margin-bottom: 16px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(139,92,246,.08);
+
+    border:
+        1px solid
+        rgba(139,92,246,.2);
+
+    color: #c4b5fd;
+
+    font-size: .78rem;
+}
+
+.booking-login-hint i {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 640px) {
+
+    main {
+        padding-top: 28px;
     }
 
     .salon-image {
-        width: 100%;
-        height: 210px;
-        object-fit: cover;
-        object-position: center;
-        display: block;
-        background: #111827;
+        height: 200px;
     }
 
-    .primary-btn {
-        background:
-            linear-gradient(
-                90deg,
-                #3b82f6,
-                #8b5cf6
-            );
-
-        border: none;
-        color: white;
-
-        padding:
-            0.9rem 1.25rem;
-
-        border-radius: 0.75rem;
-        font-weight: bold;
-        width: 100%;
-
-        cursor: pointer;
-
-        transition:
-            all 0.2s ease;
+    .nav-item {
+        max-width: 105px;
     }
 
-    .primary-btn:hover {
-        opacity: 0.9;
-        transform: translateY(-2px);
-    }
-
-    .primary-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-
-        background:
-            rgba(
-                0,
-                0,
-                0,
-                0.82
-            );
-
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-
-        justify-content: center;
-        align-items: center;
-
-        z-index: 10000;
-
-        padding: 1rem;
-        overflow-y: auto;
-    }
-
-    .modal.active {
-        display: flex;
-    }
-
-    .loading-box {
-        text-align: center;
-        padding: 50px 20px;
-        color: #9ca3af;
-    }
-
-    .loading-box i {
-        display: block;
-        font-size: 3rem;
-        color: #3b82f6;
-        margin-bottom: 12px;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #9ca3af;
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        color: #8b8b98;
-        margin-bottom: 15px;
-    }
-
-    .empty-state h3 {
-        color: #c7c7d1;
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
-
-    .empty-state p {
-        color: #888895;
-        font-size: 0.95rem;
-    }
-
-    .error-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: #ff4757;
-    }
-
-    .error-state i {
-        font-size: 3rem;
-        margin-bottom: 10px;
-    }
-
-    .error-state p {
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .error-state small {
-        color: #aaa;
-        display: block;
-        word-break: break-word;
+    .nav-item i {
+        font-size: 1.8rem;
     }
 
     #firebaseStatus {
-        position: fixed;
-        top: 90px;
-        left: 50%;
-
-        transform:
-            translateX(-50%);
-
-        z-index: 9990;
-
-        display: none;
-
-        max-width: 90%;
-
-        padding:
-            8px 14px;
-
-        border-radius: 999px;
-
-        font-size: 11px;
-        font-weight: 700;
-
-        background:
-            rgba(
-                17,
-                24,
-                39,
-                0.95
-            );
-
-        border:
-            1px solid
-            rgba(
-                59,
-                130,
-                246,
-                0.4
-            );
-
-        color: #93c5fd;
-
-        box-shadow:
-            0 10px 30px
-            rgba(
-                0,
-                0,
-                0,
-                0.3
-            );
-
-        text-align: center;
+        top: 85px;
     }
 
-    @media (max-width: 640px) {
+}
 
-        main {
-            padding-top: 28px;
-        }
-
-        .salon-image {
-            height: 200px;
-        }
-
-        .nav-item {
-            max-width: 105px;
-        }
-
-        .nav-item i {
-            font-size: 1.8rem;
-        }
-
-        #firebaseStatus {
-            top: 85px;
-        }
-
-    }
-
-</style>
-
-</head><body><header
+</style></head><body><header
     class="sticky top-0 bg-gray-900/95 backdrop-blur border-b border-gray-800"
 ><div
     class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
+><div><h1
+    class="text-2xl font-bold flex items-center gap-2"
+><i class="bx bx-cut text-purple-500"></i>
+
+<span
+class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+
+«»
+
+K@si Web
+
+</span></h1><p
+    id="bookingsToday"
+    class="text-xs text-blue-400 font-semibold mt-0.5"
 >
+    0 bookings today
+</p></div><div class="flex gap-2"><button
+id="adminBtn"
+type="button"
+class="hidden bg-purple-600 hover:bg-purple-700 text-xs px-3 py-2 rounded-xl font-bold items-center gap-1"
 
-    <div>
+«»
 
-        <h1
-            class="text-2xl font-bold flex items-center gap-2"
-        >
+<i class="bx bx-shield-alt-2"></i>
 
-            <i class="bx bx-cut text-purple-500"></i>
+Dashboard
 
-            <span
-                class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
-            >
-                K@si Web
-            </span>
+</button><button
+id="logoutBtn"
+type="button"
+class="hidden bg-red-600 hover:bg-red-700 px-3 py-2 rounded-xl text-xs font-bold items-center gap-1"
 
-        </h1>
+«»
 
-        <p
-            id="bookingsToday"
-            class="text-xs text-blue-400 font-semibold mt-0.5"
-        >
-            0 bookings today
-        </p>
+<i class="bx bx-log-out"></i>
 
-    </div>
+Logout
 
-    <div class="flex gap-2">
-
-        <button
-            id="adminBtn"
-            type="button"
-            class="hidden bg-purple-600 hover:bg-purple-700 text-xs px-3 py-2 rounded-xl font-bold items-center gap-1"
-        >
-
-            <i class="bx bx-shield-alt-2"></i>
-
-            Dashboard
-
-        </button>
-
-        <button
-            id="logoutBtn"
-            type="button"
-            class="hidden bg-red-600 hover:bg-red-700 px-3 py-2 rounded-xl text-xs font-bold items-center gap-1"
-        >
-
-            <i class="bx bx-log-out"></i>
-
-            Logout
-
-        </button>
-
-    </div>
-
-</div>
-
-</header><div id="firebaseStatus"></div><main
+</button></div></div></header><div id="firebaseStatus"></div><main
     class="max-w-7xl mx-auto px-4 py-8"
-><div class="text-center mb-6">
-
-    <h2
-        class="text-4xl md:text-5xl font-black mb-3 bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent"
-    >
-        🔥 Find Your Barber
-    </h2>
-
-    <p class="text-gray-400">
-        Fresh cuts without standing in line.
-    </p>
-
-</div>
-
-<div
-    class="flex gap-2 mb-8 max-w-xl mx-auto"
+><div class="text-center mb-6"><h2
+    class="text-4xl md:text-5xl font-black mb-3 bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent"
 >
+    🔥 Find Your Barber
+</h2><p class="text-gray-400">
+    Fresh cuts without standing in line.
+</p><!-- NEW LOGIN INSTRUCTION --><div
+    id="loginInstruction"
+    class="max-w-xl mx-auto mt-5 px-4 py-3 rounded-xl border border-purple-500/20 bg-purple-500/10"
+><div
+    class="flex items-center justify-center gap-2 text-sm text-purple-200 font-semibold"
+><i class="bx bx-lock-alt text-lg"></i>
 
-    <input
-        type="text"
-        id="searchBar"
-        placeholder="Search salon or location..."
-        autocomplete="off"
-        class="flex-1 bg-gray-900 border border-blue-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500"
-    >
+<span>
+    Please log in or create an account before booking.
+</span></div></div></div><div
+    class="flex gap-2 mb-8 max-w-xl mx-auto"
+><input
+type="text"
+id="searchBar"
+placeholder="Search salon or location..."
+autocomplete="off"
+class="flex-1 bg-gray-900 border border-blue-500/30 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500"
 
-    <button
-        id="searchBtn"
-        type="button"
-        class="bg-blue-600 hover:bg-blue-700 px-5 rounded-xl font-bold flex items-center justify-center"
-    >
+«»
 
-        <i class="bx bx-search text-xl"></i>
+<button
+id="searchBtn"
+type="button"
+class="bg-blue-600 hover:bg-blue-700 px-5 rounded-xl font-bold flex items-center justify-center"
 
-    </button>
+«»
 
-</div>
+<i class="bx bx-search text-xl"></i>
 
-<div
+</button></div><div
     id="salonList"
     class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
->
+><div class="loading-box col-span-full"><i class="bx bx-loader-alt bx-spin"></i>
 
-    <div class="loading-box col-span-full">
-
-        <i class="bx bx-loader-alt bx-spin"></i>
-
-        <p>
-            Loading salons near you...
-        </p>
-
-    </div>
-
-</div>
-
-</main><!-- BOOKING MODAL --><div
+<p>
+    Loading salons near you...
+</p></div></div></main><!-- BOOKING MODAL --><div
     id="bookingModal"
     class="modal"
 ><div
     class="salon-card w-full max-w-md relative bg-gray-950 p-6 border border-blue-500/50 shadow-2xl"
+><button
+id="closeModalBtn"
+type="button"
+class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"
+aria-label="Close"
+
+«»
+
+✕
+
+</button><div
+    id="bookingHeader"
+><div class="mb-5 pr-8"><p class="text-xs text-gray-500 mb-1">
+    Booking at
+</p><h2
+    id="bookingSalonName"
+    class="text-xl font-bold text-blue-400"
 >
+    Book Appointment
+</h2><p
+    id="bookingSalonLocation"
+    class="text-xs text-gray-400 mt-1"
+></p></div></div><!-- LOGIN REQUIRED CONTENT --><div
+    id="loginRequiredContent"
+    class="hidden"
+><div class="login-required-box"><div class="login-required-icon"><i class="bx bx-lock-alt"></i>
 
-    <button
-        id="closeModalBtn"
-        type="button"
-        class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"
-        aria-label="Close"
-    >
-        ✕
-    </button>
+</div><h3>
+    Login required to book
+</h3><p>
+    You need a K@si Web account before you can make a booking.
+    Log in if you already have an account, or create one if you're new.
+</p><div class="login-required-note"><i class="bx bx-info-circle"></i>
 
-    <div class="mb-5 pr-8">
+Your booking is linked to your account so you can keep track of your appointments.
 
-        <p class="text-xs text-gray-500 mb-1">
-            Booking at
-        </p>
+</div><button
+id="loginToBookBtn"
+type="button"
+class="login-btn"
 
-        <h2
-            id="bookingSalonName"
-            class="text-xl font-bold text-blue-400"
-        >
-            Book Appointment
-        </h2>
+«»
 
-        <p
-            id="bookingSalonLocation"
-            class="text-xs text-gray-400 mt-1"
-        ></p>
+<i class="bx bx-log-in mr-1"></i>
 
-    </div>
+Login / Sign Up
 
-    <form
-        id="bookingForm"
-        class="space-y-4"
-    >
+</button><button
+id="cancelLoginBtn"
+type="button"
+class="cancel-btn"
 
-        <div>
+«»
 
-            <label
-                class="text-xs text-gray-400 block mb-1"
-            >
-                Your Full Name
-            </label>
+Cancel
 
-            <input
-                type="text"
-                id="custName"
-                required
-                autocomplete="name"
-                class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none"
-            >
+</button></div></div><!-- ACTUAL BOOKING FORM --><form
+    id="bookingForm"
+    class="space-y-4 hidden"
+><div class="booking-login-hint"><i class="bx bx-check-shield"></i>
 
-        </div>
+<span>
+    You're logged in. Complete the details below to confirm your booking.
+</span></div><div><label
+class="text-xs text-gray-400 block mb-1"
 
-        <div>
+«»
 
-            <label
-                class="text-xs text-gray-400 block mb-1"
-            >
-                Phone Number
-            </label>
+Your Full Name
 
-            <input
-                type="tel"
-                id="custPhone"
-                required
-                autocomplete="tel"
-                class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none"
-            >
+</label><input
+type="text"
+id="custName"
+required
+autocomplete="name"
+class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none"
 
-        </div>
+«»
 
-        <div>
+</div><div><label
+class="text-xs text-gray-400 block mb-1"
 
-            <label
-                class="text-xs text-gray-400 block mb-1"
-            >
-                Select Service
-            </label>
+«»
 
-            <select
-                id="serviceType"
-                required
-                class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none"
-            ></select>
+Phone Number
 
-        </div>
+</label><input
+type="tel"
+id="custPhone"
+required
+autocomplete="tel"
+class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none"
 
-        <div class="grid grid-cols-2 gap-2">
+«»
 
-            <div>
+</div><div><label
+class="text-xs text-gray-400 block mb-1"
 
-                <label
-                    class="text-xs text-gray-400 block mb-1"
-                >
-                    Date
-                </label>
+«»
 
-                <input
-                    type="date"
-                    id="custDate"
-                    required
-                    class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm outline-none"
-                >
+Select Service
 
-            </div>
+</label><select
+id="serviceType"
+required
+class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm focus:border-blue-500 outline-none"
 
-            <div>
+«</select>»
 
-                <label
-                    class="text-xs text-gray-400 block mb-1"
-                >
-                    Time
-                </label>
+</div><div class="grid grid-cols-2 gap-2"><div><label
+class="text-xs text-gray-400 block mb-1"
 
-                <input
-                    type="time"
-                    id="custTime"
-                    required
-                    class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm outline-none"
-                >
+«»
 
-            </div>
+Date
 
-        </div>
+</label><input
+type="date"
+id="custDate"
+required
+class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm outline-none"
 
-        <button
-            type="submit"
-            id="confirmBookingBtn"
-            class="primary-btn mt-2"
-        >
-            <i class="bx bx-calendar-check mr-1"></i>
-            Confirm Booking
-        </button>
+«»
 
-    </form>
+</div><div><label
+class="text-xs text-gray-400 block mb-1"
 
-</div>
+«»
 
-</div><!-- BOTTOM NAV --><nav
+Time
+
+</label><input
+type="time"
+id="custTime"
+required
+class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-sm outline-none"
+
+«»
+
+</div></div><button
+type="submit"
+id="confirmBookingBtn"
+class="primary-btn mt-2"
+
+«»
+
+<i class="bx bx-calendar-check mr-1"></i>
+
+Confirm Booking
+
+</button></form></div></div><!-- BOTTOM NAV --><nav
     class="nav-grid"
     aria-label="Main navigation"
 ><a
-    href="index.html"
-    class="nav-item"
->
+href="index.html"
+class="nav-item"
 
-    <i class="bx bx-home-alt"></i>
+«»
 
-    <span>
-        Home
-    </span>
+<i class="bx bx-home-alt"></i>
 
-</a>
+<span>
+    Home
+</span></a><a
+href="home.html"
+class="nav-item"
 
-<a
-    href="home.html"
-    class="nav-item"
->
+«»
 
-    <i class="bx bx-user"></i>
+<i class="bx bx-user"></i>
 
-    <span>
-        Account
-    </span>
+<span>
+    Account
+</span></a><a
+href="salons.html"
+class="nav-item active"
 
-</a>
+«»
 
-<a
-    href="salons.html"
-    class="nav-item active"
->
+<i class="bx bx-cut"></i>
 
-    <i class="bx bx-cut"></i>
-
-    <span>
-        Salons
-    </span>
-
-</a>
-
-</nav><audio
+<span>
+    Salons
+</span></a></nav><audio
 id="clickSound"
 src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
 preload="auto"
@@ -776,6 +893,21 @@ document.addEventListener(
                 "bookingForm"
             );
 
+        const loginRequiredContent =
+            document.getElementById(
+                "loginRequiredContent"
+            );
+
+        const loginToBookBtn =
+            document.getElementById(
+                "loginToBookBtn"
+            );
+
+        const cancelLoginBtn =
+            document.getElementById(
+                "cancelLoginBtn"
+            );
+
         const closeModalBtn =
             document.getElementById(
                 "closeModalBtn"
@@ -841,6 +973,12 @@ document.addEventListener(
                 "firebaseStatus"
             );
 
+        const loginInstruction =
+            document.getElementById(
+                "loginInstruction"
+            );
+
+
         /*
          * REAL SALON DOCUMENT
          */
@@ -851,6 +989,7 @@ document.addEventListener(
         const DEFAULT_SALON_IMAGE =
             "https://raw.githubusercontent.com/siphesihle-design/Kasi-web/refs/heads/main/9C00E0.jpeg";
 
+
         let allSalons = [];
 
         let selectedSalon = null;
@@ -859,13 +998,16 @@ document.addEventListener(
 
         let bookingUnsubscribe = null;
 
+
         function escapeHtml(value) {
 
             if (
                 value === null ||
                 value === undefined
             ) {
+
                 return "";
+
             }
 
             return String(value)
@@ -876,6 +1018,7 @@ document.addEventListener(
                 .replace(/'/g, "&#039;");
 
         }
+
 
         function formatDate(
             date = new Date()
@@ -896,6 +1039,7 @@ document.addEventListener(
             ].join("-");
 
         }
+
 
         function showStatus(
             message,
@@ -935,6 +1079,7 @@ document.addEventListener(
 
         }
 
+
         function normalizeServices(
             rawServices
         ) {
@@ -944,7 +1089,9 @@ document.addEventListener(
                     rawServices
                 )
             ) {
+
                 return [];
+
             }
 
             return rawServices
@@ -956,8 +1103,11 @@ document.addEventListener(
                     ) {
 
                         return {
+
                             name: service,
+
                             price: 0
+
                         };
 
                     }
@@ -991,14 +1141,19 @@ document.addEventListener(
 
         }
 
+
         const clickSound =
             document.getElementById(
                 "clickSound"
             );
 
         if (clickSound) {
-            clickSound.volume = 0.4;
+
+            clickSound.volume =
+                0.4;
+
         }
+
 
         function playClick() {
 
@@ -1023,6 +1178,7 @@ document.addEventListener(
 
         }
 
+
         document.addEventListener(
             "click",
             event => {
@@ -1039,6 +1195,7 @@ document.addEventListener(
 
             }
         );
+
 
         /*
          * DATE
@@ -1063,6 +1220,7 @@ document.addEventListener(
         custDate.value =
             formatDate(today);
 
+
         /*
          * AUTH
          */
@@ -1077,6 +1235,7 @@ document.addEventListener(
                         : "not logged in"
                 );
 
+
                 if (!user) {
 
                     logoutBtn.classList.add(
@@ -1087,18 +1246,80 @@ document.addEventListener(
                         "hidden"
                     );
 
+                    /*
+                     * Show login instruction
+                     */
+
+                    loginInstruction.classList.remove(
+                        "hidden"
+                    );
+
                     stopBookingListener();
 
                     bookingsToday.textContent =
-                        "0 bookings today";
+                        "Login to view your bookings";
+
+                    /*
+                     * If a booking modal is open,
+                     * make sure the login screen
+                     * is shown.
+                     */
+
+                    if (
+                        bookingModal.classList.contains(
+                            "active"
+                        )
+                    ) {
+
+                        bookingForm.classList.add(
+                            "hidden"
+                        );
+
+                        loginRequiredContent.classList.remove(
+                            "hidden"
+                        );
+
+                    }
 
                     return;
 
                 }
 
+
+                /*
+                 * User IS logged in.
+                 */
+
                 logoutBtn.classList.remove(
                     "hidden"
                 );
+
+                loginInstruction.classList.add(
+                    "hidden"
+                );
+
+
+                /*
+                 * If modal is open,
+                 * show booking form.
+                 */
+
+                if (
+                    bookingModal.classList.contains(
+                        "active"
+                    )
+                ) {
+
+                    loginRequiredContent.classList.add(
+                        "hidden"
+                    );
+
+                    bookingForm.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
 
                 try {
 
@@ -1117,6 +1338,7 @@ document.addEventListener(
                         userData.role ||
                         "customer";
 
+
                     console.log(
                         "CURRENT USER UID:",
                         user.uid
@@ -1127,6 +1349,7 @@ document.addEventListener(
                         role
                     );
 
+
                     if (
                         role === "admin"
                     ) {
@@ -1136,8 +1359,11 @@ document.addEventListener(
                         );
 
                         adminBtn.innerHTML = `
+
                             <i class="bx bx-shield-alt-2"></i>
+
                             Admin
+
                         `;
 
                         adminBtn.onclick =
@@ -1160,8 +1386,11 @@ document.addEventListener(
                         );
 
                         adminBtn.innerHTML = `
+
                             <i class="bx bx-store"></i>
+
                             Owner Dashboard
+
                         `;
 
                         adminBtn.onclick =
@@ -1181,6 +1410,7 @@ document.addEventListener(
                         );
 
                     }
+
 
                     listenForUserBookings(
                         user
@@ -1208,6 +1438,7 @@ document.addEventListener(
             }
         );
 
+
         /*
          * LOGOUT
          */
@@ -1228,7 +1459,9 @@ document.addEventListener(
 
                 catch (error) {
 
-                    console.error(error);
+                    console.error(
+                        error
+                    );
 
                     showStatus(
                         error.message ||
@@ -1241,11 +1474,9 @@ document.addEventListener(
             }
         );
 
+
         /*
          * LOAD SALON
-         *
-         * IMPORTANT:
-         * ownerId MUST come from Firestore.
          */
 
         function loadSalons() {
@@ -1272,6 +1503,7 @@ document.addEventListener(
 
             `;
 
+
             salonUnsubscribe =
                 db
                     .collection("salons")
@@ -1297,26 +1529,27 @@ document.addEventListener(
 
                             }
 
+
                             const data =
                                 snapshot.data() || {};
+
 
                             console.log(
                                 "FIRESTORE SALON:",
                                 data
                             );
 
+
                             /*
-                             * DO NOT USE A FALLBACK OWNER ID.
-                             *
-                             * The ownerId must be the
-                             * Firebase Authentication UID
-                             * of the salon owner.
+                             * OWNER ID MUST COME
+                             * FROM FIRESTORE.
                              */
 
                             const ownerId =
                                 data.ownerId ||
                                 data.OwnerId ||
                                 null;
+
 
                             if (!ownerId) {
 
@@ -1330,6 +1563,7 @@ document.addEventListener(
                                 );
 
                             }
+
 
                             const salon = {
 
@@ -1376,6 +1610,7 @@ document.addEventListener(
 
                             };
 
+
                             console.log(
                                 "SALON ID:",
                                 salon.salonId
@@ -1391,13 +1626,16 @@ document.addEventListener(
                                 salon.services
                             );
 
+
                             allSalons = [
                                 salon
                             ];
 
+
                             renderSalons(
                                 allSalons
                             );
+
 
                             if (ownerId) {
 
@@ -1415,6 +1653,7 @@ document.addEventListener(
                                 "SALON LOAD ERROR:",
                                 error
                             );
+
 
                             salonList.innerHTML = `
 
@@ -1447,6 +1686,7 @@ document.addEventListener(
 
                             `;
 
+
                             showStatus(
                                 "Unable to load salon",
                                 true
@@ -1458,6 +1698,7 @@ document.addEventListener(
 
         }
 
+
         /*
          * RENDER
          */
@@ -1467,6 +1708,7 @@ document.addEventListener(
         ) {
 
             salonList.innerHTML = "";
+
 
             if (
                 !salons.length
@@ -1494,6 +1736,7 @@ document.addEventListener(
 
             }
 
+
             salons.forEach(
                 salon => {
 
@@ -1502,15 +1745,19 @@ document.addEventListener(
                             "div"
                         );
 
+
                     card.className =
                         "salon-card flex flex-col justify-between";
+
 
                     const hasOwner =
                         Boolean(
                             salon.ownerId
                         );
 
+
                     let servicePreview = "";
+
 
                     if (
                         salon.services.length
@@ -1556,6 +1803,7 @@ document.addEventListener(
 
                     }
 
+
                     card.innerHTML = `
 
                         <div>
@@ -1580,9 +1828,11 @@ document.addEventListener(
                                     <div>
 
                                         <h3 class="text-xl font-bold text-white">
+
                                             ${escapeHtml(
                                                 salon.name
                                             )}
+
                                         </h3>
 
                                         <p class="text-sm text-gray-400 mt-1">
@@ -1605,6 +1855,7 @@ document.addEventListener(
 
                                 </div>
 
+
                                 <div class="mt-4">
 
                                     <div class="flex items-center gap-2 text-sm text-gray-400 mb-2">
@@ -1612,19 +1863,24 @@ document.addEventListener(
                                         <i class="bx bx-time text-blue-400"></i>
 
                                         <span>
+
                                             ${escapeHtml(
                                                 salon.hours
                                             )}
+
                                         </span>
 
                                     </div>
 
                                 </div>
 
+
                                 <div class="mt-4">
 
                                     <p class="text-xs uppercase tracking-wide text-gray-500 mb-2">
+
                                         Services
+
                                     </p>
 
                                     <div class="space-y-1 text-sm text-gray-300">
@@ -1638,6 +1894,7 @@ document.addEventListener(
                             </div>
 
                         </div>
+
 
                         <div class="p-5 pt-0">
 
@@ -1664,6 +1921,7 @@ document.addEventListener(
 
                     `;
 
+
                     salonList.appendChild(
                         card
                     );
@@ -1673,8 +1931,9 @@ document.addEventListener(
 
         }
 
+
         /*
-         * OPEN MODAL
+         * OPEN BOOKING MODAL
          */
 
         function openBookingModal(
@@ -1684,6 +1943,7 @@ document.addEventListener(
             if (!salon) {
                 return;
             }
+
 
             if (!salon.ownerId) {
 
@@ -1696,8 +1956,10 @@ document.addEventListener(
 
             }
 
+
             selectedSalon =
                 salon;
+
 
             bookingSalonName.textContent =
                 salon.name;
@@ -1705,7 +1967,14 @@ document.addEventListener(
             bookingSalonLocation.textContent =
                 salon.location;
 
+
+            /*
+             * ALWAYS prepare services,
+             * even before login.
+             */
+
             serviceType.innerHTML = "";
+
 
             if (
                 salon.services.length
@@ -1752,6 +2021,7 @@ document.addEventListener(
                     "No services available";
 
                 option.disabled = true;
+
                 option.selected = true;
 
                 serviceType.appendChild(
@@ -1760,6 +2030,40 @@ document.addEventListener(
 
             }
 
+
+            /*
+             * IMPORTANT:
+             * Decide what to show based on
+             * Firebase Authentication.
+             */
+
+            if (
+                auth.currentUser
+            ) {
+
+                loginRequiredContent.classList.add(
+                    "hidden"
+                );
+
+                bookingForm.classList.remove(
+                    "hidden"
+                );
+
+            }
+
+            else {
+
+                bookingForm.classList.add(
+                    "hidden"
+                );
+
+                loginRequiredContent.classList.remove(
+                    "hidden"
+                );
+
+            }
+
+
             bookingModal.classList.add(
                 "active"
             );
@@ -1767,14 +2071,8 @@ document.addEventListener(
             document.body.style.overflow =
                 "hidden";
 
-            setTimeout(
-                () => {
-                    custName.focus();
-                },
-                150
-            );
-
         }
+
 
         function closeBookingModal() {
 
@@ -1790,10 +2088,18 @@ document.addEventListener(
 
         }
 
+
         closeModalBtn.addEventListener(
             "click",
             closeBookingModal
         );
+
+
+        cancelLoginBtn.addEventListener(
+            "click",
+            closeBookingModal
+        );
+
 
         bookingModal.addEventListener(
             "click",
@@ -1811,6 +2117,7 @@ document.addEventListener(
             }
         );
 
+
         document.addEventListener(
             "keydown",
             event => {
@@ -1826,6 +2133,7 @@ document.addEventListener(
             }
         );
 
+
         /*
          * BOOK BUTTON
          */
@@ -1839,12 +2147,15 @@ document.addEventListener(
                         ".book-btn"
                     );
 
+
                 if (!button) {
                     return;
                 }
 
+
                 const salonId =
                     button.dataset.salonId;
+
 
                 const salon =
                     allSalons.find(
@@ -1852,6 +2163,7 @@ document.addEventListener(
                             item.salonId ===
                             salonId
                     );
+
 
                 if (salon) {
 
@@ -1864,6 +2176,45 @@ document.addEventListener(
             }
         );
 
+
+        /*
+         * LOGIN / SIGN UP
+         *
+         * We store the salon ID so the
+         * login page can return to this
+         * booking.
+         */
+
+        loginToBookBtn.addEventListener(
+            "click",
+            () => {
+
+                if (!selectedSalon) {
+
+                    return;
+
+                }
+
+
+                sessionStorage.setItem(
+                    "bookingSalonId",
+                    selectedSalon.salonId
+                );
+
+
+                sessionStorage.setItem(
+                    "returnToBooking",
+                    "true"
+                );
+
+
+                window.location.href =
+                    "index.html";
+
+            }
+        );
+
+
         /*
          * CREATE BOOKING
          */
@@ -1873,6 +2224,7 @@ document.addEventListener(
             async event => {
 
                 event.preventDefault();
+
 
                 if (!selectedSalon) {
 
@@ -1885,29 +2237,34 @@ document.addEventListener(
 
                 }
 
+
                 const user =
                     auth.currentUser;
 
+
+                /*
+                 * EXTRA SAFETY CHECK
+                 */
+
                 if (!user) {
+
+                    bookingForm.classList.add(
+                        "hidden"
+                    );
+
+                    loginRequiredContent.classList.remove(
+                        "hidden"
+                    );
 
                     showStatus(
                         "Please log in before booking",
                         true
                     );
 
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "index.html";
-
-                        },
-                        800
-                    );
-
                     return;
 
                 }
+
 
                 /*
                  * CRITICAL SECURITY CHECK
@@ -1926,6 +2283,7 @@ document.addEventListener(
 
                 }
 
+
                 const name =
                     custName.value.trim();
 
@@ -1940,6 +2298,7 @@ document.addEventListener(
 
                 const time =
                     custTime.value;
+
 
                 if (
                     !name ||
@@ -1958,8 +2317,10 @@ document.addEventListener(
 
                 }
 
+
                 confirmBookingBtn.disabled =
                     true;
+
 
                 confirmBookingBtn.innerHTML = `
 
@@ -1968,6 +2329,7 @@ document.addEventListener(
                     Booking...
 
                 `;
+
 
                 try {
 
@@ -1978,6 +2340,7 @@ document.addEventListener(
                                 service
                         );
 
+
                     const price =
                         selectedService
                             ? Number(
@@ -1985,11 +2348,10 @@ document.addEventListener(
                             ) || 0
                             : 0;
 
+
                     /*
-                     * THIS IS THE IMPORTANT PART.
-                     *
-                     * ownerId is taken directly from
-                     * the salon document.
+                     * OWNER ID COMES DIRECTLY
+                     * FROM THE SALON DOCUMENT.
                      */
 
                     const bookingData = {
@@ -2038,6 +2400,7 @@ document.addEventListener(
                                 .serverTimestamp()
 
                     };
+
 
                     console.log(
                         "================================"
@@ -2091,6 +2454,7 @@ document.addEventListener(
                         "================================"
                     );
 
+
                     const bookingRef =
                         await db
                             .collection(
@@ -2100,21 +2464,26 @@ document.addEventListener(
                                 bookingData
                             );
 
+
                     console.log(
                         "BOOKING CREATED:",
                         bookingRef.id
                     );
 
+
                     showStatus(
                         "Booking confirmed successfully!"
                     );
 
+
                     bookingForm.reset();
+
 
                     custDate.value =
                         formatDate(
                             new Date()
                         );
+
 
                     closeBookingModal();
 
@@ -2137,6 +2506,7 @@ document.addEventListener(
                         error.message
                     );
 
+
                     showStatus(
                         error.message ||
                         "Booking failed",
@@ -2149,6 +2519,7 @@ document.addEventListener(
 
                     confirmBookingBtn.disabled =
                         false;
+
 
                     confirmBookingBtn.innerHTML = `
 
@@ -2163,6 +2534,7 @@ document.addEventListener(
             }
         );
 
+
         /*
          * CUSTOMER BOOKING COUNTER
          */
@@ -2173,19 +2545,22 @@ document.addEventListener(
 
             stopBookingListener();
 
+
             if (!user) {
 
                 bookingsToday.textContent =
-                    "0 bookings today";
+                    "Login to view your bookings";
 
                 return;
 
             }
 
+
             const todayDate =
                 formatDate(
                     new Date()
                 );
+
 
             bookingUnsubscribe =
                 db
@@ -2206,6 +2581,7 @@ document.addEventListener(
 
                             const count =
                                 snapshot.size;
+
 
                             bookingsToday.textContent =
                                 `${count} ${
@@ -2232,6 +2608,7 @@ document.addEventListener(
 
         }
 
+
         function stopBookingListener() {
 
             if (
@@ -2247,6 +2624,7 @@ document.addEventListener(
 
         }
 
+
         /*
          * SEARCH
          */
@@ -2258,6 +2636,7 @@ document.addEventListener(
                     .trim()
                     .toLowerCase();
 
+
             if (!search) {
 
                 renderSalons(
@@ -2267,6 +2646,7 @@ document.addEventListener(
                 return;
 
             }
+
 
             const filtered =
                 allSalons.filter(
@@ -2298,9 +2678,11 @@ document.addEventListener(
                     }
                 );
 
+
             renderSalons(
                 filtered
             );
+
 
             if (
                 !filtered.length
@@ -2314,15 +2696,18 @@ document.addEventListener(
 
         }
 
+
         searchBtn.addEventListener(
             "click",
             performSearch
         );
 
+
         searchBar.addEventListener(
             "input",
             performSearch
         );
+
 
         searchBar.addEventListener(
             "keydown",
@@ -2341,6 +2726,7 @@ document.addEventListener(
             }
         );
 
+
         /*
          * START
          */
@@ -2350,4 +2736,5 @@ document.addEventListener(
     }
 );
 
-</script></body></html>
+</script></body>
+    </html>
