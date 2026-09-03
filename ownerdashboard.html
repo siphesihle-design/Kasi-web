@@ -7,7 +7,7 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
     <meta
@@ -20,2098 +20,826 @@
         content="K@si Web Salon Owner Dashboard"
     >
 
-    <title>K@si Web | Owner Dashboard</title>
+    <title>K@si Web | Salon Owner Dashboard</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+
+        body {
+            background: #030712;
+        }
+
+        .glass {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loader {
+            width: 42px;
+            height: 42px;
+            border: 4px solid rgba(255,255,255,.15);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+    </style>
 
 </head>
 
 
-<body class="bg-gray-950 text-white min-h-screen">
+<body class="min-h-screen text-white">
 
 
 <!-- =========================================================
-     HEADER
+     LOADING SCREEN
 ========================================================= -->
 
-<header
-    class="bg-gray-900 border-b border-gray-800 sticky top-0 z-40"
+<div
+    id="loadingScreen"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950"
 >
 
-    <div
-        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center gap-4"
-    >
+    <div class="text-center">
 
-        <h1 class="text-2xl font-bold">
-            💈 Owner Dashboard
-        </h1>
+        <div class="loader mx-auto mb-4"></div>
+
+        <p class="text-gray-300">
+            Checking your account...
+        </p>
+
+    </div>
+
+</div>
 
 
-        <div class="flex gap-2">
+<!-- =========================================================
+     LOGIN SCREEN
+========================================================= -->
 
-            <a
-                href="home.html"
-                class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition"
+<section
+    id="loginSection"
+    class="hidden min-h-screen flex items-center justify-center px-5"
+>
+
+    <div class="glass w-full max-w-md rounded-3xl p-7 shadow-2xl">
+
+        <div class="text-center mb-7">
+
+            <div
+                class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-black"
             >
-                Home
-            </a>
+                K@
+            </div>
+
+            <h1 class="text-3xl font-bold">
+                Salon Owner
+            </h1>
+
+            <p class="mt-2 text-gray-400">
+                Sign in to manage your salon
+            </p>
+
+        </div>
+
+
+        <form id="loginForm" class="space-y-5">
+
+            <div>
+
+                <label
+                    for="email"
+                    class="mb-2 block text-sm font-medium text-gray-300"
+                >
+                    Email
+                </label>
+
+                <input
+                    id="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="owner@example.com"
+                    class="w-full rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-white outline-none focus:border-blue-500"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label
+                    for="password"
+                    class="mb-2 block text-sm font-medium text-gray-300"
+                >
+                    Password
+                </label>
+
+                <input
+                    id="password"
+                    type="password"
+                    required
+                    autocomplete="current-password"
+                    placeholder="••••••••"
+                    class="w-full rounded-xl border border-gray-700 bg-gray-900 px-4 py-3 text-white outline-none focus:border-blue-500"
+                >
+
+            </div>
+
+
+            <div
+                id="loginError"
+                class="hidden rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300"
+            ></div>
 
 
             <button
-                id="logoutBtn"
-                type="button"
-                class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition"
+                id="loginButton"
+                type="submit"
+                class="w-full rounded-xl bg-blue-600 py-3.5 font-bold transition hover:bg-blue-500 active:scale-[.98]"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <div class="mt-6 text-center">
+
+            <a
+                href="index.html"
+                class="text-sm text-gray-400 hover:text-white"
+            >
+                ← Back to K@si Web
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
+
+<div
+    id="dashboardSection"
+    class="hidden min-h-screen"
+>
+
+
+    <!-- HEADER -->
+
+    <header
+        class="sticky top-0 z-40 border-b border-white/10 bg-gray-950/90 backdrop-blur"
+    >
+
+        <div
+            class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4"
+        >
+
+            <div>
+
+                <p class="text-xs font-semibold uppercase tracking-widest text-blue-400">
+                    K@si Web
+                </p>
+
+                <h1
+                    id="headerSalonName"
+                    class="text-xl font-bold"
+                >
+                    Owner Dashboard
+                </h1>
+
+            </div>
+
+
+            <button
+                id="logoutButton"
+                class="rounded-xl border border-gray-700 px-4 py-2 text-sm font-semibold hover:bg-gray-800"
             >
                 Logout
             </button>
 
         </div>
 
-    </div>
-
-</header>
+    </header>
 
 
+    <!-- MAIN -->
 
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
-<main
-    class="max-w-7xl mx-auto px-4 py-8"
->
+    <main class="mx-auto max-w-6xl px-5 py-7">
 
 
-    <!-- =====================================================
-         LOADING
-    ====================================================== -->
+        <!-- ACCOUNT -->
 
-    <div
-        id="loading"
-        class="text-center py-20"
-    >
-
-        <div class="text-5xl mb-4">
-            💈
-        </div>
-
-        <p class="text-gray-400">
-            Loading dashboard...
-        </p>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         ERROR
-    ====================================================== -->
-
-    <section
-        id="errorSection"
-        class="hidden max-w-xl mx-auto"
-    >
-
-        <div
-            class="bg-red-950/50 border border-red-800 rounded-2xl p-6"
+        <section
+            class="glass mb-6 rounded-3xl p-6"
         >
 
-            <h2
-                class="text-xl font-bold text-red-400 mb-2"
-            >
-                Dashboard Error
-            </h2>
-
-
-            <p
-                id="errorMessage"
-                class="text-red-300 break-words"
-            ></p>
-
-
-            <button
-                id="retryBtn"
-                type="button"
-                class="mt-5 bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-lg transition"
-            >
-                Try Again
-            </button>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         CREATE SALON
-    ====================================================== -->
-
-    <section
-        id="createSalonSection"
-        class="hidden max-w-xl mx-auto"
-    >
-
-        <div
-            class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl"
-        >
-
-            <div class="text-center mb-6">
-
-                <div class="text-5xl mb-3">
-                    💈
-                </div>
-
-
-                <h2 class="text-2xl font-bold mb-2">
-                    Create Your Salon
-                </h2>
-
-
-                <p class="text-gray-400">
-                    Your owner account is ready.
-                    Connect it to your salon.
-                </p>
-
-            </div>
-
-
-            <label
-                for="salonName"
-                class="block text-sm text-gray-400 mb-2"
-            >
-                Salon Name
-            </label>
-
-            <input
-                id="salonName"
-                type="text"
-                autocomplete="organization"
-                placeholder="e.g. K@si Cuts"
-                class="w-full p-3 mb-4 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500"
-            >
-
-
-            <label
-                for="salonLocation"
-                class="block text-sm text-gray-400 mb-2"
-            >
-                Location
-            </label>
-
-            <input
-                id="salonLocation"
-                type="text"
-                placeholder="e.g. Soweto"
-                class="w-full p-3 mb-4 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500"
-            >
-
-
-            <label
-                for="salonHours"
-                class="block text-sm text-gray-400 mb-2"
-            >
-                Opening Hours
-            </label>
-
-            <input
-                id="salonHours"
-                type="text"
-                placeholder="e.g. 06:00 - 18:00"
-                class="w-full p-3 mb-4 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500"
-            >
-
-
-            <label
-                for="salonImage"
-                class="block text-sm text-gray-400 mb-2"
-            >
-                Salon Image URL
-            </label>
-
-            <input
-                id="salonImage"
-                type="url"
-                placeholder="https://..."
-                class="w-full p-3 mb-5 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500"
-            >
-
-
-            <button
-                id="createSalonBtn"
-                type="button"
-                class="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed p-3 rounded-lg font-bold transition"
-            >
-                Create Salon
-            </button>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         OWNER CONTENT
-    ====================================================== -->
-
-    <section
-        id="ownerContent"
-        class="hidden"
-    >
-
-
-        <!-- =================================================
-             SALON INFORMATION
-        ================================================== -->
-
-        <div
-            class="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6"
-        >
-
-            <div
-                class="flex flex-col md:flex-row md:justify-between md:items-center gap-5"
-            >
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
                 <div>
 
-                    <p class="text-sm text-gray-500 mb-1">
-                        My Salon
+                    <p class="text-sm text-gray-400">
+                        Signed in as
                     </p>
 
-
-                    <h2
-                        id="salonTitle"
-                        class="text-3xl font-bold"
+                    <p
+                        id="ownerEmail"
+                        class="mt-1 break-all font-semibold"
                     >
-                        My Salon
-                    </h2>
-
-
-                    <p
-                        id="salonInfo"
-                        class="text-gray-400 mt-2"
-                    ></p>
-
+                        —
+                    </p>
 
                     <p
-                        id="salonIdDisplay"
-                        class="text-xs text-gray-600 mt-2 break-all"
-                    ></p>
+                        id="ownerIdDisplay"
+                        class="mt-1 break-all text-xs text-gray-500"
+                    >
+                        —
+                    </p>
 
                 </div>
 
 
                 <div
-                    class="bg-gray-800 rounded-xl px-6 py-4 text-center"
+                    id="salonStatus"
+                    class="rounded-xl bg-yellow-500/10 px-4 py-3 text-sm text-yellow-300"
                 >
+                    Looking for your salon...
+                </div>
 
-                    <p class="text-gray-400 text-sm">
-                        Today's bookings
+            </div>
+
+        </section>
+
+
+        <!-- STATS -->
+
+        <section class="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+
+            <div class="glass rounded-2xl p-5">
+
+                <p class="text-sm text-gray-400">
+                    Total Bookings
+                </p>
+
+                <p
+                    id="totalBookings"
+                    class="mt-2 text-3xl font-black"
+                >
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="glass rounded-2xl p-5">
+
+                <p class="text-sm text-gray-400">
+                    Pending
+                </p>
+
+                <p
+                    id="pendingBookings"
+                    class="mt-2 text-3xl font-black text-yellow-400"
+                >
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="glass rounded-2xl p-5">
+
+                <p class="text-sm text-gray-400">
+                    Confirmed
+                </p>
+
+                <p
+                    id="confirmedBookings"
+                    class="mt-2 text-3xl font-black text-green-400"
+                >
+                    0
+                </p>
+
+            </div>
+
+
+            <div class="glass rounded-2xl p-5">
+
+                <p class="text-sm text-gray-400">
+                    Today
+                </p>
+
+                <p
+                    id="todayBookings"
+                    class="mt-2 text-3xl font-black text-blue-400"
+                >
+                    0
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SALON -->
+
+        <section
+            id="salonSection"
+            class="glass mb-6 rounded-3xl p-6"
+        >
+
+            <div class="mb-5 flex items-center justify-between">
+
+                <div>
+
+                    <p class="text-sm text-blue-400">
+                        Your Salon
                     </p>
 
+                    <h2
+                        id="salonName"
+                        class="mt-1 text-2xl font-bold"
+                    >
+                        Loading...
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid gap-4 md:grid-cols-2">
+
+                <div class="rounded-2xl bg-gray-900 p-4">
+
+                    <p class="text-xs uppercase tracking-wide text-gray-500">
+                        Location
+                    </p>
 
                     <p
-                        id="bookingCount"
-                        class="text-3xl font-bold"
+                        id="salonLocation"
+                        class="mt-2 font-medium"
                     >
-                        0
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-2xl bg-gray-900 p-4">
+
+                    <p class="text-xs uppercase tracking-wide text-gray-500">
+                        Hours
+                    </p>
+
+                    <p
+                        id="salonHours"
+                        class="mt-2 font-medium"
+                    >
+                        —
                     </p>
 
                 </div>
 
             </div>
 
-        </div>
+
+            <div class="mt-4 rounded-2xl bg-gray-900 p-4">
+
+                <p class="text-xs uppercase tracking-wide text-gray-500">
+                    Salon ID
+                </p>
+
+                <p
+                    id="salonIdDisplay"
+                    class="mt-2 break-all text-sm font-mono text-gray-300"
+                >
+                    —
+                </p>
+
+            </div>
+
+        </section>
 
 
+        <!-- BOOKINGS -->
 
-        <!-- =================================================
-             BOOKINGS
-        ================================================== -->
-
-        <div
-            class="bg-gray-900 border border-gray-800 rounded-2xl p-6"
+        <section
+            class="glass rounded-3xl p-6"
         >
 
+            <div class="mb-5">
+
+                <p class="text-sm text-blue-400">
+                    Appointments
+                </p>
+
+                <h2 class="mt-1 text-2xl font-bold">
+                    Customer Bookings
+                </h2>
+
+            </div>
+
+
             <div
-                class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5"
+                id="bookingMessage"
+                class="rounded-2xl bg-gray-900 p-6 text-center text-gray-400"
             >
-
-                <div>
-
-                    <h2 class="text-2xl font-bold">
-                        Today's Bookings
-                    </h2>
-
-
-                    <p
-                        id="todayDate"
-                        class="text-gray-400"
-                    ></p>
-
-                </div>
-
+                Loading bookings...
             </div>
 
 
             <div
                 id="bookingsList"
-                class="space-y-4"
-            >
+                class="hidden space-y-4"
+            ></div>
 
-                <div class="text-gray-400">
-                    Loading bookings...
-                </div>
-
-            </div>
-
-        </div>
+        </section>
 
 
-    </section>
+    </main>
 
-
-</main>
-
+</div>
 
 
 <!-- =========================================================
-     JAVASCRIPT
+     FIREBASE
 ========================================================= -->
 
 <script type="module">
 
-/* =========================================================
-   FIREBASE IMPORTS
-========================================================= */
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
-import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+    import {
+        getAuth,
+        onAuthStateChanged,
+        signInWithEmailAndPassword,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    addDoc,
-    collection,
-    query,
-    where,
-    getDocs,
-    onSnapshot,
-    updateDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
+    import {
+        getFirestore,
+        collection,
+        doc,
+        getDoc,
+        getDocs,
+        query,
+        where,
+        onSnapshot
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+    /* ========================================================
+       FIREBASE CONFIGURATION
+    ======================================================== */
 
-const firebaseConfig = {
+    const firebaseConfig = {
 
-    apiKey:
-        "AIzaSyCjmaSIPBngBf3SbhP1AH4Frfn4Mz1QXHk",
+        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
 
-    authDomain:
-        "kasi-web-d073f.firebaseapp.com",
+        authDomain: "kasi-web-d073f.firebaseapp.com",
 
-    projectId:
-        "kasi-web-d073f",
+        databaseURL:
+            "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
 
-    storageBucket:
-        "kasi-web-d073f.firebasestorage.app",
+        projectId: "kasi-web-d073f",
 
-    messagingSenderId:
-        "471544855566",
+        storageBucket:
+            "kasi-web-d073f.firebasestorage.app",
 
-    appId:
-        "1:471544855566:web:aa669a968b8af0ceb6905f"
+        messagingSenderId: "471544855566",
 
-};
+        appId:
+            "1:471544855566:web:aa669a968b8af0ceb6905f",
 
+        measurementId:
+            "G-Q8QVN2T54S"
 
+    };
 
-/* =========================================================
-   INITIALIZE FIREBASE
-========================================================= */
 
-const app =
-    initializeApp(
-        firebaseConfig
-    );
+    /* ========================================================
+       INITIALIZE FIREBASE
+    ======================================================== */
 
+    const app = initializeApp(firebaseConfig);
 
-const auth =
-    getAuth(
-        app
-    );
+    const auth = getAuth(app);
 
+    const db = getFirestore(app);
 
-const db =
-    getFirestore(
-        app
-    );
 
+    /* ========================================================
+       DOM
+    ======================================================== */
 
+    const loadingScreen =
+        document.getElementById("loadingScreen");
 
-/* =========================================================
-   STATE
-========================================================= */
+    const loginSection =
+        document.getElementById("loginSection");
 
-let currentUser =
-    null;
+    const dashboardSection =
+        document.getElementById("dashboardSection");
 
-let salonId =
-    null;
+    const loginForm =
+        document.getElementById("loginForm");
 
-let currentSalon =
-    null;
+    const loginButton =
+        document.getElementById("loginButton");
 
-let unsubscribeBookings =
-    null;
+    const loginError =
+        document.getElementById("loginError");
 
-let dashboardStarted =
-    false;
+    const logoutButton =
+        document.getElementById("logoutButton");
 
 
+    const ownerEmail =
+        document.getElementById("ownerEmail");
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+    const ownerIdDisplay =
+        document.getElementById("ownerIdDisplay");
 
-const loading =
-    document.getElementById(
-        "loading"
-    );
+    const salonStatus =
+        document.getElementById("salonStatus");
 
+    const headerSalonName =
+        document.getElementById("headerSalonName");
 
-const errorSection =
-    document.getElementById(
-        "errorSection"
-    );
+    const salonName =
+        document.getElementById("salonName");
 
+    const salonLocation =
+        document.getElementById("salonLocation");
 
-const errorMessage =
-    document.getElementById(
-        "errorMessage"
-    );
+    const salonHours =
+        document.getElementById("salonHours");
 
+    const salonIdDisplay =
+        document.getElementById("salonIdDisplay");
 
-const createSalonSection =
-    document.getElementById(
-        "createSalonSection"
-    );
 
+    const totalBookings =
+        document.getElementById("totalBookings");
 
-const ownerContent =
-    document.getElementById(
-        "ownerContent"
-    );
+    const pendingBookings =
+        document.getElementById("pendingBookings");
 
+    const confirmedBookings =
+        document.getElementById("confirmedBookings");
 
-const bookingsList =
-    document.getElementById(
-        "bookingsList"
-    );
+    const todayBookings =
+        document.getElementById("todayBookings");
 
 
-const bookingCount =
-    document.getElementById(
-        "bookingCount"
-    );
+    const bookingMessage =
+        document.getElementById("bookingMessage");
 
+    const bookingsList =
+        document.getElementById("bookingsList");
 
 
-/* =========================================================
-   SOUTH AFRICA DATE
-========================================================= */
+    let currentUser = null;
 
-function todayZA() {
+    let currentSalon = null;
 
-    return new Intl.DateTimeFormat(
-        "en-CA",
-        {
-            timeZone:
-                "Africa/Johannesburg",
+    let unsubscribeBookings = null;
 
-            year:
-                "numeric",
 
-            month:
-                "2-digit",
+    /* ========================================================
+       ESCAPE HTML
+    ======================================================== */
 
-            day:
-                "2-digit"
-        }
-    ).format(
-        new Date()
-    );
+    function escapeHtml(value) {
 
-}
-
-
-document.getElementById(
-    "todayDate"
-).textContent =
-    todayZA();
-
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-onAuthStateChanged(
-    auth,
-    async user => {
-
-        console.log(
-            "AUTH STATE:",
-            user
-                ? user.uid
-                : "No user"
-        );
-
-
-        if (!user) {
-
-            currentUser =
-                null;
-
-            window.location.replace(
-                "owners.html"
-            );
-
-            return;
-
+        if (value === null || value === undefined) {
+            return "";
         }
 
+        return String(value)
 
-        currentUser =
-            user;
+            .replace(/&/g, "&amp;")
 
+            .replace(/</g, "&lt;")
 
-        /*
-         * Prevent duplicate initialization.
-         */
+            .replace(/>/g, "&gt;")
 
-        if (
-            dashboardStarted
-        ) {
+            .replace(/"/g, "&quot;")
 
-            return;
-
-        }
-
-
-        dashboardStarted =
-            true;
-
-
-        await initializeOwnerDashboard();
-
-    }
-);
-
-
-
-/* =========================================================
-   INITIALIZE OWNER DASHBOARD
-========================================================= */
-
-async function initializeOwnerDashboard() {
-
-    showLoading();
-
-
-    try {
-
-        if (!currentUser) {
-
-            throw new Error(
-                "You are not logged in."
-            );
-
-        }
-
-
-        console.log(
-            "Initializing dashboard for:",
-            currentUser.uid
-        );
-
-
-        /* -------------------------------------------------
-           LOAD USER PROFILE
-        ------------------------------------------------- */
-
-        const userRef =
-            doc(
-                db,
-                "users",
-                currentUser.uid
-            );
-
-
-        const userSnap =
-            await getDoc(
-                userRef
-            );
-
-
-        if (
-            !userSnap.exists()
-        ) {
-
-            await signOut(
-                auth
-            );
-
-
-            window.location.replace(
-                "owners.html"
-            );
-
-
-            return;
-
-        }
-
-
-        const userData =
-            userSnap.data();
-
-
-        console.log(
-            "USER DATA:",
-            userData
-        );
-
-
-        /* -------------------------------------------------
-           OWNER ROLE CHECK
-        ------------------------------------------------- */
-
-        const role =
-            userData.role ||
-            userData.Role ||
-            null;
-
-
-        if (
-            role !==
-            "salon_owner"
-        ) {
-
-            await signOut(
-                auth
-            );
-
-
-            window.location.replace(
-                "owners.html"
-            );
-
-
-            return;
-
-        }
-
-
-        /* -------------------------------------------------
-           GET SALON ID
-        ------------------------------------------------- */
-
-        salonId =
-            userData.salonId ||
-            null;
-
-
-        console.log(
-            "Salon ID from user:",
-            salonId
-        );
-
-
-        /* -------------------------------------------------
-           VERIFY EXISTING SALON ID
-        ------------------------------------------------- */
-
-        if (
-            salonId
-        ) {
-
-            const salonRef =
-                doc(
-                    db,
-                    "salons",
-                    salonId
-                );
-
-
-            const salonSnap =
-                await getDoc(
-                    salonRef
-                );
-
-
-            if (
-                !salonSnap.exists()
-            ) {
-
-                console.warn(
-                    "Stored salonId does not exist."
-                );
-
-
-                salonId =
-                    null;
-
-            } else {
-
-                const salonData =
-                    salonSnap.data();
-
-
-                /*
-                 * Make sure this salon belongs
-                 * to the authenticated owner.
-                 */
-
-                if (
-                    salonData.ownerId !==
-                    currentUser.uid
-                ) {
-
-                    console.warn(
-                        "Stored salon belongs to another owner."
-                    );
-
-
-                    salonId =
-                        null;
-
-                }
-
-            }
-
-        }
-
-
-        /* -------------------------------------------------
-           RECOVER SALON BY OWNER ID
-        ------------------------------------------------- */
-
-        if (
-            !salonId
-        ) {
-
-            console.log(
-                "Searching salons using ownerId..."
-            );
-
-
-            salonId =
-                await findSalonForOwner(
-                    currentUser.uid
-                );
-
-
-            if (
-                salonId
-            ) {
-
-                console.log(
-                    "Recovered salon:",
-                    salonId
-                );
-
-
-                await setDoc(
-                    userRef,
-                    {
-
-                        salonId:
-                            salonId,
-
-                        role:
-                            "salon_owner",
-
-                        updatedAt:
-                            serverTimestamp()
-
-                    },
-                    {
-                        merge:
-                            true
-                    }
-                );
-
-            }
-
-        }
-
-
-        /* -------------------------------------------------
-           NO SALON
-        ------------------------------------------------- */
-
-        if (
-            !salonId
-        ) {
-
-            console.log(
-                "Owner has no salon yet."
-            );
-
-
-            hideLoading();
-
-
-            ownerContent.classList.add(
-                "hidden"
-            );
-
-
-            createSalonSection.classList.remove(
-                "hidden"
-            );
-
-
-            return;
-
-        }
-
-
-        /* -------------------------------------------------
-           LOAD SALON
-        ------------------------------------------------- */
-
-        const loaded =
-            await loadSalon();
-
-
-        if (!loaded) {
-
-            return;
-
-        }
-
-
-        hideLoading();
-
-
-        createSalonSection.classList.add(
-            "hidden"
-        );
-
-
-        ownerContent.classList.remove(
-            "hidden"
-        );
-
-
-        /*
-         * Start realtime bookings.
-         */
-
-        listenForBookings();
-
-    } catch (error) {
-
-        console.error(
-            "Dashboard initialization error:",
-            error
-        );
-
-
-        showError(
-            error.message
-        );
-
+            .replace(/'/g, "&#039;");
     }
 
-}
 
+    /* ========================================================
+       DATE
+    ======================================================== */
 
+    function todayString() {
 
-/* =========================================================
-   FIND SALON FOR OWNER
-========================================================= */
+        const now = new Date();
 
-async function findSalonForOwner(
-    ownerId
-) {
+        const year =
+            now.getFullYear();
 
-    try {
+        const month =
+            String(now.getMonth() + 1)
+                .padStart(2, "0");
 
-        const q =
-            query(
-                collection(
-                    db,
-                    "salons"
-                ),
-                where(
-                    "ownerId",
-                    "==",
-                    ownerId
-                )
-            );
+        const day =
+            String(now.getDate())
+                .padStart(2, "0");
 
-
-        const snapshot =
-            await getDocs(
-                q
-            );
-
-
-        console.log(
-            "Owner salon query results:",
-            snapshot.size
-        );
-
-
-        if (
-            snapshot.empty
-        ) {
-
-            return null;
-
-        }
-
-
-        /*
-         * Find the first valid salon.
-         */
-
-        for (
-            const salonDoc of snapshot.docs
-        ) {
-
-            const data =
-                salonDoc.data();
-
-
-            if (
-                data.ownerId ===
-                ownerId
-            ) {
-
-                return salonDoc.id;
-
-            }
-
-        }
-
-
-        return null;
-
-    } catch (error) {
-
-        console.error(
-            "Salon lookup failed:",
-            error
-        );
-
-
-        /*
-         * Return null so a new owner can
-         * still access Create Salon.
-         */
-
-        return null;
-
-    }
-
-}
-
-
-
-/* =========================================================
-   CREATE SALON
-========================================================= */
-
-document
-    .getElementById(
-        "createSalonBtn"
-    )
-    .addEventListener(
-        "click",
-        createSalon
-    );
-
-
-async function createSalon() {
-
-    if (
-        !currentUser
-    ) {
-
-        alert(
-            "You are not logged in."
-        );
-
-        return;
+        return `${year}-${month}-${day}`;
 
     }
 
 
-    const name =
-        document
-            .getElementById(
-                "salonName"
-            )
-            .value
-            .trim();
+    /* ========================================================
+       SHOW LOGIN
+    ======================================================== */
 
+    function showLogin() {
 
-    const location =
-        document
-            .getElementById(
-                "salonLocation"
-            )
-            .value
-            .trim();
+        loadingScreen.classList.add("hidden");
 
+        dashboardSection.classList.add("hidden");
 
-    const hours =
-        document
-            .getElementById(
-                "salonHours"
-            )
-            .value
-            .trim();
-
-
-    const image =
-        document
-            .getElementById(
-                "salonImage"
-            )
-            .value
-            .trim();
-
-
-    if (
-        !name
-    ) {
-
-        alert(
-            "Please enter your salon name."
-        );
-
-        return;
+        loginSection.classList.remove("hidden");
 
     }
 
 
-    if (
-        !location
-    ) {
+    /* ========================================================
+       SHOW DASHBOARD
+    ======================================================== */
 
-        alert(
-            "Please enter your salon location."
-        );
+    function showDashboard() {
 
-        return;
+        loadingScreen.classList.add("hidden");
+
+        loginSection.classList.add("hidden");
+
+        dashboardSection.classList.remove("hidden");
 
     }
 
 
-    const button =
-        document.getElementById(
-            "createSalonBtn"
-        );
+    /* ========================================================
+       LOGIN
+    ======================================================== */
 
+    loginForm.addEventListener("submit", async (event) => {
 
-    button.disabled =
-        true;
+        event.preventDefault();
 
-    button.textContent =
-        "Creating salon...";
 
+        const email =
+            document.getElementById("email")
+                .value
+                .trim();
 
-    try {
+        const password =
+            document.getElementById("password")
+                .value;
 
-        /* -------------------------------------------------
-           CHECK AGAIN BEFORE CREATE
-        ------------------------------------------------- */
 
-        const existingSalon =
-            await findSalonForOwner(
-                currentUser.uid
-            );
+        loginError.classList.add("hidden");
 
+        loginError.textContent = "";
 
-        if (
-            existingSalon
-        ) {
 
-            salonId =
-                existingSalon;
+        loginButton.disabled = true;
 
-        } else {
-
-            /* ---------------------------------------------
-               CREATE SALON DOCUMENT
-            ---------------------------------------------- */
-
-            const salonRef =
-                await addDoc(
-                    collection(
-                        db,
-                        "salons"
-                    ),
-                    {
-
-                        ownerId:
-                            currentUser.uid,
-
-                        ownerEmail:
-                            currentUser.email ||
-                            "",
-
-                        name:
-                            name,
-
-                        location:
-                            location,
-
-                        hours:
-                            hours ||
-                            "06:00 - 18:00",
-
-                        image:
-                            image ||
-                            "",
-
-                        services: [
-
-                            {
-                                name:
-                                    "Basic Cut",
-
-                                price:
-                                    80
-                            },
-
-                            {
-                                name:
-                                    "Fade",
-
-                                price:
-                                    120
-                            },
-
-                            {
-                                name:
-                                    "Beard Trim",
-
-                                price:
-                                    80
-                            }
-
-                        ],
-
-                        createdAt:
-                            serverTimestamp(),
-
-                        updatedAt:
-                            serverTimestamp()
-
-                    }
-                );
-
-
-            salonId =
-                salonRef.id;
-
-        }
-
-
-        /* -------------------------------------------------
-           CONNECT USER TO SALON
-        ------------------------------------------------- */
-
-        await setDoc(
-            doc(
-                db,
-                "users",
-                currentUser.uid
-            ),
-            {
-
-                email:
-                    currentUser.email ||
-                    "",
-
-                role:
-                    "salon_owner",
-
-                salonId:
-                    salonId,
-
-                updatedAt:
-                    serverTimestamp()
-
-            },
-            {
-                merge:
-                    true
-            }
-        );
-
-
-        console.log(
-            "Salon connected:",
-            salonId
-        );
-
-
-        /* -------------------------------------------------
-           LOAD NEW SALON
-        ------------------------------------------------- */
-
-        const loaded =
-            await loadSalon();
-
-
-        if (
-            !loaded
-        ) {
-
-            return;
-
-        }
-
-
-        createSalonSection.classList.add(
-            "hidden"
-        );
-
-
-        ownerContent.classList.remove(
-            "hidden"
-        );
-
-
-        listenForBookings();
-
-
-    } catch (error) {
-
-        console.error(
-            "Create salon error:",
-            error
-        );
-
-
-        alert(
-            "Could not create/connect your salon.\n\n" +
-            error.message
-        );
-
-    } finally {
-
-        button.disabled =
-            false;
-
-        button.textContent =
-            "Create Salon";
-
-    }
-
-}
-
-
-
-/* =========================================================
-   LOAD SALON
-========================================================= */
-
-async function loadSalon() {
-
-    if (
-        !salonId ||
-        !currentUser
-    ) {
-
-        return false;
-
-    }
-
-
-    console.log(
-        "Loading salon:",
-        salonId
-    );
-
-
-    const salonRef =
-        doc(
-            db,
-            "salons",
-            salonId
-        );
-
-
-    const salonSnap =
-        await getDoc(
-            salonRef
-        );
-
-
-    if (
-        !salonSnap.exists()
-    ) {
-
-        console.warn(
-            "Salon document does not exist."
-        );
-
-
-        salonId =
-            null;
-
-
-        return false;
-
-    }
-
-
-    const salonData =
-        salonSnap.data();
-
-
-    console.log(
-        "SALON DATA:",
-        salonData
-    );
-
-
-    /*
-     * Verify ownership.
-     */
-
-    if (
-        salonData.ownerId !==
-        currentUser.uid
-    ) {
-
-        throw new Error(
-            "This salon does not belong to your owner account."
-        );
-
-    }
-
-
-    currentSalon =
-        {
-            id:
-                salonSnap.id,
-
-            ...salonData
-        };
-
-
-    /*
-     * Display salon information.
-     */
-
-    document.getElementById(
-        "salonTitle"
-    ).textContent =
-        salonData.name ||
-        "My Salon";
-
-
-    document.getElementById(
-        "salonInfo"
-    ).textContent =
-        [
-            salonData.location ||
-                "Location not set",
-
-            salonData.hours ||
-                "Hours not set"
-        ].join(
-            " • "
-        );
-
-
-    document.getElementById(
-        "salonIdDisplay"
-    ).textContent =
-        "Salon ID: " +
-        salonSnap.id;
-
-
-    return true;
-
-}
-
-
-
-/* =========================================================
-   BOOKINGS LISTENER
-========================================================= */
-
-function listenForBookings() {
-
-    if (
-        unsubscribeBookings
-    ) {
-
-        unsubscribeBookings();
-
-        unsubscribeBookings =
-            null;
-
-    }
-
-
-    if (
-        !salonId
-    ) {
-
-        bookingsList.innerHTML = `
-            <div class="text-gray-500">
-                No salon connected.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    console.log(
-        "Listening for bookings for salon:",
-        salonId
-    );
-
-
-    /*
-     * We query ONLY by salonId.
-     *
-     * Today's date is filtered in JavaScript.
-     * This avoids needing a composite Firestore index.
-     */
-
-    const bookingsQuery =
-        query(
-            collection(
-                db,
-                "bookings"
-            ),
-            where(
-                "salonId",
-                "==",
-                salonId
-            )
-        );
-
-
-    unsubscribeBookings =
-        onSnapshot(
-            bookingsQuery,
-
-            snapshot => {
-
-                console.log(
-                    "Bookings received:",
-                    snapshot.size
-                );
-
-
-                const today =
-                    todayZA();
-
-
-                const bookings =
-                    snapshot.docs
-                        .map(
-                            bookingDoc => ({
-
-                                id:
-                                    bookingDoc.id,
-
-                                ...bookingDoc.data()
-
-                            })
-                        )
-                        .filter(
-                            booking => {
-
-                                return String(
-                                    booking.date ||
-                                    ""
-                                ) === today;
-
-                            }
-                        );
-
-
-                /*
-                 * Sort by time.
-                 */
-
-                bookings.sort(
-                    (
-                        a,
-                        b
-                    ) => {
-
-                        return String(
-                            a.time ||
-                            ""
-                        ).localeCompare(
-                            String(
-                                b.time ||
-                                ""
-                            )
-                        );
-
-                    }
-                );
-
-
-                renderBookings(
-                    bookings
-                );
-
-            },
-
-            error => {
-
-                console.error(
-                    "Bookings listener error:",
-                    error
-                );
-
-
-                bookingsList.innerHTML = `
-
-                    <div
-                        class="bg-red-950/40 border border-red-800 rounded-xl p-5"
-                    >
-
-                        <p class="text-red-400 font-bold">
-                            Could not load bookings
-                        </p>
-
-                        <p class="text-red-300 text-sm mt-2 break-words">
-                            ${escapeHtml(
-                                error.message
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-            }
-        );
-
-}
-
-
-
-/* =========================================================
-   RENDER BOOKINGS
-========================================================= */
-
-function renderBookings(
-    bookings
-) {
-
-    bookingCount.textContent =
-        String(
-            bookings.length
-        );
-
-
-    if (
-        bookings.length === 0
-    ) {
-
-        bookingsList.innerHTML = `
-
-            <div
-                class="text-center py-12 text-gray-500"
-            >
-
-                <div class="text-5xl mb-3">
-                    💈
-                </div>
-
-                <p>
-                    No bookings for today.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    bookingsList.innerHTML =
-        "";
-
-
-    bookings.forEach(
-        booking => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "border border-gray-800 bg-gray-950 rounded-xl p-5";
-
-
-            const status =
-                String(
-                    booking.status ||
-                    "pending"
-                ).toLowerCase();
-
-
-            card.innerHTML = `
-
-                <div
-                    class="flex justify-between items-start gap-3"
-                >
-
-                    <div>
-
-                        <h3
-                            class="text-xl font-bold"
-                        >
-                            ${escapeHtml(
-                                booking.customerName ||
-                                "Customer"
-                            )}
-                        </h3>
-
-
-                        <p
-                            class="text-gray-400 mt-1"
-                        >
-                            📞
-                            ${escapeHtml(
-                                booking.phone ||
-                                "No phone number"
-                            )}
-                        </p>
-
-                    </div>
-
-
-                    <span
-                        class="shrink-0 px-3 py-1 rounded-full text-sm font-bold ${statusClass(
-                            status
-                        )}"
-                    >
-                        ${escapeHtml(
-                            status
-                        )}
-                    </span>
-
-                </div>
-
-
-                <div
-                    class="mt-4 space-y-2 text-gray-300"
-                >
-
-                    <p>
-                        ✂️
-                        <span class="text-white">
-                            ${escapeHtml(
-                                booking.service ||
-                                "Service not specified"
-                            )}
-                        </span>
-                    </p>
-
-
-                    <p>
-                        💰
-                        <span class="text-white">
-                            R${formatPrice(
-                                booking.price
-                            )}
-                        </span>
-                    </p>
-
-
-                    <p>
-                        🕐
-                        <span class="text-white">
-                            ${escapeHtml(
-                                booking.time ||
-                                "--:--"
-                            )}
-                        </span>
-                    </p>
-
-                </div>
-
-
-                ${
-                    status === "pending"
-                    ? `
-
-                        <div
-                            class="flex flex-col sm:flex-row gap-2 mt-5"
-                        >
-
-                            <button
-                                type="button"
-                                class="approve flex-1 bg-green-600 hover:bg-green-700 p-3 rounded-lg font-bold transition"
-                                data-id="${escapeHtml(
-                                    booking.id
-                                )}"
-                            >
-                                ✓ Approve
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="decline flex-1 bg-red-600 hover:bg-red-700 p-3 rounded-lg font-bold transition"
-                                data-id="${escapeHtml(
-                                    booking.id
-                                )}"
-                            >
-                                ✕ Decline
-                            </button>
-
-                        </div>
-
-                    `
-                    : ""
-                }
-
-
-                ${
-                    status === "approved"
-                    ? `
-
-                        <button
-                            type="button"
-                            class="complete w-full mt-5 bg-purple-600 hover:bg-purple-700 p-3 rounded-lg font-bold transition"
-                            data-id="${escapeHtml(
-                                booking.id
-                            )}"
-                        >
-                            ✓ Mark as Completed
-                        </button>
-
-                    `
-                    : ""
-                }
-
-            `;
-
-
-            bookingsList.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================================================
-   BOOKING ACTIONS
-========================================================= */
-
-document.addEventListener(
-    "click",
-    async event => {
-
-        const approveButton =
-            event.target.closest(
-                ".approve"
-            );
-
-
-        const declineButton =
-            event.target.closest(
-                ".decline"
-            );
-
-
-        const completeButton =
-            event.target.closest(
-                ".complete"
-            );
-
-
-        let button =
-            null;
-
-        let bookingId =
-            null;
-
-        let newStatus =
-            null;
-
-
-        if (
-            approveButton
-        ) {
-
-            button =
-                approveButton;
-
-            bookingId =
-                approveButton.dataset.id;
-
-            newStatus =
-                "approved";
-
-        }
-
-
-        if (
-            declineButton
-        ) {
-
-            button =
-                declineButton;
-
-            bookingId =
-                declineButton.dataset.id;
-
-            newStatus =
-                "declined";
-
-        }
-
-
-        if (
-            completeButton
-        ) {
-
-            button =
-                completeButton;
-
-            bookingId =
-                completeButton.dataset.id;
-
-            newStatus =
-                "completed";
-
-        }
-
-
-        if (
-            !button ||
-            !bookingId ||
-            !newStatus
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-         * Disable button immediately to prevent
-         * duplicate clicks.
-         */
-
-        button.disabled =
-            true;
-
-        button.classList.add(
-            "opacity-50"
-        );
+        loginButton.textContent = "Signing in...";
 
 
         try {
 
-            /*
-             * First verify the booking belongs
-             * to this salon.
-             */
-
-            const bookingRef =
-                doc(
-                    db,
-                    "bookings",
-                    bookingId
-                );
-
-
-            const bookingSnap =
-                await getDoc(
-                    bookingRef
-                );
-
-
-            if (
-                !bookingSnap.exists()
-            ) {
-
-                throw new Error(
-                    "This booking no longer exists."
-                );
-
-            }
-
-
-            const booking =
-                bookingSnap.data();
-
-
-            if (
-                booking.salonId !==
-                salonId
-            ) {
-
-                throw new Error(
-                    "This booking does not belong to your salon."
-                );
-
-            }
-
-
-            /*
-             * Update status.
-             */
-
-            await updateDoc(
-                bookingRef,
-                {
-
-                    status:
-                        newStatus,
-
-                    updatedAt:
-                        serverTimestamp()
-
-                }
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
             );
 
-
-            console.log(
-                "Booking updated:",
-                bookingId,
-                newStatus
-            );
 
         } catch (error) {
 
             console.error(
-                "Booking update error:",
+                "Login error:",
                 error
             );
 
 
-            alert(
-                "Could not update booking.\n\n" +
-                error.message
-            );
+            let message =
+                "Unable to sign in.";
 
 
-            button.disabled =
-                false;
+            if (
+                error.code ===
+                "auth/invalid-credential"
+            ) {
 
-            button.classList.remove(
-                "opacity-50"
+                message =
+                    "Incorrect email or password.";
+
+            }
+
+            else if (
+                error.code ===
+                "auth/user-not-found"
+            ) {
+
+                message =
+                    "No account exists with this email.";
+
+            }
+
+            else if (
+                error.code ===
+                "auth/wrong-password"
+            ) {
+
+                message =
+                    "Incorrect password.";
+
+            }
+
+            else if (
+                error.code ===
+                "auth/invalid-email"
+            ) {
+
+                message =
+                    "Please enter a valid email address.";
+
+            }
+
+            else if (
+                error.code ===
+                "auth/too-many-requests"
+            ) {
+
+                message =
+                    "Too many attempts. Please try again later.";
+
+            }
+
+
+            loginError.textContent =
+                message;
+
+            loginError.classList.remove(
+                "hidden"
             );
 
         }
 
-    }
-);
+
+        loginButton.disabled = false;
+
+        loginButton.textContent = "Sign In";
+
+    });
 
 
+    /* ========================================================
+       LOGOUT
+    ======================================================== */
 
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-document
-    .getElementById(
-        "logoutBtn"
-    )
-    .addEventListener(
+    logoutButton.addEventListener(
         "click",
         async () => {
 
-            const button =
-                document.getElementById(
-                    "logoutBtn"
-                );
-
-
-            button.disabled =
-                true;
-
-            button.textContent =
-                "Logging out...";
-
-
             try {
 
-                if (
-                    unsubscribeBookings
-                ) {
-
+                if (unsubscribeBookings) {
                     unsubscribeBookings();
-
-                    unsubscribeBookings =
-                        null;
-
+                    unsubscribeBookings = null;
                 }
 
-
-                sessionStorage.removeItem(
-                    "ownerUid"
-                );
-
-
-                sessionStorage.removeItem(
-                    "ownerSalonId"
-                );
-
-
-                sessionStorage.removeItem(
-                    "justLoggedIn"
-                );
-
-
-                await signOut(
-                    auth
-                );
-
-
-                window.location.replace(
-                    "index.html"
-                );
+                await signOut(auth);
 
             } catch (error) {
 
@@ -2120,234 +848,717 @@ document
                     error
                 );
 
-
-                alert(
-                    "Could not log out.\n\n" +
-                    error.message
-                );
-
-
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    "Logout";
-
             }
 
         }
     );
 
 
+    /* ========================================================
+       FIND OWNER SALON
+    ======================================================== */
 
-/* =========================================================
-   RETRY
-========================================================= */
+    async function findOwnerSalon(user) {
 
-document
-    .getElementById(
-        "retryBtn"
-    )
-    .addEventListener(
-        "click",
-        async () => {
-
-            dashboardStarted =
-                false;
+        console.log(
+            "Searching salon for owner:",
+            user.uid
+        );
 
 
-            await initializeOwnerDashboard();
+        /*
+         * FIRST:
+         * Search salons where ownerId == Firebase UID.
+         */
+
+        const ownerQuery = query(
+
+            collection(db, "salons"),
+
+            where(
+                "ownerId",
+                "==",
+                user.uid
+            )
+
+        );
+
+
+        const ownerSnapshot =
+            await getDocs(ownerQuery);
+
+
+        if (!ownerSnapshot.empty) {
+
+            const salonDoc =
+                ownerSnapshot.docs[0];
+
+
+            return {
+
+                id: salonDoc.id,
+
+                ...salonDoc.data()
+
+            };
+
+        }
+
+
+        /*
+         * SECOND:
+         * Your project has previously used:
+         *
+         * salon_${user.uid}
+         *
+         * as the salon document ID.
+         */
+
+        const expectedId =
+            `salon_${user.uid}`;
+
+
+        const expectedRef =
+            doc(
+                db,
+                "salons",
+                expectedId
+            );
+
+
+        const expectedSnapshot =
+            await getDoc(expectedRef);
+
+
+        if (
+            expectedSnapshot.exists()
+        ) {
+
+            return {
+
+                id: expectedSnapshot.id,
+
+                ...expectedSnapshot.data()
+
+            };
+
+        }
+
+
+        /*
+         * No salon found.
+         */
+
+        return null;
+
+    }
+
+
+    /* ========================================================
+       LOAD SALON
+    ======================================================== */
+
+    async function loadSalon(user) {
+
+        salonStatus.textContent =
+            "Finding your salon...";
+
+        salonStatus.className =
+            "rounded-xl bg-yellow-500/10 px-4 py-3 text-sm text-yellow-300";
+
+
+        try {
+
+            const salon =
+                await findOwnerSalon(user);
+
+
+            if (!salon) {
+
+                currentSalon = null;
+
+
+                salonStatus.textContent =
+                    "No salon is linked to this account.";
+
+                salonStatus.className =
+                    "rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300";
+
+
+                salonName.textContent =
+                    "Salon not found";
+
+                headerSalonName.textContent =
+                    "Owner Dashboard";
+
+
+                salonLocation.textContent =
+                    "—";
+
+                salonHours.textContent =
+                    "—";
+
+                salonIdDisplay.textContent =
+                    "—";
+
+
+                bookingMessage.textContent =
+                    "Your account is signed in, but no salon is linked to your Firebase account.";
+
+                bookingsList.classList.add(
+                    "hidden"
+                );
+
+                return;
+
+            }
+
+
+            currentSalon =
+                salon;
+
+
+            const name =
+                salon.name ||
+                salon.salonName ||
+                "My Salon";
+
+
+            salonName.textContent =
+                name;
+
+            headerSalonName.textContent =
+                name;
+
+
+            salonLocation.textContent =
+                salon.location ||
+                "Location not provided";
+
+
+            salonHours.textContent =
+                salon.hours ||
+                "Hours not provided";
+
+
+            salonIdDisplay.textContent =
+                salon.id;
+
+
+            salonStatus.textContent =
+                "Salon connected ✓";
+
+            salonStatus.className =
+                "rounded-xl bg-green-500/10 px-4 py-3 text-sm text-green-300";
+
+
+            loadBookings(user, salon);
+
+
+        } catch (error) {
+
+            console.error(
+                "Salon loading error:",
+                error
+            );
+
+
+            salonStatus.textContent =
+                "Unable to load salon.";
+
+            salonStatus.className =
+                "rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-300";
+
+
+            bookingMessage.textContent =
+                "There was a problem reading your salon data. Check your Firestore rules.";
+
+        }
+
+    }
+
+
+    /* ========================================================
+       LOAD BOOKINGS
+    ======================================================== */
+
+    function loadBookings(user, salon) {
+
+        if (unsubscribeBookings) {
+
+            unsubscribeBookings();
+
+            unsubscribeBookings = null;
+
+        }
+
+
+        const salonId =
+            salon.id;
+
+
+        /*
+         * IMPORTANT:
+         *
+         * We query by BOTH ownerId and salonId.
+         *
+         * This matches the booking structure used
+         * by K@si Web.
+         */
+
+
+        const bookingsQuery = query(
+
+            collection(db, "bookings"),
+
+            where(
+                "ownerId",
+                "==",
+                user.uid
+            )
+
+        );
+
+
+        unsubscribeBookings =
+            onSnapshot(
+
+                bookingsQuery,
+
+                (snapshot) => {
+
+                    const bookings = [];
+
+
+                    snapshot.forEach(
+                        (docSnapshot) => {
+
+                            const data =
+                                docSnapshot.data();
+
+
+                            /*
+                             * Only show bookings belonging
+                             * to this salon.
+                             *
+                             * This also protects against
+                             * old bookings belonging to
+                             * another salon.
+                             */
+
+                            if (
+                                data.salonId ===
+                                salonId
+                            ) {
+
+                                bookings.push({
+
+                                    id:
+                                        docSnapshot.id,
+
+                                    ...data
+
+                                });
+
+                            }
+
+                        }
+                    );
+
+
+                    bookings.sort(
+                        (a, b) => {
+
+                            const dateA =
+                                `${a.date || ""} ${a.time || ""}`;
+
+                            const dateB =
+                                `${b.date || ""} ${b.time || ""}`;
+
+
+                            return dateB.localeCompare(
+                                dateA
+                            );
+
+                        }
+                    );
+
+
+                    renderBookings(
+                        bookings
+                    );
+
+
+                    updateStats(
+                        bookings
+                    );
+
+                },
+
+
+                (error) => {
+
+                    console.error(
+                        "Bookings listener error:",
+                        error
+                    );
+
+
+                    bookingMessage.textContent =
+                        "Unable to load bookings. Check your Firestore security rules.";
+
+                    bookingMessage.classList.remove(
+                        "hidden"
+                    );
+
+                    bookingsList.classList.add(
+                        "hidden"
+                    );
+
+                }
+
+            );
+
+    }
+
+
+    /* ========================================================
+       RENDER BOOKINGS
+    ======================================================== */
+
+    function renderBookings(bookings) {
+
+        if (!bookings.length) {
+
+            bookingMessage.textContent =
+                "No bookings yet.";
+
+            bookingMessage.classList.remove(
+                "hidden"
+            );
+
+            bookingsList.classList.add(
+                "hidden"
+            );
+
+            return;
+
+        }
+
+
+        bookingMessage.classList.add(
+            "hidden"
+        );
+
+        bookingsList.classList.remove(
+            "hidden"
+        );
+
+
+        bookingsList.innerHTML =
+            bookings
+                .map(
+                    (booking) => {
+
+                        const status =
+                            String(
+                                booking.status ||
+                                "pending"
+                            )
+                            .toLowerCase();
+
+
+                        let statusClass =
+                            "bg-yellow-500/10 text-yellow-300";
+
+
+                        if (
+                            status ===
+                            "confirmed"
+                        ) {
+
+                            statusClass =
+                                "bg-green-500/10 text-green-300";
+
+                        }
+
+
+                        if (
+                            status ===
+                            "completed"
+                        ) {
+
+                            statusClass =
+                                "bg-blue-500/10 text-blue-300";
+
+                        }
+
+
+                        if (
+                            status ===
+                            "cancelled"
+                        ) {
+
+                            statusClass =
+                                "bg-red-500/10 text-red-300";
+
+                        }
+
+
+                        return `
+
+                            <article
+                                class="rounded-2xl border border-white/5 bg-gray-900 p-5"
+                            >
+
+                                <div
+                                    class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
+                                >
+
+                                    <div>
+
+                                        <h3
+                                            class="text-lg font-bold"
+                                        >
+                                            ${escapeHtml(
+                                                booking.customerName ||
+                                                "Customer"
+                                            )}
+                                        </h3>
+
+
+                                        <p
+                                            class="mt-1 text-sm text-gray-400"
+                                        >
+                                            ${escapeHtml(
+                                                booking.phone ||
+                                                "No phone number"
+                                            )}
+                                        </p>
+
+                                    </div>
+
+
+                                    <span
+                                        class="w-fit rounded-full px-3 py-1 text-xs font-semibold capitalize ${statusClass}"
+                                    >
+                                        ${escapeHtml(
+                                            status
+                                        )}
+                                    </span>
+
+                                </div>
+
+
+                                <div
+                                    class="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4"
+                                >
+
+                                    <div>
+
+                                        <p class="text-xs text-gray-500">
+                                            Service
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-semibold">
+                                            ${escapeHtml(
+                                                booking.service ||
+                                                "—"
+                                            )}
+                                        </p>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <p class="text-xs text-gray-500">
+                                            Price
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-semibold">
+                                            ${escapeHtml(
+                                                booking.price !== undefined
+                                                    ? "R" + booking.price
+                                                    : "—"
+                                            )}
+                                        </p>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <p class="text-xs text-gray-500">
+                                            Date
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-semibold">
+                                            ${escapeHtml(
+                                                booking.date ||
+                                                "—"
+                                            )}
+                                        </p>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <p class="text-xs text-gray-500">
+                                            Time
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-semibold">
+                                            ${escapeHtml(
+                                                booking.time ||
+                                                "—"
+                                            )}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </article>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    /* ========================================================
+       UPDATE STATS
+    ======================================================== */
+
+    function updateStats(bookings) {
+
+        const pending =
+            bookings.filter(
+                booking =>
+                    String(
+                        booking.status ||
+                        "pending"
+                    ).toLowerCase() ===
+                    "pending"
+            ).length;
+
+
+        const confirmed =
+            bookings.filter(
+                booking =>
+                    String(
+                        booking.status ||
+                        ""
+                    ).toLowerCase() ===
+                    "confirmed"
+            ).length;
+
+
+        const today =
+            todayString();
+
+
+        const todayCount =
+            bookings.filter(
+                booking =>
+                    booking.date === today
+            ).length;
+
+
+        totalBookings.textContent =
+            bookings.length;
+
+
+        pendingBookings.textContent =
+            pending;
+
+
+        confirmedBookings.textContent =
+            confirmed;
+
+
+        todayBookings.textContent =
+            todayCount;
+
+    }
+
+
+    /* ========================================================
+       AUTH STATE
+    ======================================================== */
+
+    onAuthStateChanged(
+        auth,
+        async (user) => {
+
+            console.log(
+                "Firebase auth state:",
+                user
+            );
+
+
+            if (!user) {
+
+                currentUser = null;
+
+                showLogin();
+
+                return;
+
+            }
+
+
+            currentUser =
+                user;
+
+
+            ownerEmail.textContent =
+                user.email ||
+                "No email";
+
+
+            ownerIdDisplay.textContent =
+                `UID: ${user.uid}`;
+
+
+            showDashboard();
+
+
+            await loadSalon(
+                user
+            );
 
         }
     );
 
 
+    /* ========================================================
+       FIREBASE DEBUG
+    ======================================================== */
 
-/* =========================================================
-   UI HELPERS
-========================================================= */
-
-function showLoading() {
-
-    loading.classList.remove(
-        "hidden"
+    console.log(
+        "K@si Web Firebase initialized."
     );
 
-
-    errorSection.classList.add(
-        "hidden"
+    console.log(
+        "Project:",
+        firebaseConfig.projectId
     );
 
-
-    createSalonSection.classList.add(
-        "hidden"
+    console.log(
+        "Auth:",
+        auth
     );
 
-
-    ownerContent.classList.add(
-        "hidden"
+    console.log(
+        "Firestore:",
+        db
     );
-
-}
-
-
-function hideLoading() {
-
-    loading.classList.add(
-        "hidden"
-    );
-
-}
-
-
-function showError(
-    message
-) {
-
-    loading.classList.add(
-        "hidden"
-    );
-
-
-    createSalonSection.classList.add(
-        "hidden"
-    );
-
-
-    ownerContent.classList.add(
-        "hidden"
-    );
-
-
-    errorSection.classList.remove(
-        "hidden"
-    );
-
-
-    errorMessage.textContent =
-        message ||
-        "An unknown error occurred.";
-
-}
-
-
-
-/* =========================================================
-   STATUS STYLE
-========================================================= */
-
-function statusClass(
-    status
-) {
-
-    switch (
-        status
-    ) {
-
-        case "approved":
-
-            return (
-                "bg-green-900 text-green-300"
-            );
-
-
-        case "declined":
-
-            return (
-                "bg-red-900 text-red-300"
-            );
-
-
-        case "completed":
-
-            return (
-                "bg-purple-900 text-purple-300"
-            );
-
-
-        case "cancelled":
-
-            return (
-                "bg-gray-700 text-gray-300"
-            );
-
-
-        default:
-
-            return (
-                "bg-yellow-900 text-yellow-300"
-            );
-
-    }
-
-}
-
-
-
-/* =========================================================
-   PRICE FORMAT
-========================================================= */
-
-function formatPrice(
-    value
-) {
-
-    const number =
-        Number(
-            value
-        );
-
-
-    if (
-        Number.isNaN(number)
-    ) {
-
-        return "0";
-
-    }
-
-
-    return number.toFixed(
-        0
-    );
-
-}
-
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHtml(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
 
 </script>
 
