@@ -1,673 +1,505 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* =========================================================
+   K@si Web - script.js
+   Firebase COMPAT version
+   ========================================================= */
 
-    // =========================================================
-    // 0. AUTOMATIC + TOUCH PICTURE SWIPER
-    // =========================================================
+document.addEventListener("DOMContentLoaded", () => {
 
-    function initializeSwiper() {
+    /* =====================================================
+       BASIC UI ELEMENTS
+       ===================================================== */
 
-        const swiperElement =
-            document.querySelector('.elite-swiper');
+    const authSection = document.getElementById("authSection");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const adminBtn = document.getElementById("adminBtn");
 
-        if (!swiperElement) {
-            console.warn(
-                'K@si Web: .elite-swiper was not found.'
-            );
-            return;
+    const bookingModal = document.getElementById("bookingModal");
+    const closeBookingModal = document.getElementById("closeBookingModal");
+    const cancelBookingBtn = document.getElementById("cancelBookingBtn");
+    const bookingForm = document.getElementById("bookingForm");
+
+    const salonsContainer =
+        document.getElementById("salonsContainer") ||
+        document.getElementById("salonContainer") ||
+        document.getElementById("salonsGrid");
+
+    const serviceType = document.getElementById("serviceType");
+    const custName = document.getElementById("custName");
+    const custPhone = document.getElementById("custPhone");
+    const custDate = document.getElementById("custDate");
+    const custTime = document.getElementById("custTime");
+
+    const bookingMessage =
+        document.getElementById("bookingMessage") ||
+        document.getElementById("bookingStatus");
+
+    const todayBookings =
+        document.getElementById("todayBookings") ||
+        document.getElementById("bookingsToday");
+
+    /* =====================================================
+       FIREBASE COMPAT CHECK
+       ===================================================== */
+
+    const auth = window.firebaseAuth;
+    const db = window.firebaseDB;
+
+    if (!auth || !db) {
+        console.error("K@si Web: Firebase Auth or Firestore is missing.");
+
+        if (bookingMessage) {
+            bookingMessage.textContent =
+                "Firebase is not connected. Please refresh the page.";
         }
-
-        if (typeof Swiper === 'undefined') {
-            console.error(
-                'K@si Web: Swiper library was not loaded.'
-            );
-            return;
-        }
-
-        const wrapper =
-            swiperElement.querySelector('.swiper-wrapper');
-
-        const slides =
-            swiperElement.querySelectorAll('.swiper-slide');
-
-        if (!wrapper || slides.length === 0) {
-            console.error(
-                'K@si Web: Swiper requires .swiper-wrapper and at least one .swiper-slide.'
-            );
-            return;
-        }
-
-        const pagination =
-            swiperElement.querySelector('.swiper-pagination');
-
-        try {
-
-            const eliteSwiper = new Swiper(
-                swiperElement,
-                {
-                    // -------------------------------------------------
-                    // Basic
-                    // -------------------------------------------------
-                    loop: slides.length > 1,
-                    speed: 800,
-
-                    slidesPerView: 1,
-                    slidesPerGroup: 1,
-                    spaceBetween: 0,
-
-                    // -------------------------------------------------
-                    // MOBILE TOUCH SWIPING
-                    // -------------------------------------------------
-                    allowTouchMove: true,
-
-                    touchRatio: 1,
-
-                    touchAngle: 45,
-
-                    threshold: 5,
-
-                    resistance: true,
-
-                    resistanceRatio: 0.85,
-
-                    grabCursor: true,
-
-                    simulateTouch: true,
-
-                    followFinger: true,
-
-                    shortSwipes: true,
-
-                    longSwipes: true,
-
-                    longSwipesRatio: 0.5,
-
-                    longSwipesMs: 300,
-
-                    // -------------------------------------------------
-                    // Automatic slideshow
-                    // -------------------------------------------------
-                    autoplay: {
-                        delay: 2200,
-
-                        disableOnInteraction: false,
-
-                        pauseOnMouseEnter: false
-                    },
-
-                    // -------------------------------------------------
-                    // Pagination dots
-                    // -------------------------------------------------
-                    pagination: pagination
-                        ? {
-                            el: pagination,
-
-                            clickable: true
-                        }
-                        : undefined,
-
-                    // -------------------------------------------------
-                    // Prevent Swiper from interfering with normal
-                    // vertical page scrolling
-                    // -------------------------------------------------
-                    touchStartPreventDefault: false,
-
-                    passiveListeners: true
-                }
-            );
-
-            console.log(
-                'K@si Web: Swiper initialized successfully.',
-                eliteSwiper
-            );
-
-            // ---------------------------------------------------------
-            // Extra protection for Android touch devices
-            // ---------------------------------------------------------
-
-            swiperElement.style.touchAction =
-                'pan-y';
-
-            wrapper.style.touchAction =
-                'pan-y';
-
-        } catch (error) {
-
-            console.error(
-                'K@si Web: Swiper initialization failed:',
-                error
-            );
-        }
-    }
-
-    /*
-     * Initialize after the page has rendered.
-     * This also gives the Swiper CDN a little extra time to load.
-     */
-    if (typeof Swiper !== 'undefined') {
-
-        initializeSwiper();
-
-    } else {
-
-        window.addEventListener(
-            'load',
-            () => {
-                initializeSwiper();
-            },
-            { once: true }
-        );
-    }
-
-
-    // =========================================================
-    // 1. TYPEWRITER WORD ANIMATION
-    // =========================================================
-
-    const words = [
-        "Fresh Cuts",
-        "No Lines",
-        "Kasi Prices"
-    ];
-
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-
-    const typedText =
-        document.getElementById('typed-text');
-
-    function type() {
-
-        if (!typedText) return;
-
-        const currentWord =
-            words[wordIndex];
-
-        if (isDeleting) {
-
-            typedText.textContent =
-                currentWord.substring(
-                    0,
-                    charIndex--
-                );
-
-        } else {
-
-            typedText.textContent =
-                currentWord.substring(
-                    0,
-                    charIndex++
-                );
-        }
-
-        // Finished typing
-        if (
-            !isDeleting &&
-            charIndex === currentWord.length
-        ) {
-
-            isDeleting = true;
-
-            setTimeout(
-                type,
-                1500
-            );
-
-            return;
-        }
-
-        // Finished deleting
-        if (
-            isDeleting &&
-            charIndex === 0
-        ) {
-
-            isDeleting = false;
-
-            wordIndex =
-                (wordIndex + 1) %
-                words.length;
-        }
-
-        setTimeout(
-            type,
-            isDeleting
-                ? 80
-                : 120
-        );
-    }
-
-    type();
-
-
-    // =========================================================
-    // 2. FIREBASE SAFETY CHECK
-    // =========================================================
-
-    if (
-        !window.firebaseAuth ||
-        !window.firebaseDB
-    ) {
-
-        console.error(
-            'Firebase services not found on window object.'
-        );
 
         return;
     }
 
-    const {
-        firebaseAuth: auth,
-        firebaseDB: db,
-        onAuthState,
-        dbDoc,
-        dbGet,
-        addDoc,
-        collection,
-        onSnapshot,
-        query,
-        where,
-        serverTimestamp,
-        logOut: signOut
-    } = window;
+    console.log("K@si Web: Firebase connected successfully.");
 
+    /* =====================================================
+       GLOBAL STATE
+       ===================================================== */
 
-    // =========================================================
-    // 3. DOM ELEMENTS
-    // =========================================================
-
-    const salonList =
-        document.getElementById(
-            'salonList'
-        );
-
-    const bookingModal =
-        document.getElementById(
-            'bookingModal'
-        );
-
-    const bookingForm =
-        document.getElementById(
-            'bookingForm'
-        );
-
-    const closeModalBtn =
-        document.getElementById(
-            'closeModalBtn'
-        );
-
-    const adminBtn =
-        document.getElementById(
-            'adminBtn'
-        );
-
-    const logoutBtn =
-        document.getElementById(
-            'logoutBtn'
-        );
-
-    const searchBar =
-        document.getElementById(
-            'searchBar'
-        );
-
-    const searchBtn =
-        document.getElementById(
-            'searchBtn'
-        );
-
-    const bookingsToday =
-        document.getElementById(
-            'bookingsToday'
-        );
-
-    const custDateInput =
-        document.getElementById(
-            'custDate'
-        );
-
-
+    let currentUser = null;
+    let selectedSalonData = null;
     let selectedSalonId = null;
 
-    let selectedSalonData = null;
+    /* =====================================================
+       HELPERS
+       ===================================================== */
 
-    let allSalons = [];
+    function escapeHtml(value) {
+        if (value === null || value === undefined) return "";
 
-
-    // =========================================================
-    // 4. AUDIO + HAPTIC FEEDBACK
-    // =========================================================
-
-    const clickSound =
-        document.getElementById(
-            'clickSound'
-        );
-
-    if (clickSound) {
-        clickSound.volume = 0.4;
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
-    function playClick() {
+    function showMessage(message, type = "info") {
+        console.log(message);
 
-        if (clickSound) {
+        if (!bookingMessage) return;
 
-            try {
+        bookingMessage.textContent = message;
 
-                clickSound.currentTime = 0;
+        bookingMessage.classList.remove(
+            "text-red-400",
+            "text-green-400",
+            "text-yellow-400",
+            "text-blue-400"
+        );
 
-                const playPromise =
-                    clickSound.play();
+        if (type === "error") {
+            bookingMessage.classList.add("text-red-400");
+        } else if (type === "success") {
+            bookingMessage.classList.add("text-green-400");
+        } else if (type === "warning") {
+            bookingMessage.classList.add("text-yellow-400");
+        } else {
+            bookingMessage.classList.add("text-blue-400");
+        }
+    }
 
-                if (
-                    playPromise &&
-                    typeof playPromise.catch ===
-                    'function'
-                ) {
+    function vibrate() {
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+        } catch (error) {
+            console.warn("Vibration unavailable.");
+        }
+    }
 
-                    playPromise.catch(
-                        () => {}
-                    );
+    function playClickSound() {
+        try {
+            const sound = document.getElementById("clickSound");
+
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        } catch (error) {
+            console.warn("Click sound unavailable.");
+        }
+    }
+
+    function formatPrice(price) {
+        const number = Number(price);
+
+        if (!Number.isFinite(number) || number <= 0) {
+            return "";
+        }
+
+        return `R${number}`;
+    }
+
+    function getServiceName(service) {
+        if (typeof service === "string") {
+            return service;
+        }
+
+        if (!service || typeof service !== "object") {
+            return "";
+        }
+
+        return (
+            service.name ||
+            service.service ||
+            service.title ||
+            service.serviceName ||
+            ""
+        );
+    }
+
+    function getServicePrice(service) {
+        if (!service || typeof service !== "object") {
+            return 0;
+        }
+
+        const price =
+            service.price ??
+            service.amount ??
+            service.cost ??
+            0;
+
+        const number = Number(price);
+
+        return Number.isFinite(number) ? number : 0;
+    }
+
+    /* =====================================================
+       TYPEWRITER
+       ===================================================== */
+
+    const typewriterElement =
+        document.getElementById("typewriter") ||
+        document.querySelector(".typewriter");
+
+    if (typewriterElement) {
+
+        const words = [
+            "Fresh Cuts",
+            "No Lines",
+            "Kasi Prices"
+        ];
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+        function typeWriter() {
+
+            const word = words[wordIndex];
+
+            if (!deleting) {
+
+                typewriterElement.textContent =
+                    word.substring(0, charIndex + 1);
+
+                charIndex++;
+
+                if (charIndex === word.length) {
+
+                    deleting = true;
+
+                    setTimeout(typeWriter, 1500);
+                    return;
                 }
 
-            } catch (error) {
+            } else {
 
-                console.warn(
-                    'Click sound could not play:',
-                    error
-                );
+                typewriterElement.textContent =
+                    word.substring(0, charIndex - 1);
+
+                charIndex--;
+
+                if (charIndex === 0) {
+
+                    deleting = false;
+
+                    wordIndex =
+                        (wordIndex + 1) % words.length;
+                }
             }
+
+            setTimeout(
+                typeWriter,
+                deleting ? 70 : 110
+            );
         }
 
-        if (navigator.vibrate) {
-
-            try {
-
-                navigator.vibrate(30);
-
-            } catch (error) {
-
-                // Ignore vibration errors
-            }
-        }
+        typeWriter();
     }
 
-
-    document.addEventListener(
-        'click',
-        (event) => {
-
-            const button =
-                event.target.closest(
-                    'button'
-                );
-
-            if (button) {
-                playClick();
-            }
-        }
-    );
-
-
-    // =========================================================
-    // 5. DATE INPUT RANGE
-    // TODAY -> 30 DAYS
-    // =========================================================
-
-    if (custDateInput) {
-
-        const today =
-            new Date();
-
-        const maxDate =
-            new Date();
-
-        maxDate.setDate(
-            today.getDate() + 30
-        );
-
-        const todayString =
-            today
-                .toISOString()
-                .split('T')[0];
-
-        const maxDateString =
-            maxDate
-                .toISOString()
-                .split('T')[0];
-
-        custDateInput.min =
-            todayString;
-
-        custDateInput.max =
-            maxDateString;
-    }
-
-
-    // =========================================================
-    // 6. AUTHENTICATION + ROLE ROUTING
-    // =========================================================
+    /* =====================================================
+       SWIPER
+       ===================================================== */
 
     if (
-        typeof onAuthState ===
-        'function'
+        typeof Swiper !== "undefined" &&
+        document.querySelector(".elite-swiper")
     ) {
 
-        onAuthState(
-            auth,
-            async (user) => {
+        try {
 
-                if (user) {
+            new Swiper(".elite-swiper", {
 
-                    if (logoutBtn) {
+                effect: "coverflow",
 
-                        logoutBtn.style.display =
-                            'flex';
-                    }
+                grabCursor: true,
+
+                centeredSlides: true,
+
+                slidesPerView: "auto",
+
+                loop: true,
+
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false
+                },
+
+                coverflowEffect: {
+                    rotate: 15,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true
+                },
+
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true
+                },
+
+                touchRatio: 1,
+
+                touchAngle: 45,
+
+                simulateTouch: true
+            });
+
+        } catch (error) {
+            console.error("Swiper error:", error);
+        }
+    }
+
+    /* =====================================================
+       AUTH STATE
+       ===================================================== */
+
+    auth.onAuthStateChanged(async (user) => {
+
+        currentUser = user;
+
+        console.log(
+            "Auth state:",
+            user ? user.uid : "Not logged in"
+        );
+
+        if (!user) {
+
+            if (logoutBtn) {
+                logoutBtn.classList.add("hidden");
+            }
+
+            if (adminBtn) {
+                adminBtn.classList.add("hidden");
+            }
+
+            updateBookingCounter(null);
+
+            return;
+        }
+
+        if (logoutBtn) {
+            logoutBtn.classList.remove("hidden");
+        }
+
+        /* ---------------------------------------------
+           LOAD USER DOCUMENT
+           --------------------------------------------- */
+
+        try {
+
+            const userDoc =
+                await db
+                    .collection("users")
+                    .doc(user.uid)
+                    .get();
+
+            let userData = {};
+
+            if (userDoc.exists) {
+                userData = userDoc.data() || {};
+            }
+
+            const role =
+                userData.role ||
+                userData.userRole ||
+                "customer";
+
+            console.log("Logged-in user role:", role);
+
+            /* -----------------------------------------
+               ADMIN BUTTON
+               ----------------------------------------- */
+
+            if (adminBtn) {
+
+                if (role === "admin") {
+                    adminBtn.classList.remove("hidden");
+                } else {
+                    adminBtn.classList.add("hidden");
+                }
+            }
+
+            /* -----------------------------------------
+               CREATE/FIX OWNER SALON ID
+               ----------------------------------------- */
+
+            if (role === "salon_owner") {
+
+                const existingSalonId =
+                    userData.salonId || null;
+
+                if (!existingSalonId) {
+
+                    const generatedSalonId =
+                        `salon_${user.uid}`;
+
+                    console.log(
+                        "Owner has no salonId. Generated:",
+                        generatedSalonId
+                    );
 
                     try {
 
-                        const userRef =
-                            dbDoc(
-                                db,
-                                'users',
-                                user.uid
+                        await db
+                            .collection("users")
+                            .doc(user.uid)
+                            .set(
+                                {
+                                    salonId: generatedSalonId,
+                                    role: "salon_owner"
+                                },
+                                {
+                                    merge: true
+                                }
                             );
-
-                        const userSnap =
-                            await dbGet(
-                                userRef
-                            );
-
-                        if (
-                            !userSnap.exists()
-                        ) {
-
-                            console.warn(
-                                'No user document found for:',
-                                user.uid
-                            );
-
-                            if (adminBtn) {
-
-                                adminBtn.style.display =
-                                    'none';
-                            }
-
-                            return;
-                        }
-
-                        const userData =
-                            userSnap.data() ||
-                            {};
-
-                        const role =
-                            userData.role ||
-                            'customer';
-
-                        console.log(
-                            'Logged in user:',
-                            user.uid,
-                            'Role:',
-                            role
-                        );
-
-
-                        // ADMIN
-                        if (
-                            role === 'admin' &&
-                            adminBtn
-                        ) {
-
-                            adminBtn.style.display =
-                                'flex';
-
-                            adminBtn.onclick =
-                                () => {
-
-                                    window.location.href =
-                                        'admin.html';
-                                };
-                        }
-
-
-                        // SALON OWNER
-                        else if (
-                            role === 'salon_owner' &&
-                            adminBtn
-                        ) {
-
-                            adminBtn.style.display =
-                                'flex';
-
-                            adminBtn.onclick =
-                                () => {
-
-                                    window.location.href =
-                                        'owners.html';
-                                };
-                        }
-
-
-                        // CUSTOMER
-                        else if (adminBtn) {
-
-                            adminBtn.style.display =
-                                'none';
-                        }
 
                     } catch (error) {
 
                         console.error(
-                            'User document fetch error:',
+                            "Could not save salonId:",
                             error
                         );
-
-                        if (adminBtn) {
-
-                            adminBtn.style.display =
-                                'none';
-                        }
-                    }
-
-                } else {
-
-                    if (logoutBtn) {
-
-                        logoutBtn.style.display =
-                            'none';
-                    }
-
-                    if (adminBtn) {
-
-                        adminBtn.style.display =
-                            'none';
                     }
                 }
             }
-        );
 
-    } else {
+            updateBookingCounter(user);
 
-        console.error(
-            'onAuthState function is missing from window.'
-        );
+        } catch (error) {
+
+            console.error(
+                "Could not load user document:",
+                error
+            );
+        }
+    });
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener("click", async () => {
+
+            playClickSound();
+            vibrate();
+
+            try {
+
+                await auth.signOut();
+
+                console.log("User signed out.");
+
+                window.location.href = "index.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+            }
+        });
     }
 
+    /* =====================================================
+       LOAD SALONS
+       ===================================================== */
 
-    // =========================================================
-    // 7. LOAD SALONS FROM FIRESTORE
-    // =========================================================
+    function loadSalons() {
 
-    if (salonList) {
+        if (!salonsContainer) {
 
-        const salonsCollection =
-            collection(
-                db,
-                'salons'
+            console.warn(
+                "Salon container not found."
             );
 
-        onSnapshot(
-            salonsCollection,
+            return;
+        }
 
-            (snapshot) => {
+        salonsContainer.innerHTML = `
+            <div class="col-span-full text-center py-10">
+                <p class="text-gray-400">
+                    Loading salons...
+                </p>
+            </div>
+        `;
 
-                allSalons = [];
+        db.collection("salons")
+            .onSnapshot(
 
-                salonList.innerHTML = '';
+                (snapshot) => {
 
-                if (snapshot.empty) {
+                    console.log(
+                        "Salons found:",
+                        snapshot.size
+                    );
 
-                    salonList.innerHTML = `
+                    if (snapshot.empty) {
 
-                        <div
-                            style="
-                                text-align:center;
-                                padding:40px 20px;
-                                color:#888;
-                            "
-                        >
+                        salonsContainer.innerHTML = `
+                            <div class="col-span-full text-center py-10">
+                                <p class="text-gray-400">
+                                    No salons registered yet.
+                                </p>
+                            </div>
+                        `;
 
-                            <i
-                                class="bx bx-store-alt"
-                                style="
-                                    font-size:3rem;
-                                    margin-bottom:10px;
-                                "
-                            ></i>
+                        return;
+                    }
 
-                            <p
-                                style="
-                                    font-size:1.1rem;
-                                    font-weight:600;
-                                    margin-bottom:5px;
-                                "
-                            >
-                                No salons registered yet
-                            </p>
+                    const salons = [];
 
-                            <p
-                                style="
-                                    font-size:0.9rem;
-                                "
-                            >
-                                The salons collection is empty.
-                            </p>
-
-                        </div>
-                    `;
-
-                    updateBookingCount();
-
-                    return;
-                }
-
-
-                snapshot.forEach(
-                    (docSnap) => {
+                    snapshot.forEach((docSnap) => {
 
                         const data =
-                            docSnap.data() ||
-                            {};
+                            docSnap.data() || {};
+
+                        /*
+                         * IMPORTANT:
+                         * Do NOT use a hardcoded owner ID.
+                         */
 
                         const ownerId =
                             data.ownerId ||
@@ -678,884 +510,753 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             ...data,
 
-                            id:
-                                docSnap.id,
+                            id: docSnap.id,
 
                             salonId:
                                 data.salonId ||
                                 docSnap.id,
 
-                            ownerId:
-                                ownerId,
+                            ownerId,
 
                             name:
                                 data.name ||
-                                'Unnamed Salon',
+                                "Unnamed Salon",
 
                             location:
                                 data.location ||
-                                'Soweto',
+                                "Soweto",
 
                             hours:
                                 data.hours ||
-                                '9AM - 6PM',
+                                "9AM - 6PM",
 
                             image:
                                 data.image ||
-                                '',
+                                "",
 
                             services:
-                                Array.isArray(
-                                    data.services
-                                )
+                                Array.isArray(data.services)
                                     ? data.services
                                     : []
                         };
 
-                        allSalons.push(
-                            salon
-                        );
-                    }
-                );
+                        salons.push(salon);
+                    });
 
-
-                // Sort salons
-                allSalons.sort(
-                    (a, b) => {
-
-                        return String(
-                            a.name || ''
-                        ).localeCompare(
-                            String(
-                                b.name || ''
+                    salons.sort((a, b) =>
+                        String(a.name)
+                            .localeCompare(
+                                String(b.name)
                             )
+                    );
+
+                    salonsContainer.innerHTML = "";
+
+                    salons.forEach((salon) => {
+
+                        salonsContainer.appendChild(
+                            renderSalon(salon)
                         );
-                    }
-                );
 
+                    });
 
-                console.log(
-                    'Loaded salons:',
-                    allSalons
-                );
+                },
 
+                (error) => {
 
-                allSalons.forEach(
-                    (salon) => {
+                    console.error(
+                        "Salon loading error:",
+                        error
+                    );
 
-                        renderSalon(
-                            salon
-                        );
-                    }
-                );
-
-
-                updateBookingCount();
-            },
-
-            (error) => {
-
-                console.error(
-                    'Firestore Salons Error:',
-                    error
-                );
-
-                salonList.innerHTML = `
-
-                    <div
-                        style="
-                            text-align:center;
-                            padding:30px;
-                            color:#ff4757;
-                        "
-                    >
-
-                        <i
-                            class="bx bx-error-circle"
-                            style="
-                                font-size:2.5rem;
-                            "
-                        ></i>
-
-                        <p
-                            style="
-                                margin-top:10px;
-                                font-weight:bold;
-                            "
-                        >
-                            Failed to load salons
-                        </p>
-
-                        <small
-                            style="
-                                color:#aaa;
-                                word-break:break-word;
-                            "
-                        >
-                            ${escapeHtml(
-                                error.message
-                            )}
-                        </small>
-
-                    </div>
-                `;
-            }
-        );
+                    salonsContainer.innerHTML = `
+                        <div class="col-span-full text-center py-10">
+                            <p class="text-red-400">
+                                Could not load salons.
+                            </p>
+                            <p class="text-gray-500 text-sm mt-2">
+                                ${escapeHtml(error.message)}
+                            </p>
+                        </div>
+                    `;
+                }
+            );
     }
 
-
-    // =========================================================
-    // 8. RENDER SALON CARD
-    // =========================================================
+    /* =====================================================
+       RENDER SALON
+       ===================================================== */
 
     function renderSalon(salon) {
 
-        const noOwner =
-            !salon.ownerId;
-
         const card =
-            document.createElement(
-                'div'
-            );
+            document.createElement("div");
 
         card.className =
-            'glass-card salon-card';
+            "salon-card bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800";
 
+        const image =
+            salon.image ||
+            "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=900&q=80";
 
-        const salonImage =
-            salon.image
-                ? `
-
-                    <img
-                        src="${escapeHtml(
-                            salon.image
-                        )}"
-                        alt="${escapeHtml(
-                            salon.name
-                        )}"
-                        loading="lazy"
-
-                        style="
-                            width:100%;
-                            height:180px;
-                            object-fit:cover;
-                            border-radius:15px;
-                            margin-bottom:12px;
-                        "
-
-                        onerror="
-                            this.style.display='none';
-                        "
-                    >
-
-                `
-                : '';
-
+        const hasOwner =
+            Boolean(salon.ownerId);
 
         card.innerHTML = `
 
-            ${salonImage}
+            <div class="relative">
 
-            <h3>
-                ${escapeHtml(
-                    salon.name
-                )}
-            </h3>
+                <img
+                    src="${escapeHtml(image)}"
+                    alt="${escapeHtml(salon.name)}"
+                    class="w-full h-48 object-cover"
+                    loading="lazy"
+                >
 
-            <p>
-                <i class="bx bx-map"></i>
-                ${escapeHtml(
-                    salon.location ||
-                    'Soweto'
-                )}
-            </p>
+                <div class="
+                    absolute
+                    top-3
+                    right-3
+                    bg-black/70
+                    px-3
+                    py-1
+                    rounded-full
+                    text-xs
+                    text-white
+                ">
+                    ${hasOwner ? "Available" : "Unavailable"}
+                </div>
 
-            <p>
-                <i class="bx bx-time"></i>
-                ${escapeHtml(
-                    salon.hours ||
-                    '9AM - 6PM'
-                )}
-            </p>
+            </div>
 
-            ${
-                noOwner
-                    ? `
+            <div class="p-5">
 
-                        <small
-                            style="
-                                color:#ff4757;
-                                display:block;
-                                margin-bottom:8px;
-                                font-weight:600;
-                            "
-                        >
-                            ⚠️ This salon is not available
-                            for online booking.
-                        </small>
+                <h3 class="
+                    text-xl
+                    font-bold
+                    text-white
+                    mb-2
+                ">
+                    ${escapeHtml(salon.name)}
+                </h3>
 
-                    `
-                    : ''
-            }
+                <p class="text-gray-400 text-sm mb-2">
+                    📍 ${escapeHtml(salon.location)}
+                </p>
 
+                <p class="text-gray-400 text-sm mb-4">
+                    🕒 ${escapeHtml(salon.hours)}
+                </p>
 
-            <button
-                class="primary-btn bookBtn"
-                data-id="${escapeHtml(
-                    salon.id
-                )}"
+                <div class="mb-4">
 
-                ${
-                    noOwner
-                        ? `
-                            disabled
+                    <p class="
+                        text-sm
+                        font-semibold
+                        text-gray-300
+                        mb-2
+                    ">
+                        Services
+                    </p>
 
-                            style="
-                                opacity:0.5;
-                                cursor:not-allowed;
-                            "
-                        `
-                        : ''
-                }
-            >
-                Book Now
-            </button>
+                    <div class="flex flex-wrap gap-2">
+
+                        ${
+                            salon.services.length
+                                ? salon.services
+                                    .slice(0, 5)
+                                    .map(service => {
+
+                                        const name =
+                                            getServiceName(service);
+
+                                        const price =
+                                            getServicePrice(service);
+
+                                        return `
+                                            <span class="
+                                                bg-gray-800
+                                                text-gray-300
+                                                text-xs
+                                                px-2
+                                                py-1
+                                                rounded-lg
+                                            ">
+                                                ${escapeHtml(name)}
+                                                ${
+                                                    price > 0
+                                                        ? ` — R${price}`
+                                                        : ""
+                                                }
+                                            </span>
+                                        `;
+
+                                    })
+                                    .join("")
+                                : `
+                                    <span class="text-gray-500 text-xs">
+                                        Services not listed
+                                    </span>
+                                `
+                        }
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="
+                        book-salon-btn
+                        w-full
+                        py-3
+                        rounded-xl
+                        font-semibold
+                        transition
+                        ${
+                            hasOwner
+                                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                                : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        }
+                    "
+                    ${
+                        hasOwner
+                            ? ""
+                            : "disabled"
+                    }
+
+                    data-salon-id="${escapeHtml(salon.id)}"
+                >
+                    ${
+                        hasOwner
+                            ? "Book Now"
+                            : "Booking Unavailable"
+                    }
+                </button>
+
+            </div>
         `;
 
+        const button =
+            card.querySelector(".book-salon-btn");
 
-        salonList.appendChild(
-            card
-        );
+        if (button && hasOwner) {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    playClickSound();
+                    vibrate();
+
+                    openBookingModal(salon);
+                }
+            );
+        }
+
+        return card;
     }
 
+    /* =====================================================
+       OPEN BOOKING MODAL
+       ===================================================== */
 
-    // =========================================================
-    // 9. SEARCH FUNCTIONALITY
-    // =========================================================
+    function openBookingModal(salon) {
 
-    if (
-        searchBtn &&
-        searchBar
-    ) {
+        if (!currentUser) {
 
-        const executeSearch =
-            () => {
-
-                const term =
-                    searchBar.value
-                        .toLowerCase()
-                        .trim();
-
-                if (!salonList) {
-                    return;
-                }
-
-                salonList.innerHTML = '';
-
-                const filtered =
-                    allSalons.filter(
-                        (salon) => {
-
-                            const name =
-                                String(
-                                    salon.name ||
-                                    ''
-                                ).toLowerCase();
-
-                            const location =
-                                String(
-                                    salon.location ||
-                                    ''
-                                ).toLowerCase();
-
-                            return (
-                                name.includes(
-                                    term
-                                ) ||
-                                location.includes(
-                                    term
-                                )
-                            );
-                        }
-                    );
-
-
-                if (
-                    filtered.length === 0
-                ) {
-
-                    salonList.innerHTML = `
-
-                        <p
-                            style="
-                                text-align:center;
-                                color:#888;
-                                padding:20px;
-                            "
-                        >
-                            No salons matching
-                            "${escapeHtml(
-                                term
-                            )}"
-                        </p>
-
-                    `;
-
-                    return;
-                }
-
-
-                filtered.forEach(
-                    (salon) => {
-
-                        renderSalon(
-                            salon
-                        );
-                    }
-                );
-            };
-
-
-        searchBtn.onclick =
-            executeSearch;
-
-
-        searchBar.addEventListener(
-            'keyup',
-            (event) => {
-
-                if (
-                    event.key ===
-                    'Enter'
-                ) {
-
-                    executeSearch();
-                }
-            }
-        );
-
-
-        searchBar.addEventListener(
-            'input',
-            () => {
-
-                executeSearch();
-            }
-        );
-    }
-
-
-    // =========================================================
-    // 10. OPEN BOOKING MODAL
-    // =========================================================
-
-    if (salonList) {
-
-        salonList.addEventListener(
-            'click',
-            (event) => {
-
-                const bookBtn =
-                    event.target.closest(
-                        '.bookBtn'
-                    );
-
-                if (!bookBtn) {
-                    return;
-                }
-
-                if (bookBtn.disabled) {
-                    return;
-                }
-
-
-                if (!auth.currentUser) {
-
-                    alert(
-                        'Please login first to book an appointment.'
-                    );
-
-                    window.location.href =
-                        'index.html';
-
-                    return;
-                }
-
-
-                selectedSalonId =
-                    bookBtn.dataset.id;
-
-
-                selectedSalonData =
-                    allSalons.find(
-                        (salon) =>
-                            salon.id ===
-                            selectedSalonId
-                    );
-
-
-                if (!selectedSalonData) {
-
-                    console.error(
-                        'Selected salon could not be found:',
-                        selectedSalonId
-                    );
-
-                    alert(
-                        'Salon information could not be loaded.'
-                    );
-
-                    return;
-                }
-
-
-                if (
-                    !selectedSalonData.ownerId
-                ) {
-
-                    alert(
-                        'This salon is not configured for online booking yet.'
-                    );
-
-                    return;
-                }
-
-
-                console.log(
-                    'Selected salon:',
-                    selectedSalonData
-                );
-
-
-                if (bookingModal) {
-
-                    bookingModal.classList.add(
-                        'active'
-                    );
-                }
-
-
-                populateServices(
-                    selectedSalonData
-                );
-            }
-        );
-    }
-
-
-    // =========================================================
-    // 11. POPULATE SERVICES
-    // =========================================================
-
-    function populateServices(
-        salon
-    ) {
-
-        const serviceElem =
-            document.getElementById(
-                'serviceType'
+            alert(
+                "Please log in before booking a salon."
             );
 
-        if (!serviceElem) {
             return;
         }
 
+        if (!salon) {
 
-        const services =
-            Array.isArray(
-                salon.services
-            )
-                ? salon.services
-                : [];
-
-
-        if (
-            services.length === 0
-        ) {
+            alert(
+                "Salon information is unavailable."
+            );
 
             return;
         }
 
+        if (!salon.ownerId) {
 
-        serviceElem.innerHTML = `
+            alert(
+                "This salon is not connected to an owner yet."
+            );
 
+            return;
+        }
+
+        selectedSalonData = salon;
+
+        selectedSalonId =
+            salon.salonId ||
+            salon.id;
+
+        console.log(
+            "Selected salon:",
+            selectedSalonData
+        );
+
+        populateServices(salon);
+
+        /* ---------------------------------------------
+           PREFILL CUSTOMER NAME
+           --------------------------------------------- */
+
+        if (custName && !custName.value) {
+
+            db.collection("users")
+                .doc(currentUser.uid)
+                .get()
+                .then((docSnap) => {
+
+                    if (!docSnap.exists) return;
+
+                    const data =
+                        docSnap.data() || {};
+
+                    const name =
+                        data.name ||
+                        data.fullName ||
+                        data.displayName ||
+                        currentUser.displayName ||
+                        "";
+
+                    if (name) {
+                        custName.value = name;
+                    }
+                })
+                .catch((error) => {
+
+                    console.warn(
+                        "Could not load customer name:",
+                        error
+                    );
+                });
+        }
+
+        /* ---------------------------------------------
+           DATE LIMITS
+           --------------------------------------------- */
+
+        if (custDate) {
+
+            const today =
+                new Date();
+
+            const maxDate =
+                new Date();
+
+            maxDate.setDate(
+                today.getDate() + 30
+            );
+
+            custDate.min =
+                formatInputDate(today);
+
+            custDate.max =
+                formatInputDate(maxDate);
+
+            if (!custDate.value) {
+                custDate.value =
+                    formatInputDate(today);
+            }
+        }
+
+        showMessage("", "info");
+
+        if (bookingModal) {
+
+            bookingModal.classList.remove("hidden");
+
+            bookingModal.classList.add("flex");
+
+            document.body.classList.add(
+                "overflow-hidden"
+            );
+        }
+    }
+
+    /* =====================================================
+       DATE FORMAT
+       ===================================================== */
+
+    function formatInputDate(date) {
+
+        const year =
+            date.getFullYear();
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    }
+
+    /* =====================================================
+       POPULATE SERVICES
+       ===================================================== */
+
+    function populateServices(salon) {
+
+        if (!serviceType) return;
+
+        serviceType.innerHTML = `
             <option value="">
                 Select a service
             </option>
-
         `;
 
+        const services =
+            Array.isArray(salon.services)
+                ? salon.services
+                : [];
 
-        services.forEach(
-            (item) => {
+        if (!services.length) {
 
-                let serviceName =
-                    '';
+            serviceType.innerHTML += `
+                <option value="" disabled>
+                    No services available
+                </option>
+            `;
 
-                let servicePrice =
-                    0;
+            return;
+        }
 
+        services.forEach((service) => {
 
-                if (
-                    typeof item ===
-                        'object' &&
-                    item !== null
-                ) {
+            const serviceName =
+                getServiceName(service);
 
-                    serviceName =
-                        item.name ||
-                        item.service ||
-                        '';
+            const servicePrice =
+                getServicePrice(service);
 
-                    servicePrice =
-                        Number(
-                            item.price ||
-                            0
-                        );
+            if (!serviceName) return;
 
-                } else {
+            const option =
+                document.createElement("option");
 
-                    serviceName =
-                        String(item);
+            /*
+             * IMPORTANT:
+             * The value contains ONLY the service name.
+             * The price is stored separately.
+             */
 
-                    servicePrice =
-                        0;
-                }
+            option.value =
+                serviceName;
 
+            option.textContent =
+                servicePrice > 0
+                    ? `${serviceName} — R${servicePrice}`
+                    : serviceName;
 
-                if (!serviceName) {
-                    return;
-                }
+            option.dataset.price =
+                String(servicePrice);
 
+            serviceType.appendChild(option);
+        });
+    }
 
-                const option =
-                    document.createElement(
-                        'option'
-                    );
+    /* =====================================================
+       CLOSE BOOKING MODAL
+       ===================================================== */
 
+    function closeModal() {
 
-                option.value =
-                    `${serviceName} — R${servicePrice}`;
+        if (!bookingModal) return;
 
+        bookingModal.classList.add("hidden");
 
-                option.textContent =
-                    servicePrice > 0
-                        ? `${serviceName} — R${servicePrice}`
-                        : serviceName;
+        bookingModal.classList.remove("flex");
 
+        document.body.classList.remove(
+            "overflow-hidden"
+        );
 
-                serviceElem.appendChild(
-                    option
-                );
-            }
+        selectedSalonData = null;
+
+        selectedSalonId = null;
+
+        showMessage("", "info");
+    }
+
+    if (closeBookingModal) {
+
+        closeBookingModal.addEventListener(
+            "click",
+            closeModal
         );
     }
 
+    if (cancelBookingBtn) {
 
-    // =========================================================
-    // 12. CLOSE BOOKING MODAL
-    // =========================================================
-
-    if (closeModalBtn) {
-
-        closeModalBtn.addEventListener(
-            'click',
-            () => {
-
-                if (bookingModal) {
-
-                    bookingModal.classList.remove(
-                        'active'
-                    );
-                }
-
-                selectedSalonId =
-                    null;
-
-                selectedSalonData =
-                    null;
-            }
+        cancelBookingBtn.addEventListener(
+            "click",
+            closeModal
         );
     }
-
 
     if (bookingModal) {
 
         bookingModal.addEventListener(
-            'click',
+            "click",
             (event) => {
 
                 if (
                     event.target ===
                     bookingModal
                 ) {
-
-                    bookingModal.classList.remove(
-                        'active'
-                    );
-
-                    selectedSalonId =
-                        null;
-
-                    selectedSalonData =
-                        null;
+                    closeModal();
                 }
             }
         );
     }
 
+    /* =====================================================
+       SERVICE CHANGE
+       ===================================================== */
 
-    // =========================================================
-    // 13. SUBMIT BOOKING
-    // =========================================================
+    if (serviceType) {
+
+        serviceType.addEventListener(
+            "change",
+            () => {
+
+                const option =
+                    serviceType.options[
+                        serviceType.selectedIndex
+                    ];
+
+                console.log(
+                    "Selected service:",
+                    serviceType.value,
+                    "Price:",
+                    option
+                        ? option.dataset.price
+                        : 0
+                );
+            }
+        );
+    }
+
+    /* =====================================================
+       BOOKING SUBMISSION
+       ===================================================== */
 
     if (bookingForm) {
 
         bookingForm.addEventListener(
-            'submit',
+            "submit",
             async (event) => {
 
                 event.preventDefault();
 
+                console.log(
+                    "Booking form submitted."
+                );
 
-                if (!auth.currentUser) {
+                /* -------------------------------------
+                   CHECK AUTH
+                   ------------------------------------- */
 
-                    alert(
-                        'Please login first.'
+                const user =
+                    auth.currentUser;
+
+                if (!user) {
+
+                    showMessage(
+                        "Please log in before booking.",
+                        "error"
                     );
-
-                    window.location.href =
-                        'index.html';
 
                     return;
                 }
 
+                /* -------------------------------------
+                   CHECK SALON
+                   ------------------------------------- */
 
                 if (!selectedSalonData) {
 
-                    alert(
-                        'Please select a salon first.'
+                    showMessage(
+                        "Please select a salon first.",
+                        "error"
                     );
 
                     return;
                 }
 
+                const ownerId =
+                    selectedSalonData.ownerId ||
+                    selectedSalonData.OwnerId ||
+                    null;
 
-                if (
-                    !selectedSalonData.ownerId
-                ) {
+                if (!ownerId) {
 
-                    alert(
-                        'This salon is not configured correctly for bookings.'
+                    showMessage(
+                        "This salon has no owner ID. Booking cannot continue.",
+                        "error"
                     );
 
                     console.error(
-                        'Missing ownerId:',
+                        "Missing ownerId:",
                         selectedSalonData
                     );
 
                     return;
                 }
 
+                /* -------------------------------------
+                   FORM VALUES
+                   ------------------------------------- */
 
                 const customerName =
-                    document
-                        .getElementById(
-                            'custName'
-                        )
-                        ?.value
-                        .trim() || '';
-
+                    custName
+                        ? custName.value.trim()
+                        : "";
 
                 const phone =
-                    document
-                        .getElementById(
-                            'custPhone'
-                        )
-                        ?.value
-                        .trim() || '';
-
+                    custPhone
+                        ? custPhone.value.trim()
+                        : "";
 
                 const date =
-                    document
-                        .getElementById(
-                            'custDate'
-                        )
-                        ?.value || '';
-
+                    custDate
+                        ? custDate.value
+                        : "";
 
                 const time =
-                    document
-                        .getElementById(
-                            'custTime'
-                        )
-                        ?.value || '';
+                    custTime
+                        ? custTime.value
+                        : "";
 
+                const serviceName =
+                    serviceType
+                        ? serviceType.value
+                        : "";
 
-                const serviceElem =
-                    document.getElementById(
-                        'serviceType'
-                    );
-
-
-                const serviceVal =
-                    serviceElem
-                        ? serviceElem.value.trim()
-                        : '';
-
+                /* -------------------------------------
+                   VALIDATION
+                   ------------------------------------- */
 
                 if (!customerName) {
 
-                    alert(
-                        'Please enter your name.'
+                    showMessage(
+                        "Please enter your name.",
+                        "error"
                     );
+
+                    custName?.focus();
 
                     return;
                 }
-
 
                 if (!phone) {
 
-                    alert(
-                        'Please enter your phone number.'
+                    showMessage(
+                        "Please enter your phone number.",
+                        "error"
                     );
+
+                    custPhone?.focus();
 
                     return;
                 }
 
+                if (!serviceName) {
 
-                if (!serviceVal) {
-
-                    alert(
-                        'Please select a service.'
+                    showMessage(
+                        "Please select a service.",
+                        "error"
                     );
+
+                    serviceType?.focus();
 
                     return;
                 }
-
 
                 if (!date) {
 
-                    alert(
-                        'Please select a date.'
+                    showMessage(
+                        "Please select a date.",
+                        "error"
                     );
+
+                    custDate?.focus();
 
                     return;
                 }
-
 
                 if (!time) {
 
-                    alert(
-                        'Please select a time.'
+                    showMessage(
+                        "Please select a time.",
+                        "error"
                     );
+
+                    custTime?.focus();
 
                     return;
                 }
 
+                /* -------------------------------------
+                   GET PRICE
+                   ------------------------------------- */
 
-                let service =
-                    serviceVal;
+                let price = 0;
 
-                let price =
-                    0;
+                const selectedOption =
+                    serviceType.options[
+                        serviceType.selectedIndex
+                    ];
 
+                if (selectedOption) {
 
-                if (
-                    serviceVal.includes(
-                        '— R'
-                    )
-                ) {
-
-                    const parts =
-                        serviceVal.split(
-                            '— R'
+                    price =
+                        Number(
+                            selectedOption.dataset.price ||
+                            0
                         );
-
-                    service =
-                        parts[0].trim();
-
-                    price =
-                        Number(
-                            parts[1]
-                                ?.replace(
-                                    /[^\d.]/g,
-                                    ''
-                                )
-                        ) || 0;
-
-                } else if (
-                    serviceVal.includes(
-                        ' - R'
-                    )
-                ) {
-
-                    const parts =
-                        serviceVal.split(
-                            ' - R'
-                        );
-
-                    service =
-                        parts[0].trim();
-
-                    price =
-                        Number(
-                            parts[1]
-                                ?.replace(
-                                    /[^\d.]/g,
-                                    ''
-                                )
-                        ) || 0;
-
-                } else if (
-                    serviceVal.includes('R')
-                ) {
-
-                    const parts =
-                        serviceVal.split('R');
-
-                    service =
-                        parts[0].trim();
-
-                    price =
-                        Number(
-                            parts[1]
-                                ?.replace(
-                                    /[^\d.]/g,
-                                    ''
-                                )
-                        ) || 0;
                 }
 
+                /* -------------------------------------
+                   BUILD BOOKING
+                   ------------------------------------- */
 
                 const bookingData = {
 
                     userId:
-                        auth.currentUser.uid,
+                        user.uid,
 
                     ownerId:
-                        selectedSalonData.ownerId,
+                        ownerId,
 
                     salonId:
-                        selectedSalonId,
+                        selectedSalonData.salonId ||
+                        selectedSalonData.id,
 
                     salonName:
-                        selectedSalonData.name,
-
-                    salon:
-                        selectedSalonData.name,
+                        selectedSalonData.name ||
+                        "Salon",
 
                     customerName:
-                        customerName,
-
-                    name:
                         customerName,
 
                     phone:
                         phone,
 
                     service:
-                        service,
+                        serviceName,
 
                     price:
                         price,
@@ -1567,430 +1268,280 @@ document.addEventListener('DOMContentLoaded', () => {
                         time,
 
                     status:
-                        'pending',
+                        "pending",
 
                     createdAt:
-                        serverTimestamp(),
+                        firebase.firestore.FieldValue
+                            .serverTimestamp(),
 
                     updatedAt:
-                        serverTimestamp()
+                        firebase.firestore.FieldValue
+                            .serverTimestamp()
                 };
 
-
                 console.log(
-                    'Creating booking:',
+                    "Booking data:",
                     bookingData
                 );
 
+                /* -------------------------------------
+                   DISABLE BUTTON
+                   ------------------------------------- */
+
+                const submitButton =
+                    bookingForm.querySelector(
+                        'button[type="submit"]'
+                    );
+
+                const originalText =
+                    submitButton
+                        ? submitButton.textContent
+                        : "";
+
+                if (submitButton) {
+
+                    submitButton.disabled =
+                        true;
+
+                    submitButton.textContent =
+                        "Booking...";
+                }
+
+                showMessage(
+                    "Submitting your booking...",
+                    "info"
+                );
+
+                /* -------------------------------------
+                   SAVE TO FIRESTORE
+                   ------------------------------------- */
 
                 try {
 
-                    await addDoc(
-                        collection(
-                            db,
-                            'bookings'
-                        ),
-                        bookingData
+                    const bookingRef =
+                        await db
+                            .collection("bookings")
+                            .add(bookingData);
+
+                    console.log(
+                        "Booking successfully created:",
+                        bookingRef.id
                     );
 
-
-                    alert(
-                        'Booking placed! Owner will approve soon 💈'
+                    showMessage(
+                        "Booking successful! Your booking is pending confirmation.",
+                        "success"
                     );
 
+                    /* ---------------------------------
+                       SUCCESS RESET
+                       --------------------------------- */
 
-                    if (bookingModal) {
+                    setTimeout(() => {
 
-                        bookingModal.classList.remove(
-                            'active'
+                        if (bookingForm) {
+                            bookingForm.reset();
+                        }
+
+                        closeModal();
+
+                        alert(
+                            "Booking successful! Your booking is pending confirmation."
                         );
-                    }
 
-
-                    bookingForm.reset();
-
-
-                    selectedSalonId =
-                        null;
-
-                    selectedSalonData =
-                        null;
+                    }, 1200);
 
                 } catch (error) {
 
                     console.error(
-                        'Booking error:',
+                        "BOOKING ERROR:",
                         error
                     );
 
-                    alert(
-                        'Booking failed: ' +
-                        (
-                            error.message ||
-                            'Unknown error'
-                        )
+                    console.error(
+                        "Error code:",
+                        error.code
                     );
+
+                    console.error(
+                        "Error message:",
+                        error.message
+                    );
+
+                    let message =
+                        "Booking failed. Please try again.";
+
+                    if (
+                        error.code ===
+                        "permission-denied"
+                    ) {
+
+                        message =
+                            "Booking was denied by Firebase. Please check your Firestore security rules.";
+
+                    } else if (
+                        error.code ===
+                        "unauthenticated"
+                    ) {
+
+                        message =
+                            "Your login session has expired. Please log in again.";
+
+                    } else if (
+                        error.code ===
+                        "failed-precondition"
+                    ) {
+
+                        message =
+                            "Firebase needs an index or database configuration update.";
+
+                    } else if (
+                        error.code ===
+                        "unavailable"
+                    ) {
+
+                        message =
+                            "Firebase is temporarily unavailable. Please try again.";
+
+                    } else if (
+                        error.message
+                    ) {
+
+                        message =
+                            error.message;
+                    }
+
+                    showMessage(
+                        message,
+                        "error"
+                    );
+
+                    alert(
+                        "Booking failed:\n\n" +
+                        message
+                    );
+
+                } finally {
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+                        submitButton.textContent =
+                            originalText ||
+                            "Confirm Booking";
+                    }
                 }
             }
         );
     }
 
+    /* =====================================================
+       TODAY'S BOOKINGS
+       ===================================================== */
 
-    // =========================================================
-    // 14. TODAY'S BOOKING COUNTER
-    // =========================================================
+    function updateBookingCounter(user) {
 
-    function updateBookingCount() {
+        if (!todayBookings) return;
 
-        if (!bookingsToday) {
+        if (!user) {
+
+            todayBookings.textContent =
+                "0";
+
             return;
         }
 
+        /*
+         * We query by userId only.
+         *
+         * This avoids requiring a composite index for
+         * userId + date.
+         *
+         * The date is filtered locally.
+         */
 
-        const todayStr =
-            new Date()
-                .toISOString()
-                .split('T')[0];
-
-
-        try {
-
-            const bookingsCollection =
-                collection(
-                    db,
-                    'bookings'
-                );
-
-
-            const qBookings =
-                query(
-                    bookingsCollection,
-
-                    where(
-                        'date',
-                        '==',
-                        todayStr
-                    )
-                );
-
-
-            onSnapshot(
-                qBookings,
+        db.collection("bookings")
+            .where(
+                "userId",
+                "==",
+                user.uid
+            )
+            .onSnapshot(
 
                 (snapshot) => {
 
-                    bookingsToday.textContent =
-                        `${snapshot.size} bookings today`;
+                    const today =
+                        formatInputDate(
+                            new Date()
+                        );
+
+                    let count = 0;
+
+                    snapshot.forEach(
+                        (docSnap) => {
+
+                            const data =
+                                docSnap.data() ||
+                                {};
+
+                            if (
+                                data.date ===
+                                today
+                            ) {
+                                count++;
+                            }
+                        }
+                    );
+
+                    todayBookings.textContent =
+                        String(count);
                 },
 
                 (error) => {
 
-                    console.error(
-                        'Booking count error:',
+                    console.warn(
+                        "Booking counter error:",
                         error
                     );
 
-                    bookingsToday.textContent =
-                        'Bookings today';
+                    todayBookings.textContent =
+                        "0";
                 }
             );
-
-        } catch (error) {
-
-            console.error(
-                'Booking count setup error:',
-                error
-            );
-
-            bookingsToday.textContent =
-                'Bookings today';
-        }
     }
 
+    /* =====================================================
+       LOAD SALONS NOW
+       ===================================================== */
 
-    // =========================================================
-    // 15. LOGOUT
-    // =========================================================
+    loadSalons();
 
-    if (logoutBtn) {
+    /* =====================================================
+       GLOBAL DEBUG HELPERS
+       ===================================================== */
 
-        logoutBtn.onclick =
-            async () => {
+    window.kasiWeb = {
 
-                try {
+        getCurrentUser: () =>
+            auth.currentUser,
 
-                    await signOut(
-                        auth
-                    );
+        getSelectedSalon: () =>
+            selectedSalonData,
 
-                    window.location.href =
-                        'index.html';
+        getSelectedSalonId: () =>
+            selectedSalonId,
 
-                } catch (error) {
+        reloadSalons: () =>
+            loadSalons(),
 
-                    console.error(
-                        'Logout error:',
-                        error
-                    );
+        db,
+        auth
+    };
 
-                    alert(
-                        'Logout failed: ' +
-                        error.message
-                    );
-                }
-            };
-    }
-
-
-    // =========================================================
-    // 16. COOKIE + ONESIGNAL CONSENT
-    // =========================================================
-
-    const banner =
-        document.getElementById(
-            'cookieBanner'
-        );
-
-    const acceptAll =
-        document.getElementById(
-            'acceptAllCookies'
-        );
-
-    const essential =
-        document.getElementById(
-            'essentialCookies'
-        );
-
-    const closeBtn =
-        document.getElementById(
-            'cookieClose'
-        );
-
-    const subBtn =
-        document.getElementById(
-            'subscribe-btn'
-        );
-
-
-    const cookieChoice =
-        localStorage.getItem(
-            'kasiCookieChoice'
-        );
-
-
-    if (
-        !cookieChoice &&
-        banner
-    ) {
-
-        setTimeout(
-            () => {
-
-                banner.style.display =
-                    'flex';
-
-            },
-            1000
-        );
-    }
-
-
-    function saveChoice(
-        choice
-    ) {
-
-        playClick();
-
-
-        localStorage.setItem(
-            'kasiCookieChoice',
-            choice
-        );
-
-
-        if (banner) {
-
-            banner.style.display =
-                'none';
-        }
-    }
-
-
-    // ACCEPT ALL
-    if (acceptAll) {
-
-        acceptAll.addEventListener(
-            'click',
-            () => {
-
-                saveChoice(
-                    'all'
-                );
-
-
-                if (
-                    window.OneSignalDeferred
-                ) {
-
-                    OneSignalDeferred.push(
-                        async function (
-                            OneSignal
-                        ) {
-
-                            try {
-
-                                await OneSignal.showNativePrompt();
-
-                                await OneSignal.registerForPushNotifications();
-
-                            } catch (error) {
-
-                                console.error(
-                                    'Notification permission error:',
-                                    error
-                                );
-                            }
-                        }
-                    );
-                }
-            }
-        );
-    }
-
-
-    // ESSENTIAL ONLY
-    if (essential) {
-
-        essential.addEventListener(
-            'click',
-            () => {
-
-                saveChoice(
-                    'essential'
-                );
-            }
-        );
-    }
-
-
-    // CLOSE
-    if (closeBtn) {
-
-        closeBtn.addEventListener(
-            'click',
-            () => {
-
-                saveChoice(
-                    'essential'
-                );
-            }
-        );
-    }
-
-
-    // SUBSCRIBE
-    if (subBtn) {
-
-        subBtn.addEventListener(
-            'click',
-            () => {
-
-                const choice =
-                    localStorage.getItem(
-                        'kasiCookieChoice'
-                    );
-
-
-                if (
-                    choice !== 'all'
-                ) {
-
-                    alert(
-                        'Please accept all cookies first to enable notifications 🍪'
-                    );
-
-
-                    if (banner) {
-
-                        banner.style.display =
-                            'flex';
-                    }
-
-                    return;
-                }
-
-
-                if (
-                    window.OneSignalDeferred
-                ) {
-
-                    OneSignalDeferred.push(
-                        async function (
-                            OneSignal
-                        ) {
-
-                            try {
-
-                                await OneSignal.showNativePrompt();
-
-                            } catch (error) {
-
-                                console.error(
-                                    'Notification prompt error:',
-                                    error
-                                );
-                            }
-                        }
-                    );
-                }
-            }
-        );
-    }
-
-
-    // =========================================================
-    // 17. HTML ESCAPE
-    // =========================================================
-
-    function escapeHtml(
-        value
-    ) {
-
-        if (
-            value === null ||
-            value === undefined
-        ) {
-
-            return '';
-        }
-
-
-        return String(value)
-
-            .replace(
-                /&/g,
-                '&amp;'
-            )
-
-            .replace(
-                /</g,
-                '&lt;'
-            )
-
-            .replace(
-                />/g,
-                '&gt;'
-            )
-
-            .replace(
-                /"/g,
-                '&quot;'
-            )
-
-            .replace(
-                /'/g,
-                '&#039;'
-            );
-    }
+    console.log(
+        "K@si Web script.js loaded successfully."
+    );
 
 });
