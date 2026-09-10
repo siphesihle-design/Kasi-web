@@ -17,84 +17,91 @@
 
     <meta
         name="description"
-        content="K@si Web — Discover exceptional local barbers and salons. Compare services, choose your time and book your next fresh cut."
+        content="K@si Web — discover local barbers, compare services and book your next fresh cut."
     >
 
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>K@si Web | Fresh Cuts, No Lines</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%233B82F6'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='55' fill='white' font-family='Arial' font-weight='900'%3EK%3C/text%3E%3C/svg%3E"
     >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent"
-    >
-
-    <title>K@si Web | Fresh Cuts. No Lines.</title>
-
-    <!-- =====================================================
-         TAILWIND
-    ====================================================== -->
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- =====================================================
-         BOXICONS
-    ====================================================== -->
 
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
-    <!-- =====================================================
-         PWA
-    ====================================================== -->
-
-    <link
-        rel="manifest"
-        href="manifest.json"
-    >
-
-    <link
-        rel="icon"
-        type="image/png"
-        href="icon-192.png"
-    >
-
-
-    <!-- =====================================================
-         CUSTOM CSS
-    ====================================================== -->
-
     <style>
+
+        /* =========================================================
+           K@si Web
+           INTRO / LANDING PAGE
+        ========================================================= */
+
+        :root {
+
+            --bg: #07070d;
+            --bg-soft: #0c0c15;
+
+            --blue: #3B82F6;
+            --blue-light: #60A5FA;
+
+            --purple: #8B5CF6;
+            --purple-light: #A78BFA;
+
+            --white: #ffffff;
+            --text: #F4F4F5;
+            --muted: #A1A1AA;
+
+            --border: rgba(255,255,255,0.10);
+
+        }
+
 
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
         }
 
 
         html {
             scroll-behavior: smooth;
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
         }
 
 
         body {
-            margin: 0;
-            padding: 0;
-
-            width: 100%;
-            max-width: 100%;
 
             min-height: 100vh;
 
-            overflow-x: hidden;
+            background:
 
-            color: #ffffff;
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(59,130,246,0.18),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 35%,
+                    rgba(139,92,246,0.16),
+                    transparent 32%
+                ),
+
+                linear-gradient(
+                    180deg,
+                    #07070d 0%,
+                    #0a0a13 55%,
+                    #07070d 100%
+                );
+
+            color: var(--white);
 
             font-family:
                 Inter,
@@ -104,624 +111,532 @@
                 "Segoe UI",
                 sans-serif;
 
-            background:
-                radial-gradient(
-                    circle at 80% 5%,
-                    rgba(59,130,246,.16),
-                    transparent 27%
-                ),
-                radial-gradient(
-                    circle at 5% 35%,
-                    rgba(139,92,246,.13),
-                    transparent 28%
-                ),
-                linear-gradient(
-                    180deg,
-                    #07070d 0%,
-                    #0a0b18 48%,
-                    #0c0b1c 100%
-                );
+            overflow-x: hidden;
+
+            -webkit-font-smoothing: antialiased;
         }
 
 
-        img {
-            max-width: 100%;
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .landing {
+
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+
+            overflow: hidden;
         }
 
 
-        button,
-        a,
-        input {
-            font: inherit;
-        }
+        /* =========================================================
+           BACKGROUND LIGHT
+        ========================================================= */
 
+        .glow {
 
-        button {
-            cursor: pointer;
-        }
+            position: absolute;
 
+            width: 280px;
+            height: 280px;
 
-        ::selection {
-            background: rgba(96,165,250,.35);
-            color: white;
-        }
+            border-radius: 50%;
 
-
-        /* =====================================================
-           BACKGROUND GRID
-        ====================================================== */
-
-        body::before {
-            content: "";
-
-            position: fixed;
-
-            inset: 0;
+            filter: blur(90px);
 
             pointer-events: none;
 
-            z-index: -1;
+            opacity: 0.16;
+        }
 
-            opacity: .65;
 
-            background-image:
+        .glow-one {
+
+            top: -120px;
+            left: -100px;
+
+            background: var(--blue);
+        }
+
+
+        .glow-two {
+
+            right: -120px;
+            top: 35%;
+
+            background: var(--purple);
+        }
+
+
+        .glow-three {
+
+            bottom: -160px;
+            left: 25%;
+
+            background: #2563EB;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .topbar {
+
+            width: 100%;
+
+            padding:
+                max(18px, env(safe-area-inset-top))
+                20px
+                14px;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .brand-icon {
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
                 linear-gradient(
-                    rgba(255,255,255,.014) 1px,
-                    transparent 1px
-                ),
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 10px 30px rgba(59,130,246,0.25);
+
+            font-size: 1.35rem;
+
+            font-weight: 900;
+        }
+
+
+        .brand-name {
+
+            font-size: 1.05rem;
+
+            font-weight: 950;
+
+            letter-spacing: -0.4px;
+        }
+
+
+        .brand-name span {
+
+            color: var(--blue-light);
+        }
+
+
+        .top-pill {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 8px 11px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid var(--border);
+
+            color: #D4D4D8;
+
+            font-size: 0.68rem;
+
+            font-weight: 800;
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        .top-pill i {
+
+            color: #60A5FA;
+
+            font-size: 0.9rem;
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+
+            width: min(100%, 620px);
+
+            margin: 0 auto;
+
+            padding:
+                30px
+                20px
+                30px;
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =========================================================
+           HERO IMAGE
+        ========================================================= */
+
+        .hero-image-wrap {
+
+            position: relative;
+
+            width: 100%;
+
+            height: min(67vh, 560px);
+
+            min-height: 390px;
+
+            margin-bottom: 28px;
+
+            border-radius: 32px;
+
+            overflow: hidden;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            background: #11111b;
+
+            box-shadow:
+
+                0 35px 90px
+                rgba(0,0,0,0.60),
+
+                0 0 60px
+                rgba(59,130,246,0.08);
+        }
+
+
+        .hero-image {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            object-position: center;
+
+            display: block;
+
+            transform: scale(1.01);
+
+            animation:
+                heroZoom 8s ease-in-out infinite alternate;
+        }
+
+
+        @keyframes heroZoom {
+
+            from {
+                transform: scale(1.01);
+            }
+
+            to {
+                transform: scale(1.055);
+            }
+
+        }
+
+
+        .hero-image-wrap::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 2;
+
+            background:
+
+                linear-gradient(
+                    180deg,
+                    rgba(0,0,0,0.05) 0%,
+                    rgba(0,0,0,0.10) 30%,
+                    rgba(0,0,0,0.42) 58%,
+                    rgba(0,0,0,0.94) 100%
+                );
+
+            pointer-events: none;
+        }
+
+
+        .hero-image-wrap::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            right: -80px;
+            top: -80px;
+
+            border-radius: 50%;
+
+            background: var(--purple);
+
+            filter: blur(80px);
+
+            opacity: 0.20;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           IMAGE FALLBACK
+        ========================================================= */
+
+        .image-fallback {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-direction: column;
+
+            gap: 12px;
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    #111827,
+                    #1E1B4B
+                );
+
+            z-index: 1;
+        }
+
+
+        .image-fallback i {
+
+            font-size: 4rem;
+
+            color: #93C5FD;
+        }
+
+
+        .image-fallback span {
+
+            color: #D4D4D8;
+
+            font-size: 0.85rem;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           HERO CONTENT
+        ========================================================= */
+
+        .hero-content {
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 5;
+
+            padding: 28px 24px;
+        }
+
+
+        .hero-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 13px;
+
+            padding: 7px 11px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(59,130,246,0.13);
+
+            border:
+                1px solid
+                rgba(96,165,250,0.25);
+
+            color: #BFDBFE;
+
+            font-size: 0.68rem;
+
+            font-weight: 900;
+
+            letter-spacing: 1.1px;
+
+            text-transform: uppercase;
+
+            backdrop-filter: blur(12px);
+        }
+
+
+        .hero-badge i {
+
+            font-size: 0.9rem;
+
+            color: #60A5FA;
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    2.5rem,
+                    11vw,
+                    4.8rem
+                );
+
+            line-height: 0.92;
+
+            letter-spacing: -3px;
+
+            font-weight: 950;
+
+            max-width: 520px;
+        }
+
+
+        .hero h1 .gradient {
+
+            display: block;
+
+            background:
+
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,.014) 1px,
-                    transparent 1px
-                );
-
-            background-size: 60px 60px;
-
-            mask-image:
-                linear-gradient(
-                    to bottom,
-                    black,
-                    transparent 80%
-                );
-        }
-
-
-        /* =====================================================
-           GLASS
-        ====================================================== */
-
-        .glass {
-            background:
-                rgba(255,255,255,.045);
-
-            border:
-                1px solid rgba(255,255,255,.09);
-
-            backdrop-filter:
-                blur(22px);
-
-            -webkit-backdrop-filter:
-                blur(22px);
-        }
-
-
-        .glass-strong {
-            background:
-                rgba(10,10,22,.78);
-
-            border:
-                1px solid rgba(255,255,255,.11);
-
-            backdrop-filter:
-                blur(25px);
-
-            -webkit-backdrop-filter:
-                blur(25px);
-        }
-
-
-        /* =====================================================
-           GRADIENT TEXT
-        ====================================================== */
-
-        .gradient-text {
-            background:
-                linear-gradient(
-                    100deg,
-                    #60a5fa 0%,
-                    #8b5cf6 48%,
-                    #d8b4fe 100%
+                    #ffffff 0%,
+                    #93C5FD 45%,
+                    #C4B5FD 100%
                 );
 
             -webkit-background-clip: text;
+
             background-clip: text;
 
             color: transparent;
         }
 
 
-        /* =====================================================
-           BUTTONS
-        ====================================================== */
-
-        .primary-btn {
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #7c3aed
-                );
-
-            box-shadow:
-                0 15px 45px rgba(59,130,246,.22);
-
-            transition:
-                transform .25s ease,
-                box-shadow .25s ease,
-                filter .25s ease;
-        }
-
-
-        .primary-btn:hover {
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 20px 55px rgba(59,130,246,.34);
-
-            filter: brightness(1.08);
-        }
-
-
-        .primary-btn:active {
-            transform: scale(.98);
-        }
-
-
-        .secondary-btn {
-            background:
-                rgba(255,255,255,.055);
-
-            border:
-                1px solid rgba(255,255,255,.12);
-
-            transition:
-                transform .25s ease,
-                background .25s ease;
-        }
-
-
-        .secondary-btn:hover {
-            background:
-                rgba(255,255,255,.09);
-
-            transform:
-                translateY(-2px);
-        }
-
-
-        /* =====================================================
-           NAVIGATION
-        ====================================================== */
-
-        .nav-link {
-            position: relative;
-        }
-
-
-        .nav-link::after {
-            content: "";
-
-            position: absolute;
-
-            left: 0;
-            right: 0;
-
-            bottom: -8px;
-
-            height: 2px;
-
-            border-radius: 999px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #60a5fa,
-                    #8b5cf6
-                );
-
-            transform:
-                scaleX(0);
-
-            transition:
-                transform .25s ease;
-        }
-
-
-        .nav-link:hover::after {
-            transform:
-                scaleX(1);
-        }
-
-
-        /* =====================================================
-           HERO
-        ====================================================== */
-
-        .hero-title {
-            letter-spacing: -.065em;
-        }
-
-
-        .hero-image-wrap {
-            position: relative;
-
-            width: 100%;
-
-            max-width: 570px;
-
-            margin-left: auto;
-
-            border-radius:
-                38px;
-
-            overflow: hidden;
-
-            background:
-                #080810;
-
-            border:
-                1px solid rgba(255,255,255,.11);
-
-            box-shadow:
-                0 40px 110px rgba(0,0,0,.52),
-                0 0 100px rgba(59,130,246,.10);
-        }
-
-
-        .hero-image {
-            display: block;
-
-            width: 100%;
-
-            height: 620px;
-
-            object-fit: cover;
-
-            object-position: center;
-
-            filter:
-                brightness(.78)
-                contrast(1.06)
-                saturate(1.08);
-        }
-
-
-        .hero-overlay {
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    to top,
-                    rgba(0,0,0,.90) 0%,
-                    rgba(0,0,0,.28) 48%,
-                    rgba(0,0,0,.04) 100%
-                );
-        }
-
-
-        .hero-glow {
-            position: absolute;
-
-            width: 380px;
-            height: 380px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(59,130,246,.16);
-
-            filter:
-                blur(90px);
-
-            pointer-events: none;
-        }
-
-
-        .hero-glow-1 {
-            top: -150px;
-            right: -100px;
-        }
-
-
-        .hero-glow-2 {
-            bottom: -180px;
-            left: -140px;
-
-            background:
-                rgba(139,92,246,.15);
-        }
-
-
-        /* =====================================================
-           BADGE
-        ====================================================== */
-
-        .premium-badge {
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 9px;
-
-            padding:
-                10px 16px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(59,130,246,.08);
-
-            border:
-                1px solid rgba(96,165,250,.22);
-
-            color:
-                #a9c7ff;
-
-            font-size:
-                11px;
-
-            font-weight:
-                900;
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                .18em;
-
-            box-shadow:
-                0 10px 35px rgba(59,130,246,.08);
-        }
-
-
-        .live-dot {
-            width: 7px;
-            height: 7px;
-
-            border-radius: 999px;
-
-            background:
-                #4ade80;
-
-            box-shadow:
-                0 0 14px rgba(74,222,128,.75);
-        }
-
-
-        /* =====================================================
-           SEARCH
-        ====================================================== */
-
-        .search-box {
-            width: 100%;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            padding: 7px;
-
-            border-radius:
-                18px;
-
-            background:
-                rgba(255,255,255,.055);
-
-            border:
-                1px solid rgba(255,255,255,.11);
-
-            box-shadow:
-                0 20px 55px rgba(0,0,0,.22);
-
-            backdrop-filter:
-                blur(20px);
-
-            -webkit-backdrop-filter:
-                blur(20px);
-        }
-
-
-        .search-box input {
-            min-width: 0;
-
-            flex: 1;
-
-            border: 0;
-
-            outline: 0;
-
-            background: transparent;
-
-            color: white;
-        }
-
-
-        .search-box input::placeholder {
-            color:
-                rgba(255,255,255,.34);
-        }
-
-
-        /* =====================================================
-           FEATURE CARDS
-        ====================================================== */
-
-        .feature-card {
-            transition:
-                transform .3s ease,
-                background .3s ease,
-                border-color .3s ease;
-        }
-
-
-        .feature-card:hover {
-            transform:
-                translateY(-6px);
-
-            background:
-                rgba(255,255,255,.065);
-
-            border-color:
-                rgba(96,165,250,.24);
-        }
-
-
-        /* =====================================================
-           NUMBER
-        ====================================================== */
-
-        .step-number {
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.20),
-                    rgba(139,92,246,.20)
-                );
-
-            border:
-                1px solid rgba(255,255,255,.08);
-        }
-
-
-        /* =====================================================
-           ORBS
-        ====================================================== */
-
-        .orb {
-            position: absolute;
-
-            border-radius: 999px;
-
-            filter:
-                blur(80px);
-
-            pointer-events:
-                none;
-        }
-
-
-        /* =====================================================
-           ANIMATIONS
-        ====================================================== */
-
-        .fade-up {
-            animation:
-                fadeUp .8s ease both;
-        }
-
-
-        @keyframes fadeUp {
-
-            from {
-                opacity: 0;
-
-                transform:
-                    translateY(22px);
-            }
-
-            to {
-                opacity: 1;
-
-                transform:
-                    translateY(0);
-            }
-
-        }
-
-
-        .delay-1 {
-            animation-delay:
-                .10s;
-        }
-
-
-        .delay-2 {
-            animation-delay:
-                .20s;
-        }
-
-
-        .delay-3 {
-            animation-delay:
-                .30s;
-        }
-
-
-        .delay-4 {
-            animation-delay:
-                .40s;
-        }
-
-
-        .floating {
-            animation:
-                floating 5s ease-in-out infinite;
-        }
-
-
-        @keyframes floating {
-
-            0%,
-            100% {
-                transform:
-                    translateY(0);
-            }
-
-            50% {
-                transform:
-                    translateY(-7px);
-            }
-
-        }
-
-
-        /* =====================================================
+        /* =========================================================
            TYPEWRITER
-        ====================================================== */
+        ========================================================= */
 
-        .typing-word {
-            display: inline-block;
+        .type-line {
 
-            min-width:
-                115px;
+            min-height: 29px;
 
-            text-align:
-                left;
+            margin-top: 14px;
+
+            color: #D4D4D8;
+
+            font-size: clamp(
+                0.88rem,
+                3.7vw,
+                1.05rem
+            );
+
+            line-height: 1.55;
+
+            font-weight: 600;
         }
 
 
-        .typing-cursor {
+        .type-text {
+
+            color: #BFDBFE;
+        }
+
+
+        .cursor {
+
             display: inline-block;
 
-            width: 3px;
+            width: 2px;
 
-            height: .82em;
+            height: 1em;
 
-            margin-left: 5px;
+            margin-left: 3px;
 
-            vertical-align: -.04em;
+            vertical-align: -2px;
 
-            border-radius: 999px;
-
-            background:
-                #a78bfa;
+            background: #60A5FA;
 
             animation:
-                blink .75s infinite;
+                blink 0.8s infinite;
         }
 
 
@@ -740,208 +655,332 @@
         }
 
 
-        /* =====================================================
-           MOBILE MENU
-        ====================================================== */
+        /* =========================================================
+           INTRO COPY
+        ========================================================= */
 
-        .mobile-menu {
-            transition:
-                opacity .25s ease,
-                transform .25s ease;
+        .intro-copy {
+
+            margin-top: 19px;
+
+            color: #A1A1AA;
+
+            font-size: 0.86rem;
+
+            line-height: 1.65;
+
+            max-width: 470px;
         }
 
 
-        /* =====================================================
-           LOGIN MODAL
-        ====================================================== */
+        /* =========================================================
+           GET STARTED
+        ========================================================= */
 
-        .modal-bg {
-            background:
-                rgba(0,0,0,.80);
+        .cta-area {
 
-            backdrop-filter:
-                blur(14px);
+            margin-top: 25px;
 
-            -webkit-backdrop-filter:
-                blur(14px);
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
         }
 
 
-        .input-field {
+        .get-started {
+
             width: 100%;
 
-            background:
-                rgba(255,255,255,.055);
+            min-height: 58px;
 
-            border:
-                1px solid rgba(255,255,255,.10);
-
-            transition:
-                border-color .2s ease,
-                background .2s ease;
-        }
-
-
-        .input-field:focus {
-            outline: none;
-
-            border-color:
-                rgba(96,165,250,.65);
-
-            background:
-                rgba(255,255,255,.075);
-        }
-
-
-        .input-field::placeholder {
-            color:
-                rgba(255,255,255,.35);
-        }
-
-
-        /* =====================================================
-           MARQUEE
-        ====================================================== */
-
-        .marquee {
-            width: 100%;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-        }
-
-
-        .marquee-track {
-            display: inline-flex;
+            display: flex;
 
             align-items: center;
 
-            gap: 40px;
+            justify-content: center;
 
-            min-width: max-content;
+            gap: 9px;
 
-            animation:
-                marquee 28s linear infinite;
+            border: none;
+
+            border-radius: 17px;
+
+            background:
+
+                linear-gradient(
+                    100deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 0.97rem;
+
+            font-weight: 900;
+
+            box-shadow:
+
+                0 15px 35px
+                rgba(59,130,246,0.25),
+
+                inset 0 1px 0
+                rgba(255,255,255,0.18);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
 
-        @keyframes marquee {
+        .get-started i {
 
-            from {
-                transform:
-                    translateX(0);
-            }
+            font-size: 1.25rem;
 
-            to {
-                transform:
-                    translateX(-50%);
-            }
-
+            transition:
+                transform 0.2s ease;
         }
 
 
-        /* =====================================================
-           MOBILE
-        ====================================================== */
+        .get-started:hover {
 
-        @media (max-width: 767px) {
+            transform: translateY(-2px);
 
-            .hero-image-wrap {
-                max-width: none;
+            box-shadow:
 
-                border-radius:
-                    28px;
-            }
+                0 20px 42px
+                rgba(59,130,246,0.34),
 
-
-            .hero-image {
-                height:
-                    430px;
-            }
-
-
-            .hero-title {
-                font-size:
-                    clamp(
-                        46px,
-                        14vw,
-                        66px
-                    );
-
-                line-height:
-                    .94;
-            }
-
-
-            .typing-word {
-                min-width:
-                    95px;
-            }
-
-
-            .search-box {
-                padding:
-                    6px;
-            }
-
-
-            .search-box button {
-                padding-left:
-                    16px;
-
-                padding-right:
-                    16px;
-            }
-
+                inset 0 1px 0
+                rgba(255,255,255,0.20);
         }
 
+
+        .get-started:hover i {
+
+            transform: translateX(4px);
+        }
+
+
+        .get-started:active {
+
+            transform: scale(0.98);
+        }
+
+
+        /* =========================================================
+           TRUST ROW
+        ========================================================= */
+
+        .trust-row {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+
+            margin-top: 13px;
+        }
+
+
+        .trust-item {
+
+            min-height: 62px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-direction: column;
+
+            gap: 4px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            color: #A1A1AA;
+
+            font-size: 0.64rem;
+
+            font-weight: 800;
+
+            text-align: center;
+
+            backdrop-filter: blur(12px);
+        }
+
+
+        .trust-item i {
+
+            color: #93C5FD;
+
+            font-size: 1.1rem;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+
+            position: relative;
+
+            z-index: 3;
+
+            width: min(100%, 620px);
+
+            margin: auto;
+
+            padding:
+                8px
+                20px
+                max(22px, env(safe-area-inset-bottom));
+
+            text-align: center;
+
+            color: #52525B;
+
+            font-size: 0.66rem;
+
+            line-height: 1.5;
+        }
+
+
+        .footer strong {
+
+            color: #71717A;
+        }
+
+
+        /* =========================================================
+           SMALL SCREEN
+        ========================================================= */
 
         @media (max-width: 380px) {
 
-            .hero-title {
-                font-size:
-                    43px;
+            .topbar {
+
+                padding-left: 15px;
+                padding-right: 15px;
             }
 
 
-            .hero-image {
-                height:
-                    390px;
-            }
+            .hero {
 
-
-            .search-box i {
-                display:
-                    none;
-            }
-
-
-            .search-box button {
                 padding:
-                    12px 14px;
+                    20px
+                    15px
+                    20px;
+            }
+
+
+            .hero-image-wrap {
+
+                height: 57vh;
+
+                min-height: 350px;
+
+                border-radius: 27px;
+            }
+
+
+            .hero-content {
+
+                padding:
+                    22px
+                    19px;
+            }
+
+
+            .hero h1 {
+
+                letter-spacing: -2.2px;
+
+                font-size: 2.35rem;
+            }
+
+
+            .intro-copy {
+
+                font-size: 0.81rem;
             }
 
         }
 
 
-        /* =====================================================
+        /* =========================================================
+           TABLET / DESKTOP
+        ========================================================= */
+
+        @media (min-width: 700px) {
+
+            .hero {
+
+                padding-top: 45px;
+
+                padding-bottom: 45px;
+            }
+
+
+            .hero-image-wrap {
+
+                height: 610px;
+
+                border-radius: 36px;
+            }
+
+
+            .hero-content {
+
+                padding: 42px;
+            }
+
+
+            .hero h1 {
+
+                font-size: 4.5rem;
+            }
+
+
+            .footer {
+
+                padding-bottom: 30px;
+            }
+
+        }
+
+
+        /* =========================================================
            REDUCED MOTION
-        ====================================================== */
+        ========================================================= */
 
         @media (prefers-reduced-motion: reduce) {
 
-            *,
-            *::before,
-            *::after {
-                animation-duration:
-                    .01ms !important;
+            html {
+                scroll-behavior: auto;
+            }
 
-                animation-iteration-count:
-                    1 !important;
+            .hero-image {
+                animation: none;
+            }
 
-                scroll-behavior:
-                    auto !important;
+            .cursor {
+                animation: none;
             }
 
         }
@@ -954,2912 +993,322 @@
 <body>
 
 
-<!-- =========================================================
-     NAVIGATION
-========================================================= -->
+    <main class="landing">
 
-<header
-    class="
-        fixed
-        top-0
-        left-0
-        right-0
-        z-50
-        border-b
-        border-white/5
-        bg-[#07070d]/80
-        backdrop-blur-2xl
-    "
->
-
-    <div
-        class="
-            w-full
-            max-w-7xl
-            mx-auto
-            px-4
-            sm:px-5
-            md:px-8
-            h-[72px]
-            flex
-            items-center
-            justify-between
-            gap-3
-        "
-    >
-
-        <!-- LOGO -->
-
-        <a
-            href="index.html"
-            class="
-                flex
-                items-center
-                gap-2.5
-                min-w-0
-            "
-        >
-
-            <div
-                class="
-                    shrink-0
-                    w-10
-                    h-10
-                    rounded-xl
-                    bg-gradient-to-br
-                    from-blue-500
-                    to-violet-600
-                    flex
-                    items-center
-                    justify-center
-                    shadow-xl
-                    shadow-blue-500/20
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-cut
-                        text-xl
-                    "
-                ></i>
-
-            </div>
+        <!-- Background glow -->
+        <div class="glow glow-one"></div>
+        <div class="glow glow-two"></div>
+        <div class="glow glow-three"></div>
 
 
-            <div class="min-w-0">
+        <!-- =====================================================
+             TOP BAR
+        ====================================================== -->
 
-                <div
-                    class="
-                        text-lg
-                        sm:text-xl
-                        font-black
-                        tracking-tight
-                    "
-                >
-                    K<span class="text-blue-400">@</span>si
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    K
                 </div>
 
-                <div
-                    class="
-                        hidden
-                        sm:block
-                        text-[8px]
-                        uppercase
-                        tracking-[.25em]
-                        text-white/35
-                        -mt-1
-                    "
-                >
-                    Fresh. Local. Yours.
-                </div>
-
-            </div>
-
-        </a>
-
-
-        <!-- DESKTOP NAV -->
-
-        <nav
-            class="
-                hidden
-                lg:flex
-                items-center
-                gap-8
-                text-sm
-                text-white/55
-            "
-        >
-
-            <a
-                href="#discover"
-                class="nav-link hover:text-white"
-            >
-                Discover
-            </a>
-
-            <a
-                href="#how-it-works"
-                class="nav-link hover:text-white"
-            >
-                How it works
-            </a>
-
-            <a
-                href="#why-kasi"
-                class="nav-link hover:text-white"
-            >
-                Why K@si
-            </a>
-
-            <a
-                href="owners.html"
-                class="nav-link hover:text-white"
-            >
-                For Owners
-            </a>
-
-        </nav>
-
-
-        <!-- RIGHT -->
-
-        <div
-            class="
-                flex
-                items-center
-                gap-2
-                sm:gap-3
-                shrink-0
-            "
-        >
-
-            <button
-                id="desktopLoginBtn"
-                class="
-                    hidden
-                    sm:block
-                    text-sm
-                    font-bold
-                    text-white/70
-                    hover:text-white
-                    transition
-                "
-            >
-                Login
-            </button>
-
-
-            <a
-                href="home.html"
-                class="
-                    primary-btn
-                    hidden
-                    sm:flex
-                    items-center
-                    gap-2
-                    rounded-xl
-                    px-4
-                    md:px-5
-                    py-3
-                    text-sm
-                    font-black
-                    whitespace-nowrap
-                "
-            >
-
-                Get Started
-
-                <i
-                    class="
-                        bx
-                        bx-right-arrow-alt
-                        text-lg
-                    "
-                ></i>
-
-            </a>
-
-
-            <button
-                id="mobileMenuBtn"
-                class="
-                    lg:hidden
-                    shrink-0
-                    w-10
-                    h-10
-                    rounded-xl
-                    glass
-                    flex
-                    items-center
-                    justify-center
-                "
-                aria-label="Open menu"
-            >
-
-                <i
-                    id="menuIcon"
-                    class="
-                        bx
-                        bx-menu
-                        text-2xl
-                    "
-                ></i>
-
-            </button>
-
-        </div>
-
-    </div>
-
-</header>
-
-
-<!-- =========================================================
-     MOBILE MENU
-========================================================= -->
-
-<div
-    id="mobileMenu"
-    class="
-        mobile-menu
-        fixed
-        inset-x-0
-        top-[72px]
-        z-40
-        hidden
-        bg-[#090914]/98
-        border-b
-        border-white/10
-        backdrop-blur-2xl
-    "
->
-
-    <div
-        class="
-            p-4
-            space-y-1
-        "
-    >
-
-        <a
-            href="#discover"
-            class="
-                mobileLink
-                block
-                rounded-xl
-                p-4
-                hover:bg-white/5
-            "
-        >
-            Discover
-        </a>
-
-
-        <a
-            href="#how-it-works"
-            class="
-                mobileLink
-                block
-                rounded-xl
-                p-4
-                hover:bg-white/5
-            "
-        >
-            How it works
-        </a>
-
-
-        <a
-            href="#why-kasi"
-            class="
-                mobileLink
-                block
-                rounded-xl
-                p-4
-                hover:bg-white/5
-            "
-        >
-            Why K@si
-        </a>
-
-
-        <a
-            href="owners.html"
-            class="
-                block
-                rounded-xl
-                p-4
-                hover:bg-white/5
-            "
-        >
-            For Salon Owners
-        </a>
-
-
-        <button
-            id="mobileLoginBtn"
-            class="
-                w-full
-                text-left
-                rounded-xl
-                p-4
-                hover:bg-white/5
-            "
-        >
-            Login
-        </button>
-
-
-        <a
-            href="home.html"
-            class="
-                primary-btn
-                block
-                text-center
-                rounded-xl
-                p-4
-                font-black
-                mt-2
-            "
-        >
-            Get Started
-        </a>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     HERO
-========================================================= -->
-
-<main>
-
-<section
-    class="
-        relative
-        overflow-hidden
-        pt-28
-        pb-16
-        sm:pb-20
-        lg:pt-36
-        lg:pb-28
-    "
->
-
-    <!-- BACKGROUND ORBS -->
-
-    <div
-        class="
-            orb
-            w-72
-            h-72
-            bg-blue-600/20
-            -top-20
-            right-[-100px]
-        "
-    ></div>
-
-
-    <div
-        class="
-            orb
-            w-80
-            h-80
-            bg-violet-600/15
-            bottom-0
-            left-[-120px]
-        "
-    ></div>
-
-
-    <div
-        class="
-            relative
-            w-full
-            max-w-7xl
-            mx-auto
-            px-4
-            sm:px-5
-            md:px-8
-        "
-    >
-
-        <div
-            class="
-                grid
-                lg:grid-cols-[1fr_.92fr]
-                gap-12
-                lg:gap-16
-                items-center
-            "
-        >
-
-
-            <!-- =================================================
-                 HERO TEXT
-            ================================================== -->
-
-            <div
-                class="
-                    min-w-0
-                    text-center
-                    lg:text-left
-                "
-            >
-
-                <!-- BADGE -->
-
-                <div
-                    class="
-                        fade-up
-                        inline-flex
-                    "
-                >
-
-                    <span
-                        class="premium-badge"
-                    >
-
-                        <span
-                            class="live-dot"
-                        ></span>
-
-                        The local grooming marketplace
-
-                    </span>
-
-                </div>
-
-
-                <!-- TITLE -->
-
-                <h1
-                    class="
-                        fade-up
-                        delay-1
-                        hero-title
-                        mt-7
-                        font-black
-                        leading-[.94]
-                        text-[clamp(48px,13vw,82px)]
-                    "
-                >
-
-                    Fresh cuts.
-
-                    <br>
-
-                    <span class="gradient-text">
-                        No lines.
-                    </span>
-
-                </h1>
-
-
-                <!-- AUTOMATIC WORD -->
-
-                <div
-                    class="
-                        fade-up
-                        delay-2
-                        mt-6
-                        text-xl
-                        sm:text-2xl
-                        md:text-3xl
-                        font-bold
-                        text-white/75
-                    "
-                >
-
-                    Your next look starts
-
-                    <span
-                        class="
-                            gradient-text
-                            typing-word
-                        "
-                        id="typingWord"
-                    >
-                        local
-                    </span>
-
-                    <span
-                        class="typing-cursor"
-                    ></span>
-
-                </div>
-
-
-                <!-- DESCRIPTION -->
-
-                <p
-                    class="
-                        fade-up
-                        delay-2
-                        mt-6
-                        text-base
-                        sm:text-lg
-                        leading-relaxed
-                        text-white/48
-                        max-w-xl
-                        mx-auto
-                        lg:mx-0
-                    "
-                >
-                    Discover the best local barbers and salons,
-                    compare services and prices, choose your time
-                    and book your next look — all in one place.
-                </p>
-
-
-                <!-- SEARCH -->
-
-                <div
-                    class="
-                        fade-up
-                        delay-3
-                        search-box
-                        mt-8
-                        max-w-xl
-                        mx-auto
-                        lg:mx-0
-                    "
-                >
-
-                    <i
-                        class="
-                            bx
-                            bx-search
-                            text-xl
-                            text-white/30
-                            ml-2
-                            shrink-0
-                        "
-                    ></i>
-
-
-                    <input
-                        id="heroSearch"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="Search salons, barbers or styles..."
-                        class="
-                            px-2
-                            py-3
-                            sm:py-4
-                            text-sm
-                            sm:text-base
-                        "
-                    >
-
-
-                    <button
-                        id="findSalonBtn"
-                        class="
-                            primary-btn
-                            shrink-0
-                            rounded-xl
-                            px-5
-                            sm:px-7
-                            py-3.5
-                            font-black
-                            text-sm
-                        "
-                    >
-                        Search
-                    </button>
-
-                </div>
-
-
-                <!-- ACTIONS -->
-
-                <div
-                    class="
-                        fade-up
-                        delay-3
-                        grid
-                        sm:flex
-                        gap-3
-                        mt-4
-                        max-w-xl
-                        mx-auto
-                        lg:mx-0
-                    "
-                >
-
-                    <a
-                        href="home.html"
-                        class="
-                            primary-btn
-                            rounded-xl
-                            px-6
-                            py-4
-                            font-black
-                            flex
-                            items-center
-                            justify-center
-                            gap-2
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-calendar-check
-                                text-xl
-                            "
-                        ></i>
-
-                        Explore salons
-
-                    </a>
-
-
-                    <a
-                        href="owners.html"
-                        class="
-                            secondary-btn
-                            rounded-xl
-                            px-6
-                            py-4
-                            font-black
-                            flex
-                            items-center
-                            justify-center
-                            gap-2
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-store
-                                text-xl
-                            "
-                        ></i>
-
-                        List your salon
-
-                    </a>
-
-                </div>
-
-
-                <!-- TRUST -->
-
-                <div
-                    class="
-                        fade-up
-                        delay-4
-                        flex
-                        flex-wrap
-                        justify-center
-                        lg:justify-start
-                        gap-x-6
-                        gap-y-3
-                        mt-7
-                        text-xs
-                        sm:text-sm
-                        text-white/40
-                    "
-                >
-
-                    <span
-                        class="
-                            flex
-                            items-center
-                            gap-2
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bxs-check-circle
-                                text-blue-400
-                                text-lg
-                            "
-                        ></i>
-
-                        Local salons
-
-                    </span>
-
-
-                    <span
-                        class="
-                            flex
-                            items-center
-                            gap-2
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-time-five
-                                text-blue-400
-                                text-lg
-                            "
-                        ></i>
-
-                        Book your time
-
-                    </span>
-
-
-                    <span
-                        class="
-                            flex
-                            items-center
-                            gap-2
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-shield-quarter
-                                text-violet-400
-                                text-lg
-                            "
-                        ></i>
-
-                        Simple & secure
-
-                    </span>
-
+                <div class="brand-name">
+                    K<span>@</span>si Web
                 </div>
 
             </div>
 
 
-            <!-- =================================================
-                 HERO IMAGE
-            ================================================== -->
-
-            <div
-                class="
-                    relative
-                    w-full
-                    min-w-0
-                    order-first
-                    lg:order-none
-                "
-            >
-
-                <div
-                    class="
-                        hero-glow
-                        hero-glow-1
-                    "
-                ></div>
-
-
-                <div
-                    class="
-                        hero-glow
-                        hero-glow-2
-                    "
-                ></div>
-
-
-                <div
-                    class="
-                        hero-image-wrap
-                    "
-                >
-
-                    <img
-                        src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
-                        alt="K@si Web featured grooming style"
-                        class="hero-image"
-                        loading="eager"
-                        fetchpriority="high"
-                        onerror="
-                            this.onerror=null;
-                            this.src='683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg';
-                        "
-                    >
-
-
-                    <div
-                        class="hero-overlay"
-                    ></div>
-
-
-                    <!-- TOP BADGE -->
-
-                    <div
-                        class="
-                            absolute
-                            top-4
-                            left-4
-                            right-4
-                            flex
-                            justify-between
-                            items-start
-                            gap-3
-                        "
-                    >
-
-                        <div
-                            class="
-                                glass-strong
-                                rounded-full
-                                px-3
-                                sm:px-4
-                                py-2
-                                text-[10px]
-                                sm:text-xs
-                                font-bold
-                                flex
-                                items-center
-                                gap-2
-                            "
-                        >
-
-                            <i
-                                class="
-                                    bx
-                                    bxs-star
-                                    text-yellow-400
-                                "
-                            ></i>
-
-                            Top local style
-
-                        </div>
-
-
-                        <div
-                            class="
-                                glass-strong
-                                rounded-full
-                                px-3
-                                py-2
-                                text-[10px]
-                                font-bold
-                                text-green-300
-                            "
-                        >
-                            Available
-                        </div>
-
-                    </div>
-
-
-                    <!-- BOTTOM FEATURE CARD -->
-
-                    <div
-                        class="
-                            floating
-                            absolute
-                            bottom-4
-                            left-4
-                            right-4
-                            glass-strong
-                            rounded-2xl
-                            p-4
-                            sm:p-5
-                        "
-                    >
-
-                        <div
-                            class="
-                                flex
-                                items-center
-                                justify-between
-                                gap-4
-                            "
-                        >
-
-                            <div
-                                class="min-w-0"
-                            >
-
-                                <div
-                                    class="
-                                        text-[9px]
-                                        sm:text-[10px]
-                                        uppercase
-                                        tracking-[.2em]
-                                        text-white/40
-                                    "
-                                >
-                                    Featured style
-                                </div>
-
-
-                                <div
-                                    class="
-                                        font-black
-                                        text-base
-                                        sm:text-lg
-                                        mt-1
-                                    "
-                                >
-                                    Kasi Taper Fade
-                                </div>
-
-
-                                <div
-                                    class="
-                                        text-[11px]
-                                        sm:text-xs
-                                        text-white/40
-                                        mt-1
-                                    "
-                                >
-                                    Fresh fade • Clean finish
-                                </div>
-
-                            </div>
-
-
-                            <div
-                                class="
-                                    text-right
-                                    shrink-0
-                                "
-                            >
-
-                                <div
-                                    class="
-                                        flex
-                                        items-center
-                                        justify-end
-                                        gap-1
-                                        text-yellow-400
-                                        font-black
-                                    "
-                                >
-
-                                    <i
-                                        class="bx bxs-star"
-                                    ></i>
-
-                                    4.8
-
-                                </div>
-
-
-                                <div
-                                    class="
-                                        text-[11px]
-                                        sm:text-xs
-                                        text-white/40
-                                        mt-1
-                                    "
-                                >
-                                    From R120
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     BRAND STRIP
-========================================================= -->
-
-<section
-    class="
-        border-y
-        border-white/5
-        bg-white/[.015]
-        py-5
-    "
->
-
-    <div class="marquee">
-
-        <div class="marquee-track">
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                BARBERS
-            </span>
-
-            <span class="text-blue-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                SALONS
-            </span>
-
-            <span class="text-violet-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                FRESH CUTS
-            </span>
-
-            <span class="text-blue-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                LOCAL TALENT
-            </span>
-
-            <span class="text-violet-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                EASY BOOKINGS
-            </span>
-
-            <span class="text-blue-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                BARBERS
-            </span>
-
-            <span class="text-violet-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                SALONS
-            </span>
-
-            <span class="text-blue-400">✦</span>
-
-
-            <span
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-white/30
-                "
-            >
-                FRESH CUTS
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     DISCOVER
-========================================================= -->
-
-<section
-    id="discover"
-    class="
-        w-full
-        max-w-7xl
-        mx-auto
-        px-4
-        sm:px-5
-        md:px-8
-        py-20
-        sm:py-24
-    "
->
-
-    <div
-        class="
-            flex
-            flex-col
-            md:flex-row
-            md:items-end
-            md:justify-between
-            gap-5
-            mb-10
-        "
-    >
-
-        <div>
-
-            <div
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.28em]
-                    text-blue-400
-                    font-black
-                "
-            >
-                Discover
-            </div>
-
-
-            <h2
-                class="
-                    text-3xl
-                    sm:text-4xl
-                    md:text-5xl
-                    font-black
-                    tracking-tight
-                    mt-3
-                "
-            >
-                Styles worth booking.
-            </h2>
-
-
-            <p
-                class="
-                    text-white/40
-                    mt-3
-                    max-w-xl
-                "
-            >
-                Explore popular cuts and services from
-                local grooming professionals.
-            </p>
-
-        </div>
-
-
-        <a
-            href="home.html"
-            class="
-                text-sm
-                text-blue-400
-                font-bold
-                flex
-                items-center
-                gap-2
-            "
-        >
-
-            Explore K@si
-
-            <i
-                class="
-                    bx
-                    bx-right-arrow-alt
-                    text-lg
-                "
-            ></i>
-
-        </a>
-
-    </div>
-
-
-    <!-- CARDS -->
-
-    <div
-        class="
-            grid
-            sm:grid-cols-2
-            lg:grid-cols-4
-            gap-4
-        "
-    >
-
-        <!-- CARD 1 -->
-
-        <article
-            class="
-                feature-card
-                glass
-                rounded-3xl
-                p-6
-            "
-        >
-
-            <div
-                class="
-                    w-12
-                    h-12
-                    rounded-2xl
-                    bg-blue-500/10
-                    border
-                    border-blue-400/15
-                    flex
-                    items-center
-                    justify-center
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-cut
-                        text-2xl
-                        text-blue-400
-                    "
-                ></i>
-
-            </div>
-
-
-            <h3
-                class="
-                    font-black
-                    text-lg
-                    mt-6
-                "
-            >
-                Fresh Fades
-            </h3>
-
-
-            <p
-                class="
-                    text-sm
-                    text-white/40
-                    mt-2
-                    leading-relaxed
-                "
-            >
-                Sharp fades and clean finishes from
-                local professionals.
-            </p>
-
-
-            <div
-                class="
-                    flex
-                    items-center
-                    justify-between
-                    mt-6
-                "
-            >
-
-                <span
-                    class="
-                        text-xs
-                        text-white/40
-                    "
-                >
-                    From
-                    <strong
-                        class="text-white"
-                    >
-                        R80
-                    </strong>
-                </span>
-
-
-                <span
-                    class="
-                        text-yellow-400
-                        text-sm
-                        font-black
-                    "
-                >
-                    ★ 4.8
-                </span>
-
-            </div>
-
-        </article>
-
-
-        <!-- CARD 2 -->
-
-        <article
-            class="
-                feature-card
-                glass
-                rounded-3xl
-                p-6
-            "
-        >
-
-            <div
-                class="
-                    w-12
-                    h-12
-                    rounded-2xl
-                    bg-violet-500/10
-                    border
-                    border-violet-400/15
-                    flex
-                    items-center
-                    justify-center
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-spa
-                        text-2xl
-                        text-violet-400
-                    "
-                ></i>
-
-            </div>
-
-
-            <h3
-                class="
-                    font-black
-                    text-lg
-                    mt-6
-                "
-            >
-                Beauty & Care
-            </h3>
-
-
-            <p
-                class="
-                    text-sm
-                    text-white/40
-                    mt-2
-                    leading-relaxed
-                "
-            >
-                Find salons offering beauty, grooming
-                and self-care services.
-            </p>
-
-
-            <div
-                class="
-                    flex
-                    items-center
-                    justify-between
-                    mt-6
-                "
-            >
-
-                <span
-                    class="
-                        text-xs
-                        text-white/40
-                    "
-                >
-                    Local
-                </span>
-
-
-                <span
-                    class="
-                        text-violet-400
-                        text-sm
-                        font-black
-                    "
-                >
-                    EXPLORE
-                </span>
-
-            </div>
-
-        </article>
-
-
-        <!-- CARD 3 -->
-
-        <article
-            class="
-                feature-card
-                glass
-                rounded-3xl
-                p-6
-            "
-        >
-
-            <div
-                class="
-                    w-12
-                    h-12
-                    rounded-2xl
-                    bg-cyan-500/10
-                    border
-                    border-cyan-400/15
-                    flex
-                    items-center
-                    justify-center
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-time-five
-                        text-2xl
-                        text-cyan-400
-                    "
-                ></i>
-
-            </div>
-
-
-            <h3
-                class="
-                    font-black
-                    text-lg
-                    mt-6
-                "
-            >
-                Less Waiting
-            </h3>
-
-
-            <p
-                class="
-                    text-sm
-                    text-white/40
-                    mt-2
-                    leading-relaxed
-                "
-            >
-                Choose your appointment before you
-                leave home.
-            </p>
-
-
-            <div
-                class="
-                    flex
-                    items-center
-                    gap-2
-                    mt-6
-                    text-cyan-400
-                    text-xs
-                    font-black
-                "
-            >
-
-                <i class="bx bx-check-circle"></i>
-
-                BOOK A TIME
-
-            </div>
-
-        </article>
-
-
-        <!-- CARD 4 -->
-
-        <article
-            class="
-                feature-card
-                glass
-                rounded-3xl
-                p-6
-            "
-        >
-
-            <div
-                class="
-                    w-12
-                    h-12
-                    rounded-2xl
-                    bg-purple-500/10
-                    border
-                    border-purple-400/15
-                    flex
-                    items-center
-                    justify-center
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-store
-                        text-2xl
-                        text-purple-400
-                    "
-                ></i>
-
-            </div>
-
-
-            <h3
-                class="
-                    font-black
-                    text-lg
-                    mt-6
-                "
-            >
-                Local Talent
-            </h3>
-
-
-            <p
-                class="
-                    text-sm
-                    text-white/40
-                    mt-2
-                    leading-relaxed
-                "
-            >
-                Support barbers and salons in your
-                community.
-            </p>
-
-
-            <div
-                class="
-                    flex
-                    items-center
-                    gap-2
-                    mt-6
-                    text-purple-400
-                    text-xs
-                    font-black
-                "
-            >
+            <div class="top-pill">
 
                 <i class="bx bx-map"></i>
 
-                FIND NEARBY
+                Local • Fresh • Easy
 
             </div>
 
-        </article>
-
-    </div>
-
-</section>
+        </header>
 
 
-<!-- =========================================================
-     HOW IT WORKS
-========================================================= -->
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
 
-<section
-    id="how-it-works"
-    class="
-        border-y
-        border-white/5
-        bg-white/[.015]
-    "
->
-
-    <div
-        class="
-            w-full
-            max-w-7xl
-            mx-auto
-            px-4
-            sm:px-5
-            md:px-8
-            py-20
-            sm:py-24
-        "
-    >
-
-        <div
-            class="
-                text-center
-                max-w-2xl
-                mx-auto
-            "
-        >
-
-            <div
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.28em]
-                    text-violet-400
-                    font-black
-                "
-            >
-                Simple by design
-            </div>
+        <section class="hero">
 
 
-            <h2
-                class="
-                    text-3xl
-                    sm:text-4xl
-                    md:text-5xl
-                    font-black
-                    mt-3
-                "
-            >
-
-                Your next cut in
-
-                <span class="gradient-text">
-                    three steps.
-                </span>
-
-            </h2>
-
-        </div>
+            <div class="hero-image-wrap">
 
 
-        <div
-            class="
-                grid
-                md:grid-cols-3
-                gap-5
-                mt-14
-            "
-        >
+                <!-- =================================================
+                     MAIN LANDING IMAGE
 
-            <!-- STEP 1 -->
+                     Change this filename if your landing image
+                     has a different filename.
+                ================================================== -->
 
-            <div
-                class="
-                    glass
-                    rounded-3xl
-                    p-7
-                "
-            >
+                <img
+                    class="hero-image"
+                    id="heroImage"
+                    src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
+                    alt="K@si Web barber experience"
+                    loading="eager"
+                    fetchpriority="high"
+                >
+
+
+                <!-- Fallback if image is missing -->
 
                 <div
-                    class="
-                        step-number
-                        w-12
-                        h-12
-                        rounded-2xl
-                        flex
-                        items-center
-                        justify-center
-                        font-black
-                        text-blue-300
-                    "
-                >
-                    01
-                </div>
-
-
-                <i
-                    class="
-                        bx
-                        bx-search
-                        text-4xl
-                        text-blue-400
-                        mt-8
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        text-xl
-                        font-black
-                        mt-5
-                    "
-                >
-                    Find your style
-                </h3>
-
-
-                <p
-                    class="
-                        text-sm
-                        text-white/40
-                        leading-relaxed
-                        mt-3
-                    "
-                >
-                    Search local salons, barbers, services
-                    and styles that match what you want.
-                </p>
-
-            </div>
-
-
-            <!-- STEP 2 -->
-
-            <div
-                class="
-                    glass
-                    rounded-3xl
-                    p-7
-                "
-            >
-
-                <div
-                    class="
-                        step-number
-                        w-12
-                        h-12
-                        rounded-2xl
-                        flex
-                        items-center
-                        justify-center
-                        font-black
-                        text-violet-300
-                    "
-                >
-                    02
-                </div>
-
-
-                <i
-                    class="
-                        bx
-                        bx-calendar-check
-                        text-4xl
-                        text-violet-400
-                        mt-8
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        text-xl
-                        font-black
-                        mt-5
-                    "
-                >
-                    Choose your time
-                </h3>
-
-
-                <p
-                    class="
-                        text-sm
-                        text-white/40
-                        leading-relaxed
-                        mt-3
-                    "
-                >
-                    Compare services and prices, then
-                    select a convenient appointment time.
-                </p>
-
-            </div>
-
-
-            <!-- STEP 3 -->
-
-            <div
-                class="
-                    glass
-                    rounded-3xl
-                    p-7
-                "
-            >
-
-                <div
-                    class="
-                        step-number
-                        w-12
-                        h-12
-                        rounded-2xl
-                        flex
-                        items-center
-                        justify-center
-                        font-black
-                        text-purple-300
-                    "
-                >
-                    03
-                </div>
-
-
-                <i
-                    class="
-                        bx
-                        bx-check-circle
-                        text-4xl
-                        text-cyan-400
-                        mt-8
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        text-xl
-                        font-black
-                        mt-5
-                    "
-                >
-                    Show up fresh
-                </h3>
-
-
-                <p
-                    class="
-                        text-sm
-                        text-white/40
-                        leading-relaxed
-                        mt-3
-                    "
-                >
-                    Your booking is sent to the salon.
-                    Arrive at your chosen time and get fresh.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     WHY KASI
-========================================================= -->
-
-<section
-    id="why-kasi"
-    class="
-        w-full
-        max-w-7xl
-        mx-auto
-        px-4
-        sm:px-5
-        md:px-8
-        py-20
-        sm:py-24
-    "
->
-
-    <div
-        class="
-            grid
-            lg:grid-cols-2
-            gap-14
-            items-center
-        "
-    >
-
-        <div>
-
-            <div
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.28em]
-                    text-blue-400
-                    font-black
-                "
-            >
-                Why K@si
-            </div>
-
-
-            <h2
-                class="
-                    text-3xl
-                    sm:text-4xl
-                    md:text-5xl
-                    font-black
-                    leading-tight
-                    mt-3
-                "
-            >
-
-                Built around the way
-
-                <span class="gradient-text">
-                    Kasi moves.
-                </span>
-
-            </h2>
-
-
-            <p
-                class="
-                    text-white/45
-                    leading-relaxed
-                    mt-5
-                    max-w-xl
-                "
-            >
-                Great grooming should be easy to find,
-                easy to book and easy to access. K@si brings
-                local grooming businesses and customers
-                together in one simple experience.
-            </p>
-
-
-            <a
-                href="home.html"
-                class="
-                    primary-btn
-                    inline-flex
-                    items-center
-                    gap-2
-                    rounded-xl
-                    px-6
-                    py-3.5
-                    mt-8
-                    font-black
-                "
-            >
-
-                Explore K@si
-
-                <i
-                    class="
-                        bx
-                        bx-right-arrow-alt
-                        text-xl
-                    "
-                ></i>
-
-            </a>
-
-        </div>
-
-
-        <!-- FEATURES -->
-
-        <div
-            class="
-                grid
-                sm:grid-cols-2
-                gap-4
-            "
-        >
-
-            <div
-                class="
-                    feature-card
-                    glass
-                    rounded-3xl
-                    p-6
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-map
-                        text-3xl
-                        text-blue-400
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        font-black
-                        mt-5
-                    "
-                >
-                    Local first
-                </h3>
-
-
-                <p
-                    class="
-                        text-xs
-                        text-white/40
-                        leading-relaxed
-                        mt-2
-                    "
-                >
-                    Discover businesses and talent in
-                    your community.
-                </p>
-
-            </div>
-
-
-            <div
-                class="
-                    feature-card
-                    glass
-                    rounded-3xl
-                    p-6
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-time-five
-                        text-3xl
-                        text-violet-400
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        font-black
-                        mt-5
-                    "
-                >
-                    Less waiting
-                </h3>
-
-
-                <p
-                    class="
-                        text-xs
-                        text-white/40
-                        leading-relaxed
-                        mt-2
-                    "
-                >
-                    Choose your appointment before
-                    you leave home.
-                </p>
-
-            </div>
-
-
-            <div
-                class="
-                    feature-card
-                    glass
-                    rounded-3xl
-                    p-6
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-wallet
-                        text-3xl
-                        text-cyan-400
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        font-black
-                        mt-5
-                    "
-                >
-                    Clear pricing
-                </h3>
-
-
-                <p
-                    class="
-                        text-xs
-                        text-white/40
-                        leading-relaxed
-                        mt-2
-                    "
-                >
-                    See available services and prices
-                    before booking.
-                </p>
-
-            </div>
-
-
-            <div
-                class="
-                    feature-card
-                    glass
-                    rounded-3xl
-                    p-6
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-mobile-alt
-                        text-3xl
-                        text-purple-400
-                    "
-                ></i>
-
-
-                <h3
-                    class="
-                        font-black
-                        mt-5
-                    "
-                >
-                    One experience
-                </h3>
-
-
-                <p
-                    class="
-                        text-xs
-                        text-white/40
-                        leading-relaxed
-                        mt-2
-                    "
-                >
-                    Search, book and manage your
-                    appointments from one place.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     OWNER CTA
-========================================================= -->
-
-<section
-    class="
-        w-full
-        max-w-7xl
-        mx-auto
-        px-4
-        sm:px-5
-        md:px-8
-        pb-20
-    "
->
-
-    <div
-        class="
-            relative
-            overflow-hidden
-            rounded-[2rem]
-            sm:rounded-[2.5rem]
-            border
-            border-white/10
-            bg-gradient-to-br
-            from-blue-600/15
-            via-violet-600/10
-            to-transparent
-            p-7
-            sm:p-8
-            md:p-12
-        "
-    >
-
-        <div
-            class="
-                absolute
-                -right-24
-                -top-24
-                w-80
-                h-80
-                rounded-full
-                bg-blue-500/15
-                blur-3xl
-            "
-        ></div>
-
-
-        <div
-            class="
-                relative
-                grid
-                md:grid-cols-[1fr_auto]
-                gap-8
-                items-center
-            "
-        >
-
-            <div>
-
-                <div
-                    class="
-                        text-xs
-                        uppercase
-                        tracking-[.28em]
-                        text-blue-300
-                        font-black
-                    "
-                >
-                    For salon owners
-                </div>
-
-
-                <h2
-                    class="
-                        text-3xl
-                        sm:text-4xl
-                        font-black
-                        mt-3
-                    "
+                    class="image-fallback"
+                    id="imageFallback"
                 >
 
-                    Bring your chair
+                    <i class="bx bx-cut"></i>
 
-                    <span class="gradient-text">
-                        online.
+                    <span>
+                        K@si Web
                     </span>
 
-                </h2>
-
-
-                <p
-                    class="
-                        text-white/45
-                        mt-4
-                        max-w-2xl
-                    "
-                >
-                    Put your salon in front of local customers,
-                    showcase your services and manage bookings
-                    from your owner dashboard.
-                </p>
-
-            </div>
-
-
-            <a
-                href="owners.html"
-                class="
-                    secondary-btn
-                    rounded-xl
-                    px-6
-                    py-3.5
-                    font-black
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    whitespace-nowrap
-                "
-            >
-
-                List Your Salon
-
-                <i
-                    class="
-                        bx
-                        bx-right-arrow-alt
-                        text-xl
-                    "
-                ></i>
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     FINAL CTA
-========================================================= -->
-
-<section
-    class="
-        w-full
-        max-w-5xl
-        mx-auto
-        px-4
-        sm:px-5
-        md:px-8
-        pb-24
-        text-center
-    "
->
-
-    <div
-        class="
-            glass
-            rounded-[2rem]
-            sm:rounded-[2.5rem]
-            p-8
-            sm:p-10
-            md:p-16
-            relative
-            overflow-hidden
-        "
-    >
-
-        <div
-            class="
-                absolute
-                inset-0
-                bg-gradient-to-br
-                from-blue-500/10
-                via-violet-500/10
-                to-transparent
-                pointer-events-none
-            "
-        ></div>
-
-
-        <div class="relative">
-
-            <div
-                class="
-                    text-xs
-                    uppercase
-                    tracking-[.3em]
-                    text-blue-400
-                    font-black
-                "
-            >
-                Your next look starts here
-            </div>
-
-
-            <h2
-                class="
-                    text-4xl
-                    sm:text-5xl
-                    md:text-6xl
-                    font-black
-                    tracking-tight
-                    mt-4
-                "
-            >
-
-                Ready to get
-
-                <span class="gradient-text">
-                    fresh?
-                </span>
-
-            </h2>
-
-
-            <p
-                class="
-                    text-white/40
-                    mt-5
-                    max-w-xl
-                    mx-auto
-                "
-            >
-                Find a local salon, choose your service
-                and book your next appointment.
-            </p>
-
-
-            <a
-                href="home.html"
-                class="
-                    primary-btn
-                    inline-flex
-                    items-center
-                    gap-2
-                    rounded-xl
-                    px-7
-                    py-4
-                    mt-8
-                    font-black
-                "
-            >
-
-                Start Exploring
-
-                <i
-                    class="
-                        bx
-                        bx-right-arrow-alt
-                        text-xl
-                    "
-                ></i>
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-</main>
-
-
-<!-- =========================================================
-     FOOTER
-========================================================= -->
-
-<footer
-    class="
-        border-t
-        border-white/5
-        bg-black/20
-    "
->
-
-    <div
-        class="
-            w-full
-            max-w-7xl
-            mx-auto
-            px-4
-            sm:px-5
-            md:px-8
-            py-10
-        "
-    >
-
-        <div
-            class="
-                flex
-                flex-col
-                md:flex-row
-                items-center
-                justify-between
-                gap-6
-            "
-        >
-
-            <div
-                class="
-                    text-center
-                    md:text-left
-                "
-            >
-
-                <div
-                    class="
-                        text-xl
-                        font-black
-                    "
-                >
-                    K<span class="text-blue-400">@</span>si
                 </div>
 
 
-                <p
-                    class="
-                        text-xs
-                        text-white/30
-                        mt-1
-                    "
-                >
-                    Fresh cuts. Local talent. Less waiting.
-                </p>
+                <!-- Hero text -->
+
+                <div class="hero-content">
+
+
+                    <div class="hero-badge">
+
+                        <i class="bx bx-sparkles"></i>
+
+                        BUILT FOR KASI
+
+                    </div>
+
+
+                    <h1>
+
+                        Fresh Cuts.
+
+                        <span class="gradient">
+                            No Lines.
+                        </span>
+
+                    </h1>
+
+
+                    <div class="type-line">
+
+                        <span id="typeText" class="type-text">
+                        </span>
+
+                        <span class="cursor"></span>
+
+                    </div>
+
+                </div>
 
             </div>
 
 
-            <div
-                class="
-                    flex
-                    flex-wrap
-                    justify-center
-                    gap-6
-                    text-xs
-                    text-white/35
-                "
-            >
+            <!-- =================================================
+                 INTRODUCTION
+            ================================================== -->
+
+            <p class="intro-copy">
+
+                K@si Web makes finding your next barber
+                simple. Discover local salons, compare
+                services, choose your time and book your
+                fresh cut — all in one place.
+
+            </p>
+
+
+            <!-- =================================================
+                 CTA
+            ================================================== -->
+
+            <div class="cta-area">
 
                 <a
                     href="home.html"
-                    class="hover:text-white"
+                    class="get-started"
+                    id="getStartedBtn"
                 >
-                    Explore
+
+                    Get Started
+
+                    <i class="bx bx-right-arrow-alt"></i>
+
                 </a>
 
 
-                <a
-                    href="owners.html"
-                    class="hover:text-white"
-                >
-                    For Owners
-                </a>
+                <div class="trust-row">
 
 
-                <button
-                    id="footerLoginBtn"
-                    class="hover:text-white"
-                >
-                    Login
-                </button>
+                    <div class="trust-item">
 
-            </div>
+                        <i class="bx bx-store"></i>
 
+                        Local Salons
 
-            <div
-                class="
-                    text-xs
-                    text-white/25
-                    text-center
-                "
-            >
-                © 2026 K@si Web
-            </div>
-
-        </div>
-
-    </div>
-
-</footer>
+                    </div>
 
 
-<!-- =========================================================
-     LOGIN MODAL
-========================================================= -->
+                    <div class="trust-item">
 
-<div
-    id="loginModal"
-    class="
-        fixed
-        inset-0
-        z-[100]
-        hidden
-        items-center
-        justify-center
-        p-4
-        sm:p-5
-        modal-bg
-    "
->
+                        <i class="bx bx-calendar-check"></i>
 
-    <div
-        class="
-            glass-strong
-            rounded-3xl
-            w-full
-            max-w-md
-            p-5
-            sm:p-6
-            border
-            border-white/10
-            shadow-2xl
-        "
-    >
+                        Easy Booking
 
-        <div
-            class="
-                flex
-                items-start
-                justify-between
-                gap-4
-            "
-        >
-
-            <div>
-
-                <div
-                    class="
-                        text-2xl
-                        font-black
-                    "
-                >
-                    Welcome back.
-                </div>
+                    </div>
 
 
-                <div
-                    class="
-                        text-xs
-                        text-white/40
-                        mt-1
-                    "
-                >
-                    Sign in to continue to K@si.
+                    <div class="trust-item">
+
+                        <i class="bx bx-time-five"></i>
+
+                        Less Waiting
+
+                    </div>
+
+
                 </div>
 
             </div>
 
-
-            <button
-                id="closeLoginModal"
-                class="
-                    shrink-0
-                    w-10
-                    h-10
-                    rounded-xl
-                    bg-white/5
-                    flex
-                    items-center
-                    justify-center
-                "
-            >
-
-                <i
-                    class="
-                        bx
-                        bx-x
-                        text-xl
-                    "
-                ></i>
-
-            </button>
-
-        </div>
+        </section>
 
 
-        <div
-            class="
-                mt-7
-                space-y-4
-            "
-        >
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
 
-            <input
-                id="userEmail"
-                type="email"
-                autocomplete="email"
-                placeholder="Email address"
-                class="
-                    input-field
-                    rounded-xl
-                    px-4
-                    py-4
-                    text-sm
-                    text-white
-                "
-            >
+        <footer class="footer">
+
+            <strong>K@si Web</strong>
+
+            <br>
+
+            Your local barber experience, made simpler.
+
+        </footer>
 
 
-            <input
-                id="userPass"
-                type="password"
-                autocomplete="current-password"
-                placeholder="Password"
-                class="
-                    input-field
-                    rounded-xl
-                    px-4
-                    py-4
-                    text-sm
-                    text-white
-                "
-            >
+    </main>
 
 
-            <input
-                id="userRole"
-                type="hidden"
-                value="customer"
-            >
+    <!-- =========================================================
+         AUDIO
+    ========================================================== -->
+
+    <audio
+        id="clickSound"
+        src="mixkit-select-click-1109.wav"
+        preload="auto"
+    ></audio>
 
 
-            <button
-                id="mainLoginBtn"
-                class="
-                    primary-btn
-                    w-full
-                    rounded-xl
-                    py-4
-                    font-black
-                "
-            >
-                Login
-            </button>
+    <script>
+
+        /* =========================================================
+           IMAGE FALLBACK
+        ========================================================= */
+
+        const heroImage =
+            document.getElementById("heroImage");
+
+        const imageFallback =
+            document.getElementById("imageFallback");
 
 
-            <button
-                id="signupBtn"
-                class="
-                    secondary-btn
-                    w-full
-                    rounded-xl
-                    py-4
-                    font-bold
-                "
-            >
-                Create Customer Account
-            </button>
+        if (heroImage) {
 
+            heroImage.addEventListener(
+                "error",
+                () => {
 
-            <button
-                id="showRoleBtn"
-                class="
-                    w-full
-                    text-xs
-                    text-blue-400
-                    py-2
-                "
-            >
-                Are you a salon owner?
-            </button>
+                    heroImage.style.display =
+                        "none";
 
+                    if (imageFallback) {
 
-            <div
-                id="authMsg"
-                class="
-                    text-center
-                    text-xs
-                    text-white/45
-                    min-h-5
-                "
-            ></div>
+                        imageFallback.style.display =
+                            "flex";
 
-        </div>
+                    }
 
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     FIREBASE
-========================================================= -->
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-
-        /* =====================================================
-           FIREBASE
-        ===================================================== */
-
-        const firebaseConfig = {
-
-            apiKey:
-                "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-
-            authDomain:
-                "kasi-web-d073f.firebaseapp.com",
-
-            databaseURL:
-                "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-
-            projectId:
-                "kasi-web-d073f",
-
-            storageBucket:
-                "kasi-web-d073f.firebasestorage.app",
-
-            messagingSenderId:
-                "YOUR_MESSAGING_SENDER_ID",
-
-            appId:
-                "YOUR_APP_ID"
-
-        };
-
-
-        try {
-
-            if (
-                !firebase.apps.length
-            ) {
-
-                firebase.initializeApp(
-                    firebaseConfig
-                );
-
-            }
-
-
-            window.firebaseAuth =
-                firebase.auth();
-
-
-            window.firebaseDB =
-                firebase.firestore();
-
-        } catch (error) {
-
-            console.warn(
-                "Firebase initialization warning:",
-                error
+                }
             );
 
         }
 
 
-        /* =====================================================
-           AUTOMATIC TYPING WORD
-        ===================================================== */
+        /* =========================================================
+           TYPEWRITER
+        ========================================================= */
 
-        const typingWord =
-            document.getElementById(
-                "typingWord"
-            );
+        const typeText =
+            document.getElementById("typeText");
 
 
-        const words = [
-            "local",
-            "fresh",
-            "simple",
-            "booked",
-            "yours"
+        const phrases = [
+
+            "Find your barber.",
+
+            "Choose your style.",
+
+            "Book your fresh cut.",
+
+            "Skip the queue.",
+
+            "Look your best."
+
         ];
 
 
-        let wordIndex = 0;
+        let phraseIndex = 0;
 
-        let charIndex = 0;
+        let characterIndex = 0;
 
         let deleting = false;
 
 
-        function typeWord() {
+        function typeWriter() {
 
-            if (!typingWord) {
+            if (!typeText) {
                 return;
             }
 
 
-            const currentWord =
-                words[wordIndex];
+            const currentPhrase =
+                phrases[phraseIndex];
 
 
             if (!deleting) {
 
-                typingWord.textContent =
-                    currentWord.substring(
+                typeText.textContent =
+                    currentPhrase.substring(
                         0,
-                        charIndex + 1
+                        characterIndex + 1
                     );
 
-                charIndex++;
+                characterIndex++;
 
 
                 if (
-                    charIndex >=
-                    currentWord.length
+                    characterIndex >=
+                    currentPhrase.length
                 ) {
 
                     deleting = true;
 
                     setTimeout(
-                        typeWord,
-                        1200
+                        typeWriter,
+                        1700
                     );
 
                     return;
@@ -3868,37 +1317,38 @@ document.addEventListener(
 
 
                 setTimeout(
-                    typeWord,
-                    95
+                    typeWriter,
+                    70
                 );
 
+            }
 
-            } else {
+            else {
 
-                typingWord.textContent =
-                    currentWord.substring(
+                typeText.textContent =
+                    currentPhrase.substring(
                         0,
-                        charIndex - 1
+                        characterIndex - 1
                     );
 
-                charIndex--;
+                characterIndex--;
 
 
                 if (
-                    charIndex <= 0
+                    characterIndex <= 0
                 ) {
 
                     deleting = false;
 
-                    wordIndex =
+                    phraseIndex =
                         (
-                            wordIndex + 1
+                            phraseIndex + 1
                         ) %
-                        words.length;
+                        phrases.length;
 
                     setTimeout(
-                        typeWord,
-                        250
+                        typeWriter,
+                        350
                     );
 
                     return;
@@ -3907,8 +1357,8 @@ document.addEventListener(
 
 
                 setTimeout(
-                    typeWord,
-                    55
+                    typeWriter,
+                    38
                 );
 
             }
@@ -3916,850 +1366,96 @@ document.addEventListener(
         }
 
 
-        setTimeout(
-            typeWord,
-            700
-        );
+        typeWriter();
 
 
-        /* =====================================================
-           MOBILE MENU
-        ===================================================== */
+        /* =========================================================
+           BUTTON SOUND
+        ========================================================== */
 
-        const mobileMenuBtn =
-            document.getElementById(
-                "mobileMenuBtn"
-            );
+        const clickSound =
+            document.getElementById("clickSound");
 
 
-        const mobileMenu =
-            document.getElementById(
-                "mobileMenu"
-            );
+        if (clickSound) {
 
-
-        const menuIcon =
-            document.getElementById(
-                "menuIcon"
-            );
-
-
-        function closeMobileMenu() {
-
-            mobileMenu.classList.add(
-                "hidden"
-            );
-
-            menuIcon.className =
-                "bx bx-menu text-2xl";
+            clickSound.volume = 0.25;
 
         }
 
 
-        mobileMenuBtn.addEventListener(
-            "click",
-            function () {
-
-                const hidden =
-                    mobileMenu.classList.contains(
-                        "hidden"
-                    );
+        const getStartedBtn =
+            document.getElementById(
+                "getStartedBtn"
+            );
 
 
-                if (hidden) {
+        if (getStartedBtn) {
 
-                    mobileMenu.classList.remove(
-                        "hidden"
-                    );
+            getStartedBtn.addEventListener(
+                "click",
+                () => {
 
-                    menuIcon.className =
-                        "bx bx-x text-2xl";
+                    if (clickSound) {
 
-                } else {
+                        clickSound.currentTime = 0;
 
-                    closeMobileMenu();
+                        clickSound
+                            .play()
+                            .catch(() => {});
+
+                    }
+
+
+                    if (
+                        navigator.vibrate
+                    ) {
+
+                        navigator.vibrate(25);
+
+                    }
 
                 }
-
-            }
-        );
-
-
-        document
-            .querySelectorAll(
-                ".mobileLink"
-            )
-            .forEach(
-                function (link) {
-
-                    link.addEventListener(
-                        "click",
-                        closeMobileMenu
-                    );
-
-                }
-            );
-
-
-        /* =====================================================
-           LOGIN MODAL
-        ===================================================== */
-
-        const loginModal =
-            document.getElementById(
-                "loginModal"
-            );
-
-
-        const desktopLoginBtn =
-            document.getElementById(
-                "desktopLoginBtn"
-            );
-
-
-        const mobileLoginBtn =
-            document.getElementById(
-                "mobileLoginBtn"
-            );
-
-
-        const footerLoginBtn =
-            document.getElementById(
-                "footerLoginBtn"
-            );
-
-
-        const closeLoginModal =
-            document.getElementById(
-                "closeLoginModal"
-            );
-
-
-        function openLogin() {
-
-            loginModal.classList.remove(
-                "hidden"
-            );
-
-            loginModal.classList.add(
-                "flex"
-            );
-
-            document.body.style.overflow =
-                "hidden";
-
-
-            setTimeout(
-                function () {
-
-                    document
-                        .getElementById(
-                            "userEmail"
-                        )
-                        ?.focus();
-
-                },
-                100
             );
 
         }
 
 
-        function closeLogin() {
+        /* =========================================================
+           PREVENT DOUBLE TAP ZOOM ON CTA
+        ========================================================== */
 
-            loginModal.classList.add(
-                "hidden"
-            );
+        let lastTouchEnd = 0;
 
-            loginModal.classList.remove(
-                "flex"
-            );
-
-            document.body.style.overflow =
-                "";
-
-        }
-
-
-        desktopLoginBtn.addEventListener(
-            "click",
-            openLogin
-        );
-
-
-        mobileLoginBtn.addEventListener(
-            "click",
-            function () {
-
-                closeMobileMenu();
-
-                openLogin();
-
-            }
-        );
-
-
-        footerLoginBtn.addEventListener(
-            "click",
-            openLogin
-        );
-
-
-        closeLoginModal.addEventListener(
-            "click",
-            closeLogin
-        );
-
-
-        loginModal.addEventListener(
-            "click",
-            function (event) {
-
-                if (
-                    event.target ===
-                    loginModal
-                ) {
-
-                    closeLogin();
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           SEARCH
-        ===================================================== */
-
-        const heroSearch =
-            document.getElementById(
-                "heroSearch"
-            );
-
-
-        const findSalonBtn =
-            document.getElementById(
-                "findSalonBtn"
-            );
-
-
-        function goToSalons(
-            searchValue = ""
-        ) {
-
-            const value =
-                String(
-                    searchValue || ""
-                ).trim();
-
-
-            if (value) {
-
-                window.location.href =
-                    "home.html?search=" +
-                    encodeURIComponent(
-                        value
-                    );
-
-            } else {
-
-                window.location.href =
-                    "home.html";
-
-            }
-
-        }
-
-
-        findSalonBtn.addEventListener(
-            "click",
-            function () {
-
-                goToSalons(
-                    heroSearch.value
-                );
-
-            }
-        );
-
-
-        heroSearch.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
-
-                    goToSalons(
-                        heroSearch.value
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           AUTH ELEMENTS
-        ===================================================== */
-
-        const mainLoginBtn =
-            document.getElementById(
-                "mainLoginBtn"
-            );
-
-
-        const signupBtn =
-            document.getElementById(
-                "signupBtn"
-            );
-
-
-        const showRoleBtn =
-            document.getElementById(
-                "showRoleBtn"
-            );
-
-
-        const authMsg =
-            document.getElementById(
-                "authMsg"
-            );
-
-
-        const userEmail =
-            document.getElementById(
-                "userEmail"
-            );
-
-
-        const userPass =
-            document.getElementById(
-                "userPass"
-            );
-
-
-        const userRole =
-            document.getElementById(
-                "userRole"
-            );
-
-
-        let ownerMode =
-            false;
-
-
-        function showAuthMessage(
-            message,
-            error = false
-        ) {
-
-            authMsg.textContent =
-                message;
-
-
-            authMsg.className =
-                error
-                    ?
-                    "text-center text-xs text-red-400 min-h-5"
-                    :
-                    "text-center text-xs text-white/45 min-h-5";
-
-        }
-
-
-        /* =====================================================
-           LOGIN
-        ===================================================== */
-
-        mainLoginBtn.addEventListener(
-            "click",
-            async function () {
-
-                const email =
-                    userEmail.value.trim();
-
-
-                const password =
-                    userPass.value;
-
-
-                if (
-                    !email ||
-                    !password
-                ) {
-
-                    showAuthMessage(
-                        "Please enter your email and password.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    !window.firebaseAuth
-                ) {
-
-                    showAuthMessage(
-                        "Firebase is not configured correctly.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                mainLoginBtn.disabled =
-                    true;
-
-
-                mainLoginBtn.textContent =
-                    "Signing in...";
-
-
-                try {
-
-                    const result =
-                        await window
-                            .firebaseAuth
-                            .signInWithEmailAndPassword(
-                                email,
-                                password
-                            );
-
-
-                    const user =
-                        result.user;
-
-
-                    let role =
-                        "customer";
-
-
-                    if (
-                        window.firebaseDB
-                    ) {
-
-                        try {
-
-                            const userDoc =
-                                await window
-                                    .firebaseDB
-                                    .collection(
-                                        "users"
-                                    )
-                                    .doc(
-                                        user.uid
-                                    )
-                                    .get();
-
-
-                            if (
-                                userDoc.exists
-                            ) {
-
-                                const data =
-                                    userDoc.data();
-
-
-                                role =
-                                    data.role ||
-                                    data.Role ||
-                                    "customer";
-
-                            }
-
-                        } catch (
-                            profileError
-                        ) {
-
-                            console.warn(
-                                "Profile lookup failed:",
-                                profileError
-                            );
-
-                        }
-
-                    }
-
-
-                    if (
-                        role ===
-                        "admin"
-                    ) {
-
-                        window.location.href =
-                            "admin.html";
-
-                        return;
-
-                    }
-
-
-                    if (
-                        role ===
-                        "salon_owner"
-                    ) {
-
-                        window.location.href =
-                            "ownerdashboard.html";
-
-                        return;
-
-                    }
-
-
-                    window.location.href =
-                        "home.html";
-
-                } catch (
-                    error
-                ) {
-
-                    console.error(
-                        error
-                    );
-
-
-                    let message =
-                        "Login failed. Please check your details.";
-
-
-                    if (
-                        error.code ===
-                        "auth/user-not-found"
-                    ) {
-
-                        message =
-                            "No account was found with this email.";
-
-                    } else if (
-                        error.code ===
-                        "auth/wrong-password"
-                    ) {
-
-                        message =
-                            "Incorrect password.";
-
-                    } else if (
-                        error.code ===
-                        "auth/invalid-credential"
-                    ) {
-
-                        message =
-                            "Incorrect email or password.";
-
-                    } else if (
-                        error.code ===
-                        "auth/invalid-email"
-                    ) {
-
-                        message =
-                            "Please enter a valid email address.";
-
-                    }
-
-
-                    showAuthMessage(
-                        message,
-                        true
-                    );
-
-
-                    mainLoginBtn.disabled =
-                        false;
-
-
-                    mainLoginBtn.textContent =
-                        "Login";
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           CUSTOMER SIGNUP
-        ===================================================== */
-
-        signupBtn.addEventListener(
-            "click",
-            async function () {
-
-                const email =
-                    userEmail.value.trim();
-
-
-                const password =
-                    userPass.value;
-
-
-                if (
-                    !email ||
-                    !password
-                ) {
-
-                    showAuthMessage(
-                        "Enter your email and password first.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    password.length < 6
-                ) {
-
-                    showAuthMessage(
-                        "Password must be at least 6 characters.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    !window.firebaseAuth
-                ) {
-
-                    showAuthMessage(
-                        "Firebase is not configured correctly.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                try {
-
-                    signupBtn.disabled =
-                        true;
-
-
-                    signupBtn.textContent =
-                        "Creating account...";
-
-
-                    const result =
-                        await window
-                            .firebaseAuth
-                            .createUserWithEmailAndPassword(
-                                email,
-                                password
-                            );
-
-
-                    const user =
-                        result.user;
-
-
-                    if (
-                        window.firebaseDB
-                    ) {
-
-                        await window
-                            .firebaseDB
-                            .collection(
-                                "users"
-                            )
-                            .doc(
-                                user.uid
-                            )
-                            .set(
-                                {
-
-                                    email:
-                                        user.email,
-
-                                    role:
-                                        "customer",
-
-                                    createdAt:
-                                        firebase
-                                            .firestore
-                                            .FieldValue
-                                            .serverTimestamp()
-
-                                },
-                                {
-                                    merge:
-                                        true
-                                }
-                            );
-
-                    }
-
-
-                    window.location.href =
-                        "home.html";
-
-                } catch (
-                    error
-                ) {
-
-                    console.error(
-                        error
-                    );
-
-
-                    let message =
-                        error.message ||
-                        "Could not create account.";
-
-
-                    if (
-                        error.code ===
-                        "auth/email-already-in-use"
-                    ) {
-
-                        message =
-                            "An account already exists with this email.";
-
-                    }
-
-
-                    showAuthMessage(
-                        message,
-                        true
-                    );
-
-
-                    signupBtn.disabled =
-                        false;
-
-
-                    signupBtn.textContent =
-                        "Create Customer Account";
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           OWNER MODE
-        ===================================================== */
-
-        showRoleBtn.addEventListener(
-            "click",
-            function () {
-
-                ownerMode =
-                    !ownerMode;
-
-
-                if (
-                    ownerMode
-                ) {
-
-                    userRole.value =
-                        "salon_owner";
-
-
-                    showRoleBtn.textContent =
-                        "Customer login instead";
-
-
-                    showAuthMessage(
-                        "Salon owner mode selected."
-                    );
-
-                } else {
-
-                    userRole.value =
-                        "customer";
-
-
-                    showRoleBtn.textContent =
-                        "Are you a salon owner?";
-
-
-                    showAuthMessage(
-                        "Customer mode selected."
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           ESC KEY
-        ===================================================== */
 
         document.addEventListener(
-            "keydown",
-            function (event) {
+            "touchend",
+            event => {
+
+                const now =
+                    Date.now();
+
 
                 if (
-                    event.key ===
-                    "Escape"
+                    now - lastTouchEnd <= 300
                 ) {
 
-                    closeLogin();
-
-                    closeMobileMenu();
+                    event.preventDefault();
 
                 }
 
 
-                if (
-                    event.key ===
-                    "Enter" &&
-                    document.activeElement ===
-                    userPass
-                ) {
+                lastTouchEnd = now;
 
-                    mainLoginBtn.click();
-
-                }
-
+            },
+            {
+                passive: false
             }
         );
 
+    </script>
 
-        /* =====================================================
-           CLOSE MOBILE MENU WHEN RESIZING
-        ===================================================== */
-
-        window.addEventListener(
-            "resize",
-            function () {
-
-                if (
-                    window.innerWidth >= 1024
-                ) {
-
-                    closeMobileMenu();
-
-                }
-
-            }
-        );
-
-    }
-
-);
-
-</script>
 
 </body>
+
         </html>
