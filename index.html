@@ -1,898 +1,1326 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"><meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
-<head>
-    <meta charset="UTF-8">
+<meta name="theme-color" content="#080812">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+<meta
+    name="description"
+    content="K@si Web - Find local barbers and salons, compare services and book your next fresh cut."
+>
 
-    <meta
-        name="theme-color"
-        content="#080812"
-    >
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
 
-    <meta
-        name="description"
-        content="K@si Web - Find local barbers and salons, compare services and book your next fresh cut."
-    >
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+>
 
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
+<title>K@si Web | Fresh Cuts, No Lines</title>
 
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent"
-    >
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-    <title>K@si Web | Fresh Cuts, No Lines</title>
+<!-- Boxicons -->
+<link
+    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+    rel="stylesheet"
+>
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<!-- Swiper -->
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+>
 
-    <!-- Boxicons -->
-    <link
-        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet"
-    >
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
 
-    <!-- Swiper -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    >
+<link
+    rel="icon"
+    type="image/png"
+    href="icon-192.png"
+>
 
-    <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
+<style>
 
-    <link
-        rel="icon"
-        type="image/png"
-        href="icon-192.png"
-    >
+    /* =====================================================
+       GLOBAL
+    ====================================================== */
 
-    <style>
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+    html {
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+
+        background:
+            radial-gradient(
+                circle at 85% 8%,
+                rgba(59,130,246,.15),
+                transparent 28%
+            ),
+            radial-gradient(
+                circle at 8% 28%,
+                rgba(139,92,246,.14),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at 50% 100%,
+                rgba(59,130,246,.07),
+                transparent 30%
+            ),
+            #080812;
+
+        color: #fff;
+
+        font-family:
+            Inter,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+    }
+
+    img {
+        max-width: 100%;
+        display: block;
+    }
+
+    button,
+    a {
+        touch-action: manipulation;
+    }
+
+    button {
+        font-family: inherit;
+    }
+
+    ::selection {
+        background: rgba(96,165,250,.35);
+        color: #fff;
+    }
+
+
+    /* =====================================================
+       BACKGROUND EFFECT
+    ====================================================== */
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                120deg,
+                transparent 0%,
+                rgba(255,255,255,.018) 50%,
+                transparent 100%
+            );
+
+        z-index: -1;
+    }
+
+
+    /* =====================================================
+       GLASS
+    ====================================================== */
+
+    .glass {
+        background: rgba(255,255,255,.055);
+        border: 1px solid rgba(255,255,255,.09);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+    }
+
+
+    /* =====================================================
+       GRADIENT TEXT
+    ====================================================== */
+
+    .gradient-text {
+        background:
+            linear-gradient(
+                90deg,
+                #60a5fa,
+                #8b5cf6,
+                #c084fc
+            );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+
+    /* =====================================================
+       BUTTONS
+    ====================================================== */
+
+    .primary-btn {
+        background:
+            linear-gradient(
+                135deg,
+                #3b82f6,
+                #7c3aed
+            );
+
+        box-shadow:
+            0 12px 35px rgba(59,130,246,.22);
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease,
+            filter .2s ease;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 18px 45px rgba(59,130,246,.34);
+
+        filter: brightness(1.06);
+    }
+
+    .primary-btn:active {
+        transform: scale(.97);
+    }
+
+    .secondary-btn {
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.12);
+
+        transition:
+            background .2s ease,
+            transform .2s ease;
+    }
+
+    .secondary-btn:hover {
+        background: rgba(255,255,255,.1);
+        transform: translateY(-2px);
+    }
+
+
+    /* =====================================================
+       HERO
+    ====================================================== */
+
+    .hero-glow {
+        box-shadow:
+            0 0 80px rgba(59,130,246,.12),
+            0 0 140px rgba(139,92,246,.08);
+    }
+
+    .hero-image {
+        filter:
+            brightness(.82)
+            saturate(1.08);
+    }
+
+
+    /* =====================================================
+       ANIMATIONS
+    ====================================================== */
+
+    .floating {
+        animation:
+            floating 5s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+
+        0%,
+        100% {
+            transform: translateY(0);
         }
 
-        html {
-            scroll-behavior: smooth;
+        50% {
+            transform: translateY(-7px);
         }
 
-        body {
-            margin: 0;
-            background:
-                radial-gradient(
-                    circle at 80% 10%,
-                    rgba(59, 130, 246, 0.14),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 10% 30%,
-                    rgba(139, 92, 246, 0.12),
-                    transparent 28%
-                ),
-                #080812;
+    }
 
-            color: #fff;
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+    .fade-up {
+        animation:
+            fadeUp .7s ease both;
+    }
 
-            min-height: 100vh;
-            overflow-x: hidden;
+    @keyframes fadeUp {
+
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background:
-                linear-gradient(
-                    120deg,
-                    transparent 0%,
-                    rgba(255,255,255,.015) 50%,
-                    transparent 100%
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    .delay-1 {
+        animation-delay: .1s;
+    }
+
+    .delay-2 {
+        animation-delay: .2s;
+    }
+
+    .delay-3 {
+        animation-delay: .3s;
+    }
+
+    .delay-4 {
+        animation-delay: .4s;
+    }
+
+
+    /* =====================================================
+       CATEGORY CARDS
+    ====================================================== */
+
+    .category-card {
+        transition:
+            transform .25s ease,
+            background .25s ease,
+            border-color .25s ease;
+    }
+
+    .category-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255,255,255,.08);
+        border-color: rgba(96,165,250,.25);
+    }
+
+    .category-card:active {
+        transform: scale(.98);
+    }
+
+
+    /* =====================================================
+       FEATURED SWIPER
+    ====================================================== */
+
+    .featuredSwiper {
+        width: calc(100% + 0px);
+        overflow: visible;
+        padding:
+            8px 2px 48px;
+    }
+
+    .featuredSwiper .swiper-wrapper {
+        align-items: stretch;
+    }
+
+    .featuredSwiper .swiper-slide {
+        height: auto;
+
+        transition:
+            transform .45s cubic-bezier(.22,.61,.36,1),
+            opacity .45s ease;
+    }
+
+    /*
+     * The active card is slightly larger.
+     * This gives the slider a premium carousel feeling.
+     */
+
+    .featuredSwiper .swiper-slide-active {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .featuredSwiper .swiper-slide:not(.swiper-slide-active) {
+        opacity: .72;
+    }
+
+    .salon-card {
+        height: 100%;
+        transition:
+            transform .3s ease,
+            border-color .3s ease,
+            box-shadow .3s ease;
+    }
+
+    .salon-card:hover {
+        transform: translateY(-5px);
+
+        border-color:
+            rgba(96,165,250,.35);
+
+        box-shadow:
+            0 25px 70px rgba(0,0,0,.28);
+    }
+
+    .featured-image {
+        width: 100%;
+        height: 270px;
+        object-fit: cover;
+
+        transition:
+            transform .55s ease,
+            filter .55s ease;
+    }
+
+    .salon-card:hover .featured-image {
+        transform: scale(1.035);
+        filter: brightness(.9) saturate(1.08);
+    }
+
+
+    /* =====================================================
+       SWIPER PAGINATION
+    ====================================================== */
+
+    .featuredSwiper .swiper-pagination {
+        bottom: 5px;
+    }
+
+    .featuredSwiper
+    .swiper-pagination-bullet {
+        width: 7px;
+        height: 7px;
+
+        margin:
+            0 4px !important;
+
+        background:
+            rgba(255,255,255,.25);
+
+        opacity: 1;
+
+        transition:
+            width .25s ease,
+            background .25s ease,
+            transform .25s ease;
+    }
+
+    .featuredSwiper
+    .swiper-pagination-bullet-active {
+        width: 25px;
+
+        border-radius: 999px;
+
+        background:
+            linear-gradient(
+                90deg,
+                #60a5fa,
+                #8b5cf6
+            );
+
+        transform: translateY(0);
+    }
+
+
+    /* =====================================================
+       SEARCH
+    ====================================================== */
+
+    .search-box {
+        transition:
+            border-color .25s ease,
+            box-shadow .25s ease;
+    }
+
+    .search-box:focus-within {
+        border-color:
+            rgba(96,165,250,.35);
+
+        box-shadow:
+            0 0 45px rgba(59,130,246,.12);
+    }
+
+    .search-box input {
+        min-width: 0;
+    }
+
+    .search-box input::placeholder {
+        color:
+            rgba(255,255,255,.4);
+    }
+
+    .search-box input:focus {
+        outline: none;
+    }
+
+
+    /* =====================================================
+       LOGIN
+    ====================================================== */
+
+    .modal-bg {
+        background:
+            rgba(0,0,0,.76);
+
+        backdrop-filter:
+            blur(10px);
+
+        -webkit-backdrop-filter:
+            blur(10px);
+    }
+
+    .auth-input {
+        transition:
+            border-color .2s ease,
+            background .2s ease;
+    }
+
+    .auth-input:focus {
+        outline: none;
+
+        border-color:
+            rgba(96,165,250,.6);
+
+        background:
+            rgba(255,255,255,.07);
+    }
+
+
+    /* =====================================================
+       MOBILE MENU
+    ====================================================== */
+
+    #mobileMenu {
+        max-height:
+            calc(100vh - 64px);
+
+        overflow-y: auto;
+    }
+
+
+    /* =====================================================
+       BOTTOM NAV
+    ====================================================== */
+
+    .bottom-nav {
+        padding-bottom:
+            calc(
+                8px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ====================================================== */
+
+    @media (max-width: 639px) {
+
+        .hero-title {
+            font-size:
+                clamp(
+                    2.65rem,
+                    12vw,
+                    4rem
                 );
-            z-index: -1;
         }
 
-        .glass {
-            background: rgba(255,255,255,.055);
-            border: 1px solid rgba(255,255,255,.09);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+        .hero-copy {
+            font-size:
+                .95rem;
         }
 
-        .gradient-text {
-            background:
-                linear-gradient(
-                    90deg,
-                    #60a5fa,
-                    #8b5cf6,
-                    #c084fc
+        .hero-section {
+            padding-top:
+                2rem;
+        }
+
+        /*
+         * Mobile carousel:
+         * one strong card + a visible slice
+         * of the next card.
+         */
+
+        .featuredSwiper {
+            width:
+                calc(100% + 10px);
+
+            margin-left:
+                -5px;
+
+            padding-left:
+                0;
+
+            padding-right:
+                10px;
+        }
+
+        .featuredSwiper .swiper-slide {
+            width:
+                calc(100% - 22px);
+        }
+
+        .featuredSwiper
+        .swiper-slide:not(.swiper-slide-active) {
+            opacity: .58;
+        }
+
+        .featured-image {
+            height:
+                clamp(
+                    220px,
+                    62vw,
+                    280px
                 );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .hero-glow {
-            box-shadow:
-                0 0 80px rgba(59,130,246,.12),
-                0 0 140px rgba(139,92,246,.08);
-        }
-
-        .primary-btn {
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #7c3aed
-                );
-
-            box-shadow:
-                0 12px 35px rgba(59,130,246,.25);
-
-            transition:
-                transform .2s ease,
-                box-shadow .2s ease;
-        }
-
-        .primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow:
-                0 18px 45px rgba(59,130,246,.35);
-        }
-
-        .secondary-btn {
-            background: rgba(255,255,255,.06);
-            border: 1px solid rgba(255,255,255,.12);
-            transition: .2s ease;
-        }
-
-        .secondary-btn:hover {
-            background: rgba(255,255,255,.1);
-            transform: translateY(-2px);
         }
 
         .salon-card {
-            transition:
-                transform .25s ease,
-                border-color .25s ease,
-                box-shadow .25s ease;
+            border-radius:
+                1.5rem;
         }
 
-        .salon-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(96,165,250,.35);
-            box-shadow:
-                0 20px 60px rgba(0,0,0,.25);
+        .salon-card .card-content {
+            padding:
+                1rem;
         }
 
         .category-card {
-            transition: .2s ease;
+            padding:
+                1rem;
         }
 
-        .category-card:hover {
-            transform: translateY(-4px);
-            background: rgba(255,255,255,.08);
+        .category-icon {
+            width:
+                2.6rem;
+
+            height:
+                2.6rem;
+
+            margin-bottom:
+                .8rem;
         }
 
-        .hero-image {
-            filter:
-                brightness(.82)
-                saturate(1.08);
+        .quick-stat {
+            padding:
+                1rem .6rem;
         }
 
-        .swiper {
-            width: 100%;
-            padding-bottom: 30px;
+    }
+
+
+    /* =====================================================
+       VERY SMALL PHONES
+    ====================================================== */
+
+    @media (max-width: 380px) {
+
+        .hero-title {
+            font-size:
+                2.45rem;
         }
 
-        .swiper-slide {
-            height: auto;
+        .search-box {
+            padding:
+                .35rem;
         }
 
-        .swiper-pagination-bullet {
-            background: rgba(255,255,255,.45);
-            opacity: 1;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: #60a5fa;
-        }
-
-        .floating {
-            animation: floating 5s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-7px);
-            }
-        }
-
-        .fade-up {
-            animation: fadeUp .7s ease both;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .delay-1 {
-            animation-delay: .1s;
-        }
-
-        .delay-2 {
-            animation-delay: .2s;
-        }
-
-        .delay-3 {
-            animation-delay: .3s;
-        }
-
-        .delay-4 {
-            animation-delay: .4s;
-        }
-
-        .bottom-nav {
-            padding-bottom:
-                calc(
-                    10px +
-                    env(safe-area-inset-bottom)
-                );
-        }
-
-        .auth-panel {
+        .search-box i {
             display: none;
         }
 
-        .auth-panel.active {
-            display: flex;
+        .search-box input {
+            padding-left:
+                .7rem;
         }
 
-        .modal-bg {
-            background: rgba(0,0,0,.72);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+        .search-box button {
+            padding-left:
+                .8rem;
+
+            padding-right:
+                .8rem;
         }
 
-        .search-box input::placeholder {
-            color: rgba(255,255,255,.45);
+        .featuredSwiper .swiper-slide {
+            width:
+                calc(100% - 15px);
         }
 
-        .search-box input:focus {
-            outline: none;
+    }
+
+
+    /* =====================================================
+       TABLET
+    ====================================================== */
+
+    @media (min-width: 640px) {
+
+        .featuredSwiper {
+            overflow:
+                hidden;
         }
 
-        @media (min-width: 768px) {
-
-            .bottom-nav {
-                display: none;
-            }
-
-            .desktop-nav {
-                display: flex !important;
-            }
+        .featuredSwiper
+        .swiper-slide {
+            opacity: 1;
         }
 
-    </style>
-</head>
+        .featured-image {
+            height:
+                250px;
+        }
+
+    }
 
 
-<body>
+    /* =====================================================
+       DESKTOP
+    ====================================================== */
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+    @media (min-width: 1024px) {
 
-    <header
-        class="
-            sticky
-            top-0
-            z-50
-            border-b
-            border-white/5
-            bg-[#080812]/80
-            backdrop-blur-xl
-        "
+        .featuredSwiper {
+            padding-bottom:
+                45px;
+        }
+
+        .featured-image {
+            height:
+                260px;
+        }
+
+    }
+
+
+    /* =====================================================
+       REDUCE MOTION
+    ====================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        html {
+            scroll-behavior:
+                auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration:
+                .01ms !important;
+
+            animation-iteration-count:
+                1 !important;
+
+            transition-duration:
+                .01ms !important;
+        }
+
+    }
+
+</style>
+
+</head><body><!-- =========================================================
+     HEADER
+========================================================= --><header
+    class="
+        sticky
+        top-0
+        z-50
+        border-b
+        border-white/5
+        bg-[#080812]/85
+        backdrop-blur-xl
+    "
+><div
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        h-16
+        flex
+        items-center
+        justify-between
+    "
+>
+
+    <!-- LOGO -->
+
+    <a
+        href="index.html"
+        class="flex items-center gap-2"
     >
 
         <div
             class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                h-16
+                w-10
+                h-10
+                rounded-2xl
+                bg-gradient-to-br
+                from-blue-500
+                to-violet-600
                 flex
                 items-center
-                justify-between
+                justify-center
+                shadow-lg
+                shadow-blue-500/20
+                shrink-0
             "
         >
 
-            <!-- LOGO -->
-
-            <a
-                href="index.html"
-                class="flex items-center gap-2"
-            >
-
-                <div
-                    class="
-                        w-10
-                        h-10
-                        rounded-2xl
-                        bg-gradient-to-br
-                        from-blue-500
-                        to-violet-600
-                        flex
-                        items-center
-                        justify-center
-                        shadow-lg
-                        shadow-blue-500/20
-                    "
-                >
-                    <i class="bx bx-cut text-xl"></i>
-                </div>
-
-                <div>
-                    <div
-                        class="
-                            font-black
-                            text-xl
-                            tracking-tight
-                        "
-                    >
-                        K<span class="text-blue-400">@</span>si
-                    </div>
-
-                    <div
-                        class="
-                            text-[9px]
-                            uppercase
-                            tracking-[.25em]
-                            text-white/40
-                            -mt-1
-                        "
-                    >
-                        Fresh. Local. Yours.
-                    </div>
-                </div>
-
-            </a>
-
-
-            <!-- DESKTOP NAV -->
-
-            <nav
+            <i
                 class="
-                    desktop-nav
-                    hidden
-                    items-center
-                    gap-7
-                    text-sm
-                    text-white/65
+                    bx
+                    bx-cut
+                    text-xl
+                "
+            ></i>
+
+        </div>
+
+
+        <div>
+
+            <div
+                class="
+                    font-black
+                    text-xl
+                    tracking-tight
                 "
             >
+                K<span class="text-blue-400">@</span>si
+            </div>
 
-                <a
-                    href="#discover"
-                    class="hover:text-white transition"
-                >
-                    Discover
-                </a>
+            <div
+                class="
+                    text-[9px]
+                    uppercase
+                    tracking-[.25em]
+                    text-white/40
+                    -mt-1
+                "
+            >
+                Fresh. Local. Yours.
+            </div>
 
-                <a
-                    href="#categories"
-                    class="hover:text-white transition"
-                >
-                    Services
-                </a>
+        </div>
 
-                <a
-                    href="#why-kasi"
-                    class="hover:text-white transition"
-                >
-                    Why K@si
-                </a>
-
-                <button
-                    id="desktopLoginBtn"
-                    class="hover:text-white transition"
-                >
-                    Login
-                </button>
-
-            </nav>
+    </a>
 
 
-            <!-- MOBILE MENU -->
+    <!-- DESKTOP NAV -->
+
+    <nav
+        class="
+            desktop-nav
+            hidden
+            md:flex
+            items-center
+            gap-7
+            text-sm
+            text-white/65
+        "
+    >
+
+        <a
+            href="#discover"
+            class="hover:text-white transition"
+        >
+            Discover
+        </a>
+
+        <a
+            href="#categories"
+            class="hover:text-white transition"
+        >
+            Services
+        </a>
+
+        <a
+            href="#why-kasi"
+            class="hover:text-white transition"
+        >
+            Why K@si
+        </a>
+
+        <button
+            id="desktopLoginBtn"
+            class="hover:text-white transition"
+        >
+            Login
+        </button>
+
+    </nav>
+
+
+    <!-- MOBILE MENU BUTTON -->
+
+    <button
+        id="mobileMenuBtn"
+        class="
+            md:hidden
+            w-10
+            h-10
+            rounded-xl
+            glass
+            flex
+            items-center
+            justify-center
+        "
+        aria-label="Open menu"
+        aria-expanded="false"
+    >
+
+        <i
+            id="mobileMenuIcon"
+            class="
+                bx
+                bx-menu
+                text-2xl
+            "
+        ></i>
+
+    </button>
+
+</div>
+
+</header><!-- =========================================================
+     MOBILE MENU
+========================================================= --><div
+    id="mobileMenu"
+    class="
+        fixed
+        inset-x-0
+        top-16
+        z-40
+        hidden
+        bg-[#0b0b18]/98
+        border-b
+        border-white/10
+        backdrop-blur-xl
+    "
+><div class="p-4 sm:p-5 space-y-1">
+
+    <a
+        href="#discover"
+        class="
+            block
+            p-4
+            rounded-xl
+            hover:bg-white/5
+        "
+    >
+        <i class="bx bx-compass mr-2 text-blue-400"></i>
+        Discover
+    </a>
+
+    <a
+        href="#categories"
+        class="
+            block
+            p-4
+            rounded-xl
+            hover:bg-white/5
+        "
+    >
+        <i class="bx bx-cut mr-2 text-violet-400"></i>
+        Services
+    </a>
+
+    <a
+        href="#why-kasi"
+        class="
+            block
+            p-4
+            rounded-xl
+            hover:bg-white/5
+        "
+    >
+        <i class="bx bx-star mr-2 text-purple-400"></i>
+        Why K@si
+    </a>
+
+    <button
+        id="mobileLoginBtn"
+        class="
+            w-full
+            text-left
+            p-4
+            rounded-xl
+            hover:bg-white/5
+        "
+    >
+        <i class="bx bx-log-in mr-2 text-blue-400"></i>
+        Login
+    </button>
+
+</div>
+
+</div><main><!-- =========================================================
+     HERO
+========================================================= --><section
+    class="
+        hero-section
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        pt-8
+        sm:pt-10
+        md:pt-16
+        pb-10
+    "
+><div
+    class="
+        grid
+        lg:grid-cols-2
+        gap-8
+        lg:gap-12
+        items-center
+    "
+>
+
+    <!-- HERO TEXT -->
+
+    <div>
+
+        <div
+            class="
+                fade-up
+                inline-flex
+                items-center
+                gap-2
+                glass
+                rounded-full
+                px-3
+                py-2
+                text-xs
+                text-white/65
+                mb-5
+            "
+        >
+
+            <span
+                class="
+                    w-2
+                    h-2
+                    rounded-full
+                    bg-green-400
+                    shadow
+                    shadow-green-400
+                "
+            ></span>
+
+            Local barbers. Real bookings.
+
+        </div>
+
+
+        <h1
+            class="
+                hero-title
+                fade-up
+                delay-1
+                text-5xl
+                md:text-7xl
+                font-black
+                leading-[.95]
+                tracking-[-.05em]
+                max-w-3xl
+            "
+        >
+
+            Your next
+
+            <span class="gradient-text">
+                fresh cut
+            </span>
+
+            is one tap away.
+
+        </h1>
+
+
+        <p
+            class="
+                hero-copy
+                fade-up
+                delay-2
+                mt-6
+                text-base
+                md:text-lg
+                text-white/55
+                max-w-xl
+                leading-relaxed
+            "
+        >
+            Find trusted barbers and salons around you,
+            compare services, choose your time and book
+            without standing in a queue.
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <div
+            class="
+                fade-up
+                delay-3
+                search-box
+                glass
+                rounded-2xl
+                mt-7
+                p-2
+                flex
+                items-center
+                gap-2
+                hero-glow
+                w-full
+            "
+        >
+
+            <i
+                class="
+                    bx
+                    bx-search
+                    text-2xl
+                    text-white/40
+                    ml-3
+                    shrink-0
+                "
+            ></i>
+
+            <input
+                id="heroSearch"
+                type="search"
+                autocomplete="off"
+                placeholder="Search salons or services..."
+                class="
+                    bg-transparent
+                    flex-1
+                    min-w-0
+                    px-2
+                    py-3
+                    text-sm
+                    text-white
+                "
+            >
 
             <button
-                id="mobileMenuBtn"
+                id="findSalonBtn"
                 class="
-                    md:hidden
-                    w-10
-                    h-10
+                    primary-btn
                     rounded-xl
-                    glass
-                    flex
-                    items-center
-                    justify-center
+                    px-5
+                    py-3
+                    font-bold
+                    text-sm
+                    whitespace-nowrap
+                    shrink-0
                 "
-                aria-label="Open menu"
             >
-                <i class="bx bx-menu text-2xl"></i>
+                Find Salon
             </button>
 
         </div>
 
-    </header>
 
+        <!-- TRUST -->
 
-    <!-- =====================================================
-         MOBILE MENU
-    ====================================================== -->
+        <div
+            class="
+                fade-up
+                delay-4
+                flex
+                flex-wrap
+                gap-x-6
+                gap-y-3
+                mt-6
+                text-xs
+                text-white/45
+            "
+        >
 
-    <div
-        id="mobileMenu"
-        class="
-            fixed
-            inset-x-0
-            top-16
-            z-40
-            hidden
-            bg-[#0b0b18]/98
-            border-b
-            border-white/10
-            backdrop-blur-xl
-        "
-    >
+            <span class="flex items-center gap-2">
+                <i class="bx bxs-star text-yellow-400"></i>
+                Trusted local salons
+            </span>
 
-        <div class="p-5 space-y-2">
+            <span class="flex items-center gap-2">
+                <i class="bx bx-map text-blue-400"></i>
+                Find salons nearby
+            </span>
 
-            <a
-                href="#discover"
-                class="
-                    block
-                    p-4
-                    rounded-xl
-                    hover:bg-white/5
-                "
-            >
-                Discover
-            </a>
-
-            <a
-                href="#categories"
-                class="
-                    block
-                    p-4
-                    rounded-xl
-                    hover:bg-white/5
-                "
-            >
-                Services
-            </a>
-
-            <a
-                href="#why-kasi"
-                class="
-                    block
-                    p-4
-                    rounded-xl
-                    hover:bg-white/5
-                "
-            >
-                Why K@si
-            </a>
-
-            <button
-                id="mobileLoginBtn"
-                class="
-                    w-full
-                    text-left
-                    p-4
-                    rounded-xl
-                    hover:bg-white/5
-                "
-            >
-                Login
-            </button>
+            <span class="flex items-center gap-2">
+                <i class="bx bx-time-five text-violet-400"></i>
+                Skip the queue
+            </span>
 
         </div>
 
     </div>
 
 
-    <main>
+    <!-- HERO VISUAL -->
 
+    <div
+        class="
+            relative
+            hidden
+            md:block
+        "
+    >
 
-        <!-- =================================================
-             HERO
-        ================================================== -->
-
-        <section
+        <div
             class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                pt-8
-                md:pt-16
-                pb-10
+                absolute
+                -top-8
+                -right-8
+                w-32
+                h-32
+                rounded-full
+                bg-blue-500/20
+                blur-3xl
+            "
+        ></div>
+
+        <div
+            class="
+                absolute
+                -bottom-8
+                -left-8
+                w-40
+                h-40
+                rounded-full
+                bg-violet-500/20
+                blur-3xl
+            "
+        ></div>
+
+
+        <div
+            class="
+                relative
+                rounded-[2rem]
+                overflow-hidden
+                border
+                border-white/10
+                hero-glow
             "
         >
 
-            <div
+            <img
+                src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/37BA0E35.jpg"
+                alt="Fresh barber haircut"
                 class="
-                    grid
-                    lg:grid-cols-2
-                    gap-8
-                    items-center
+                    hero-image
+                    w-full
+                    h-[480px]
+                    object-cover
+                "
+                loading="eager"
+                onerror="
+                    this.style.display='none';
+                    this.parentElement.style.background=
+                    'linear-gradient(135deg,#111827,#312e81)';
                 "
             >
 
-                <!-- HERO TEXT -->
 
-                <div>
-
-                    <div
-                        class="
-                            fade-up
-                            inline-flex
-                            items-center
-                            gap-2
-                            glass
-                            rounded-full
-                            px-3
-                            py-2
-                            text-xs
-                            text-white/65
-                            mb-5
-                        "
-                    >
-
-                        <span
-                            class="
-                                w-2
-                                h-2
-                                rounded-full
-                                bg-green-400
-                                shadow
-                                shadow-green-400
-                            "
-                        ></span>
-
-                        Local barbers. Real bookings.
-
-                    </div>
+            <div
+                class="
+                    absolute
+                    inset-0
+                    bg-gradient-to-t
+                    from-black/80
+                    via-black/10
+                    to-transparent
+                "
+            ></div>
 
 
-                    <h1
-                        class="
-                            fade-up
-                            delay-1
-                            text-5xl
-                            md:text-7xl
-                            font-black
-                            leading-[.95]
-                            tracking-[-.05em]
-                        "
-                    >
-
-                        Your next
-
-                        <span class="gradient-text">
-                            fresh cut
-                        </span>
-
-                        is one tap away.
-
-                    </h1>
-
-
-                    <p
-                        class="
-                            fade-up
-                            delay-2
-                            mt-6
-                            text-base
-                            md:text-lg
-                            text-white/55
-                            max-w-xl
-                            leading-relaxed
-                        "
-                    >
-                        Find trusted barbers and salons around you,
-                        compare services, choose your time and book
-                        without standing in a queue.
-                    </p>
-
-
-                    <!-- SEARCH -->
-
-                    <div
-                        class="
-                            fade-up
-                            delay-3
-                            search-box
-                            glass
-                            rounded-2xl
-                            mt-7
-                            p-2
-                            flex
-                            items-center
-                            gap-2
-                            hero-glow
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-search
-                                text-2xl
-                                text-white/40
-                                ml-3
-                            "
-                        ></i>
-
-                        <input
-                            id="heroSearch"
-                            type="text"
-                            placeholder="Search salons or services..."
-                            class="
-                                bg-transparent
-                                flex-1
-                                min-w-0
-                                px-2
-                                py-3
-                                text-sm
-                                text-white
-                            "
-                        >
-
-                        <button
-                            id="findSalonBtn"
-                            class="
-                                primary-btn
-                                rounded-xl
-                                px-5
-                                py-3
-                                font-bold
-                                text-sm
-                                whitespace-nowrap
-                            "
-                        >
-                            Find Salon
-                        </button>
-
-                    </div>
-
-
-                    <!-- TRUST -->
-
-                    <div
-                        class="
-                            fade-up
-                            delay-4
-                            flex
-                            flex-wrap
-                            gap-x-6
-                            gap-y-3
-                            mt-6
-                            text-xs
-                            text-white/45
-                        "
-                    >
-
-                        <span class="flex items-center gap-2">
-                            <i class="bx bxs-star text-yellow-400"></i>
-                            Trusted local salons
-                        </span>
-
-                        <span class="flex items-center gap-2">
-                            <i class="bx bx-map text-blue-400"></i>
-                            Find salons nearby
-                        </span>
-
-                        <span class="flex items-center gap-2">
-                            <i class="bx bx-time-five text-violet-400"></i>
-                            Skip the queue
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- HERO VISUAL -->
+            <div
+                class="
+                    floating
+                    absolute
+                    bottom-5
+                    left-5
+                    right-5
+                    glass
+                    rounded-2xl
+                    p-4
+                "
+            >
 
                 <div
                     class="
-                        relative
-                        hidden
-                        md:block
+                        flex
+                        items-center
+                        justify-between
+                        gap-4
                     "
                 >
 
-                    <div
-                        class="
-                            absolute
-                            -top-8
-                            -right-8
-                            w-32
-                            h-32
-                            rounded-full
-                            bg-blue-500/20
-                            blur-3xl
-                        "
-                    ></div>
-
-                    <div
-                        class="
-                            absolute
-                            -bottom-8
-                            -left-8
-                            w-40
-                            h-40
-                            rounded-full
-                            bg-violet-500/20
-                            blur-3xl
-                        "
-                    ></div>
-
-
-                    <div
-                        class="
-                            relative
-                            rounded-[2rem]
-                            overflow-hidden
-                            border
-                            border-white/10
-                            hero-glow
-                        "
-                    >
-
-                        <img
-                            src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/37BA0E35.jpg"
-                            alt="Fresh barber haircut"
-                            class="
-                                hero-image
-                                w-full
-                                h-[480px]
-                                object-cover
-                            "
-                            onerror="
-                                this.style.display='none';
-                                this.parentElement.style.background=
-                                'linear-gradient(135deg,#111827,#312e81)';
-                            "
-                        >
-
-
-                        <!-- IMAGE OVERLAY -->
+                    <div>
 
                         <div
                             class="
-                                absolute
-                                inset-0
-                                bg-gradient-to-t
-                                from-black/80
-                                via-black/10
-                                to-transparent
+                                text-xs
+                                text-white/50
                             "
-                        ></div>
-
-
-                        <!-- FLOATING CARD -->
+                        >
+                            Featured cut
+                        </div>
 
                         <div
                             class="
-                                floating
-                                absolute
-                                bottom-5
-                                left-5
-                                right-5
-                                glass
-                                rounded-2xl
-                                p-4
+                                font-bold
+                                mt-1
                             "
                         >
+                            Kasi Taper Fade
+                        </div>
 
-                            <div
-                                class="
-                                    flex
-                                    items-center
-                                    justify-between
-                                "
-                            >
-
-                                <div>
-
-                                    <div
-                                        class="
-                                            text-xs
-                                            text-white/50
-                                        "
-                                    >
-                                        Featured cut
-                                    </div>
-
-                                    <div
-                                        class="
-                                            font-bold
-                                            mt-1
-                                        "
-                                    >
-                                        Kasi Taper Fade
-                                    </div>
-
-                                </div>
+                    </div>
 
 
-                                <div
-                                    class="
-                                        text-right
-                                    "
-                                >
+                    <div class="text-right">
 
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-1
-                                            text-yellow-400
-                                            font-bold
-                                        "
-                                    >
-                                        <i class="bx bxs-star"></i>
-                                        4.8
-                                    </div>
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-1
+                                text-yellow-400
+                                font-bold
+                            "
+                        >
+                            <i class="bx bxs-star"></i>
+                            4.8
+                        </div>
 
-                                    <div
-                                        class="
-                                            text-xs
-                                            text-white/45
-                                            mt-1
-                                        "
-                                    >
-                                        From R120
-                                    </div>
-
-                                </div>
-
-                            </div>
-
+                        <div
+                            class="
+                                text-xs
+                                text-white/45
+                                mt-1
+                            "
+                        >
+                            From R120
                         </div>
 
                     </div>
@@ -901,2020 +1329,2365 @@
 
             </div>
 
-        </section>
+        </div>
 
+    </div>
 
-        <!-- =================================================
-             QUICK STATS
-        ================================================== -->
+</div>
 
-        <section
-            class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                pb-10
-            "
-        >
+</section><!-- =========================================================
+     QUICK STATS
+========================================================= --><section
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        pb-10
+    "
+><div
+    class="
+        glass
+        rounded-3xl
+        grid
+        grid-cols-2
+        md:grid-cols-4
+        divide-x
+        divide-y
+        md:divide-y-0
+        divide-white/10
+        overflow-hidden
+    "
+>
 
-            <div
-                class="
-                    glass
-                    rounded-3xl
-                    grid
-                    grid-cols-2
-                    md:grid-cols-4
-                    divide-x
-                    divide-white/10
-                    overflow-hidden
-                "
-            >
+    <div class="quick-stat p-5 text-center">
 
-                <div class="p-5 text-center">
+        <div class="text-2xl font-black">
+            4.9<span class="text-blue-400">★</span>
+        </div>
 
-                    <div
-                        class="
-                            text-2xl
-                            font-black
-                        "
-                    >
-                        4.9<span class="text-blue-400">★</span>
-                    </div>
+        <div class="text-xs text-white/40 mt-1">
+            Customer rating
+        </div>
 
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Customer rating
-                    </div>
+    </div>
 
-                </div>
 
+    <div class="quick-stat p-5 text-center">
 
-                <div class="p-5 text-center">
+        <div class="text-2xl font-black">
+            100%
+        </div>
 
-                    <div
-                        class="
-                            text-2xl
-                            font-black
-                        "
-                    >
-                        100%
-                    </div>
+        <div class="text-xs text-white/40 mt-1">
+            Local focus
+        </div>
 
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Local focus
-                    </div>
+    </div>
 
-                </div>
 
+    <div class="quick-stat p-5 text-center">
 
-                <div class="p-5 text-center">
+        <div class="text-2xl font-black">
+            24/7
+        </div>
 
-                    <div
-                        class="
-                            text-2xl
-                            font-black
-                        "
-                    >
-                        24/7
-                    </div>
+        <div class="text-xs text-white/40 mt-1">
+            Online booking
+        </div>
 
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Online booking
-                    </div>
+    </div>
 
-                </div>
 
+    <div class="quick-stat p-5 text-center">
 
-                <div class="p-5 text-center">
+        <div class="text-2xl font-black">
+            1 Tap
+        </div>
 
-                    <div
-                        class="
-                            text-2xl
-                            font-black
-                        "
-                    >
-                        1 Tap
-                    </div>
+        <div class="text-xs text-white/40 mt-1">
+            To get started
+        </div>
 
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        To get started
-                    </div>
+    </div>
 
-                </div>
+</div>
 
-            </div>
+</section><!-- =========================================================
+     CATEGORIES
+========================================================= --><section
+    id="categories"
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        py-10
+    "
+><div class="mb-6">
 
-        </section>
-
-
-        <!-- =================================================
-             CATEGORIES
-        ================================================== -->
-
-        <section
-            id="categories"
-            class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                py-10
-            "
-        >
-
-            <div
-                class="
-                    flex
-                    items-end
-                    justify-between
-                    mb-6
-                "
-            >
-
-                <div>
-
-                    <div
-                        class="
-                            text-xs
-                            uppercase
-                            tracking-[.25em]
-                            text-blue-400
-                            font-bold
-                        "
-                    >
-                        Explore
-                    </div>
-
-                    <h2
-                        class="
-                            text-2xl
-                            md:text-3xl
-                            font-black
-                            mt-2
-                        "
-                    >
-                        Find your style
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="
-                    grid
-                    grid-cols-2
-                    md:grid-cols-4
-                    gap-3
-                "
-            >
-
-                <button
-                    class="
-                        category-card
-                        glass
-                        rounded-2xl
-                        p-5
-                        text-left
-                    "
-                    data-search="haircut"
-                >
-
-                    <div
-                        class="
-                            w-11
-                            h-11
-                            rounded-xl
-                            bg-blue-500/15
-                            flex
-                            items-center
-                            justify-center
-                            mb-4
-                        "
-                    >
-                        <i
-                            class="
-                                bx
-                                bx-cut
-                                text-2xl
-                                text-blue-400
-                            "
-                        ></i>
-                    </div>
-
-                    <div class="font-bold">
-                        Haircuts
-                    </div>
-
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Fades & cuts
-                    </div>
-
-                </button>
-
-
-                <button
-                    class="
-                        category-card
-                        glass
-                        rounded-2xl
-                        p-5
-                        text-left
-                    "
-                    data-search="beard"
-                >
-
-                    <div
-                        class="
-                            w-11
-                            h-11
-                            rounded-xl
-                            bg-violet-500/15
-                            flex
-                            items-center
-                            justify-center
-                            mb-4
-                        "
-                    >
-                        <i
-                            class="
-                                bx
-                                bx-user
-                                text-2xl
-                                text-violet-400
-                            "
-                        ></i>
-                    </div>
-
-                    <div class="font-bold">
-                        Beard
-                    </div>
-
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Trim & shape
-                    </div>
-
-                </button>
-
-
-                <button
-                    class="
-                        category-card
-                        glass
-                        rounded-2xl
-                        p-5
-                        text-left
-                    "
-                    data-search="fade"
-                >
-
-                    <div
-                        class="
-                            w-11
-                            h-11
-                            rounded-xl
-                            bg-purple-500/15
-                            flex
-                            items-center
-                            justify-center
-                            mb-4
-                        "
-                    >
-                        <i
-                            class="
-                                bx
-                                bx-star
-                                text-2xl
-                                text-purple-400
-                            "
-                        ></i>
-                    </div>
-
-                    <div class="font-bold">
-                        Fades
-                    </div>
-
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Clean & sharp
-                    </div>
-
-                </button>
-
-
-                <button
-                    class="
-                        category-card
-                        glass
-                        rounded-2xl
-                        p-5
-                        text-left
-                    "
-                    data-search="premium"
-                >
-
-                    <div
-                        class="
-                            w-11
-                            h-11
-                            rounded-xl
-                            bg-cyan-500/15
-                            flex
-                            items-center
-                            justify-center
-                            mb-4
-                        "
-                    >
-                        <i
-                            class="
-                                bx
-                                bx-crown
-                                text-2xl
-                                text-cyan-400
-                            "
-                        ></i>
-                    </div>
-
-                    <div class="font-bold">
-                        Premium
-                    </div>
-
-                    <div
-                        class="
-                            text-xs
-                            text-white/40
-                            mt-1
-                        "
-                    >
-                        Elite services
-                    </div>
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             DISCOVER
-        ================================================== -->
-
-        <section
-            id="discover"
-            class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                py-12
-            "
-        >
-
-            <div
-                class="
-                    flex
-                    items-end
-                    justify-between
-                    mb-6
-                "
-            >
-
-                <div>
-
-                    <div
-                        class="
-                            text-xs
-                            uppercase
-                            tracking-[.25em]
-                            text-violet-400
-                            font-bold
-                        "
-                    >
-                        Discover
-                    </div>
-
-                    <h2
-                        class="
-                            text-2xl
-                            md:text-3xl
-                            font-black
-                            mt-2
-                        "
-                    >
-                        Popular right now
-                    </h2>
-
-                    <p
-                        class="
-                            text-sm
-                            text-white/40
-                            mt-2
-                        "
-                    >
-                        Fresh styles from local talent.
-                    </p>
-
-                </div>
-
-
-                <a
-                    href="salons.html"
-                    class="
-                        hidden
-                        md:flex
-                        items-center
-                        gap-1
-                        text-sm
-                        text-blue-400
-                        font-bold
-                    "
-                >
-                    View all
-                    <i class="bx bx-right-arrow-alt"></i>
-                </a>
-
-            </div>
-
-
-            <!-- FEATURED SLIDER -->
-
-            <div class="swiper featuredSwiper">
-
-                <div class="swiper-wrapper">
-
-
-                    <!-- CARD 1 -->
-
-                    <div class="swiper-slide">
-
-                        <article
-                            class="
-                                salon-card
-                                glass
-                                rounded-3xl
-                                overflow-hidden
-                                border
-                                border-white/10
-                            "
-                        >
-
-                            <div class="relative">
-
-                                <img
-                                    src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/37BA0E35.jpg"
-                                    alt="Kasi Taper Fade"
-                                    class="
-                                        w-full
-                                        h-64
-                                        object-cover
-                                    "
-                                >
-
-                                <div
-                                    class="
-                                        absolute
-                                        top-4
-                                        left-4
-                                        glass
-                                        rounded-full
-                                        px-3
-                                        py-1.5
-                                        text-xs
-                                        font-bold
-                                    "
-                                >
-                                    FEATURED
-                                </div>
-
-                            </div>
-
-
-                            <div class="p-5">
-
-                                <div
-                                    class="
-                                        flex
-                                        items-start
-                                        justify-between
-                                        gap-4
-                                    "
-                                >
-
-                                    <div>
-
-                                        <h3
-                                            class="
-                                                font-black
-                                                text-lg
-                                            "
-                                        >
-                                            Kasi Taper Fade
-                                        </h3>
-
-                                        <p
-                                            class="
-                                                text-xs
-                                                text-white/40
-                                                mt-1
-                                            "
-                                        >
-                                            Fresh fade & clean finish
-                                        </p>
-
-                                    </div>
-
-
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-1
-                                            text-yellow-400
-                                            text-sm
-                                            font-bold
-                                        "
-                                    >
-                                        <i class="bx bxs-star"></i>
-                                        4.8
-                                    </div>
-
-                                </div>
-
-
-                                <div
-                                    class="
-                                        flex
-                                        items-center
-                                        justify-between
-                                        mt-5
-                                    "
-                                >
-
-                                    <div
-                                        class="
-                                            text-white/45
-                                            text-sm
-                                        "
-                                    >
-                                        From
-                                        <span
-                                            class="
-                                                text-white
-                                                font-bold
-                                            "
-                                        >
-                                            R120
-                                        </span>
-                                    </div>
-
-
-                                    <button
-                                        class="
-                                            primary-btn
-                                            rounded-xl
-                                            px-4
-                                            py-2.5
-                                            text-sm
-                                            font-bold
-                                            bookBtn
-                                        "
-                                    >
-                                        Book Now
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-
-                    <!-- CARD 2 -->
-
-                    <div class="swiper-slide">
-
-                        <article
-                            class="
-                                salon-card
-                                glass
-                                rounded-3xl
-                                overflow-hidden
-                                border
-                                border-white/10
-                            "
-                        >
-
-                            <div>
-
-                                <img
-                                    src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/7847041D.jpg"
-                                    alt="Burst Fade and Beard"
-                                    class="
-                                        w-full
-                                        h-64
-                                        object-cover
-                                    "
-                                >
-
-                            </div>
-
-
-                            <div class="p-5">
-
-                                <div
-                                    class="
-                                        flex
-                                        items-start
-                                        justify-between
-                                    "
-                                >
-
-                                    <div>
-
-                                        <h3
-                                            class="
-                                                font-black
-                                                text-lg
-                                            "
-                                        >
-                                            Burst Fade & Beard
-                                        </h3>
-
-                                        <p
-                                            class="
-                                                text-xs
-                                                text-white/40
-                                                mt-1
-                                            "
-                                        >
-                                            Sharp fade and beard finish
-                                        </p>
-
-                                    </div>
-
-
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-1
-                                            text-yellow-400
-                                            text-sm
-                                            font-bold
-                                        "
-                                    >
-                                        <i class="bx bxs-star"></i>
-                                        4.9
-                                    </div>
-
-                                </div>
-
-
-                                <div
-                                    class="
-                                        flex
-                                        items-center
-                                        justify-between
-                                        mt-5
-                                    "
-                                >
-
-                                    <div
-                                        class="
-                                            text-white/45
-                                            text-sm
-                                        "
-                                    >
-                                        From
-                                        <span
-                                            class="
-                                                text-white
-                                                font-bold
-                                            "
-                                        >
-                                            R150
-                                        </span>
-                                    </div>
-
-
-                                    <button
-                                        class="
-                                            primary-btn
-                                            rounded-xl
-                                            px-4
-                                            py-2.5
-                                            text-sm
-                                            font-bold
-                                            bookBtn
-                                        "
-                                    >
-                                        Book Now
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-
-                    <!-- CARD 3 -->
-
-                    <div class="swiper-slide">
-
-                        <article
-                            class="
-                                salon-card
-                                glass
-                                rounded-3xl
-                                overflow-hidden
-                                border
-                                border-white/10
-                            "
-                        >
-
-                            <div>
-
-                                <img
-                                    src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/A3886FFD.jpg"
-                                    alt="Classic Clean Cut"
-                                    class="
-                                        w-full
-                                        h-64
-                                        object-cover
-                                    "
-                                >
-
-                            </div>
-
-
-                            <div class="p-5">
-
-                                <div
-                                    class="
-                                        flex
-                                        items-start
-                                        justify-between
-                                    "
-                                >
-
-                                    <div>
-
-                                        <h3
-                                            class="
-                                                font-black
-                                                text-lg
-                                            "
-                                        >
-                                            Classic Clean Cut
-                                        </h3>
-
-                                        <p
-                                            class="
-                                                text-xs
-                                                text-white/40
-                                                mt-1
-                                            "
-                                        >
-                                            Simple. Clean. Timeless.
-                                        </p>
-
-                                    </div>
-
-
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-1
-                                            text-yellow-400
-                                            text-sm
-                                            font-bold
-                                        "
-                                    >
-                                        <i class="bx bxs-star"></i>
-                                        4.7
-                                    </div>
-
-                                </div>
-
-
-                                <div
-                                    class="
-                                        flex
-                                        items-center
-                                        justify-between
-                                        mt-5
-                                    "
-                                >
-
-                                    <div
-                                        class="
-                                            text-white/45
-                                            text-sm
-                                        "
-                                    >
-                                        From
-                                        <span
-                                            class="
-                                                text-white
-                                                font-bold
-                                            "
-                                        >
-                                            R80
-                                        </span>
-                                    </div>
-
-
-                                    <button
-                                        class="
-                                            primary-btn
-                                            rounded-xl
-                                            px-4
-                                            py-2.5
-                                            text-sm
-                                            font-bold
-                                            bookBtn
-                                        "
-                                    >
-                                        Book Now
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-
-                    <!-- CARD 4 -->
-
-                    <div class="swiper-slide">
-
-                        <article
-                            class="
-                                salon-card
-                                glass
-                                rounded-3xl
-                                overflow-hidden
-                                border
-                                border-white/10
-                            "
-                        >
-
-                            <div>
-
-                                <img
-                                    src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/B307F46B.jpg"
-                                    alt="Line Design Cut"
-                                    class="
-                                        w-full
-                                        h-64
-                                        object-cover
-                                    "
-                                >
-
-                            </div>
-
-
-                            <div class="p-5">
-
-                                <div
-                                    class="
-                                        flex
-                                        items-start
-                                        justify-between
-                                    "
-                                >
-
-                                    <div>
-
-                                        <h3
-                                            class="
-                                                font-black
-                                                text-lg
-                                            "
-                                        >
-                                            Line Design Cut
-                                        </h3>
-
-                                        <p
-                                            class="
-                                                text-xs
-                                                text-white/40
-                                                mt-1
-                                            "
-                                        >
-                                            Stand out with custom design
-                                        </p>
-
-                                    </div>
-
-
-                                    <div
-                                        class="
-                                            flex
-                                            items-center
-                                            gap-1
-                                            text-yellow-400
-                                            text-sm
-                                            font-bold
-                                        "
-                                    >
-                                        <i class="bx bxs-star"></i>
-                                        5.0
-                                    </div>
-
-                                </div>
-
-
-                                <div
-                                    class="
-                                        flex
-                                        items-center
-                                        justify-between
-                                        mt-5
-                                    "
-                                >
-
-                                    <div
-                                        class="
-                                            text-white/45
-                                            text-sm
-                                        "
-                                    >
-                                        From
-                                        <span
-                                            class="
-                                                text-white
-                                                font-bold
-                                            "
-                                        >
-                                            R180
-                                        </span>
-                                    </div>
-
-
-                                    <button
-                                        class="
-                                            primary-btn
-                                            rounded-xl
-                                            px-4
-                                            py-2.5
-                                            text-sm
-                                            font-bold
-                                            bookBtn
-                                        "
-                                    >
-                                        Book Now
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-                </div>
-
-
-                <div class="swiper-pagination"></div>
-
-            </div>
-
-
-            <a
-                href="salons.html"
-                class="
-                    md:hidden
-                    mt-3
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    glass
-                    rounded-xl
-                    p-3
-                    text-sm
-                    font-bold
-                    text-blue-400
-                "
-            >
-                See all salons
-                <i class="bx bx-right-arrow-alt"></i>
-            </a>
-
-        </section>
-
-
-        <!-- =================================================
-             WHY KASI
-        ================================================== -->
-
-        <section
-            id="why-kasi"
-            class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                py-14
-            "
-        >
-
-            <div
-                class="
-                    grid
-                    lg:grid-cols-2
-                    gap-10
-                    items-center
-                "
-            >
-
-                <div>
-
-                    <div
-                        class="
-                            text-xs
-                            uppercase
-                            tracking-[.25em]
-                            text-blue-400
-                            font-bold
-                        "
-                    >
-                        Why K@si
-                    </div>
-
-                    <h2
-                        class="
-                            text-3xl
-                            md:text-5xl
-                            font-black
-                            leading-tight
-                            mt-3
-                        "
-                    >
-                        Less waiting.
-                        <span class="gradient-text">
-                            More fresh.
-                        </span>
-                    </h2>
-
-                    <p
-                        class="
-                            text-white/45
-                            mt-5
-                            leading-relaxed
-                        "
-                    >
-                        K@si connects customers with local
-                        barbers and salons so getting your next
-                        cut is simple, fast and convenient.
-                    </p>
-
-                </div>
-
-
-                <div
-                    class="
-                        grid
-                        sm:grid-cols-2
-                        gap-3
-                    "
-                >
-
-                    <div
-                        class="
-                            glass
-                            rounded-2xl
-                            p-5
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-time-five
-                                text-3xl
-                                text-blue-400
-                            "
-                        ></i>
-
-                        <h3
-                            class="
-                                font-bold
-                                mt-4
-                            "
-                        >
-                            Skip the queue
-                        </h3>
-
-                        <p
-                            class="
-                                text-xs
-                                text-white/40
-                                mt-2
-                                leading-relaxed
-                            "
-                        >
-                            Choose your time before
-                            you arrive.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            glass
-                            rounded-2xl
-                            p-5
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-map
-                                text-3xl
-                                text-violet-400
-                            "
-                        ></i>
-
-                        <h3
-                            class="
-                                font-bold
-                                mt-4
-                            "
-                        >
-                            Find local talent
-                        </h3>
-
-                        <p
-                            class="
-                                text-xs
-                                text-white/40
-                                mt-2
-                                leading-relaxed
-                            "
-                        >
-                            Discover barbers and salons
-                            around your community.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            glass
-                            rounded-2xl
-                            p-5
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-receipt
-                                text-3xl
-                                text-purple-400
-                            "
-                        ></i>
-
-                        <h3
-                            class="
-                                font-bold
-                                mt-4
-                            "
-                        >
-                            Know the price
-                        </h3>
-
-                        <p
-                            class="
-                                text-xs
-                                text-white/40
-                                mt-2
-                                leading-relaxed
-                            "
-                        >
-                            Compare services before
-                            you book.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            glass
-                            rounded-2xl
-                            p-5
-                        "
-                    >
-
-                        <i
-                            class="
-                                bx
-                                bx-check-shield
-                                text-3xl
-                                text-cyan-400
-                            "
-                        ></i>
-
-                        <h3
-                            class="
-                                font-bold
-                                mt-4
-                            "
-                        >
-                            Easy booking
-                        </h3>
-
-                        <p
-                            class="
-                                text-xs
-                                text-white/40
-                                mt-2
-                                leading-relaxed
-                            "
-                        >
-                            Book in a few simple steps.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             CTA
-        ================================================== -->
-
-        <section
-            class="
-                max-w-6xl
-                mx-auto
-                px-5
-                md:px-8
-                py-12
-            "
-        >
-
-            <div
-                class="
-                    relative
-                    overflow-hidden
-                    rounded-[2rem]
-                    p-8
-                    md:p-12
-                    border
-                    border-white/10
-                    bg-gradient-to-br
-                    from-blue-600/20
-                    via-violet-600/15
-                    to-transparent
-                "
-            >
-
-                <div
-                    class="
-                        absolute
-                        -right-20
-                        -top-20
-                        w-64
-                        h-64
-                        rounded-full
-                        bg-blue-500/15
-                        blur-3xl
-                    "
-                ></div>
-
-
-                <div
-                    class="
-                        relative
-                        max-w-2xl
-                    "
-                >
-
-                    <div
-                        class="
-                            text-xs
-                            uppercase
-                            tracking-[.25em]
-                            text-blue-300
-                            font-bold
-                        "
-                    >
-                        Ready?
-                    </div>
-
-                    <h2
-                        class="
-                            text-3xl
-                            md:text-5xl
-                            font-black
-                            mt-3
-                        "
-                    >
-                        Get fresh without
-                        the wait.
-                    </h2>
-
-                    <p
-                        class="
-                            text-white/50
-                            mt-4
-                        "
-                    >
-                        Find a salon, choose your service and
-                        book your next cut.
-                    </p>
-
-
-                    <button
-                        id="ctaBookBtn"
-                        class="
-                            primary-btn
-                            rounded-xl
-                            px-6
-                            py-3.5
-                            mt-7
-                            font-black
-                        "
-                    >
-                        Book Your Cut
-                        <i class="bx bx-right-arrow-alt ml-1"></i>
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-    <footer
+    <div
         class="
-            max-w-6xl
-            mx-auto
-            px-5
-            md:px-8
-            pt-8
-            pb-28
-            md:pb-10
+            text-xs
+            uppercase
+            tracking-[.25em]
+            text-blue-400
+            font-bold
         "
+    >
+        Explore
+    </div>
+
+    <h2
+        class="
+            text-2xl
+            md:text-3xl
+            font-black
+            mt-2
+        "
+    >
+        Find your style
+    </h2>
+
+</div>
+
+
+<div
+    class="
+        grid
+        grid-cols-2
+        md:grid-cols-4
+        gap-3
+    "
+>
+
+    <button
+        class="
+            category-card
+            glass
+            rounded-2xl
+            p-5
+            text-left
+        "
+        data-search="haircut"
     >
 
         <div
             class="
-                border-t
-                border-white/10
-                pt-8
+                category-icon
+                w-11
+                h-11
+                rounded-xl
+                bg-blue-500/15
                 flex
-                flex-col
-                md:flex-row
                 items-center
-                justify-between
-                gap-5
+                justify-center
+                mb-4
             "
         >
 
-            <div>
-
-                <div
-                    class="
-                        font-black
-                        text-lg
-                    "
-                >
-                    K<span class="text-blue-400">@</span>si
-                </div>
-
-                <p
-                    class="
-                        text-xs
-                        text-white/35
-                        mt-1
-                    "
-                >
-                    Fresh cuts. Local talent. Zero queue.
-                </p>
-
-            </div>
-
-
-            <div
+            <i
                 class="
-                    text-xs
-                    text-white/30
+                    bx
+                    bx-cut
+                    text-2xl
+                    text-blue-400
                 "
-            >
-                © 2026 K@si Web • Made for Kasi People
-            </div>
+            ></i>
 
         </div>
 
-    </footer>
+        <div class="font-bold">
+            Haircuts
+        </div>
+
+        <div class="text-xs text-white/40 mt-1">
+            Fades & cuts
+        </div>
+
+    </button>
 
 
-    <!-- =====================================================
-         LOGIN MODAL
-    ====================================================== -->
-
-    <div
-        id="loginModal"
+    <button
         class="
-            fixed
-            inset-0
-            z-[100]
-            hidden
-            items-center
-            justify-center
+            category-card
+            glass
+            rounded-2xl
             p-5
-            modal-bg
+            text-left
         "
+        data-search="beard"
     >
 
         <div
             class="
-                glass
-                rounded-3xl
-                w-full
-                max-w-md
-                p-6
-                border
-                border-white/10
-                shadow-2xl
+                category-icon
+                w-11
+                h-11
+                rounded-xl
+                bg-violet-500/15
+                flex
+                items-center
+                justify-center
+                mb-4
             "
         >
 
-            <div
+            <i
                 class="
-                    flex
-                    items-center
-                    justify-between
+                    bx
+                    bx-user
+                    text-2xl
+                    text-violet-400
+                "
+            ></i>
+
+        </div>
+
+        <div class="font-bold">
+            Beard
+        </div>
+
+        <div class="text-xs text-white/40 mt-1">
+            Trim & shape
+        </div>
+
+    </button>
+
+
+    <button
+        class="
+            category-card
+            glass
+            rounded-2xl
+            p-5
+            text-left
+        "
+        data-search="fade"
+    >
+
+        <div
+            class="
+                category-icon
+                w-11
+                h-11
+                rounded-xl
+                bg-purple-500/15
+                flex
+                items-center
+                justify-center
+                mb-4
+            "
+        >
+
+            <i
+                class="
+                    bx
+                    bx-star
+                    text-2xl
+                    text-purple-400
+                "
+            ></i>
+
+        </div>
+
+        <div class="font-bold">
+            Fades
+        </div>
+
+        <div class="text-xs text-white/40 mt-1">
+            Clean & sharp
+        </div>
+
+    </button>
+
+
+    <button
+        class="
+            category-card
+            glass
+            rounded-2xl
+            p-5
+            text-left
+        "
+        data-search="premium"
+    >
+
+        <div
+            class="
+                category-icon
+                w-11
+                h-11
+                rounded-xl
+                bg-cyan-500/15
+                flex
+                items-center
+                justify-center
+                mb-4
+            "
+        >
+
+            <i
+                class="
+                    bx
+                    bx-crown
+                    text-2xl
+                    text-cyan-400
+                "
+            ></i>
+
+        </div>
+
+        <div class="font-bold">
+            Premium
+        </div>
+
+        <div class="text-xs text-white/40 mt-1">
+            Elite services
+        </div>
+
+    </button>
+
+</div>
+
+</section><!-- =========================================================
+     DISCOVER
+========================================================= --><section
+    id="discover"
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        py-12
+    "
+><div
+    class="
+        flex
+        items-end
+        justify-between
+        mb-6
+    "
+>
+
+    <div>
+
+        <div
+            class="
+                text-xs
+                uppercase
+                tracking-[.25em]
+                text-violet-400
+                font-bold
+            "
+        >
+            Discover
+        </div>
+
+        <h2
+            class="
+                text-2xl
+                md:text-3xl
+                font-black
+                mt-2
+            "
+        >
+            Popular right now
+        </h2>
+
+        <p
+            class="
+                text-sm
+                text-white/40
+                mt-2
+            "
+        >
+            Fresh styles from local talent.
+        </p>
+
+    </div>
+
+
+    <a
+        href="salons.html"
+        class="
+            hidden
+            md:flex
+            items-center
+            gap-1
+            text-sm
+            text-blue-400
+            font-bold
+        "
+    >
+        View all
+        <i class="bx bx-right-arrow-alt"></i>
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     ELITE FEATURED SLIDER
+====================================================== -->
+
+<div class="swiper featuredSwiper">
+
+    <div class="swiper-wrapper">
+
+
+        <!-- CARD 1 -->
+
+        <div class="swiper-slide">
+
+            <article
+                class="
+                    salon-card
+                    glass
+                    rounded-3xl
+                    overflow-hidden
+                    border
+                    border-white/10
                 "
             >
 
-                <div>
+                <div class="relative overflow-hidden">
 
-                    <div
-                        class="
-                            text-xl
-                            font-black
-                        "
+                    <img
+                        src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/37BA0E35.jpg"
+                        alt="Kasi Taper Fade"
+                        class="featured-image"
+                        loading="lazy"
                     >
-                        Welcome back
-                    </div>
 
                     <div
                         class="
+                            absolute
+                            inset-x-0
+                            bottom-0
+                            h-28
+                            bg-gradient-to-t
+                            from-black/70
+                            to-transparent
+                            pointer-events-none
+                        "
+                    ></div>
+
+                    <div
+                        class="
+                            absolute
+                            top-4
+                            left-4
+                            glass
+                            rounded-full
+                            px-3
+                            py-1.5
                             text-xs
-                            text-white/40
-                            mt-1
+                            font-bold
                         "
                     >
-                        Login to continue to K@si
+                        FEATURED
                     </div>
 
                 </div>
 
 
-                <button
-                    id="closeLoginModal"
-                    class="
-                        w-9
-                        h-9
-                        rounded-xl
-                        bg-white/5
-                        flex
-                        items-center
-                        justify-center
-                    "
-                >
-                    <i class="bx bx-x text-xl"></i>
-                </button>
+                <div class="card-content p-5">
 
-            </div>
+                    <div
+                        class="
+                            flex
+                            items-start
+                            justify-between
+                            gap-4
+                        "
+                    >
 
+                        <div class="min-w-0">
 
-            <div class="mt-6 space-y-4">
+                            <h3
+                                class="
+                                    font-black
+                                    text-lg
+                                    truncate
+                                "
+                            >
+                                Kasi Taper Fade
+                            </h3>
 
-                <input
-                    id="userEmail"
-                    type="email"
-                    placeholder="Email address"
-                    class="
-                        w-full
-                        bg-white/5
-                        border
-                        border-white/10
-                        rounded-xl
-                        px-4
-                        py-3.5
-                        text-sm
-                        outline-none
-                        focus:border-blue-500/60
-                    "
-                >
+                            <p
+                                class="
+                                    text-xs
+                                    text-white/40
+                                    mt-1
+                                "
+                            >
+                                Fresh fade & clean finish
+                            </p>
+
+                        </div>
 
 
-                <input
-                    id="userPass"
-                    type="password"
-                    placeholder="Password"
-                    class="
-                        w-full
-                        bg-white/5
-                        border
-                        border-white/10
-                        rounded-xl
-                        px-4
-                        py-3.5
-                        text-sm
-                        outline-none
-                        focus:border-blue-500/60
-                    "
-                >
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-1
+                                text-yellow-400
+                                text-sm
+                                font-bold
+                                shrink-0
+                            "
+                        >
+                            <i class="bx bxs-star"></i>
+                            4.8
+                        </div>
+
+                    </div>
 
 
-                <input
-                    id="userRole"
-                    type="hidden"
-                    value="customer"
-                >
+                    <div
+                        class="
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                            mt-5
+                        "
+                    >
+
+                        <div
+                            class="
+                                text-white/45
+                                text-sm
+                            "
+                        >
+                            From
+                            <span
+                                class="
+                                    text-white
+                                    font-bold
+                                "
+                            >
+                                R120
+                            </span>
+                        </div>
 
 
-                <button
-                    id="mainLoginBtn"
-                    class="
-                        primary-btn
-                        w-full
-                        rounded-xl
-                        py-3.5
-                        font-black
-                    "
-                >
-                    Login
-                </button>
+                        <button
+                            class="
+                                primary-btn
+                                rounded-xl
+                                px-4
+                                py-2.5
+                                text-sm
+                                font-bold
+                                bookBtn
+                            "
+                        >
+                            Book Now
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
 
 
-                <button
-                    id="signupBtn"
-                    class="
-                        secondary-btn
-                        w-full
-                        rounded-xl
-                        py-3.5
-                        font-bold
-                    "
-                >
-                    Create Account
-                </button>
+        <!-- CARD 2 -->
+
+        <div class="swiper-slide">
+
+            <article
+                class="
+                    salon-card
+                    glass
+                    rounded-3xl
+                    overflow-hidden
+                    border
+                    border-white/10
+                "
+            >
+
+                <div class="relative overflow-hidden">
+
+                    <img
+                        src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/7847041D.jpg"
+                        alt="Burst Fade and Beard"
+                        class="featured-image"
+                        loading="lazy"
+                    >
+
+                    <div
+                        class="
+                            absolute
+                            inset-x-0
+                            bottom-0
+                            h-28
+                            bg-gradient-to-t
+                            from-black/70
+                            to-transparent
+                            pointer-events-none
+                        "
+                    ></div>
+
+                </div>
 
 
-                <button
-                    id="showRoleBtn"
-                    class="
-                        w-full
-                        text-xs
-                        text-blue-400
-                        py-2
-                    "
-                >
-                    Are you a salon owner?
-                </button>
+                <div class="card-content p-5">
+
+                    <div
+                        class="
+                            flex
+                            items-start
+                            justify-between
+                            gap-4
+                        "
+                    >
+
+                        <div class="min-w-0">
+
+                            <h3
+                                class="
+                                    font-black
+                                    text-lg
+                                "
+                            >
+                                Burst Fade & Beard
+                            </h3>
+
+                            <p
+                                class="
+                                    text-xs
+                                    text-white/40
+                                    mt-1
+                                "
+                            >
+                                Sharp fade and beard finish
+                            </p>
+
+                        </div>
 
 
-                <div
-                    id="authMsg"
-                    class="
-                        text-center
-                        text-xs
-                        text-white/50
-                        min-h-5
-                    "
-                ></div>
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-1
+                                text-yellow-400
+                                text-sm
+                                font-bold
+                                shrink-0
+                            "
+                        >
+                            <i class="bx bxs-star"></i>
+                            4.9
+                        </div>
 
-            </div>
+                    </div>
+
+
+                    <div
+                        class="
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                            mt-5
+                        "
+                    >
+
+                        <div class="text-white/45 text-sm">
+                            From
+                            <span class="text-white font-bold">
+                                R150
+                            </span>
+                        </div>
+
+                        <button
+                            class="
+                                primary-btn
+                                rounded-xl
+                                px-4
+                                py-2.5
+                                text-sm
+                                font-bold
+                                bookBtn
+                            "
+                        >
+                            Book Now
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <!-- CARD 3 -->
+
+        <div class="swiper-slide">
+
+            <article
+                class="
+                    salon-card
+                    glass
+                    rounded-3xl
+                    overflow-hidden
+                    border
+                    border-white/10
+                "
+            >
+
+                <div class="relative overflow-hidden">
+
+                    <img
+                        src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/A3886FFD.jpg"
+                        alt="Classic Clean Cut"
+                        class="featured-image"
+                        loading="lazy"
+                    >
+
+                    <div
+                        class="
+                            absolute
+                            inset-x-0
+                            bottom-0
+                            h-28
+                            bg-gradient-to-t
+                            from-black/70
+                            to-transparent
+                            pointer-events-none
+                        "
+                    ></div>
+
+                </div>
+
+
+                <div class="card-content p-5">
+
+                    <div
+                        class="
+                            flex
+                            items-start
+                            justify-between
+                            gap-4
+                        "
+                    >
+
+                        <div class="min-w-0">
+
+                            <h3
+                                class="
+                                    font-black
+                                    text-lg
+                                "
+                            >
+                                Classic Clean Cut
+                            </h3>
+
+                            <p
+                                class="
+                                    text-xs
+                                    text-white/40
+                                    mt-1
+                                "
+                            >
+                                Simple. Clean. Timeless.
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-1
+                                text-yellow-400
+                                text-sm
+                                font-bold
+                                shrink-0
+                            "
+                        >
+                            <i class="bx bxs-star"></i>
+                            4.7
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                            mt-5
+                        "
+                    >
+
+                        <div class="text-white/45 text-sm">
+                            From
+                            <span class="text-white font-bold">
+                                R80
+                            </span>
+                        </div>
+
+                        <button
+                            class="
+                                primary-btn
+                                rounded-xl
+                                px-4
+                                py-2.5
+                                text-sm
+                                font-bold
+                                bookBtn
+                            "
+                        >
+                            Book Now
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <!-- CARD 4 -->
+
+        <div class="swiper-slide">
+
+            <article
+                class="
+                    salon-card
+                    glass
+                    rounded-3xl
+                    overflow-hidden
+                    border
+                    border-white/10
+                "
+            >
+
+                <div class="relative overflow-hidden">
+
+                    <img
+                        src="https://raw.githubusercontent.com/siphesihle-design/Kasi-web/main/B307F46B.jpg"
+                        alt="Line Design Cut"
+                        class="featured-image"
+                        loading="lazy"
+                    >
+
+                    <div
+                        class="
+                            absolute
+                            inset-x-0
+                            bottom-0
+                            h-28
+                            bg-gradient-to-t
+                            from-black/70
+                            to-transparent
+                            pointer-events-none
+                        "
+                    ></div>
+
+                </div>
+
+
+                <div class="card-content p-5">
+
+                    <div
+                        class="
+                            flex
+                            items-start
+                            justify-between
+                            gap-4
+                        "
+                    >
+
+                        <div class="min-w-0">
+
+                            <h3
+                                class="
+                                    font-black
+                                    text-lg
+                                "
+                            >
+                                Line Design Cut
+                            </h3>
+
+                            <p
+                                class="
+                                    text-xs
+                                    text-white/40
+                                    mt-1
+                                "
+                            >
+                                Stand out with custom design
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                flex
+                                items-center
+                                gap-1
+                                text-yellow-400
+                                text-sm
+                                font-bold
+                                shrink-0
+                            "
+                        >
+                            <i class="bx bxs-star"></i>
+                            5.0
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                            mt-5
+                        "
+                    >
+
+                        <div class="text-white/45 text-sm">
+                            From
+                            <span class="text-white font-bold">
+                                R180
+                            </span>
+                        </div>
+
+                        <button
+                            class="
+                                primary-btn
+                                rounded-xl
+                                px-4
+                                py-2.5
+                                text-sm
+                                font-bold
+                                bookBtn
+                            "
+                        >
+                            Book Now
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
 
         </div>
 
     </div>
 
 
-    <!-- =====================================================
-         BOTTOM NAV
-    ====================================================== -->
+    <div class="swiper-pagination"></div>
 
-    <nav
+</div>
+
+
+<!-- MOBILE VIEW ALL -->
+
+<a
+    href="salons.html"
+    class="
+        md:hidden
+        mt-1
+        flex
+        items-center
+        justify-center
+        gap-2
+        glass
+        rounded-xl
+        p-3
+        text-sm
+        font-bold
+        text-blue-400
+    "
+>
+    See all salons
+    <i class="bx bx-right-arrow-alt"></i>
+</a>
+
+</section><!-- =========================================================
+     WHY KASI
+========================================================= --><section
+    id="why-kasi"
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        py-14
+    "
+><div
+    class="
+        grid
+        lg:grid-cols-2
+        gap-10
+        items-center
+    "
+>
+
+    <div>
+
+        <div
+            class="
+                text-xs
+                uppercase
+                tracking-[.25em]
+                text-blue-400
+                font-bold
+            "
+        >
+            Why K@si
+        </div>
+
+        <h2
+            class="
+                text-3xl
+                md:text-5xl
+                font-black
+                leading-tight
+                mt-3
+            "
+        >
+            Less waiting.
+            <span class="gradient-text">
+                More fresh.
+            </span>
+        </h2>
+
+        <p
+            class="
+                text-white/45
+                mt-5
+                leading-relaxed
+                max-w-xl
+            "
+        >
+            K@si connects customers with local
+            barbers and salons so getting your next
+            cut is simple, fast and convenient.
+        </p>
+
+    </div>
+
+
+    <div
         class="
-            bottom-nav
-            fixed
-            bottom-0
-            left-0
-            right-0
-            z-50
-            md:hidden
-            bg-[#080812]/90
-            backdrop-blur-xl
-            border-t
-            border-white/10
+            grid
+            sm:grid-cols-2
+            gap-3
+        "
+    >
+
+        <div class="glass rounded-2xl p-5">
+
+            <i
+                class="
+                    bx
+                    bx-time-five
+                    text-3xl
+                    text-blue-400
+                "
+            ></i>
+
+            <h3 class="font-bold mt-4">
+                Skip the queue
+            </h3>
+
+            <p
+                class="
+                    text-xs
+                    text-white/40
+                    mt-2
+                    leading-relaxed
+                "
+            >
+                Choose your time before
+                you arrive.
+            </p>
+
+        </div>
+
+
+        <div class="glass rounded-2xl p-5">
+
+            <i
+                class="
+                    bx
+                    bx-map
+                    text-3xl
+                    text-violet-400
+                "
+            ></i>
+
+            <h3 class="font-bold mt-4">
+                Find local talent
+            </h3>
+
+            <p
+                class="
+                    text-xs
+                    text-white/40
+                    mt-2
+                    leading-relaxed
+                "
+            >
+                Discover barbers and salons
+                around your community.
+            </p>
+
+        </div>
+
+
+        <div class="glass rounded-2xl p-5">
+
+            <i
+                class="
+                    bx
+                    bx-receipt
+                    text-3xl
+                    text-purple-400
+                "
+            ></i>
+
+            <h3 class="font-bold mt-4">
+                Know the price
+            </h3>
+
+            <p
+                class="
+                    text-xs
+                    text-white/40
+                    mt-2
+                    leading-relaxed
+                "
+            >
+                Compare services before
+                you book.
+            </p>
+
+        </div>
+
+
+        <div class="glass rounded-2xl p-5">
+
+            <i
+                class="
+                    bx
+                    bx-check-shield
+                    text-3xl
+                    text-cyan-400
+                "
+            ></i>
+
+            <h3 class="font-bold mt-4">
+                Easy booking
+            </h3>
+
+            <p
+                class="
+                    text-xs
+                    text-white/40
+                    mt-2
+                    leading-relaxed
+                "
+            >
+                Book in a few simple steps.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section><!-- =========================================================
+     CTA
+========================================================= --><section
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        py-12
+    "
+><div
+    class="
+        relative
+        overflow-hidden
+        rounded-[2rem]
+        p-7
+        sm:p-8
+        md:p-12
+        border
+        border-white/10
+        bg-gradient-to-br
+        from-blue-600/20
+        via-violet-600/15
+        to-transparent
+    "
+>
+
+    <div
+        class="
+            absolute
+            -right-20
+            -top-20
+            w-64
+            h-64
+            rounded-full
+            bg-blue-500/15
+            blur-3xl
+        "
+    ></div>
+
+
+    <div
+        class="
+            absolute
+            -left-20
+            -bottom-20
+            w-52
+            h-52
+            rounded-full
+            bg-violet-500/10
+            blur-3xl
+        "
+    ></div>
+
+
+    <div
+        class="
+            relative
+            max-w-2xl
         "
     >
 
         <div
             class="
-                max-w-lg
-                mx-auto
-                grid
-                grid-cols-3
-                px-3
-                pt-2
+                text-xs
+                uppercase
+                tracking-[.25em]
+                text-blue-300
+                font-bold
             "
         >
+            Ready?
+        </div>
 
-            <a
-                href="index.html"
+        <h2
+            class="
+                text-3xl
+                md:text-5xl
+                font-black
+                mt-3
+            "
+        >
+            Get fresh without
+            the wait.
+        </h2>
+
+        <p
+            class="
+                text-white/50
+                mt-4
+            "
+        >
+            Find a salon, choose your service and
+            book your next cut.
+        </p>
+
+
+        <button
+            id="ctaBookBtn"
+            class="
+                primary-btn
+                rounded-xl
+                px-6
+                py-3.5
+                mt-7
+                font-black
+            "
+        >
+            Book Your Cut
+            <i class="bx bx-right-arrow-alt ml-1"></i>
+        </button>
+
+    </div>
+
+</div>
+
+</section></main><!-- =========================================================
+     FOOTER
+========================================================= --><footer
+    class="
+        max-w-6xl
+        mx-auto
+        px-4
+        sm:px-5
+        md:px-8
+        pt-8
+        pb-28
+        md:pb-10
+    "
+><div
+    class="
+        border-t
+        border-white/10
+        pt-8
+        flex
+        flex-col
+        md:flex-row
+        items-center
+        justify-between
+        gap-5
+    "
+>
+
+    <div>
+
+        <div class="font-black text-lg">
+            K<span class="text-blue-400">@</span>si
+        </div>
+
+        <p
+            class="
+                text-xs
+                text-white/35
+                mt-1
+            "
+        >
+            Fresh cuts. Local talent. Zero queue.
+        </p>
+
+    </div>
+
+
+    <div
+        class="
+            text-xs
+            text-white/30
+            text-center
+        "
+    >
+        © 2026 K@si Web • Made for Kasi People
+    </div>
+
+</div>
+
+</footer><!-- =========================================================
+     LOGIN MODAL
+========================================================= --><div
+    id="loginModal"
+    class="
+        fixed
+        inset-0
+        z-[100]
+        hidden
+        items-center
+        justify-center
+        p-4
+        sm:p-5
+        modal-bg
+    "
+><div
+    class="
+        glass
+        rounded-3xl
+        w-full
+        max-w-md
+        p-5
+        sm:p-6
+        border
+        border-white/10
+        shadow-2xl
+        max-h-[90vh]
+        overflow-y-auto
+    "
+>
+
+    <div
+        class="
+            flex
+            items-center
+            justify-between
+            gap-4
+        "
+    >
+
+        <div>
+
+            <div class="text-xl font-black">
+                Welcome back
+            </div>
+
+            <div
                 class="
-                    flex
-                    flex-col
-                    items-center
-                    gap-1
-                    py-2
-                    text-blue-400
+                    text-xs
+                    text-white/40
+                    mt-1
                 "
             >
-                <i class="bx bx-home-alt text-xl"></i>
-
-                <span class="text-[10px]">
-                    Home
-                </span>
-            </a>
-
-
-            <a
-                href="salons.html"
-                class="
-                    flex
-                    flex-col
-                    items-center
-                    gap-1
-                    py-2
-                    text-white/45
-                "
-            >
-                <i class="bx bx-cut text-xl"></i>
-
-                <span class="text-[10px]">
-                    Salons
-                </span>
-            </a>
-
-
-            <a
-                href="home.html"
-                class="
-                    flex
-                    flex-col
-                    items-center
-                    gap-1
-                    py-2
-                    text-white/45
-                "
-            >
-                <i class="bx bx-user text-xl"></i>
-
-                <span class="text-[10px]">
-                    Account
-                </span>
-            </a>
+                Login to continue to K@si
+            </div>
 
         </div>
 
-    </nav>
+
+        <button
+            id="closeLoginModal"
+            class="
+                w-9
+                h-9
+                rounded-xl
+                bg-white/5
+                flex
+                items-center
+                justify-center
+                shrink-0
+            "
+            aria-label="Close login"
+        >
+
+            <i class="bx bx-x text-xl"></i>
+
+        </button>
+
+    </div>
 
 
-    <!-- =====================================================
-         SCRIPTS
-    ====================================================== -->
+    <div class="mt-6 space-y-4">
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-
-    <!-- Firebase COMPAT -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-
-    <script>
-
-        /* =====================================================
-           FIREBASE
-        ====================================================== */
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+        <input
+            id="userEmail"
+            type="email"
+            autocomplete="email"
+            placeholder="Email address"
+            class="
+                auth-input
+                w-full
+                bg-white/5
+                border
+                border-white/10
+                rounded-xl
+                px-4
+                py-3.5
+                text-sm
+                text-white
+            "
+        >
 
 
-        /* =====================================================
-           INITIALISE FIREBASE SAFELY
-        ====================================================== */
+        <input
+            id="userPass"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Password"
+            class="
+                auth-input
+                w-full
+                bg-white/5
+                border
+                border-white/10
+                rounded-xl
+                px-4
+                py-3.5
+                text-sm
+                text-white
+            "
+        >
 
-        try {
 
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
+        <input
+            id="userRole"
+            type="hidden"
+            value="customer"
+        >
+
+
+        <button
+            id="mainLoginBtn"
+            class="
+                primary-btn
+                w-full
+                rounded-xl
+                py-3.5
+                font-black
+            "
+        >
+            Login
+        </button>
+
+
+        <button
+            id="signupBtn"
+            class="
+                secondary-btn
+                w-full
+                rounded-xl
+                py-3.5
+                font-bold
+            "
+        >
+            Create Account
+        </button>
+
+
+        <button
+            id="showRoleBtn"
+            class="
+                w-full
+                text-xs
+                text-blue-400
+                py-2
+            "
+        >
+            Are you a salon owner?
+        </button>
+
+
+        <div
+            id="authMsg"
+            class="
+                text-center
+                text-xs
+                text-white/50
+                min-h-5
+            "
+        ></div>
+
+    </div>
+
+</div>
+
+</div><!-- =========================================================
+     BOTTOM NAV
+========================================================= --><nav
+    class="
+        bottom-nav
+        fixed
+        bottom-0
+        left-0
+        right-0
+        z-50
+        md:hidden
+        bg-[#080812]/92
+        backdrop-blur-xl
+        border-t
+        border-white/10
+    "
+><div
+    class="
+        max-w-lg
+        mx-auto
+        grid
+        grid-cols-3
+        px-3
+        pt-2
+    "
+>
+
+    <a
+        href="index.html"
+        class="
+            flex
+            flex-col
+            items-center
+            gap-1
+            py-2
+            text-blue-400
+        "
+    >
+
+        <i class="bx bx-home-alt text-xl"></i>
+
+        <span class="text-[10px]">
+            Home
+        </span>
+
+    </a>
+
+
+    <a
+        href="salons.html"
+        class="
+            flex
+            flex-col
+            items-center
+            gap-1
+            py-2
+            text-white/45
+        "
+    >
+
+        <i class="bx bx-cut text-xl"></i>
+
+        <span class="text-[10px]">
+            Salons
+        </span>
+
+    </a>
+
+
+    <a
+        href="home.html"
+        class="
+            flex
+            flex-col
+            items-center
+            gap-1
+            py-2
+            text-white/45
+        "
+    >
+
+        <i class="bx bx-user text-xl"></i>
+
+        <span class="text-[10px]">
+            Account
+        </span>
+
+    </a>
+
+</div>
+
+</nav><!-- =========================================================
+     SCRIPTS
+========================================================= --><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script><!-- Firebase COMPAT --><script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script><script>
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
+
+    databaseURL:
+        "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+
+    projectId:
+        "kasi-web-d073f",
+
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
+
+    messagingSenderId:
+        "YOUR_MESSAGING_SENDER_ID",
+
+    appId:
+        "YOUR_APP_ID"
+
+};
+
+
+try {
+
+    if (!firebase.apps.length) {
+
+        firebase.initializeApp(
+            firebaseConfig
+        );
+
+    }
+
+    window.firebaseAuth =
+        firebase.auth();
+
+    window.firebaseDB =
+        firebase.firestore();
+
+} catch (error) {
+
+    console.warn(
+        "Firebase initialisation warning:",
+        error
+    );
+
+}
+
+
+/* =========================================================
+   ELITE SWIPER
+========================================================= */
+
+const featuredSwiper =
+    new Swiper(
+        ".featuredSwiper",
+        {
+
+            /*
+             * Mobile:
+             * Show one large card and a preview
+             * of the next card.
+             */
+
+            slidesPerView:
+                "auto",
+
+            spaceBetween:
+                14,
+
+            grabCursor:
+                true,
+
+            speed:
+                650,
+
+            resistanceRatio:
+                0.72,
+
+            threshold:
+                5,
+
+            watchSlidesProgress:
+                true,
+
+            observer:
+                true,
+
+            observeParents:
+                true,
+
+            pagination: {
+
+                el:
+                    ".swiper-pagination",
+
+                clickable:
+                    true
+
+            },
+
+            breakpoints: {
+
+                640: {
+
+                    slidesPerView:
+                        2,
+
+                    spaceBetween:
+                        16
+
+                },
+
+                1024: {
+
+                    slidesPerView:
+                        3,
+
+                    spaceBetween:
+                        18
+
+                }
+
+            },
+
+            on: {
+
+                progress(swiper) {
+
+                    swiper.slides.forEach(
+                        slide => {
+
+                            const progress =
+                                slide.progress;
+
+                            const scale =
+                                Math.max(
+                                    0.96,
+                                    1 -
+                                    Math.min(
+                                        Math.abs(progress),
+                                        1
+                                    ) * 0.04
+                                );
+
+                            slide.style.transform =
+                                `scale(${scale})`;
+
+                        }
+                    );
+
+                },
+
+                setTransition(
+                    swiper,
+                    duration
+                ) {
+
+                    swiper.slides.forEach(
+                        slide => {
+
+                            slide.style.transitionDuration =
+                                `${duration}ms`;
+
+                        }
+                    );
+
+                }
+
             }
 
-            window.firebaseAuth =
-                firebase.auth();
+        }
+    );
 
-            window.firebaseDB =
-                firebase.firestore();
 
-        } catch (error) {
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-            console.warn(
-                "Firebase initialisation warning:",
-                error
+const mobileMenuBtn =
+    document.getElementById(
+        "mobileMenuBtn"
+    );
+
+const mobileMenu =
+    document.getElementById(
+        "mobileMenu"
+    );
+
+const mobileMenuIcon =
+    document.getElementById(
+        "mobileMenuIcon"
+    );
+
+
+function closeMobileMenu() {
+
+    mobileMenu.classList.add(
+        "hidden"
+    );
+
+    mobileMenuBtn.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+    mobileMenuIcon.className =
+        "bx bx-menu text-2xl";
+
+}
+
+
+mobileMenuBtn.addEventListener(
+    "click",
+    () => {
+
+        const isOpen =
+            !mobileMenu.classList.contains(
+                "hidden"
+            );
+
+        if (isOpen) {
+
+            closeMobileMenu();
+
+        } else {
+
+            mobileMenu.classList.remove(
+                "hidden"
+            );
+
+            mobileMenuBtn.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+            mobileMenuIcon.className =
+                "bx bx-x text-2xl";
+
+        }
+
+    }
+);
+
+
+document
+    .querySelectorAll(
+        "#mobileMenu a"
+    )
+    .forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                closeMobileMenu
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   LOGIN MODAL
+========================================================= */
+
+const loginModal =
+    document.getElementById(
+        "loginModal"
+    );
+
+const desktopLoginBtn =
+    document.getElementById(
+        "desktopLoginBtn"
+    );
+
+const mobileLoginBtn =
+    document.getElementById(
+        "mobileLoginBtn"
+    );
+
+const closeLoginModal =
+    document.getElementById(
+        "closeLoginModal"
+    );
+
+
+function openLogin() {
+
+    closeMobileMenu();
+
+    loginModal.classList.remove(
+        "hidden"
+    );
+
+    loginModal.classList.add(
+        "flex"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+    setTimeout(
+        () => {
+
+            document
+                .getElementById(
+                    "userEmail"
+                )
+                ?.focus();
+
+        },
+        100
+    );
+
+}
+
+
+function closeLogin() {
+
+    loginModal.classList.add(
+        "hidden"
+    );
+
+    loginModal.classList.remove(
+        "flex"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+desktopLoginBtn.addEventListener(
+    "click",
+    openLogin
+);
+
+
+mobileLoginBtn.addEventListener(
+    "click",
+    openLogin
+);
+
+
+closeLoginModal.addEventListener(
+    "click",
+    closeLogin
+);
+
+
+loginModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            loginModal
+        ) {
+
+            closeLogin();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FIND SALON
+========================================================= */
+
+const heroSearch =
+    document.getElementById(
+        "heroSearch"
+    );
+
+const findSalonBtn =
+    document.getElementById(
+        "findSalonBtn"
+    );
+
+
+function goToSalons(
+    searchValue = ""
+) {
+
+    const value =
+        String(
+            searchValue || ""
+        ).trim();
+
+
+    if (value) {
+
+        window.location.href =
+            "salons.html?search=" +
+            encodeURIComponent(
+                value
+            );
+
+    } else {
+
+        window.location.href =
+            "salons.html";
+
+    }
+
+}
+
+
+findSalonBtn.addEventListener(
+    "click",
+    () => {
+
+        goToSalons(
+            heroSearch.value
+        );
+
+    }
+);
+
+
+heroSearch.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            event.preventDefault();
+
+            goToSalons(
+                heroSearch.value
             );
 
         }
 
-
-        /* =====================================================
-           SWIPER
-        ====================================================== */
-
-        new Swiper(
-            ".featuredSwiper",
-            {
-                slidesPerView: 1.08,
-                spaceBetween: 14,
-                grabCursor: true,
-
-                breakpoints: {
-
-                    640: {
-                        slidesPerView: 2
-                    },
-
-                    1024: {
-                        slidesPerView: 3
-                    }
-
-                },
-
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true
-                }
-
-            }
-        );
+    }
+);
 
 
-        /* =====================================================
-           MOBILE MENU
-        ====================================================== */
+/* =========================================================
+   CATEGORIES
+========================================================= */
 
-        const mobileMenuBtn =
-            document.getElementById(
-                "mobileMenuBtn"
-            );
+document
+    .querySelectorAll(
+        "[data-search]"
+    )
+    .forEach(
+        button => {
 
-        const mobileMenu =
-            document.getElementById(
-                "mobileMenu"
-            );
+            button.addEventListener(
+                "click",
+                () => {
 
-
-        mobileMenuBtn.addEventListener(
-            "click",
-            () => {
-
-                mobileMenu.classList.toggle(
-                    "hidden"
-                );
-
-            }
-        );
-
-
-        document
-            .querySelectorAll("#mobileMenu a")
-            .forEach(
-                link => {
-
-                    link.addEventListener(
-                        "click",
-                        () => {
-                            mobileMenu.classList.add(
-                                "hidden"
-                            );
-                        }
+                    goToSalons(
+                        button.dataset.search
                     );
 
                 }
             );
 
+        }
+    );
 
-        /* =====================================================
-           LOGIN MODAL
-        ====================================================== */
 
-        const loginModal =
-            document.getElementById(
-                "loginModal"
+/* =========================================================
+   BOOK BUTTONS
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".bookBtn"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    goToSalons();
+
+                }
             );
 
-        const desktopLoginBtn =
-            document.getElementById(
-                "desktopLoginBtn"
+        }
+    );
+
+
+document
+    .getElementById(
+        "ctaBookBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            goToSalons();
+
+        }
+    );
+
+
+/* =========================================================
+   AUTH ELEMENTS
+========================================================= */
+
+const mainLoginBtn =
+    document.getElementById(
+        "mainLoginBtn"
+    );
+
+const signupBtn =
+    document.getElementById(
+        "signupBtn"
+    );
+
+const showRoleBtn =
+    document.getElementById(
+        "showRoleBtn"
+    );
+
+const authMsg =
+    document.getElementById(
+        "authMsg"
+    );
+
+const userEmail =
+    document.getElementById(
+        "userEmail"
+    );
+
+const userPass =
+    document.getElementById(
+        "userPass"
+    );
+
+const userRole =
+    document.getElementById(
+        "userRole"
+    );
+
+
+let ownerMode =
+    false;
+
+
+/* =========================================================
+   AUTH MESSAGE
+========================================================= */
+
+function showAuthMessage(
+    message,
+    error = false
+) {
+
+    authMsg.textContent =
+        message;
+
+    authMsg.className =
+        error
+            ?
+            "text-center text-xs text-red-400 min-h-5"
+            :
+            "text-center text-xs text-white/50 min-h-5";
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+mainLoginBtn.addEventListener(
+    "click",
+    async () => {
+
+        const email =
+            userEmail.value.trim();
+
+        const password =
+            userPass.value;
+
+
+        if (
+            !email ||
+            !password
+        ) {
+
+            showAuthMessage(
+                "Please enter your email and password.",
+                true
             );
 
-        const mobileLoginBtn =
-            document.getElementById(
-                "mobileLoginBtn"
-            );
-
-        const closeLoginModal =
-            document.getElementById(
-                "closeLoginModal"
-            );
-
-
-        function openLogin() {
-
-            loginModal.classList.remove(
-                "hidden"
-            );
-
-            loginModal.classList.add(
-                "flex"
-            );
+            return;
 
         }
 
 
-        function closeLogin() {
+        if (
+            !window.firebaseAuth
+        ) {
 
-            loginModal.classList.add(
-                "hidden"
+            showAuthMessage(
+                "Firebase is not configured correctly.",
+                true
             );
 
-            loginModal.classList.remove(
-                "flex"
-            );
+            return;
 
         }
 
 
-        desktopLoginBtn.addEventListener(
-            "click",
-            openLogin
-        );
+        mainLoginBtn.disabled =
+            true;
+
+        mainLoginBtn.textContent =
+            "Logging in...";
 
 
-        mobileLoginBtn.addEventListener(
-            "click",
-            () => {
+        try {
 
-                mobileMenu.classList.add(
-                    "hidden"
-                );
-
-                openLogin();
-
-            }
-        );
+            const result =
+                await window.firebaseAuth
+                    .signInWithEmailAndPassword(
+                        email,
+                        password
+                    );
 
 
-        closeLoginModal.addEventListener(
-            "click",
-            closeLogin
-        );
+            const user =
+                result.user;
 
 
-        loginModal.addEventListener(
-            "click",
-            event => {
+            let role =
+                userRole.value ||
+                "customer";
 
-                if (
-                    event.target ===
-                    loginModal
+
+            if (
+                window.firebaseDB
+            ) {
+
+                try {
+
+                    const userDoc =
+                        await window.firebaseDB
+                            .collection("users")
+                            .doc(user.uid)
+                            .get();
+
+
+                    if (
+                        userDoc.exists
+                    ) {
+
+                        const data =
+                            userDoc.data();
+
+
+                        role =
+                            data.role ||
+                            data.Role ||
+                            role;
+
+                    }
+
+                } catch (
+                    profileError
                 ) {
-                    closeLogin();
+
+                    console.warn(
+                        "Could not read user profile:",
+                        profileError
+                    );
+
                 }
 
             }
-        );
 
 
-        /* =====================================================
-           FIND SALON
-        ====================================================== */
-
-        const heroSearch =
-            document.getElementById(
-                "heroSearch"
-            );
-
-        const findSalonBtn =
-            document.getElementById(
-                "findSalonBtn"
-            );
-
-
-        function goToSalons(
-            searchValue = ""
-        ) {
-
-            const value =
-                String(searchValue || "")
-                    .trim();
-
-            if (value) {
+            if (
+                role ===
+                "admin"
+            ) {
 
                 window.location.href =
-                    "salons.html?search=" +
-                    encodeURIComponent(value);
+                    "admin.html";
+
+            } else if (
+                role ===
+                "salon_owner"
+            ) {
+
+                window.location.href =
+                    "ownerdashboard.html";
 
             } else {
 
@@ -2923,526 +3696,288 @@
 
             }
 
-        }
-
-
-        findSalonBtn.addEventListener(
-            "click",
-            () => {
-                goToSalons(
-                    heroSearch.value
-                );
-            }
-        );
-
-
-        heroSearch.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    goToSalons(
-                        heroSearch.value
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           CATEGORIES
-        ====================================================== */
-
-        document
-            .querySelectorAll(
-                "[data-search]"
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            goToSalons(
-                                button.dataset.search
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-
-        /* =====================================================
-           BOOK BUTTONS
-        ====================================================== */
-
-        document
-            .querySelectorAll(
-                ".bookBtn"
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            goToSalons();
-
-                        }
-                    );
-
-                }
-            );
-
-
-        document
-            .getElementById(
-                "ctaBookBtn"
-            )
-            .addEventListener(
-                "click",
-                () => {
-                    goToSalons();
-                }
-            );
-
-
-        /* =====================================================
-           AUTH
-        ====================================================== */
-
-        const mainLoginBtn =
-            document.getElementById(
-                "mainLoginBtn"
-            );
-
-        const signupBtn =
-            document.getElementById(
-                "signupBtn"
-            );
-
-        const showRoleBtn =
-            document.getElementById(
-                "showRoleBtn"
-            );
-
-        const authMsg =
-            document.getElementById(
-                "authMsg"
-            );
-
-        const userEmail =
-            document.getElementById(
-                "userEmail"
-            );
-
-        const userPass =
-            document.getElementById(
-                "userPass"
-            );
-
-        const userRole =
-            document.getElementById(
-                "userRole"
-            );
-
-
-        let ownerMode = false;
-
-
-        function showAuthMessage(
-            message,
-            error = false
+        } catch (
+            error
         ) {
 
-            authMsg.textContent =
-                message;
-
-            authMsg.className =
+            console.error(
                 error
-                    ? "text-center text-xs text-red-400 min-h-5"
-                    : "text-center text-xs text-white/50 min-h-5";
+            );
+
+            showAuthMessage(
+                error.message ||
+                "Login failed.",
+                true
+            );
+
+            mainLoginBtn.disabled =
+                false;
+
+            mainLoginBtn.textContent =
+                "Login";
 
         }
 
+    }
+);
 
-        /* =====================================================
-           LOGIN
-        ====================================================== */
 
-        mainLoginBtn.addEventListener(
-            "click",
-            async () => {
+/* =========================================================
+   CREATE CUSTOMER ACCOUNT
+========================================================= */
 
-                const email =
-                    userEmail.value.trim();
+signupBtn.addEventListener(
+    "click",
+    async () => {
 
-                const password =
-                    userPass.value;
+        const email =
+            userEmail.value.trim();
 
+        const password =
+            userPass.value;
 
-                if (
-                    !email ||
-                    !password
-                ) {
-
-                    showAuthMessage(
-                        "Please enter your email and password.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    !window.firebaseAuth
-                ) {
-
-                    showAuthMessage(
-                        "Firebase is not configured correctly.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                mainLoginBtn.disabled =
-                    true;
-
-                mainLoginBtn.textContent =
-                    "Logging in...";
-
-
-                try {
-
-                    const result =
-                        await window.firebaseAuth
-                            .signInWithEmailAndPassword(
-                                email,
-                                password
-                            );
-
-
-                    const user =
-                        result.user;
-
-
-                    let role =
-                        userRole.value ||
-                        "customer";
-
-
-                    if (
-                        window.firebaseDB
-                    ) {
-
-                        try {
-
-                            const userDoc =
-                                await window.firebaseDB
-                                    .collection("users")
-                                    .doc(user.uid)
-                                    .get();
-
-
-                            if (
-                                userDoc.exists
-                            ) {
-
-                                const data =
-                                    userDoc.data();
-
-                                role =
-                                    data.role ||
-                                    data.Role ||
-                                    role;
-
-                            }
-
-                        } catch (profileError) {
-
-                            console.warn(
-                                "Could not read user profile:",
-                                profileError
-                            );
-
-                        }
-
-                    }
-
-
-                    if (
-                        role ===
-                        "admin"
-                    ) {
-
-                        window.location.href =
-                            "admin.html";
-
-                    } else if (
-                        role ===
-                        "salon_owner"
-                    ) {
-
-                        window.location.href =
-                            "ownerdashboard.html";
-
-                    } else {
-
-                        window.location.href =
-                            "salons.html";
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-                    showAuthMessage(
-                        error.message ||
-                        "Login failed.",
-                        true
-                    );
-
-                    mainLoginBtn.disabled =
-                        false;
-
-                    mainLoginBtn.textContent =
-                        "Login";
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           CREATE ACCOUNT
-        ====================================================== */
-
-        signupBtn.addEventListener(
-            "click",
-            async () => {
-
-                const email =
-                    userEmail.value.trim();
-
-                const password =
-                    userPass.value;
-
-
-                if (
-                    !email ||
-                    !password
-                ) {
-
-                    showAuthMessage(
-                        "Enter an email and password first.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    password.length < 6
-                ) {
-
-                    showAuthMessage(
-                        "Password must be at least 6 characters.",
-                        true
-                    );
-
-                    return;
-
-                }
-
-
-                try {
-
-                    signupBtn.disabled =
-                        true;
-
-                    signupBtn.textContent =
-                        "Creating...";
-
-
-                    const result =
-                        await window.firebaseAuth
-                            .createUserWithEmailAndPassword(
-                                email,
-                                password
-                            );
-
-
-                    const user =
-                        result.user;
-
-
-                    if (
-                        window.firebaseDB
-                    ) {
-
-                        await window.firebaseDB
-                            .collection("users")
-                            .doc(user.uid)
-                            .set(
-                                {
-                                    email:
-                                        user.email,
-
-                                    role:
-                                        "customer",
-
-                                    createdAt:
-                                        firebase.firestore
-                                            .FieldValue
-                                            .serverTimestamp()
-
-                                },
-                                {
-                                    merge:
-                                        true
-                                }
-                            );
-
-                    }
-
-
-                    window.location.href =
-                        "salons.html";
-
-                } catch (error) {
-
-                    console.error(
-                        error
-                    );
-
-                    showAuthMessage(
-                        error.message ||
-                        "Could not create account.",
-                        true
-                    );
-
-                    signupBtn.disabled =
-                        false;
-
-                    signupBtn.textContent =
-                        "Create Account";
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           OWNER MODE
-        ====================================================== */
-
-        showRoleBtn.addEventListener(
-            "click",
-            () => {
-
-                ownerMode =
-                    !ownerMode;
-
-
-                if (ownerMode) {
-
-                    userRole.value =
-                        "salon_owner";
-
-                    showRoleBtn.textContent =
-                        "Customer login instead";
-
-                    showAuthMessage(
-                        "Salon owner mode selected."
-                    );
-
-                } else {
-
-                    userRole.value =
-                        "customer";
-
-                    showRoleBtn.textContent =
-                        "Are you a salon owner?";
-
-                    showAuthMessage(
-                        "Customer mode selected."
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           AUTH STATE
-        ====================================================== */
 
         if (
-            window.firebaseAuth
+            !email ||
+            !password
         ) {
 
-            window.firebaseAuth
-                .onAuthStateChanged(
-                    user => {
+            showAuthMessage(
+                "Enter an email and password first.",
+                true
+            );
 
-                        if (user) {
-
-                            console.log(
-                                "K@si user signed in:",
-                                user.email
-                            );
-
-                        }
-
-                    }
-                );
+            return;
 
         }
 
 
-        /* =====================================================
-           KEYBOARD SHORTCUT
-        ====================================================== */
+        if (
+            password.length <
+            6
+        ) {
 
-        document.addEventListener(
-            "keydown",
-            event => {
+            showAuthMessage(
+                "Password must be at least 6 characters.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !window.firebaseAuth
+        ) {
+
+            showAuthMessage(
+                "Firebase is not configured correctly.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            signupBtn.disabled =
+                true;
+
+            signupBtn.textContent =
+                "Creating...";
+
+
+            const result =
+                await window.firebaseAuth
+                    .createUserWithEmailAndPassword(
+                        email,
+                        password
+                    );
+
+
+            const user =
+                result.user;
+
+
+            if (
+                window.firebaseDB
+            ) {
+
+                await window.firebaseDB
+                    .collection("users")
+                    .doc(user.uid)
+                    .set(
+                        {
+
+                            email:
+                                user.email,
+
+                            role:
+                                "customer",
+
+                            createdAt:
+                                firebase.firestore
+                                    .FieldValue
+                                    .serverTimestamp()
+
+                        },
+                        {
+                            merge:
+                                true
+                        }
+                    );
+
+            }
+
+
+            window.location.href =
+                "salons.html";
+
+
+        } catch (
+            error
+        ) {
+
+            console.error(
+                error
+            );
+
+            showAuthMessage(
+                error.message ||
+                "Could not create account.",
+                true
+            );
+
+            signupBtn.disabled =
+                false;
+
+            signupBtn.textContent =
+                "Create Account";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   OWNER MODE
+========================================================= */
+
+showRoleBtn.addEventListener(
+    "click",
+    () => {
+
+        ownerMode =
+            !ownerMode;
+
+
+        if (
+            ownerMode
+        ) {
+
+            userRole.value =
+                "salon_owner";
+
+            showRoleBtn.textContent =
+                "Customer login instead";
+
+            showAuthMessage(
+                "Salon owner mode selected."
+            );
+
+        } else {
+
+            userRole.value =
+                "customer";
+
+            showRoleBtn.textContent =
+                "Are you a salon owner?";
+
+            showAuthMessage(
+                "Customer mode selected."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+if (
+    window.firebaseAuth
+) {
+
+    window.firebaseAuth
+        .onAuthStateChanged(
+            user => {
 
                 if (
-                    event.key === "Escape"
+                    user
                 ) {
 
-                    closeLogin();
+                    console.log(
+                        "K@si user signed in:",
+                        user.email
+                    );
 
                 }
 
             }
         );
 
-    </script>
+}
 
-</body>
 
-                </html>
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closeLogin();
+
+            closeMobileMenu();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PREVENT MOBILE MENU + MODAL BODY ISSUES
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (
+            window.innerWidth >=
+            768
+        ) {
+
+            closeMobileMenu();
+
+        }
+
+    }
+);
+
+</script></body>
+    </html>
