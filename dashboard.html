@@ -9,38 +9,22 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta
-        name="theme-color"
-        content="#07070d"
-    >
+    <meta name="theme-color" content="#07070d">
 
     <meta
         name="description"
         content="K@si Web Elite Admin Dashboard"
     >
 
-    <title>K@si Web | Elite Admin</title>
+    <title>K@si Web | Admin Dashboard</title>
 
-    <!-- =====================================================
-         BOXICONS
-    ====================================================== -->
+    <!-- BOXICONS -->
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
-    <!-- =====================================================
-         FIREBASE COMPAT
-    ====================================================== -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
     <style>
-
-        /* =====================================================
-           RESET
-        ====================================================== */
 
         * {
             margin: 0;
@@ -48,8 +32,30 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+        :root {
+            --bg: #07070d;
+            --bg2: #0c0c16;
+            --card: rgba(20, 20, 34, 0.82);
+            --card2: rgba(27, 27, 45, 0.88);
+
+            --blue: #3b82f6;
+            --blue2: #2563eb;
+
+            --purple: #8b5cf6;
+            --purple2: #6d28d9;
+
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+
+            --text: #ffffff;
+            --muted: #a7a7c4;
+            --border: rgba(255,255,255,0.08);
+
+            --shadow:
+                0 20px 60px rgba(0,0,0,0.45);
+
+            --radius: 20px;
         }
 
         body {
@@ -61,106 +67,77 @@
                 "Segoe UI",
                 sans-serif;
 
-            min-height: 100vh;
-
-            color: #ffffff;
-
             background:
                 radial-gradient(
-                    circle at top left,
-                    rgba(59, 130, 246, 0.16),
-                    transparent 35%
+                    circle at 15% 10%,
+                    rgba(59,130,246,0.13),
+                    transparent 30%
                 ),
                 radial-gradient(
-                    circle at top right,
-                    rgba(139, 92, 246, 0.15),
-                    transparent 32%
+                    circle at 85% 20%,
+                    rgba(139,92,246,0.13),
+                    transparent 30%
                 ),
-                #07070d;
+                var(--bg);
 
-            overflow-x: hidden;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 100px;
         }
 
-        button,
-        input,
-        select {
-            font: inherit;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ::selection {
-            background: #8b5cf6;
-            color: white;
-        }
-
-        /* =====================================================
-           BACKGROUND
-        ====================================================== */
-
-        .background-glow {
+        body::before {
+            content: "";
             position: fixed;
-            width: 450px;
-            height: 450px;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.16;
+            inset: 0;
             pointer-events: none;
+
+            background:
+                linear-gradient(
+                    rgba(255,255,255,0.015) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.015) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 90%
+                );
+
             z-index: -1;
         }
 
-        .glow-one {
-            top: -200px;
-            left: -180px;
-            background: #2563eb;
-        }
-
-        .glow-two {
-            right: -200px;
-            top: 250px;
-            background: #9333ea;
-        }
-
-        /* =====================================================
-           APP
-        ====================================================== */
-
-        .app {
-            width: 100%;
-            min-height: 100vh;
-        }
-
-        /* =====================================================
+        /* =========================================
            TOP BAR
-        ====================================================== */
+        ========================================= */
 
         .topbar {
             position: sticky;
             top: 0;
             z-index: 1000;
 
-            height: 76px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
 
-            padding: 0 28px;
+            padding:
+                16px
+                max(18px, env(safe-area-inset-right))
+                16px
+                max(18px, env(safe-area-inset-left));
 
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(7,7,13,0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
 
-            background:
-                rgba(7,7,13,0.84);
-
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
+            border-bottom: 1px solid var(--border);
         }
 
         .brand {
@@ -169,7 +146,7 @@
             gap: 12px;
         }
 
-        .brand-logo {
+        .brand-icon {
             width: 44px;
             height: 44px;
 
@@ -181,133 +158,151 @@
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #7c3aed
+                    var(--blue),
+                    var(--purple)
                 );
 
             box-shadow:
-                0 10px 35px rgba(59,130,246,0.25);
-        }
+                0 8px 30px rgba(59,130,246,0.25);
 
-        .brand-logo i {
             font-size: 24px;
         }
 
         .brand-text h1 {
-            font-size: 17px;
-            font-weight: 800;
-            letter-spacing: -0.3px;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: -0.4px;
         }
 
         .brand-text span {
             display: block;
-
             margin-top: 2px;
 
-            color: #8d8da2;
-
             font-size: 11px;
-            font-weight: 600;
+            color: var(--muted);
+
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
         .top-actions {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .top-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
+        .icon-btn {
+            width: 42px;
+            height: 42px;
 
-            min-height: 42px;
+            display: grid;
+            place-items: center;
 
-            padding: 0 15px;
-
-            border: 1px solid rgba(255,255,255,0.09);
-            border-radius: 12px;
-
-            color: #e9e9f2;
+            border: 1px solid var(--border);
+            border-radius: 13px;
 
             background: rgba(255,255,255,0.045);
+            color: white;
 
-            transition: 0.25s ease;
+            cursor: pointer;
+            transition: .2s;
         }
 
-        .top-btn:hover {
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.09);
             transform: translateY(-2px);
-
-            background: rgba(255,255,255,0.08);
-
-            border-color:
-                rgba(139,92,246,0.4);
         }
 
-        .logout-btn {
-            color: #ff9b9b;
-
-            border-color:
-                rgba(239,68,68,0.18);
+        .icon-btn.logout:hover {
+            background: rgba(239,68,68,0.14);
+            color: #ff7070;
         }
 
-        .logout-btn:hover {
-            background:
-                rgba(239,68,68,0.12);
-
-            border-color:
-                rgba(239,68,68,0.35);
-        }
-
-        /* =====================================================
+        /* =========================================
            MAIN
-        ====================================================== */
+        ========================================= */
 
-        .main {
+        .container {
             width: min(1400px, 100%);
-            margin: 0 auto;
-
-            padding: 32px 28px 110px;
+            margin: auto;
+            padding: 24px 16px;
         }
 
-        /* =====================================================
-           WELCOME
-        ====================================================== */
+        .hero {
+            position: relative;
+            overflow: hidden;
 
-        .welcome {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
+            padding: 26px;
 
-            gap: 20px;
+            border: 1px solid var(--border);
+            border-radius: 26px;
 
-            margin-bottom: 28px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.12),
+                    rgba(139,92,246,0.08)
+                ),
+                var(--card);
+
+            box-shadow: var(--shadow);
         }
 
-        .welcome-text small {
-            display: block;
+        .hero::after {
+            content: "";
 
-            margin-bottom: 7px;
+            position: absolute;
+            width: 180px;
+            height: 180px;
 
-            color: #8d8da2;
+            right: -60px;
+            top: -60px;
 
-            font-size: 12px;
-            font-weight: 700;
+            border-radius: 50%;
 
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139,92,246,0.30),
+                    transparent 70%
+                );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 7px 11px;
+
+            border-radius: 999px;
+
+            background: rgba(59,130,246,0.10);
+            border: 1px solid rgba(59,130,246,0.20);
+
+            color: #8db8ff;
+
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
         }
 
-        .welcome-text h2 {
-            font-size: clamp(27px, 4vw, 42px);
+        .hero h2 {
+            margin-top: 14px;
 
+            font-size: clamp(26px, 6vw, 42px);
             line-height: 1.05;
 
+            font-weight: 950;
             letter-spacing: -1.5px;
         }
 
-        .welcome-text h2 span {
+        .hero h2 span {
             background:
                 linear-gradient(
                     90deg,
@@ -317,654 +312,602 @@
 
             -webkit-background-clip: text;
             background-clip: text;
-
             color: transparent;
         }
 
-        .welcome-text p {
+        .hero p {
             max-width: 650px;
 
-            margin-top: 10px;
+            margin-top: 12px;
 
-            color: #9090a3;
-
-            font-size: 14px;
+            color: var(--muted);
             line-height: 1.6;
+            font-size: 14px;
         }
 
-        .admin-pill {
+        .live-status {
+            margin-top: 18px;
+
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-
-            padding: 9px 13px;
-
-            border: 1px solid
-                rgba(139,92,246,0.25);
-
-            border-radius: 999px;
-
-            color: #c4b5fd;
-
-            background:
-                rgba(139,92,246,0.09);
+            gap: 8px;
 
             font-size: 12px;
-            font-weight: 700;
+            color: #9ca3af;
         }
 
-        .admin-pill i {
-            font-size: 15px;
+        .live-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 0 5px rgba(34,197,94,0.10),
+                0 0 16px rgba(34,197,94,0.65);
         }
 
-        /* =====================================================
-           STATS
-        ====================================================== */
+        /* =========================================
+           NAVIGATION
+        ========================================= */
 
-        .stats-grid {
+        .quick-nav {
             display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
 
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-
-            gap: 16px;
-
-            margin-bottom: 28px;
+            margin-top: 18px;
         }
 
-        .stat-card {
-            position: relative;
+        .nav-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
 
-            overflow: hidden;
+            padding: 15px;
 
-            min-height: 145px;
+            text-decoration: none;
+            color: white;
 
-            padding: 21px;
+            border: 1px solid var(--border);
+            border-radius: 17px;
 
-            border: 1px solid
-                rgba(255,255,255,0.075);
+            background: rgba(255,255,255,0.035);
 
-            border-radius: 20px;
+            transition: .2s;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(139,92,246,0.35);
+            background: rgba(139,92,246,0.08);
+        }
+
+        .nav-card i {
+            width: 38px;
+            height: 38px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
 
             background:
                 linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.075),
-                    rgba(255,255,255,0.025)
+                    135deg,
+                    rgba(59,130,246,0.20),
+                    rgba(139,92,246,0.20)
                 );
 
+            color: #8db8ff;
+            font-size: 21px;
+        }
+
+        .nav-card strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .nav-card small {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* =========================================
+           STATS
+        ========================================= */
+
+        .section-title {
+            margin: 28px 0 13px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title h3 {
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .section-title span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat {
+            position: relative;
+            overflow: hidden;
+
+            padding: 18px;
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            background: var(--card);
+
             box-shadow:
-                0 15px 50px
-                rgba(0,0,0,0.18);
-
-            transition: 0.25s ease;
+                0 10px 30px rgba(0,0,0,0.20);
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-
-            border-color:
-                rgba(139,92,246,0.25);
-        }
-
-        .stat-card::after {
+        .stat::after {
             content: "";
 
             position: absolute;
 
-            width: 130px;
-            height: 130px;
+            width: 100px;
+            height: 100px;
 
-            right: -50px;
-            bottom: -70px;
+            right: -45px;
+            bottom: -50px;
 
             border-radius: 50%;
 
             background:
-                rgba(99,102,241,0.18);
-
-            filter: blur(10px);
+                radial-gradient(
+                    circle,
+                    rgba(139,92,246,0.20),
+                    transparent 70%
+                );
         }
 
         .stat-icon {
-            width: 42px;
-            height: 42px;
+            width: 38px;
+            height: 38px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            background: rgba(59,130,246,0.10);
+
+            color: #7db1ff;
+
+            font-size: 20px;
+        }
+
+        .stat h4 {
+            margin-top: 15px;
+
+            font-size: 27px;
+            font-weight: 950;
+        }
+
+        .stat p {
+            margin-top: 3px;
+
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .stat.pending .stat-icon {
+            color: var(--orange);
+            background: rgba(245,158,11,0.10);
+        }
+
+        .stat.completed .stat-icon {
+            color: var(--green);
+            background: rgba(34,197,94,0.10);
+        }
+
+        .stat.revenue .stat-icon {
+            color: #c4a7ff;
+            background: rgba(139,92,246,0.10);
+        }
+
+        /* =========================================
+           TOOLBAR
+        ========================================= */
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+
+            padding: 14px;
+
+            border: 1px solid var(--border);
+            border-radius: 18px;
+
+            background: var(--card);
+        }
+
+        .search {
+            flex: 1;
+            min-width: 200px;
+
+            position: relative;
+        }
+
+        .search i {
+            position: absolute;
+
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #777796;
+            font-size: 18px;
+        }
+
+        .search input {
+            width: 100%;
+
+            padding: 12px 13px 12px 40px;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            outline: none;
+
+            background: rgba(0,0,0,0.20);
+            color: white;
+
+            font-size: 13px;
+        }
+
+        .search input:focus {
+            border-color: rgba(59,130,246,0.55);
+        }
+
+        .toolbar-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            padding: 11px 14px;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            color: white;
+            background: rgba(255,255,255,0.05);
+
+            cursor: pointer;
+
+            font-weight: 800;
+            font-size: 12px;
+
+            transition: .2s;
+        }
+
+        .toolbar-btn:hover {
+            transform: translateY(-1px);
+            background: rgba(255,255,255,0.09);
+        }
+
+        .toolbar-btn.danger {
+            color: #ff7b7b;
+            border-color: rgba(239,68,68,0.18);
+        }
+
+        /* =========================================
+           NEXT APPOINTMENT
+        ========================================= */
+
+        .next-card {
+            margin-top: 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            padding: 17px;
+
+            border: 1px solid rgba(59,130,246,0.18);
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.08),
+                    rgba(139,92,246,0.08)
+                );
+        }
+
+        .next-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .next-icon {
+            width: 43px;
+            height: 43px;
 
             display: grid;
             place-items: center;
 
             border-radius: 13px;
 
-            color: #fff;
-
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #7c3aed
+                    var(--blue),
+                    var(--purple)
                 );
 
-            box-shadow:
-                0 10px 25px
-                rgba(59,130,246,0.18);
-        }
-
-        .stat-icon i {
             font-size: 21px;
         }
 
-        .stat-title {
-            margin-top: 16px;
-
-            color: #858598;
-
-            font-size: 12px;
-            font-weight: 700;
-
+        .next-card small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 1px;
         }
 
-        .stat-value {
-            margin-top: 4px;
-
-            font-size: 29px;
-            font-weight: 850;
-
-            letter-spacing: -1px;
+        .next-card strong {
+            display: block;
+            margin-top: 3px;
+            font-size: 17px;
         }
 
-        /* =====================================================
-           CONTROL GRID
-        ====================================================== */
-
-        .dashboard-grid {
-            display: grid;
-
-            grid-template-columns:
-                minmax(0, 1.6fr)
-                minmax(300px, 0.8fr);
-
-            gap: 18px;
-
-            margin-bottom: 22px;
+        #nextTime {
+            font-size: 24px;
+            font-weight: 950;
         }
 
-        .panel {
-            border: 1px solid
-                rgba(255,255,255,0.075);
+        /* =========================================
+           BOOKINGS
+        ========================================= */
 
-            border-radius: 20px;
-
-            background:
-                rgba(255,255,255,0.035);
-
+        .table-card {
             overflow: hidden;
 
-            box-shadow:
-                0 20px 60px
-                rgba(0,0,0,0.16);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+
+            background: var(--card);
+
+            box-shadow: var(--shadow);
         }
 
-        .panel-header {
-            min-height: 70px;
-
+        .table-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            gap: 15px;
-
-            padding: 17px 20px;
-
-            border-bottom: 1px solid
-                rgba(255,255,255,0.065);
-        }
-
-        .panel-heading {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-        }
-
-        .panel-heading-icon {
-            width: 36px;
-            height: 36px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 10px;
-
-            background:
-                rgba(59,130,246,0.11);
-
-            color: #60a5fa;
-        }
-
-        .panel-heading h3 {
-            font-size: 15px;
-        }
-
-        .panel-heading p {
-            margin-top: 2px;
-
-            color: #77778b;
-
-            font-size: 11px;
-        }
-
-        /* =====================================================
-           QUICK ACTIONS
-        ====================================================== */
-
-        .quick-actions {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0,1fr));
-
-            gap: 12px;
-
-            padding: 20px;
-        }
-
-        .action-btn {
-            min-height: 105px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-
-            gap: 8px;
 
             padding: 17px;
 
-            text-align: left;
-
-            color: white;
-
-            border: 1px solid
-                rgba(255,255,255,0.07);
-
-            border-radius: 16px;
-
-            background:
-                rgba(255,255,255,0.035);
-
-            transition: 0.25s ease;
+            border-bottom: 1px solid var(--border);
         }
 
-        .action-btn:hover {
-            transform: translateY(-3px);
-
-            border-color:
-                rgba(96,165,250,0.35);
-
-            background:
-                rgba(59,130,246,0.08);
+        .table-head h3 {
+            font-size: 15px;
+            font-weight: 900;
         }
 
-        .action-btn i {
-            font-size: 25px;
+        .booking-count {
+            padding: 5px 9px;
 
-            color: #8b5cf6;
+            border-radius: 999px;
+
+            background: rgba(59,130,246,0.10);
+            color: #8db8ff;
+
+            font-size: 10px;
+            font-weight: 800;
         }
 
-        .action-btn strong {
-            font-size: 13px;
-        }
-
-        .action-btn span {
-            color: #77778b;
-
-            font-size: 11px;
-        }
-
-        /* =====================================================
-           SYSTEM PANEL
-        ====================================================== */
-
-        .system-body {
-            padding: 20px;
-        }
-
-        .system-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
-            padding: 13px 0;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,0.055);
-        }
-
-        .system-row:last-child {
-            border-bottom: 0;
-        }
-
-        .system-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            color: #b7b7c6;
-
-            font-size: 13px;
-        }
-
-        .system-label i {
-            color: #8b5cf6;
-            font-size: 18px;
-        }
-
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .status-dot {
-            width: 7px;
-            height: 7px;
-
-            border-radius: 50%;
-        }
-
-        .online {
-            color: #6ee7b7;
-        }
-
-        .online .status-dot {
-            background: #34d399;
-            box-shadow:
-                0 0 12px rgba(52,211,153,0.7);
-        }
-
-        .offline {
-            color: #fca5a5;
-        }
-
-        .offline .status-dot {
-            background: #ef4444;
-        }
-
-        /* =====================================================
-           TABLE SECTION
-        ====================================================== */
-
-        .section {
-            margin-top: 22px;
-        }
-
-        .section-controls {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .search-box {
-            position: relative;
-        }
-
-        .search-box i {
-            position: absolute;
-
-            left: 12px;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            color: #77778b;
-        }
-
-        .search-box input {
-            width: 190px;
-
-            height: 39px;
-
-            padding:
-                0 12px 0 36px;
-
-            color: white;
-
-            outline: none;
-
-            border: 1px solid
-                rgba(255,255,255,0.08);
-
-            border-radius: 10px;
-
-            background:
-                rgba(255,255,255,0.045);
-        }
-
-        .search-box input::placeholder {
-            color: #696979;
-        }
-
-        .refresh-btn {
-            width: 39px;
-            height: 39px;
-
-            display: grid;
-            place-items: center;
-
-            border: 1px solid
-                rgba(255,255,255,0.08);
-
-            border-radius: 10px;
-
-            color: #aaaabd;
-
-            background:
-                rgba(255,255,255,0.045);
-
-            transition: 0.2s;
-        }
-
-        .refresh-btn:hover {
-            color: white;
-
-            background:
-                rgba(139,92,246,0.14);
-        }
-
-        .table-wrap {
+        .table-scroll {
+            width: 100%;
             overflow-x: auto;
         }
 
         table {
             width: 100%;
-
+            min-width: 850px;
             border-collapse: collapse;
-
-            min-width: 700px;
         }
 
         th {
-            padding:
-                13px 20px;
-
-            color: #707084;
-
-            font-size: 10px;
-            font-weight: 800;
+            padding: 13px 15px;
 
             text-align: left;
 
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+            color: #777796;
 
-            background:
-                rgba(255,255,255,0.018);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+
+            background: rgba(0,0,0,0.15);
         }
 
         td {
-            padding:
-                15px 20px;
+            padding: 15px;
 
-            color: #c7c7d3;
+            border-top: 1px solid rgba(255,255,255,0.045);
 
-            font-size: 13px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,0.055);
+            color: #e7e7f5;
+            font-size: 12px;
         }
 
-        tbody tr {
-            transition: 0.2s;
+        tr:hover td {
+            background: rgba(255,255,255,0.018);
         }
 
-        tbody tr:hover {
-            background:
-                rgba(255,255,255,0.025);
+        .customer-name {
+            font-weight: 800;
         }
 
-        .salon-name {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-
-            font-weight: 700;
-            color: white;
+        .sub {
+            margin-top: 4px;
+            color: #8585a4;
+            font-size: 10px;
         }
 
-        .salon-avatar {
-            width: 38px;
-            height: 38px;
-
-            object-fit: cover;
-
-            border-radius: 10px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #7c3aed
-                );
+        .time {
+            color: #9f8cff;
+            font-weight: 900;
         }
 
-        .location {
-            color: #8b8b9d;
+        .price {
+            font-weight: 900;
+            color: #fff;
         }
 
-        .badge {
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status-pill {
             display: inline-flex;
+            align-items: center;
 
-            padding: 5px 9px;
+            padding: 6px 9px;
 
             border-radius: 999px;
 
             font-size: 10px;
-            font-weight: 800;
+            font-weight: 900;
         }
 
-        .badge-green {
-            color: #6ee7b7;
-
-            background:
-                rgba(16,185,129,0.1);
+        .status-pending {
+            color: #ffc45e;
+            background: rgba(245,158,11,0.10);
         }
 
-        .badge-blue {
-            color: #93c5fd;
-
-            background:
-                rgba(59,130,246,0.1);
+        .status-approved {
+            color: #76aaff;
+            background: rgba(59,130,246,0.10);
         }
 
-        .badge-orange {
-            color: #fdba74;
-
-            background:
-                rgba(249,115,22,0.1);
+        .status-completed {
+            color: #68e58e;
+            background: rgba(34,197,94,0.10);
         }
 
-        .badge-red {
-            color: #fca5a5;
-
-            background:
-                rgba(239,68,68,0.1);
+        .status-declined {
+            color: #ff7777;
+            background: rgba(239,68,68,0.10);
         }
 
-        .empty {
-            padding: 45px 20px;
+        /* =========================================
+           ACTION BUTTONS
+        ========================================= */
+
+        .action-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            border: 0;
+            border-radius: 9px;
+
+            padding: 8px 10px;
+
+            color: white;
+
+            font-size: 10px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.12);
+        }
+
+        .approve {
+            background: #2563eb;
+        }
+
+        .done {
+            background: #16a34a;
+        }
+
+        .delete {
+            background: #dc2626;
+        }
+
+        /* =========================================
+           EMPTY / LOADING
+        ========================================= */
+
+        .state {
+            padding: 55px 20px;
 
             text-align: center;
-
-            color: #77778b;
+            color: var(--muted);
         }
 
-        .empty i {
+        .state i {
             display: block;
 
-            margin-bottom: 9px;
+            margin-bottom: 10px;
 
-            font-size: 35px;
-
-            color: #555568;
+            font-size: 40px;
+            color: #555573;
         }
 
-        /* =====================================================
-           BOOKING ROW
-        ====================================================== */
+        .state strong {
+            display: block;
 
-        .booking-service {
-            color: #ffffff;
+            color: #d8d8e8;
 
-            font-weight: 700;
+            font-size: 14px;
         }
 
-        .booking-price {
-            color: #a78bfa;
+        .state small {
+            display: block;
 
-            font-weight: 800;
-        }
+            margin-top: 6px;
 
-        /* =====================================================
-           LOADING
-        ====================================================== */
-
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 10px;
-
-            padding: 40px;
-
-            color: #7d7d91;
-
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .spinner {
-            width: 18px;
-            height: 18px;
+            width: 30px;
+            height: 30px;
+
+            margin: 0 auto 12px;
+
+            border: 3px solid rgba(255,255,255,0.10);
+            border-top-color: var(--blue);
 
             border-radius: 50%;
 
-            border:
-                2px solid
-                rgba(255,255,255,0.1);
-
-            border-top-color:
-                #8b5cf6;
-
-            animation:
-                spin 0.8s linear infinite;
+            animation: spin .8s linear infinite;
         }
 
         @keyframes spin {
@@ -973,99 +916,100 @@
             }
         }
 
-        /* =====================================================
+        /* =========================================
            TOAST
-        ====================================================== */
+        ========================================= */
 
-        .toast {
+        #toast {
             position: fixed;
 
             left: 50%;
             bottom: 90px;
 
             transform:
-                translate(-50%, 30px);
-
-            opacity: 0;
+                translate(-50%, 20px);
 
             z-index: 9999;
 
-            min-width: 260px;
-            max-width: calc(100% - 30px);
+            width: min(92%, 420px);
 
-            padding: 14px 17px;
+            padding: 13px 16px;
 
-            border:
-                1px solid
-                rgba(255,255,255,0.09);
-
+            border: 1px solid var(--border);
             border-radius: 14px;
+
+            background:
+                rgba(20,20,32,0.96);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow: var(--shadow);
 
             color: white;
 
-            background:
-                rgba(20,20,30,0.94);
+            font-size: 12px;
+            font-weight: 700;
 
-            backdrop-filter: blur(15px);
-
-            box-shadow:
-                0 15px 50px
-                rgba(0,0,0,0.35);
-
+            opacity: 0;
             pointer-events: none;
 
-            transition: 0.3s ease;
+            transition: .25s;
         }
 
-        .toast.show {
+        #toast.show {
             opacity: 1;
-
             transform:
                 translate(-50%, 0);
         }
 
-        /* =====================================================
+        #toast.success {
+            border-color: rgba(34,197,94,0.30);
+        }
+
+        #toast.error {
+            border-color: rgba(239,68,68,0.30);
+        }
+
+        /* =========================================
            BOTTOM NAV
-        ====================================================== */
+        ========================================= */
 
         .bottom-nav {
             position: fixed;
 
-            left: 50%;
-            bottom: 15px;
-
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
+            bottom: 0;
 
             z-index: 900;
 
-            width: min(560px, calc(100% - 24px));
+            display: flex;
+            justify-content: center;
 
-            display: grid;
-
-            grid-template-columns:
-                repeat(4,1fr);
-
-            padding: 8px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.09);
-
-            border-radius: 19px;
+            padding:
+                9px
+                max(12px, env(safe-area-inset-right))
+                calc(9px + env(safe-area-inset-bottom))
+                max(12px, env(safe-area-inset-left));
 
             background:
-                rgba(12,12,20,0.9);
+                rgba(7,7,13,0.88);
 
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
 
-            box-shadow:
-                0 18px 55px
-                rgba(0,0,0,0.42);
+            border-top: 1px solid var(--border);
         }
 
-        .nav-item {
-            min-height: 55px;
+        .bottom-inner {
+            width: min(520px, 100%);
 
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .bottom-nav a {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1073,177 +1017,113 @@
 
             gap: 3px;
 
+            min-height: 52px;
+
             border-radius: 13px;
 
-            color: #707084;
+            color: #73738f;
+            text-decoration: none;
 
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 9px;
+            font-weight: 800;
 
-            transition: 0.2s;
+            transition: .2s;
         }
 
-        .nav-item i {
-            font-size: 21px;
+        .bottom-nav a i {
+            font-size: 20px;
         }
 
-        .nav-item:hover,
-        .nav-item.active {
-            color: white;
+        .bottom-nav a.active {
+            color: #9f8cff;
 
             background:
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,0.18),
-                    rgba(139,92,246,0.18)
-                );
+                rgba(139,92,246,0.08);
         }
 
-        .nav-item.active i {
-            color: #8b5cf6;
-        }
+        /* =========================================
+           DESKTOP
+        ========================================= */
 
-        /* =====================================================
-           MOBILE
-        ====================================================== */
+        @media (min-width: 700px) {
 
-        @media (max-width: 900px) {
+            .container {
+                padding: 32px 24px;
+            }
 
-            .stats-grid {
+            .quick-nav {
+                grid-template-columns: repeat(2, 190px);
+            }
+
+            .stats {
                 grid-template-columns:
-                    repeat(2, minmax(0,1fr));
+                    repeat(4, 1fr);
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-        }
-
-        @media (max-width: 650px) {
-
-            .topbar {
-                height: 68px;
-
-                padding:
-                    0 15px;
-            }
-
-            .brand-logo {
-                width: 39px;
-                height: 39px;
-
-                border-radius: 12px;
-            }
-
-            .brand-logo i {
-                font-size: 21px;
-            }
-
-            .brand-text h1 {
-                font-size: 15px;
-            }
-
-            .brand-text span {
-                display: none;
-            }
-
-            .top-btn span {
-                display: none;
-            }
-
-            .top-btn {
-                width: 40px;
-                padding: 0;
-            }
-
-            .main {
-                padding:
-                    24px 14px 105px;
-            }
-
-            .welcome {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .welcome-text h2 {
-                font-size: 30px;
-            }
-
-            .stats-grid {
-                gap: 10px;
-            }
-
-            .stat-card {
-                min-height: 125px;
-
-                padding: 15px;
-
-                border-radius: 16px;
-            }
-
-            .stat-icon {
-                width: 37px;
-                height: 37px;
-            }
-
-            .stat-value {
-                font-size: 25px;
-            }
-
-            .quick-actions {
-                padding: 13px;
-                gap: 9px;
-            }
-
-            .action-btn {
-                min-height: 95px;
-
-                padding: 13px;
-            }
-
-            .panel-header {
-                padding: 14px;
-            }
-
-            .search-box input {
-                width: 145px;
+            .hero {
+                padding: 35px;
             }
 
             .bottom-nav {
-                bottom:
-                    max(10px, env(safe-area-inset-bottom));
+                display: none;
             }
 
+            body {
+                padding-bottom: 30px;
+            }
         }
 
-        @media (max-width: 420px) {
+        @media (min-width: 1000px) {
 
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
+            .topbar {
+                padding-left: 32px;
+                padding-right: 32px;
             }
 
-            .stat-title {
-                font-size: 10px;
+            .container {
+                padding-left: 32px;
+                padding-right: 32px;
             }
 
-            .stat-value {
+            .quick-nav {
+                margin-top: 24px;
+            }
+
+            .stats {
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .hero {
+                padding: 21px;
+                border-radius: 21px;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .stats {
+                gap: 9px;
+            }
+
+            .stat {
+                padding: 14px;
+            }
+
+            .stat h4 {
                 font-size: 23px;
             }
 
-            .section-controls {
-                width: 100%;
+            .toolbar {
+                padding: 10px;
             }
 
-            .search-box {
+            .toolbar-btn {
                 flex: 1;
             }
-
-            .search-box input {
-                width: 100%;
-            }
-
         }
 
     </style>
@@ -1251,2168 +1131,416 @@
 
 <body>
 
-    <div class="background-glow glow-one"></div>
-    <div class="background-glow glow-two"></div>
+    <!-- =========================================
+         TOP BAR
+    ========================================== -->
 
-    <div class="app">
+    <header class="topbar">
 
-        <!-- =================================================
-             TOP BAR
-        ================================================== -->
+        <div class="brand">
 
-        <header class="topbar">
-
-            <a href="index.html" class="brand">
-
-                <div class="brand-logo">
-                    <i class="bx bx-cut"></i>
-                </div>
-
-                <div class="brand-text">
-                    <h1>K@si Web</h1>
-                    <span>Elite Admin</span>
-                </div>
-
-            </a>
-
-            <div class="top-actions">
-
-                <a
-                    href="index.html"
-                    class="top-btn"
-                    title="Home"
-                >
-                    <i class="bx bx-home-alt-2"></i>
-                    <span>Home</span>
-                </a>
-
-                <a
-                    href="salons.html"
-                    class="top-btn"
-                    title="Salons"
-                >
-                    <i class="bx bx-store"></i>
-                    <span>Salons</span>
-                </a>
-
-                <button
-                    id="logoutBtn"
-                    class="top-btn logout-btn"
-                    title="Logout"
-                >
-                    <i class="bx bx-log-out"></i>
-                    <span>Logout</span>
-                </button>
-
+            <div class="brand-icon">
+                <i class='bx bx-crown'></i>
             </div>
 
-        </header>
+            <div class="brand-text">
+                <h1>K@si Web</h1>
+                <span>Elite Admin</span>
+            </div>
+
+        </div>
+
+        <div class="top-actions">
+
+            <button
+                class="icon-btn"
+                id="refreshBtn"
+                title="Refresh"
+                aria-label="Refresh dashboard"
+            >
+                <i class='bx bx-refresh'></i>
+            </button>
+
+            <button
+                class="icon-btn logout"
+                id="logoutBtnAdmin"
+                title="Logout"
+                aria-label="Logout"
+            >
+                <i class='bx bx-log-out'></i>
+            </button>
+
+        </div>
+
+    </header>
 
 
-        <!-- =================================================
-             MAIN
-        ================================================== -->
+    <main class="container">
 
-        <main class="main">
+        <!-- =====================================
+             HERO
+        ====================================== -->
 
-            <!-- WELCOME -->
+        <section class="hero">
 
-            <section class="welcome">
+            <div class="hero-content">
 
-                <div class="welcome-text">
-
-                    <small>K@si Control Center</small>
-
-                    <h2>
-                        Welcome to your
-                        <span>Admin Dashboard.</span>
-                    </h2>
-
-                    <p>
-                        Manage your K@si Web marketplace,
-                        salons, bookings and users from one
-                        powerful control center.
-                    </p>
-
-                </div>
-
-                <div class="admin-pill">
-                    <i class="bx bxs-shield-check"></i>
+                <div class="eyebrow">
+                    <i class='bx bx-shield-quarter'></i>
                     Administrator
                 </div>
 
-            </section>
+                <h2 id="dashboardTitle">
+                    Welcome to the
+                    <span>K@si Control Centre</span>
+                </h2>
 
+                <p>
+                    Manage bookings, monitor salon activity and keep
+                    the K@si Web marketplace running smoothly from one
+                    elite dashboard.
+                </p>
 
-            <!-- =================================================
-                 STATS
-            ================================================== -->
-
-            <section class="stats-grid">
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-store"></i>
-                    </div>
-
-                    <div class="stat-title">
-                        Total Salons
-                    </div>
-
-                    <div
-                        id="salonCount"
-                        class="stat-value"
-                    >
-                        —
-                    </div>
-
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    Live Firestore connection
                 </div>
 
+            </div>
 
-                <div class="stat-card">
+        </section>
 
-                    <div class="stat-icon">
-                        <i class="bx bx-calendar-check"></i>
-                    </div>
 
-                    <div class="stat-title">
-                        Total Bookings
-                    </div>
+        <!-- =====================================
+             QUICK NAV
+        ====================================== -->
 
-                    <div
-                        id="bookingCount"
-                        class="stat-value"
-                    >
-                        —
-                    </div>
+        <div class="quick-nav">
 
+            <a href="home.html" class="nav-card">
+
+                <i class='bx bx-home-alt-2'></i>
+
+                <div>
+                    <strong>Home</strong>
+                    <small>K@si home</small>
                 </div>
 
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-user"></i>
-                    </div>
-
-                    <div class="stat-title">
-                        Total Users
-                    </div>
-
-                    <div
-                        id="userCount"
-                        class="stat-value"
-                    >
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-time-five"></i>
-                    </div>
-
-                    <div class="stat-title">
-                        Pending
-                    </div>
-
-                    <div
-                        id="pendingCount"
-                        class="stat-value"
-                    >
-                        —
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 DASHBOARD GRID
-            ================================================== -->
-
-            <section class="dashboard-grid">
-
-
-                <!-- QUICK ACTIONS -->
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div class="panel-heading">
-
-                            <div class="panel-heading-icon">
-                                <i class="bx bx-grid-alt"></i>
-                            </div>
-
-                            <div>
-                                <h3>Quick Actions</h3>
-
-                                <p>
-                                    Jump straight to what you need
-                                </p>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="quick-actions">
-
-                        <button
-                            class="action-btn"
-                            onclick="goTo('index.html')"
-                        >
-                            <i class="bx bx-home-alt-2"></i>
-
-                            <strong>
-                                Open Home
-                            </strong>
-
-                            <span>
-                                View K@si landing page
-                            </span>
-
-                        </button>
-
-
-                        <button
-                            class="action-btn"
-                            onclick="goTo('salons.html')"
-                        >
-                            <i class="bx bx-store"></i>
-
-                            <strong>
-                                View Salons
-                            </strong>
-
-                            <span>
-                                Browse marketplace
-                            </span>
-
-                        </button>
-
-
-                        <button
-                            class="action-btn"
-                            onclick="scrollToSection('salonsSection')"
-                        >
-                            <i class="bx bx-buildings"></i>
-
-                            <strong>
-                                Manage Salons
-                            </strong>
-
-                            <span>
-                                Review registered salons
-                            </span>
-
-                        </button>
-
-
-                        <button
-                            class="action-btn"
-                            onclick="scrollToSection('bookingsSection')"
-                        >
-                            <i class="bx bx-calendar"></i>
-
-                            <strong>
-                                View Bookings
-                            </strong>
-
-                            <span>
-                                Monitor customer bookings
-                            </span>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- SYSTEM -->
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div class="panel-heading">
-
-                            <div class="panel-heading-icon">
-                                <i class="bx bx-server"></i>
-                            </div>
-
-                            <div>
-                                <h3>System Status</h3>
-
-                                <p>
-                                    Live platform services
-                                </p>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="system-body">
-
-                        <div class="system-row">
-
-                            <div class="system-label">
-                                <i class="bx bx-fingerprint"></i>
-                                Firebase Auth
-                            </div>
-
-                            <div
-                                id="authStatus"
-                                class="status offline"
-                            >
-                                <span class="status-dot"></span>
-                                Checking
-                            </div>
-
-                        </div>
-
-
-                        <div class="system-row">
-
-                            <div class="system-label">
-                                <i class="bx bx-data"></i>
-                                Firestore
-                            </div>
-
-                            <div
-                                id="firestoreStatus"
-                                class="status offline"
-                            >
-                                <span class="status-dot"></span>
-                                Checking
-                            </div>
-
-                        </div>
-
-
-                        <div class="system-row">
-
-                            <div class="system-label">
-                                <i class="bx bx-shield"></i>
-                                Admin Access
-                            </div>
-
-                            <div
-                                id="adminStatus"
-                                class="status offline"
-                            >
-                                <span class="status-dot"></span>
-                                Checking
-                            </div>
-
-                        </div>
-
-
-                        <div class="system-row">
-
-                            <div class="system-label">
-                                <i class="bx bx-globe"></i>
-                                K@si Web
-                            </div>
-
-                            <div class="status online">
-
-                                <span class="status-dot"></span>
-
-                                Online
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 SALONS
-            ================================================== -->
-
-            <section
-                id="salonsSection"
-                class="section"
-            >
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div class="panel-heading">
-
-                            <div class="panel-heading-icon">
-                                <i class="bx bx-store"></i>
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Registered Salons
-                                </h3>
-
-                                <p>
-                                    All salons currently on K@si Web
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="section-controls">
-
-                            <div class="search-box">
-
-                                <i class="bx bx-search"></i>
-
-                                <input
-                                    id="salonSearch"
-                                    type="search"
-                                    placeholder="Search salons..."
-                                >
-
-                            </div>
-
-                            <button
-                                id="refreshSalonsBtn"
-                                class="refresh-btn"
-                                title="Refresh salons"
-                            >
-                                <i class="bx bx-refresh"></i>
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Salon</th>
-                                    <th>Location</th>
-                                    <th>Owner</th>
-                                    <th>Services</th>
-                                    <th>Status</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="salonsTable">
-
-                                <tr>
-                                    <td colspan="5">
-
-                                        <div class="loading">
-
-                                            <div class="spinner"></div>
-
-                                            Loading salons...
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 BOOKINGS
-            ================================================== -->
-
-            <section
-                id="bookingsSection"
-                class="section"
-            >
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div class="panel-heading">
-
-                            <div class="panel-heading-icon">
-                                <i class="bx bx-calendar-check"></i>
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Recent Bookings
-                                </h3>
-
-                                <p>
-                                    Customer appointments across K@si
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            id="refreshBookingsBtn"
-                            class="refresh-btn"
-                            title="Refresh bookings"
-                        >
-                            <i class="bx bx-refresh"></i>
-                        </button>
-
-                    </div>
-
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Customer</th>
-                                    <th>Salon</th>
-                                    <th>Service</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="bookingsTable">
-
-                                <tr>
-                                    <td colspan="7">
-
-                                        <div class="loading">
-
-                                            <div class="spinner"></div>
-
-                                            Loading bookings...
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 USERS
-            ================================================== -->
-
-            <section
-                id="usersSection"
-                class="section"
-            >
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div class="panel-heading">
-
-                            <div class="panel-heading-icon">
-                                <i class="bx bx-group"></i>
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Platform Users
-                                </h3>
-
-                                <p>
-                                    Customers and salon owners
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>User</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>User ID</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="usersTable">
-
-                                <tr>
-                                    <td colspan="4">
-
-                                        <div class="loading">
-
-                                            <div class="spinner"></div>
-
-                                            Loading users...
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
-
-        <!-- =================================================
-             BOTTOM NAV
-        ================================================== -->
-
-        <nav class="bottom-nav">
-
-            <a
-                href="index.html"
-                class="nav-item"
-            >
-                <i class="bx bx-home-alt-2"></i>
-                <span>Home</span>
             </a>
 
 
-            <a
-                href="salons.html"
-                class="nav-item"
-            >
-                <i class="bx bx-store"></i>
-                <span>Salons</span>
+            <a href="salons.html" class="nav-card">
+
+                <i class='bx bx-cut'></i>
+
+                <div>
+                    <strong>Salons</strong>
+                    <small>View marketplace</small>
+                </div>
+
             </a>
 
+        </div>
 
-            <a
-                href="#bookingsSection"
-                class="nav-item"
-                onclick="scrollToSection('bookingsSection')"
+
+        <!-- =====================================
+             STATS
+        ====================================== -->
+
+        <div class="section-title">
+
+            <h3>Today's Overview</h3>
+
+            <span id="todayLabel">
+                South Africa
+            </span>
+
+        </div>
+
+
+        <section class="stats">
+
+            <article class="stat">
+
+                <div class="stat-icon">
+                    <i class='bx bx-calendar-check'></i>
+                </div>
+
+                <h4 id="totalCount">0</h4>
+                <p>Total bookings</p>
+
+            </article>
+
+
+            <article class="stat pending">
+
+                <div class="stat-icon">
+                    <i class='bx bx-time-five'></i>
+                </div>
+
+                <h4 id="pendingCount">0</h4>
+                <p>Pending</p>
+
+            </article>
+
+
+            <article class="stat completed">
+
+                <div class="stat-icon">
+                    <i class='bx bx-check-circle'></i>
+                </div>
+
+                <h4 id="completedCount">0</h4>
+                <p>Completed</p>
+
+            </article>
+
+
+            <article class="stat revenue">
+
+                <div class="stat-icon">
+                    <i class='bx bx-money'></i>
+                </div>
+
+                <h4 id="totalRevenue">R0</h4>
+                <p>Today's revenue</p>
+
+            </article>
+
+        </section>
+
+
+        <!-- =====================================
+             NEXT APPOINTMENT
+        ====================================== -->
+
+        <div class="next-card">
+
+            <div class="next-left">
+
+                <div class="next-icon">
+                    <i class='bx bx-alarm'></i>
+                </div>
+
+                <div>
+
+                    <small>Next appointment</small>
+
+                    <strong id="nextCustomer">
+                        Waiting for booking
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <strong id="nextTime">
+                --:--
+            </strong>
+
+        </div>
+
+
+        <!-- =====================================
+             BOOKINGS SECTION
+        ====================================== -->
+
+        <div class="section-title">
+
+            <h3>Today's Bookings</h3>
+
+            <span id="bookingDate">
+                Loading...
+            </span>
+
+        </div>
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <div class="search">
+
+                <i class='bx bx-search'></i>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search customer, salon, service..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button
+                class="toolbar-btn"
+                id="refreshBookingsBtn"
             >
-                <i class="bx bx-calendar-check"></i>
-                <span>Bookings</span>
-            </a>
+                <i class='bx bx-refresh'></i>
+                Refresh
+            </button>
 
 
-            <a
-                href="#usersSection"
-                class="nav-item"
-                onclick="scrollToSection('usersSection')"
+            <button
+                class="toolbar-btn danger"
+                id="clearBtn"
             >
-                <i class="bx bx-group"></i>
-                <span>Users</span>
-            </a>
+                <i class='bx bx-trash'></i>
+                Clear Today
+            </button>
 
-        </nav>
+        </div>
 
 
-        <!-- TOAST -->
+        <!-- TABLE -->
 
-        <div
-            id="toast"
-            class="toast"
-        ></div>
+        <section class="table-card">
 
-    </div>
+            <div class="table-head">
 
+                <h3>Booking Management</h3>
 
-    <script>
+                <span
+                    class="booking-count"
+                    id="visibleCount"
+                >
+                    0 bookings
+                </span>
 
-        /* =====================================================
-           FIREBASE CONFIG
-           K@si Web
-        ====================================================== */
+            </div>
 
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
 
+            <div class="table-scroll">
 
-        /* =====================================================
-           INITIALIZE FIREBASE
-        ====================================================== */
+                <table>
 
-        let auth = null;
-        let db = null;
-
-        try {
-
-            firebase.initializeApp(firebaseConfig);
-
-            auth = firebase.auth();
-
-            db = firebase.firestore();
-
-            setSystemStatus(
-                "authStatus",
-                true,
-                "Connected"
-            );
-
-            setSystemStatus(
-                "firestoreStatus",
-                true,
-                "Connected"
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Firebase initialization error:",
-                error
-            );
-
-            setSystemStatus(
-                "authStatus",
-                false,
-                "Error"
-            );
-
-            setSystemStatus(
-                "firestoreStatus",
-                false,
-                "Error"
-            );
-
-        }
-
-
-        /* =====================================================
-           ADMIN EMAILS
-           
-           IMPORTANT:
-           Put your actual admin email here.
-           
-           Example:
-           "yourname@gmail.com"
-        ====================================================== */
-
-        const ADMIN_EMAILS = [
-
-            "admin@kasiweb.co.za"
-
-            // Add your real admin email here.
-            // "your-email@gmail.com"
-
-        ];
-
-
-        /* =====================================================
-           HELPERS
-        ====================================================== */
-
-        function $(id) {
-            return document.getElementById(id);
-        }
-
-
-        function escapeHTML(value) {
-
-            if (value === null || value === undefined) {
-                return "";
-            }
-
-            return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-
-        }
-
-
-        function showToast(message) {
-
-            const toast = $("toast");
-
-            toast.textContent = message;
-
-            toast.classList.add("show");
-
-            setTimeout(() => {
-
-                toast.classList.remove("show");
-
-            }, 2800);
-
-        }
-
-
-        function goTo(page) {
-
-            window.location.href = page;
-
-        }
-
-
-        function scrollToSection(id) {
-
-            const section = $(id);
-
-            if (!section) {
-                return;
-            }
-
-            section.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        }
-
-
-        function setSystemStatus(
-            id,
-            online,
-            text
-        ) {
-
-            const element = $(id);
-
-            if (!element) {
-                return;
-            }
-
-            element.className =
-                online
-                    ? "status online"
-                    : "status offline";
-
-            element.innerHTML = `
-                <span class="status-dot"></span>
-                ${escapeHTML(text)}
-            `;
-
-        }
-
-
-        function formatDate(value) {
-
-            if (!value) {
-                return "—";
-            }
-
-            try {
-
-                if (
-                    value &&
-                    typeof value.toDate === "function"
-                ) {
-
-                    value = value.toDate();
-
-                }
-
-                const date = new Date(value);
-
-                if (Number.isNaN(date.getTime())) {
-                    return String(value);
-                }
-
-                return date.toLocaleDateString(
-                    "en-ZA",
-                    {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric"
-                    }
-                );
-
-            } catch {
-
-                return "—";
-
-            }
-
-        }
-
-
-        function normalizeRole(data) {
-
-            return (
-                data?.role ||
-                data?.Role ||
-                "customer"
-            );
-
-        }
-
-
-        function getSalonName(
-            booking,
-            salonMap
-        ) {
-
-            if (
-                booking.salonName &&
-                String(booking.salonName).trim()
-            ) {
-
-                return booking.salonName;
-
-            }
-
-            if (
-                booking.salonId &&
-                salonMap[booking.salonId]
-            ) {
-
-                return salonMap[booking.salonId].name;
-
-            }
-
-            return "Unknown salon";
-
-        }
-
-
-        /* =====================================================
-           ADMIN CHECK
-        ====================================================== */
-
-        function isAdmin(user) {
-
-            if (!user) {
-                return false;
-            }
-
-            const email =
-                String(user.email || "")
-                    .trim()
-                    .toLowerCase();
-
-            return ADMIN_EMAILS
-                .map(
-                    e =>
-                        String(e)
-                            .trim()
-                            .toLowerCase()
-                )
-                .includes(email);
-
-        }
-
-
-        /* =====================================================
-           AUTH STATE
-        ====================================================== */
-
-        if (auth) {
-
-            auth.onAuthStateChanged(
-                async user => {
-
-                    if (!user) {
-
-                        setSystemStatus(
-                            "adminStatus",
-                            false,
-                            "Not signed in"
-                        );
-
-                        window.location.href =
-                            "index.html";
-
-                        return;
-
-                    }
-
-
-                    try {
-
-                        /*
-                         * Admin access is based on the
-                         * configured admin email.
-                         */
-
-                        if (isAdmin(user)) {
-
-                            setSystemStatus(
-                                "adminStatus",
-                                true,
-                                "Authorized"
-                            );
-
-                            await loadDashboard();
-
-                            return;
-
-                        }
-
-
-                        /*
-                         * Also check Firestore user role.
-                         * This allows role-based admin accounts
-                         * if you have an admin role in users/{uid}.
-                         */
-
-                        let role = "";
-
-                        try {
-
-                            const userDoc =
-                                await db
-                                    .collection("users")
-                                    .doc(user.uid)
-                                    .get();
-
-                            if (userDoc.exists) {
-
-                                role =
-                                    normalizeRole(
-                                        userDoc.data()
-                                    );
-
-                            }
-
-                        } catch (error) {
-
-                            console.warn(
-                                "Could not read user role:",
-                                error
-                            );
-
-                        }
-
-
-                        if (role === "admin") {
-
-                            setSystemStatus(
-                                "adminStatus",
-                                true,
-                                "Authorized"
-                            );
-
-                            await loadDashboard();
-
-                            return;
-
-                        }
-
-
-                        setSystemStatus(
-                            "adminStatus",
-                            false,
-                            "Access denied"
-                        );
-
-                        showToast(
-                            "Admin access required."
-                        );
-
-                        setTimeout(() => {
-
-                            window.location.href =
-                                "index.html";
-
-                        }, 1200);
-
-                    } catch (error) {
-
-                        console.error(
-                            "Admin authentication error:",
-                            error
-                        );
-
-                        setSystemStatus(
-                            "adminStatus",
-                            false,
-                            "Verification failed"
-                        );
-
-                        showToast(
-                            "Could not verify admin access."
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /* =====================================================
-           LOAD DASHBOARD
-        ====================================================== */
-
-        async function loadDashboard() {
-
-            await Promise.allSettled([
-
-                loadSalons(),
-
-                loadBookings(),
-
-                loadUsers()
-
-            ]);
-
-        }
-
-
-        /* =====================================================
-           LOAD SALONS
-        ====================================================== */
-
-        async function loadSalons() {
-
-            const table =
-                $("salonsTable");
-
-            try {
-
-                const snapshot =
-                    await db
-                        .collection("salons")
-                        .get();
-
-
-                const salons = [];
-
-                snapshot.forEach(doc => {
-
-                    salons.push({
-
-                        id: doc.id,
-
-                        ...doc.data()
-
-                    });
-
-                });
-
-
-                salons.sort(
-                    (a, b) =>
-                        String(a.name || "")
-                            .localeCompare(
-                                String(b.name || "")
-                            )
-                );
-
-
-                $("salonCount").textContent =
-                    salons.length;
-
-
-                renderSalons(salons);
-
-
-                window.__kasiSalons =
-                    salons;
-
-
-                setSystemStatus(
-                    "firestoreStatus",
-                    true,
-                    "Connected"
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Salon loading error:",
-                    error
-                );
-
-                $("salonCount").textContent =
-                    "0";
-
-                table.innerHTML = `
-
-                    <tr>
-                        <td colspan="5">
-
-                            <div class="empty">
-
-                                <i class="bx bx-error-circle"></i>
-
-                                <strong>
-                                    Could not load salons
-                                </strong>
-
-                                <br>
-
-                                <small>
-                                    ${escapeHTML(error.message)}
-                                </small>
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                `;
-
-                setSystemStatus(
-                    "firestoreStatus",
-                    false,
-                    "Read error"
-                );
-
-            }
-
-        }
-
-
-        /* =====================================================
-           RENDER SALONS
-        ====================================================== */
-
-        function renderSalons(
-            salons
-        ) {
-
-            const table =
-                $("salonsTable");
-
-            if (!salons.length) {
-
-                table.innerHTML = `
-
-                    <tr>
-                        <td colspan="5">
-
-                            <div class="empty">
-
-                                <i class="bx bx-store-alt"></i>
-
-                                No salons registered yet.
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                `;
-
-                return;
-
-            }
-
-
-            table.innerHTML =
-                salons.map(salon => {
-
-                    const name =
-                        salon.name ||
-                        "Unnamed Salon";
-
-                    const location =
-                        salon.location ||
-                        salon.address ||
-                        "Location not set";
-
-                    const owner =
-                        salon.ownerEmail ||
-                        salon.email ||
-                        "Not provided";
-
-                    let servicesCount = 0;
-
-                    if (
-                        Array.isArray(
-                            salon.services
-                        )
-                    ) {
-
-                        servicesCount =
-                            salon.services.length;
-
-                    } else if (
-                        salon.services &&
-                        typeof salon.services === "object"
-                    ) {
-
-                        servicesCount =
-                            Object.keys(
-                                salon.services
-                            ).length;
-
-                    }
-
-
-                    const image =
-                        salon.image ||
-                        salon.imageUrl ||
-                        "https://via.placeholder.com/80";
-
-
-                    const ownerStatus =
-                        salon.ownerId
-                            ? `
-                                <span class="badge badge-green">
-                                    Active
-                                </span>
-                              `
-                            : `
-                                <span class="badge badge-orange">
-                                    No owner
-                                </span>
-                              `;
-
-
-                    return `
+                    <thead>
 
                         <tr>
 
-                            <td>
+                            <th>Salon</th>
+                            <th>Customer</th>
+                            <th>Time</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Action</th>
 
-                                <div class="salon-name">
+                        </tr>
 
-                                    <img
-                                        class="salon-avatar"
-                                        src="${escapeHTML(image)}"
-                                        alt=""
-                                        onerror="
-                                            this.src='https://via.placeholder.com/80';
-                                        "
-                                    >
+                    </thead>
 
-                                    <span>
-                                        ${escapeHTML(name)}
-                                    </span>
+                    <tbody id="tableBody">
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                <div class="state">
+
+                                    <div class="spinner"></div>
+
+                                    <strong>
+                                        Loading bookings...
+                                    </strong>
+
+                                    <small>
+                                        Connecting to K@si Web
+                                    </small>
 
                                 </div>
 
                             </td>
 
-
-                            <td>
-
-                                <span class="location">
-                                    ${escapeHTML(location)}
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                ${escapeHTML(owner)}
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="badge badge-blue">
-
-                                    ${servicesCount}
-                                    service${servicesCount === 1 ? "" : "s"}
-
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                ${ownerStatus}
-
-                            </td>
-
                         </tr>
 
-                    `;
+                    </tbody>
 
-                }).join("");
+                </table>
 
-        }
+            </div>
 
+        </section>
 
-        /* =====================================================
-           LOAD BOOKINGS
-        ====================================================== */
+    </main>
 
-        async function loadBookings() {
 
-            const table =
-                $("bookingsTable");
+    <!-- =========================================
+         TOAST
+    ========================================== -->
 
-            try {
+    <div id="toast"></div>
 
-                const snapshot =
-                    await db
-                        .collection("bookings")
-                        .get();
 
+    <!-- =========================================
+         BOTTOM NAV
+    ========================================== -->
 
-                const bookings = [];
+    <nav class="bottom-nav">
 
-                snapshot.forEach(doc => {
+        <div class="bottom-inner">
 
-                    bookings.push({
+            <a href="home.html">
 
-                        id: doc.id,
+                <i class='bx bx-home-alt-2'></i>
+                <span>Home</span>
 
-                        ...doc.data()
+            </a>
 
-                    });
 
-                });
+            <a
+                href="admin.html"
+                class="active"
+            >
 
+                <i class='bx bx-bar-chart-alt-2'></i>
+                <span>Admin</span>
 
-                bookings.sort(
-                    (a, b) => {
+            </a>
 
-                        const dateA =
-                            a.createdAt?.toDate
-                                ? a.createdAt.toDate()
-                                : new Date(
-                                    a.createdAt || 0
-                                );
 
-                        const dateB =
-                            b.createdAt?.toDate
-                                ? b.createdAt.toDate()
-                                : new Date(
-                                    b.createdAt || 0
-                                );
+            <a href="salons.html">
 
-                        return dateB - dateA;
+                <i class='bx bx-cut'></i>
+                <span>Salons</span>
 
-                    }
-                );
+            </a>
 
+        </div>
 
-                $("bookingCount").textContent =
-                    bookings.length;
+    </nav>
 
 
-                const pending =
-                    bookings.filter(
-                        booking =>
-                            String(
-                                booking.status || ""
-                            ).toLowerCase() ===
-                            "pending"
-                    ).length;
+    <!-- =========================================
+         FIREBASE / YOUR EXISTING BRIDGE
+    ========================================== -->
 
+    <!--
+        IMPORTANT:
 
-                $("pendingCount").textContent =
-                    pending;
+        Your project already uses a Firebase bridge which exposes:
 
+        window.firebaseAuth
+        window.firebaseDB
+        window.onAuthState
+        window.dbDoc
+        window.dbGet
+        window.removeDoc
+        window.collection
+        window.onSnapshot
+        window.query
+        window.where
+        window.getDocs
+        window.updateDoc
+        window.logOut
 
-                const salons =
-                    window.__kasiSalons || [];
+        Keep your existing Firebase initialization script here
+        or before admin.js.
+    -->
 
 
-                const salonMap = {};
-
-                salons.forEach(salon => {
-
-                    salonMap[salon.id] =
-                        salon;
-
-                });
-
-
-                renderBookings(
-                    bookings.slice(0, 50),
-                    salonMap
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Booking loading error:",
-                    error
-                );
-
-                $("bookingCount").textContent =
-                    "0";
-
-                $("pendingCount").textContent =
-                    "0";
-
-
-                table.innerHTML = `
-
-                    <tr>
-                        <td colspan="7">
-
-                            <div class="empty">
-
-                                <i class="bx bx-error-circle"></i>
-
-                                Could not load bookings.
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                `;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           RENDER BOOKINGS
-        ====================================================== */
-
-        function renderBookings(
-            bookings,
-            salonMap
-        ) {
-
-            const table =
-                $("bookingsTable");
-
-
-            if (!bookings.length) {
-
-                table.innerHTML = `
-
-                    <tr>
-                        <td colspan="7">
-
-                            <div class="empty">
-
-                                <i class="bx bx-calendar-x"></i>
-
-                                No bookings found yet.
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                `;
-
-                return;
-
-            }
-
-
-            table.innerHTML =
-                bookings.map(booking => {
-
-                    const customer =
-                        booking.custName ||
-                        booking.customerName ||
-                        booking.name ||
-                        "Customer";
-
-
-                    const salon =
-                        getSalonName(
-                            booking,
-                            salonMap
-                        );
-
-
-                    const service =
-                        booking.service ||
-                        booking.serviceType ||
-                        "Service";
-
-
-                    const date =
-                        booking.date ||
-                        booking.bookingDate ||
-                        "—";
-
-
-                    const time =
-                        booking.time ||
-                        booking.bookingTime ||
-                        "—";
-
-
-                    const price =
-                        booking.price !== undefined &&
-                        booking.price !== null
-                            ? `R${booking.price}`
-                            : "—";
-
-
-                    const status =
-                        String(
-                            booking.status ||
-                            "pending"
-                        ).toLowerCase();
-
-
-                    let badgeClass =
-                        "badge-orange";
-
-
-                    if (
-                        status === "approved" ||
-                        status === "completed" ||
-                        status === "confirmed"
-                    ) {
-
-                        badgeClass =
-                            "badge-green";
-
-                    }
-
-
-                    if (
-                        status === "declined" ||
-                        status === "cancelled"
-                    ) {
-
-                        badgeClass =
-                            "badge-red";
-
-                    }
-
-
-                    if (
-                        status === "pending"
-                    ) {
-
-                        badgeClass =
-                            "badge-orange";
-
-                    }
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-
-                                <strong>
-                                    ${escapeHTML(customer)}
-                                </strong>
-
-                            </td>
-
-
-                            <td>
-
-                                ${escapeHTML(salon)}
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="booking-service">
-                                    ${escapeHTML(service)}
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                ${escapeHTML(
-                                    formatDate(date)
-                                )}
-
-                            </td>
-
-
-                            <td>
-
-                                ${escapeHTML(time)}
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="booking-price">
-                                    ${escapeHTML(price)}
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    class="badge ${badgeClass}"
-                                >
-                                    ${escapeHTML(status)}
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }).join("");
-
-        }
-
-
-        /* =====================================================
-           LOAD USERS
-        ====================================================== */
-
-        async function loadUsers() {
-
-            const table =
-                $("usersTable");
-
-            try {
-
-                const snapshot =
-                    await db
-                        .collection("users")
-                        .get();
-
-
-                const users = [];
-
-                snapshot.forEach(doc => {
-
-                    users.push({
-
-                        id: doc.id,
-
-                        ...doc.data()
-
-                    });
-
-                });
-
-
-                $("userCount").textContent =
-                    users.length;
-
-
-                users.sort(
-                    (a,b) =>
-                        String(
-                            a.email ||
-                            a.name ||
-                            ""
-                        ).localeCompare(
-                            String(
-                                b.email ||
-                                b.name ||
-                                ""
-                            )
-                        )
-                );
-
-
-                renderUsers(
-                    users.slice(0, 100)
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "User loading error:",
-                    error
-                );
-
-                $("userCount").textContent =
-                    "0";
-
-
-                table.innerHTML = `
-
-                    <tr>
-                        <td colspan="4">
-
-                            <div class="empty">
-
-                                <i class="bx bx-error-circle"></i>
-
-                                Could not load users.
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                `;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           RENDER USERS
-        ====================================================== */
-
-        function renderUsers(
-            users
-        ) {
-
-            const table =
-                $("usersTable");
-
-
-            if (!users.length) {
-
-                table.innerHTML = `
-
-                    <tr>
-                        <td colspan="4">
-
-                            <div class="empty">
-
-                                <i class="bx bx-user-x"></i>
-
-                                No users found.
-
-                            </div>
-
-                        </td>
-                    </tr>
-
-                `;
-
-                return;
-
-            }
-
-
-            table.innerHTML =
-                users.map(user => {
-
-                    const name =
-                        user.name ||
-                        user.displayName ||
-                        "K@si User";
-
-
-                    const email =
-                        user.email ||
-                        "No email";
-
-
-                    const role =
-                        normalizeRole(user);
-
-
-                    let badge =
-                        "badge-blue";
-
-
-                    if (
-                        role === "salon_owner"
-                    ) {
-
-                        badge =
-                            "badge-green";
-
-                    }
-
-
-                    if (
-                        role === "admin"
-                    ) {
-
-                        badge =
-                            "badge-orange";
-
-                    }
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-
-                                <strong>
-                                    ${escapeHTML(name)}
-                                </strong>
-
-                            </td>
-
-
-                            <td>
-
-                                ${escapeHTML(email)}
-
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    class="badge ${badge}"
-                                >
-                                    ${escapeHTML(role)}
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    style="
-                                        color:#68687a;
-                                        font-size:11px;
-                                    "
-                                >
-                                    ${escapeHTML(user.id)}
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }).join("");
-
-        }
-
-
-        /* =====================================================
-           SALON SEARCH
-        ====================================================== */
-
-        $("salonSearch")
-            .addEventListener(
-                "input",
-                event => {
-
-                    const search =
-                        String(
-                            event.target.value
-                        )
-                        .trim()
-                        .toLowerCase();
-
-
-                    const salons =
-                        window.__kasiSalons ||
-                        [];
-
-
-                    if (!search) {
-
-                        renderSalons(
-                            salons
-                        );
-
-                        return;
-
-                    }
-
-
-                    const filtered =
-                        salons.filter(
-                            salon => {
-
-                                const text =
-                                    [
-
-                                        salon.name,
-
-                                        salon.location,
-
-                                        salon.address,
-
-                                        salon.ownerEmail,
-
-                                        salon.email
-
-                                    ]
-                                    .filter(Boolean)
-                                    .join(" ")
-                                    .toLowerCase();
-
-
-                                return text
-                                    .includes(search);
-
-                            }
-                        );
-
-
-                    renderSalons(
-                        filtered
-                    );
-
-                }
-            );
-
-
-        /* =====================================================
-           REFRESH
-        ====================================================== */
-
-        $("refreshSalonsBtn")
-            .addEventListener(
-                "click",
-                async () => {
-
-                    const icon =
-                        $("refreshSalonsBtn")
-                            .querySelector("i");
-
-                    icon.classList.add(
-                        "bx-spin"
-                    );
-
-                    await loadSalons();
-
-                    icon.classList.remove(
-                        "bx-spin"
-                    );
-
-                    showToast(
-                        "Salons refreshed."
-                    );
-
-                }
-            );
-
-
-        $("refreshBookingsBtn")
-            .addEventListener(
-                "click",
-                async () => {
-
-                    const icon =
-                        $("refreshBookingsBtn")
-                            .querySelector("i");
-
-                    icon.classList.add(
-                        "bx-spin"
-                    );
-
-                    await loadBookings();
-
-                    icon.classList.remove(
-                        "bx-spin"
-                    );
-
-                    showToast(
-                        "Bookings refreshed."
-                    );
-
-                }
-            );
-
-
-        /* =====================================================
-           LOGOUT
-        ====================================================== */
-
-        $("logoutBtn")
-            .addEventListener(
-                "click",
-                async () => {
-
-                    try {
-
-                        if (auth) {
-
-                            await auth.signOut();
-
-                        }
-
-                        sessionStorage.clear();
-
-                        window.location.href =
-                            "index.html";
-
-                    } catch (error) {
-
-                        console.error(
-                            "Logout error:",
-                            error
-                        );
-
-                        showToast(
-                            "Logout failed."
-                        );
-
-                    }
-
-                }
-            );
-
-
-        /* =====================================================
-           INITIAL MESSAGE
-        ====================================================== */
-
-        console.log(
-            "K@si Web Elite Admin Dashboard loaded."
-        );
-
-    </script>
+    <script src="admin.js"></script>
 
 </body>
 
