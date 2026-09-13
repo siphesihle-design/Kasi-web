@@ -7,44 +7,355 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <title>K@si Web | Dashboard</title>
+    <meta
+        name="theme-color"
+        content="#07070d"
+    >
+
+    <meta
+        name="description"
+        content="K@si Web Admin Dashboard"
+    >
+
+    <title>K@si Web | Admin Dashboard</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(124, 58, 237, 0.16),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(59, 130, 246, 0.12),
+                    transparent 30%
+                ),
+                #07070d;
+        }
+
+        .glass {
+            background: rgba(17, 17, 27, 0.72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .glass-hover {
+            transition:
+                transform .2s ease,
+                border-color .2s ease,
+                background .2s ease;
+        }
+
+        .glass-hover:hover {
+            transform: translateY(-2px);
+            border-color: rgba(139, 92, 246, 0.35);
+            background: rgba(24, 24, 38, 0.82);
+        }
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #a78bfa,
+                    #60a5fa
+                );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .btn {
+            transition:
+                transform .15s ease,
+                opacity .15s ease,
+                box-shadow .15s ease;
+        }
+
+        .btn:active {
+            transform: scale(.97);
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .stat-number {
+            letter-spacing: -0.04em;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: rgba(234, 179, 8, .12);
+            color: #fde047;
+            border: 1px solid rgba(234,179,8,.2);
+        }
+
+        .status-pending .status-dot {
+            background: #eab308;
+        }
+
+        .status-approved {
+            background: rgba(34, 197, 94, .12);
+            color: #86efac;
+            border: 1px solid rgba(34,197,94,.2);
+        }
+
+        .status-approved .status-dot {
+            background: #22c55e;
+        }
+
+        .status-declined {
+            background: rgba(239, 68, 68, .12);
+            color: #fca5a5;
+            border: 1px solid rgba(239,68,68,.2);
+        }
+
+        .status-declined .status-dot {
+            background: #ef4444;
+        }
+
+        .status-completed {
+            background: rgba(168, 85, 247, .12);
+            color: #d8b4fe;
+            border: 1px solid rgba(168,85,247,.2);
+        }
+
+        .status-completed .status-dot {
+            background: #a855f7;
+        }
+
+        .booking-card {
+            transition:
+                border-color .2s ease,
+                transform .2s ease,
+                background .2s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-1px);
+            border-color: rgba(139, 92, 246, .32);
+            background: rgba(24,24,38,.85);
+        }
+
+        .loading-spinner {
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255,255,255,.15);
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pulse-dot {
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0%,100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .35;
+            }
+        }
+
+        .mobile-nav {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #09090f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #27273a;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b3b58;
+        }
+
+    </style>
 
 </head>
 
 
-<body class="bg-gray-950 text-white min-h-screen">
+<body class="text-white min-h-screen">
 
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
 <header
-    class="bg-gray-900 border-b border-gray-800 sticky top-0 z-40"
+    class="
+        sticky top-0 z-50
+        border-b border-white/10
+        bg-[#08080f]/85
+        backdrop-blur-xl
+    "
 >
 
     <div
-        class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"
+        class="
+            max-w-7xl mx-auto
+            px-4 sm:px-6
+            py-3 sm:py-4
+            flex items-center
+            justify-between gap-3
+        "
     >
 
-        <h1 class="text-2xl font-bold">
-            📊 K@si Dashboard
-        </h1>
+        <div class="flex items-center gap-3">
+
+            <div
+                class="
+                    w-11 h-11
+                    rounded-2xl
+                    bg-gradient-to-br
+                    from-violet-600
+                    to-blue-600
+                    flex items-center
+                    justify-center
+                    shadow-lg shadow-violet-900/20
+                "
+            >
+                <span class="text-xl">
+                    ✂️
+                </span>
+            </div>
+
+            <div>
+
+                <h1 class="font-black text-lg sm:text-xl tracking-tight">
+                    K@si
+                    <span class="gradient-text">
+                        Admin
+                    </span>
+                </h1>
+
+                <p class="text-[10px] sm:text-xs text-gray-500">
+                    Management Dashboard
+                </p>
+
+            </div>
+
+        </div>
 
 
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
+
+            <div
+                class="
+                    hidden sm:flex
+                    items-center gap-2
+                    px-3 py-2
+                    rounded-xl
+                    bg-white/5
+                    border border-white/10
+                "
+            >
+
+                <span
+                    class="
+                        w-2 h-2
+                        rounded-full
+                        bg-green-500
+                        pulse-dot
+                    "
+                ></span>
+
+                <span
+                    id="connectionStatus"
+                    class="text-xs text-gray-400"
+                >
+                    Live
+                </span>
+
+            </div>
+
 
             <a
                 href="home.html"
-                class="bg-gray-800 px-4 py-2 rounded-lg"
+                class="
+                    btn
+                    hidden sm:inline-flex
+                    items-center gap-2
+                    px-4 py-2.5
+                    rounded-xl
+                    bg-white/5
+                    border border-white/10
+                    hover:bg-white/10
+                    text-sm font-semibold
+                "
             >
+                <span>⌂</span>
                 Home
             </a>
 
+
             <button
                 id="logoutBtn"
-                class="bg-red-600 px-4 py-2 rounded-lg"
+                class="
+                    btn
+                    px-4 py-2.5
+                    rounded-xl
+                    bg-red-600/15
+                    border border-red-500/20
+                    hover:bg-red-600/25
+                    text-red-300
+                    text-sm font-bold
+                "
             >
                 Logout
             </button>
@@ -56,160 +367,875 @@
 </header>
 
 
-<main class="max-w-7xl mx-auto px-4 py-8">
+<!-- =========================================================
+     AUTH / LOADING
+========================================================= -->
 
+<div
+    id="loading"
+    class="
+        min-h-[70vh]
+        flex flex-col
+        items-center
+        justify-center
+        px-6
+    "
+>
+
+    <div class="loading-spinner mb-5"></div>
+
+    <h2 class="font-bold text-lg">
+        Checking admin access...
+    </h2>
+
+    <p class="text-gray-500 text-sm mt-2 text-center">
+        Connecting to your K@si dashboard.
+    </p>
+
+</div>
+
+
+<!-- =========================================================
+     ACCESS ERROR
+========================================================= -->
+
+<div
+    id="accessError"
+    class="
+        hidden
+        min-h-[70vh]
+        flex items-center
+        justify-center
+        px-5
+    "
+>
 
     <div
-        id="loading"
-        class="text-center py-20"
+        class="
+            glass
+            max-w-md
+            w-full
+            rounded-3xl
+            p-8
+            text-center
+        "
     >
-        Loading...
-    </div>
-
-
-    <section
-        id="content"
-        class="hidden"
-    >
-
-
-        <!-- STATS -->
 
         <div
-            class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+            class="
+                mx-auto mb-5
+                w-16 h-16
+                rounded-2xl
+                bg-red-500/10
+                border border-red-500/20
+                flex items-center justify-center
+                text-3xl
+            "
+        >
+            🔒
+        </div>
+
+        <h2 class="text-2xl font-black mb-2">
+            Access Restricted
+        </h2>
+
+        <p
+            id="accessErrorText"
+            class="text-gray-400 text-sm leading-6"
+        >
+            You do not have permission to access the admin dashboard.
+        </p>
+
+        <a
+            href="index.html"
+            class="
+                btn
+                inline-flex
+                mt-6
+                px-5 py-3
+                rounded-xl
+                bg-gradient-to-r
+                from-violet-600
+                to-blue-600
+                font-bold
+            "
+        >
+            Return to K@si
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DASHBOARD
+========================================================= -->
+
+<main
+    id="content"
+    class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8"
+>
+
+
+    <!-- =====================================================
+         WELCOME
+    ====================================================== -->
+
+    <section class="mb-7">
+
+        <div
+            class="
+                glass
+                rounded-3xl
+                p-5 sm:p-7
+                relative overflow-hidden
+            "
         >
 
-            <div class="bg-gray-900 p-5 rounded-xl">
-                <p class="text-gray-400">
-                    Total Bookings
-                </p>
+            <div
+                class="
+                    absolute
+                    -right-16 -top-16
+                    w-48 h-48
+                    rounded-full
+                    bg-violet-600/10
+                    blur-3xl
+                "
+            ></div>
+
+            <div
+                class="
+                    absolute
+                    -left-20 -bottom-20
+                    w-52 h-52
+                    rounded-full
+                    bg-blue-600/10
+                    blur-3xl
+                "
+            ></div>
+
+
+            <div class="relative">
+
+                <div
+                    class="
+                        inline-flex
+                        items-center gap-2
+                        px-3 py-1.5
+                        rounded-full
+                        bg-violet-500/10
+                        border border-violet-500/20
+                        text-violet-300
+                        text-xs font-bold
+                        mb-4
+                    "
+                >
+                    <span>👑</span>
+                    Admin Control Center
+                </div>
+
 
                 <h2
-                    id="totalBookings"
-                    class="text-3xl font-bold mt-2"
+                    class="
+                        text-2xl sm:text-4xl
+                        font-black
+                        tracking-tight
+                    "
                 >
-                    0
+                    Welcome back,
+                    <span class="gradient-text">
+                        Admin
+                    </span>
                 </h2>
-            </div>
 
 
-            <div class="bg-gray-900 p-5 rounded-xl">
-                <p class="text-gray-400">
-                    Pending
+                <p
+                    class="
+                        mt-2
+                        text-gray-400
+                        text-sm sm:text-base
+                        max-w-2xl
+                        leading-6
+                    "
+                >
+                    Monitor K@si bookings, salons and users
+                    from one place.
+                    Changes made here are synced with Firestore.
                 </p>
 
-                <h2
-                    id="pendingBookings"
-                    class="text-3xl font-bold mt-2"
-                >
-                    0
-                </h2>
-            </div>
-
-
-            <div class="bg-gray-900 p-5 rounded-xl">
-                <p class="text-gray-400">
-                    Salons
-                </p>
-
-                <h2
-                    id="totalSalons"
-                    class="text-3xl font-bold mt-2"
-                >
-                    0
-                </h2>
-            </div>
-
-
-            <div class="bg-gray-900 p-5 rounded-xl">
-                <p class="text-gray-400">
-                    Users
-                </p>
-
-                <h2
-                    id="totalUsers"
-                    class="text-3xl font-bold mt-2"
-                >
-                    0
-                </h2>
             </div>
 
         </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <section
+        class="
+            grid
+            grid-cols-2
+            lg:grid-cols-4
+            gap-3 sm:gap-4
+            mb-8
+        "
+    >
 
 
         <!-- BOOKINGS -->
 
         <div
-            class="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden"
+            class="
+                glass glass-hover
+                rounded-2xl
+                p-4 sm:p-5
+            "
         >
 
-            <div class="p-5 border-b border-gray-800">
+            <div class="flex justify-between items-start">
 
-                <h2 class="text-2xl font-bold">
-                    All Bookings
-                </h2>
+                <div
+                    class="
+                        w-10 h-10
+                        rounded-xl
+                        bg-blue-500/10
+                        border border-blue-500/20
+                        flex items-center justify-center
+                    "
+                >
+                    📅
+                </div>
+
+                <span
+                    class="
+                        text-[10px]
+                        text-gray-500
+                        uppercase
+                        tracking-wider
+                    "
+                >
+                    All time
+                </span>
+
+            </div>
+
+            <p class="text-gray-500 text-xs sm:text-sm mt-4">
+                Total Bookings
+            </p>
+
+            <h3
+                id="totalBookings"
+                class="
+                    stat-number
+                    text-3xl sm:text-4xl
+                    font-black
+                    mt-1
+                "
+            >
+                0
+            </h3>
+
+        </div>
+
+
+        <!-- PENDING -->
+
+        <div
+            class="
+                glass glass-hover
+                rounded-2xl
+                p-4 sm:p-5
+            "
+        >
+
+            <div class="flex justify-between items-start">
+
+                <div
+                    class="
+                        w-10 h-10
+                        rounded-xl
+                        bg-yellow-500/10
+                        border border-yellow-500/20
+                        flex items-center justify-center
+                    "
+                >
+                    ⏳
+                </div>
+
+                <span
+                    class="
+                        text-[10px]
+                        text-yellow-400
+                        uppercase
+                        tracking-wider
+                    "
+                >
+                    Action
+                </span>
+
+            </div>
+
+            <p class="text-gray-500 text-xs sm:text-sm mt-4">
+                Pending
+            </p>
+
+            <h3
+                id="pendingBookings"
+                class="
+                    stat-number
+                    text-3xl sm:text-4xl
+                    font-black
+                    mt-1
+                    text-yellow-300
+                "
+            >
+                0
+            </h3>
+
+        </div>
+
+
+        <!-- SALONS -->
+
+        <div
+            class="
+                glass glass-hover
+                rounded-2xl
+                p-4 sm:p-5
+            "
+        >
+
+            <div class="flex justify-between items-start">
+
+                <div
+                    class="
+                        w-10 h-10
+                        rounded-xl
+                        bg-violet-500/10
+                        border border-violet-500/20
+                        flex items-center justify-center
+                    "
+                >
+                    💈
+                </div>
+
+                <span
+                    class="
+                        text-[10px]
+                        text-gray-500
+                        uppercase
+                        tracking-wider
+                    "
+                >
+                    Firestore
+                </span>
+
+            </div>
+
+            <p class="text-gray-500 text-xs sm:text-sm mt-4">
+                Salons
+            </p>
+
+            <h3
+                id="totalSalons"
+                class="
+                    stat-number
+                    text-3xl sm:text-4xl
+                    font-black
+                    mt-1
+                "
+            >
+                0
+            </h3>
+
+        </div>
+
+
+        <!-- USERS -->
+
+        <div
+            class="
+                glass glass-hover
+                rounded-2xl
+                p-4 sm:p-5
+            "
+        >
+
+            <div class="flex justify-between items-start">
+
+                <div
+                    class="
+                        w-10 h-10
+                        rounded-xl
+                        bg-emerald-500/10
+                        border border-emerald-500/20
+                        flex items-center justify-center
+                    "
+                >
+                    👥
+                </div>
+
+                <span
+                    class="
+                        text-[10px]
+                        text-gray-500
+                        uppercase
+                        tracking-wider
+                    "
+                >
+                    Accounts
+                </span>
+
+            </div>
+
+            <p class="text-gray-500 text-xs sm:text-sm mt-4">
+                Users
+            </p>
+
+            <h3
+                id="totalUsers"
+                class="
+                    stat-number
+                    text-3xl sm:text-4xl
+                    font-black
+                    mt-1
+                "
+            >
+                0
+            </h3>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BOOKINGS SECTION
+    ====================================================== -->
+
+    <section
+        class="
+            glass
+            rounded-3xl
+            overflow-hidden
+        "
+    >
+
+        <!-- HEADER -->
+
+        <div
+            class="
+                p-5 sm:p-6
+                border-b border-white/10
+                flex flex-col
+                lg:flex-row
+                lg:items-center
+                justify-between
+                gap-4
+            "
+        >
+
+            <div>
+
+                <div class="flex items-center gap-3">
+
+                    <h2
+                        class="
+                            text-xl sm:text-2xl
+                            font-black
+                        "
+                    >
+                        All Bookings
+                    </h2>
+
+                    <span
+                        id="bookingCountBadge"
+                        class="
+                            px-2.5 py-1
+                            rounded-full
+                            bg-white/5
+                            border border-white/10
+                            text-xs
+                            text-gray-400
+                        "
+                    >
+                        0
+                    </span>
+
+                </div>
+
+                <p
+                    class="
+                        text-gray-500
+                        text-xs sm:text-sm
+                        mt-1
+                    "
+                >
+                    Live booking activity from Firestore.
+                </p>
 
             </div>
 
 
-            <div class="overflow-x-auto">
+            <!-- FILTER -->
 
-                <table class="w-full">
+            <div
+                class="
+                    flex flex-col
+                    sm:flex-row
+                    gap-2
+                "
+            >
 
-                    <thead>
+                <select
+                    id="statusFilter"
+                    class="
+                        bg-black/30
+                        border border-white/10
+                        rounded-xl
+                        px-4 py-2.5
+                        text-sm
+                        text-white
+                        outline-none
+                        focus:border-violet-500/50
+                    "
+                >
 
-                        <tr class="bg-gray-800">
+                    <option value="all">
+                        All statuses
+                    </option>
 
-                            <th class="p-3 text-left">
-                                Customer
-                            </th>
+                    <option value="pending">
+                        Pending
+                    </option>
 
-                            <th class="p-3 text-left">
-                                Salon
-                            </th>
+                    <option value="approved">
+                        Approved
+                    </option>
 
-                            <th class="p-3 text-left">
-                                Service
-                            </th>
+                    <option value="declined">
+                        Declined
+                    </option>
 
-                            <th class="p-3 text-left">
-                                Date
-                            </th>
+                    <option value="completed">
+                        Completed
+                    </option>
 
-                            <th class="p-3 text-left">
-                                Time
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Status
-                            </th>
-
-                            <th class="p-3 text-left">
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
+                </select>
 
 
-                    <tbody
-                        id="bookingsTable"
-                    >
-
-                    </tbody>
-
-                </table>
+                <button
+                    id="refreshBtn"
+                    class="
+                        btn
+                        px-4 py-2.5
+                        rounded-xl
+                        bg-white/5
+                        border border-white/10
+                        hover:bg-white/10
+                        text-sm font-semibold
+                    "
+                >
+                    ↻ Refresh
+                </button>
 
             </div>
 
         </div>
 
 
+        <!-- LOADING BOOKINGS -->
+
+        <div
+            id="bookingsLoading"
+            class="
+                hidden
+                p-12
+                text-center
+            "
+        >
+
+            <div class="loading-spinner mx-auto mb-4"></div>
+
+            <p class="text-gray-400 text-sm">
+                Loading bookings...
+            </p>
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        <div
+            id="emptyBookings"
+            class="
+                hidden
+                p-12
+                text-center
+            "
+        >
+
+            <div
+                class="
+                    mx-auto
+                    w-16 h-16
+                    rounded-2xl
+                    bg-white/5
+                    border border-white/10
+                    flex items-center justify-center
+                    text-2xl
+                    mb-4
+                "
+            >
+                📭
+            </div>
+
+            <h3 class="font-bold text-lg">
+                No bookings found
+            </h3>
+
+            <p class="text-gray-500 text-sm mt-1">
+                There are no bookings matching the current filter.
+            </p>
+
+        </div>
+
+
+        <!-- DESKTOP TABLE -->
+
+        <div
+            id="desktopBookings"
+            class="hidden lg:block overflow-x-auto"
+        >
+
+            <table class="w-full">
+
+                <thead>
+
+                    <tr
+                        class="
+                            text-left
+                            text-[11px]
+                            uppercase
+                            tracking-wider
+                            text-gray-500
+                            border-b border-white/10
+                            bg-white/[0.02]
+                        "
+                    >
+
+                        <th class="px-5 py-4">
+                            Customer
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Salon
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Service
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Date & Time
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Status
+                        </th>
+
+                        <th class="px-5 py-4 text-right">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="bookingsTable"
+                    class="divide-y divide-white/5"
+                ></tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- MOBILE CARDS -->
+
+        <div
+            id="mobileBookings"
+            class="
+                lg:hidden
+                p-4
+                space-y-3
+            "
+        ></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER INFO
+    ====================================================== -->
+
+    <section
+        class="
+            mt-6
+            flex flex-col
+            sm:flex-row
+            justify-between
+            gap-2
+            text-xs
+            text-gray-600
+            px-1
+        "
+    >
+
+        <span>
+            K@si Web Admin
+        </span>
+
+        <span id="lastUpdated">
+            Last updated: —
+        </span>
+
     </section>
 
 </main>
 
+
+<!-- =========================================================
+     MOBILE NAV
+========================================================= -->
+
+<nav
+    class="
+        mobile-nav
+        lg:hidden
+        fixed
+        bottom-0
+        left-0
+        right-0
+        z-50
+        bg-[#09090f]/95
+        backdrop-blur-xl
+        border-t border-white/10
+        px-4 py-3
+    "
+>
+
+    <div
+        class="
+            max-w-md
+            mx-auto
+            grid grid-cols-3
+            gap-2
+        "
+    >
+
+        <a
+            href="home.html"
+            class="
+                flex flex-col
+                items-center
+                justify-center
+                gap-1
+                py-2
+                rounded-xl
+                text-gray-400
+                hover:text-white
+            "
+        >
+            <span>⌂</span>
+            <span class="text-[10px]">
+                Home
+            </span>
+        </a>
+
+
+        <a
+            href="salons.html"
+            class="
+                flex flex-col
+                items-center
+                justify-center
+                gap-1
+                py-2
+                rounded-xl
+                bg-violet-600/15
+                text-violet-300
+            "
+        >
+            <span>💈</span>
+            <span class="text-[10px]">
+                Salons
+            </span>
+        </a>
+
+
+        <button
+            id="mobileLogoutBtn"
+            class="
+                flex flex-col
+                items-center
+                justify-center
+                gap-1
+                py-2
+                rounded-xl
+                text-red-400
+            "
+        >
+            <span>↪</span>
+            <span class="text-[10px]">
+                Logout
+            </span>
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    id="toast"
+    class="
+        fixed
+        left-1/2
+        -translate-x-1/2
+        bottom-24
+        lg:bottom-8
+        z-[100]
+        hidden
+        max-w-[90vw]
+        px-5 py-3
+        rounded-2xl
+        bg-[#171722]
+        border border-white/10
+        shadow-2xl
+        text-sm
+        font-semibold
+    "
+>
+
+    <span id="toastText"></span>
+
+</div>
+
+
+<!-- =========================================================
+     FIREBASE
+========================================================= -->
 
 <script type="module">
 
@@ -230,6 +1256,7 @@ import {
     collection,
     getDocs,
     updateDoc,
+    onSnapshot,
     query,
     orderBy,
     serverTimestamp
@@ -237,7 +1264,7 @@ import {
 
 
 /* =========================================================
-   FIREBASE
+   FIREBASE CONFIG
 ========================================================= */
 
 const firebaseConfig = {
@@ -274,7 +1301,59 @@ const db =
 
 
 /* =========================================================
-   AUTH
+   STATE
+========================================================= */
+
+let allBookings = [];
+
+let unsubscribeBookings = null;
+
+let salonMap = new Map();
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const loading =
+    document.getElementById("loading");
+
+const content =
+    document.getElementById("content");
+
+const accessError =
+    document.getElementById("accessError");
+
+const accessErrorText =
+    document.getElementById("accessErrorText");
+
+const bookingsLoading =
+    document.getElementById("bookingsLoading");
+
+const emptyBookings =
+    document.getElementById("emptyBookings");
+
+const desktopBookings =
+    document.getElementById("desktopBookings");
+
+const bookingsTable =
+    document.getElementById("bookingsTable");
+
+const mobileBookings =
+    document.getElementById("mobileBookings");
+
+const statusFilter =
+    document.getElementById("statusFilter");
+
+const refreshBtn =
+    document.getElementById("refreshBtn");
+
+const connectionStatus =
+    document.getElementById("connectionStatus");
+
+
+/* =========================================================
+   AUTHENTICATION
 ========================================================= */
 
 onAuthStateChanged(
@@ -292,26 +1371,25 @@ onAuthStateChanged(
 
         try {
 
-            const userSnap =
-                await getDoc(
-                    doc(
-                        db,
-                        "users",
-                        user.uid
-                    )
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
                 );
+
+
+            const userSnap =
+                await getDoc(userRef);
 
 
             if (!userSnap.exists()) {
 
-                alert(
-                    "User profile not found."
+                showAccessError(
+                    "Your K@si user profile could not be found."
                 );
 
                 await signOut(auth);
-
-                window.location.href =
-                    "index.html";
 
                 return;
             }
@@ -321,53 +1399,67 @@ onAuthStateChanged(
                 userSnap.data();
 
 
-            if (
-                userData.role !==
-                "admin"
-            ) {
+            const role =
+                String(
+                    userData.role ||
+                    userData.Role ||
+                    ""
+                ).toLowerCase().trim();
+
+
+            /* =================================================
+               ADMIN ONLY
+            ================================================= */
+
+            if (role !== "admin") {
 
                 if (
-                    userData.role ===
+                    role ===
                     "salon_owner"
                 ) {
 
                     window.location.href =
                         "owners.html";
 
-                } else {
-
-                    window.location.href =
-                        "salons.html";
+                    return;
                 }
+
+
+                window.location.href =
+                    "salons.html";
 
                 return;
             }
 
 
-            document.getElementById(
-                "loading"
-            ).classList.add("hidden");
+            /* =================================================
+               ADMIN VERIFIED
+            ================================================= */
+
+            loading.classList.add("hidden");
+
+            content.classList.remove("hidden");
 
 
-            document.getElementById(
-                "content"
-            ).classList.remove("hidden");
+            await loadSalons();
+
+            startLiveBookings();
 
 
-            loadDashboard();
-
+            loadCounts();
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                "Admin authentication error:",
+                error
+            );
 
-            document.getElementById(
-                "loading"
-            ).innerHTML = `
-                <p class="text-red-400">
-                    ${escapeHtml(error.message)}
-                </p>
-            `;
+
+            showAccessError(
+                error.message ||
+                "Unable to verify your admin account."
+            );
 
         }
 
@@ -376,31 +1468,12 @@ onAuthStateChanged(
 
 
 /* =========================================================
-   LOAD DASHBOARD
+   LOAD SALONS
 ========================================================= */
 
-async function loadDashboard() {
+async function loadSalons() {
 
     try {
-
-        const bookingsQuery =
-            query(
-                collection(
-                    db,
-                    "bookings"
-                ),
-                orderBy(
-                    "createdAt",
-                    "desc"
-                )
-            );
-
-
-        const bookingsSnap =
-            await getDocs(
-                bookingsQuery
-            );
-
 
         const salonsSnap =
             await getDocs(
@@ -410,6 +1483,284 @@ async function loadDashboard() {
                 )
             );
 
+
+        salonMap.clear();
+
+
+        salonsSnap.forEach(
+            salonDoc => {
+
+                const data =
+                    salonDoc.data();
+
+
+                salonMap.set(
+                    salonDoc.id,
+                    {
+                        id:
+                            salonDoc.id,
+
+                        name:
+                            data.name ||
+                            data.salonName ||
+                            "K@si Salon",
+
+                        location:
+                            data.location ||
+                            ""
+                    }
+                );
+
+            }
+        );
+
+
+        document.getElementById(
+            "totalSalons"
+        ).textContent =
+            salonsSnap.size;
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not load salons:",
+            error
+        );
+
+        document.getElementById(
+            "totalSalons"
+        ).textContent =
+            "—";
+
+    }
+
+}
+
+
+/* =========================================================
+   LIVE BOOKINGS
+========================================================= */
+
+function startLiveBookings() {
+
+    if (unsubscribeBookings) {
+
+        unsubscribeBookings();
+
+    }
+
+
+    bookingsLoading.classList.remove(
+        "hidden"
+    );
+
+
+    /*
+        We try the ordered query first.
+
+        If an older/malformed booking prevents the
+        orderBy query from working, we automatically
+        fall back to the normal collection snapshot.
+    */
+
+    const orderedQuery =
+        query(
+            collection(
+                db,
+                "bookings"
+            ),
+            orderBy(
+                "createdAt",
+                "desc"
+            )
+        );
+
+
+    unsubscribeBookings =
+        onSnapshot(
+            orderedQuery,
+
+            snapshot => {
+
+                allBookings =
+                    snapshot.docs.map(
+                        bookingDoc => ({
+                            id:
+                                bookingDoc.id,
+
+                            ...bookingDoc.data()
+                        })
+                    );
+
+
+                handleBookingsUpdate(
+                    snapshot
+                );
+
+            },
+
+            error => {
+
+                console.warn(
+                    "Ordered bookings listener failed. Falling back:",
+                    error
+                );
+
+
+                startFallbackBookings();
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   FALLBACK LIVE BOOKINGS
+========================================================= */
+
+function startFallbackBookings() {
+
+    if (unsubscribeBookings) {
+
+        unsubscribeBookings();
+
+        unsubscribeBookings =
+            null;
+    }
+
+
+    unsubscribeBookings =
+        onSnapshot(
+            collection(
+                db,
+                "bookings"
+            ),
+
+            snapshot => {
+
+                allBookings =
+                    snapshot.docs.map(
+                        bookingDoc => ({
+                            id:
+                                bookingDoc.id,
+
+                            ...bookingDoc.data()
+                        })
+                    );
+
+
+                allBookings.sort(
+                    (a, b) => {
+
+                        const aTime =
+                            getTimestampMillis(
+                                a.createdAt
+                            );
+
+                        const bTime =
+                            getTimestampMillis(
+                                b.createdAt
+                            );
+
+                        return bTime - aTime;
+
+                    }
+                );
+
+
+                handleBookingsUpdate(
+                    snapshot
+                );
+
+            },
+
+            error => {
+
+                console.error(
+                    "Bookings listener failed:",
+                    error
+                );
+
+
+                bookingsLoading.classList.add(
+                    "hidden"
+                );
+
+
+                connectionStatus.textContent =
+                    "Offline";
+
+                connectionStatus.classList.remove(
+                    "text-gray-400"
+                );
+
+                connectionStatus.classList.add(
+                    "text-red-400"
+                );
+
+
+                showToast(
+                    "Could not load live bookings.",
+                    "error"
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   HANDLE BOOKING UPDATE
+========================================================= */
+
+function handleBookingsUpdate(
+    snapshot
+) {
+
+    bookingsLoading.classList.add(
+        "hidden"
+    );
+
+
+    connectionStatus.textContent =
+        "Live";
+
+    connectionStatus.classList.remove(
+        "text-red-400"
+    );
+
+    connectionStatus.classList.add(
+        "text-gray-400"
+    );
+
+
+    updateStats();
+
+
+    renderBookings();
+
+
+    document.getElementById(
+        "lastUpdated"
+    ).textContent =
+        "Last updated: " +
+        formatDateTime(
+            new Date()
+        );
+
+}
+
+
+/* =========================================================
+   LOAD COUNTS
+========================================================= */
+
+async function loadCounts() {
+
+    try {
 
         const usersSnap =
             await getDocs(
@@ -421,48 +1772,59 @@ async function loadDashboard() {
 
 
         document.getElementById(
-            "totalBookings"
+            "totalUsers"
         ).textContent =
-            bookingsSnap.size;
+            usersSnap.size;
 
+    } catch (error) {
 
-        document.getElementById(
-            "pendingBookings"
-        ).textContent =
-            bookingsSnap.docs.filter(
-                item =>
-                    item.data().status ===
-                    "pending"
-            ).length;
-
-
-        document.getElementById(
-            "totalSalons"
-        ).textContent =
-            salonsSnap.size;
+        console.error(
+            "Could not load users:",
+            error
+        );
 
 
         document.getElementById(
             "totalUsers"
         ).textContent =
-            usersSnap.size;
-
-
-        renderBookings(
-            bookingsSnap
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Dashboard error: " +
-            error.message
-        );
+            "—";
 
     }
+
+}
+
+
+/* =========================================================
+   UPDATE STATS
+========================================================= */
+
+function updateStats() {
+
+    const pending =
+        allBookings.filter(
+            booking =>
+                normalizeStatus(
+                    booking.status
+                ) === "pending"
+        ).length;
+
+
+    document.getElementById(
+        "totalBookings"
+    ).textContent =
+        allBookings.length;
+
+
+    document.getElementById(
+        "pendingBookings"
+    ).textContent =
+        pending;
+
+
+    document.getElementById(
+        "bookingCountBadge"
+    ).textContent =
+        allBookings.length;
 
 }
 
@@ -471,46 +1833,96 @@ async function loadDashboard() {
    RENDER BOOKINGS
 ========================================================= */
 
-function renderBookings(
-    snapshot
-) {
+function renderBookings() {
 
-    const table =
-        document.getElementById(
-            "bookingsTable"
+    const selectedStatus =
+        statusFilter.value;
+
+
+    let bookings =
+        [...allBookings];
+
+
+    if (
+        selectedStatus !==
+        "all"
+    ) {
+
+        bookings =
+            bookings.filter(
+                booking =>
+                    normalizeStatus(
+                        booking.status
+                    ) ===
+                    selectedStatus
+            );
+
+    }
+
+
+    bookingsLoading.classList.add(
+        "hidden"
+    );
+
+
+    if (!bookings.length) {
+
+        emptyBookings.classList.remove(
+            "hidden"
         );
 
+        desktopBookings.classList.add(
+            "hidden"
+        );
 
-    table.innerHTML = "";
-
-
-    if (snapshot.empty) {
-
-        table.innerHTML = `
-            <tr>
-                <td
-                    colspan="7"
-                    class="p-8 text-center text-gray-500"
-                >
-                    No bookings found.
-                </td>
-            </tr>
-        `;
+        mobileBookings.classList.add(
+            "hidden"
+        );
 
         return;
     }
 
 
-    snapshot.forEach(
-        bookingDoc => {
-
-            const b =
-                bookingDoc.data();
+    emptyBookings.classList.add(
+        "hidden"
+    );
 
 
-            const id =
-                bookingDoc.id;
+    desktopBookings.classList.remove(
+        "hidden"
+    );
 
+    mobileBookings.classList.remove(
+        "hidden"
+    );
+
+
+    renderDesktopBookings(
+        bookings
+    );
+
+
+    renderMobileBookings(
+        bookings
+    );
+
+}
+
+
+/* =========================================================
+   DESKTOP BOOKINGS
+========================================================= */
+
+function renderDesktopBookings(
+    bookings
+) {
+
+    bookingsTable.innerHTML =
+        "";
+
+
+    bookings.forEach(
+        booking => {
 
             const row =
                 document.createElement(
@@ -519,117 +1931,157 @@ function renderBookings(
 
 
             row.className =
-                "border-t border-gray-800";
+                "hover:bg-white/[0.025] transition";
+
+
+            const customer =
+                booking.customerName ||
+                booking.custName ||
+                booking.name ||
+                "Customer";
+
+
+            const phone =
+                booking.customerPhone ||
+                booking.custPhone ||
+                booking.phone ||
+                "";
+
+
+            const salon =
+                getSalonName(
+                    booking
+                );
+
+
+            const service =
+                booking.service ||
+                booking.serviceType ||
+                "Service";
+
+
+            const price =
+                formatPrice(
+                    booking.price
+                );
+
+
+            const status =
+                normalizeStatus(
+                    booking.status
+                );
 
 
             row.innerHTML = `
 
-                <td class="p-3">
-                    ${escapeHtml(
-                        b.customerName ||
-                        "Customer"
-                    )}
+                <td class="px-5 py-4">
+
+                    <div class="font-bold text-sm">
+                        ${escapeHtml(customer)}
+                    </div>
+
+                    ${
+                        phone
+                        ? `
+                            <div
+                                class="
+                                    text-xs
+                                    text-gray-600
+                                    mt-1
+                                "
+                            >
+                                ${escapeHtml(phone)}
+                            </div>
+                        `
+                        : ""
+                    }
+
                 </td>
 
 
-                <td class="p-3">
-                    ${escapeHtml(
-                        b.salonName ||
-                        "Salon"
-                    )}
+                <td class="px-5 py-4">
+
+                    <div class="font-semibold text-sm">
+                        ${escapeHtml(salon)}
+                    </div>
+
                 </td>
 
 
-                <td class="p-3">
-                    ${escapeHtml(
-                        b.service ||
-                        "Service"
-                    )}
+                <td class="px-5 py-4">
 
-                    <br>
+                    <div class="font-semibold text-sm">
+                        ${escapeHtml(service)}
+                    </div>
 
-                    <span class="text-gray-500">
-                        R${Number(
-                            b.price || 0
+                    <div
+                        class="
+                            text-xs
+                            text-gray-500
+                            mt-1
+                        "
+                    >
+                        R${escapeHtml(price)}
+                    </div>
+
+                </td>
+
+
+                <td class="px-5 py-4">
+
+                    <div class="text-sm font-semibold">
+                        ${escapeHtml(
+                            booking.date || "-"
                         )}
-                    </span>
-                </td>
+                    </div>
 
-
-                <td class="p-3">
-                    ${escapeHtml(
-                        b.date || "-"
-                    )}
-                </td>
-
-
-                <td class="p-3">
-                    ${escapeHtml(
-                        b.time || "-"
-                    )}
-                </td>
-
-
-                <td class="p-3">
-                    <span
-                        class="px-2 py-1 rounded-lg text-xs ${statusClass(
-                            b.status
-                        )}"
+                    <div
+                        class="
+                            text-xs
+                            text-gray-500
+                            mt-1
+                        "
                     >
                         ${escapeHtml(
-                            b.status ||
-                            "pending"
+                            booking.time || "-"
                         )}
-                    </span>
+                    </div>
+
                 </td>
 
 
-                <td class="p-3">
+                <td class="px-5 py-4">
 
-                    ${
-                        b.status === "pending"
-                        ? `
+                    ${statusBadge(status)}
 
-                            <button
-                                class="approve bg-green-600 px-3 py-1 rounded mr-1"
-                                data-id="${id}"
-                            >
-                                Approve
-                            </button>
-
-                            <button
-                                class="decline bg-red-600 px-3 py-1 rounded"
-                                data-id="${id}"
-                            >
-                                Decline
-                            </button>
-
-                        `
-                        : ""
-                    }
+                </td>
 
 
-                    ${
-                        b.status === "approved"
-                        ? `
+                <td class="px-5 py-4">
 
-                            <button
-                                class="complete bg-purple-600 px-3 py-1 rounded"
-                                data-id="${id}"
-                            >
-                                Complete
-                            </button>
+                    <div
+                        class="
+                            flex
+                            justify-end
+                            items-center
+                            gap-2
+                            flex-wrap
+                        "
+                    >
 
-                        `
-                        : ""
-                    }
+                        ${actionButtons(
+                            booking.id,
+                            status
+                        )}
+
+                    </div>
 
                 </td>
 
             `;
 
 
-            table.appendChild(
+            bookingsTable.appendChild(
                 row
             );
 
@@ -640,103 +2092,634 @@ function renderBookings(
 
 
 /* =========================================================
-   UPDATE BOOKING
+   MOBILE BOOKINGS
+========================================================= */
+
+function renderMobileBookings(
+    bookings
+) {
+
+    mobileBookings.innerHTML =
+        "";
+
+
+    bookings.forEach(
+        booking => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                `
+                    booking-card
+                    bg-white/[0.025]
+                    border border-white/10
+                    rounded-2xl
+                    p-4
+                `;
+
+
+            const customer =
+                booking.customerName ||
+                booking.custName ||
+                booking.name ||
+                "Customer";
+
+
+            const phone =
+                booking.customerPhone ||
+                booking.custPhone ||
+                booking.phone ||
+                "";
+
+
+            const salon =
+                getSalonName(
+                    booking
+                );
+
+
+            const service =
+                booking.service ||
+                booking.serviceType ||
+                "Service";
+
+
+            const status =
+                normalizeStatus(
+                    booking.status
+                );
+
+
+            card.innerHTML = `
+
+                <div
+                    class="
+                        flex
+                        justify-between
+                        gap-3
+                        items-start
+                    "
+                >
+
+                    <div class="min-w-0">
+
+                        <h3
+                            class="
+                                font-black
+                                text-base
+                                truncate
+                            "
+                        >
+                            ${escapeHtml(customer)}
+                        </h3>
+
+                        ${
+                            phone
+                            ? `
+                                <p
+                                    class="
+                                        text-xs
+                                        text-gray-500
+                                        mt-1
+                                    "
+                                >
+                                    ${escapeHtml(phone)}
+                                </p>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                    ${statusBadge(status)}
+
+                </div>
+
+
+                <div
+                    class="
+                        grid
+                        grid-cols-2
+                        gap-3
+                        mt-4
+                    "
+                >
+
+                    <div
+                        class="
+                            rounded-xl
+                            bg-black/20
+                            p-3
+                        "
+                    >
+
+                        <p
+                            class="
+                                text-[10px]
+                                uppercase
+                                tracking-wider
+                                text-gray-600
+                            "
+                        >
+                            Salon
+                        </p>
+
+                        <p
+                            class="
+                                text-sm
+                                font-semibold
+                                mt-1
+                            "
+                        >
+                            ${escapeHtml(salon)}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            rounded-xl
+                            bg-black/20
+                            p-3
+                        "
+                    >
+
+                        <p
+                            class="
+                                text-[10px]
+                                uppercase
+                                tracking-wider
+                                text-gray-600
+                            "
+                        >
+                            Service
+                        </p>
+
+                        <p
+                            class="
+                                text-sm
+                                font-semibold
+                                mt-1
+                            "
+                        >
+                            ${escapeHtml(service)}
+                        </p>
+
+                        <p
+                            class="
+                                text-xs
+                                text-gray-500
+                                mt-0.5
+                            "
+                        >
+                            R${escapeHtml(
+                                formatPrice(
+                                    booking.price
+                                )
+                            )}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            rounded-xl
+                            bg-black/20
+                            p-3
+                        "
+                    >
+
+                        <p
+                            class="
+                                text-[10px]
+                                uppercase
+                                tracking-wider
+                                text-gray-600
+                            "
+                        >
+                            Date
+                        </p>
+
+                        <p
+                            class="
+                                text-sm
+                                font-semibold
+                                mt-1
+                            "
+                        >
+                            ${escapeHtml(
+                                booking.date || "-"
+                            )}
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            rounded-xl
+                            bg-black/20
+                            p-3
+                        "
+                    >
+
+                        <p
+                            class="
+                                text-[10px]
+                                uppercase
+                                tracking-wider
+                                text-gray-600
+                            "
+                        >
+                            Time
+                        </p>
+
+                        <p
+                            class="
+                                text-sm
+                                font-semibold
+                                mt-1
+                            "
+                        >
+                            ${escapeHtml(
+                                booking.time || "-"
+                            )}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="
+                        flex
+                        gap-2
+                        mt-4
+                    "
+                >
+
+                    ${actionButtons(
+                        booking.id,
+                        status,
+                        true
+                    )}
+
+                </div>
+
+            `;
+
+
+            mobileBookings.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+function actionButtons(
+    id,
+    status,
+    mobile = false
+) {
+
+    const common =
+        mobile
+        ? "flex-1"
+        : "";
+
+
+    if (
+        status ===
+        "pending"
+    ) {
+
+        return `
+
+            <button
+                class="
+                    btn
+                    approve-btn
+                    ${common}
+                    px-3 py-2
+                    rounded-xl
+                    bg-green-600/15
+                    border border-green-500/20
+                    hover:bg-green-600/25
+                    text-green-300
+                    text-xs
+                    font-bold
+                "
+                data-id="${escapeHtml(id)}"
+                data-status="approved"
+            >
+                ✓ Approve
+            </button>
+
+
+            <button
+                class="
+                    btn
+                    decline-btn
+                    ${common}
+                    px-3 py-2
+                    rounded-xl
+                    bg-red-600/15
+                    border border-red-500/20
+                    hover:bg-red-600/25
+                    text-red-300
+                    text-xs
+                    font-bold
+                "
+                data-id="${escapeHtml(id)}"
+                data-status="declined"
+            >
+                × Decline
+            </button>
+
+        `;
+
+    }
+
+
+    if (
+        status ===
+        "approved"
+    ) {
+
+        return `
+
+            <button
+                class="
+                    btn
+                    complete-btn
+                    ${common}
+                    px-3 py-2
+                    rounded-xl
+                    bg-violet-600/15
+                    border border-violet-500/20
+                    hover:bg-violet-600/25
+                    text-violet-300
+                    text-xs
+                    font-bold
+                "
+                data-id="${escapeHtml(id)}"
+                data-status="completed"
+            >
+                ✓ Complete
+            </button>
+
+        `;
+
+    }
+
+
+    return `
+
+        <span
+            class="
+                text-xs
+                text-gray-600
+            "
+        >
+            No action required
+        </span>
+
+    `;
+
+}
+
+
+/* =========================================================
+   UPDATE BOOKING STATUS
 ========================================================= */
 
 document.addEventListener(
     "click",
     async event => {
 
-        const approve =
+        const button =
             event.target.closest(
-                ".approve"
+                "[data-status]"
             );
 
 
-        const decline =
-            event.target.closest(
-                ".decline"
-            );
+        if (!button) return;
 
 
-        const complete =
-            event.target.closest(
-                ".complete"
-            );
+        const bookingId =
+            button.dataset.id;
 
 
-        let id = null;
+        const newStatus =
+            button.dataset.status;
 
-        let status = null;
+
+        if (
+            !bookingId ||
+            !newStatus
+        ) {
+            return;
+        }
 
 
-        if (approve) {
+        let message =
+            "";
 
-            id =
-                approve.dataset.id;
 
-            status =
-                "approved";
+        if (
+            newStatus ===
+            "approved"
+        ) {
+
+            message =
+                "Approve this booking?";
+
+        } else if (
+            newStatus ===
+            "declined"
+        ) {
+
+            message =
+                "Decline this booking?";
+
+        } else if (
+            newStatus ===
+            "completed"
+        ) {
+
+            message =
+                "Mark this booking as completed?";
 
         }
 
 
-        if (decline) {
-
-            id =
-                decline.dataset.id;
-
-            status =
-                "declined";
-
+        if (
+            message &&
+            !window.confirm(message)
+        ) {
+            return;
         }
 
 
-        if (complete) {
+        await changeBookingStatus(
+            bookingId,
+            newStatus,
+            button
+        );
 
-            id =
-                complete.dataset.id;
-
-            status =
-                "completed";
-
-        }
+    }
+);
 
 
-        if (!id || !status) return;
+/* =========================================================
+   CHANGE BOOKING STATUS
+========================================================= */
+
+async function changeBookingStatus(
+    bookingId,
+    newStatus,
+    button
+) {
+
+    const originalText =
+        button.innerHTML;
+
+
+    button.disabled =
+        true;
+
+    button.innerHTML =
+        "Updating...";
+
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "bookings",
+                bookingId
+            ),
+            {
+
+                status:
+                    newStatus,
+
+                updatedAt:
+                    serverTimestamp()
+
+            }
+        );
+
+
+        showToast(
+            "Booking marked " +
+            newStatus +
+            ".",
+            "success"
+        );
+
+
+        /*
+            No manual render is necessary.
+
+            onSnapshot() receives the Firestore
+            change and refreshes the dashboard.
+        */
+
+
+    } catch (error) {
+
+        console.error(
+            "Booking update error:",
+            error
+        );
+
+
+        button.disabled =
+            false;
+
+        button.innerHTML =
+            originalText;
+
+
+        showToast(
+            "Could not update booking: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+statusFilter.addEventListener(
+    "change",
+    renderBookings
+);
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+refreshBtn.addEventListener(
+    "click",
+    async () => {
+
+        refreshBtn.disabled =
+            true;
+
+        refreshBtn.innerHTML =
+            "↻ Loading...";
 
 
         try {
 
-            await updateDoc(
-                doc(
-                    db,
-                    "bookings",
-                    id
-                ),
-                {
+            await loadSalons();
 
-                    status:
-                        status,
+            await loadCounts();
 
-                    updatedAt:
-                        serverTimestamp()
+            renderBookings();
 
-                }
+
+            showToast(
+                "Dashboard refreshed.",
+                "success"
             );
-
-
-            loadDashboard();
-
 
         } catch (error) {
 
-            console.error(error);
-
-            alert(
-                "Could not update booking: " +
-                error.message
+            console.error(
+                error
             );
+
+        } finally {
+
+            refreshBtn.disabled =
+                false;
+
+            refreshBtn.innerHTML =
+                "↻ Refresh";
 
         }
 
@@ -748,53 +2731,457 @@ document.addEventListener(
    LOGOUT
 ========================================================= */
 
-document.getElementById(
-    "logoutBtn"
-).addEventListener(
-    "click",
-    async () => {
+async function logout() {
+
+    try {
+
+        if (unsubscribeBookings) {
+
+            unsubscribeBookings();
+
+        }
+
 
         await signOut(auth);
+
 
         window.location.href =
             "index.html";
 
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+
+        showToast(
+            "Logout failed.",
+            "error"
+        );
+
     }
+
+}
+
+
+document.getElementById(
+    "logoutBtn"
+).addEventListener(
+    "click",
+    logout
+);
+
+
+document.getElementById(
+    "mobileLogoutBtn"
+).addEventListener(
+    "click",
+    logout
 );
 
 
 /* =========================================================
-   HELPERS
+   SALON NAME
 ========================================================= */
 
-function statusClass(status) {
+function getSalonName(
+    booking
+) {
 
-    if (status === "approved")
-        return "bg-green-900 text-green-300";
+    /*
+        First use salonName already stored
+        inside the booking.
+    */
 
-    if (status === "declined")
-        return "bg-red-900 text-red-300";
+    if (
+        booking.salonName
+    ) {
 
-    if (status === "completed")
-        return "bg-purple-900 text-purple-300";
+        return booking.salonName;
 
-    return "bg-yellow-900 text-yellow-300";
+    }
+
+
+    /*
+        Otherwise resolve salonName from
+        the salonId saved in the booking.
+    */
+
+    if (
+        booking.salonId &&
+        salonMap.has(
+            booking.salonId
+        )
+    ) {
+
+        return salonMap.get(
+            booking.salonId
+        ).name;
+
+    }
+
+
+    return "K@si Salon";
 
 }
 
 
-function escapeHtml(value) {
+/* =========================================================
+   STATUS
+========================================================= */
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+function normalizeStatus(
+    status
+) {
+
+    const value =
+        String(
+            status ||
+            "pending"
+        )
+        .toLowerCase()
+        .trim();
+
+
+    if (
+        [
+            "pending",
+            "approved",
+            "declined",
+            "completed"
+        ].includes(value)
+    ) {
+
+        return value;
+
+    }
+
+
+    return "pending";
 
 }
+
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+function statusBadge(
+    status
+) {
+
+    const label =
+        status.charAt(0).toUpperCase() +
+        status.slice(1);
+
+
+    return `
+
+        <span
+            class="
+                status-pill
+                status-${escapeHtml(status)}
+            "
+        >
+
+            <span class="status-dot"></span>
+
+            ${escapeHtml(label)}
+
+        </span>
+
+    `;
+
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+function formatPrice(
+    value
+) {
+
+    const number =
+        Number(value);
+
+
+    if (
+        Number.isNaN(number)
+    ) {
+
+        return "0";
+
+    }
+
+
+    return number.toLocaleString(
+        "en-ZA",
+        {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+/* =========================================================
+   TIMESTAMP
+========================================================= */
+
+function getTimestampMillis(
+    timestamp
+) {
+
+    if (!timestamp) {
+        return 0;
+    }
+
+
+    if (
+        typeof timestamp.toMillis ===
+        "function"
+    ) {
+
+        return timestamp.toMillis();
+
+    }
+
+
+    if (
+        timestamp.seconds
+    ) {
+
+        return (
+            Number(timestamp.seconds) *
+            1000
+        );
+
+    }
+
+
+    if (
+        timestamp instanceof Date
+    ) {
+
+        return timestamp.getTime();
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =========================================================
+   DATE / TIME
+========================================================= */
+
+function formatDateTime(
+    date
+) {
+
+    try {
+
+        return date.toLocaleString(
+            "en-ZA",
+            {
+                day:
+                    "2-digit",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric",
+
+                hour:
+                    "2-digit",
+
+                minute:
+                    "2-digit"
+            }
+        );
+
+    } catch {
+
+        return "Just now";
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCESS ERROR
+========================================================= */
+
+function showAccessError(
+    message
+) {
+
+    loading.classList.add(
+        "hidden"
+    );
+
+    content.classList.add(
+        "hidden"
+    );
+
+    accessError.classList.remove(
+        "hidden"
+    );
+
+
+    accessErrorText.textContent =
+        message ||
+        "You do not have permission to access this dashboard.";
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    const text =
+        document.getElementById(
+            "toastText"
+        );
+
+
+    text.textContent =
+        message;
+
+
+    toast.classList.remove(
+        "hidden"
+    );
+
+
+    toast.classList.remove(
+        "border-green-500/30",
+        "border-red-500/30",
+        "text-green-300",
+        "text-red-300"
+    );
+
+
+    if (
+        type ===
+        "error"
+    ) {
+
+        toast.classList.add(
+            "border-red-500/30",
+            "text-red-300"
+        );
+
+    } else {
+
+        toast.classList.add(
+            "border-green-500/30",
+            "text-green-300"
+        );
+
+    }
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.add(
+                    "hidden"
+                );
+
+            },
+            3500
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   CLEANUP
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        if (
+            unsubscribeBookings
+        ) {
+
+            unsubscribeBookings();
+
+        }
+
+    }
+);
 
 </script>
 
+
 </body>
-</html>
+                    </html>
