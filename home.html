@@ -183,6 +183,11 @@ button {
     transform: translateY(-1px);
 }
 
+.icon-btn:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
 
 /* =========================================================
    PAGE
@@ -1501,6 +1506,11 @@ button {
         rgba(239,68,68,.12);
 }
 
+.logout:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
 
 /* =========================================================
    BOTTOM NAV
@@ -1667,12 +1677,14 @@ button {
 
     background: #07070d;
 
-    transition: opacity .35s;
+    transition:
+        opacity .35s,
+        visibility .35s;
 }
 
 .loading.hide {
     opacity: 0;
-
+    visibility: hidden;
     pointer-events: none;
 }
 
@@ -1817,6 +1829,35 @@ button {
 
 }
 
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width:390px) {
+
+    .booking-main {
+        flex-direction: column;
+    }
+
+    .status-badge {
+        align-self: flex-start;
+    }
+
+    .booking-details {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+}
+
 </style>
 
 </head>
@@ -1838,7 +1879,7 @@ button {
 
         <div class="loader"></div>
 
-        <div class="loader-text">
+        <div class="loader-text" id="loadingText">
             Loading your K@si space...
         </div>
 
@@ -2600,8 +2641,10 @@ const firebaseConfig = {
 
 
 /* =========================================================
-   FIREBASE INIT
+   FIREBASE INITIALIZATION
 ========================================================= */
+
+let firebaseReady = false;
 
 try {
 
@@ -2619,6 +2662,8 @@ try {
     window.firebaseDB =
         firebase.firestore();
 
+    firebaseReady = true;
+
 } catch (error) {
 
     console.error(
@@ -2635,6 +2680,9 @@ try {
 
 const loading =
     document.getElementById("loading");
+
+const loadingText =
+    document.getElementById("loadingText");
 
 const userName =
     document.getElementById("userName");
@@ -2673,38 +2721,63 @@ const toast =
 
 let currentUser = null;
 
+let currentRole = "customer";
+
 let unsubscribeBookings = null;
 
 let loadingHidden = false;
 
 let redirecting = false;
 
+let authHandled = false;
+
+let toastTimer = null;
+
 
 /* =========================================================
    TOAST
 ========================================================= */
 
-let toastTimer = null;
-
-function showToast(message) {
+function showToast(message, type = "info") {
 
     clearTimeout(toastTimer);
 
+    let icon =
+        "bx-info-circle";
+
+    if (type === "success") {
+
+        icon =
+            "bx-check-circle";
+
+    }
+
+    if (type === "error") {
+
+        icon =
+            "bx-error-circle";
+
+    }
+
     toast.innerHTML = `
-        <i class="bx bx-info-circle"></i>
+
+        <i class="bx ${icon}"></i>
+
         ${escapeHtml(message)}
+
     `;
 
     toast.classList.add("show");
 
-    toastTimer = setTimeout(
-        function() {
+    toastTimer =
+        setTimeout(
+            function() {
 
-            toast.classList.remove("show");
+                toast.classList.remove("show");
 
-        },
-        3000
-    );
+            },
+            3500
+        );
 
 }
 
@@ -2716,11 +2789,26 @@ function showToast(message) {
 function escapeHtml(value) {
 
     return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -2732,7 +2820,9 @@ function escapeHtml(value) {
 function hideLoading() {
 
     if (loadingHidden) {
+
         return;
+
     }
 
     loadingHidden = true;
@@ -2743,8 +2833,24 @@ function hideLoading() {
             loading.classList.add("hide");
 
         },
-        180
+        150
     );
+
+}
+
+
+/* =========================================================
+   LOADING MESSAGE
+========================================================= */
+
+function setLoadingText(text) {
+
+    if (loadingText) {
+
+        loadingText.textContent =
+            text;
+
+    }
 
 }
 
@@ -2753,16 +2859,29 @@ function hideLoading() {
    GET FIRST NAME
 ========================================================= */
 
-function getFirstName(user) {
+function getFirstName(user, profileData = {}) {
 
     if (!user) {
+
         return "Fresh";
+
     }
 
-    if (user.displayName) {
+
+    const possibleName =
+        profileData.name ||
+        profileData.displayName ||
+        profileData.fullName ||
+        user.displayName ||
+        "";
+
+
+    if (possibleName) {
 
         const clean =
-            user.displayName.trim();
+            String(
+                possibleName
+            ).trim();
 
         if (clean) {
 
@@ -2773,6 +2892,7 @@ function getFirstName(user) {
 
     }
 
+
     if (user.email) {
 
         const emailName =
@@ -2782,6 +2902,7 @@ function getFirstName(user) {
                 .replace(/[._-]+/g, " ")
                 .trim();
 
+
         if (emailName) {
 
             return emailName
@@ -2790,6 +2911,7 @@ function getFirstName(user) {
         }
 
     }
+
 
     return "Fresh";
 
@@ -2803,13 +2925,36 @@ function getFirstName(user) {
 function normalizeRole(value) {
 
     if (!value) {
+
         return "";
+
     }
 
     return String(value)
         .trim()
         .toLowerCase()
-        .replace(/[\s-]+/g, "_");
+        .replace(
+            /[\s-]+/g,
+            "_"
+        );
+
+}
+
+
+/* =========================================================
+   IS PRIVILEGED ROLE
+========================================================= */
+
+function isPrivilegedRole(role) {
+
+    role =
+        normalizeRole(role);
+
+    return (
+        role === "admin" ||
+        role === "salon_owner" ||
+        role === "owner"
+    );
 
 }
 
@@ -2823,9 +2968,13 @@ function routeByRole(role) {
     role =
         normalizeRole(role);
 
+
     if (redirecting) {
-        return;
+
+        return true;
+
     }
+
 
     if (role === "admin") {
 
@@ -2835,9 +2984,10 @@ function routeByRole(role) {
             "admin.html"
         );
 
-        return;
+        return true;
 
     }
+
 
     if (
         role === "salon_owner" ||
@@ -2850,36 +3000,65 @@ function routeByRole(role) {
             "ownerdashboard.html"
         );
 
+        return true;
+
     }
+
+
+    return false;
 
 }
 
 
 /* =========================================================
-   BASIC UI
+   BASIC USER UI
 ========================================================= */
 
-function setBasicUserUI(user) {
+function setBasicUserUI(
+    user,
+    profileData = {}
+) {
 
     const firstName =
-        getFirstName(user);
+        getFirstName(
+            user,
+            profileData
+        );
 
-    userName.textContent =
-        firstName;
 
-    profileName.textContent =
+    const fullName =
+        profileData.name ||
+        profileData.displayName ||
+        profileData.fullName ||
         user.displayName ||
         firstName ||
         "K@si Customer";
 
-    profileEmail.textContent =
+
+    const email =
+        profileData.email ||
         user.email ||
         "K@si account";
+
+
+    userName.textContent =
+        firstName;
+
+
+    profileName.textContent =
+        fullName;
+
+
+    profileEmail.textContent =
+        email;
+
 
     avatar.textContent =
         firstName
             .charAt(0)
-            .toUpperCase();
+            .toUpperCase() ||
+        "K";
+
 
     profileRole.textContent =
         "Customer";
@@ -2888,140 +3067,177 @@ function setBasicUserUI(user) {
 
 
 /* =========================================================
-   LOAD FIRESTORE PROFILE
+   CREATE / REPAIR CUSTOMER PROFILE
 ========================================================= */
 
-async function loadProfile(user) {
+async function ensureUserProfile(
+    user
+) {
 
     if (
         !user ||
         !window.firebaseDB
     ) {
 
-        return null;
+        return {
+            role: "customer",
+            data: {}
+        };
 
     }
 
+
+    const userRef =
+        window.firebaseDB
+            .collection("users")
+            .doc(user.uid);
+
+
     try {
 
-        const profile =
-            await window.firebaseDB
-                .collection("users")
-                .doc(user.uid)
-                .get();
+        const snapshot =
+            await userRef.get();
 
-        if (!profile.exists) {
 
-            console.warn(
-                "No Firestore profile found:",
+        if (snapshot.exists) {
+
+            const data =
+                snapshot.data() || {};
+
+
+            const role =
+                normalizeRole(
+                    data.role ||
+                    data.Role ||
+                    data.userRole ||
+                    "customer"
+                );
+
+
+            /*
+                IMPORTANT:
+                Firestore role is authoritative.
+            */
+
+            return {
+                role:
+                    role || "customer",
+                data
+            };
+
+        }
+
+
+        /*
+            No users/{uid} document.
+
+            This is common for a newly
+            registered customer if the
+            registration page created
+            Firebase Auth but failed to
+            create the Firestore profile.
+
+            We repair it here.
+        */
+
+        const firstName =
+            getFirstName(user);
+
+
+        const newProfile = {
+
+            uid:
+                user.uid,
+
+            name:
+                user.displayName ||
+                firstName ||
+                "K@si Customer",
+
+            displayName:
+                user.displayName ||
+                firstName ||
+                "K@si Customer",
+
+            email:
+                user.email ||
+                "",
+
+            role:
+                "customer",
+
+            createdAt:
+                firebase.firestore.FieldValue.serverTimestamp(),
+
+            updatedAt:
+                firebase.firestore.FieldValue.serverTimestamp()
+
+        };
+
+
+        try {
+
+            await userRef.set(
+                newProfile,
+                {
+                    merge: true
+                }
+            );
+
+            console.log(
+                "Created missing customer profile:",
                 user.uid
             );
 
+
             return {
-                role: "customer"
+                role: "customer",
+                data: newProfile
             };
 
-        }
+        } catch (createError) {
 
-        const data =
-            profile.data() || {};
+            /*
+                If Firestore rules reject creation,
+                do not incorrectly convert the
+                customer into an owner/admin.
 
-        const role =
-            normalizeRole(
-                data.role ||
-                data.Role ||
-                data.userRole
+                Continue as a customer.
+            */
+
+            console.error(
+                "Could not create customer profile:",
+                createError
             );
 
-        /*
-            Firestore is the role source
-            of truth.
-        */
-
-        if (
-            role === "admin" ||
-            role === "salon_owner" ||
-            role === "owner"
-        ) {
-
-            routeByRole(role);
 
             return {
-                ...data,
-                role
+                role: "customer",
+                data: {}
             };
 
         }
-
-
-        const name =
-            data.name ||
-            data.displayName ||
-            data.fullName;
-
-
-        const email =
-            data.email ||
-            user.email;
-
-
-        if (name) {
-
-            const cleanName =
-                String(name).trim();
-
-            if (cleanName) {
-
-                userName.textContent =
-                    cleanName.split(/\s+/)[0];
-
-                profileName.textContent =
-                    cleanName;
-
-                avatar.textContent =
-                    cleanName
-                        .charAt(0)
-                        .toUpperCase();
-
-            }
-
-        }
-
-
-        if (email) {
-
-            profileEmail.textContent =
-                email;
-
-        }
-
-
-        profileRole.textContent =
-            "Customer";
-
-
-        return {
-            ...data,
-            role: "customer"
-        };
 
     } catch (error) {
 
         console.error(
-            "Profile lookup error:",
+            "Profile read error:",
             error
         );
 
+
         /*
-            Do not lock a legitimate
-            customer out simply because
-            their profile document failed.
+            A missing/unreadable profile should
+            never automatically become admin or
+            owner.
+
+            Safe fallback = customer.
         */
 
-        profileRole.textContent =
-            "Customer";
-
-        return null;
+        return {
+            role: "customer",
+            data: {}
+        };
 
     }
 
@@ -3035,12 +3251,18 @@ async function loadProfile(user) {
 function toDate(value) {
 
     if (!value) {
+
         return null;
+
     }
 
+
     if (value instanceof Date) {
+
         return value;
+
     }
+
 
     if (
         typeof value.toDate ===
@@ -3059,6 +3281,7 @@ function toDate(value) {
 
     }
 
+
     if (
         typeof value ===
         "number"
@@ -3067,11 +3290,15 @@ function toDate(value) {
         const date =
             new Date(value);
 
-        return isNaN(date.getTime())
+
+        return isNaN(
+            date.getTime()
+        )
             ? null
             : date;
 
     }
+
 
     if (
         typeof value ===
@@ -3081,11 +3308,15 @@ function toDate(value) {
         const date =
             new Date(value);
 
-        return isNaN(date.getTime())
+
+        return isNaN(
+            date.getTime()
+        )
             ? null
             : date;
 
     }
+
 
     return null;
 
@@ -3096,13 +3327,17 @@ function toDate(value) {
    BOOKING DATETIME
 ========================================================= */
 
-function getBookingDateTime(booking) {
+function getBookingDateTime(
+    booking
+) {
 
     const dateString =
         booking.date || "";
 
+
     const timeString =
         booking.time || "00:00";
+
 
     if (dateString) {
 
@@ -3111,9 +3346,12 @@ function getBookingDateTime(booking) {
                 `${dateString}T${timeString}`
             );
 
-        if (!isNaN(
-            parsed.getTime()
-        )) {
+
+        if (
+            !isNaN(
+                parsed.getTime()
+            )
+        ) {
 
             return parsed.getTime();
 
@@ -3121,10 +3359,12 @@ function getBookingDateTime(booking) {
 
     }
 
+
     const created =
         toDate(
             booking.createdAt
         );
+
 
     return created
         ? created.getTime()
@@ -3137,14 +3377,22 @@ function getBookingDateTime(booking) {
    FORMAT DATE
 ========================================================= */
 
-function formatBookingDate(dateString) {
+function formatBookingDate(
+    dateString
+) {
 
     if (!dateString) {
+
         return "Date pending";
+
     }
 
+
     const parts =
-        String(dateString).split("-");
+        String(
+            dateString
+        ).split("-");
+
 
     if (
         parts.length === 3 &&
@@ -3158,9 +3406,12 @@ function formatBookingDate(dateString) {
                 Number(parts[2])
             );
 
-        if (!isNaN(
-            date.getTime()
-        )) {
+
+        if (
+            !isNaN(
+                date.getTime()
+            )
+        ) {
 
             return new Intl.DateTimeFormat(
                 "en-ZA",
@@ -3175,12 +3426,18 @@ function formatBookingDate(dateString) {
 
     }
 
-    const fallback =
-        new Date(dateString);
 
-    if (!isNaN(
-        fallback.getTime()
-    )) {
+    const fallback =
+        new Date(
+            dateString
+        );
+
+
+    if (
+        !isNaN(
+            fallback.getTime()
+        )
+    ) {
 
         return new Intl.DateTimeFormat(
             "en-ZA",
@@ -3193,7 +3450,10 @@ function formatBookingDate(dateString) {
 
     }
 
-    return String(dateString);
+
+    return String(
+        dateString
+    );
 
 }
 
@@ -3214,6 +3474,7 @@ function formatPrice(price) {
 
     }
 
+
     const raw =
         String(price)
             .replace(
@@ -3221,10 +3482,14 @@ function formatPrice(price) {
                 ""
             );
 
+
     const numeric =
         Number(raw);
 
-    if (!isNaN(numeric)) {
+
+    if (
+        !isNaN(numeric)
+    ) {
 
         return (
             "R" +
@@ -3235,7 +3500,10 @@ function formatPrice(price) {
 
     }
 
-    return String(price);
+
+    return String(
+        price
+    );
 
 }
 
@@ -3244,7 +3512,9 @@ function formatPrice(price) {
    NORMALIZE STATUS
 ========================================================= */
 
-function normalizeStatus(status) {
+function normalizeStatus(
+    status
+) {
 
     return String(
         status || "pending"
@@ -3263,10 +3533,15 @@ function normalizeStatus(status) {
    STATUS UI
 ========================================================= */
 
-function getStatusUI(status) {
+function getStatusUI(
+    status
+) {
 
     const normalized =
-        normalizeStatus(status);
+        normalizeStatus(
+            status
+        );
+
 
     if (
         normalized === "approved" ||
@@ -3275,12 +3550,20 @@ function getStatusUI(status) {
     ) {
 
         return {
-            className: "status-approved",
-            icon: "bx-check-circle",
-            label: "Approved"
+
+            className:
+                "status-approved",
+
+            icon:
+                "bx-check-circle",
+
+            label:
+                "Approved"
+
         };
 
     }
+
 
     if (
         normalized === "declined" ||
@@ -3288,12 +3571,20 @@ function getStatusUI(status) {
     ) {
 
         return {
-            className: "status-declined",
-            icon: "bx-x-circle",
-            label: "Declined"
+
+            className:
+                "status-declined",
+
+            icon:
+                "bx-x-circle",
+
+            label:
+                "Declined"
+
         };
 
     }
+
 
     if (
         normalized === "completed" ||
@@ -3301,12 +3592,20 @@ function getStatusUI(status) {
     ) {
 
         return {
-            className: "status-completed",
-            icon: "bx-check-double",
-            label: "Completed"
+
+            className:
+                "status-completed",
+
+            icon:
+                "bx-check-double",
+
+            label:
+                "Completed"
+
         };
 
     }
+
 
     if (
         normalized === "cancelled" ||
@@ -3314,12 +3613,20 @@ function getStatusUI(status) {
     ) {
 
         return {
-            className: "status-cancelled",
-            icon: "bx-block",
-            label: "Cancelled"
+
+            className:
+                "status-cancelled",
+
+            icon:
+                "bx-block",
+
+            label:
+                "Cancelled"
+
         };
 
     }
+
 
     if (
         normalized === "pending" ||
@@ -3327,23 +3634,39 @@ function getStatusUI(status) {
     ) {
 
         return {
-            className: "status-pending",
-            icon: "bx-time-five",
-            label: "Pending"
+
+            className:
+                "status-pending",
+
+            icon:
+                "bx-time-five",
+
+            label:
+                "Pending"
+
         };
 
     }
 
+
     return {
-        className: "status-unknown",
-        icon: "bx-info-circle",
+
+        className:
+            "status-unknown",
+
+        icon:
+            "bx-info-circle",
+
         label:
-            String(status || "Pending")
-                .replace(
-                    /^./,
-                    char =>
-                        char.toUpperCase()
-                )
+            String(
+                status ||
+                "Pending"
+            ).replace(
+                /^./,
+                char =>
+                    char.toUpperCase()
+            )
+
     };
 
 }
@@ -3353,10 +3676,13 @@ function getStatusUI(status) {
    NORMALIZE BOOKING
 ========================================================= */
 
-function normalizeBooking(doc) {
+function normalizeBooking(
+    doc
+) {
 
     const data =
         doc.data() || {};
+
 
     return {
 
@@ -3364,10 +3690,12 @@ function normalizeBooking(doc) {
             doc.id,
 
         salonId:
-            data.salonId || "",
+            data.salonId ||
+            "",
 
         ownerId:
-            data.ownerId || "",
+            data.ownerId ||
+            "",
 
         userId:
             data.userId ||
@@ -3446,12 +3774,20 @@ function normalizeBooking(doc) {
    UPCOMING BOOKING
 ========================================================= */
 
-function isUpcomingBooking(booking) {
+function isUpcomingBooking(
+    booking
+) {
 
     const status =
         normalizeStatus(
             booking.status
         );
+
+
+    /*
+        Do not show finished/declined
+        appointments in upcoming list.
+    */
 
     if (
         status === "declined" ||
@@ -3466,10 +3802,19 @@ function isUpcomingBooking(booking) {
 
     }
 
+
     const dateTime =
         getBookingDateTime(
             booking
         );
+
+
+    /*
+        A booking without a valid
+        appointment date is still
+        shown because it may be a
+        newly-created booking.
+    */
 
     if (!dateTime) {
 
@@ -3477,8 +3822,10 @@ function isUpcomingBooking(booking) {
 
     }
 
+
     const now =
         new Date();
+
 
     const today =
         new Date(
@@ -3486,6 +3833,7 @@ function isUpcomingBooking(booking) {
             now.getMonth(),
             now.getDate()
         );
+
 
     return (
         dateTime >=
@@ -3499,17 +3847,21 @@ function isUpcomingBooking(booking) {
    BOOKING CARD
 ========================================================= */
 
-function createBookingCard(booking) {
+function createBookingCard(
+    booking
+) {
 
     const status =
         getStatusUI(
             booking.status
         );
 
+
     const salonName =
         escapeHtml(
             booking.salonName
         );
+
 
     const location =
         escapeHtml(
@@ -3517,10 +3869,12 @@ function createBookingCard(booking) {
             "Local K@si salon"
         );
 
+
     const service =
         escapeHtml(
             booking.service
         );
+
 
     const date =
         escapeHtml(
@@ -3529,11 +3883,13 @@ function createBookingCard(booking) {
             )
         );
 
+
     const time =
         escapeHtml(
             booking.time ||
             "Time pending"
         );
+
 
     const price =
         escapeHtml(
@@ -3541,6 +3897,7 @@ function createBookingCard(booking) {
                 booking.price
             )
         );
+
 
     const statusLabel =
         escapeHtml(
@@ -3556,7 +3913,8 @@ function createBookingCard(booking) {
 
 
     if (
-        status.label === "Approved"
+        status.label ===
+        "Approved"
     ) {
 
         note =
@@ -3566,7 +3924,8 @@ function createBookingCard(booking) {
             "bx-check-circle";
 
     } else if (
-        status.label === "Pending"
+        status.label ===
+        "Pending"
     ) {
 
         note =
@@ -3576,7 +3935,8 @@ function createBookingCard(booking) {
             "bx-time-five";
 
     } else if (
-        status.label === "Declined"
+        status.label ===
+        "Declined"
     ) {
 
         note =
@@ -3584,6 +3944,17 @@ function createBookingCard(booking) {
 
         noteIcon =
             "bx-x-circle";
+
+    } else if (
+        status.label ===
+        "Completed"
+    ) {
+
+        note =
+            "This appointment has been completed.";
+
+        noteIcon =
+            "bx-check-double";
 
     }
 
@@ -3761,13 +4132,91 @@ function renderEmptyBookings() {
 
 
 /* =========================================================
+   BOOKING ERROR
+========================================================= */
+
+function renderBookingError() {
+
+    bookingCount.textContent =
+        "0";
+
+
+    bookingContent.innerHTML = `
+
+        <div class="booking-empty">
+
+            <div class="empty-icon">
+
+                <i class="bx bx-error-circle"></i>
+
+            </div>
+
+
+            <h3>
+                Couldn't load bookings.
+            </h3>
+
+
+            <p>
+
+                Your account is signed in,
+                but K@si couldn't read your
+                bookings right now.
+
+            </p>
+
+
+            <button
+                class="btn btn-primary"
+                type="button"
+                id="retryBookingsBtn"
+            >
+
+                Try Again
+
+                <i class="bx bx-refresh"></i>
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    const retry =
+        document.getElementById(
+            "retryBookingsBtn"
+        );
+
+
+    if (retry) {
+
+        retry.addEventListener(
+            "click",
+            function() {
+
+                listenToBookings(
+                    currentUser
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    RENDER BOOKINGS
 ========================================================= */
 
-function renderBookings(bookings) {
+function renderBookings(
+    bookings
+) {
 
     bookings.sort(
-        function(a,b) {
+        function(a, b) {
 
             const aTime =
                 getBookingDateTime(a);
@@ -3788,7 +4237,9 @@ function renderBookings(bookings) {
 
 
     bookingCount.textContent =
-        String(upcoming.length);
+        String(
+            upcoming.length
+        );
 
 
     if (!upcoming.length) {
@@ -3800,8 +4251,16 @@ function renderBookings(bookings) {
     }
 
 
+    /*
+        Show maximum 10 bookings
+        on the home page.
+    */
+
     const visible =
-        upcoming.slice(0,10);
+        upcoming.slice(
+            0,
+            10
+        );
 
 
     bookingContent.innerHTML = `
@@ -3810,7 +4269,9 @@ function renderBookings(bookings) {
 
             ${
                 visible
-                    .map(createBookingCard)
+                    .map(
+                        createBookingCard
+                    )
                     .join("")
             }
 
@@ -3825,7 +4286,14 @@ function renderBookings(bookings) {
    LIVE BOOKINGS
 ========================================================= */
 
-function listenToBookings(user) {
+function listenToBookings(
+    user
+) {
+
+    /*
+        Always remove old listener
+        before creating a new one.
+    */
 
     if (unsubscribeBookings) {
 
@@ -3865,146 +4333,95 @@ function listenToBookings(user) {
     /*
         IMPORTANT:
 
-        Only userId is queried.
+        Query only by userId.
 
-        No orderBy() means no composite
-        index requirement.
+        There is deliberately NO
+        orderBy() here.
 
-        Results are sorted locally.
+        Therefore Firestore does not
+        require a composite index.
+
+        Sorting happens locally.
     */
 
-    unsubscribeBookings =
-        window.firebaseDB
-            .collection("bookings")
-            .where(
-                "userId",
-                "==",
-                user.uid
-            )
-            .onSnapshot(
+    try {
 
-                function(snapshot) {
+        unsubscribeBookings =
+            window.firebaseDB
+                .collection("bookings")
+                .where(
+                    "userId",
+                    "==",
+                    user.uid
+                )
+                .onSnapshot(
 
-                    const bookings = [];
+                    function(snapshot) {
 
-
-                    snapshot.forEach(
-                        function(doc) {
-
-                            const booking =
-                                normalizeBooking(
-                                    doc
-                                );
+                        const bookings = [];
 
 
-                            /*
-                                Extra protection:
-                                make sure this booking
-                                really belongs to the
-                                current signed-in user.
-                            */
+                        snapshot.forEach(
+                            function(doc) {
 
-                            if (
-                                !booking.userId ||
-                                booking.userId ===
-                                user.uid
-                            ) {
-
-                                bookings.push(
-                                    booking
-                                );
-
-                            }
-
-                        }
-                    );
+                                const booking =
+                                    normalizeBooking(
+                                        doc
+                                    );
 
 
-                    renderBookings(
-                        bookings
-                    );
+                                /*
+                                    Extra ownership
+                                    protection.
+                                */
 
-                },
+                                if (
+                                    booking.userId ===
+                                    user.uid
+                                ) {
 
+                                    bookings.push(
+                                        booking
+                                    );
 
-                function(error) {
-
-                    console.error(
-                        "Booking listener error:",
-                        error
-                    );
-
-
-                    bookingCount.textContent =
-                        "0";
-
-
-                    bookingContent.innerHTML = `
-
-                        <div class="booking-empty">
-
-                            <div class="empty-icon">
-
-                                <i class="bx bx-error-circle"></i>
-
-                            </div>
-
-
-                            <h3>
-                                Couldn't load bookings.
-                            </h3>
-
-
-                            <p>
-
-                                Your account is signed in,
-                                but K@si couldn't read your
-                                bookings right now.
-
-                            </p>
-
-
-                            <button
-                                class="btn btn-primary"
-                                type="button"
-                                id="retryBookingsBtn"
-                            >
-
-                                Try Again
-
-                                <i class="bx bx-refresh"></i>
-
-                            </button>
-
-                        </div>
-
-                    `;
-
-
-                    const retry =
-                        document.getElementById(
-                            "retryBookingsBtn"
-                        );
-
-
-                    if (retry) {
-
-                        retry.addEventListener(
-                            "click",
-                            function() {
-
-                                listenToBookings(
-                                    currentUser
-                                );
+                                }
 
                             }
                         );
+
+
+                        renderBookings(
+                            bookings
+                        );
+
+                    },
+
+
+                    function(error) {
+
+                        console.error(
+                            "Booking listener error:",
+                            error
+                        );
+
+
+                        renderBookingError();
 
                     }
 
-                }
+                );
 
-            );
+    } catch (error) {
+
+        console.error(
+            "Booking listener setup error:",
+            error
+        );
+
+
+        renderBookingError();
+
+    }
 
 }
 
@@ -4013,10 +4430,14 @@ function listenToBookings(user) {
    LOAD USER
 ========================================================= */
 
-async function loadUser(user) {
+async function loadUser(
+    user
+) {
 
     if (redirecting) {
+
         return;
+
     }
 
 
@@ -4041,35 +4462,63 @@ async function loadUser(user) {
         user;
 
 
+    setLoadingText(
+        "Checking your K@si account..."
+    );
+
+
+    /*
+        First show basic Auth
+        information immediately.
+    */
+
     setBasicUserUI(
         user
     );
 
 
     /*
-        Read Firestore role before
-        enabling customer content.
+        Load / repair Firestore
+        profile.
     */
 
     const profile =
-        await loadProfile(
+        await ensureUserProfile(
             user
         );
 
 
     if (redirecting) {
+
         return;
+
     }
 
 
+    const role =
+        normalizeRole(
+            profile.role ||
+            "customer"
+        );
+
+
+    currentRole =
+        role || "customer";
+
+
+    /*
+        Admin and owner accounts
+        should NEVER be treated as
+        customer accounts.
+    */
+
     if (
-        profile &&
-        (
-            profile.role === "admin" ||
-            profile.role === "salon_owner" ||
-            profile.role === "owner"
-        )
+        isPrivilegedRole(role)
     ) {
+
+        routeByRole(
+            role
+        );
 
         return;
 
@@ -4077,8 +4526,23 @@ async function loadUser(user) {
 
 
     /*
-        Customer account.
+        Customer UI.
     */
+
+    setBasicUserUI(
+        user,
+        profile.data || {}
+    );
+
+
+    profileRole.textContent =
+        "Customer";
+
+
+    setLoadingText(
+        "Loading your bookings..."
+    );
+
 
     listenToBookings(
         user
@@ -4095,16 +4559,108 @@ async function loadUser(user) {
 ========================================================= */
 
 if (
+    firebaseReady &&
     window.firebaseAuth
 ) {
 
     window.firebaseAuth
         .onAuthStateChanged(
-            function(user) {
+            async function(user) {
 
-                loadUser(
-                    user
-                );
+                /*
+                    Prevent accidental duplicate
+                    handling of the same auth state.
+                */
+
+                if (
+                    authHandled &&
+                    user &&
+                    currentUser &&
+                    user.uid ===
+                    currentUser.uid
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    !user &&
+                    !redirecting
+                ) {
+
+                    authHandled = true;
+
+                    /*
+                        Remove old listener.
+                    */
+
+                    if (
+                        unsubscribeBookings
+                    ) {
+
+                        unsubscribeBookings();
+
+                        unsubscribeBookings =
+                            null;
+
+                    }
+
+
+                    window.location.replace(
+                        "index.html"
+                    );
+
+                    return;
+
+                }
+
+
+                if (user) {
+
+                    authHandled =
+                        true;
+
+                    try {
+
+                        await loadUser(
+                            user
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "User loading error:",
+                            error
+                        );
+
+
+                        /*
+                            Do not leave the
+                            loading screen forever.
+                        */
+
+                        setLoadingText(
+                            "Opening your K@si space..."
+                        );
+
+
+                        setBasicUserUI(
+                            user
+                        );
+
+
+                        listenToBookings(
+                            user
+                        );
+
+
+                        hideLoading();
+
+                    }
+
+                }
 
             }
         );
@@ -4170,6 +4726,10 @@ logoutBtn.addEventListener(
 
         try {
 
+            /*
+                Stop live listener first.
+            */
+
             if (
                 unsubscribeBookings
             ) {
@@ -4182,12 +4742,29 @@ logoutBtn.addEventListener(
             }
 
 
+            currentUser =
+                null;
+
+
+            authHandled =
+                false;
+
+
+            /*
+                Sign out of Firebase Auth.
+
+                This is the important part:
+                the customer is not deleted
+                from Authentication.
+            */
+
             await window.firebaseAuth
                 .signOut();
 
 
             /*
-                Clear local app session only.
+                Only clear K@si's temporary
+                session storage.
             */
 
             sessionStorage.clear();
@@ -4213,7 +4790,8 @@ logoutBtn.addEventListener(
 
 
             showToast(
-                "Could not sign out. Please try again."
+                "Could not sign out. Please try again.",
+                "error"
             );
 
         }
@@ -4230,9 +4808,25 @@ refreshBtn.addEventListener(
     "click",
     function() {
 
+        if (
+            refreshBtn.disabled
+        ) {
+
+            return;
+
+        }
+
+
+        refreshBtn.disabled =
+            true;
+
+
         refreshBtn.innerHTML = `
+
             <i class="bx bx-loader-alt bx-spin"></i>
+
         `;
+
 
         setTimeout(
             function() {
@@ -4271,7 +4865,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   BACK/FORWARD CACHE
+   BACK / FORWARD CACHE
 ========================================================= */
 
 window.addEventListener(
@@ -4315,6 +4909,36 @@ window.addEventListener(
         }
 
     }
+);
+
+
+/* =========================================================
+   SAFETY LOADING TIMEOUT
+========================================================= */
+
+setTimeout(
+    function() {
+
+        /*
+            Prevent an infinite loading
+            screen if Firebase takes too
+            long to respond.
+
+            Only hide it if the user is
+            already authenticated.
+        */
+
+        if (
+            window.firebaseAuth &&
+            window.firebaseAuth.currentUser
+        ) {
+
+            hideLoading();
+
+        }
+
+    },
+    8000
 );
 
 </script>
