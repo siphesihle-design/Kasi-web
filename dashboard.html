@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -11,42 +10,70 @@
 
     <meta
         name="theme-color"
-        content="#07070d"
+        content="#080812"
     >
 
     <meta
         name="description"
-        content="K@si Web Admin — Manage salons, bookings and users."
+        content="K@si Web Elite Admin Dashboard"
     >
 
-    <title>K@si Web | Admin</title>
+    <title>K@si Web | Admin Command Center</title>
 
-    <!-- =====================================================
-         BOXICONS
-    ====================================================== -->
+    <!-- Boxicons -->
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
-    <!-- =====================================================
-         GOOGLE FONT
-    ====================================================== -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet"
-    >
-
     <style>
-
         /* =====================================================
-           RESET
-        ====================================================== */
+           K@SI ELITE ADMIN
+           INDEX.HTML BLUE / PURPLE THEME
+        ===================================================== */
+
+        :root {
+            --bg: #080812;
+            --bg-soft: #0c0c18;
+            --panel: #11111f;
+            --panel-2: #151526;
+
+            --blue: #3b82f6;
+            --blue-bright: #60a5fa;
+
+            --purple: #8b5cf6;
+            --purple-bright: #a78bfa;
+
+            --cyan: #38bdf8;
+
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+
+            --text: #ffffff;
+            --muted: #a7a7bb;
+            --muted-2: #77778f;
+
+            --border: rgba(255,255,255,0.08);
+            --border-blue: rgba(59,130,246,0.25);
+            --border-purple: rgba(139,92,246,0.25);
+
+            --shadow:
+                0 20px 60px rgba(0,0,0,0.35);
+
+            --blue-glow:
+                0 0 25px rgba(59,130,246,0.22);
+
+            --purple-glow:
+                0 0 25px rgba(139,92,246,0.22);
+
+            --radius: 20px;
+        }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         html {
@@ -54,82 +81,108 @@
         }
 
         body {
-            min-height: 100vh;
-            font-family: "Inter", sans-serif;
-            color: #f8f9ff;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
             background:
                 radial-gradient(
-                    circle at 10% 0%,
-                    rgba(79,70,229,.18),
-                    transparent 30%
+                    circle at 10% 10%,
+                    rgba(59,130,246,0.12),
+                    transparent 28%
                 ),
                 radial-gradient(
                     circle at 90% 10%,
-                    rgba(124,58,237,.16),
-                    transparent 28%
+                    rgba(139,92,246,0.13),
+                    transparent 30%
                 ),
-                #07070d;
+                linear-gradient(
+                    135deg,
+                    #06060c 0%,
+                    #080812 45%,
+                    #0a0814 100%
+                );
+
+            color: var(--text);
+            min-height: 100vh;
             overflow-x: hidden;
         }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           BACKGROUND EFFECT
+        ===================================================== */
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             pointer-events: none;
-            background:
+            z-index: -1;
+
+            background-image:
                 linear-gradient(
-                    rgba(255,255,255,.018) 1px,
+                    rgba(255,255,255,0.018) 1px,
                     transparent 1px
                 ),
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,.018) 1px,
+                    rgba(255,255,255,0.018) 1px,
                     transparent 1px
                 );
-            background-size: 40px 40px;
-            mask-image: linear-gradient(
-                to bottom,
-                black,
-                transparent 90%
-            );
-            z-index: -1;
-        }
 
-        button,
-        input,
-        select {
-            font-family: inherit;
-        }
+            background-size: 42px 42px;
 
-        button,
-        a {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 95%
+                );
         }
 
         /* =====================================================
            LOADING SCREEN
-        ====================================================== */
+        ===================================================== */
 
         #loadingScreen {
             position: fixed;
             inset: 0;
             z-index: 9999;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             background:
                 radial-gradient(
                     circle at center,
-                    #17112f,
-                    #07070d 65%
+                    rgba(59,130,246,0.12),
+                    rgba(8,8,18,0.98) 55%
                 );
-            transition: .4s ease;
+
+            transition:
+                opacity .35s ease,
+                visibility .35s ease;
         }
 
         #loadingScreen.hidden {
@@ -138,166 +191,184 @@
             pointer-events: none;
         }
 
-        .loading-box {
+        .loader-box {
             text-align: center;
         }
 
-        .loading-logo {
-            width: 76px;
-            height: 76px;
-            margin: auto;
+        .loader-logo {
+            width: 78px;
+            height: 78px;
+
+            margin: 0 auto 18px;
+
             border-radius: 24px;
-            display: grid;
-            place-items: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             font-size: 34px;
-            color: white;
+
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #7c3aed
+                    var(--blue),
+                    var(--purple)
                 );
+
             box-shadow:
-                0 0 50px rgba(99,102,241,.45);
-            animation: logoPulse 1.8s infinite;
+                0 0 40px rgba(59,130,246,0.25),
+                0 0 70px rgba(139,92,246,0.18);
         }
 
-        .loading-title {
-            margin-top: 22px;
+        .loader-box h2 {
             font-size: 22px;
-            font-weight: 900;
-            letter-spacing: -.6px;
+            font-weight: 800;
+            letter-spacing: -.5px;
         }
 
-        .loading-text {
+        .loader-box p {
             margin-top: 7px;
-            color: #8e91a5;
-            font-size: 13px;
-        }
-
-        .loading-line {
-            width: 180px;
-            height: 3px;
-            margin: 22px auto 0;
-            overflow: hidden;
-            border-radius: 100px;
-            background: rgba(255,255,255,.08);
-        }
-
-        .loading-line::after {
-            content: "";
-            display: block;
-            width: 45%;
-            height: 100%;
-            border-radius: inherit;
-            background: linear-gradient(
-                90deg,
-                #3b82f6,
-                #8b5cf6
-            );
-            animation: loading 1.2s infinite;
-        }
-
-        @keyframes loading {
-            from {
-                transform: translateX(-120%);
-            }
-
-            to {
-                transform: translateX(450%);
-            }
-        }
-
-        @keyframes logoPulse {
-            50% {
-                transform: translateY(-4px) scale(1.03);
-            }
+            color: var(--muted);
+            font-size: 14px;
         }
 
         /* =====================================================
-           TOP NAV
-        ====================================================== */
+           TOPBAR
+        ===================================================== */
 
         .topbar {
             position: sticky;
             top: 0;
             z-index: 1000;
-            height: 78px;
+
+            width: 100%;
+
+            background:
+                rgba(8,8,18,0.82);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.07);
+
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.18);
+        }
+
+        .topbar-inner {
+            width: min(1400px, calc(100% - 32px));
+            margin: auto;
+
+            min-height: 78px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 34px;
-            background: rgba(7,7,13,.76);
-            border-bottom: 1px solid rgba(255,255,255,.07);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+
+            gap: 20px;
         }
 
+        /* =====================================================
+           BRAND
+        ===================================================== */
+
         .brand {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 12px;
+
+            min-width: max-content;
         }
 
         .brand-icon {
-            width: 43px;
-            height: 43px;
+            width: 44px;
+            height: 44px;
+
             border-radius: 14px;
-            display: grid;
-            place-items: center;
-            color: white;
-            font-size: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             background:
                 linear-gradient(
                     135deg,
-                    #2563eb,
-                    #7c3aed
+                    var(--blue),
+                    var(--purple)
                 );
+
             box-shadow:
-                0 8px 30px rgba(79,70,229,.32);
+                var(--blue-glow),
+                var(--purple-glow);
+
+            font-size: 23px;
         }
 
         .brand-text {
             display: flex;
             flex-direction: column;
+            line-height: 1.05;
         }
 
-        .brand-name {
-            font-size: 16px;
+        .brand-title {
+            font-size: 17px;
             font-weight: 900;
-            letter-spacing: -.5px;
+            letter-spacing: -.4px;
         }
 
-        .brand-sub {
-            margin-top: 2px;
+        .brand-subtitle {
+            margin-top: 5px;
+            color: var(--muted-2);
             font-size: 10px;
             font-weight: 700;
-            color: #777b91;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
         }
+
+        /* =====================================================
+           DESKTOP NAV
+        ===================================================== */
 
         .desktop-nav {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .nav-link,
         .logout-top {
-            height: 42px;
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            min-height: 44px;
+
+            padding: 0 16px;
+
             border-radius: 13px;
-            border: 1px solid transparent;
-            color: #8d91a8;
-            background: transparent;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            white-space: nowrap;
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            background:
+                rgba(255,255,255,0.045);
+
+            color: #e8e8f3;
+
             font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: .25s ease;
+            font-weight: 800;
+
+            transition:
+                transform .2s ease,
+                background .2s ease,
+                border-color .2s ease,
+                box-shadow .2s ease,
+                color .2s ease;
         }
 
         .nav-link i,
@@ -306,797 +377,1139 @@
         }
 
         .nav-link:hover {
-            color: white;
-            background: rgba(255,255,255,.055);
-            border-color: rgba(255,255,255,.07);
+            transform: translateY(-2px);
+
+            background:
+                rgba(59,130,246,0.12);
+
+            border-color:
+                rgba(59,130,246,0.45);
+
+            color: #ffffff;
+
+            box-shadow:
+                0 10px 25px rgba(59,130,246,0.12);
         }
 
         .nav-link.active {
-            color: white;
             background:
                 linear-gradient(
                     135deg,
-                    rgba(37,99,235,.2),
-                    rgba(124,58,237,.22)
+                    rgba(59,130,246,0.24),
+                    rgba(139,92,246,0.24)
                 );
-            border-color: rgba(124,92,246,.3);
+
+            border-color:
+                rgba(139,92,246,0.5);
+
+            color: #ffffff;
+
             box-shadow:
-                inset 0 0 20px rgba(124,58,237,.06);
+                0 0 20px rgba(139,92,246,0.14),
+                inset 0 0 20px rgba(59,130,246,0.05);
         }
 
         .logout-top {
-            margin-left: 6px;
-            color: #ff8f9b;
-            border-color: rgba(255,100,120,.12);
-            background: rgba(255,70,90,.05);
+            border-color:
+                rgba(239,68,68,0.22);
+
+            color:
+                #ffb0b0;
+
+            background:
+                rgba(239,68,68,0.08);
         }
 
         .logout-top:hover {
-            color: white;
-            background: #dc3545;
-            border-color: #dc3545;
-        }
+            transform: translateY(-2px);
 
-        .mobile-menu-btn {
-            display: none;
-            width: 42px;
-            height: 42px;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 13px;
-            color: white;
-            background: rgba(255,255,255,.05);
-            font-size: 22px;
-            cursor: pointer;
+            background:
+                rgba(239,68,68,0.15);
+
+            border-color:
+                rgba(239,68,68,0.45);
+
+            color: #ffffff;
         }
 
         /* =====================================================
-           MOBILE MENU
-        ====================================================== */
+           MOBILE MENU BUTTON
+        ===================================================== */
+
+        .menu-toggle {
+            display: none;
+
+            width: 46px;
+            height: 46px;
+
+            border-radius: 14px;
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.18),
+                    rgba(139,92,246,0.18)
+                );
+
+            font-size: 23px;
+
+            box-shadow:
+                0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        /* =====================================================
+           MOBILE NAV
+        ===================================================== */
 
         .mobile-menu {
-            position: fixed;
-            top: 88px;
-            right: 16px;
-            z-index: 1500;
-            width: 220px;
-            padding: 10px;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 20px;
-            background: rgba(13,13,24,.96);
-            box-shadow: 0 25px 70px rgba(0,0,0,.55);
-            backdrop-filter: blur(20px);
-            transform: translateY(-10px) scale(.96);
-            opacity: 0;
-            visibility: hidden;
-            transition: .25s ease;
+            display: none;
+
+            padding:
+                0 16px 16px;
+
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .mobile-menu.open {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            visibility: visible;
+        .mobile-menu.show {
+            display: flex;
         }
 
-        .mobile-menu a,
-        .mobile-menu button {
+        .mobile-nav-link,
+        .mobile-logout {
             width: 100%;
-            min-height: 46px;
-            padding: 0 13px;
+            min-height: 50px;
+
+            border-radius: 14px;
+
             display: flex;
             align-items: center;
+
             gap: 11px;
-            border: 0;
-            border-radius: 12px;
-            color: #b5b8ca;
-            background: transparent;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: left;
+
+            padding: 0 16px;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            border:
+                1px solid rgba(255,255,255,0.09);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.045),
+                    rgba(255,255,255,0.025)
+                );
+
+            color: #eeeeF7;
         }
 
-        .mobile-menu a:hover,
-        .mobile-menu button:hover {
-            color: white;
-            background: rgba(255,255,255,.06);
+        .mobile-nav-link i,
+        .mobile-logout i {
+            font-size: 21px;
+        }
+
+        .mobile-nav-link.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.20),
+                    rgba(139,92,246,0.25)
+                );
+
+            border-color:
+                rgba(139,92,246,0.48);
+
+            box-shadow:
+                0 0 20px rgba(139,92,246,0.12);
+        }
+
+        .mobile-logout {
+            color: #ffb2b2;
+
+            background:
+                rgba(239,68,68,0.07);
+
+            border-color:
+                rgba(239,68,68,0.20);
         }
 
         /* =====================================================
            MAIN
-        ====================================================== */
+        ===================================================== */
 
-        .page {
-            width: min(1450px, calc(100% - 40px));
-            margin: auto;
-            padding: 45px 0 70px;
+        main {
+            width: min(1400px, calc(100% - 32px));
+            margin: 0 auto;
+
+            padding:
+                34px 0 60px;
         }
 
         /* =====================================================
            HERO
-        ====================================================== */
+        ===================================================== */
 
         .hero {
             position: relative;
-            min-height: 230px;
-            padding: 38px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 30px;
+
+            padding: 34px;
+
+            border-radius: 28px;
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
             background:
                 linear-gradient(
                     135deg,
-                    rgba(31,41,91,.48),
-                    rgba(35,17,67,.38)
+                    rgba(59,130,246,0.12),
+                    rgba(139,92,246,0.12)
                 ),
-                rgba(13,13,24,.65);
+                rgba(13,13,25,0.78);
+
             box-shadow:
-                0 30px 90px rgba(0,0,0,.28),
-                inset 0 1px rgba(255,255,255,.04);
+                var(--shadow);
+
+            margin-bottom: 24px;
         }
 
         .hero::before {
             content: "";
+
             position: absolute;
-            width: 380px;
-            height: 380px;
-            right: -130px;
-            top: -180px;
+
+            width: 330px;
+            height: 330px;
+
+            right: -110px;
+            top: -140px;
+
             border-radius: 50%;
-            background: rgba(99,102,241,.2);
-            filter: blur(20px);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139,92,246,0.24),
+                    transparent 68%
+                );
+
+            pointer-events: none;
         }
 
         .hero::after {
             content: "";
+
             position: absolute;
-            width: 280px;
-            height: 280px;
-            left: -180px;
-            bottom: -180px;
+
+            width: 250px;
+            height: 250px;
+
+            left: -100px;
+            bottom: -150px;
+
             border-radius: 50%;
-            background: rgba(37,99,235,.16);
-            filter: blur(20px);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(59,130,246,0.17),
+                    transparent 70%
+                );
+
+            pointer-events: none;
         }
 
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 780px;
         }
 
-        .eyebrow {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 7px 11px;
-            border-radius: 100px;
-            border: 1px solid rgba(129,140,248,.2);
-            color: #aeb6ff;
-            background: rgba(99,102,241,.09);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
-        }
 
-        .eyebrow i {
-            font-size: 14px;
+            padding:
+                8px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(59,130,246,0.10);
+
+            border:
+                1px solid rgba(59,130,246,0.24);
+
+            color:
+                #a9ccff;
+
+            font-size: 11px;
+            font-weight: 900;
+
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
         }
 
         .hero h1 {
-            margin-top: 18px;
-            font-size: clamp(30px, 4vw, 50px);
+            margin-top: 16px;
+
+            max-width: 820px;
+
+            font-size:
+                clamp(30px, 4.4vw, 58px);
+
             line-height: 1.02;
+
             letter-spacing: -2px;
-            font-weight: 900;
+
+            font-weight: 950;
         }
 
-        .hero h1 span {
+        .gradient-text {
             background:
                 linear-gradient(
                     90deg,
-                    #60a5fa,
-                    #a78bfa,
-                    #c084fc
+                    var(--blue-bright),
+                    var(--purple-bright)
                 );
+
             -webkit-background-clip: text;
             background-clip: text;
+
             color: transparent;
         }
 
         .hero p {
-            max-width: 680px;
+            max-width: 760px;
+
             margin-top: 14px;
-            color: #9699ad;
+
+            color: var(--muted);
+
+            font-size: 15px;
             line-height: 1.7;
-            font-size: 14px;
         }
 
-        .hero-badge {
-            position: absolute;
-            right: 38px;
-            bottom: 32px;
+        .hero-actions {
             display: flex;
-            align-items: center;
-            gap: 9px;
-            padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 100px;
-            background: rgba(255,255,255,.04);
-            color: #c5c8d8;
-            font-size: 11px;
-            font-weight: 700;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            margin-top: 22px;
         }
 
-        .online-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #22c55e;
-            box-shadow: 0 0 14px #22c55e;
+        .hero-action {
+            min-height: 48px;
+
+            padding: 0 17px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            border-radius: 14px;
+
+            font-size: 13px;
+            font-weight: 900;
+
+            border: 1px solid rgba(255,255,255,0.09);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                border-color .2s ease;
+        }
+
+        .hero-action.primary {
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 12px 30px rgba(59,130,246,0.18);
+        }
+
+        .hero-action.secondary {
+            color: #e8e8f3;
+
+            background:
+                rgba(255,255,255,0.045);
+        }
+
+        .hero-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-action.secondary:hover {
+            border-color:
+                rgba(139,92,246,0.38);
+
+            box-shadow:
+                0 10px 22px rgba(139,92,246,0.10);
         }
 
         /* =====================================================
            STATS
-        ====================================================== */
+        ===================================================== */
 
         .stats-grid {
             display: grid;
+
             grid-template-columns:
                 repeat(4, minmax(0, 1fr));
+
             gap: 16px;
-            margin-top: 20px;
+
+            margin-bottom: 24px;
         }
 
         .stat-card {
             position: relative;
-            overflow: hidden;
-            min-height: 150px;
+
+            min-height: 160px;
+
             padding: 22px;
-            border: 1px solid rgba(255,255,255,.07);
-            border-radius: 22px;
-            background: rgba(14,14,24,.68);
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.045),
+                    rgba(255,255,255,0.018)
+                );
+
             box-shadow:
-                0 20px 55px rgba(0,0,0,.18),
-                inset 0 1px rgba(255,255,255,.025);
-            transition: .3s ease;
+                var(--shadow);
         }
 
-        .stat-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(129,140,248,.2);
-            box-shadow:
-                0 25px 60px rgba(0,0,0,.3);
+        .stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+            height: 120px;
+
+            right: -42px;
+            bottom: -42px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(59,130,246,0.13),
+                    transparent 70%
+                );
         }
 
         .stat-icon {
             width: 42px;
             height: 42px;
-            display: grid;
-            place-items: center;
+
             border-radius: 13px;
-            font-size: 20px;
-            background: rgba(99,102,241,.1);
-            color: #9ca9ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.18),
+                    rgba(139,92,246,0.18)
+                );
+
+            border:
+                1px solid rgba(139,92,246,0.16);
+
+            font-size: 21px;
+
+            color: #bcd7ff;
         }
 
-        .stat-label {
-            margin-top: 17px;
-            color: #777b91;
-            font-size: 11px;
+        .stat-card h3 {
+            margin-top: 20px;
+
+            font-size: 30px;
+
+            line-height: 1;
+        }
+
+        .stat-card p {
+            margin-top: 8px;
+
+            color:
+                var(--muted);
+
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: .8px;
         }
 
-        .stat-value {
-            margin-top: 5px;
-            font-size: 27px;
-            font-weight: 900;
-            letter-spacing: -.8px;
-        }
-
-        .stat-card::after {
-            content: "";
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            right: -40px;
-            bottom: -45px;
-            border-radius: 50%;
-            background: rgba(99,102,241,.08);
-            filter: blur(5px);
-        }
-
         /* =====================================================
            SECTION
-        ====================================================== */
+        ===================================================== */
 
         .section {
-            margin-top: 22px;
-            padding: 23px;
-            border: 1px solid rgba(255,255,255,.07);
-            border-radius: 24px;
-            background: rgba(13,13,23,.68);
+            border-radius: 22px;
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            background:
+                rgba(14,14,26,0.78);
+
             box-shadow:
-                0 20px 60px rgba(0,0,0,.18);
+                var(--shadow);
+
+            overflow: hidden;
+
+            margin-bottom: 24px;
         }
 
-        .section-header {
+        .section-head {
+            padding: 20px 22px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 15px;
-            margin-bottom: 20px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.06);
         }
 
         .section-title {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 11px;
         }
 
         .section-title-icon {
-            width: 36px;
-            height: 36px;
-            display: grid;
-            place-items: center;
-            border-radius: 11px;
-            color: #9faaff;
-            background: rgba(99,102,241,.1);
-            font-size: 18px;
+            width: 40px;
+            height: 40px;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.17),
+                    rgba(139,92,246,0.17)
+                );
+
+            border:
+                1px solid rgba(139,92,246,0.18);
+
+            font-size: 19px;
         }
 
         .section-title h2 {
-            font-size: 16px;
-            font-weight: 850;
-            letter-spacing: -.3px;
+            font-size: 17px;
+            font-weight: 900;
         }
 
         .section-title p {
             margin-top: 3px;
-            color: #686c80;
+
             font-size: 11px;
-        }
 
-        .section-actions {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .refresh-btn {
-            height: 38px;
-            padding: 0 13px;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 11px;
-            color: #aeb2c4;
-            background: rgba(255,255,255,.035);
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: .2s ease;
-        }
-
-        .refresh-btn:hover {
-            color: white;
-            background: rgba(255,255,255,.07);
-        }
-
-        .refresh-btn i {
-            font-size: 16px;
+            color:
+                var(--muted-2);
         }
 
         /* =====================================================
-           FILTER BAR
-        ====================================================== */
+           CONTROLS
+        ===================================================== */
 
-        .filter-bar {
+        .controls {
+            padding: 16px 22px;
+
             display: grid;
-            grid-template-columns: 1.5fr .8fr .8fr;
+
+            grid-template-columns:
+                minmax(220px, 1fr)
+                180px
+                160px
+                auto;
+
             gap: 10px;
-            margin-bottom: 17px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.05);
         }
 
-        .search-box {
-            position: relative;
+        .field {
+            min-height: 45px;
+
+            display: flex;
+            align-items: center;
+
+            border-radius: 13px;
+
+            overflow: hidden;
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            background:
+                rgba(255,255,255,0.035);
         }
 
-        .search-box i {
-            position: absolute;
-            left: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #676b80;
-            font-size: 18px;
+        .field i {
+            margin-left: 12px;
+
+            font-size: 19px;
+
+            color:
+                var(--muted-2);
         }
 
-        .search-box input,
-        .filter-select {
+        .field input,
+        .field select {
             width: 100%;
-            height: 43px;
-            padding: 0 13px;
-            border: 1px solid rgba(255,255,255,.07);
-            border-radius: 12px;
-            outline: none;
-            color: #f5f5ff;
-            background: rgba(255,255,255,.035);
-            font-size: 12px;
-            transition: .2s ease;
+
+            height: 45px;
+
+            padding:
+                0 12px;
+
+            border: 0;
+            outline: 0;
+
+            background: transparent;
+
+            color: #ffffff;
+
+            font-size: 13px;
         }
 
-        .search-box input {
-            padding-left: 40px;
-        }
-
-        .search-box input::placeholder {
-            color: #5f6275;
-        }
-
-        .search-box input:focus,
-        .filter-select:focus {
-            border-color: rgba(99,102,241,.5);
-            background: rgba(99,102,241,.05);
-        }
-
-        .filter-select {
+        .field select {
+            appearance: none;
             cursor: pointer;
         }
 
-        .filter-select option {
-            color: white;
-            background: #11111c;
+        .field input::placeholder {
+            color:
+                #6f6f82;
+        }
+
+        .field select option {
+            background: #11111f;
+            color: #fff;
+        }
+
+        .refresh-btn {
+            min-height: 45px;
+
+            padding: 0 16px;
+
+            border-radius: 13px;
+
+            border:
+                1px solid rgba(59,130,246,0.30);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,0.14),
+                    rgba(139,92,246,0.14)
+                );
+
+            color:
+                #dbeafe;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            border-color:
+                rgba(139,92,246,0.45);
+
+            box-shadow:
+                0 10px 25px rgba(139,92,246,0.12);
         }
 
         /* =====================================================
            TABLE
-        ====================================================== */
+        ===================================================== */
 
         .table-wrap {
             overflow-x: auto;
-            border: 1px solid rgba(255,255,255,.055);
-            border-radius: 16px;
         }
 
         table {
             width: 100%;
-            min-width: 950px;
             border-collapse: collapse;
+
+            min-width: 920px;
         }
 
-        thead {
-            background: rgba(255,255,255,.025);
-        }
+        thead th {
+            padding:
+                14px 18px;
 
-        th {
-            padding: 14px 16px;
-            color: #666a7e;
-            border-bottom: 1px solid rgba(255,255,255,.06);
-            font-size: 10px;
-            font-weight: 800;
             text-align: left;
+
+            font-size: 10px;
+
+            color:
+                var(--muted-2);
+
             text-transform: uppercase;
-            letter-spacing: .8px;
+            letter-spacing: 1px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.06);
         }
 
-        td {
-            padding: 15px 16px;
-            border-bottom: 1px solid rgba(255,255,255,.045);
-            color: #c9cbda;
-            font-size: 12px;
-            vertical-align: middle;
-        }
+        tbody td {
+            padding:
+                15px 18px;
 
-        tbody tr {
-            transition: .2s ease;
+            font-size: 13px;
+
+            color:
+                #ededf5;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.045);
         }
 
         tbody tr:hover {
-            background: rgba(99,102,241,.035);
+            background:
+                rgba(59,130,246,0.025);
         }
 
-        tbody tr:last-child td {
-            border-bottom: 0;
+        .empty-row {
+            text-align: center !important;
+
+            padding:
+                44px 20px !important;
+
+            color:
+                var(--muted-2) !important;
         }
 
-        .customer-name {
-            color: white;
-            font-weight: 750;
+        .booking-name {
+            font-weight: 850;
         }
 
-        .customer-email {
-            margin-top: 3px;
-            color: #666a7d;
-            font-size: 10px;
-        }
+        .booking-sub {
+            margin-top: 4px;
 
-        .salon-name {
-            color: #c9ccff;
-            font-weight: 700;
-        }
+            color:
+                var(--muted-2);
 
-        .service-name {
-            color: #e3e4ec;
-            font-weight: 650;
-        }
-
-        .price {
-            color: #a5f3c0;
-            font-weight: 800;
-        }
-
-        .date-main {
-            color: #e1e2eb;
-            font-weight: 650;
-        }
-
-        .date-sub {
-            margin-top: 3px;
-            color: #65697c;
-            font-size: 10px;
+            font-size: 11px;
         }
 
         /* =====================================================
-           STATUS
-        ====================================================== */
+           STATUS BADGES
+        ===================================================== */
 
         .status {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 9px;
-            border-radius: 100px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: capitalize;
-        }
 
-        .status::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
+            padding:
+                7px 10px;
+
+            border-radius: 999px;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            text-transform: uppercase;
+
+            letter-spacing: .65px;
+
+            border: 1px solid transparent;
         }
 
         .status.pending {
-            color: #fbbf24;
-            background: rgba(251,191,36,.09);
-        }
+            color: #fde68a;
 
-        .status.pending::before {
-            background: #fbbf24;
+            background:
+                rgba(245,158,11,0.10);
+
+            border-color:
+                rgba(245,158,11,0.20);
         }
 
         .status.approved {
-            color: #4ade80;
-            background: rgba(74,222,128,.09);
-        }
+            color: #86efac;
 
-        .status.approved::before {
-            background: #4ade80;
+            background:
+                rgba(34,197,94,0.10);
+
+            border-color:
+                rgba(34,197,94,0.20);
         }
 
         .status.declined {
-            color: #fb7185;
-            background: rgba(251,113,133,.09);
-        }
+            color: #fca5a5;
 
-        .status.declined::before {
-            background: #fb7185;
+            background:
+                rgba(239,68,68,0.10);
+
+            border-color:
+                rgba(239,68,68,0.20);
         }
 
         .status.completed {
-            color: #60a5fa;
-            background: rgba(96,165,250,.09);
+            color: #93c5fd;
+
+            background:
+                rgba(59,130,246,0.10);
+
+            border-color:
+                rgba(59,130,246,0.22);
         }
 
-        .status.completed::before {
-            background: #60a5fa;
-        }
+        .status-select {
+            min-height: 36px;
 
-        /* =====================================================
-           ACTIONS
-        ====================================================== */
+            padding: 0 10px;
 
-        .action-select {
-            min-width: 105px;
-            height: 34px;
-            padding: 0 8px;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 9px;
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            background:
+                rgba(255,255,255,0.045);
+
+            color: #fff;
+
             outline: none;
-            color: #bfc2d1;
-            background: rgba(255,255,255,.035);
-            font-size: 10px;
-            cursor: pointer;
-        }
 
-        .action-select option {
-            color: white;
-            background: #11111c;
-        }
-
-        /* =====================================================
-           EMPTY STATE
-        ====================================================== */
-
-        .empty-state {
-            padding: 60px 20px;
-            text-align: center;
-            color: #686c80;
-        }
-
-        .empty-icon {
-            width: 64px;
-            height: 64px;
-            margin: auto;
-            display: grid;
-            place-items: center;
-            border-radius: 20px;
-            color: #777ca0;
-            background: rgba(255,255,255,.035);
-            font-size: 28px;
-        }
-
-        .empty-state h3 {
-            margin-top: 15px;
-            color: #c8cad7;
-            font-size: 15px;
-        }
-
-        .empty-state p {
-            margin-top: 6px;
             font-size: 11px;
+            font-weight: 800;
+        }
+
+        .status-select option {
+            background: #11111f;
         }
 
         /* =====================================================
            LOWER GRID
-        ====================================================== */
+        ===================================================== */
 
         .lower-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 24px;
         }
 
-        .mini-list {
-            display: grid;
-            gap: 10px;
+        .list {
+            padding: 8px 0;
         }
 
-        .mini-card {
+        .list-item {
+            padding:
+                15px 20px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            padding: 13px;
-            border: 1px solid rgba(255,255,255,.055);
-            border-radius: 14px;
-            background: rgba(255,255,255,.025);
+
+            gap: 15px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.045);
         }
 
-        .mini-left {
+        .list-item:last-child {
+            border-bottom: 0;
+        }
+
+        .list-main {
+            min-width: 0;
+        }
+
+        .list-title {
+            font-size: 13px;
+            font-weight: 850;
+        }
+
+        .list-meta {
+            margin-top: 4px;
+
+            color:
+                var(--muted-2);
+
+            font-size: 11px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-pill {
+            flex-shrink: 0;
+
+            padding:
+                6px 9px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(59,130,246,0.09);
+
+            border:
+                1px solid rgba(59,130,246,0.18);
+
+            color:
+                #a7ccff;
+
+            font-size: 9px;
+            font-weight: 900;
+
+            text-transform: uppercase;
+        }
+
+        /* =====================================================
+           ACCESS DENIED
+        ===================================================== */
+
+        #accessDenied {
+            display: none;
+
+            min-height: 65vh;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+        }
+
+        .denied-card {
+            width: min(520px, 100%);
+
+            text-align: center;
+
+            padding: 38px 28px;
+
+            border-radius: 24px;
+
+            border:
+                1px solid rgba(239,68,68,0.20);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(239,68,68,0.06),
+                    rgba(255,255,255,0.02)
+                );
+
+            box-shadow:
+                var(--shadow);
+        }
+
+        .denied-icon {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 22px;
+
             display: flex;
             align-items: center;
-            gap: 11px;
-            min-width: 0;
+            justify-content: center;
+
+            background:
+                rgba(239,68,68,0.10);
+
+            border:
+                1px solid rgba(239,68,68,0.18);
+
+            color:
+                #fca5a5;
+
+            font-size: 34px;
         }
 
-        .mini-icon {
-            flex: 0 0 auto;
-            width: 38px;
-            height: 38px;
-            display: grid;
-            place-items: center;
-            border-radius: 11px;
-            color: #aeb8ff;
-            background: rgba(99,102,241,.09);
-            font-size: 17px;
+        .denied-card h2 {
+            font-size: 25px;
         }
 
-        .mini-info {
-            min-width: 0;
+        .denied-card p {
+            margin-top: 9px;
+
+            color:
+                var(--muted);
+
+            line-height: 1.6;
+
+            font-size: 14px;
         }
 
-        .mini-title {
-            overflow: hidden;
-            color: #d7d9e3;
-            font-size: 12px;
-            font-weight: 750;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .denied-btn {
+            margin-top: 22px;
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            min-height: 46px;
+
+            padding: 0 17px;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            color: #fff;
+
+            font-size: 13px;
+            font-weight: 900;
         }
 
-        .mini-sub {
-            margin-top: 3px;
-            overflow: hidden;
-            color: #65697b;
-            font-size: 10px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+        /* =====================================================
+           FOOTER
+        ===================================================== */
 
-        .mini-value {
-            flex: 0 0 auto;
-            color: #9da5ff;
+        footer {
+            padding: 30px 0 10px;
+
+            text-align: center;
+
+            color:
+                var(--muted-2);
+
             font-size: 11px;
-            font-weight: 800;
+        }
+
+        footer strong {
+            color:
+                #aebfff;
         }
 
         /* =====================================================
            TOAST
-        ====================================================== */
+        ===================================================== */
 
         #toastContainer {
             position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 9998;
+
+            right: 18px;
+            bottom: 18px;
+
+            z-index: 99999;
+
             display: flex;
+
             flex-direction: column;
+
             gap: 10px;
-            pointer-events: none;
+
+            width:
+                min(370px, calc(100vw - 36px));
         }
 
         .toast {
-            width: min(360px, calc(100vw - 40px));
-            padding: 14px;
             display: flex;
             align-items: flex-start;
+
             gap: 11px;
-            border: 1px solid rgba(255,255,255,.08);
+
+            padding: 14px 15px;
+
             border-radius: 15px;
-            background: rgba(18,18,29,.94);
-            box-shadow: 0 20px 50px rgba(0,0,0,.4);
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            background:
+                rgba(17,17,31,0.96);
+
             backdrop-filter: blur(20px);
-            animation: toastIn .3s ease;
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.35);
+
+            animation:
+                toastIn .25s ease;
         }
 
-        .toast-icon {
-            width: 32px;
-            height: 32px;
-            flex: 0 0 auto;
-            display: grid;
-            place-items: center;
-            border-radius: 10px;
-            font-size: 17px;
+        .toast i {
+            margin-top: 1px;
+
+            font-size: 20px;
         }
 
-        .toast.success .toast-icon {
+        .toast.success i {
             color: #4ade80;
-            background: rgba(74,222,128,.1);
         }
 
-        .toast.error .toast-icon {
-            color: #fb7185;
-            background: rgba(251,113,133,.1);
+        .toast.error i {
+            color: #f87171;
         }
 
-        .toast.info .toast-icon {
+        .toast.info i {
             color: #60a5fa;
-            background: rgba(96,165,250,.1);
         }
 
-        .toast-title {
-            color: white;
+        .toast-text {
+            color: #ededf7;
+
             font-size: 12px;
-            font-weight: 800;
-        }
-
-        .toast-message {
-            margin-top: 3px;
-            color: #777b90;
-            font-size: 10px;
             line-height: 1.45;
         }
 
         @keyframes toastIn {
             from {
                 opacity: 0;
-                transform: translateY(12px) scale(.97);
+                transform: translateY(10px) scale(.98);
             }
 
             to {
@@ -1106,231 +1519,144 @@
         }
 
         /* =====================================================
-           ACCESS DENIED
-        ====================================================== */
-
-        #accessDenied {
-            display: none;
-            min-height: 70vh;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-        }
-
-        .denied-box {
-            max-width: 470px;
-            width: 100%;
-            padding: 40px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,.08);
-            border-radius: 26px;
-            background: rgba(15,15,25,.8);
-            box-shadow: 0 30px 80px rgba(0,0,0,.4);
-        }
-
-        .denied-icon {
-            width: 72px;
-            height: 72px;
-            margin: auto;
-            display: grid;
-            place-items: center;
-            border-radius: 22px;
-            color: #fb7185;
-            background: rgba(251,113,133,.08);
-            font-size: 31px;
-        }
-
-        .denied-box h2 {
-            margin-top: 20px;
-            font-size: 24px;
-        }
-
-        .denied-box p {
-            margin-top: 10px;
-            color: #777b90;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        .denied-btn {
-            margin-top: 24px;
-            height: 45px;
-            padding: 0 20px;
-            border: 0;
-            border-radius: 13px;
-            color: white;
-            background: linear-gradient(
-                135deg,
-                #2563eb,
-                #7c3aed
-            );
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        /* =====================================================
-           FOOTER
-        ====================================================== */
-
-        footer {
-            padding: 30px 0 0;
-            text-align: center;
-            color: #4f5264;
-            font-size: 10px;
-        }
-
-        footer strong {
-            color: #73778d;
-        }
-
-        /* =====================================================
            RESPONSIVE
-        ====================================================== */
+        ===================================================== */
 
-        @media (max-width: 1050px) {
+        @media (max-width: 1080px) {
+            .desktop-nav {
+                gap: 7px;
+            }
+
+            .nav-link,
+            .logout-top {
+                padding: 0 12px;
+            }
 
             .stats-grid {
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
             }
 
-            .lower-grid {
-                grid-template-columns: 1fr;
+            .controls {
+                grid-template-columns:
+                    1fr 1fr;
             }
-
         }
 
         @media (max-width: 760px) {
 
-            .topbar {
-                height: 70px;
-                padding: 0 16px;
+            .topbar-inner {
+                min-height: 72px;
             }
 
             .desktop-nav {
                 display: none;
             }
 
-            .mobile-menu-btn {
-                display: grid;
-                place-items: center;
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
-            .page {
-                width: min(100% - 24px, 1450px);
-                padding: 22px 0 45px;
+            main {
+                width:
+                    min(100% - 20px, 1400px);
+
+                padding-top: 20px;
             }
 
             .hero {
-                min-height: auto;
-                padding: 25px 21px 27px;
-                border-radius: 23px;
+                padding: 25px 20px;
+                border-radius: 22px;
             }
 
             .hero h1 {
-                font-size: 32px;
-                letter-spacing: -1.5px;
+                letter-spacing: -1.3px;
             }
 
-            .hero p {
-                font-size: 12px;
+            .hero-actions {
+                flex-direction: column;
             }
 
-            .hero-badge {
-                position: static;
-                width: fit-content;
-                margin-top: 22px;
+            .hero-action {
+                width: 100%;
             }
 
             .stats-grid {
                 grid-template-columns:
                     repeat(2, minmax(0, 1fr));
+
                 gap: 10px;
             }
 
             .stat-card {
-                min-height: 135px;
+                min-height: 145px;
                 padding: 17px;
-                border-radius: 18px;
+                border-radius: 17px;
             }
 
-            .stat-value {
-                font-size: 23px;
+            .stat-card h3 {
+                font-size: 26px;
             }
 
             .section {
-                padding: 16px;
-                border-radius: 19px;
+                border-radius: 18px;
             }
 
-            .section-header {
-                align-items: flex-start;
+            .section-head {
+                padding: 17px;
             }
 
-            .section-title h2 {
-                font-size: 14px;
-            }
-
-            .section-actions {
-                flex-shrink: 0;
-            }
-
-            .filter-bar {
+            .controls {
                 grid-template-columns: 1fr;
+
+                padding: 14px 16px;
             }
 
-            .table-wrap {
-                margin: 0 -2px;
-            }
+            .lower-grid {
+                grid-template-columns: 1fr;
 
+                gap: 16px;
+            }
         }
 
         @media (max-width: 430px) {
 
-            .brand-sub {
+            .brand-subtitle {
                 display: none;
             }
 
-            .brand-name {
-                font-size: 14px;
+            .brand-title {
+                font-size: 15px;
             }
 
             .brand-icon {
-                width: 39px;
-                height: 39px;
-                border-radius: 12px;
-            }
-
-            .hero h1 {
-                font-size: 29px;
+                width: 40px;
+                height: 40px;
             }
 
             .stats-grid {
-                gap: 8px;
+                grid-template-columns: 1fr 1fr;
             }
 
-            .stat-card {
-                padding: 14px;
+            .stat-card p {
+                font-size: 10px;
             }
 
-            .stat-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-
-            .stat-label {
+            .hero-badge {
                 font-size: 9px;
             }
 
-            .stat-value {
-                font-size: 21px;
+            .hero p {
+                font-size: 13px;
             }
 
+            .section-title p {
+                display: none;
+            }
         }
-
     </style>
-
 </head>
 
 <body>
@@ -1340,276 +1666,291 @@
     ====================================================== -->
 
     <div id="loadingScreen">
+        <div class="loader-box">
 
-        <div class="loading-box">
-
-            <div class="loading-logo">
+            <div class="loader-logo">
                 <i class="bx bx-crown"></i>
             </div>
 
-            <div class="loading-title">
-                K@si Web
-            </div>
+            <h2>K@si Admin</h2>
 
-            <div class="loading-text">
-                Securing your admin session...
-            </div>
-
-            <div class="loading-line"></div>
+            <p>
+                Securing your command center...
+            </p>
 
         </div>
-
     </div>
 
 
     <!-- =====================================================
-         TOP NAV
+         TOPBAR
     ====================================================== -->
 
     <header class="topbar">
 
-        <a href="admin.html" class="brand">
+        <div class="topbar-inner">
 
-            <div class="brand-icon">
-                <i class="bx bx-crown"></i>
-            </div>
-
-            <div class="brand-text">
-
-                <div class="brand-name">
-                    K@si Web
+            <a
+                href="admin.html"
+                class="brand"
+                aria-label="K@si Admin"
+            >
+                <div class="brand-icon">
+                    <i class="bx bx-crown"></i>
                 </div>
 
-                <div class="brand-sub">
-                    Admin Control
+                <div class="brand-text">
+                    <span class="brand-title">
+                        K@si Web
+                    </span>
+
+                    <span class="brand-subtitle">
+                        Admin Command Center
+                    </span>
                 </div>
-
-            </div>
-
-        </a>
+            </a>
 
 
-        <nav class="desktop-nav">
+            <!-- Desktop Navigation -->
+
+            <nav
+                class="desktop-nav"
+                aria-label="Admin navigation"
+            >
+
+                <a
+                    href="home.html"
+                    class="nav-link"
+                >
+                    <i class="bx bx-home-alt-2"></i>
+                    <span>Home</span>
+                </a>
+
+                <a
+                    href="salons.html"
+                    class="nav-link"
+                >
+                    <i class="bx bx-store"></i>
+                    <span>Salons</span>
+                </a>
+
+                <a
+                    href="admin.html"
+                    class="nav-link active"
+                    aria-current="page"
+                >
+                    <i class="bx bx-shield-quarter"></i>
+                    <span>Admin</span>
+                </a>
+
+                <button
+                    type="button"
+                    class="logout-top"
+                    id="logoutBtn"
+                >
+                    <i class="bx bx-log-out"></i>
+                    <span>Logout</span>
+                </button>
+
+            </nav>
+
+
+            <!-- Mobile Menu Button -->
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+                <i class="bx bx-menu"></i>
+            </button>
+
+        </div>
+
+
+        <!-- Mobile Navigation -->
+
+        <nav
+            class="mobile-menu"
+            id="mobileMenu"
+            aria-label="Mobile admin navigation"
+        >
 
             <a
                 href="home.html"
-                class="nav-link"
+                class="mobile-nav-link"
             >
-                <i class="bx bx-home"></i>
-                Home
+                <i class="bx bx-home-alt-2"></i>
+                <span>Home</span>
             </a>
 
             <a
                 href="salons.html"
-                class="nav-link"
+                class="mobile-nav-link"
             >
-                <i class="bx bx-cut"></i>
-                Salons
+                <i class="bx bx-store"></i>
+                <span>Salons</span>
             </a>
 
             <a
                 href="admin.html"
-                class="nav-link active"
+                class="mobile-nav-link active"
+                aria-current="page"
             >
                 <i class="bx bx-shield-quarter"></i>
-                Admin
+                <span>Admin Dashboard</span>
             </a>
 
             <button
-                class="logout-top"
-                id="logoutBtn"
+                type="button"
+                class="mobile-logout"
+                id="mobileLogoutBtn"
             >
                 <i class="bx bx-log-out"></i>
-                Logout
+                <span>Logout</span>
             </button>
 
         </nav>
-
-
-        <button
-            class="mobile-menu-btn"
-            id="mobileMenuBtn"
-            aria-label="Open menu"
-        >
-            <i class="bx bx-menu"></i>
-        </button>
 
     </header>
 
 
     <!-- =====================================================
-         MOBILE MENU
+         ADMIN CONTENT
     ====================================================== -->
 
-    <div
-        class="mobile-menu"
-        id="mobileMenu"
-    >
+    <main id="adminContent">
 
-        <a href="home.html">
-            <i class="bx bx-home"></i>
-            Home
-        </a>
-
-        <a href="salons.html">
-            <i class="bx bx-cut"></i>
-            Salons
-        </a>
-
-        <a href="admin.html">
-            <i class="bx bx-shield-quarter"></i>
-            Admin Dashboard
-        </a>
-
-        <button id="mobileLogoutBtn">
-            <i class="bx bx-log-out"></i>
-            Logout
-        </button>
-
-    </div>
-
-
-    <!-- =====================================================
-         MAIN ADMIN
-    ====================================================== -->
-
-    <main
-        class="page"
-        id="adminContent"
-    >
-
-        <!-- =================================================
-             HERO
-        ================================================== -->
+        <!-- Hero -->
 
         <section class="hero">
 
             <div class="hero-content">
 
-                <div class="eyebrow">
+                <span class="hero-badge">
                     <i class="bx bx-shield-quarter"></i>
-                    K@si Command Center
-                </div>
+                    Elite Admin Access
+                </span>
 
                 <h1>
                     Welcome to the
-                    <span>Admin Hub.</span>
+                    <span class="gradient-text">
+                        K@si Command Center.
+                    </span>
                 </h1>
 
                 <p>
-                    Manage the K@si Web marketplace from one premium
-                    control center. Monitor bookings, salons and users
-                    while keeping the experience smooth for everyone.
+                    Monitor bookings, manage salons, track users,
+                    and keep the entire K@si Web marketplace
+                    running smoothly from one powerful dashboard.
                 </p>
 
-            </div>
+                <div class="hero-actions">
 
-            <div class="hero-badge">
+                    <a
+                        href="home.html"
+                        class="hero-action secondary"
+                    >
+                        <i class="bx bx-home-alt-2"></i>
+                        Go Home
+                    </a>
 
-                <span class="online-dot"></span>
+                    <a
+                        href="salons.html"
+                        class="hero-action primary"
+                    >
+                        <i class="bx bx-store"></i>
+                        View Salons
+                    </a>
 
-                Admin systems online
+                </div>
 
             </div>
 
         </section>
 
 
-        <!-- =================================================
-             STATS
-        ================================================== -->
+        <!-- Stats -->
 
         <section class="stats-grid">
 
-            <div class="stat-card">
+            <article class="stat-card">
 
                 <div class="stat-icon">
                     <i class="bx bx-calendar-check"></i>
                 </div>
 
-                <div class="stat-label">
-                    Total Bookings
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalBookings"
-                >
+                <h3 id="totalBookings">
                     0
-                </div>
+                </h3>
 
-            </div>
+                <p>
+                    Total Bookings
+                </p>
+
+            </article>
 
 
-            <div class="stat-card">
+            <article class="stat-card">
 
                 <div class="stat-icon">
                     <i class="bx bx-time-five"></i>
                 </div>
 
-                <div class="stat-label">
-                    Pending
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="pendingBookings"
-                >
+                <h3 id="pendingBookings">
                     0
-                </div>
+                </h3>
 
-            </div>
+                <p>
+                    Pending
+                </p>
+
+            </article>
 
 
-            <div class="stat-card">
+            <article class="stat-card">
 
                 <div class="stat-icon">
-                    <i class="bx bx-cut"></i>
+                    <i class="bx bx-store"></i>
                 </div>
 
-                <div class="stat-label">
-                    Salons
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalSalons"
-                >
+                <h3 id="totalSalons">
                     0
-                </div>
+                </h3>
 
-            </div>
+                <p>
+                    Salons
+                </p>
+
+            </article>
 
 
-            <div class="stat-card">
+            <article class="stat-card">
 
                 <div class="stat-icon">
                     <i class="bx bx-group"></i>
                 </div>
 
-                <div class="stat-label">
-                    Users
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="totalUsers"
-                >
+                <h3 id="totalUsers">
                     0
-                </div>
+                </h3>
 
-            </div>
+                <p>
+                    Users
+                </p>
+
+            </article>
 
         </section>
 
 
-        <!-- =================================================
-             BOOKINGS
-        ================================================== -->
+        <!-- Booking Command Center -->
 
         <section class="section">
 
-            <div class="section-header">
+            <div class="section-head">
 
                 <div class="section-title">
 
@@ -1618,45 +1959,30 @@
                     </div>
 
                     <div>
-
                         <h2>
                             Booking Command Center
                         </h2>
 
                         <p>
-                            Monitor and manage every booking
+                            Monitor and manage marketplace bookings.
                         </p>
-
                     </div>
-
-                </div>
-
-
-                <div class="section-actions">
-
-                    <button
-                        class="refresh-btn"
-                        id="refreshBtn"
-                    >
-                        <i class="bx bx-refresh"></i>
-                        Refresh
-                    </button>
 
                 </div>
 
             </div>
 
 
-            <!-- FILTERS -->
+            <!-- Controls -->
 
-            <div class="filter-bar">
+            <div class="controls">
 
-                <div class="search-box">
+                <div class="field">
 
                     <i class="bx bx-search"></i>
 
                     <input
-                        type="text"
+                        type="search"
                         id="bookingSearch"
                         placeholder="Search customer, salon or service..."
                     >
@@ -1664,57 +1990,77 @@
                 </div>
 
 
-                <select
-                    class="filter-select"
-                    id="statusFilter"
+                <div class="field">
+
+                    <i class="bx bx-filter-alt"></i>
+
+                    <select id="statusFilter">
+
+                        <option value="all">
+                            All statuses
+                        </option>
+
+                        <option value="pending">
+                            Pending
+                        </option>
+
+                        <option value="approved">
+                            Approved
+                        </option>
+
+                        <option value="declined">
+                            Declined
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <i class="bx bx-calendar"></i>
+
+                    <select id="dateFilter">
+
+                        <option value="all">
+                            All dates
+                        </option>
+
+                        <option value="today">
+                            Today
+                        </option>
+
+                        <option value="upcoming">
+                            Upcoming
+                        </option>
+
+                        <option value="past">
+                            Past
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="refresh-btn"
+                    id="refreshBtn"
                 >
-
-                    <option value="all">
-                        All statuses
-                    </option>
-
-                    <option value="pending">
-                        Pending
-                    </option>
-
-                    <option value="approved">
-                        Approved
-                    </option>
-
-                    <option value="declined">
-                        Declined
-                    </option>
-
-                    <option value="completed">
-                        Completed
-                    </option>
-
-                </select>
-
-
-                <select
-                    class="filter-select"
-                    id="dateFilter"
-                >
-
-                    <option value="all">
-                        All dates
-                    </option>
-
-                    <option value="today">
-                        Today
-                    </option>
-
-                    <option value="upcoming">
-                        Upcoming
-                    </option>
-
-                </select>
+                    <i class="bx bx-refresh"></i>
+                    Refresh
+                </button>
 
             </div>
 
 
-            <!-- BOOKING TABLE -->
+            <!-- Table -->
 
             <div class="table-wrap">
 
@@ -1737,7 +2083,11 @@
                             </th>
 
                             <th>
-                                Date & Time
+                                Date
+                            </th>
+
+                            <th>
+                                Time
                             </th>
 
                             <th>
@@ -1756,10 +2106,18 @@
 
                     </thead>
 
+                    <tbody id="bookingsTableBody">
 
-                    <tbody
-                        id="bookingsTableBody"
-                    >
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="empty-row"
+                            >
+                                Loading bookings...
+                            </td>
+
+                        </tr>
 
                     </tbody>
 
@@ -1770,83 +2128,105 @@
         </section>
 
 
-        <!-- =================================================
-             LOWER INFORMATION
-        ================================================== -->
+        <!-- Lower Grid -->
 
         <div class="lower-grid">
 
-            <!-- SALONS -->
+            <!-- Salon Network -->
 
             <section class="section">
 
-                <div class="section-header">
+                <div class="section-head">
 
                     <div class="section-title">
 
                         <div class="section-title-icon">
-                            <i class="bx bx-store"></i>
+                            <i class="bx bx-store-alt"></i>
                         </div>
 
                         <div>
-
                             <h2>
                                 Salon Network
                             </h2>
 
                             <p>
-                                Latest salons on K@si
+                                Active salons on K@si.
                             </p>
-
                         </div>
 
                     </div>
 
                 </div>
 
-
                 <div
-                    class="mini-list"
-                    id="salonsList"
+                    class="list"
+                    id="salonList"
                 >
+
+                    <div class="list-item">
+
+                        <div class="list-main">
+                            <div class="list-title">
+                                Loading...
+                            </div>
+
+                            <div class="list-meta">
+                                Fetching salon network
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </section>
 
 
-            <!-- USERS -->
+            <!-- User Network -->
 
             <section class="section">
 
-                <div class="section-header">
+                <div class="section-head">
 
                     <div class="section-title">
 
                         <div class="section-title-icon">
-                            <i class="bx bx-user-circle"></i>
+                            <i class="bx bx-user"></i>
                         </div>
 
                         <div>
-
                             <h2>
                                 User Network
                             </h2>
 
                             <p>
-                                Latest registered accounts
+                                Registered K@si accounts.
                             </p>
-
                         </div>
 
                     </div>
 
                 </div>
 
-
                 <div
-                    class="mini-list"
-                    id="usersList"
+                    class="list"
+                    id="userList"
                 >
+
+                    <div class="list-item">
+
+                        <div class="list-main">
+                            <div class="list-title">
+                                Loading...
+                            </div>
+
+                            <div class="list-meta">
+                                Fetching users
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </section>
@@ -1854,12 +2234,14 @@
         </div>
 
 
+        <!-- Footer -->
+
         <footer>
-
             <strong>K@si Web</strong>
-            · Admin Command Center
-            · Built for Kasi people
-
+            &nbsp;•&nbsp;
+            Elite Admin Command Center
+            &nbsp;•&nbsp;
+            <span id="footerYear"></span>
         </footer>
 
     </main>
@@ -1871,28 +2253,28 @@
 
     <section id="accessDenied">
 
-        <div class="denied-box">
+        <div class="denied-card">
 
             <div class="denied-icon">
                 <i class="bx bx-lock-alt"></i>
             </div>
 
             <h2>
-                Admin Access Required
+                Access Denied
             </h2>
 
             <p>
-                This area is restricted to verified K@si Web
-                administrators. Please sign in with an authorized
-                admin account.
+                This area is reserved for K@si administrators.
+                Your account does not have admin permissions.
             </p>
 
-            <button
+            <a
+                href="index.html"
                 class="denied-btn"
-                onclick="window.location.href='index.html'"
             >
+                <i class="bx bx-home"></i>
                 Return to K@si
-            </button>
+            </a>
 
         </div>
 
@@ -1914,13 +2296,17 @@
 
         import {
             initializeApp
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        } from
+        "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+
 
         import {
             getAuth,
             onAuthStateChanged,
             signOut
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+        } from
+        "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
 
         import {
             getFirestore,
@@ -1931,22 +2317,40 @@
             onSnapshot,
             updateDoc,
             serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        } from
+        "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 
         /* =====================================================
            FIREBASE CONFIG
-        ====================================================== */
+           KEEP YOUR EXISTING CONFIG VALUES HERE
+        ===================================================== */
 
         const firebaseConfig = {
-            apiKey: "YOUR_EXISTING_FIREBASE_API_KEY",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.firebasestorage.app",
-            messagingSenderId: "YOUR_EXISTING_MESSAGING_SENDER_ID",
-            appId: "YOUR_EXISTING_APP_ID"
+
+            apiKey:
+                "YOUR_EXISTING_FIREBASE_API_KEY",
+
+            authDomain:
+                "kasi-web-d073f.firebaseapp.com",
+
+            projectId:
+                "kasi-web-d073f",
+
+            storageBucket:
+                "kasi-web-d073f.firebasestorage.app",
+
+            messagingSenderId:
+                "YOUR_EXISTING_MESSAGING_SENDER_ID",
+
+            appId:
+                "YOUR_EXISTING_APP_ID"
         };
 
+
+        /* =====================================================
+           INITIALIZE
+        ===================================================== */
 
         const app = initializeApp(firebaseConfig);
 
@@ -1957,7 +2361,7 @@
 
         /* =====================================================
            ELEMENTS
-        ====================================================== */
+        ===================================================== */
 
         const loadingScreen =
             document.getElementById("loadingScreen");
@@ -1974,14 +2378,14 @@
         const mobileLogoutBtn =
             document.getElementById("mobileLogoutBtn");
 
-        const mobileMenuBtn =
-            document.getElementById("mobileMenuBtn");
+        const menuToggle =
+            document.getElementById("menuToggle");
 
         const mobileMenu =
             document.getElementById("mobileMenu");
 
-        const bookingsTableBody =
-            document.getElementById("bookingsTableBody");
+        const refreshBtn =
+            document.getElementById("refreshBtn");
 
         const bookingSearch =
             document.getElementById("bookingSearch");
@@ -1992,39 +2396,46 @@
         const dateFilter =
             document.getElementById("dateFilter");
 
-        const refreshBtn =
-            document.getElementById("refreshBtn");
+        const bookingsTableBody =
+            document.getElementById("bookingsTableBody");
+
+        const salonList =
+            document.getElementById("salonList");
+
+        const userList =
+            document.getElementById("userList");
 
 
         /* =====================================================
            STATE
-        ====================================================== */
+        ===================================================== */
 
         let currentUser = null;
 
         let allBookings = [];
-
         let allSalons = [];
-
         let allUsers = [];
 
         let unsubscribeBookings = null;
 
 
         /* =====================================================
+           YEAR
+        ===================================================== */
+
+        document.getElementById(
+            "footerYear"
+        ).textContent = new Date().getFullYear();
+
+
+        /* =====================================================
            TOAST
-        ====================================================== */
+        ===================================================== */
 
         function showToast(
-            title,
             message,
             type = "info"
         ) {
-
-            const container =
-                document.getElementById(
-                    "toastContainer"
-                );
 
             const toast =
                 document.createElement("div");
@@ -2043,26 +2454,15 @@
             }
 
             toast.innerHTML = `
-
-                <div class="toast-icon">
-                    <i class="bx ${icon}"></i>
+                <i class="bx ${icon}"></i>
+                <div class="toast-text">
+                    ${escapeHtml(message)}
                 </div>
-
-                <div>
-
-                    <div class="toast-title">
-                        ${escapeHtml(title)}
-                    </div>
-
-                    <div class="toast-message">
-                        ${escapeHtml(message)}
-                    </div>
-
-                </div>
-
             `;
 
-            container.appendChild(toast);
+            document
+                .getElementById("toastContainer")
+                .appendChild(toast);
 
             setTimeout(() => {
 
@@ -2074,160 +2474,194 @@
                     toast.remove();
                 }, 250);
 
-            }, 3500);
-
+            }, 3200);
         }
 
 
         /* =====================================================
            ESCAPE HTML
-        ====================================================== */
+        ===================================================== */
 
         function escapeHtml(value) {
 
-            if (value === null ||
-                value === undefined) {
+            if (value === null || value === undefined) {
                 return "";
             }
 
             return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
         }
 
 
         /* =====================================================
-           DATE HELPERS
-        ====================================================== */
+           DATE FORMAT
+        ===================================================== */
 
-        function formatDate(value) {
+        function formatDate(dateValue) {
 
-            if (!value) {
+            if (!dateValue) {
                 return "—";
             }
 
-            let date;
-
             try {
+
+                let date;
 
                 if (
-                    typeof value === "object" &&
-                    typeof value.toDate === "function"
+                    typeof dateValue === "object" &&
+                    typeof dateValue.toDate === "function"
                 ) {
-
-                    date = value.toDate();
-
-                } else if (
-                    value instanceof Date
-                ) {
-
-                    date = value;
-
-                } else {
-
-                    date = new Date(value);
-
+                    date = dateValue.toDate();
                 }
-
-            } catch {
-                return "—";
-            }
-
-            if (Number.isNaN(date.getTime())) {
-                return "—";
-            }
-
-            return date.toLocaleDateString(
-                "en-ZA",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
+                else {
+                    date = new Date(dateValue);
                 }
-            );
-
-        }
-
-
-        function formatTime(value) {
-
-            if (!value) {
-                return "";
-            }
-
-            if (
-                typeof value === "string" &&
-                value.includes(":")
-            ) {
-
-                return value;
-
-            }
-
-            try {
-
-                const date =
-                    typeof value.toDate === "function"
-                        ? value.toDate()
-                        : new Date(value);
 
                 if (Number.isNaN(date.getTime())) {
-                    return "";
+                    return "—";
                 }
 
-                return date.toLocaleTimeString(
+                return date.toLocaleDateString(
                     "en-ZA",
                     {
-                        hour: "2-digit",
-                        minute: "2-digit"
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
                     }
                 );
 
             } catch {
 
-                return "";
-
+                return "—";
             }
-
-        }
-
-
-        function bookingDateObject(booking) {
-
-            const value =
-                booking.date ||
-                booking.bookingDate ||
-                booking.appointmentDate;
-
-            if (!value) {
-                return null;
-            }
-
-            if (
-                typeof value === "object" &&
-                typeof value.toDate === "function"
-            ) {
-                return value.toDate();
-            }
-
-            const parsed =
-                new Date(value);
-
-            if (Number.isNaN(parsed.getTime())) {
-                return null;
-            }
-
-            return parsed;
-
         }
 
 
         /* =====================================================
-           STATS
-        ====================================================== */
+           TIME FORMAT
+        ===================================================== */
+
+        function formatTime(value) {
+
+            if (!value) {
+                return "—";
+            }
+
+            return String(value);
+        }
+
+
+        /* =====================================================
+           BOOKING DATE OBJECT
+        ===================================================== */
+
+        function bookingDateObject(booking) {
+
+            try {
+
+                if (booking.date) {
+
+                    const time =
+                        booking.time ||
+                        "00:00";
+
+                    const date =
+                        new Date(
+                            `${booking.date}T${time}`
+                        );
+
+                    if (!Number.isNaN(
+                        date.getTime()
+                    )) {
+                        return date;
+                    }
+                }
+
+            } catch {}
+
+            if (booking.createdAt) {
+
+                try {
+
+                    if (
+                        typeof booking.createdAt.toDate ===
+                        "function"
+                    ) {
+                        return booking.createdAt.toDate();
+                    }
+
+                    const d =
+                        new Date(
+                            booking.createdAt
+                        );
+
+                    if (!Number.isNaN(
+                        d.getTime()
+                    )) {
+                        return d;
+                    }
+
+                } catch {}
+            }
+
+            return null;
+        }
+
+
+        /* =====================================================
+           PRICE
+        ===================================================== */
+
+        function formatPrice(price) {
+
+            if (
+                price === undefined ||
+                price === null ||
+                price === ""
+            ) {
+                return "—";
+            }
+
+            const number =
+                Number(price);
+
+            if (Number.isNaN(number)) {
+                return `R${escapeHtml(price)}`;
+            }
+
+            return `R${number.toFixed(0)}`;
+        }
+
+
+        /* =====================================================
+           STATUS CLASS
+        ===================================================== */
+
+        function statusClass(status) {
+
+            const value =
+                String(
+                    status || "pending"
+                ).toLowerCase();
+
+            return [
+                "pending",
+                "approved",
+                "declined",
+                "completed"
+            ].includes(value)
+                ? value
+                : "pending";
+        }
+
+
+        /* =====================================================
+           UPDATE STATS
+        ===================================================== */
 
         function updateBookingStats() {
 
@@ -2250,14 +2684,21 @@
                 "pendingBookings"
             ).textContent = pending;
 
+            document.getElementById(
+                "totalSalons"
+            ).textContent = allSalons.length;
+
+            document.getElementById(
+                "totalUsers"
+            ).textContent = allUsers.length;
         }
 
 
         /* =====================================================
-           RENDER BOOKINGS
-        ====================================================== */
+           FILTER BOOKINGS
+        ===================================================== */
 
-        function renderBookings() {
+        function getFilteredBookings() {
 
             const search =
                 bookingSearch.value
@@ -2270,453 +2711,411 @@
             const dateMode =
                 dateFilter.value;
 
+            const now =
+                new Date();
 
-            let filtered =
-                [...allBookings];
-
-
-            /* SEARCH */
-
-            if (search) {
-
-                filtered =
-                    filtered.filter(booking => {
-
-                        const customer =
-                            booking.customerName ||
-                            booking.custName ||
-                            booking.name ||
-                            "";
-
-                        const email =
-                            booking.customerEmail ||
-                            booking.email ||
-                            "";
-
-                        const salon =
-                            booking.salonName ||
-                            "";
-
-                        const service =
-                            booking.service ||
-                            booking.serviceType ||
-                            "";
-
-                        const text =
-                            `
-                            ${customer}
-                            ${email}
-                            ${salon}
-                            ${service}
-                            `
-                            .toLowerCase();
-
-                        return text.includes(search);
-
-                    });
-
-            }
-
-
-            /* STATUS */
-
-            if (status !== "all") {
-
-                filtered =
-                    filtered.filter(booking => {
-
-                        return String(
-                            booking.status ||
-                            "pending"
-                        ).toLowerCase() === status;
-
-                    });
-
-            }
-
-
-            /* DATE */
-
-            if (dateMode !== "all") {
-
-                const today =
-                    new Date();
-
-                today.setHours(
-                    0,
-                    0,
-                    0,
-                    0
+            const startOfToday =
+                new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate()
                 );
 
-                filtered =
-                    filtered.filter(booking => {
-
-                        const date =
-                            bookingDateObject(
-                                booking
-                            );
-
-                        if (!date) {
-                            return false;
-                        }
-
-                        date.setHours(
-                            0,
-                            0,
-                            0,
-                            0
-                        );
-
-                        if (
-                            dateMode === "today"
-                        ) {
-
-                            return (
-                                date.getTime() ===
-                                today.getTime()
-                            );
-
-                        }
-
-                        if (
-                            dateMode === "upcoming"
-                        ) {
-
-                            return date >= today;
-
-                        }
-
-                        return true;
-
-                    });
-
-            }
-
-
-            /* SORT */
-
-            filtered.sort((a, b) => {
-
-                const aDate =
-                    bookingDateObject(a);
-
-                const bDate =
-                    bookingDateObject(b);
-
-                if (!aDate && !bDate) {
-                    return 0;
-                }
-
-                if (!aDate) {
-                    return 1;
-                }
-
-                if (!bDate) {
-                    return -1;
-                }
-
-                return (
-                    bDate.getTime() -
-                    aDate.getTime()
+            const endOfToday =
+                new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate(),
+                    23,
+                    59,
+                    59
                 );
 
-            });
+            return allBookings.filter(
+                booking => {
+
+                    const text =
+                        [
+
+                            booking.customerName,
+                            booking.custName,
+
+                            booking.customerEmail,
+                            booking.email,
+
+                            booking.phone,
+                            booking.custPhone,
+
+                            booking.salonName,
+                            booking.service,
+
+                            booking.serviceType
+
+                        ]
+                        .filter(Boolean)
+                        .join(" ")
+                        .toLowerCase();
+
+                    if (
+                        search &&
+                        !text.includes(search)
+                    ) {
+                        return false;
+                    }
 
 
-            /* EMPTY */
-
-            if (!filtered.length) {
-
-                bookingsTableBody.innerHTML = `
-
-                    <tr>
-
-                        <td colspan="7">
-
-                            <div class="empty-state">
-
-                                <div class="empty-icon">
-                                    <i class="bx bx-calendar-x"></i>
-                                </div>
-
-                                <h3>
-                                    No bookings found
-                                </h3>
-
-                                <p>
-                                    Try changing your filters
-                                    or search.
-                                </p>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-                return;
-
-            }
-
-
-            /* ROWS */
-
-            bookingsTableBody.innerHTML =
-                filtered.map(booking => {
-
-                    const customer =
-                        booking.customerName ||
-                        booking.custName ||
-                        booking.name ||
-                        "Customer";
-
-                    const email =
-                        booking.customerEmail ||
-                        booking.email ||
-                        booking.userEmail ||
-                        "";
-
-                    const salon =
-                        booking.salonName ||
-                        "K@si Salon";
-
-                    const service =
-                        booking.service ||
-                        booking.serviceType ||
-                        "Service";
-
-                    const price =
-                        booking.price !== undefined &&
-                        booking.price !== null
-                            ? `R${booking.price}`
-                            : "—";
-
-                    const statusValue =
+                    const bookingStatus =
                         String(
                             booking.status ||
                             "pending"
                         ).toLowerCase();
 
-                    const date =
-                        booking.date ||
-                        booking.bookingDate ||
-                        booking.appointmentDate;
-
-                    const time =
-                        booking.time ||
-                        booking.bookingTime ||
-                        booking.appointmentTime ||
-                        "";
-
-                    return `
-
-                        <tr>
-
-                            <td>
-
-                                <div class="customer-name">
-                                    ${escapeHtml(customer)}
-                                </div>
-
-                                <div class="customer-email">
-                                    ${escapeHtml(email)}
-                                </div>
-
-                            </td>
+                    if (
+                        status !== "all" &&
+                        bookingStatus !== status
+                    ) {
+                        return false;
+                    }
 
 
-                            <td>
+                    if (dateMode !== "all") {
 
-                                <div class="salon-name">
-                                    ${escapeHtml(salon)}
-                                </div>
+                        const bookingDate =
+                            bookingDateObject(
+                                booking
+                            );
 
-                            </td>
+                        if (!bookingDate) {
+                            return false;
+                        }
 
+                        if (
+                            dateMode === "today" &&
+                            (
+                                bookingDate < startOfToday ||
+                                bookingDate > endOfToday
+                            )
+                        ) {
+                            return false;
+                        }
 
-                            <td>
+                        if (
+                            dateMode === "upcoming" &&
+                            bookingDate < startOfToday
+                        ) {
+                            return false;
+                        }
 
-                                <div class="service-name">
-                                    ${escapeHtml(service)}
-                                </div>
+                        if (
+                            dateMode === "past" &&
+                            bookingDate >= startOfToday
+                        ) {
+                            return false;
+                        }
+                    }
 
-                            </td>
-
-
-                            <td>
-
-                                <div class="date-main">
-                                    ${escapeHtml(
-                                        formatDate(date)
-                                    )}
-                                </div>
-
-                                <div class="date-sub">
-                                    ${escapeHtml(
-                                        formatTime(time)
-                                    )}
-                                </div>
-
-                            </td>
-
-
-                            <td>
-
-                                <div class="price">
-                                    ${escapeHtml(price)}
-                                </div>
-
-                            </td>
-
-
-                            <td>
-
-                                <span
-                                    class="status ${escapeHtml(
-                                        statusValue
-                                    )}"
-                                >
-                                    ${escapeHtml(
-                                        statusValue
-                                    )}
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <select
-                                    class="action-select status-change"
-                                    data-id="${escapeHtml(
-                                        booking.id
-                                    )}"
-                                >
-
-                                    <option
-                                        value="pending"
-                                        ${statusValue === "pending"
-                                            ? "selected"
-                                            : ""}
-                                    >
-                                        Pending
-                                    </option>
-
-                                    <option
-                                        value="approved"
-                                        ${statusValue === "approved"
-                                            ? "selected"
-                                            : ""}
-                                    >
-                                        Approved
-                                    </option>
-
-                                    <option
-                                        value="declined"
-                                        ${statusValue === "declined"
-                                            ? "selected"
-                                            : ""}
-                                    >
-                                        Declined
-                                    </option>
-
-                                    <option
-                                        value="completed"
-                                        ${statusValue === "completed"
-                                            ? "selected"
-                                            : ""}
-                                    >
-                                        Completed
-                                    </option>
-
-                                </select>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-
-                }).join("");
-
+                    return true;
+                }
+            );
         }
 
 
         /* =====================================================
-           BOOKING STATUS UPDATE
-        ====================================================== */
+           RENDER BOOKINGS
+        ===================================================== */
 
-        bookingsTableBody.addEventListener(
-            "change",
-            async event => {
+        function renderBookings() {
 
-                const select =
-                    event.target.closest(
-                        ".status-change"
-                    );
+            const bookings =
+                getFilteredBookings();
 
-                if (!select) {
-                    return;
-                }
+            if (!bookings.length) {
 
-                const bookingId =
-                    select.dataset.id;
+                bookingsTableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="8"
+                            class="empty-row"
+                        >
+                            <i
+                                class="bx bx-calendar-x"
+                                style="
+                                    font-size:30px;
+                                    display:block;
+                                    margin-bottom:8px;
+                                "
+                            ></i>
 
-                const newStatus =
-                    select.value;
+                            No bookings found.
+                        </td>
+                    </tr>
+                `;
 
-                if (!bookingId) {
-                    return;
-                }
+                return;
+            }
 
-                try {
 
-                    await updateDoc(
-                        doc(
-                            db,
-                            "bookings",
-                            bookingId
-                        ),
-                        {
-                            status: newStatus,
-                            updatedAt:
-                                serverTimestamp(),
-                            updatedBy:
-                                currentUser.uid
+            bookingsTableBody.innerHTML =
+                bookings
+                    .map(booking => {
+
+                        const bookingId =
+                            booking.id;
+
+                        const customerName =
+                            booking.customerName ||
+                            booking.custName ||
+                            "Customer";
+
+                        const customerPhone =
+                            booking.customerPhone ||
+                            booking.custPhone ||
+                            booking.phone ||
+                            "";
+
+                        const salonName =
+                            booking.salonName ||
+                            "Salon";
+
+                        const service =
+                            booking.service ||
+                            booking.serviceType ||
+                            "Service";
+
+                        const date =
+                            booking.date ||
+                            "";
+
+                        const time =
+                            booking.time ||
+                            "";
+
+                        const price =
+                            booking.price;
+
+                        const status =
+                            String(
+                                booking.status ||
+                                "pending"
+                            ).toLowerCase();
+
+                        return `
+
+                            <tr>
+
+                                <td>
+
+                                    <div
+                                        class="booking-name"
+                                    >
+                                        ${escapeHtml(
+                                            customerName
+                                        )}
+                                    </div>
+
+                                    <div
+                                        class="booking-sub"
+                                    >
+                                        ${escapeHtml(
+                                            customerPhone
+                                        )}
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    ${escapeHtml(
+                                        salonName
+                                    )}
+                                </td>
+
+
+                                <td>
+                                    ${escapeHtml(
+                                        service
+                                    )}
+                                </td>
+
+
+                                <td>
+                                    ${escapeHtml(
+                                        formatDate(date)
+                                    )}
+                                </td>
+
+
+                                <td>
+                                    ${escapeHtml(
+                                        formatTime(time)
+                                    )}
+                                </td>
+
+
+                                <td>
+                                    ${formatPrice(price)}
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="status ${statusClass(
+                                            status
+                                        )}"
+                                    >
+                                        ${escapeHtml(
+                                            status
+                                        )}
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <select
+                                        class="status-select"
+                                        data-booking-id="${escapeHtml(
+                                            bookingId
+                                        )}"
+                                    >
+
+                                        <option
+                                            value="pending"
+                                            ${status === "pending"
+                                                ? "selected"
+                                                : ""}
+                                        >
+                                            Pending
+                                        </option>
+
+                                        <option
+                                            value="approved"
+                                            ${status === "approved"
+                                                ? "selected"
+                                                : ""}
+                                        >
+                                            Approved
+                                        </option>
+
+                                        <option
+                                            value="declined"
+                                            ${status === "declined"
+                                                ? "selected"
+                                                : ""}
+                                        >
+                                            Declined
+                                        </option>
+
+                                        <option
+                                            value="completed"
+                                            ${status === "completed"
+                                                ? "selected"
+                                                : ""}
+                                        >
+                                            Completed
+                                        </option>
+
+                                    </select>
+
+                                </td>
+
+                            </tr>
+                        `;
+                    })
+                    .join("");
+
+
+            document
+                .querySelectorAll(
+                    ".status-select"
+                )
+                .forEach(select => {
+
+                    select.addEventListener(
+                        "change",
+                        async event => {
+
+                            const bookingId =
+                                event.target.dataset
+                                    .bookingId;
+
+                            const newStatus =
+                                event.target.value;
+
+                            await updateBookingStatus(
+                                bookingId,
+                                newStatus
+                            );
                         }
                     );
+                });
+        }
 
-                    showToast(
-                        "Booking updated",
-                        `Booking status changed to ${newStatus}.`,
-                        "success"
-                    );
 
-                } catch (error) {
+        /* =====================================================
+           UPDATE BOOKING STATUS
+        ===================================================== */
 
-                    console.error(
-                        "Status update error:",
-                        error
-                    );
+        async function updateBookingStatus(
+            bookingId,
+            newStatus
+        ) {
 
-                    showToast(
-                        "Update failed",
-                        "The booking status could not be updated.",
-                        "error"
-                    );
+            if (!currentUser) {
+                showToast(
+                    "You are not signed in.",
+                    "error"
+                );
 
-                }
-
+                return;
             }
-        );
+
+            try {
+
+                await updateDoc(
+                    doc(
+                        db,
+                        "bookings",
+                        bookingId
+                    ),
+                    {
+                        status:
+                            newStatus,
+
+                        updatedAt:
+                            serverTimestamp(),
+
+                        updatedBy:
+                            currentUser.uid
+                    }
+                );
+
+
+                showToast(
+                    "Booking status updated.",
+                    "success"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Status update error:",
+                    error
+                );
+
+                showToast(
+                    "Could not update the booking.",
+                    "error"
+                );
+            }
+        }
 
 
         /* =====================================================
            LOAD SALONS
-        ====================================================== */
+        ===================================================== */
 
         async function loadSalons() {
 
@@ -2731,120 +3130,127 @@
                     );
 
                 allSalons =
-                    snapshot.docs.map(item => ({
-                        id: item.id,
-                        ...item.data()
-                    }));
-
-                document.getElementById(
-                    "totalSalons"
-                ).textContent =
-                    allSalons.length;
-
-
-                const latest =
-                    allSalons.slice(0, 5);
-
-
-                const container =
-                    document.getElementById(
-                        "salonsList"
+                    snapshot.docs.map(
+                        item => ({
+                            id: item.id,
+                            ...item.data()
+                        })
                     );
 
 
-                if (!latest.length) {
+                renderSalons();
 
-                    container.innerHTML = `
-
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="bx bx-store-alt"></i>
-                            </div>
-
-                            <h3>
-                                No salons yet
-                            </h3>
-
-                            <p>
-                                Salons will appear here.
-                            </p>
-                        </div>
-
-                    `;
-
-                    return;
-
-                }
-
-
-                container.innerHTML =
-                    latest.map(salon => {
-
-                        const name =
-                            salon.name ||
-                            "Unnamed Salon";
-
-                        const location =
-                            salon.location ||
-                            salon.area ||
-                            "Location not provided";
-
-                        return `
-
-                            <div class="mini-card">
-
-                                <div class="mini-left">
-
-                                    <div class="mini-icon">
-                                        <i class="bx bx-cut"></i>
-                                    </div>
-
-                                    <div class="mini-info">
-
-                                        <div class="mini-title">
-                                            ${escapeHtml(name)}
-                                        </div>
-
-                                        <div class="mini-sub">
-                                            ${escapeHtml(location)}
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="mini-value">
-                                    ACTIVE
-                                </div>
-
-                            </div>
-
-                        `;
-
-                    }).join("");
-
+                updateBookingStats();
 
             } catch (error) {
 
                 console.error(
-                    "Salon loading error:",
+                    "Salon load error:",
                     error
                 );
 
-                showToast(
-                    "Salon data unavailable",
-                    "Could not load salon information.",
-                    "error"
-                );
+                salonList.innerHTML = `
+                    <div class="list-item">
 
+                        <div class="list-main">
+
+                            <div class="list-title">
+                                Could not load salons
+                            </div>
+
+                            <div class="list-meta">
+                                Check your Firestore rules.
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        }
+
+
+        /* =====================================================
+           RENDER SALONS
+        ===================================================== */
+
+        function renderSalons() {
+
+            if (!allSalons.length) {
+
+                salonList.innerHTML = `
+                    <div class="list-item">
+
+                        <div class="list-main">
+
+                            <div class="list-title">
+                                No salons found
+                            </div>
+
+                            <div class="list-meta">
+                                No salon records are currently available.
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+                return;
             }
 
+
+            salonList.innerHTML =
+                allSalons
+                    .slice(0, 8)
+                    .map(salon => {
+
+                        const name =
+                            salon.name ||
+                            salon.salonName ||
+                            "Unnamed Salon";
+
+                        const location =
+                            salon.location ||
+                            "Location not set";
+
+                        return `
+
+                            <div class="list-item">
+
+                                <div class="list-main">
+
+                                    <div class="list-title">
+                                        ${escapeHtml(
+                                            name
+                                        )}
+                                    </div>
+
+                                    <div class="list-meta">
+                                        ${escapeHtml(
+                                            location
+                                        )}
+                                    </div>
+
+                                </div>
+
+
+                                <span
+                                    class="list-pill"
+                                >
+                                    Active
+                                </span>
+
+                            </div>
+                        `;
+                    })
+                    .join("");
         }
 
 
         /* =====================================================
            LOAD USERS
-        ====================================================== */
+        ===================================================== */
 
         async function loadUsers() {
 
@@ -2859,62 +3265,84 @@
                     );
 
                 allUsers =
-                    snapshot.docs.map(item => ({
-                        id: item.id,
-                        ...item.data()
-                    }));
-
-                document.getElementById(
-                    "totalUsers"
-                ).textContent =
-                    allUsers.length;
-
-
-                const latest =
-                    allUsers.slice(0, 5);
-
-
-                const container =
-                    document.getElementById(
-                        "usersList"
+                    snapshot.docs.map(
+                        item => ({
+                            id: item.id,
+                            ...item.data()
+                        })
                     );
 
 
-                if (!latest.length) {
+                renderUsers();
 
-                    container.innerHTML = `
+                updateBookingStats();
 
-                        <div class="empty-state">
+            } catch (error) {
 
-                            <div class="empty-icon">
-                                <i class="bx bx-user-x"></i>
+                console.error(
+                    "Users load error:",
+                    error
+                );
+
+                userList.innerHTML = `
+                    <div class="list-item">
+
+                        <div class="list-main">
+
+                            <div class="list-title">
+                                Could not load users
                             </div>
 
-                            <h3>
-                                No users yet
-                            </h3>
-
-                            <p>
-                                Registered users will appear here.
-                            </p>
+                            <div class="list-meta">
+                                Check your Firestore rules.
+                            </div>
 
                         </div>
 
-                    `;
+                    </div>
+                `;
+            }
+        }
 
-                    return;
 
-                }
+        /* =====================================================
+           RENDER USERS
+        ===================================================== */
+
+        function renderUsers() {
+
+            if (!allUsers.length) {
+
+                userList.innerHTML = `
+                    <div class="list-item">
+
+                        <div class="list-main">
+
+                            <div class="list-title">
+                                No users found
+                            </div>
+
+                            <div class="list-meta">
+                                No user records are currently available.
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+                return;
+            }
 
 
-                container.innerHTML =
-                    latest.map(user => {
+            userList.innerHTML =
+                allUsers
+                    .slice(0, 8)
+                    .map(user => {
 
-                        const name =
-                            user.name ||
-                            user.displayName ||
+                        const email =
                             user.email ||
-                            "K@si User";
+                            "No email";
 
                         const role =
                             user.role ||
@@ -2923,66 +3351,53 @@
 
                         return `
 
-                            <div class="mini-card">
+                            <div class="list-item">
 
-                                <div class="mini-left">
+                                <div class="list-main">
 
-                                    <div class="mini-icon">
-                                        <i class="bx bx-user"></i>
+                                    <div class="list-title">
+                                        ${escapeHtml(
+                                            email
+                                        )}
                                     </div>
 
-                                    <div class="mini-info">
-
-                                        <div class="mini-title">
-                                            ${escapeHtml(name)}
-                                        </div>
-
-                                        <div class="mini-sub">
-                                            ${escapeHtml(role)}
-                                        </div>
-
+                                    <div class="list-meta">
+                                        ${escapeHtml(
+                                            user.id
+                                        )}
                                     </div>
 
                                 </div>
 
-                                <div class="mini-value">
-                                    USER
-                                </div>
+
+                                <span
+                                    class="list-pill"
+                                >
+                                    ${escapeHtml(
+                                        role
+                                    )}
+                                </span>
 
                             </div>
-
                         `;
-
-                    }).join("");
-
-
-            } catch (error) {
-
-                console.error(
-                    "User loading error:",
-                    error
-                );
-
-                showToast(
-                    "User data unavailable",
-                    "Could not load user information.",
-                    "error"
-                );
-
-            }
-
+                    })
+                    .join("");
         }
 
 
         /* =====================================================
-           REAL-TIME BOOKINGS
-        ====================================================== */
+           BOOKINGS LISTENER
+        ===================================================== */
 
         function startBookingListener() {
 
-            if (unsubscribeBookings) {
+            if (
+                typeof unsubscribeBookings ===
+                "function"
+            ) {
                 unsubscribeBookings();
             }
+
 
             unsubscribeBookings =
                 onSnapshot(
@@ -2994,15 +3409,52 @@
                     snapshot => {
 
                         allBookings =
-                            snapshot.docs.map(item => ({
-                                id: item.id,
-                                ...item.data()
-                            }));
+                            snapshot.docs.map(
+                                item => ({
+                                    id: item.id,
+                                    ...item.data()
+                                })
+                            );
+
+
+                        allBookings.sort(
+                            (
+                                a,
+                                b
+                            ) => {
+
+                                const da =
+                                    bookingDateObject(
+                                        a
+                                    );
+
+                                const dbDate =
+                                    bookingDateObject(
+                                        b
+                                    );
+
+                                if (!da && !dbDate) {
+                                    return 0;
+                                }
+
+                                if (!da) {
+                                    return 1;
+                                }
+
+                                if (!dbDate) {
+                                    return -1;
+                                }
+
+                                return (
+                                    dbDate - da
+                                );
+                            }
+                        );
+
 
                         updateBookingStats();
 
                         renderBookings();
-
                     },
 
                     error => {
@@ -3012,28 +3464,39 @@
                             error
                         );
 
+                        bookingsTableBody.innerHTML = `
+                            <tr>
+                                <td
+                                    colspan="8"
+                                    class="empty-row"
+                                >
+                                    Unable to load bookings.
+                                    Check your Firestore rules.
+                                </td>
+                            </tr>
+                        `;
+
                         showToast(
-                            "Booking connection error",
-                            "Could not load live bookings.",
+                            "Could not load bookings.",
                             "error"
                         );
-
                     }
                 );
-
         }
 
 
         /* =====================================================
-           REFRESH
-        ====================================================== */
+           REFRESH DASHBOARD
+        ===================================================== */
 
         async function refreshDashboard() {
 
-            const icon =
-                refreshBtn.querySelector("i");
+            refreshBtn.disabled = true;
 
-            icon.classList.add("bx-spin");
+            refreshBtn.innerHTML = `
+                <i class="bx bx-loader-alt bx-spin"></i>
+                Refreshing
+            `;
 
             try {
 
@@ -3045,27 +3508,260 @@
                 renderBookings();
 
                 showToast(
-                    "Dashboard refreshed",
-                    "Your K@si admin data is up to date.",
+                    "Dashboard refreshed.",
                     "success"
                 );
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Refresh error:",
+                    error
+                );
 
+                showToast(
+                    "Refresh failed.",
+                    "error"
+                );
+
+            } finally {
+
+                refreshBtn.disabled = false;
+
+                refreshBtn.innerHTML = `
+                    <i class="bx bx-refresh"></i>
+                    Refresh
+                `;
             }
-
-            setTimeout(() => {
-                icon.classList.remove("bx-spin");
-            }, 500);
-
         }
 
 
         /* =====================================================
+           AUTHENTICATION
+        ===================================================== */
+
+        onAuthStateChanged(
+            auth,
+            async user => {
+
+                try {
+
+                    if (!user) {
+
+                        adminContent.style.display =
+                            "none";
+
+                        accessDenied.style.display =
+                            "flex";
+
+                        loadingScreen.classList.add(
+                            "hidden"
+                        );
+
+                        return;
+                    }
+
+
+                    currentUser = user;
+
+
+                    const userDoc =
+                        await getDoc(
+                            doc(
+                                db,
+                                "users",
+                                user.uid
+                            )
+                        );
+
+
+                    if (!userDoc.exists()) {
+
+                        adminContent.style.display =
+                            "none";
+
+                        accessDenied.style.display =
+                            "flex";
+
+                        loadingScreen.classList.add(
+                            "hidden"
+                        );
+
+                        return;
+                    }
+
+
+                    const userData =
+                        userDoc.data();
+
+
+                    const role =
+                        String(
+                            userData.role ||
+                            userData.Role ||
+                            ""
+                        ).toLowerCase();
+
+
+                    if (role !== "admin") {
+
+                        adminContent.style.display =
+                            "none";
+
+                        accessDenied.style.display =
+                            "flex";
+
+                        loadingScreen.classList.add(
+                            "hidden"
+                        );
+
+                        return;
+                    }
+
+
+                    adminContent.style.display =
+                        "block";
+
+                    accessDenied.style.display =
+                        "none";
+
+
+                    await Promise.all([
+                        loadSalons(),
+                        loadUsers()
+                    ]);
+
+
+                    startBookingListener();
+
+
+                    loadingScreen.classList.add(
+                        "hidden"
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Admin auth error:",
+                        error
+                    );
+
+                    adminContent.style.display =
+                        "none";
+
+                    accessDenied.style.display =
+                        "flex";
+
+                    loadingScreen.classList.add(
+                        "hidden"
+                    );
+
+                    showToast(
+                        "Unable to verify admin access.",
+                        "error"
+                    );
+                }
+            }
+        );
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        async function logout() {
+
+            try {
+
+                await signOut(auth);
+
+                window.location.href =
+                    "index.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+                showToast(
+                    "Logout failed.",
+                    "error"
+                );
+            }
+        }
+
+
+        logoutBtn.addEventListener(
+            "click",
+            logout
+        );
+
+        mobileLogoutBtn.addEventListener(
+            "click",
+            logout
+        );
+
+
+        /* =====================================================
+           MOBILE MENU
+        ===================================================== */
+
+        menuToggle.addEventListener(
+            "click",
+            () => {
+
+                const isOpen =
+                    mobileMenu.classList.toggle(
+                        "show"
+                    );
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    String(isOpen)
+                );
+
+
+                menuToggle.innerHTML = isOpen
+                    ? `<i class="bx bx-x"></i>`
+                    : `<i class="bx bx-menu"></i>`;
+            }
+        );
+
+
+        /* Close mobile menu after navigation */
+
+        document
+            .querySelectorAll(
+                ".mobile-nav-link"
+            )
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        mobileMenu.classList.remove(
+                            "show"
+                        );
+
+                        menuToggle.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                        menuToggle.innerHTML = `
+                            <i class="bx bx-menu"></i>
+                        `;
+                    }
+                );
+            });
+
+
+        /* =====================================================
            FILTER EVENTS
-        ====================================================== */
+        ===================================================== */
 
         bookingSearch.addEventListener(
             "input",
@@ -3089,247 +3785,17 @@
 
 
         /* =====================================================
-           MOBILE MENU
-        ====================================================== */
-
-        mobileMenuBtn.addEventListener(
-            "click",
-            () => {
-
-                mobileMenu.classList.toggle(
-                    "open"
-                );
-
-                const icon =
-                    mobileMenuBtn.querySelector(
-                        "i"
-                    );
-
-                if (
-                    mobileMenu.classList.contains(
-                        "open"
-                    )
-                ) {
-
-                    icon.className =
-                        "bx bx-x";
-
-                } else {
-
-                    icon.className =
-                        "bx bx-menu";
-
-                }
-
-            }
-        );
-
-
-        document.addEventListener(
-            "click",
-            event => {
-
-                if (
-                    !mobileMenu.contains(event.target) &&
-                    !mobileMenuBtn.contains(event.target)
-                ) {
-
-                    mobileMenu.classList.remove(
-                        "open"
-                    );
-
-                    mobileMenuBtn
-                        .querySelector("i")
-                        .className =
-                        "bx bx-menu";
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           LOGOUT
-        ====================================================== */
-
-        async function logout() {
-
-            try {
-
-                await signOut(auth);
-
-                window.location.href =
-                    "index.html";
-
-            } catch (error) {
-
-                console.error(
-                    "Logout error:",
-                    error
-                );
-
-                showToast(
-                    "Logout failed",
-                    "Please try again.",
-                    "error"
-                );
-
-            }
-
-        }
-
-
-        logoutBtn.addEventListener(
-            "click",
-            logout
-        );
-
-        mobileLogoutBtn.addEventListener(
-            "click",
-            logout
-        );
-
-
-        /* =====================================================
-           ADMIN AUTH
-        ====================================================== */
-
-        onAuthStateChanged(
-            auth,
-            async user => {
-
-                if (!user) {
-
-                    loadingScreen.classList.add(
-                        "hidden"
-                    );
-
-                    adminContent.style.display =
-                        "none";
-
-                    accessDenied.style.display =
-                        "flex";
-
-                    return;
-
-                }
-
-
-                currentUser = user;
-
-
-                try {
-
-                    const userRef =
-                        doc(
-                            db,
-                            "users",
-                            user.uid
-                        );
-
-                    const userSnap =
-                        await getDoc(
-                            userRef
-                        );
-
-
-                    if (!userSnap.exists()) {
-
-                        throw new Error(
-                            "User profile not found."
-                        );
-
-                    }
-
-
-                    const profile =
-                        userSnap.data();
-
-
-                    const role =
-                        profile.role ||
-                        profile.Role ||
-                        "";
-
-
-                    if (
-                        String(role)
-                            .toLowerCase() !==
-                        "admin"
-                    ) {
-
-                        throw new Error(
-                            "Admin access required."
-                        );
-
-                    }
-
-
-                    /* ADMIN VERIFIED */
-
-                    accessDenied.style.display =
-                        "none";
-
-                    adminContent.style.display =
-                        "block";
-
-
-                    await Promise.all([
-                        loadSalons(),
-                        loadUsers()
-                    ]);
-
-
-                    startBookingListener();
-
-
-                    loadingScreen.classList.add(
-                        "hidden"
-                    );
-
-
-                    showToast(
-                        "Welcome, Admin",
-                        "K@si Command Center is ready.",
-                        "success"
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Admin authentication error:",
-                        error
-                    );
-
-
-                    adminContent.style.display =
-                        "none";
-
-                    accessDenied.style.display =
-                        "flex";
-
-
-                    loadingScreen.classList.add(
-                        "hidden"
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
            CLEANUP
-        ====================================================== */
+        ===================================================== */
 
         window.addEventListener(
             "beforeunload",
             () => {
 
-                if (unsubscribeBookings) {
+                if (
+                    typeof unsubscribeBookings ===
+                    "function"
+                ) {
                     unsubscribeBookings();
                 }
 
