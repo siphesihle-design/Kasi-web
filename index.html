@@ -2,18 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#07070d">
-    <meta name="description" content="K@si Web — Discover premium local barbers and salons, compare services and book your next fresh cut.">
-    <title>K@si Web | Your Cut. Your Time.</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#07070d"
+    >
+
+    <meta
+        name="description"
+        content="K@si Web — Discover premium local barbers and salons, compare services and book your next fresh cut."
+    >
+
+    <title>K@si Web | Fresh Cuts. No Lines.</title>
 
     <link rel="manifest" href="manifest.json">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+        rel="stylesheet"
+    >
 
     <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
         * {
             margin: 0;
             padding: 0;
@@ -26,61 +53,115 @@
 
         body {
             min-height: 100vh;
-            background:
-                radial-gradient(
-                    circle at 80% 10%,
-                    rgba(99, 102, 241, 0.16),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 10% 35%,
-                    rgba(59, 130, 246, 0.10),
-                    transparent 30%
-                ),
-                #07070d;
+            background: #07070d;
             color: #ffffff;
             font-family: "Inter", sans-serif;
             overflow-x: hidden;
         }
 
-        button, a, input, select {
-            font-family: inherit;
+        body::selection {
+            background: rgba(139, 92, 246, 0.45);
         }
 
         a {
-            text-decoration: none;
             color: inherit;
+            text-decoration: none;
         }
 
-        /* =========================
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           PAGE GLOW
+        ===================================================== */
+
+        .page-glow {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .page-glow::before {
+            content: "";
+            position: absolute;
+            width: 550px;
+            height: 550px;
+            top: -250px;
+            right: -180px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.14);
+            filter: blur(100px);
+        }
+
+        .page-glow::after {
+            content: "";
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            top: 45%;
+            left: -250px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.08);
+            filter: blur(100px);
+        }
+
+
+        /* =====================================================
            NAVBAR
-        ========================= */
+        ===================================================== */
+
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
+
             z-index: 1000;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             padding: 18px 6%;
-            background: rgba(7, 7, 13, 0.68);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+
+            background: rgba(7, 7, 13, 0.72);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
             border-bottom: 1px solid rgba(255,255,255,0.07);
         }
 
         .logo {
-            font-size: 1.35rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+
+            font-size: 1.4rem;
             font-weight: 800;
-            letter-spacing: -0.05em;
+
+            letter-spacing: -0.06em;
         }
 
         .logo span {
-            background: linear-gradient(90deg, #60a5fa, #8b5cf6);
+            background: linear-gradient(
+                90deg,
+                #60a5fa,
+                #8b5cf6
+            );
+
             -webkit-background-clip: text;
             background-clip: text;
+
             color: transparent;
         }
 
@@ -91,459 +172,745 @@
         }
 
         .nav-links a {
-            color: rgba(255,255,255,0.72);
-            font-size: 0.9rem;
-            transition: 0.25s;
+            color: rgba(255,255,255,0.68);
+            font-size: 0.88rem;
+            transition: 0.25s ease;
         }
 
         .nav-links a:hover {
             color: #ffffff;
         }
 
-        .nav-login {
+        .nav-signin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
             padding: 10px 17px;
+
             border-radius: 999px;
+
+            background: rgba(255,255,255,0.06);
+
             border: 1px solid rgba(255,255,255,0.13);
-            background: rgba(255,255,255,0.05);
+
+            color: #ffffff !important;
+
+            font-weight: 600;
+        }
+
+        .nav-signin:hover {
+            background: rgba(255,255,255,0.10);
         }
 
         .pwa-btn {
             display: none;
+
             align-items: center;
             gap: 6px;
-            padding: 9px 15px;
+
+            padding: 9px 14px;
+
             border-radius: 999px;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            color: #a78bfa;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.25s;
+
+            background: rgba(139,92,246,0.14);
+
+            border: 1px solid rgba(139,92,246,0.30);
+
+            color: #c4b5fd;
+
+            font-size: 0.78rem;
+            font-weight: 700;
         }
 
-        .pwa-btn:hover {
-            background: rgba(139, 92, 246, 0.35);
-            color: #ffffff;
-        }
 
-        /* =========================
+        /* =====================================================
            HERO
-        ========================= */
+        ===================================================== */
+
         .hero {
             position: relative;
+
             min-height: 100svh;
+
             display: flex;
             align-items: center;
-            padding: 120px 6% 70px;
+
+            padding:
+                125px
+                6%
+                90px;
+
             overflow: hidden;
         }
 
         .hero-image {
             position: absolute;
             inset: 0;
+
             z-index: 0;
         }
 
         .hero-image img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
+
             object-position: center;
-            filter: brightness(0.45) saturate(0.9);
+
+            filter:
+                brightness(0.48)
+                saturate(0.92);
+
+            transform: scale(1.015);
         }
 
-        .hero-image::after {
+        .hero-image::before {
             content: "";
+
             position: absolute;
             inset: 0;
+
             background:
                 linear-gradient(
                     90deg,
                     rgba(7,7,13,0.98) 0%,
-                    rgba(7,7,13,0.82) 36%,
-                    rgba(7,7,13,0.32) 75%,
-                    rgba(7,7,13,0.70) 100%
-                ),
+                    rgba(7,7,13,0.88) 28%,
+                    rgba(7,7,13,0.55) 58%,
+                    rgba(7,7,13,0.22) 100%
+                );
+
+            z-index: 1;
+        }
+
+        .hero-image::after {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
                 linear-gradient(
                     0deg,
                     #07070d 0%,
-                    transparent 35%,
-                    rgba(7,7,13,0.25) 100%
+                    transparent 25%,
+                    rgba(7,7,13,0.15) 100%
                 );
+
+            z-index: 2;
         }
 
         .hero-content {
             position: relative;
-            z-index: 2;
-            width: min(680px, 100%);
+            z-index: 5;
+
+            width: min(700px, 100%);
         }
 
-        .hero-top-badges {
+
+        /* =====================================================
+           HERO BADGES
+        ===================================================== */
+
+        .hero-badges {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+
             flex-wrap: wrap;
-            margin-bottom: 24px;
+
+            margin-bottom: 25px;
         }
 
-        .eyebrow {
+        .eyebrow,
+        .rating {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 13px;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: rgba(255,255,255,0.06);
-            backdrop-filter: blur(14px);
+
+            padding: 9px 14px;
+
             border-radius: 999px;
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .eyebrow {
             color: rgba(255,255,255,0.78);
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
+
+            background: rgba(255,255,255,0.06);
+
+            border: 1px solid rgba(255,255,255,0.12);
+
             text-transform: uppercase;
+
+            letter-spacing: 0.08em;
         }
 
         .eyebrow i {
-            color: #8b5cf6;
+            color: #a78bfa;
             font-size: 1rem;
         }
 
-        .social-proof-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 13px;
-            border: 1px solid rgba(251, 191, 36, 0.25);
-            background: rgba(251, 191, 36, 0.08);
-            backdrop-filter: blur(14px);
-            border-radius: 999px;
+        .rating {
             color: #fbbf24;
-            font-size: 0.75rem;
-            font-weight: 600;
+
+            background: rgba(251,191,36,0.07);
+
+            border: 1px solid rgba(251,191,36,0.20);
         }
 
+
+        /* =====================================================
+           HERO TITLE
+        ===================================================== */
+
         .hero h1 {
+            max-width: 760px;
+
             font-family: "Playfair Display", serif;
-            font-size: clamp(3.2rem, 8vw, 6.8rem);
-            line-height: 0.92;
-            letter-spacing: -0.055em;
-            margin-bottom: 28px;
+
+            font-size: clamp(
+                3.4rem,
+                8vw,
+                7rem
+            );
+
+            line-height: 0.9;
+
+            letter-spacing: -0.065em;
+
+            margin-bottom: 25px;
         }
 
         .hero h1 span {
             display: block;
-            background: linear-gradient(100deg, #ffffff 15%, #93c5fd 55%, #a78bfa 90%);
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff 10%,
+                    #93c5fd 48%,
+                    #a78bfa 90%
+                );
+
             -webkit-background-clip: text;
             background-clip: text;
+
             color: transparent;
         }
 
+
+        /* =====================================================
+           TYPEWRITER
+        ===================================================== */
+
         .typing-line {
             min-height: 35px;
-            font-size: clamp(1.05rem, 2vw, 1.35rem);
-            color: rgba(255,255,255,0.76);
-            margin-bottom: 24px;
+
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+
+            gap: 5px;
+
+            margin-bottom: 22px;
+
+            color: rgba(255,255,255,0.70);
+
+            font-size: clamp(
+                1rem,
+                2vw,
+                1.3rem
+            );
         }
 
         .typing {
             color: #ffffff;
-            font-weight: 700;
+            font-weight: 800;
         }
 
         .cursor {
             display: inline-block;
+
             width: 2px;
             height: 1.1em;
+
             background: #8b5cf6;
-            margin-left: 3px;
-            vertical-align: middle;
+
+            margin-left: 2px;
+
             animation: blink 0.8s infinite;
         }
 
         @keyframes blink {
-            50% { opacity: 0; }
+            50% {
+                opacity: 0;
+            }
         }
+
+
+        /* =====================================================
+           DESCRIPTION
+        ===================================================== */
 
         .hero-description {
-            max-width: 560px;
-            color: rgba(255,255,255,0.66);
-            font-size: 1rem;
-            line-height: 1.75;
-            margin-bottom: 30px;
+            max-width: 590px;
+
+            color: rgba(255,255,255,0.64);
+
+            font-size: 0.98rem;
+
+            line-height: 1.8;
+
+            margin-bottom: 31px;
         }
 
-        /* Location Search Bar Integration */
-        .location-search-form {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 8px 8px 18px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 18px;
-            backdrop-filter: blur(16px);
-            margin-bottom: 28px;
-            max-width: 540px;
-        }
 
-        .location-search-form i {
-            font-size: 1.2rem;
-            color: #8b5cf6;
-        }
-
-        .location-search-form input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #ffffff;
-            font-size: 0.9rem;
-        }
-
-        .location-search-form input::placeholder {
-            color: rgba(255, 255, 255, 0.45);
-        }
-
-        .location-search-form button {
-            white-space: nowrap;
-            padding: 12px 20px;
-            border-radius: 12px;
-            border: none;
-        }
+        /* =====================================================
+           HERO BUTTONS
+        ===================================================== */
 
         .hero-buttons {
             display: flex;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 13px;
+
+            gap: 12px;
         }
 
         .btn {
+            min-height: 53px;
+
             display: inline-flex;
             align-items: center;
             justify-content: center;
+
             gap: 9px;
-            min-height: 52px;
+
             padding: 0 23px;
+
             border-radius: 14px;
-            font-size: 0.92rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+
+            font-size: 0.9rem;
+
+            font-weight: 800;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
         .btn-primary {
             color: #ffffff;
-            background: linear-gradient(135deg, #3b82f6, #7c3aed);
-            box-shadow: 0 15px 45px rgba(59,130,246,0.24);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #7c3aed
+                );
+
+            box-shadow:
+                0 18px 50px
+                rgba(59,130,246,0.24);
         }
 
         .btn-primary:hover {
-            box-shadow: 0 18px 55px rgba(124,58,237,0.34);
+            box-shadow:
+                0 22px 65px
+                rgba(124,58,237,0.36);
         }
 
         .btn-secondary {
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.07);
             color: #ffffff;
-            backdrop-filter: blur(12px);
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.14);
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
-        /* =========================
-           FLOATING STATS
-        ========================= */
+        .btn-secondary:hover {
+            background:
+                rgba(255,255,255,0.11);
+        }
+
+
+        /* =====================================================
+           HERO MINI TRUST
+        ===================================================== */
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            margin-top: 28px;
+
+            color: rgba(255,255,255,0.50);
+
+            font-size: 0.72rem;
+        }
+
+        .hero-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .hero-trust-item i {
+            color: #a78bfa;
+            font-size: 1rem;
+        }
+
+
+        /* =====================================================
+           HERO STATS
+        ===================================================== */
+
         .hero-stats {
             position: absolute;
+
             right: 6%;
-            bottom: 65px;
-            z-index: 3;
+            bottom: 50px;
+
+            z-index: 5;
+
             display: flex;
+
             gap: 10px;
         }
 
         .stat {
-            min-width: 115px;
-            padding: 15px;
-            border-radius: 17px;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.10);
+            min-width: 125px;
+
+            padding: 16px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,0.065);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.10);
+
             backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
         }
 
         .stat strong {
             display: block;
-            font-size: 1.15rem;
-            margin-bottom: 3px;
+
+            font-size: 1.05rem;
+
+            margin-bottom: 4px;
         }
 
         .stat small {
-            color: rgba(255,255,255,0.52);
-            font-size: 0.68rem;
+            color: rgba(255,255,255,0.48);
+
+            font-size: 0.67rem;
         }
 
-        /* =========================
-           GENERAL SECTIONS
-        ========================= */
+
+        /* =====================================================
+           SECTIONS
+        ===================================================== */
+
         section {
-            padding: 100px 6%;
+            padding: 105px 6%;
         }
 
         .section-label {
-            color: #8b5cf6;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
             margin-bottom: 13px;
+
+            color: #a78bfa;
+
+            font-size: 0.70rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.16em;
+
+            text-transform: uppercase;
         }
 
         .section-title {
-            max-width: 700px;
+            max-width: 720px;
+
             font-family: "Playfair Display", serif;
-            font-size: clamp(2.2rem, 5vw, 4rem);
-            line-height: 1;
-            letter-spacing: -0.045em;
+
+            font-size: clamp(
+                2.4rem,
+                5vw,
+                4.2rem
+            );
+
+            line-height: 0.98;
+
+            letter-spacing: -0.05em;
+
             margin-bottom: 18px;
         }
 
         .section-description {
-            max-width: 600px;
-            color: rgba(255,255,255,0.57);
-            line-height: 1.7;
+            max-width: 610px;
+
+            color: rgba(255,255,255,0.54);
+
+            line-height: 1.75;
         }
 
-        /* =========================
+
+        /* =====================================================
            EXPERIENCE
-        ========================= */
+        ===================================================== */
+
         .experience {
-            background: linear-gradient(180deg, #07070d, #0b0b14);
+            background:
+                linear-gradient(
+                    180deg,
+                    #07070d,
+                    #0b0b14
+                );
         }
 
         .experience-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 18px;
-            margin-top: 50px;
+
+            margin-top: 52px;
         }
 
         .experience-card {
             position: relative;
+
+            min-height: 255px;
+
             padding: 30px;
-            min-height: 235px;
+
             border-radius: 25px;
-            background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
-            border: 1px solid rgba(255,255,255,0.08);
+
             overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.075),
+                    rgba(255,255,255,0.025)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-7px);
+
+            border-color:
+                rgba(139,92,246,0.30);
         }
 
         .experience-card::after {
             content: "";
+
             position: absolute;
-            width: 150px;
-            height: 150px;
-            right: -70px;
-            bottom: -70px;
+
+            width: 180px;
+            height: 180px;
+
+            right: -90px;
+            bottom: -90px;
+
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(124,58,237,0.20), transparent 70%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(124,58,237,0.20),
+                    transparent 70%
+                );
         }
 
         .card-number {
-            color: rgba(255,255,255,0.22);
-            font-size: 0.75rem;
+            color: rgba(255,255,255,0.20);
+
+            font-size: 0.7rem;
+
             font-weight: 800;
+
+            letter-spacing: 0.08em;
+
             margin-bottom: 35px;
         }
 
         .experience-card i {
+            display: block;
+
+            color: #a78bfa;
+
             font-size: 2rem;
-            color: #8b5cf6;
-            margin-bottom: 18px;
+
+            margin-bottom: 17px;
         }
 
         .experience-card h3 {
             font-size: 1.15rem;
+
             margin-bottom: 9px;
         }
 
         .experience-card p {
-            color: rgba(255,255,255,0.52);
-            font-size: 0.87rem;
-            line-height: 1.6;
+            color: rgba(255,255,255,0.51);
+
+            font-size: 0.86rem;
+
+            line-height: 1.65;
         }
 
-        /* =========================
+
+        /* =====================================================
            SERVICES
-        ========================= */
+        ===================================================== */
+
+        .services {
+            background: #0b0b14;
+        }
+
         .services-header {
             display: flex;
-            align-items: end;
+
+            align-items: flex-end;
+
             justify-content: space-between;
-            gap: 30px;
+
+            gap: 35px;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
             gap: 14px;
-            margin-top: 48px;
+
+            margin-top: 50px;
         }
 
         .service-card {
-            padding: 24px;
+            padding: 25px;
+
             border-radius: 20px;
-            background: rgba(255,255,255,0.045);
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: 0.25s;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            transition: 0.25s ease;
         }
 
         .service-card:hover {
             transform: translateY(-5px);
-            background: rgba(255,255,255,0.07);
-            border-color: rgba(139,92,246,0.35);
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border-color:
+                rgba(139,92,246,0.30);
         }
 
         .service-icon {
-            width: 45px;
-            height: 45px;
+            width: 46px;
+            height: 46px;
+
             display: grid;
             place-items: center;
+
             border-radius: 13px;
-            background: rgba(124,58,237,0.13);
+
+            background:
+                rgba(124,58,237,0.13);
+
             color: #a78bfa;
+
             font-size: 1.3rem;
+
             margin-bottom: 20px;
         }
 
         .service-card h3 {
-            font-size: 1rem;
+            font-size: 0.98rem;
+
             margin-bottom: 7px;
         }
 
         .service-card p {
             color: rgba(255,255,255,0.48);
-            font-size: 0.78rem;
-            line-height: 1.5;
+
+            font-size: 0.77rem;
+
+            line-height: 1.55;
         }
 
-        /* =========================
+
+        /* =====================================================
            CTA
-        ========================= */
+        ===================================================== */
+
         .cta {
-            padding-top: 50px;
+            background: #0b0b14;
+
+            padding-top: 45px;
         }
 
         .cta-box {
             position: relative;
+
             overflow: hidden;
-            padding: 65px;
+
+            padding: 70px;
+
             border-radius: 32px;
+
             background:
                 radial-gradient(
-                    circle at 80% 20%,
+                    circle at 85% 20%,
                     rgba(139,92,246,0.25),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 10% 100%,
+                    rgba(59,130,246,0.12),
                     transparent 35%
                 ),
                 linear-gradient(
@@ -551,58 +918,132 @@
                     #111827,
                     #0d0d18
                 );
-            border: 1px solid rgba(255,255,255,0.09);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+        }
+
+        .cta-box::after {
+            content: "K@si";
+
+            position: absolute;
+
+            right: 4%;
+            bottom: -45px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: clamp(
+                8rem,
+                20vw,
+                18rem
+            );
+
+            font-weight: 800;
+
+            color:
+                rgba(255,255,255,0.025);
+
+            pointer-events: none;
         }
 
         .cta-box h2 {
-            max-width: 650px;
-            font-family: "Playfair Display", serif;
-            font-size: clamp(2.3rem, 5vw, 4.4rem);
-            line-height: 1;
-            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+
+            max-width: 700px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: clamp(
+                2.5rem,
+                5vw,
+                4.7rem
+            );
+
+            line-height: 0.98;
+
+            letter-spacing: -0.05em;
+
+            margin-bottom: 19px;
         }
 
         .cta-box p {
-            max-width: 530px;
+            position: relative;
+            z-index: 2;
+
+            max-width: 550px;
+
             color: rgba(255,255,255,0.55);
-            line-height: 1.7;
-            margin-bottom: 28px;
+
+            line-height: 1.75;
+
+            margin-bottom: 30px;
         }
 
-        /* =========================
+        .cta-box .hero-buttons {
+            position: relative;
+            z-index: 3;
+        }
+
+
+        /* =====================================================
            FOOTER
-        ========================= */
+        ===================================================== */
+
         footer {
-            padding: 45px 6% 35px;
-            border-top: 1px solid rgba(255,255,255,0.07);
-            color: rgba(255,255,255,0.45);
+            padding:
+                48px
+                6%
+                35px;
+
+            background: #07070d;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.07);
         }
 
         .footer-top {
             display: flex;
-            justify-content: space-between;
-            gap: 30px;
+
             align-items: center;
+
+            justify-content: space-between;
+
+            gap: 30px;
+
             margin-bottom: 35px;
         }
 
         .footer-brand {
-            color: #ffffff;
-            font-weight: 800;
             font-size: 1.15rem;
+
+            font-weight: 800;
         }
 
         .footer-brand span {
-            color: #8b5cf6;
+            color: #a78bfa;
         }
 
         .footer-links {
             display: flex;
+
+            flex-wrap: wrap;
+
             gap: 22px;
         }
 
         .footer-links a {
-            font-size: 0.78rem;
+            color: rgba(255,255,255,0.45);
+
+            font-size: 0.76rem;
+
             transition: 0.2s;
         }
 
@@ -611,143 +1052,57 @@
         }
 
         .copyright {
-            font-size: 0.7rem;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.06);
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.06);
+
+            color:
+                rgba(255,255,255,0.35);
+
+            font-size: 0.68rem;
         }
 
-        /* =========================
-           LOGIN MODAL
-        ========================= */
-        .modal {
-            position: fixed;
-            inset: 0;
-            z-index: 5000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(12px);
-        }
 
-        .modal.active {
-            display: flex;
-        }
-
-        .login-box {
-            width: min(430px, 100%);
-            padding: 32px;
-            border-radius: 25px;
-            background: linear-gradient(145deg, #151521, #0b0b12);
-            border: 1px solid rgba(255,255,255,0.10);
-            box-shadow: 0 30px 100px rgba(0,0,0,0.5);
-        }
-
-        .close-modal {
-            float: right;
-            width: 35px;
-            height: 35px;
-            border: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.07);
-            color: #ffffff;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .login-box h2 {
-            font-family: "Playfair Display", serif;
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .login-box > p {
-            color: rgba(255,255,255,0.52);
-            font-size: 0.85rem;
-            margin-bottom: 25px;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 7px;
-            color: rgba(255,255,255,0.65);
-            font-size: 0.75rem;
-        }
-
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            padding: 14px 15px;
-            border-radius: 13px;
-            border: 1px solid rgba(255,255,255,0.10);
-            outline: none;
-            background: rgba(255,255,255,0.05);
-            color: #ffffff;
-            font-size: 0.9rem;
-        }
-
-        .input-group input:focus,
-        .input-group select:focus {
-            border-color: rgba(139,92,246,0.65);
-        }
-
-        .input-group select option {
-            background: #11111b;
-            color: #ffffff;
-        }
-
-        .login-submit {
-            width: 100%;
-            border: 0;
-            margin-top: 10px;
-        }
-
-        .auth-message {
-            min-height: 20px;
-            margin-top: 12px;
-            text-align: center;
-            color: #fca5a5;
-            font-size: 0.78rem;
-        }
-
-        /* =========================
+        /* =====================================================
            MOBILE
-        ========================= */
-        @media (max-width: 900px) {
-            .nav-links a:not(.nav-login) {
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a:not(.nav-signin) {
                 display: none;
             }
 
             .hero {
-                align-items: end;
-                min-height: 100svh;
-                padding-bottom: 150px;
+                align-items: flex-end;
+
+                padding-bottom: 165px;
             }
 
             .hero-image img {
                 object-position: 65% center;
             }
 
-            .hero-image::after {
+            .hero-image::before {
                 background:
                     linear-gradient(
                         0deg,
-                        #07070d 3%,
-                        rgba(7,7,13,0.55) 48%,
-                        rgba(7,7,13,0.55) 100%
+                        rgba(7,7,13,0.98) 3%,
+                        rgba(7,7,13,0.68) 45%,
+                        rgba(7,7,13,0.42) 100%
                     );
             }
 
             .hero-stats {
                 left: 6%;
-                right: auto;
+                right: 6%;
                 bottom: 30px;
-                width: calc(100% - 12%);
             }
 
             .stat {
@@ -760,7 +1115,8 @@
             }
 
             .services-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns:
+                    repeat(2, 1fr);
             }
 
             .services-header {
@@ -768,79 +1124,131 @@
             }
 
             .cta-box {
-                padding: 40px 25px;
+                padding: 50px 35px;
             }
 
-            .footer-top {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-            }
         }
 
-        @media (max-width: 520px) {
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
             .navbar {
-                padding: 16px 5%;
+                padding:
+                    15px
+                    5%;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .nav-signin {
+                padding:
+                    9px
+                    14px;
+
+                font-size: 0.75rem !important;
             }
 
             section {
-                padding: 75px 5%;
+                padding:
+                    78px
+                    5%;
             }
 
             .hero {
-                padding-left: 5%;
-                padding-right: 5%;
+                min-height: 100svh;
+
+                padding:
+                    115px
+                    5%
+                    150px;
+            }
+
+            .hero-image img {
+                object-position: 68% center;
+
+                filter:
+                    brightness(0.44)
+                    saturate(0.88);
             }
 
             .hero h1 {
-                font-size: 3.35rem;
+                font-size: 3.45rem;
+
+                line-height: 0.91;
+            }
+
+            .hero-badges {
+                gap: 7px;
+            }
+
+            .eyebrow,
+            .rating {
+                font-size: 0.64rem;
+
+                padding:
+                    8px
+                    11px;
+            }
+
+            .typing-line {
+                font-size: 0.98rem;
             }
 
             .hero-description {
-                font-size: 0.9rem;
-            }
+                font-size: 0.87rem;
 
-            .location-search-form {
-                flex-direction: column;
-                padding: 10px;
-                background: rgba(255, 255, 255, 0.05);
-            }
-
-            .location-search-form input {
-                width: 100%;
-                padding: 8px 0;
-            }
-
-            .location-search-form button {
-                width: 100%;
+                line-height: 1.7;
             }
 
             .hero-buttons {
                 flex-direction: column;
+
+                align-items: stretch;
             }
 
             .btn {
                 width: 100%;
             }
 
+            .hero-trust {
+                flex-wrap: wrap;
+
+                gap: 10px 16px;
+
+                font-size: 0.66rem;
+            }
+
             .hero-stats {
                 left: 5%;
-                width: 90%;
+                right: 5%;
+
+                gap: 7px;
             }
 
             .stat {
-                padding: 12px 10px;
+                padding:
+                    11px
+                    8px;
+
+                border-radius: 14px;
             }
 
             .stat strong {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
 
             .stat small {
-                font-size: 0.58rem;
+                font-size: 0.54rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
             }
 
             .services-grid {
@@ -848,516 +1256,919 @@
             }
 
             .cta-box {
+                padding:
+                    42px
+                    23px;
+
                 border-radius: 24px;
             }
+
+            .cta-box h2 {
+                font-size: 2.55rem;
+            }
+
+            .footer-top {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .footer-links {
+                gap: 15px;
+            }
+
         }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+        }
+
     </style>
 </head>
 
+
 <body>
 
-<!-- =========================
+<div class="page-glow"></div>
+
+
+<!-- =====================================================
      NAVBAR
-========================= -->
+===================================================== -->
+
 <header class="navbar">
-    <a href="index.html" class="logo">
+
+    <a
+        href="index.html"
+        class="logo"
+        aria-label="K@si Web home"
+    >
         K<span>@</span>si
     </a>
 
-    <nav class="nav-links">
-        <a href="#experience">Experience</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
 
-        <button class="pwa-btn" id="installPwaBtn">
-            <i class="bx bx-download"></i> Get App
+    <nav class="nav-links">
+
+        <a href="#experience">
+            Experience
+        </a>
+
+        <a href="#services">
+            Services
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+
+        <button
+            class="pwa-btn"
+            id="installPwaBtn"
+            type="button"
+        >
+            <i class="bx bx-download"></i>
+            Get App
         </button>
 
-        <a href="#" class="nav-login" id="loginNav">Sign In</a>
+
+        <!-- SIGN IN GOES TO HOME -->
+        <a
+            href="home.html"
+            class="nav-signin"
+        >
+            Sign In
+        </a>
+
     </nav>
+
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <main>
-<section class="hero">
-    <div class="hero-image">
-        <img src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg" alt="Premium K@si barber experience">
-    </div>
 
-    <div class="hero-content">
-        <div class="hero-top-badges">
-            <div class="eyebrow">
-                <i class="bx bx-scissors"></i>
-                The new way to get fresh
+
+    <!-- =================================================
+         HERO
+    ================================================= -->
+
+    <section class="hero">
+
+        <div class="hero-image">
+
+            <img
+                src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
+                alt="K@si premium barber experience"
+            >
+
+        </div>
+
+
+        <div class="hero-content">
+
+
+            <!-- BADGES -->
+
+            <div class="hero-badges">
+
+                <div class="eyebrow">
+
+                    <i class="bx bx-scissors"></i>
+
+                    The new way to get fresh
+
+                </div>
+
+
+                <div class="rating">
+
+                    <i class="bx bxs-star"></i>
+
+                    4.9/5
+
+                    <span>
+                        • 1,200+ local cuts
+                    </span>
+
+                </div>
+
             </div>
 
-            <div class="social-proof-badge">
-                <i class="bx bxs-star"></i>
-                4.9/5 (1,200+ local cuts)
+
+
+            <!-- TITLE -->
+
+            <h1>
+
+                Your cut.
+
+                <span>
+                    Your time.
+                </span>
+
+            </h1>
+
+
+
+            <!-- TYPEWRITER -->
+
+            <div class="typing-line">
+
+                <span>
+                    Discover
+                </span>
+
+                <span
+                    class="typing"
+                    id="typingText"
+                ></span>
+
+                <span class="cursor"></span>
+
             </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <p class="hero-description">
+
+                Discover trusted local barbers and salons,
+                compare services and prices, choose your
+                preferred time and book your next fresh cut
+                without standing in a queue.
+
+            </p>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="hero-buttons">
+
+
+                <!-- GET STARTED → HOME -->
+
+                <a
+                    href="home.html"
+                    class="btn btn-primary"
+                >
+
+                    Get Started
+
+                    <i class="bx bx-right-arrow-alt"></i>
+
+                </a>
+
+
+                <!-- EXPLORE SALONS -->
+
+                <a
+                    href="salons.html"
+                    class="btn btn-secondary"
+                >
+
+                    Explore Salons
+
+                    <i class="bx bx-compass"></i>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- TRUST -->
+
+            <div class="hero-trust">
+
+                <div class="hero-trust-item">
+
+                    <i class="bx bx-check-circle"></i>
+
+                    Local businesses
+
+                </div>
+
+
+                <div class="hero-trust-item">
+
+                    <i class="bx bx-calendar-check"></i>
+
+                    Easy booking
+
+                </div>
+
+
+                <div class="hero-trust-item">
+
+                    <i class="bx bx-time-five"></i>
+
+                    Your time
+
+                </div>
+
+            </div>
+
         </div>
 
-        <h1>
-            Your cut.
-            <span>Your time.</span>
-        </h1>
 
-        <div class="typing-line">
-            Discover
-            <span class="typing" id="typingText"></span>
-            <span class="cursor"></span>
+
+        <!-- HERO STATS -->
+
+        <div class="hero-stats">
+
+            <div class="stat">
+
+                <strong>
+                    01
+                </strong>
+
+                <small>
+                    Find your barber
+                </small>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong>
+                    02
+                </strong>
+
+                <small>
+                    Choose your service
+                </small>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong>
+                    03
+                </strong>
+
+                <small>
+                    Book your time
+                </small>
+
+            </div>
+
         </div>
 
-        <p class="hero-description">
-            Discover trusted local barbers and salons, explore their services, choose your time and book your next cut without the queue.
-        </p>
+    </section>
 
-        <!-- Location Search Bar -->
-        <form class="location-search-form" id="locationSearchForm">
-            <i class="bx bx-map"></i>
-            <input type="text" id="locationInput" placeholder="Enter township or area (e.g. Soweto, Umlazi)..." required>
-            <button type="submit" class="btn btn-primary">
-                Find Barbers
-                <i class="bx bx-search"></i>
-            </button>
-        </form>
 
-        <div class="hero-buttons">
-            <button class="btn btn-primary" id="getStartedBtn">
-                Get Started
-                <i class="bx bx-right-arrow-alt"></i>
-            </button>
 
-            <a href="salons.html" class="btn btn-secondary">
-                Explore Salons
-                <i class="bx bx-compass"></i>
-            </a>
-        </div>
-    </div>
+    <!-- =================================================
+         EXPERIENCE
+    ================================================= -->
 
-    <div class="hero-stats">
-        <div class="stat">
-            <strong>01</strong>
-            <small>Find your barber</small>
+    <section
+        id="experience"
+        class="experience"
+    >
+
+        <div class="section-label">
+            The K@si experience
         </div>
 
-        <div class="stat">
-            <strong>02</strong>
-            <small>Choose your service</small>
-        </div>
 
-        <div class="stat">
-            <strong>03</strong>
-            <small>Book your time</small>
-        </div>
-    </div>
-</section>
+        <h2 class="section-title">
+            More than a haircut.
+            It's your time.
+        </h2>
 
 
-<!-- =========================
-     EXPERIENCE
-========================= -->
-<section id="experience" class="experience">
-    <div class="section-label">The K@si experience</div>
-    <h2 class="section-title">More than a haircut. It's your time.</h2>
-    <p class="section-description">
-        K@si brings local grooming businesses and customers together in one simple experience.
-    </p>
-
-    <div class="experience-grid">
-        <article class="experience-card">
-            <div class="card-number">01 / DISCOVER</div>
-            <i class="bx bx-search-alt-2"></i>
-            <h3>Find your place</h3>
-            <p>Browse local salons and barbers, compare services and find the right place for your next cut.</p>
-        </article>
-
-        <article class="experience-card">
-            <div class="card-number">02 / CHOOSE</div>
-            <i class="bx bx-cut"></i>
-            <h3>Choose your style</h3>
-            <p>See available services and prices before you book.</p>
-        </article>
-
-        <article class="experience-card">
-            <div class="card-number">03 / BOOK</div>
-            <i class="bx bx-calendar-check"></i>
-            <h3>Own your time</h3>
-            <p>Pick your date and time and send your booking directly to the salon.</p>
-        </article>
-    </div>
-</section>
-
-
-<!-- =========================
-     SERVICES
-========================= -->
-<section id="services">
-    <div class="services-header">
-        <div>
-            <div class="section-label">Services</div>
-            <h2 class="section-title">Find the look.</h2>
-        </div>
         <p class="section-description">
-            From clean classics to statement fades, discover services from local grooming professionals.
+
+            K@si connects customers with local
+            grooming businesses and makes finding,
+            choosing and booking your next cut simple.
+
         </p>
-    </div>
-
-    <div class="services-grid">
-        <article class="service-card">
-            <div class="service-icon"><i class="bx bx-cut"></i></div>
-            <h3>Classic Cut</h3>
-            <p>Clean, sharp and timeless.</p>
-        </article>
-
-        <article class="service-card">
-            <div class="service-icon"><i class="bx bx-star"></i></div>
-            <h3>Fade</h3>
-            <p>Fresh fades made to stand out.</p>
-        </article>
-
-        <article class="service-card">
-            <div class="service-icon"><i class="bx bx-user"></i></div>
-            <h3>Beard Trim</h3>
-            <p>Shape, line and finish.</p>
-        </article>
-
-        <article class="service-card">
-            <div class="service-icon"><i class="bx bx-diamond"></i></div>
-            <h3>Premium Cut</h3>
-            <p>The complete grooming experience.</p>
-        </article>
-    </div>
-</section>
 
 
-<!-- =========================
-     ABOUT / CTA
-========================= -->
-<section id="about" class="cta">
-    <div class="cta-box">
-        <div class="section-label">K@si Web</div>
-        <h2>Stop waiting. Start getting fresh.</h2>
-        <p>Your next barber is closer than you think. Explore salons around you and book your next appointment through K@si.</p>
 
-        <div class="hero-buttons">
-            <button class="btn btn-primary" id="ctaGetStarted">
-                Find Your Barber
-                <i class="bx bx-right-arrow-alt"></i>
-            </button>
+        <div class="experience-grid">
 
-            <a href="salons.html" class="btn btn-secondary">
-                Browse Salons
-                <i class="bx bx-store"></i>
-            </a>
+
+            <article class="experience-card">
+
+                <div class="card-number">
+                    01 / DISCOVER
+                </div>
+
+                <i class="bx bx-search-alt-2"></i>
+
+                <h3>
+                    Find your place
+                </h3>
+
+                <p>
+
+                    Browse local salons and barbers,
+                    compare services and find the right
+                    place for your next cut.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="experience-card">
+
+                <div class="card-number">
+                    02 / CHOOSE
+                </div>
+
+                <i class="bx bx-cut"></i>
+
+                <h3>
+                    Choose your style
+                </h3>
+
+                <p>
+
+                    See available services and prices
+                    before you decide where to book.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="experience-card">
+
+                <div class="card-number">
+                    03 / BOOK
+                </div>
+
+                <i class="bx bx-calendar-check"></i>
+
+                <h3>
+                    Own your time
+                </h3>
+
+                <p>
+
+                    Pick your date and time and send
+                    your booking directly to the salon.
+
+                </p>
+
+            </article>
+
         </div>
-    </div>
-</section>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SERVICES
+    ================================================= -->
+
+    <section
+        id="services"
+        class="services"
+    >
+
+        <div class="services-header">
+
+            <div>
+
+                <div class="section-label">
+                    Services
+                </div>
+
+                <h2 class="section-title">
+                    Find the look.
+                </h2>
+
+            </div>
+
+
+            <p class="section-description">
+
+                From clean classics to statement
+                fades, discover services from local
+                grooming professionals.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="services-grid">
+
+
+            <article class="service-card">
+
+                <div class="service-icon">
+
+                    <i class="bx bx-cut"></i>
+
+                </div>
+
+                <h3>
+                    Classic Cut
+                </h3>
+
+                <p>
+                    Clean, sharp and timeless.
+                </p>
+
+            </article>
+
+
+
+            <article class="service-card">
+
+                <div class="service-icon">
+
+                    <i class="bx bx-star"></i>
+
+                </div>
+
+                <h3>
+                    Fade
+                </h3>
+
+                <p>
+                    Fresh fades made to stand out.
+                </p>
+
+            </article>
+
+
+
+            <article class="service-card">
+
+                <div class="service-icon">
+
+                    <i class="bx bx-user"></i>
+
+                </div>
+
+                <h3>
+                    Beard Trim
+                </h3>
+
+                <p>
+                    Shape, line and finish.
+                </p>
+
+            </article>
+
+
+
+            <article class="service-card">
+
+                <div class="service-icon">
+
+                    <i class="bx bx-diamond"></i>
+
+                </div>
+
+                <h3>
+                    Premium Cut
+                </h3>
+
+                <p>
+                    The complete grooming experience.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         CTA
+    ================================================= -->
+
+    <section
+        id="about"
+        class="cta"
+    >
+
+        <div class="cta-box">
+
+            <div class="section-label">
+                K@si Web
+            </div>
+
+
+            <h2>
+                Stop waiting.
+                Start getting fresh.
+            </h2>
+
+
+            <p>
+
+                Your next barber is closer than you think.
+                Explore local salons, choose your service
+                and book your next appointment through K@si.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+
+                <a
+                    href="home.html"
+                    class="btn btn-primary"
+                >
+
+                    Find Your Barber
+
+                    <i class="bx bx-right-arrow-alt"></i>
+
+                </a>
+
+
+                <a
+                    href="salons.html"
+                    class="btn btn-secondary"
+                >
+
+                    Browse Salons
+
+                    <i class="bx bx-store"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </main>
 
 
-<!-- =========================
+
+<!-- =====================================================
      FOOTER
-========================= -->
+===================================================== -->
+
 <footer>
+
     <div class="footer-top">
-        <div class="footer-brand">K<span>@</span>si Web</div>
+
+
+        <div class="footer-brand">
+
+            K<span>@</span>si Web
+
+        </div>
+
 
         <div class="footer-links">
-            <a href="#experience">Experience</a>
-            <a href="#services">Services</a>
-            <a href="salons.html">Salons</a>
-            <a href="home.html">Account</a>
+
+            <a href="#experience">
+                Experience
+            </a>
+
+            <a href="#services">
+                Services
+            </a>
+
+            <a href="salons.html">
+                Salons
+            </a>
+
+            <a href="home.html">
+                Account
+            </a>
+
         </div>
+
     </div>
 
+
     <div class="copyright">
-        © 2026 K@si Web. Fresh cuts. No lines.
+
+        © 2026 K@si Web.
+        Fresh cuts. No lines.
+
     </div>
+
 </footer>
 
 
-<!-- =========================
-     LOGIN MODAL
-========================= -->
-<div class="modal" id="loginModal">
-    <div class="login-box">
-        <button class="close-modal" id="closeModal">×</button>
 
-        <div class="section-label">Welcome back</div>
-        <h2>Sign in to K@si</h2>
-        <p>Log in to continue to your K@si experience.</p>
-
-        <div class="input-group">
-            <label for="userEmail">Email</label>
-            <input type="email" id="userEmail" placeholder="you@example.com" autocomplete="email">
-        </div>
-
-        <div class="input-group">
-            <label for="userPass">Password</label>
-            <input type="password" id="userPass" placeholder="Your password" autocomplete="current-password">
-        </div>
-
-        <div class="input-group">
-            <label for="userRole">Continue as</label>
-            <select id="userRole">
-                <option value="customer">Customer</option>
-                <option value="salon_owner">Salon Owner</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
-
-        <button class="btn btn-primary login-submit" id="mainLoginBtn">
-            Sign In
-            <i class="bx bx-log-in"></i>
-        </button>
-
-        <div class="auth-message" id="authMsg"></div>
-    </div>
-</div>
-
-
-<!-- =========================
-     FIREBASE
-========================= -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script>
-    /* =========================================
-       FIREBASE CONFIG
-    ========================================= */
-    const firebaseConfig = {
-        apiKey: "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
-        authDomain: "kasi-web-d073f.firebaseapp.com",
-        databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "kasi-web-d073f",
-        storageBucket: "kasi-web-d073f.firebasestorage.app",
-        messagingSenderId: "105918157571",
-        appId: "1:105918157571:web:8d646"
-    };
 
-    try {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        window.firebaseAuth = firebase.auth();
-        window.firebaseDB = firebase.firestore();
-    } catch (error) {
-        console.error("Firebase initialization error:", error);
-    }
 
-    /* =========================================
-       TYPING EFFECT
-    ========================================= */
-    const typingText = document.getElementById("typingText");
+    /* =====================================================
+       TYPEWRITER
+    ===================================================== */
+
+    const typingText =
+        document.getElementById("typingText");
+
+
     const words = [
+
         "your next fade.",
+
         "your local barber.",
+
         "your perfect cut.",
+
         "your next appointment.",
+
         "your K@si."
+
     ];
 
+
     let wordIndex = 0;
+
     let charIndex = 0;
+
     let deleting = false;
 
+
     function typeEffect() {
-        const currentWord = words[wordIndex];
+
+        const currentWord =
+            words[wordIndex];
+
 
         if (!deleting) {
-            typingText.textContent = currentWord.substring(0, charIndex + 1);
+
+            typingText.textContent =
+                currentWord.substring(
+                    0,
+                    charIndex + 1
+                );
+
             charIndex++;
 
-            if (charIndex === currentWord.length) {
+
+            if (
+                charIndex ===
+                currentWord.length
+            ) {
+
                 deleting = true;
-                setTimeout(typeEffect, 1700);
+
+                setTimeout(
+                    typeEffect,
+                    1700
+                );
+
                 return;
+
             }
+
         } else {
-            typingText.textContent = currentWord.substring(0, charIndex - 1);
+
+            typingText.textContent =
+                currentWord.substring(
+                    0,
+                    charIndex - 1
+                );
+
             charIndex--;
 
+
             if (charIndex === 0) {
+
                 deleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
+
+                wordIndex =
+                    (wordIndex + 1)
+                    % words.length;
+
             }
+
         }
 
-        setTimeout(typeEffect, deleting ? 45 : 75);
+
+        setTimeout(
+
+            typeEffect,
+
+            deleting
+                ? 45
+                : 75
+
+        );
+
     }
+
 
     typeEffect();
 
-    /* =========================================
-       LOCATION SEARCH LOGIC
-    ========================================= */
-    const locationForm = document.getElementById("locationSearchForm");
-    const locationInput = document.getElementById("locationInput");
 
-    locationForm.addEventListener("submit", function(event) {
-        event.preventDefault();
-        const query = locationInput.value.trim();
-        if (query) {
-            window.location.href = `salons.html?location=${encodeURIComponent(query)}`;
-        }
-    });
 
-    /* =========================================
-       PWA INSTALLATION LOGIC
-    ========================================= */
-    let deferredPrompt;
-    const installPwaBtn = document.getElementById("installPwaBtn");
+    /* =====================================================
+       PWA INSTALLATION
+    ===================================================== */
 
-    window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        installPwaBtn.style.display = "inline-flex";
-    });
+    let deferredPrompt = null;
 
-    installPwaBtn.addEventListener("click", async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === "accepted") {
-                installPwaBtn.style.display = "none";
+
+    const installPwaBtn =
+        document.getElementById(
+            "installPwaBtn"
+        );
+
+
+    window.addEventListener(
+        "beforeinstallprompt",
+        function(event) {
+
+            event.preventDefault();
+
+            deferredPrompt = event;
+
+            if (installPwaBtn) {
+
+                installPwaBtn.style.display =
+                    "inline-flex";
+
             }
-            deferredPrompt = null;
+
         }
-    });
+    );
 
-    /* =========================================
-       LOGIN MODAL
-    ========================================= */
-    const loginModal = document.getElementById("loginModal");
-    const loginNav = document.getElementById("loginNav");
-    const getStartedBtn = document.getElementById("getStartedBtn");
-    const ctaGetStarted = document.getElementById("ctaGetStarted");
-    const closeModal = document.getElementById("closeModal");
 
-    function openLogin() {
-        loginModal.classList.add("active");
-        document.body.style.overflow = "hidden";
-    }
+    if (installPwaBtn) {
 
-    function closeLogin() {
-        loginModal.classList.remove("active");
-        document.body.style.overflow = "";
-    }
+        installPwaBtn.addEventListener(
+            "click",
+            async function() {
 
-    loginNav.addEventListener("click", function(event) {
-        event.preventDefault();
-        openLogin();
-    });
-
-    getStartedBtn.addEventListener("click", openLogin);
-    ctaGetStarted.addEventListener("click", openLogin);
-    closeModal.addEventListener("click", closeLogin);
-
-    loginModal.addEventListener("click", function(event) {
-        if (event.target === loginModal) {
-            closeLogin();
-        }
-    });
-
-    /* =========================================
-       LOGIN
-    ========================================= */
-    const loginButton = document.getElementById("mainLoginBtn");
-    const authMsg = document.getElementById("authMsg");
-
-    loginButton.addEventListener("click", async function() {
-        const email = document.getElementById("userEmail").value.trim();
-        const password = document.getElementById("userPass").value;
-        const selectedRole = document.getElementById("userRole").value;
-
-        authMsg.textContent = "";
-
-        if (!email || !password) {
-            authMsg.textContent = "Please enter your email and password.";
-            return;
-        }
-
-        if (!window.firebaseAuth) {
-            authMsg.textContent = "Firebase is not available. Please refresh the page.";
-            return;
-        }
-
-        loginButton.disabled = true;
-        loginButton.innerHTML = `Signing in... <i class="bx bx-loader-alt bx-spin"></i>`;
-
-        try {
-            const result = await window.firebaseAuth.signInWithEmailAndPassword(email, password);
-            const user = result.user;
-            let role = selectedRole;
-
-            try {
-                const profile = await window.firebaseDB.collection("users").doc(user.uid).get();
-                if (profile.exists) {
-                    const data = profile.data();
-                    role = data.role || data.Role || selectedRole;
+                if (!deferredPrompt) {
+                    return;
                 }
-            } catch (profileError) {
-                console.warn("Could not read user profile:", profileError);
+
+
+                deferredPrompt.prompt();
+
+
+                try {
+
+                    const result =
+                        await deferredPrompt.userChoice;
+
+
+                    if (
+                        result.outcome ===
+                        "accepted"
+                    ) {
+
+                        installPwaBtn.style.display =
+                            "none";
+
+                    }
+
+                } catch (error) {
+
+                    console.warn(
+                        "PWA installation:",
+                        error
+                    );
+
+                }
+
+
+                deferredPrompt = null;
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       AFTER APP INSTALL
+    ===================================================== */
+
+    window.addEventListener(
+        "appinstalled",
+        function() {
+
+            if (installPwaBtn) {
+
+                installPwaBtn.style.display =
+                    "none";
+
             }
 
-            sessionStorage.setItem("justLoggedIn", "true");
-            sessionStorage.setItem("userRole", role);
+            deferredPrompt = null;
 
-            if (role === "admin") {
-                window.location.href = "admin.html";
-            } else if (role === "salon_owner") {
-                sessionStorage.setItem("ownerUid", user.uid);
-                window.location.href = "ownerdashboard.html";
-            } else {
-                window.location.href = "salons.html";
+        }
+    );
+
+
+    /* =====================================================
+       PREVENT BROKEN IMAGE LAYOUT
+    ===================================================== */
+
+    const heroImage =
+        document.querySelector(
+            ".hero-image img"
+        );
+
+
+    if (heroImage) {
+
+        heroImage.addEventListener(
+            "error",
+            function() {
+
+                console.warn(
+                    "K@si hero image could not be loaded."
+                );
+
             }
+        );
 
-        } catch (error) {
-            console.error("Login error:", error);
-            let message = "Unable to sign in.";
+    }
 
-            if (error.code === "auth/invalid-credential") {
-                message = "Incorrect email or password.";
-            } else if (error.code === "auth/user-not-found") {
-                message = "No account was found with this email.";
-            } else if (error.code === "auth/wrong-password") {
-                message = "Incorrect password.";
-            } else if (error.code === "auth/too-many-requests") {
-                message = "Too many attempts. Please try again later.";
-            } else if (error.message) {
-                message = error.message;
-            }
-
-            authMsg.textContent = message;
-        }
-
-        loginButton.disabled = false;
-        loginButton.innerHTML = `Sign In <i class="bx bx-log-in"></i>`;
-    });
-
-    /* =========================================
-       ENTER KEY LOGIN
-    ========================================= */
-    document.getElementById("userPass").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            loginButton.click();
-        }
-    });
-
-    /* =========================================
-       ESCAPE CLOSE
-    ========================================= */
-    document.addEventListener("keydown", function(event) {
-        if (event.key === "Escape" && loginModal.classList.contains("active")) {
-            closeLogin();
-        }
-    });
 </script>
+
 </body>
-</html>
+    </html>
