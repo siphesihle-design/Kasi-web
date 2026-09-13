@@ -1,1859 +1,2400 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
-
-    <meta
-        name="theme-color"
-        content="#07070d"
-    >
-
-    <meta
-        name="description"
-        content="K@si Web — Discover premium local barbers and salons, compare services and book your next fresh cut."
-    >
-
-    <title>K@si Web | Fresh Cuts. No Lines.</title>
-
-    <link rel="manifest" href="manifest.json">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet"
-    >
-
-    <style>
-
-        /* =====================================================
-           RESET
-        ===================================================== */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            min-height: 100vh;
-            background: #07070d;
-            color: #ffffff;
-            font-family: "Inter", sans-serif;
-            overflow-x: hidden;
-        }
-
-        body::selection {
-            background: rgba(139, 92, 246, 0.45);
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button,
-        input {
-            font-family: inherit;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-
-        /* =====================================================
-           PAGE GLOW
-        ===================================================== */
-
-        .page-glow {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .page-glow::before {
-            content: "";
-            position: absolute;
-            width: 550px;
-            height: 550px;
-            top: -250px;
-            right: -180px;
-            border-radius: 50%;
-            background: rgba(99, 102, 241, 0.14);
-            filter: blur(100px);
-        }
-
-        .page-glow::after {
-            content: "";
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            top: 45%;
-            left: -250px;
-            border-radius: 50%;
-            background: rgba(59, 130, 246, 0.08);
-            filter: blur(100px);
-        }
 
+<meta charset="UTF-8">
 
-        /* =====================================================
-           NAVBAR
-        ===================================================== */
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+<meta
+    name="theme-color"
+    content="#07070d"
+>
 
-            z-index: 1000;
+<meta
+    name="description"
+    content="K@si Web — Your personal grooming space. Discover salons, manage bookings and find your next fresh cut."
+>
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+<title>K@si Web | Home</title>
 
-            padding: 18px 6%;
+<link rel="manifest" href="manifest.json">
 
-            background: rgba(7, 7, 13, 0.72);
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
 
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-        }
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+    rel="stylesheet"
+>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
 
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
+    background:
+        radial-gradient(
+            circle at 85% 5%,
+            rgba(124,58,237,.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 5% 35%,
+            rgba(59,130,246,.10),
+            transparent 30%
+        ),
+        #07070d;
 
-            font-size: 1.4rem;
-            font-weight: 800;
+    color: #fff;
 
-            letter-spacing: -0.06em;
-        }
+    font-family: "Inter", sans-serif;
 
-        .logo span {
-            background: linear-gradient(
-                90deg,
-                #60a5fa,
-                #8b5cf6
-            );
+    padding-bottom: 110px;
 
-            -webkit-background-clip: text;
-            background-clip: text;
+    overflow-x: hidden;
+}
 
-            color: transparent;
-        }
+body.modal-open {
+    overflow: hidden;
+}
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-        }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-        .nav-links a {
-            color: rgba(255,255,255,0.68);
-            font-size: 0.88rem;
-            transition: 0.25s ease;
-        }
+button {
+    font-family: inherit;
+}
 
-        .nav-links a:hover {
-            color: #ffffff;
-        }
 
-        .nav-signin {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+/* =========================================================
+   TOP BAR
+========================================================= */
 
-            padding: 10px 17px;
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 
-            border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            background: rgba(255,255,255,0.06);
+    padding:
+        15px
+        max(5%, calc((100vw - 1180px) / 2));
 
-            border: 1px solid rgba(255,255,255,0.13);
+    background:
+        rgba(7,7,13,.82);
 
-            color: #ffffff !important;
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
 
-            font-weight: 600;
-        }
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
 
-        .nav-signin:hover {
-            background: rgba(255,255,255,0.10);
-        }
+.brand {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -.05em;
+}
 
-        .pwa-btn {
-            display: none;
+.brand span {
+    background:
+        linear-gradient(
+            90deg,
+            #60a5fa,
+            #8b5cf6
+        );
 
-            align-items: center;
-            gap: 6px;
+    -webkit-background-clip: text;
+    background-clip: text;
 
-            padding: 9px 14px;
+    color: transparent;
+}
 
-            border-radius: 999px;
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
 
-            background: rgba(139,92,246,0.14);
+.icon-btn {
+    width: 42px;
+    height: 42px;
 
-            border: 1px solid rgba(139,92,246,0.30);
+    display: grid;
+    place-items: center;
 
-            color: #c4b5fd;
+    border-radius: 13px;
 
-            font-size: 0.78rem;
-            font-weight: 700;
-        }
+    border:
+        1px solid
+        rgba(255,255,255,.09);
 
+    background:
+        rgba(255,255,255,.05);
 
-        /* =====================================================
-           HERO
-        ===================================================== */
+    color: #fff;
 
-        .hero {
-            position: relative;
+    cursor: pointer;
 
-            min-height: 100svh;
+    font-size: 1.2rem;
 
-            display: flex;
-            align-items: center;
+    transition: .2s;
+}
 
-            padding:
-                125px
-                6%
-                90px;
+.icon-btn:hover {
+    background:
+        rgba(255,255,255,.10);
 
-            overflow: hidden;
-        }
+    transform: translateY(-1px);
+}
 
-        .hero-image {
-            position: absolute;
-            inset: 0;
 
-            z-index: 0;
-        }
+/* =========================================================
+   PAGE
+========================================================= */
 
-        .hero-image img {
-            width: 100%;
-            height: 100%;
+.page {
+    width: min(1180px, 90%);
+    margin: 0 auto;
+}
 
-            object-fit: cover;
 
-            object-position: center;
+/* =========================================================
+   WELCOME
+========================================================= */
 
-            filter:
-                brightness(0.48)
-                saturate(0.92);
+.welcome {
+    padding: 55px 0 30px;
+}
 
-            transform: scale(1.015);
-        }
+.welcome-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-        .hero-image::before {
-            content: "";
+    color:
+        rgba(255,255,255,.48);
 
-            position: absolute;
-            inset: 0;
+    font-size: .74rem;
+    font-weight: 600;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(7,7,13,0.98) 0%,
-                    rgba(7,7,13,0.88) 28%,
-                    rgba(7,7,13,0.55) 58%,
-                    rgba(7,7,13,0.22) 100%
-                );
+    letter-spacing: .04em;
 
-            z-index: 1;
-        }
+    margin-bottom: 12px;
+}
 
-        .hero-image::after {
-            content: "";
+.online-dot {
+    width: 7px;
+    height: 7px;
 
-            position: absolute;
-            inset: 0;
+    border-radius: 50%;
 
-            background:
-                linear-gradient(
-                    0deg,
-                    #07070d 0%,
-                    transparent 25%,
-                    rgba(7,7,13,0.15) 100%
-                );
+    background: #60a5fa;
 
-            z-index: 2;
-        }
+    box-shadow:
+        0 0 12px
+        rgba(96,165,250,.85);
+}
 
-        .hero-content {
-            position: relative;
-            z-index: 5;
+.welcome h1 {
+    font-family:
+        "Playfair Display",
+        serif;
 
-            width: min(700px, 100%);
-        }
+    font-size:
+        clamp(2.45rem, 6vw, 4.6rem);
 
+    line-height: .98;
 
-        /* =====================================================
-           HERO BADGES
-        ===================================================== */
+    letter-spacing: -.05em;
 
-        .hero-badges {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+    margin-bottom: 16px;
+}
 
-            flex-wrap: wrap;
+.welcome h1 span {
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #93c5fd,
+            #a78bfa
+        );
 
-            margin-bottom: 25px;
-        }
+    -webkit-background-clip: text;
+    background-clip: text;
 
-        .eyebrow,
-        .rating {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+    color: transparent;
+}
 
-            padding: 9px 14px;
+.welcome p {
+    color:
+        rgba(255,255,255,.53);
 
-            border-radius: 999px;
+    line-height: 1.65;
 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+    max-width: 570px;
 
-            font-size: 0.72rem;
-            font-weight: 700;
-        }
+    font-size: .88rem;
+}
 
-        .eyebrow {
-            color: rgba(255,255,255,0.78);
 
-            background: rgba(255,255,255,0.06);
+/* =========================================================
+   FEATURED
+========================================================= */
 
-            border: 1px solid rgba(255,255,255,0.12);
+.featured-section {
+    margin-top: 10px;
+}
 
-            text-transform: uppercase;
+.featured-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
 
-            letter-spacing: 0.08em;
-        }
+    margin-bottom: 18px;
+}
 
-        .eyebrow i {
-            color: #a78bfa;
-            font-size: 1rem;
-        }
+.eyebrow {
+    color: #8b5cf6;
 
-        .rating {
-            color: #fbbf24;
+    font-size: .67rem;
 
-            background: rgba(251,191,36,0.07);
+    font-weight: 800;
 
-            border: 1px solid rgba(251,191,36,0.20);
-        }
+    letter-spacing: .15em;
 
+    text-transform: uppercase;
 
-        /* =====================================================
-           HERO TITLE
-        ===================================================== */
+    margin-bottom: 9px;
+}
 
-        .hero h1 {
-            max-width: 760px;
+.featured-head h2,
+.section-head h2 {
+    font-family:
+        "Playfair Display",
+        serif;
 
-            font-family: "Playfair Display", serif;
+    font-size:
+        clamp(1.85rem, 4vw, 2.75rem);
 
-            font-size: clamp(
-                3.4rem,
-                8vw,
-                7rem
-            );
+    line-height: 1;
 
-            line-height: 0.9;
+    letter-spacing: -.04em;
+}
 
-            letter-spacing: -0.065em;
+.featured-head p {
+    color:
+        rgba(255,255,255,.38);
 
-            margin-bottom: 25px;
-        }
+    font-size: .68rem;
+}
 
-        .hero h1 span {
-            display: block;
 
-            background:
-                linear-gradient(
-                    100deg,
-                    #ffffff 10%,
-                    #93c5fd 48%,
-                    #a78bfa 90%
-                );
+/* =========================================================
+   SWIPE TRACK
+========================================================= */
 
-            -webkit-background-clip: text;
-            background-clip: text;
+.swipe-track {
+    display: flex;
 
-            color: transparent;
-        }
+    gap: 16px;
 
+    overflow-x: auto;
 
-        /* =====================================================
-           TYPEWRITER
-        ===================================================== */
+    padding:
+        3px
+        2px
+        20px;
 
-        .typing-line {
-            min-height: 35px;
+    scroll-snap-type: x mandatory;
 
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
+    -webkit-overflow-scrolling: touch;
 
-            gap: 5px;
+    scrollbar-width: none;
+}
 
-            margin-bottom: 22px;
+.swipe-track::-webkit-scrollbar {
+    display: none;
+}
 
-            color: rgba(255,255,255,0.70);
+.swipe-card {
+    position: relative;
 
-            font-size: clamp(
-                1rem,
-                2vw,
-                1.3rem
-            );
-        }
+    flex:
+        0 0
+        clamp(275px, 78vw, 390px);
 
-        .typing {
-            color: #ffffff;
-            font-weight: 800;
-        }
+    height:
+        clamp(390px, 65vw, 475px);
 
-        .cursor {
-            display: inline-block;
+    overflow: hidden;
 
-            width: 2px;
-            height: 1.1em;
+    border-radius: 27px;
 
-            background: #8b5cf6;
+    scroll-snap-align: start;
 
-            margin-left: 2px;
+    background: #11111a;
 
-            animation: blink 0.8s infinite;
-        }
+    border:
+        1px solid
+        rgba(255,255,255,.10);
 
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
+    box-shadow:
+        0 22px 60px
+        rgba(0,0,0,.30);
+}
 
+.swipe-card img {
+    width: 100%;
+    height: 100%;
 
-        /* =====================================================
-           DESCRIPTION
-        ===================================================== */
+    display: block;
 
-        .hero-description {
-            max-width: 590px;
+    object-fit: cover;
 
-            color: rgba(255,255,255,0.64);
+    transition:
+        transform .6s ease;
+}
 
-            font-size: 0.98rem;
+.swipe-card:hover img {
+    transform: scale(1.04);
+}
 
-            line-height: 1.8;
+.swipe-card::after {
+    content: "";
 
-            margin-bottom: 31px;
-        }
+    position: absolute;
+    inset: 0;
 
+    background:
+        linear-gradient(
+            0deg,
+            rgba(4,4,9,.95) 0%,
+            rgba(4,4,9,.42) 45%,
+            transparent 78%
+        );
+}
 
-        /* =====================================================
-           HERO BUTTONS
-        ===================================================== */
+.card-content {
+    position: absolute;
 
-        .hero-buttons {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
+    z-index: 2;
 
-            gap: 12px;
-        }
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+}
 
-        .btn {
-            min-height: 53px;
+.card-number {
+    display: inline-flex;
 
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+    align-items: center;
+    justify-content: center;
 
-            gap: 9px;
+    width: 34px;
+    height: 34px;
 
-            padding: 0 23px;
+    border-radius: 11px;
 
-            border-radius: 14px;
+    margin-bottom: 13px;
 
-            font-size: 0.9rem;
+    background:
+        rgba(255,255,255,.10);
 
-            font-weight: 800;
+    border:
+        1px solid
+        rgba(255,255,255,.13);
 
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease,
-                background 0.25s ease;
-        }
+    backdrop-filter: blur(10px);
 
-        .btn:hover {
-            transform: translateY(-3px);
-        }
+    font-size: .68rem;
+    font-weight: 800;
+}
 
-        .btn-primary {
-            color: #ffffff;
+.card-content h3 {
+    font-family:
+        "Playfair Display",
+        serif;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #7c3aed
-                );
+    font-size:
+        clamp(1.55rem, 5vw, 2rem);
 
-            box-shadow:
-                0 18px 50px
-                rgba(59,130,246,0.24);
-        }
+    margin-bottom: 7px;
+}
 
-        .btn-primary:hover {
-            box-shadow:
-                0 22px 65px
-                rgba(124,58,237,0.36);
-        }
+.card-content p {
+    color:
+        rgba(255,255,255,.62);
 
-        .btn-secondary {
-            color: #ffffff;
+    font-size: .76rem;
 
-            background:
-                rgba(255,255,255,0.07);
+    line-height: 1.55;
+}
 
-            border:
-                1px solid
-                rgba(255,255,255,0.14);
+.swipe-hint {
+    display: flex;
 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-        }
+    align-items: center;
+    justify-content: center;
 
-        .btn-secondary:hover {
-            background:
-                rgba(255,255,255,0.11);
-        }
+    gap: 8px;
 
+    margin-top: 14px;
 
-        /* =====================================================
-           HERO MINI TRUST
-        ===================================================== */
+    color:
+        rgba(255,255,255,.30);
 
-        .hero-trust {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+    font-size: .65rem;
+}
 
-            margin-top: 28px;
+.swipe-hint i {
+    font-size: 1rem;
+}
 
-            color: rgba(255,255,255,0.50);
 
-            font-size: 0.72rem;
-        }
+/* =========================================================
+   BUTTONS
+========================================================= */
 
-        .hero-trust-item {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-        }
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+}
 
-        .hero-trust-item i {
-            color: #a78bfa;
-            font-size: 1rem;
-        }
+.btn {
+    min-height: 50px;
 
+    display: inline-flex;
 
-        /* =====================================================
-           HERO STATS
-        ===================================================== */
+    align-items: center;
+    justify-content: center;
 
-        .hero-stats {
-            position: absolute;
+    gap: 8px;
 
-            right: 6%;
-            bottom: 50px;
+    padding:
+        0 20px;
 
-            z-index: 5;
+    border-radius: 13px;
 
-            display: flex;
+    font-size: .84rem;
+    font-weight: 700;
 
-            gap: 10px;
-        }
+    border: 0;
 
-        .stat {
-            min-width: 125px;
+    cursor: pointer;
 
-            padding: 16px;
+    transition: .25s;
+}
 
-            border-radius: 18px;
+.btn:hover {
+    transform: translateY(-2px);
+}
 
-            background:
-                rgba(255,255,255,0.065);
+.btn-primary {
+    color: #fff;
 
-            border:
-                1px solid
-                rgba(255,255,255,0.10);
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #7c3aed
+        );
 
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-        }
+    box-shadow:
+        0 14px 40px
+        rgba(59,130,246,.22);
+}
 
-        .stat strong {
-            display: block;
+.btn-secondary {
+    color: #fff;
 
-            font-size: 1.05rem;
+    background:
+        rgba(255,255,255,.07);
 
-            margin-bottom: 4px;
-        }
+    border:
+        1px solid
+        rgba(255,255,255,.13);
 
-        .stat small {
-            color: rgba(255,255,255,0.48);
+    backdrop-filter: blur(12px);
+}
 
-            font-size: 0.67rem;
-        }
 
+/* =========================================================
+   SECTIONS
+========================================================= */
 
-        /* =====================================================
-           SECTIONS
-        ===================================================== */
+.section {
+    padding-top: 68px;
+}
 
-        section {
-            padding: 105px 6%;
-        }
+.section-head {
+    margin-bottom: 25px;
+}
 
-        .section-label {
-            margin-bottom: 13px;
 
-            color: #a78bfa;
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
 
-            font-size: 0.70rem;
+.action-grid {
+    display: grid;
 
-            font-weight: 800;
+    grid-template-columns:
+        repeat(3,1fr);
 
-            letter-spacing: 0.16em;
+    gap: 13px;
+}
 
-            text-transform: uppercase;
-        }
+.action-card {
+    position: relative;
 
-        .section-title {
-            max-width: 720px;
+    padding: 24px;
 
-            font-family: "Playfair Display", serif;
+    min-height: 175px;
 
-            font-size: clamp(
-                2.4rem,
-                5vw,
-                4.2rem
-            );
+    border-radius: 21px;
 
-            line-height: 0.98;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.065),
+            rgba(255,255,255,.025)
+        );
 
-            letter-spacing: -0.05em;
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
-            margin-bottom: 18px;
-        }
+    transition: .25s;
 
-        .section-description {
-            max-width: 610px;
+    overflow: hidden;
+}
 
-            color: rgba(255,255,255,0.54);
+.action-card::after {
+    content: "";
 
-            line-height: 1.75;
-        }
+    position: absolute;
 
+    width: 110px;
+    height: 110px;
 
-        /* =====================================================
-           EXPERIENCE
-        ===================================================== */
+    right: -50px;
+    bottom: -50px;
 
-        .experience {
-            background:
-                linear-gradient(
-                    180deg,
-                    #07070d,
-                    #0b0b14
-                );
-        }
+    border-radius: 50%;
 
-        .experience-grid {
-            display: grid;
+    background:
+        rgba(124,58,237,.10);
 
-            grid-template-columns:
-                repeat(3, 1fr);
+    filter: blur(8px);
+}
 
-            gap: 18px;
+.action-card:hover {
+    transform: translateY(-4px);
 
-            margin-top: 52px;
-        }
+    border-color:
+        rgba(139,92,246,.30);
+}
 
-        .experience-card {
-            position: relative;
+.action-icon {
+    width: 46px;
+    height: 46px;
 
-            min-height: 255px;
+    display: grid;
+    place-items: center;
 
-            padding: 30px;
+    border-radius: 14px;
 
-            border-radius: 25px;
+    background:
+        rgba(124,58,237,.12);
 
-            overflow: hidden;
+    color: #a78bfa;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.075),
-                    rgba(255,255,255,0.025)
-                );
+    font-size: 1.35rem;
 
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
+    margin-bottom: 25px;
+}
 
-            transition:
-                transform 0.3s ease,
-                border-color 0.3s ease;
-        }
+.action-card h3 {
+    font-size: 1rem;
 
-        .experience-card:hover {
-            transform: translateY(-7px);
+    margin-bottom: 7px;
+}
 
-            border-color:
-                rgba(139,92,246,0.30);
-        }
+.action-card p {
+    color:
+        rgba(255,255,255,.47);
 
-        .experience-card::after {
-            content: "";
+    font-size: .76rem;
 
-            position: absolute;
+    line-height: 1.55;
+}
 
-            width: 180px;
-            height: 180px;
+.action-arrow {
+    position: absolute;
 
-            right: -90px;
-            bottom: -90px;
+    top: 24px;
+    right: 24px;
 
-            border-radius: 50%;
+    color:
+        rgba(255,255,255,.28);
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(124,58,237,0.20),
-                    transparent 70%
-                );
-        }
+    font-size: 1.1rem;
 
-        .card-number {
-            color: rgba(255,255,255,0.20);
+    z-index: 2;
+}
 
-            font-size: 0.7rem;
 
-            font-weight: 800;
+/* =========================================================
+   BOOKINGS
+========================================================= */
 
-            letter-spacing: 0.08em;
+.booking-panel {
+    border-radius: 25px;
 
-            margin-bottom: 35px;
-        }
+    background:
+        rgba(255,255,255,.035);
 
-        .experience-card i {
-            display: block;
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
-            color: #a78bfa;
+    overflow: hidden;
 
-            font-size: 2rem;
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.18);
+}
 
-            margin-bottom: 17px;
-        }
+.booking-top {
+    display: flex;
 
-        .experience-card h3 {
-            font-size: 1.15rem;
+    justify-content: space-between;
+    align-items: center;
 
-            margin-bottom: 9px;
-        }
+    padding: 21px;
 
-        .experience-card p {
-            color: rgba(255,255,255,0.51);
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
 
-            font-size: 0.86rem;
+.booking-top strong {
+    font-size: .9rem;
+}
 
-            line-height: 1.65;
-        }
+.booking-top a {
+    color: #93c5fd;
 
+    font-size: .72rem;
 
-        /* =====================================================
-           SERVICES
-        ===================================================== */
+    font-weight: 700;
+}
 
-        .services {
-            background: #0b0b14;
-        }
+.booking-content {
+    padding: 22px 21px 26px;
+}
 
-        .services-header {
-            display: flex;
+.booking-loading {
+    padding: 35px 20px;
 
-            align-items: flex-end;
+    text-align: center;
 
-            justify-content: space-between;
+    color:
+        rgba(255,255,255,.45);
+}
 
-            gap: 35px;
-        }
+.booking-loading i {
+    display: block;
 
-        .services-grid {
-            display: grid;
+    font-size: 1.8rem;
 
-            grid-template-columns:
-                repeat(4, 1fr);
+    margin-bottom: 10px;
 
-            gap: 14px;
+    color: #a78bfa;
+}
 
-            margin-top: 50px;
-        }
+.booking-empty {
+    padding: 35px 20px;
 
-        .service-card {
-            padding: 25px;
+    text-align: center;
+}
 
-            border-radius: 20px;
+.empty-icon {
+    width: 65px;
+    height: 65px;
 
-            background:
-                rgba(255,255,255,0.045);
+    display: grid;
+    place-items: center;
 
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
+    margin:
+        0 auto 17px;
 
-            transition: 0.25s ease;
-        }
+    border-radius: 20px;
 
-        .service-card:hover {
-            transform: translateY(-5px);
+    background:
+        rgba(59,130,246,.08);
 
-            background:
-                rgba(255,255,255,0.07);
+    color: #60a5fa;
 
-            border-color:
-                rgba(139,92,246,0.30);
-        }
+    font-size: 1.8rem;
+}
 
-        .service-icon {
-            width: 46px;
-            height: 46px;
+.booking-empty h3 {
+    font-size: 1rem;
 
-            display: grid;
-            place-items: center;
+    margin-bottom: 8px;
+}
 
-            border-radius: 13px;
+.booking-empty p {
+    max-width: 420px;
 
-            background:
-                rgba(124,58,237,0.13);
+    margin:
+        0 auto 20px;
 
-            color: #a78bfa;
+    color:
+        rgba(255,255,255,.46);
 
-            font-size: 1.3rem;
+    font-size: .77rem;
 
-            margin-bottom: 20px;
-        }
+    line-height: 1.6;
+}
 
-        .service-card h3 {
-            font-size: 0.98rem;
 
-            margin-bottom: 7px;
-        }
+/* =========================================================
+   BOOKING CARDS
+========================================================= */
 
-        .service-card p {
-            color: rgba(255,255,255,0.48);
+.booking-list {
+    display: grid;
+    gap: 13px;
+}
 
-            font-size: 0.77rem;
+.booking-card {
+    position: relative;
 
-            line-height: 1.55;
-        }
+    padding: 19px;
 
+    border-radius: 20px;
 
-        /* =====================================================
-           CTA
-        ===================================================== */
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.065),
+            rgba(255,255,255,.025)
+        );
 
-        .cta {
-            background: #0b0b14;
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
-            padding-top: 45px;
-        }
+    overflow: hidden;
 
-        .cta-box {
-            position: relative;
+    transition:
+        transform .22s ease,
+        border-color .22s ease;
+}
 
-            overflow: hidden;
+.booking-card:hover {
+    transform: translateY(-2px);
 
-            padding: 70px;
+    border-color:
+        rgba(139,92,246,.28);
+}
 
-            border-radius: 32px;
+.booking-card::before {
+    content: "";
 
-            background:
-                radial-gradient(
-                    circle at 85% 20%,
-                    rgba(139,92,246,0.25),
-                    transparent 35%
-                ),
-                radial-gradient(
-                    circle at 10% 100%,
-                    rgba(59,130,246,0.12),
-                    transparent 35%
-                ),
-                linear-gradient(
-                    135deg,
-                    #111827,
-                    #0d0d18
-                );
+    position: absolute;
 
-            border:
-                1px solid
-                rgba(255,255,255,0.09);
-        }
+    left: 0;
+    top: 0;
+    bottom: 0;
 
-        .cta-box::after {
-            content: "K@si";
+    width: 3px;
 
-            position: absolute;
+    background:
+        linear-gradient(
+            180deg,
+            #3b82f6,
+            #8b5cf6
+        );
+}
 
-            right: 4%;
-            bottom: -45px;
+.booking-main {
+    display: flex;
 
-            font-family:
-                "Playfair Display",
-                serif;
+    justify-content: space-between;
+    align-items: flex-start;
 
-            font-size: clamp(
-                8rem,
-                20vw,
-                18rem
-            );
+    gap: 14px;
+}
 
-            font-weight: 800;
+.booking-salon {
+    display: flex;
 
-            color:
-                rgba(255,255,255,0.025);
+    align-items: center;
 
-            pointer-events: none;
-        }
+    gap: 12px;
 
-        .cta-box h2 {
-            position: relative;
-            z-index: 2;
+    min-width: 0;
+}
 
-            max-width: 700px;
+.booking-salon-icon {
+    flex:
+        0 0
+        46px;
 
-            font-family:
-                "Playfair Display",
-                serif;
+    width: 46px;
+    height: 46px;
 
-            font-size: clamp(
-                2.5rem,
-                5vw,
-                4.7rem
-            );
+    display: grid;
+    place-items: center;
 
-            line-height: 0.98;
+    border-radius: 14px;
 
-            letter-spacing: -0.05em;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.17),
+            rgba(124,58,237,.18)
+        );
 
-            margin-bottom: 19px;
-        }
+    border:
+        1px solid
+        rgba(255,255,255,.08);
 
-        .cta-box p {
-            position: relative;
-            z-index: 2;
+    color: #a78bfa;
 
-            max-width: 550px;
+    font-size: 1.3rem;
+}
 
-            color: rgba(255,255,255,0.55);
+.booking-salon-info {
+    min-width: 0;
+}
 
-            line-height: 1.75;
+.booking-salon-info strong {
+    display: block;
 
-            margin-bottom: 30px;
-        }
+    overflow: hidden;
 
-        .cta-box .hero-buttons {
-            position: relative;
-            z-index: 3;
-        }
+    text-overflow: ellipsis;
 
+    white-space: nowrap;
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+    font-size: .92rem;
 
-        footer {
-            padding:
-                48px
-                6%
-                35px;
+    margin-bottom: 4px;
+}
 
-            background: #07070d;
+.booking-location {
+    color:
+        rgba(255,255,255,.40);
 
-            border-top:
-                1px solid
-                rgba(255,255,255,0.07);
-        }
+    font-size: .67rem;
 
-        .footer-top {
-            display: flex;
+    white-space: nowrap;
 
-            align-items: center;
+    overflow: hidden;
 
-            justify-content: space-between;
+    text-overflow: ellipsis;
+}
 
-            gap: 30px;
 
-            margin-bottom: 35px;
-        }
+/* =========================================================
+   STATUS
+========================================================= */
 
-        .footer-brand {
-            font-size: 1.15rem;
+.status-badge {
+    flex: 0 0 auto;
 
-            font-weight: 800;
-        }
+    display: inline-flex;
 
-        .footer-brand span {
-            color: #a78bfa;
-        }
+    align-items: center;
 
-        .footer-links {
-            display: flex;
+    gap: 5px;
 
-            flex-wrap: wrap;
+    padding:
+        7px 10px;
 
-            gap: 22px;
-        }
+    border-radius: 999px;
 
-        .footer-links a {
-            color: rgba(255,255,255,0.45);
+    font-size: .61rem;
 
-            font-size: 0.76rem;
+    font-weight: 800;
 
-            transition: 0.2s;
-        }
+    white-space: nowrap;
 
-        .footer-links a:hover {
-            color: #ffffff;
-        }
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+}
 
-        .copyright {
-            padding-top: 20px;
+.status-badge i {
+    font-size: .8rem;
+}
 
-            border-top:
-                1px solid
-                rgba(255,255,255,0.06);
+.status-pending {
+    color: #fcd34d;
 
-            color:
-                rgba(255,255,255,0.35);
+    background:
+        rgba(245,158,11,.09);
 
-            font-size: 0.68rem;
-        }
+    border-color:
+        rgba(245,158,11,.16);
+}
 
+.status-approved {
+    color: #86efac;
 
-        /* =====================================================
-           MOBILE
-        ===================================================== */
+    background:
+        rgba(34,197,94,.09);
 
-        @media (max-width: 1000px) {
+    border-color:
+        rgba(34,197,94,.16);
+}
 
-            .nav-links {
-                gap: 12px;
-            }
+.status-declined {
+    color: #fca5a5;
 
-            .nav-links a:not(.nav-signin) {
-                display: none;
-            }
+    background:
+        rgba(239,68,68,.09);
 
-            .hero {
-                align-items: flex-end;
+    border-color:
+        rgba(239,68,68,.16);
+}
 
-                padding-bottom: 165px;
-            }
+.status-completed {
+    color: #93c5fd;
 
-            .hero-image img {
-                object-position: 65% center;
-            }
+    background:
+        rgba(59,130,246,.09);
 
-            .hero-image::before {
-                background:
-                    linear-gradient(
-                        0deg,
-                        rgba(7,7,13,0.98) 3%,
-                        rgba(7,7,13,0.68) 45%,
-                        rgba(7,7,13,0.42) 100%
-                    );
-            }
+    border-color:
+        rgba(59,130,246,.16);
+}
 
-            .hero-stats {
-                left: 6%;
-                right: 6%;
-                bottom: 30px;
-            }
+.status-cancelled {
+    color: #d1d5db;
 
-            .stat {
-                flex: 1;
-                min-width: 0;
-            }
+    background:
+        rgba(107,114,128,.10);
 
-            .experience-grid {
-                grid-template-columns: 1fr;
-            }
+    border-color:
+        rgba(107,114,128,.18);
+}
 
-            .services-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
+.status-unknown {
+    color: #c4b5fd;
 
-            .services-header {
-                display: block;
-            }
+    background:
+        rgba(139,92,246,.09);
+}
 
-            .cta-box {
-                padding: 50px 35px;
-            }
 
-        }
+/* =========================================================
+   BOOKING DETAILS
+========================================================= */
 
+.booking-details {
+    display: grid;
 
-        /* =====================================================
-           SMALL MOBILE
-        ===================================================== */
+    grid-template-columns:
+        repeat(4,1fr);
 
-        @media (max-width: 600px) {
+    gap: 8px;
 
-            .navbar {
-                padding:
-                    15px
-                    5%;
-            }
+    margin-top: 17px;
 
-            .logo {
-                font-size: 1.25rem;
-            }
+    padding-top: 15px;
 
-            .nav-signin {
-                padding:
-                    9px
-                    14px;
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+}
 
-                font-size: 0.75rem !important;
-            }
+.booking-detail {
+    min-width: 0;
 
-            section {
-                padding:
-                    78px
-                    5%;
-            }
+    padding:
+        10px 11px;
 
-            .hero {
-                min-height: 100svh;
+    border-radius: 12px;
 
-                padding:
-                    115px
-                    5%
-                    150px;
-            }
+    background:
+        rgba(255,255,255,.035);
+}
 
-            .hero-image img {
-                object-position: 68% center;
+.booking-detail-label {
+    display: block;
 
-                filter:
-                    brightness(0.44)
-                    saturate(0.88);
-            }
+    color:
+        rgba(255,255,255,.34);
 
-            .hero h1 {
-                font-size: 3.45rem;
+    font-size: .57rem;
 
-                line-height: 0.91;
-            }
+    text-transform: uppercase;
 
-            .hero-badges {
-                gap: 7px;
-            }
+    letter-spacing: .08em;
 
-            .eyebrow,
-            .rating {
-                font-size: 0.64rem;
+    margin-bottom: 5px;
+}
 
-                padding:
-                    8px
-                    11px;
-            }
+.booking-detail-value {
+    display: block;
 
-            .typing-line {
-                font-size: 0.98rem;
-            }
+    color:
+        rgba(255,255,255,.82);
 
-            .hero-description {
-                font-size: 0.87rem;
+    font-size: .72rem;
 
-                line-height: 1.7;
-            }
+    font-weight: 700;
 
-            .hero-buttons {
-                flex-direction: column;
+    overflow: hidden;
 
-                align-items: stretch;
-            }
+    text-overflow: ellipsis;
 
-            .btn {
-                width: 100%;
-            }
+    white-space: nowrap;
+}
 
-            .hero-trust {
-                flex-wrap: wrap;
+.booking-price {
+    color: #a78bfa;
+}
 
-                gap: 10px 16px;
+.booking-note {
+    display: flex;
 
-                font-size: 0.66rem;
-            }
+    align-items: center;
 
-            .hero-stats {
-                left: 5%;
-                right: 5%;
+    gap: 6px;
 
-                gap: 7px;
-            }
+    margin-top: 12px;
 
-            .stat {
-                padding:
-                    11px
-                    8px;
+    color:
+        rgba(255,255,255,.35);
 
-                border-radius: 14px;
-            }
+    font-size: .63rem;
+}
 
-            .stat strong {
-                font-size: 0.9rem;
-            }
+.booking-note i {
+    color: #60a5fa;
+}
 
-            .stat small {
-                font-size: 0.54rem;
-            }
 
-            .section-title {
-                font-size: 2.5rem;
-            }
+/* =========================================================
+   BOOKING COUNT
+========================================================= */
 
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
+.booking-count {
+    display: inline-flex;
 
-            .cta-box {
-                padding:
-                    42px
-                    23px;
+    align-items: center;
+    justify-content: center;
 
-                border-radius: 24px;
-            }
+    min-width: 23px;
+    height: 23px;
 
-            .cta-box h2 {
-                font-size: 2.55rem;
-            }
+    margin-left: 7px;
 
-            .footer-top {
-                flex-direction: column;
+    padding: 0 7px;
 
-                align-items: flex-start;
-            }
+    border-radius: 999px;
 
-            .footer-links {
-                gap: 15px;
-            }
+    background:
+        rgba(139,92,246,.14);
 
-        }
+    border:
+        1px solid
+        rgba(139,92,246,.20);
 
+    color: #c4b5fd;
 
-        /* =====================================================
-           REDUCED MOTION
-        ===================================================== */
+    font-size: .62rem;
 
-        @media (prefers-reduced-motion: reduce) {
+    font-weight: 800;
+}
 
-            html {
-                scroll-behavior: auto;
-            }
 
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+/* =========================================================
+   DISCOVER
+========================================================= */
 
-        }
+.discover-card {
+    position: relative;
 
-    </style>
+    min-height: 280px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    overflow: hidden;
+
+    border-radius: 25px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    background: #101018;
+}
+
+.discover-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            110deg,
+            rgba(9,9,16,.96),
+            rgba(9,9,16,.48)
+        );
+
+    z-index: 1;
+}
+
+.discover-bg {
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 75% 35%,
+            rgba(139,92,246,.40),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 60% 80%,
+            rgba(59,130,246,.24),
+            transparent 30%
+        );
+}
+
+.discover-content {
+    position: relative;
+
+    z-index: 2;
+
+    padding: 30px;
+
+    width: min(600px,100%);
+}
+
+.discover-content h2 {
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size:
+        clamp(1.9rem,4vw,3rem);
+
+    line-height: 1;
+
+    margin-bottom: 12px;
+}
+
+.discover-content p {
+    color:
+        rgba(255,255,255,.52);
+
+    font-size: .82rem;
+
+    line-height: 1.6;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   ELITE HERO
+========================================================= */
+
+.elite-section {
+    padding-top: 75px;
+}
+
+.elite-card {
+    position: relative;
+
+    min-height:
+        clamp(420px,65vw,590px);
+
+    display: flex;
+
+    align-items: flex-end;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background: #11111a;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.38);
+}
+
+.elite-image {
+    position: absolute;
+    inset: 0;
+}
+
+.elite-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    filter:
+        brightness(.62)
+        saturate(.88);
+}
+
+.elite-image::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            0deg,
+            rgba(3,3,8,.98) 0%,
+            rgba(3,3,8,.48) 45%,
+            rgba(3,3,8,.08) 85%
+        );
+}
+
+.elite-content {
+    position: relative;
+
+    z-index: 2;
+
+    width: min(680px,100%);
+
+    padding: 35px;
+}
+
+.elite-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        8px 12px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.09);
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    backdrop-filter: blur(12px);
+
+    color:
+        rgba(255,255,255,.82);
+
+    font-size: .68rem;
+
+    font-weight: 800;
+
+    letter-spacing: .10em;
+
+    text-transform: uppercase;
+
+    margin-bottom: 18px;
+}
+
+.elite-label i {
+    color: #a78bfa;
+    font-size: 1rem;
+}
+
+.elite-content h2 {
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size:
+        clamp(2.3rem,6vw,4.5rem);
+
+    line-height: .95;
+
+    letter-spacing: -.045em;
+
+    margin-bottom: 15px;
+}
+
+.elite-content p {
+    color:
+        rgba(255,255,255,.65);
+
+    max-width: 560px;
+
+    line-height: 1.65;
+
+    font-size: .84rem;
+
+    margin-bottom: 23px;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-panel {
+    display: grid;
+
+    grid-template-columns:
+        auto 1fr auto;
+
+    gap: 18px;
+
+    align-items: center;
+
+    padding: 22px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.avatar {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #7c3aed
+        );
+
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.profile-info strong {
+    display: block;
+
+    font-size: .92rem;
+
+    margin-bottom: 5px;
+}
+
+.profile-info span {
+    color:
+        rgba(255,255,255,.45);
+
+    font-size: .72rem;
+}
+
+.profile-role {
+    display: inline-flex;
+
+    margin-top: 6px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(139,92,246,.09);
+
+    color: #c4b5fd;
+
+    font-size: .57rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+.logout {
+    color: #fca5a5;
+
+    background:
+        rgba(239,68,68,.07);
+
+    border:
+        1px solid
+        rgba(239,68,68,.12);
+
+    padding:
+        10px 14px;
+
+    border-radius: 11px;
+
+    font-size: .72rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.logout:hover {
+    background:
+        rgba(239,68,68,.12);
+}
+
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+    bottom: 14px;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 3000;
+
+    width:
+        min(500px,92%);
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    padding: 7px;
+
+    border-radius: 21px;
+
+    background:
+        rgba(15,15,24,.90);
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.45);
+}
+
+.nav-item {
+    min-height: 57px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    border-radius: 15px;
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: .62rem;
+
+    font-weight: 600;
+
+    transition: .2s;
+}
+
+.nav-item i {
+    font-size: 1.25rem;
+}
+
+.nav-item.active {
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.18),
+            rgba(124,58,237,.18)
+        );
+}
+
+.nav-item.active i {
+    color: #a78bfa;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+    bottom: 88px;
+
+    z-index: 8000;
+
+    transform:
+        translate(-50%,20px);
+
+    width:
+        min(420px,88%);
+
+    padding:
+        13px 16px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(20,20,31,.96);
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.45);
+
+    color: #fff;
+
+    font-size: .74rem;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s,
+        transform .25s;
+}
+
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%,0);
+}
+
+.toast i {
+    color: #a78bfa;
+
+    margin-right: 7px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9000;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #07070d;
+
+    transition: opacity .35s;
+}
+
+.loading.hide {
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.loader-wrap {
+    text-align: center;
+}
+
+.loader {
+    width: 35px;
+    height: 35px;
+
+    margin:
+        0 auto 13px;
+
+    border:
+        3px solid
+        rgba(255,255,255,.10);
+
+    border-top-color:
+        #8b5cf6;
+
+    border-radius: 50%;
+
+    animation:
+        spin .8s linear infinite;
+}
+
+.loader-text {
+    color:
+        rgba(255,255,255,.38);
+
+    font-size: .68rem;
+}
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width:850px) {
+
+    .action-grid {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .booking-details {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+@media (max-width:600px) {
+
+    .page {
+        width: 90%;
+    }
+
+    .topbar {
+        padding:
+            14px 5%;
+    }
+
+    .welcome {
+        padding:
+            40px 0 24px;
+    }
+
+    .swipe-card {
+        flex-basis: 82vw;
+        height: 430px;
+    }
+
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-card {
+        min-height: 145px;
+    }
+
+    .profile-panel {
+        grid-template-columns:
+            auto 1fr;
+    }
+
+    .logout {
+        grid-column:
+            1 / -1;
+
+        width: 100%;
+    }
+
+    .elite-card {
+        min-height: 500px;
+
+        border-radius: 24px;
+    }
+
+    .elite-content {
+        padding: 25px;
+    }
+
+    .elite-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .discover-card {
+        min-height: 320px;
+    }
+
+    .booking-card {
+        padding: 17px;
+    }
+
+    .booking-main {
+        gap: 9px;
+    }
+
+    .booking-salon-icon {
+        flex-basis: 42px;
+
+        width: 42px;
+        height: 42px;
+    }
+
+    .status-badge {
+        padding:
+            6px 8px;
+
+        font-size: .57rem;
+    }
+
+}
+
+</style>
+
 </head>
 
 
 <body>
 
-<div class="page-glow"></div>
+
+<!-- =====================================================
+     LOADING
+===================================================== -->
+
+<div
+    class="loading"
+    id="loading"
+>
+
+    <div class="loader-wrap">
+
+        <div class="loader"></div>
+
+        <div class="loader-text">
+            Loading your K@si space...
+        </div>
+
+    </div>
+
+</div>
 
 
 <!-- =====================================================
-     NAVBAR
+     TOP BAR
 ===================================================== -->
 
-<header class="navbar">
+<header class="topbar">
 
     <a
-        href="index.html"
-        class="logo"
-        aria-label="K@si Web home"
+        href="home.html"
+        class="brand"
     >
         K<span>@</span>si
     </a>
 
 
-    <nav class="nav-links">
-
-        <a href="#experience">
-            Experience
-        </a>
-
-        <a href="#services">
-            Services
-        </a>
-
-        <a href="#about">
-            About
-        </a>
-
+    <div class="top-actions">
 
         <button
-            class="pwa-btn"
-            id="installPwaBtn"
+            class="icon-btn"
+            id="refreshBtn"
             type="button"
+            aria-label="Refresh"
+            title="Refresh"
         >
-            <i class="bx bx-download"></i>
-            Get App
+
+            <i class="bx bx-refresh"></i>
+
         </button>
 
-
-        <!-- SIGN IN GOES TO HOME -->
-        <a
-            href="home.html"
-            class="nav-signin"
-        >
-            Sign In
-        </a>
-
-    </nav>
+    </div>
 
 </header>
 
 
+<main class="page">
+
 
 <!-- =====================================================
-     MAIN
+     WELCOME
 ===================================================== -->
 
-<main>
+<section class="welcome">
+
+    <div class="welcome-label">
+
+        <span class="online-dot"></span>
+
+        YOUR K@SI SPACE
+
+    </div>
 
 
-    <!-- =================================================
-         HERO
-    ================================================= -->
+    <h1>
 
-    <section class="hero">
+        Welcome back,
+        <span id="userName">Fresh</span>.
 
-        <div class="hero-image">
+    </h1>
 
-            <img
-                src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
-                alt="K@si premium barber experience"
-            >
+
+    <p>
+
+        Your next cut is closer than you think.
+        Discover local barbers, explore services
+        and book your time.
+
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURED
+===================================================== -->
+
+<section class="featured-section">
+
+    <div class="featured-head">
+
+        <div>
+
+            <div class="eyebrow">
+                Featured
+            </div>
+
+            <h2>
+                Fresh looks.
+            </h2>
 
         </div>
 
-
-        <div class="hero-content">
-
-
-            <!-- BADGES -->
-
-            <div class="hero-badges">
-
-                <div class="eyebrow">
-
-                    <i class="bx bx-scissors"></i>
-
-                    The new way to get fresh
-
-                </div>
-
-
-                <div class="rating">
-
-                    <i class="bx bxs-star"></i>
-
-                    4.9/5
-
-                    <span>
-                        • 1,200+ local cuts
-                    </span>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- TITLE -->
-
-            <h1>
-
-                Your cut.
-
-                <span>
-                    Your time.
-                </span>
-
-            </h1>
-
-
-
-            <!-- TYPEWRITER -->
-
-            <div class="typing-line">
-
-                <span>
-                    Discover
-                </span>
-
-                <span
-                    class="typing"
-                    id="typingText"
-                ></span>
-
-                <span class="cursor"></span>
-
-            </div>
-
-
-
-            <!-- DESCRIPTION -->
-
-            <p class="hero-description">
-
-                Discover trusted local barbers and salons,
-                compare services and prices, choose your
-                preferred time and book your next fresh cut
-                without standing in a queue.
-
-            </p>
-
-
-
-            <!-- BUTTONS -->
-
-            <div class="hero-buttons">
-
-
-                <!-- GET STARTED → HOME -->
-
-                <a
-                    href="home.html"
-                    class="btn btn-primary"
-                >
-
-                    Get Started
-
-                    <i class="bx bx-right-arrow-alt"></i>
-
-                </a>
-
-
-                <!-- EXPLORE SALONS -->
-
-                <a
-                    href="salons.html"
-                    class="btn btn-secondary"
-                >
-
-                    Explore Salons
-
-                    <i class="bx bx-compass"></i>
-
-                </a>
-
-            </div>
-
-
-
-            <!-- TRUST -->
-
-            <div class="hero-trust">
-
-                <div class="hero-trust-item">
-
-                    <i class="bx bx-check-circle"></i>
-
-                    Local businesses
-
-                </div>
-
-
-                <div class="hero-trust-item">
-
-                    <i class="bx bx-calendar-check"></i>
-
-                    Easy booking
-
-                </div>
-
-
-                <div class="hero-trust-item">
-
-                    <i class="bx bx-time-five"></i>
-
-                    Your time
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- HERO STATS -->
-
-        <div class="hero-stats">
-
-            <div class="stat">
-
-                <strong>
-                    01
-                </strong>
-
-                <small>
-                    Find your barber
-                </small>
-
-            </div>
-
-
-            <div class="stat">
-
-                <strong>
-                    02
-                </strong>
-
-                <small>
-                    Choose your service
-                </small>
-
-            </div>
-
-
-            <div class="stat">
-
-                <strong>
-                    03
-                </strong>
-
-                <small>
-                    Book your time
-                </small>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =================================================
-         EXPERIENCE
-    ================================================= -->
-
-    <section
-        id="experience"
-        class="experience"
-    >
-
-        <div class="section-label">
-            The K@si experience
-        </div>
-
-
-        <h2 class="section-title">
-            More than a haircut.
-            It's your time.
-        </h2>
-
-
-        <p class="section-description">
-
-            K@si connects customers with local
-            grooming businesses and makes finding,
-            choosing and booking your next cut simple.
-
+        <p>
+            Swipe to explore
         </p>
 
+    </div>
 
 
-        <div class="experience-grid">
+    <div class="swipe-track">
 
 
-            <article class="experience-card">
+        <article class="swipe-card">
+
+            <img
+                src="7847041D.jpg"
+                alt="Featured K@si grooming style"
+                loading="eager"
+            >
+
+            <div class="card-content">
 
                 <div class="card-number">
-                    01 / DISCOVER
+                    01
                 </div>
 
-                <i class="bx bx-search-alt-2"></i>
-
                 <h3>
-                    Find your place
+                    Fresh by design.
                 </h3>
 
                 <p>
-
-                    Browse local salons and barbers,
-                    compare services and find the right
-                    place for your next cut.
-
+                    Discover a look that matches
+                    your style and your vibe.
                 </p>
-
-            </article>
-
-
-
-            <article class="experience-card">
-
-                <div class="card-number">
-                    02 / CHOOSE
-                </div>
-
-                <i class="bx bx-cut"></i>
-
-                <h3>
-                    Choose your style
-                </h3>
-
-                <p>
-
-                    See available services and prices
-                    before you decide where to book.
-
-                </p>
-
-            </article>
-
-
-
-            <article class="experience-card">
-
-                <div class="card-number">
-                    03 / BOOK
-                </div>
-
-                <i class="bx bx-calendar-check"></i>
-
-                <h3>
-                    Own your time
-                </h3>
-
-                <p>
-
-                    Pick your date and time and send
-                    your booking directly to the salon.
-
-                </p>
-
-            </article>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =================================================
-         SERVICES
-    ================================================= -->
-
-    <section
-        id="services"
-        class="services"
-    >
-
-        <div class="services-header">
-
-            <div>
-
-                <div class="section-label">
-                    Services
-                </div>
-
-                <h2 class="section-title">
-                    Find the look.
-                </h2>
 
             </div>
 
+        </article>
 
-            <p class="section-description">
 
-                From clean classics to statement
-                fades, discover services from local
-                grooming professionals.
+        <article class="swipe-card">
 
+            <img
+                src="37BA0E35.jpg"
+                alt="Kasi Taper Fade"
+                loading="lazy"
+            >
+
+            <div class="card-content">
+
+                <div class="card-number">
+                    02
+                </div>
+
+                <h3>
+                    Kasi Taper Fade.
+                </h3>
+
+                <p>
+                    Clean lines. Fresh finish.
+                    Your next signature look.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="swipe-card">
+
+            <img
+                src="8627A569.jpg"
+                alt="Featured barber style"
+                loading="lazy"
+            >
+
+            <div class="card-content">
+
+                <div class="card-number">
+                    03
+                </div>
+
+                <h3>
+                    Your style.
+                </h3>
+
+                <p>
+                    Explore local grooming
+                    talent through K@si.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="swipe-card">
+
+            <img
+                src="A3886FFD.jpg"
+                alt="Classic clean haircut"
+                loading="lazy"
+            >
+
+            <div class="card-content">
+
+                <div class="card-number">
+                    04
+                </div>
+
+                <h3>
+                    Classic clean.
+                </h3>
+
+                <p>
+                    Timeless cuts from
+                    local professionals.
+                </p>
+
+            </div>
+
+        </article>
+
+
+        <article class="swipe-card">
+
+            <img
+                src="B307F46B.jpg"
+                alt="Line design haircut"
+                loading="lazy"
+            >
+
+            <div class="card-content">
+
+                <div class="card-number">
+                    05
+                </div>
+
+                <h3>
+                    Make your mark.
+                </h3>
+
+                <p>
+                    Stand out with a cut
+                    built around your style.
+                </p>
+
+            </div>
+
+        </article>
+
+
+    </div>
+
+
+    <div class="swipe-hint">
+
+        <i class="bx bx-left-arrow-alt"></i>
+
+        Swipe
+
+        <i class="bx bx-right-arrow-alt"></i>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUICK ACTIONS
+===================================================== -->
+
+<section class="section">
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Quick access
+        </div>
+
+        <h2>
+            Make your move.
+        </h2>
+
+    </div>
+
+
+    <div class="action-grid">
+
+
+        <a
+            href="salons.html"
+            class="action-card"
+        >
+
+            <span class="action-arrow">
+                <i class="bx bx-right-arrow-alt"></i>
+            </span>
+
+            <div class="action-icon">
+                <i class="bx bx-search-alt-2"></i>
+            </div>
+
+            <h3>
+                Explore Salons
+            </h3>
+
+            <p>
+                Discover barbers and salons
+                around you.
             </p>
 
+        </a>
+
+
+        <a
+            href="#bookings"
+            class="action-card"
+        >
+
+            <span class="action-arrow">
+                <i class="bx bx-right-arrow-alt"></i>
+            </span>
+
+            <div class="action-icon">
+                <i class="bx bx-calendar-check"></i>
+            </div>
+
+            <h3>
+                My Bookings
+            </h3>
+
+            <p>
+                See your upcoming appointments
+                and booking status.
+            </p>
+
+        </a>
+
+
+        <a
+            href="#profile"
+            class="action-card"
+        >
+
+            <span class="action-arrow">
+                <i class="bx bx-right-arrow-alt"></i>
+            </span>
+
+            <div class="action-icon">
+                <i class="bx bx-user"></i>
+            </div>
+
+            <h3>
+                My Account
+            </h3>
+
+            <p>
+                Manage your K@si account
+                information.
+            </p>
+
+        </a>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BOOKINGS
+===================================================== -->
+
+<section
+    class="section"
+    id="bookings"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Your schedule
+        </div>
+
+        <h2>
+            Upcoming bookings.
+        </h2>
+
+    </div>
+
+
+    <div class="booking-panel">
+
+
+        <div class="booking-top">
+
+            <strong>
+
+                My appointments
+
+                <span
+                    class="booking-count"
+                    id="bookingCount"
+                >
+                    0
+                </span>
+
+            </strong>
+
+
+            <a href="salons.html">
+
+                Book a cut
+
+                <i class="bx bx-right-arrow-alt"></i>
+
+            </a>
+
         </div>
 
 
+        <div
+            class="booking-content"
+            id="bookingContent"
+        >
 
-        <div class="services-grid">
+            <div class="booking-loading">
 
+                <i class="bx bx-loader-alt bx-spin"></i>
 
-            <article class="service-card">
+                Loading your bookings...
 
-                <div class="service-icon">
-
-                    <i class="bx bx-cut"></i>
-
-                </div>
-
-                <h3>
-                    Classic Cut
-                </h3>
-
-                <p>
-                    Clean, sharp and timeless.
-                </p>
-
-            </article>
-
-
-
-            <article class="service-card">
-
-                <div class="service-icon">
-
-                    <i class="bx bx-star"></i>
-
-                </div>
-
-                <h3>
-                    Fade
-                </h3>
-
-                <p>
-                    Fresh fades made to stand out.
-                </p>
-
-            </article>
-
-
-
-            <article class="service-card">
-
-                <div class="service-icon">
-
-                    <i class="bx bx-user"></i>
-
-                </div>
-
-                <h3>
-                    Beard Trim
-                </h3>
-
-                <p>
-                    Shape, line and finish.
-                </p>
-
-            </article>
-
-
-
-            <article class="service-card">
-
-                <div class="service-icon">
-
-                    <i class="bx bx-diamond"></i>
-
-                </div>
-
-                <h3>
-                    Premium Cut
-                </h3>
-
-                <p>
-                    The complete grooming experience.
-                </p>
-
-            </article>
+            </div>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
 
 
+<!-- =====================================================
+     DISCOVER
+===================================================== -->
 
-    <!-- =================================================
-         CTA
-    ================================================= -->
+<section class="section">
 
-    <section
-        id="about"
-        class="cta"
-    >
+    <div class="discover-card">
 
-        <div class="cta-box">
+        <div class="discover-bg"></div>
 
-            <div class="section-label">
-                K@si Web
+
+        <div class="discover-content">
+
+            <div class="eyebrow">
+                Discover
             </div>
 
 
             <h2>
-                Stop waiting.
-                Start getting fresh.
+                Your barber
+                is waiting.
             </h2>
 
 
             <p>
 
-                Your next barber is closer than you think.
-                Explore local salons, choose your service
-                and book your next appointment through K@si.
+                Explore local grooming businesses,
+                compare services and find the style
+                that fits you.
 
             </p>
 
 
-            <div class="hero-buttons">
+            <a
+                href="salons.html"
+                class="btn btn-primary"
+            >
 
+                Discover Salons
+
+                <i class="bx bx-compass"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ELITE
+===================================================== -->
+
+<section class="elite-section">
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            K@si Elite
+        </div>
+
+        <h2>
+            The standard is higher.
+        </h2>
+
+    </div>
+
+
+    <div class="elite-card">
+
+        <div class="elite-image">
+
+            <img
+                src="C00719B.jpg"
+                alt="K@si Elite Cuts"
+                loading="lazy"
+            >
+
+        </div>
+
+
+        <div class="elite-content">
+
+            <div class="elite-label">
+
+                <i class="bx bx-sparkles"></i>
+
+                Elite cuts only
+
+            </div>
+
+
+            <h2>
+                Look sharp.
+                Feel sharper.
+            </h2>
+
+
+            <p>
+
+                Your next great look is waiting.
+                Discover local barbers, compare
+                services and reserve your preferred
+                time — without standing in line.
+
+            </p>
+
+
+            <div class="buttons">
 
                 <a
-                    href="home.html"
+                    href="salons.html"
                     class="btn btn-primary"
                 >
 
-                    Find Your Barber
+                    Find a Salon
 
                     <i class="bx bx-right-arrow-alt"></i>
 
@@ -1861,13 +2402,13 @@
 
 
                 <a
-                    href="salons.html"
+                    href="#bookings"
                     class="btn btn-secondary"
                 >
 
-                    Browse Salons
+                    My Bookings
 
-                    <i class="bx bx-store"></i>
+                    <i class="bx bx-calendar"></i>
 
                 </a>
 
@@ -1875,300 +2416,1909 @@
 
         </div>
 
-    </section>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
+<section
+    class="section"
+    id="profile"
+>
+
+    <div class="section-head">
+
+        <div class="eyebrow">
+            Account
+        </div>
+
+        <h2>
+            Your K@si profile.
+        </h2>
+
+    </div>
+
+
+    <div class="profile-panel">
+
+
+        <div
+            class="avatar"
+            id="avatar"
+        >
+            K
+        </div>
+
+
+        <div class="profile-info">
+
+            <strong id="profileName">
+                K@si Customer
+            </strong>
+
+
+            <span id="profileEmail">
+                Loading account...
+            </span>
+
+
+            <div
+                class="profile-role"
+                id="profileRole"
+            >
+                Customer
+            </div>
+
+        </div>
+
+
+        <button
+            class="logout"
+            id="logoutBtn"
+            type="button"
+        >
+
+            Sign Out
+
+        </button>
+
+    </div>
+
+</section>
+
 
 </main>
 
 
-
 <!-- =====================================================
-     FOOTER
+     BOTTOM NAV
 ===================================================== -->
 
-<footer>
+<nav class="bottom-nav">
 
-    <div class="footer-top">
+    <a
+        href="home.html"
+        class="nav-item active"
+    >
 
+        <i class="bx bxs-home"></i>
 
-        <div class="footer-brand">
+        <span>
+            Home
+        </span>
 
-            K<span>@</span>si Web
-
-        </div>
-
-
-        <div class="footer-links">
-
-            <a href="#experience">
-                Experience
-            </a>
-
-            <a href="#services">
-                Services
-            </a>
-
-            <a href="salons.html">
-                Salons
-            </a>
-
-            <a href="home.html">
-                Account
-            </a>
-
-        </div>
-
-    </div>
+    </a>
 
 
-    <div class="copyright">
+    <a
+        href="salons.html"
+        class="nav-item"
+    >
 
-        © 2026 K@si Web.
-        Fresh cuts. No lines.
+        <i class="bx bx-store"></i>
 
-    </div>
+        <span>
+            Salons
+        </span>
 
-</footer>
+    </a>
 
+
+    <a
+        href="#profile"
+        class="nav-item"
+    >
+
+        <i class="bx bx-user"></i>
+
+        <span>
+            Account
+        </span>
+
+    </a>
+
+</nav>
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     TOAST
 ===================================================== -->
+
+<div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+></div>
+
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
 
 <script>
 
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
 
-    /* =====================================================
-       TYPEWRITER
-    ===================================================== */
+const firebaseConfig = {
 
-    const typingText =
-        document.getElementById("typingText");
+    apiKey:
+        "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
 
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
 
-    const words = [
+    databaseURL:
+        "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
 
-        "your next fade.",
+    projectId:
+        "kasi-web-d073f",
 
-        "your local barber.",
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
 
-        "your perfect cut.",
+    messagingSenderId:
+        "105918157571",
 
-        "your next appointment.",
+    appId:
+        "1:105918157571:web:8d646"
 
-        "your K@si."
-
-    ];
-
-
-    let wordIndex = 0;
-
-    let charIndex = 0;
-
-    let deleting = false;
-
-
-    function typeEffect() {
-
-        const currentWord =
-            words[wordIndex];
+};
 
 
-        if (!deleting) {
+/* =========================================================
+   FIREBASE INIT
+========================================================= */
 
-            typingText.textContent =
-                currentWord.substring(
-                    0,
-                    charIndex + 1
-                );
+try {
 
-            charIndex++;
+    if (!firebase.apps.length) {
 
+        firebase.initializeApp(
+            firebaseConfig
+        );
 
-            if (
-                charIndex ===
-                currentWord.length
-            ) {
+    }
 
-                deleting = true;
+    window.firebaseAuth =
+        firebase.auth();
 
-                setTimeout(
-                    typeEffect,
-                    1700
-                );
+    window.firebaseDB =
+        firebase.firestore();
 
-                return;
+} catch (error) {
 
-            }
+    console.error(
+        "Firebase initialization error:",
+        error
+    );
 
-        } else {
-
-            typingText.textContent =
-                currentWord.substring(
-                    0,
-                    charIndex - 1
-                );
-
-            charIndex--;
+}
 
 
-            if (charIndex === 0) {
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-                deleting = false;
+const loading =
+    document.getElementById("loading");
 
-                wordIndex =
-                    (wordIndex + 1)
-                    % words.length;
+const userName =
+    document.getElementById("userName");
+
+const profileName =
+    document.getElementById("profileName");
+
+const profileEmail =
+    document.getElementById("profileEmail");
+
+const profileRole =
+    document.getElementById("profileRole");
+
+const avatar =
+    document.getElementById("avatar");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
+
+const refreshBtn =
+    document.getElementById("refreshBtn");
+
+const bookingContent =
+    document.getElementById("bookingContent");
+
+const bookingCount =
+    document.getElementById("bookingCount");
+
+const toast =
+    document.getElementById("toast");
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+
+let unsubscribeBookings = null;
+
+let loadingHidden = false;
+
+let redirecting = false;
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+function showToast(message) {
+
+    clearTimeout(toastTimer);
+
+    toast.innerHTML = `
+        <i class="bx bx-info-circle"></i>
+        ${escapeHtml(message)}
+    `;
+
+    toast.classList.add("show");
+
+    toastTimer = setTimeout(
+        function() {
+
+            toast.classList.remove("show");
+
+        },
+        3000
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   HIDE LOADING
+========================================================= */
+
+function hideLoading() {
+
+    if (loadingHidden) {
+        return;
+    }
+
+    loadingHidden = true;
+
+    setTimeout(
+        function() {
+
+            loading.classList.add("hide");
+
+        },
+        180
+    );
+
+}
+
+
+/* =========================================================
+   GET FIRST NAME
+========================================================= */
+
+function getFirstName(user) {
+
+    if (!user) {
+        return "Fresh";
+    }
+
+    if (user.displayName) {
+
+        const clean =
+            user.displayName.trim();
+
+        if (clean) {
+
+            return clean
+                .split(/\s+/)[0];
+
+        }
+
+    }
+
+    if (user.email) {
+
+        const emailName =
+            user.email
+                .split("@")[0]
+                .replace(/[0-9]/g, "")
+                .replace(/[._-]+/g, " ")
+                .trim();
+
+        if (emailName) {
+
+            return emailName
+                .split(/\s+/)[0];
+
+        }
+
+    }
+
+    return "Fresh";
+
+}
+
+
+/* =========================================================
+   NORMALIZE ROLE
+========================================================= */
+
+function normalizeRole(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+}
+
+
+/* =========================================================
+   ROUTE BY ROLE
+========================================================= */
+
+function routeByRole(role) {
+
+    role =
+        normalizeRole(role);
+
+    if (redirecting) {
+        return;
+    }
+
+    if (role === "admin") {
+
+        redirecting = true;
+
+        window.location.replace(
+            "admin.html"
+        );
+
+        return;
+
+    }
+
+    if (
+        role === "salon_owner" ||
+        role === "owner"
+    ) {
+
+        redirecting = true;
+
+        window.location.replace(
+            "ownerdashboard.html"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BASIC UI
+========================================================= */
+
+function setBasicUserUI(user) {
+
+    const firstName =
+        getFirstName(user);
+
+    userName.textContent =
+        firstName;
+
+    profileName.textContent =
+        user.displayName ||
+        firstName ||
+        "K@si Customer";
+
+    profileEmail.textContent =
+        user.email ||
+        "K@si account";
+
+    avatar.textContent =
+        firstName
+            .charAt(0)
+            .toUpperCase();
+
+    profileRole.textContent =
+        "Customer";
+
+}
+
+
+/* =========================================================
+   LOAD FIRESTORE PROFILE
+========================================================= */
+
+async function loadProfile(user) {
+
+    if (
+        !user ||
+        !window.firebaseDB
+    ) {
+
+        return null;
+
+    }
+
+    try {
+
+        const profile =
+            await window.firebaseDB
+                .collection("users")
+                .doc(user.uid)
+                .get();
+
+        if (!profile.exists) {
+
+            console.warn(
+                "No Firestore profile found:",
+                user.uid
+            );
+
+            return {
+                role: "customer"
+            };
+
+        }
+
+        const data =
+            profile.data() || {};
+
+        const role =
+            normalizeRole(
+                data.role ||
+                data.Role ||
+                data.userRole
+            );
+
+        /*
+            Firestore is the role source
+            of truth.
+        */
+
+        if (
+            role === "admin" ||
+            role === "salon_owner" ||
+            role === "owner"
+        ) {
+
+            routeByRole(role);
+
+            return {
+                ...data,
+                role
+            };
+
+        }
+
+
+        const name =
+            data.name ||
+            data.displayName ||
+            data.fullName;
+
+
+        const email =
+            data.email ||
+            user.email;
+
+
+        if (name) {
+
+            const cleanName =
+                String(name).trim();
+
+            if (cleanName) {
+
+                userName.textContent =
+                    cleanName.split(/\s+/)[0];
+
+                profileName.textContent =
+                    cleanName;
+
+                avatar.textContent =
+                    cleanName
+                        .charAt(0)
+                        .toUpperCase();
 
             }
 
         }
 
 
-        setTimeout(
+        if (email) {
 
-            typeEffect,
+            profileEmail.textContent =
+                email;
 
-            deleting
-                ? 45
-                : 75
+        }
 
+
+        profileRole.textContent =
+            "Customer";
+
+
+        return {
+            ...data,
+            role: "customer"
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Profile lookup error:",
+            error
+        );
+
+        /*
+            Do not lock a legitimate
+            customer out simply because
+            their profile document failed.
+        */
+
+        profileRole.textContent =
+            "Customer";
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================================================
+   TIMESTAMP → DATE
+========================================================= */
+
+function toDate(value) {
+
+    if (!value) {
+        return null;
+    }
+
+    if (value instanceof Date) {
+        return value;
+    }
+
+    if (
+        typeof value.toDate ===
+        "function"
+    ) {
+
+        try {
+
+            return value.toDate();
+
+        } catch (error) {
+
+            return null;
+
+        }
+
+    }
+
+    if (
+        typeof value ===
+        "number"
+    ) {
+
+        const date =
+            new Date(value);
+
+        return isNaN(date.getTime())
+            ? null
+            : date;
+
+    }
+
+    if (
+        typeof value ===
+        "string"
+    ) {
+
+        const date =
+            new Date(value);
+
+        return isNaN(date.getTime())
+            ? null
+            : date;
+
+    }
+
+    return null;
+
+}
+
+
+/* =========================================================
+   BOOKING DATETIME
+========================================================= */
+
+function getBookingDateTime(booking) {
+
+    const dateString =
+        booking.date || "";
+
+    const timeString =
+        booking.time || "00:00";
+
+    if (dateString) {
+
+        const parsed =
+            new Date(
+                `${dateString}T${timeString}`
+            );
+
+        if (!isNaN(
+            parsed.getTime()
+        )) {
+
+            return parsed.getTime();
+
+        }
+
+    }
+
+    const created =
+        toDate(
+            booking.createdAt
+        );
+
+    return created
+        ? created.getTime()
+        : 0;
+
+}
+
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
+function formatBookingDate(dateString) {
+
+    if (!dateString) {
+        return "Date pending";
+    }
+
+    const parts =
+        String(dateString).split("-");
+
+    if (
+        parts.length === 3 &&
+        parts[0].length === 4
+    ) {
+
+        const date =
+            new Date(
+                Number(parts[0]),
+                Number(parts[1]) - 1,
+                Number(parts[2])
+            );
+
+        if (!isNaN(
+            date.getTime()
+        )) {
+
+            return new Intl.DateTimeFormat(
+                "en-ZA",
+                {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                }
+            ).format(date);
+
+        }
+
+    }
+
+    const fallback =
+        new Date(dateString);
+
+    if (!isNaN(
+        fallback.getTime()
+    )) {
+
+        return new Intl.DateTimeFormat(
+            "en-ZA",
+            {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        ).format(fallback);
+
+    }
+
+    return String(dateString);
+
+}
+
+
+/* =========================================================
+   FORMAT PRICE
+========================================================= */
+
+function formatPrice(price) {
+
+    if (
+        price === null ||
+        price === undefined ||
+        price === ""
+    ) {
+
+        return "Price not set";
+
+    }
+
+    const raw =
+        String(price)
+            .replace(
+                /[^0-9.-]/g,
+                ""
+            );
+
+    const numeric =
+        Number(raw);
+
+    if (!isNaN(numeric)) {
+
+        return (
+            "R" +
+            numeric.toLocaleString(
+                "en-ZA"
+            )
         );
 
     }
 
+    return String(price);
 
-    typeEffect();
-
-
-
-    /* =====================================================
-       PWA INSTALLATION
-    ===================================================== */
-
-    let deferredPrompt = null;
+}
 
 
-    const installPwaBtn =
-        document.getElementById(
-            "installPwaBtn"
+/* =========================================================
+   NORMALIZE STATUS
+========================================================= */
+
+function normalizeStatus(status) {
+
+    return String(
+        status || "pending"
+    )
+        .trim()
+        .toLowerCase()
+        .replace(
+            /[\s-]+/g,
+            "_"
+        );
+
+}
+
+
+/* =========================================================
+   STATUS UI
+========================================================= */
+
+function getStatusUI(status) {
+
+    const normalized =
+        normalizeStatus(status);
+
+    if (
+        normalized === "approved" ||
+        normalized === "accepted" ||
+        normalized === "confirmed"
+    ) {
+
+        return {
+            className: "status-approved",
+            icon: "bx-check-circle",
+            label: "Approved"
+        };
+
+    }
+
+    if (
+        normalized === "declined" ||
+        normalized === "rejected"
+    ) {
+
+        return {
+            className: "status-declined",
+            icon: "bx-x-circle",
+            label: "Declined"
+        };
+
+    }
+
+    if (
+        normalized === "completed" ||
+        normalized === "complete"
+    ) {
+
+        return {
+            className: "status-completed",
+            icon: "bx-check-double",
+            label: "Completed"
+        };
+
+    }
+
+    if (
+        normalized === "cancelled" ||
+        normalized === "canceled"
+    ) {
+
+        return {
+            className: "status-cancelled",
+            icon: "bx-block",
+            label: "Cancelled"
+        };
+
+    }
+
+    if (
+        normalized === "pending" ||
+        normalized === ""
+    ) {
+
+        return {
+            className: "status-pending",
+            icon: "bx-time-five",
+            label: "Pending"
+        };
+
+    }
+
+    return {
+        className: "status-unknown",
+        icon: "bx-info-circle",
+        label:
+            String(status || "Pending")
+                .replace(
+                    /^./,
+                    char =>
+                        char.toUpperCase()
+                )
+    };
+
+}
+
+
+/* =========================================================
+   NORMALIZE BOOKING
+========================================================= */
+
+function normalizeBooking(doc) {
+
+    const data =
+        doc.data() || {};
+
+    return {
+
+        id:
+            doc.id,
+
+        salonId:
+            data.salonId || "",
+
+        ownerId:
+            data.ownerId || "",
+
+        userId:
+            data.userId ||
+            data.uid ||
+            "",
+
+        salonName:
+            data.salonName ||
+            data.salon ||
+            data.businessName ||
+            "K@si Salon",
+
+        salonLocation:
+            data.salonLocation ||
+            data.location ||
+            "",
+
+        salonEmail:
+            data.salonEmail ||
+            "",
+
+        service:
+            data.service ||
+            data.serviceType ||
+            data.serviceName ||
+            "Grooming service",
+
+        price:
+            data.price ??
+            data.amount ??
+            "",
+
+        date:
+            data.date ||
+            data.bookingDate ||
+            "",
+
+        time:
+            data.time ||
+            data.bookingTime ||
+            "",
+
+        status:
+            data.status ||
+            "pending",
+
+        customerName:
+            data.customerName ||
+            data.name ||
+            "",
+
+        customerPhone:
+            data.customerPhone ||
+            data.custPhone ||
+            data.phone ||
+            "",
+
+        customerEmail:
+            data.customerEmail ||
+            "",
+
+        createdAt:
+            data.createdAt ||
+            null,
+
+        updatedAt:
+            data.updatedAt ||
+            null
+
+    };
+
+}
+
+
+/* =========================================================
+   UPCOMING BOOKING
+========================================================= */
+
+function isUpcomingBooking(booking) {
+
+    const status =
+        normalizeStatus(
+            booking.status
+        );
+
+    if (
+        status === "declined" ||
+        status === "rejected" ||
+        status === "cancelled" ||
+        status === "canceled" ||
+        status === "completed" ||
+        status === "complete"
+    ) {
+
+        return false;
+
+    }
+
+    const dateTime =
+        getBookingDateTime(
+            booking
+        );
+
+    if (!dateTime) {
+
+        return true;
+
+    }
+
+    const now =
+        new Date();
+
+    const today =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        );
+
+    return (
+        dateTime >=
+        today.getTime()
+    );
+
+}
+
+
+/* =========================================================
+   BOOKING CARD
+========================================================= */
+
+function createBookingCard(booking) {
+
+    const status =
+        getStatusUI(
+            booking.status
+        );
+
+    const salonName =
+        escapeHtml(
+            booking.salonName
+        );
+
+    const location =
+        escapeHtml(
+            booking.salonLocation ||
+            "Local K@si salon"
+        );
+
+    const service =
+        escapeHtml(
+            booking.service
+        );
+
+    const date =
+        escapeHtml(
+            formatBookingDate(
+                booking.date
+            )
+        );
+
+    const time =
+        escapeHtml(
+            booking.time ||
+            "Time pending"
+        );
+
+    const price =
+        escapeHtml(
+            formatPrice(
+                booking.price
+            )
+        );
+
+    const statusLabel =
+        escapeHtml(
+            status.label
         );
 
 
-    window.addEventListener(
-        "beforeinstallprompt",
-        function(event) {
+    let note =
+        "Booking information is updated live.";
 
-            event.preventDefault();
+    let noteIcon =
+        "bx-bell";
 
-            deferredPrompt = event;
 
-            if (installPwaBtn) {
+    if (
+        status.label === "Approved"
+    ) {
 
-                installPwaBtn.style.display =
-                    "inline-flex";
+        note =
+            "Your salon has approved this appointment.";
 
-            }
+        noteIcon =
+            "bx-check-circle";
+
+    } else if (
+        status.label === "Pending"
+    ) {
+
+        note =
+            "Waiting for the salon to respond to your booking.";
+
+        noteIcon =
+            "bx-time-five";
+
+    } else if (
+        status.label === "Declined"
+    ) {
+
+        note =
+            "This booking was declined by the salon.";
+
+        noteIcon =
+            "bx-x-circle";
+
+    }
+
+
+    return `
+
+        <article
+            class="booking-card"
+            data-booking-id="${escapeHtml(booking.id)}"
+        >
+
+            <div class="booking-main">
+
+                <div class="booking-salon">
+
+                    <div class="booking-salon-icon">
+
+                        <i class="bx bx-store-alt"></i>
+
+                    </div>
+
+
+                    <div class="booking-salon-info">
+
+                        <strong>
+                            ${salonName}
+                        </strong>
+
+                        <span class="booking-location">
+
+                            <i class="bx bx-map"></i>
+
+                            ${location}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="status-badge ${status.className}"
+                >
+
+                    <i class="bx ${status.icon}"></i>
+
+                    ${statusLabel}
+
+                </span>
+
+            </div>
+
+
+            <div class="booking-details">
+
+
+                <div class="booking-detail">
+
+                    <span class="booking-detail-label">
+                        Service
+                    </span>
+
+                    <span class="booking-detail-value">
+                        ${service}
+                    </span>
+
+                </div>
+
+
+                <div class="booking-detail">
+
+                    <span class="booking-detail-label">
+                        Date
+                    </span>
+
+                    <span class="booking-detail-value">
+                        ${date}
+                    </span>
+
+                </div>
+
+
+                <div class="booking-detail">
+
+                    <span class="booking-detail-label">
+                        Time
+                    </span>
+
+                    <span class="booking-detail-value">
+                        ${time}
+                    </span>
+
+                </div>
+
+
+                <div class="booking-detail">
+
+                    <span class="booking-detail-label">
+                        Price
+                    </span>
+
+                    <span class="booking-detail-value booking-price">
+                        ${price}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="booking-note">
+
+                <i class="bx ${noteIcon}"></i>
+
+                ${escapeHtml(note)}
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   EMPTY BOOKINGS
+========================================================= */
+
+function renderEmptyBookings() {
+
+    bookingContent.innerHTML = `
+
+        <div class="booking-empty">
+
+            <div class="empty-icon">
+
+                <i class="bx bx-calendar-plus"></i>
+
+            </div>
+
+
+            <h3>
+                Your next cut starts here.
+            </h3>
+
+
+            <p>
+
+                You don't have any upcoming
+                bookings yet. Find a salon and
+                reserve your preferred time.
+
+            </p>
+
+
+            <a
+                href="salons.html"
+                class="btn btn-primary"
+            >
+
+                Explore Salons
+
+                <i class="bx bx-right-arrow-alt"></i>
+
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RENDER BOOKINGS
+========================================================= */
+
+function renderBookings(bookings) {
+
+    bookings.sort(
+        function(a,b) {
+
+            const aTime =
+                getBookingDateTime(a);
+
+            const bTime =
+                getBookingDateTime(b);
+
+            return aTime - bTime;
 
         }
     );
 
 
-    if (installPwaBtn) {
-
-        installPwaBtn.addEventListener(
-            "click",
-            async function() {
-
-                if (!deferredPrompt) {
-                    return;
-                }
+    const upcoming =
+        bookings.filter(
+            isUpcomingBooking
+        );
 
 
-                deferredPrompt.prompt();
+    bookingCount.textContent =
+        String(upcoming.length);
 
 
-                try {
+    if (!upcoming.length) {
 
-                    const result =
-                        await deferredPrompt.userChoice;
+        renderEmptyBookings();
+
+        return;
+
+    }
 
 
-                    if (
-                        result.outcome ===
-                        "accepted"
-                    ) {
+    const visible =
+        upcoming.slice(0,10);
 
-                        installPwaBtn.style.display =
-                            "none";
 
-                    }
+    bookingContent.innerHTML = `
 
-                } catch (error) {
+        <div class="booking-list">
 
-                    console.warn(
-                        "PWA installation:",
+            ${
+                visible
+                    .map(createBookingCard)
+                    .join("")
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   LIVE BOOKINGS
+========================================================= */
+
+function listenToBookings(user) {
+
+    if (unsubscribeBookings) {
+
+        unsubscribeBookings();
+
+        unsubscribeBookings =
+            null;
+
+    }
+
+
+    if (
+        !user ||
+        !window.firebaseDB
+    ) {
+
+        renderEmptyBookings();
+
+        return;
+
+    }
+
+
+    bookingContent.innerHTML = `
+
+        <div class="booking-loading">
+
+            <i class="bx bx-loader-alt bx-spin"></i>
+
+            Loading your bookings...
+
+        </div>
+
+    `;
+
+
+    /*
+        IMPORTANT:
+
+        Only userId is queried.
+
+        No orderBy() means no composite
+        index requirement.
+
+        Results are sorted locally.
+    */
+
+    unsubscribeBookings =
+        window.firebaseDB
+            .collection("bookings")
+            .where(
+                "userId",
+                "==",
+                user.uid
+            )
+            .onSnapshot(
+
+                function(snapshot) {
+
+                    const bookings = [];
+
+
+                    snapshot.forEach(
+                        function(doc) {
+
+                            const booking =
+                                normalizeBooking(
+                                    doc
+                                );
+
+
+                            /*
+                                Extra protection:
+                                make sure this booking
+                                really belongs to the
+                                current signed-in user.
+                            */
+
+                            if (
+                                !booking.userId ||
+                                booking.userId ===
+                                user.uid
+                            ) {
+
+                                bookings.push(
+                                    booking
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                    renderBookings(
+                        bookings
+                    );
+
+                },
+
+
+                function(error) {
+
+                    console.error(
+                        "Booking listener error:",
                         error
                     );
 
+
+                    bookingCount.textContent =
+                        "0";
+
+
+                    bookingContent.innerHTML = `
+
+                        <div class="booking-empty">
+
+                            <div class="empty-icon">
+
+                                <i class="bx bx-error-circle"></i>
+
+                            </div>
+
+
+                            <h3>
+                                Couldn't load bookings.
+                            </h3>
+
+
+                            <p>
+
+                                Your account is signed in,
+                                but K@si couldn't read your
+                                bookings right now.
+
+                            </p>
+
+
+                            <button
+                                class="btn btn-primary"
+                                type="button"
+                                id="retryBookingsBtn"
+                            >
+
+                                Try Again
+
+                                <i class="bx bx-refresh"></i>
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    const retry =
+                        document.getElementById(
+                            "retryBookingsBtn"
+                        );
+
+
+                    if (retry) {
+
+                        retry.addEventListener(
+                            "click",
+                            function() {
+
+                                listenToBookings(
+                                    currentUser
+                                );
+
+                            }
+                        );
+
+                    }
+
                 }
 
+            );
 
-                deferredPrompt = null;
+}
 
-            }
+
+/* =========================================================
+   LOAD USER
+========================================================= */
+
+async function loadUser(user) {
+
+    if (redirecting) {
+        return;
+    }
+
+
+    if (!user) {
+
+        /*
+            Home is protected.
+
+            Guest → landing page.
+        */
+
+        window.location.replace(
+            "index.html"
         );
+
+        return;
 
     }
 
 
-    /* =====================================================
-       AFTER APP INSTALL
-    ===================================================== */
+    currentUser =
+        user;
 
-    window.addEventListener(
-        "appinstalled",
-        function() {
 
-            if (installPwaBtn) {
-
-                installPwaBtn.style.display =
-                    "none";
-
-            }
-
-            deferredPrompt = null;
-
-        }
+    setBasicUserUI(
+        user
     );
 
 
-    /* =====================================================
-       PREVENT BROKEN IMAGE LAYOUT
-    ===================================================== */
+    /*
+        Read Firestore role before
+        enabling customer content.
+    */
 
-    const heroImage =
-        document.querySelector(
-            ".hero-image img"
+    const profile =
+        await loadProfile(
+            user
         );
 
 
-    if (heroImage) {
+    if (redirecting) {
+        return;
+    }
 
-        heroImage.addEventListener(
-            "error",
-            function() {
 
-                console.warn(
-                    "K@si hero image could not be loaded."
+    if (
+        profile &&
+        (
+            profile.role === "admin" ||
+            profile.role === "salon_owner" ||
+            profile.role === "owner"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+        Customer account.
+    */
+
+    listenToBookings(
+        user
+    );
+
+
+    hideLoading();
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+if (
+    window.firebaseAuth
+) {
+
+    window.firebaseAuth
+        .onAuthStateChanged(
+            function(user) {
+
+                loadUser(
+                    user
                 );
 
             }
         );
 
+} else {
+
+    console.error(
+        "Firebase Auth unavailable."
+    );
+
+
+    bookingContent.innerHTML = `
+
+        <div class="booking-empty">
+
+            <div class="empty-icon">
+
+                <i class="bx bx-cloud-off"></i>
+
+            </div>
+
+            <h3>
+                Connection unavailable.
+            </h3>
+
+            <p>
+                Please refresh K@si and try again.
+            </p>
+
+        </div>
+
+    `;
+
+
+    hideLoading();
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+logoutBtn.addEventListener(
+    "click",
+    async function() {
+
+        if (
+            !window.firebaseAuth
+        ) {
+
+            return;
+
+        }
+
+
+        logoutBtn.disabled =
+            true;
+
+        logoutBtn.textContent =
+            "Signing out...";
+
+
+        try {
+
+            if (
+                unsubscribeBookings
+            ) {
+
+                unsubscribeBookings();
+
+                unsubscribeBookings =
+                    null;
+
+            }
+
+
+            await window.firebaseAuth
+                .signOut();
+
+
+            /*
+                Clear local app session only.
+            */
+
+            sessionStorage.clear();
+
+
+            window.location.replace(
+                "index.html"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+
+            logoutBtn.disabled =
+                false;
+
+            logoutBtn.textContent =
+                "Sign Out";
+
+
+            showToast(
+                "Could not sign out. Please try again."
+            );
+
+        }
+
     }
+);
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+refreshBtn.addEventListener(
+    "click",
+    function() {
+
+        refreshBtn.innerHTML = `
+            <i class="bx bx-loader-alt bx-spin"></i>
+        `;
+
+        setTimeout(
+            function() {
+
+                window.location.reload();
+
+            },
+            350
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLEAN FIRESTORE LISTENER
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        if (
+            unsubscribeBookings
+        ) {
+
+            unsubscribeBookings();
+
+            unsubscribeBookings =
+                null;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   BACK/FORWARD CACHE
+========================================================= */
+
+window.addEventListener(
+    "pageshow",
+    function(event) {
+
+        if (
+            event.persisted &&
+            window.firebaseAuth &&
+            !window.firebaseAuth.currentUser
+        ) {
+
+            window.location.replace(
+                "index.html"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FOCUS AUTH CHECK
+========================================================= */
+
+window.addEventListener(
+    "focus",
+    function() {
+
+        if (
+            window.firebaseAuth &&
+            !window.firebaseAuth.currentUser &&
+            !redirecting
+        ) {
+
+            window.location.replace(
+                "index.html"
+            );
+
+        }
+
+    }
+);
 
 </script>
 
 </body>
+
     </html>
