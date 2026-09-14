@@ -17,14 +17,20 @@
 
     <meta
         name="description"
-        content="K@si Web — Discover elite local grooming, salons and fresh cuts."
+        content="K@si Web — Your personal grooming space. Discover salons, manage bookings and find your next fresh cut."
     >
 
     <title>K@si Web | Home</title>
 
-    <link rel="manifest" href="manifest.json">
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
@@ -44,10 +50,6 @@
 
     <style>
 
-        /* =========================================================
-           RESET
-        ========================================================= */
-
         * {
             margin: 0;
             padding: 0;
@@ -63,14 +65,14 @@
 
             background:
                 radial-gradient(
-                    circle at 85% 8%,
-                    rgba(124,58,237,.18),
-                    transparent 28%
+                    circle at 85% 5%,
+                    rgba(124,58,237,0.16),
+                    transparent 30%
                 ),
                 radial-gradient(
-                    circle at 8% 40%,
-                    rgba(59,130,246,.10),
-                    transparent 28%
+                    circle at 5% 35%,
+                    rgba(59,130,246,0.09),
+                    transparent 30%
                 ),
                 #07070d;
 
@@ -78,28 +80,17 @@
 
             font-family: "Inter", sans-serif;
 
-            overflow-x: hidden;
-
             padding-bottom: 105px;
+
+            overflow-x: hidden;
         }
 
-        body::before {
-            content: "";
+        body.auth-mode {
+            padding-bottom: 0;
+        }
 
-            position: fixed;
-
-            inset: 0;
-
-            pointer-events: none;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    rgba(255,255,255,.015),
-                    transparent 25%
-                );
-
-            z-index: -1;
+        body.modal-open {
+            overflow: hidden;
         }
 
         a {
@@ -107,18 +98,833 @@
             color: inherit;
         }
 
-        button {
+        button,
+        input,
+        select {
             font-family: inherit;
         }
 
-        img {
-            max-width: 100%;
+        button {
+            cursor: pointer;
         }
 
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .page {
+            width: min(1180px, 90%);
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            color: #8b5cf6;
+
+            font-size: .68rem;
+
+            font-weight: 800;
+
+            letter-spacing: .15em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 9px;
+        }
+
+        /* =========================================================
+           LOADING
+        ========================================================= */
+
+        .loading {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 99999;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #07070d;
+
+            transition:
+                opacity .35s,
+                visibility .35s;
+        }
+
+        .loading.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-wrap {
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .loader {
+            width: 38px;
+            height: 38px;
+
+            border:
+                3px solid
+                rgba(255,255,255,.10);
+
+            border-top-color:
+                #8b5cf6;
+
+            border-right-color:
+                #3b82f6;
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+        .loader-text {
+            color:
+                rgba(255,255,255,.45);
+
+            font-size: .72rem;
+        }
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        /* =========================================================
+           AUTH SCREEN
+        ========================================================= */
+
+        .auth-screen {
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                30px
+                18px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .auth-screen::before {
+            content: "";
+
+            position: absolute;
+
+            width: 420px;
+            height: 420px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(124,58,237,.13);
+
+            filter:
+                blur(90px);
+
+            top: -170px;
+            right: -150px;
+        }
+
+        .auth-screen::after {
+            content: "";
+
+            position: absolute;
+
+            width: 360px;
+            height: 360px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(59,130,246,.10);
+
+            filter:
+                blur(90px);
+
+            bottom: -160px;
+            left: -140px;
+        }
+
+        .auth-container {
+            position: relative;
+
+            z-index: 2;
+
+            width:
+                min(100%, 1040px);
+
+            display: grid;
+
+            grid-template-columns:
+                1.05fr .95fr;
+
+            gap: 20px;
+        }
+
+        .auth-brand-panel {
+            min-height: 650px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+            padding: 40px;
+
+            border-radius: 30px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.065),
+                    rgba(255,255,255,.018)
+                );
+
+            box-shadow:
+                0 30px 100px
+                rgba(0,0,0,.35);
+        }
+
+        .auth-brand-panel::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 75% 20%,
+                    rgba(139,92,246,.23),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 20% 80%,
+                    rgba(59,130,246,.15),
+                    transparent 30%
+                );
+
+            pointer-events: none;
+        }
+
+        .auth-brand-top,
+        .auth-brand-content,
+        .auth-brand-bottom {
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-logo {
+            font-size: 1.5rem;
+
+            font-weight: 800;
+
+            letter-spacing: -.05em;
+        }
+
+        .auth-logo span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #60a5fa,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .auth-brand-content {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .auth-kicker {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                8px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            color:
+                rgba(255,255,255,.65);
+
+            font-size: .66rem;
+
+            font-weight: 700;
+
+            letter-spacing: .08em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 25px;
+        }
+
+        .auth-kicker i {
+            color: #a78bfa;
+            font-size: 1rem;
+        }
+
+        .auth-brand-content h1 {
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(2.8rem, 6vw, 5.3rem);
+
+            line-height: .94;
+
+            letter-spacing: -.055em;
+
+            max-width: 600px;
+
+            margin-bottom: 20px;
+        }
+
+        .auth-brand-content h1 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #fff,
+                    #93c5fd,
+                    #a78bfa
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .auth-brand-content p {
+            max-width: 510px;
+
+            color:
+                rgba(255,255,255,.48);
+
+            font-size: .86rem;
+
+            line-height: 1.7;
+        }
+
+        .auth-features {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 9px;
+
+            margin-top: 30px;
+        }
+
+        .auth-feature {
+            padding: 15px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,.04);
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+        }
+
+        .auth-feature i {
+            display: block;
+
+            color: #93c5fd;
+
+            font-size: 1.25rem;
+
+            margin-bottom: 8px;
+        }
+
+        .auth-feature strong {
+            display: block;
+
+            font-size: .7rem;
+
+            margin-bottom: 4px;
+        }
+
+        .auth-feature span {
+            color:
+                rgba(255,255,255,.36);
+
+            font-size: .6rem;
+
+            line-height: 1.4;
+        }
+
+        .auth-brand-bottom {
+            color:
+                rgba(255,255,255,.28);
+
+            font-size: .65rem;
+        }
+
+        /* =========================================================
+           AUTH CARD
+        ========================================================= */
+
+        .auth-card {
+            align-self: center;
+
+            padding: 32px;
+
+            border-radius: 28px;
+
+            background:
+                rgba(15,15,24,.82);
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            backdrop-filter:
+                blur(24px);
+
+            -webkit-backdrop-filter:
+                blur(24px);
+
+            box-shadow:
+                0 30px 90px
+                rgba(0,0,0,.42);
+        }
+
+        .auth-card-header {
+            margin-bottom: 25px;
+        }
+
+        .auth-card-header h2 {
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size: 2rem;
+
+            letter-spacing: -.04em;
+
+            margin-bottom: 7px;
+        }
+
+        .auth-card-header p {
+            color:
+                rgba(255,255,255,.43);
+
+            font-size: .74rem;
+
+            line-height: 1.5;
+        }
+
+        .auth-tabs {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap: 5px;
+
+            padding: 5px;
+
+            border-radius: 13px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,.06);
+
+            margin-bottom: 22px;
+        }
+
+        .auth-tab {
+            min-height: 42px;
+
+            border: 0;
+
+            border-radius: 9px;
+
+            color:
+                rgba(255,255,255,.40);
+
+            background: transparent;
+
+            font-size: .73rem;
+
+            font-weight: 700;
+        }
+
+        .auth-tab.active {
+            color: #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.20),
+                    rgba(124,58,237,.20)
+                );
+
+            box-shadow:
+                0 4px 18px
+                rgba(0,0,0,.18);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            display: block;
+
+            color:
+                rgba(255,255,255,.60);
+
+            font-size: .68rem;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap > i {
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color:
+                rgba(255,255,255,.28);
+
+            font-size: 1.05rem;
+
+            pointer-events: none;
+        }
+
+        .input-wrap input,
+        .input-wrap select {
+            width: 100%;
+
+            height: 50px;
+
+            padding:
+                0 14px 0 43px;
+
+            border-radius: 13px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.09);
+
+            outline: none;
+
+            color: #fff;
+
+            background:
+                rgba(255,255,255,.045);
+
+            font-size: .78rem;
+
+            transition: .2s;
+
+            appearance: none;
+        }
+
+        .input-wrap select {
+            padding-right: 38px;
+        }
+
+        .input-wrap input::placeholder {
+            color:
+                rgba(255,255,255,.25);
+        }
+
+        .input-wrap input:focus,
+        .input-wrap select:focus {
+            border-color:
+                rgba(139,92,246,.65);
+
+            background:
+                rgba(255,255,255,.065);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(139,92,246,.08);
+        }
+
+        .password-toggle {
+            position: absolute;
+
+            right: 10px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 34px;
+            height: 34px;
+
+            border: 0;
+
+            background: transparent;
+
+            color:
+                rgba(255,255,255,.32);
+
+            font-size: 1.1rem;
+        }
+
+        .role-note {
+            padding:
+                11px 13px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(59,130,246,.06);
+
+            border:
+                1px solid
+                rgba(59,130,246,.10);
+
+            color:
+                rgba(255,255,255,.42);
+
+            font-size: .63rem;
+
+            line-height: 1.5;
+
+            margin-bottom: 15px;
+        }
+
+        .role-note strong {
+            color:
+                rgba(255,255,255,.72);
+        }
+
+        .auth-message {
+            display: none;
+
+            padding:
+                11px 13px;
+
+            border-radius: 12px;
+
+            margin-bottom: 14px;
+
+            font-size: .66rem;
+
+            line-height: 1.5;
+        }
+
+        .auth-message.show {
+            display: block;
+        }
+
+        .auth-message.error {
+            color: #fecaca;
+
+            background:
+                rgba(239,68,68,.08);
+
+            border:
+                1px solid
+                rgba(239,68,68,.15);
+        }
+
+        .auth-message.success {
+            color: #bbf7d0;
+
+            background:
+                rgba(34,197,94,.08);
+
+            border:
+                1px solid
+                rgba(34,197,94,.15);
+        }
+
+        .auth-submit {
+            width: 100%;
+
+            min-height: 52px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            border: 0;
+
+            border-radius: 13px;
+
+            color: #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #7c3aed
+                );
+
+            box-shadow:
+                0 14px 35px
+                rgba(59,130,246,.18);
+
+            font-size: .8rem;
+
+            font-weight: 800;
+
+            transition: .25s;
+        }
+
+        .auth-submit:hover {
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 18px 45px
+                rgba(124,58,237,.24);
+        }
+
+        .auth-submit:disabled {
+            opacity: .6;
+
+            cursor: wait;
+
+            transform: none;
+        }
+
+        .auth-footer {
+            margin-top: 19px;
+
+            color:
+                rgba(255,255,255,.27);
+
+            font-size: .59rem;
+
+            line-height: 1.5;
+
+            text-align: center;
+        }
+
+        .auth-link {
+            color: #93c5fd;
+            font-weight: 700;
+        }
+
+        .owner-link {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            margin-top: 18px;
+
+            padding-top: 17px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.06);
+
+            color:
+                rgba(255,255,255,.42);
+
+            font-size: .66rem;
+        }
+
+        .owner-link a {
+            color: #a78bfa;
+            font-weight: 700;
+        }
 
         /* =========================================================
            TOP BAR
         ========================================================= */
+
+        .app-shell {
+            display: none;
+        }
+
+        .app-shell.visible {
+            display: block;
+        }
 
         .topbar {
             position: sticky;
@@ -138,7 +944,7 @@
                 max(5%, calc((100vw - 1180px) / 2));
 
             background:
-                rgba(7,7,13,.82);
+                rgba(7,7,13,.80);
 
             border-bottom:
                 1px solid
@@ -151,17 +957,12 @@
                 blur(20px);
         }
 
-
-        /* =========================================================
-           BRAND
-        ========================================================= */
-
         .brand {
             font-size: 1.35rem;
 
             font-weight: 800;
 
-            letter-spacing: -.055em;
+            letter-spacing: -.05em;
         }
 
         .brand span {
@@ -177,11 +978,6 @@
 
             color: transparent;
         }
-
-
-        /* =========================================================
-           TOP ACTIONS
-        ========================================================= */
 
         .top-actions {
             display: flex;
@@ -214,10 +1010,7 @@
 
             font-size: 1.2rem;
 
-            transition:
-                transform .2s ease,
-                background .2s ease,
-                border-color .2s ease;
+            transition: .2s;
         }
 
         .icon-btn:hover {
@@ -226,95 +1019,640 @@
 
             transform:
                 translateY(-1px);
-
-            border-color:
-                rgba(255,255,255,.16);
         }
 
-
         /* =========================================================
-           PAGE
+           WELCOME
         ========================================================= */
 
-        .page {
-            width: min(1180px,90%);
-
-            margin: 0 auto;
-        }
-
-
-        /* =========================================================
-           HIDDEN AUTH-DEPENDENT CONTENT
-           
-           These sections remain in the file for future use,
-           but the authenticated home experience focuses only
-           on the Elite section.
-        ========================================================= */
-
-        .customer-content {
-            display: none !important;
-        }
-
-
-        /* =========================================================
-           ELITE SECTION
-        ========================================================= */
-
-        .elite-section {
-            min-height:
-                calc(100vh - 120px);
-
+        .welcome {
             padding:
-                65px 0 45px;
+                55px 0 28px;
+        }
 
+        .welcome-label {
             display: flex;
 
-            flex-direction: column;
+            align-items: center;
 
-            justify-content: center;
+            gap: 8px;
+
+            color:
+                rgba(255,255,255,.50);
+
+            font-size: .76rem;
+
+            margin-bottom: 12px;
         }
 
-        .elite-section .section-head {
-            margin-bottom: 22px;
+        .online-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #60a5fa;
+
+            box-shadow:
+                0 0 12px
+                rgba(96,165,250,.8);
         }
 
-        .eyebrow {
-            color: #a78bfa;
+        .welcome h1 {
+            font-family:
+                "Playfair Display",
+                serif;
 
-            font-size: .68rem;
+            font-size:
+                clamp(2.4rem, 6vw, 4.5rem);
 
-            font-weight: 800;
+            line-height: .98;
 
-            letter-spacing: .16em;
+            letter-spacing: -.045em;
 
-            text-transform: uppercase;
-
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
+        .welcome h1 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    #fff,
+                    #93c5fd,
+                    #a78bfa
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .welcome p {
+            color:
+                rgba(255,255,255,.53);
+
+            line-height: 1.65;
+
+            max-width: 550px;
+        }
+
+        /* =========================================================
+           FEATURED
+        ========================================================= */
+
+        .featured-section {
+            margin-top: 10px;
+        }
+
+        .featured-head {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            margin-bottom: 18px;
+        }
+
+        .featured-head h2,
         .section-head h2 {
             font-family:
                 "Playfair Display",
                 serif;
 
             font-size:
-                clamp(2rem,5vw,3.3rem);
+                clamp(1.8rem,4vw,2.7rem);
 
-            line-height: .98;
-
-            letter-spacing: -.045em;
+            letter-spacing: -.035em;
         }
 
+        .featured-head p {
+            color:
+                rgba(255,255,255,.42);
 
-        /* =========================================================
-           ELITE CARD
-        ========================================================= */
+            font-size: .7rem;
+        }
 
-        .elite-card {
+        .swipe-track {
+            display: flex;
+
+            gap: 16px;
+
+            overflow-x: auto;
+
+            padding:
+                3px
+                2px
+                20px;
+
+            scroll-snap-type: x mandatory;
+
+            -webkit-overflow-scrolling: touch;
+
+            scrollbar-width: none;
+        }
+
+        .swipe-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .swipe-card {
             position: relative;
 
-            min-height:
-                clamp(500px,72vh,720px);
+            flex:
+                0 0
+                clamp(275px, 78vw, 390px);
+
+            height:
+                clamp(390px, 65vw, 475px);
+
+            overflow: hidden;
+
+            border-radius: 27px;
+
+            scroll-snap-align: start;
+
+            background: #11111a;
+
+            border:
+                1px solid
+                rgba(255,255,255,.10);
+
+            box-shadow:
+                0 22px 60px
+                rgba(0,0,0,.30);
+        }
+
+        .swipe-card img {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            transition:
+                transform .6s ease;
+        }
+
+        .swipe-card:hover img {
+            transform: scale(1.04);
+        }
+
+        .swipe-card::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    0deg,
+                    rgba(4,4,9,.94) 0%,
+                    rgba(4,4,9,.38) 45%,
+                    transparent 78%
+                );
+        }
+
+        .card-content {
+            position: absolute;
+
+            z-index: 2;
+
+            left: 22px;
+            right: 22px;
+            bottom: 22px;
+        }
+
+        .card-number {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 34px;
+            height: 34px;
+
+            border-radius: 11px;
+
+            margin-bottom: 13px;
+
+            background:
+                rgba(255,255,255,.10);
+
+            border:
+                1px solid
+                rgba(255,255,255,.13);
+
+            backdrop-filter:
+                blur(10px);
+
+            font-size: .68rem;
+
+            font-weight: 800;
+        }
+
+        .card-content h3 {
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(1.55rem,5vw,2rem);
+
+            margin-bottom: 7px;
+        }
+
+        .card-content p {
+            color:
+                rgba(255,255,255,.62);
+
+            font-size: .76rem;
+
+            line-height: 1.55;
+        }
+
+        .swipe-hint {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            margin-top: 14px;
+
+            color:
+                rgba(255,255,255,.32);
+
+            font-size: .65rem;
+        }
+
+        .swipe-hint i {
+            font-size: 1rem;
+        }
+
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
+
+        .buttons {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 11px;
+        }
+
+        .btn {
+            min-height: 50px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding:
+                0 20px;
+
+            border-radius: 13px;
+
+            font-size: .85rem;
+
+            font-weight: 700;
+
+            border: 0;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .btn:hover {
+            transform:
+                translateY(-2px);
+        }
+
+        .btn-primary {
+            color: #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #7c3aed
+                );
+
+            box-shadow:
+                0 14px 40px
+                rgba(59,130,246,.22);
+        }
+
+        .btn-secondary {
+            color: #fff;
+
+            background:
+                rgba(255,255,255,.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,.13);
+
+            backdrop-filter:
+                blur(12px);
+        }
+
+        /* =========================================================
+           SECTIONS
+        ========================================================= */
+
+        .section {
+            padding-top: 65px;
+        }
+
+        .section-head {
+            margin-bottom: 25px;
+        }
+
+        .action-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 13px;
+        }
+
+        .action-card {
+            position: relative;
+
+            padding: 24px;
+
+            min-height: 170px;
+
+            border-radius: 21px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.065),
+                    rgba(255,255,255,.025)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            transition: .25s;
+
+            overflow: hidden;
+        }
+
+        .action-card:hover {
+            transform:
+                translateY(-4px);
+
+            border-color:
+                rgba(139,92,246,.30);
+        }
+
+        .action-icon {
+            width: 46px;
+            height: 46px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            background:
+                rgba(124,58,237,.12);
+
+            color: #a78bfa;
+
+            font-size: 1.35rem;
+
+            margin-bottom: 25px;
+        }
+
+        .action-card h3 {
+            font-size: 1rem;
+
+            margin-bottom: 7px;
+        }
+
+        .action-card p {
+            color:
+                rgba(255,255,255,.47);
+
+            font-size: .76rem;
+
+            line-height: 1.55;
+        }
+
+        .action-arrow {
+            position: absolute;
+
+            top: 24px;
+            right: 24px;
+
+            color:
+                rgba(255,255,255,.28);
+
+            font-size: 1.1rem;
+        }
+
+        /* =========================================================
+           BOOKINGS
+        ========================================================= */
+
+        .booking-panel {
+            border-radius: 25px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
+
+            overflow: hidden;
+        }
+
+        .booking-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 21px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.07);
+        }
+
+        .booking-top strong {
+            font-size: .9rem;
+        }
+
+        .booking-top a {
+            color: #93c5fd;
+
+            font-size: .72rem;
+
+            font-weight: 700;
+        }
+
+        .booking-content {
+            padding: 35px 21px;
+
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 65px;
+            height: 65px;
+
+            display: grid;
+
+            place-items: center;
+
+            margin:
+                0 auto 17px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(59,130,246,.08);
+
+            color: #60a5fa;
+
+            font-size: 1.8rem;
+        }
+
+        .booking-content h3 {
+            font-size: 1rem;
+
+            margin-bottom: 8px;
+        }
+
+        .booking-content p {
+            max-width: 420px;
+
+            margin:
+                0 auto 20px;
+
+            color:
+                rgba(255,255,255,.46);
+
+            font-size: .77rem;
+
+            line-height: 1.6;
+        }
+
+        .booking-list {
+            display: grid;
+
+            gap: 10px;
+
+            text-align: left;
+        }
+
+        .booking-item {
+            display: grid;
+
+            grid-template-columns:
+                1fr auto;
+
+            gap: 15px;
+
+            padding: 16px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+        }
+
+        .booking-item-main strong {
+            display: block;
+
+            font-size: .82rem;
+
+            margin-bottom: 5px;
+        }
+
+        .booking-item-main span {
+            display: block;
+
+            color:
+                rgba(255,255,255,.40);
+
+            font-size: .66rem;
+
+            line-height: 1.5;
+        }
+
+        .booking-status {
+            align-self: start;
+
+            padding:
+                6px 9px;
+
+            border-radius: 999px;
+
+            font-size: .57rem;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: .04em;
+        }
+
+        .status-pending {
+            color: #fde68a;
+            background: rgba(234,179,8,.10);
+        }
+
+        .status-approved {
+            color: #bbf7d0;
+            background: rgba(34,197,94,.10);
+        }
+
+        .status-completed {
+            color: #bfdbfe;
+            background: rgba(59,130,246,.10);
+        }
+
+        .status-declined,
+        .status-cancelled {
+            color: #fecaca;
+            background: rgba(239,68,68,.10);
+        }
+
+        /* =========================================================
+           DISCOVER
+        ========================================================= */
+
+        .discover-card {
+            position: relative;
+
+            min-height: 280px;
 
             display: flex;
 
@@ -322,24 +1660,117 @@
 
             overflow: hidden;
 
-            border-radius: 32px;
+            border-radius: 25px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
 
             background:
                 #101018;
+        }
+
+        .discover-card::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    110deg,
+                    rgba(9,9,16,.96),
+                    rgba(9,9,16,.48)
+                );
+
+            z-index: 1;
+        }
+
+        .discover-bg {
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at 75% 35%,
+                    rgba(139,92,246,.40),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 60% 80%,
+                    rgba(59,130,246,.24),
+                    transparent 30%
+                );
+        }
+
+        .discover-content {
+            position: relative;
+
+            z-index: 2;
+
+            padding: 30px;
+
+            width: min(600px,100%);
+        }
+
+        .discover-content h2 {
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(1.9rem,4vw,3rem);
+
+            line-height: 1;
+
+            margin-bottom: 12px;
+        }
+
+        .discover-content p {
+            color:
+                rgba(255,255,255,.52);
+
+            font-size: .82rem;
+
+            line-height: 1.6;
+
+            margin-bottom: 20px;
+        }
+
+        /* =========================================================
+           ELITE
+        ========================================================= */
+
+        .elite-section {
+            padding-top: 75px;
+        }
+
+        .elite-card {
+            position: relative;
+
+            min-height:
+                clamp(420px, 65vw, 590px);
+
+            display: flex;
+
+            align-items: flex-end;
+
+            overflow: hidden;
+
+            border-radius: 30px;
+
+            background: #11111a;
 
             border:
                 1px solid
                 rgba(255,255,255,.10);
 
             box-shadow:
-                0 35px 100px
-                rgba(0,0,0,.45);
+                0 30px 90px
+                rgba(0,0,0,.38);
         }
-
-
-        /* =========================================================
-           ELITE IMAGE
-        ========================================================= */
 
         .elite-image {
             position: absolute;
@@ -358,36 +1789,8 @@
             object-position: center;
 
             filter:
-                brightness(.56)
-                saturate(.92);
-
-            transform:
-                scale(1.01);
-
-            transition:
-                transform 1.4s ease;
-        }
-
-        .elite-card:hover .elite-image img {
-            transform:
-                scale(1.045);
-        }
-
-        .elite-image::before {
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            z-index: 1;
-
-            background:
-                radial-gradient(
-                    circle at 70% 25%,
-                    rgba(139,92,246,.28),
-                    transparent 32%
-                );
+                brightness(.62)
+                saturate(.88);
         }
 
         .elite-image::after {
@@ -397,49 +1800,34 @@
 
             inset: 0;
 
-            z-index: 2;
-
             background:
                 linear-gradient(
-                    180deg,
-                    rgba(3,3,8,.10) 0%,
-                    rgba(3,3,8,.18) 22%,
-                    rgba(3,3,8,.48) 51%,
-                    rgba(3,3,8,.97) 100%
+                    0deg,
+                    rgba(3,3,8,.98) 0%,
+                    rgba(3,3,8,.48) 45%,
+                    rgba(3,3,8,.08) 85%
                 );
         }
-
-
-        /* =========================================================
-           ELITE CONTENT
-        ========================================================= */
 
         .elite-content {
             position: relative;
 
-            z-index: 5;
+            z-index: 2;
 
-            width: min(760px,100%);
+            width: min(680px,100%);
 
-            padding: 42px;
+            padding: 35px;
         }
-
-
-        /* =========================================================
-           ELITE BADGE
-        ========================================================= */
 
         .elite-label {
             display: inline-flex;
 
             align-items: center;
 
-            gap: 8px;
+            gap: 7px;
 
             padding:
-                9px 14px;
-
-            margin-bottom: 20px;
+                8px 12px;
 
             border-radius: 999px;
 
@@ -451,13 +1839,10 @@
                 rgba(255,255,255,.13);
 
             backdrop-filter:
-                blur(14px);
-
-            -webkit-backdrop-filter:
-                blur(14px);
+                blur(12px);
 
             color:
-                rgba(255,255,255,.88);
+                rgba(255,255,255,.82);
 
             font-size: .68rem;
 
@@ -466,129 +1851,79 @@
             letter-spacing: .10em;
 
             text-transform: uppercase;
+
+            margin-bottom: 18px;
         }
 
         .elite-label i {
-            color: #c4b5fd;
+            color: #a78bfa;
 
             font-size: 1rem;
         }
 
-
-        /* =========================================================
-           ELITE TITLE
-        ========================================================= */
-
-        .elite-content h1 {
+        .elite-content h2 {
             font-family:
                 "Playfair Display",
                 serif;
 
             font-size:
-                clamp(3rem,8vw,6.4rem);
+                clamp(2.3rem,6vw,4.5rem);
 
-            line-height:
-                .90;
+            line-height: .95;
 
-            letter-spacing:
-                -.055em;
+            letter-spacing: -.045em;
 
-            max-width:
-                760px;
-
-            margin-bottom:
-                19px;
+            margin-bottom: 15px;
         }
-
-        .elite-content h1 span {
-            display: inline;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #ffffff 0%,
-                    #c4b5fd 52%,
-                    #93c5fd 100%
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-
-        /* =========================================================
-           ELITE DESCRIPTION
-        ========================================================= */
 
         .elite-content p {
-            max-width:
-                620px;
-
             color:
-                rgba(255,255,255,.66);
+                rgba(255,255,255,.65);
 
-            line-height:
-                1.7;
+            max-width: 560px;
 
-            font-size:
-                .88rem;
-
-            margin-bottom:
-                26px;
-        }
-
-
-        /* =========================================================
-           BUTTONS
-        ========================================================= */
-
-        .buttons {
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 11px;
-        }
-
-        .btn {
-            min-height: 52px;
-
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 8px;
-
-            padding:
-                0 21px;
-
-            border-radius: 14px;
+            line-height: 1.65;
 
             font-size: .84rem;
 
-            font-weight: 800;
-
-            border: 0;
-
-            cursor: pointer;
-
-            transition:
-                transform .22s ease,
-                box-shadow .22s ease,
-                background .22s ease;
+            margin-bottom: 23px;
         }
 
-        .btn:hover {
-            transform:
-                translateY(-3px);
+        /* =========================================================
+           PROFILE
+        ========================================================= */
+
+        .profile-panel {
+            display: grid;
+
+            grid-template-columns:
+                auto 1fr auto;
+
+            gap: 18px;
+
+            align-items: center;
+
+            padding: 22px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,.04);
+
+            border:
+                1px solid
+                rgba(255,255,255,.08);
         }
 
-        .btn-primary {
-            color: #fff;
+        .avatar {
+            width: 58px;
+            height: 58px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 18px;
 
             background:
                 linear-gradient(
@@ -597,63 +1932,47 @@
                     #7c3aed
                 );
 
-            box-shadow:
-                0 16px 42px
-                rgba(59,130,246,.22);
+            font-size: 1.4rem;
+
+            font-weight: 800;
         }
 
-        .btn-primary:hover {
-            box-shadow:
-                0 20px 55px
-                rgba(59,130,246,.34);
+        .profile-info strong {
+            display: block;
+
+            font-size: .92rem;
+
+            margin-bottom: 5px;
         }
 
-        .btn-secondary {
-            color: #fff;
+        .profile-info span {
+            color:
+                rgba(255,255,255,.45);
+
+            font-size: .72rem;
+        }
+
+        .logout {
+            color: #fca5a5;
 
             background:
-                rgba(255,255,255,.07);
+                rgba(239,68,68,.07);
 
             border:
                 1px solid
-                rgba(255,255,255,.13);
+                rgba(239,68,68,.12);
 
-            backdrop-filter:
-                blur(12px);
+            padding:
+                10px 14px;
 
-            -webkit-backdrop-filter:
-                blur(12px);
+            border-radius: 11px;
+
+            font-size: .72rem;
+
+            font-weight: 700;
+
+            cursor: pointer;
         }
-
-
-        /* =========================================================
-           ELITE FOOTNOTE
-        ========================================================= */
-
-        .elite-footnote {
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-top: 20px;
-
-            color:
-                rgba(255,255,255,.34);
-
-            font-size: .66rem;
-
-            letter-spacing: .02em;
-        }
-
-        .elite-footnote i {
-            color:
-                #a78bfa;
-
-            font-size: 1rem;
-        }
-
 
         /* =========================================================
            BOTTOM NAV
@@ -723,19 +2042,11 @@
 
             font-weight: 600;
 
-            transition:
-                .2s ease;
+            transition: .2s;
         }
 
         .nav-item i {
             font-size: 1.25rem;
-        }
-
-        .nav-item:hover {
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.05);
         }
 
         .nav-item.active {
@@ -753,130 +2064,93 @@
             color: #a78bfa;
         }
 
-
         /* =========================================================
-           AUTH / REDIRECT LOADER
+           TOAST
         ========================================================= */
 
-        .loading {
+        .toast {
             position: fixed;
 
-            inset: 0;
+            left: 50%;
 
-            z-index: 9000;
+            bottom: 92px;
 
-            display: flex;
+            transform:
+                translate(-50%, 20px);
 
-            flex-direction: column;
+            z-index: 10000;
 
-            align-items: center;
+            width:
+                min(90%, 420px);
 
-            justify-content: center;
+            padding:
+                13px 16px;
+
+            border-radius: 14px;
 
             background:
-                #07070d;
-
-            transition:
-                opacity .35s ease;
-        }
-
-        .loading.hide {
-            opacity: 0;
-
-            pointer-events: none;
-        }
-
-        .loader {
-            width: 38px;
-            height: 38px;
+                rgba(20,20,30,.94);
 
             border:
-                3px solid
+                1px solid
                 rgba(255,255,255,.10);
 
-            border-top-color:
-                #8b5cf6;
+            box-shadow:
+                0 15px 50px
+                rgba(0,0,0,.40);
 
-            border-right-color:
-                #3b82f6;
+            color: #fff;
 
-            border-radius: 50%;
+            font-size: .7rem;
 
-            animation:
-                spin .8s linear infinite;
+            opacity: 0;
 
-            margin-bottom: 15px;
+            visibility: hidden;
+
+            transition:
+                .25s;
         }
 
-        .loading-text {
-            color:
-                rgba(255,255,255,.48);
+        .toast.show {
+            opacity: 1;
 
-            font-size: .74rem;
+            visibility: visible;
 
-            letter-spacing: .03em;
+            transform:
+                translate(-50%, 0);
         }
-
-        @keyframes spin {
-
-            to {
-                transform:
-                    rotate(360deg);
-            }
-
-        }
-
 
         /* =========================================================
-           DESKTOP
+           RESPONSIVE
         ========================================================= */
 
-        @media (min-width: 1000px) {
+        @media (max-width: 900px) {
 
-            .elite-section {
-                padding-top: 48px;
-                padding-bottom: 35px;
+            .auth-container {
+                grid-template-columns: 1fr;
             }
 
-            .elite-card {
-                min-height: 650px;
+            .auth-brand-panel {
+                min-height: auto;
             }
 
-            .elite-content {
-                padding: 50px;
+            .auth-brand-content {
+                margin:
+                    80px 0;
             }
 
         }
-
-
-        /* =========================================================
-           TABLET
-        ========================================================= */
 
         @media (max-width: 850px) {
 
-            .elite-content h1 {
-                font-size:
-                    clamp(2.8rem,9vw,5rem);
-            }
-
-            .elite-card {
-                min-height:
-                    620px;
+            .action-grid {
+                grid-template-columns:
+                    repeat(2,1fr);
             }
 
         }
 
-
-        /* =========================================================
-           MOBILE
-        ========================================================= */
-
         @media (max-width: 600px) {
-
-            body {
-                padding-bottom: 100px;
-            }
 
             .page {
                 width: 90%;
@@ -887,127 +2161,83 @@
                     15px 5%;
             }
 
-            .elite-section {
-                min-height:
-                    calc(100vh - 90px);
-
+            .welcome {
                 padding:
-                    34px 0 25px;
+                    40px 0 24px;
             }
 
-            .elite-section .section-head {
-                margin-bottom:
-                    16px;
+            .swipe-card {
+                flex-basis: 82vw;
+                height: 430px;
             }
 
-            .section-head h2 {
-                font-size:
-                    2rem;
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-card {
+                min-height: 145px;
+            }
+
+            .profile-panel {
+                grid-template-columns:
+                    auto 1fr;
+            }
+
+            .logout {
+                grid-column:
+                    1 / -1;
+
+                width: 100%;
             }
 
             .elite-card {
-                min-height:
-                    580px;
+                min-height: 500px;
 
-                border-radius:
-                    25px;
+                border-radius: 24px;
             }
 
             .elite-content {
+                padding: 25px;
+            }
+
+            .elite-content h2 {
+                font-size: 2.5rem;
+            }
+
+            .discover-card {
+                min-height: 320px;
+            }
+
+            .auth-screen {
                 padding:
-                    25px;
+                    18px 14px;
             }
 
-            .elite-content h1 {
-                font-size:
-                    clamp(2.65rem,14vw,4.3rem);
-
-                line-height:
-                    .91;
+            .auth-brand-panel {
+                display: none;
             }
 
-            .elite-content p {
-                font-size:
-                    .79rem;
+            .auth-card {
+                padding: 25px 20px;
 
-                line-height:
-                    1.65;
+                border-radius: 23px;
             }
 
-            .buttons {
-                flex-direction:
-                    column;
+            .auth-card-header h2 {
+                font-size: 1.8rem;
             }
 
-            .btn {
-                width:
-                    100%;
+            .auth-features {
+                grid-template-columns: 1fr;
             }
 
-            .elite-footnote {
-                line-height:
-                    1.5;
+            .booking-item {
+                grid-template-columns: 1fr;
             }
 
-            .bottom-nav {
-                width:
-                    94%;
-            }
-
-        }
-
-
-        /* =========================================================
-           SMALL PHONES
-        ========================================================= */
-
-        @media (max-width: 390px) {
-
-            .elite-card {
-                min-height:
-                    545px;
-            }
-
-            .elite-content {
-                padding:
-                    21px;
-            }
-
-            .elite-content h1 {
-                font-size:
-                    2.55rem;
-            }
-
-            .elite-label {
-                font-size:
-                    .61rem;
-            }
-
-        }
-
-
-        /* =========================================================
-           REDUCED MOTION
-        ========================================================= */
-
-        @media (prefers-reduced-motion: reduce) {
-
-            html {
-                scroll-behavior:
-                    auto;
-            }
-
-            *,
-            *::before,
-            *::after {
-                animation-duration:
-                    .01ms !important;
-
-                animation-iteration-count:
-                    1 !important;
-
-                transition-duration:
-                    .01ms !important;
+            .booking-status {
+                justify-self: start;
             }
 
         }
@@ -1016,12 +2246,10 @@
 
 </head>
 
-
-<body>
-
+<body class="auth-mode">
 
     <!-- =========================================================
-         LOADING / AUTH REDIRECT SCREEN
+         GLOBAL LOADING
     ========================================================= -->
 
     <div
@@ -1029,234 +2257,1196 @@
         id="loading"
     >
 
-        <div class="loader"></div>
+        <div class="loader-wrap">
 
-        <div
-            class="loading-text"
-            id="loadingText"
-        >
-            Checking your K@si account...
+            <div class="loader"></div>
+
+            <div
+                class="loader-text"
+                id="loaderText"
+            >
+                Loading K@si...
+            </div>
+
         </div>
 
     </div>
 
 
     <!-- =========================================================
-         TOP BAR
+         AUTH SCREEN
     ========================================================= -->
 
-    <header class="topbar">
+    <section
+        class="auth-screen"
+        id="authScreen"
+    >
 
-        <a
-            href="home.html"
-            class="brand"
-            aria-label="K@si Home"
-        >
-            K<span>@</span>si
-        </a>
+        <div class="auth-container">
 
+            <!-- LEFT -->
+            <div class="auth-brand-panel">
 
-        <div class="top-actions">
+                <div class="auth-brand-top">
 
-            <button
-                type="button"
-                class="icon-btn"
-                id="refreshBtn"
-                aria-label="Refresh"
-                title="Refresh"
-            >
-
-                <i class="bx bx-refresh"></i>
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <!-- =========================================================
-         MAIN CONTENT
-         
-         Only the Elite section is intentionally visible after
-         authentication.
-    ========================================================= -->
-
-    <main class="page">
-
-
-        <!-- =====================================================
-             ELITE SECTION
-        ====================================================== -->
-
-        <section class="elite-section">
-
-            <div class="section-head">
-
-                <div class="eyebrow">
-                    K@si Elite
-                </div>
-
-                <h2>
-                    The standard is higher.
-                </h2>
-
-            </div>
-
-
-            <div class="elite-card">
-
-
-                <!-- IMAGE -->
-
-                <div class="elite-image">
-
-                    <img
-                        src="C00719B.jpg"
-                        alt="K@si Elite Cuts"
-                        loading="eager"
+                    <a
+                        href="index.html"
+                        class="auth-logo"
                     >
+                        K<span>@</span>si
+                    </a>
 
                 </div>
 
 
-                <!-- CONTENT -->
+                <div class="auth-brand-content">
 
-                <div class="elite-content">
-
-
-                    <div class="elite-label">
+                    <div class="auth-kicker">
 
                         <i class="bx bx-sparkles"></i>
 
-                        Elite cuts only
+                        Your grooming space
 
                     </div>
 
-
                     <h1>
 
-                        Look sharp.
-                        <span>
-                            Feel sharper.
-                        </span>
+                        Fresh cuts.
+                        <span>Better timing.</span>
 
                     </h1>
 
-
                     <p>
 
-                        Your next great look is waiting.
-                        Discover local barbers and salons,
-                        compare services and reserve your
-                        preferred time without standing in line.
+                        Sign in to K@si to discover local
+                        salons, compare services, manage your
+                        bookings and find your next fresh look.
 
                     </p>
 
 
-                    <div class="buttons">
+                    <div class="auth-features">
 
+                        <div class="auth-feature">
+
+                            <i class="bx bx-store"></i>
+
+                            <strong>
+                                Discover
+                            </strong>
+
+                            <span>
+                                Find local salons and barbers.
+                            </span>
+
+                        </div>
+
+
+                        <div class="auth-feature">
+
+                            <i class="bx bx-calendar-check"></i>
+
+                            <strong>
+                                Book
+                            </strong>
+
+                            <span>
+                                Reserve your preferred time.
+                            </span>
+
+                        </div>
+
+
+                        <div class="auth-feature">
+
+                            <i class="bx bx-user"></i>
+
+                            <strong>
+                                Manage
+                            </strong>
+
+                            <span>
+                                Keep your bookings together.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="auth-brand-bottom">
+
+                    © <span id="authYear"></span>
+                    K@si Web
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+            <div class="auth-card">
+
+                <div class="auth-card-header">
+
+                    <div class="eyebrow">
+                        Welcome
+                    </div>
+
+                    <h2 id="authTitle">
+                        Sign in to K@si.
+                    </h2>
+
+                    <p id="authSubtitle">
+                        Continue to your personal grooming space.
+                    </p>
+
+                </div>
+
+
+                <!-- TABS -->
+
+                <div class="auth-tabs">
+
+                    <button
+                        type="button"
+                        class="auth-tab active"
+                        id="loginTab"
+                    >
+                        Sign In
+                    </button>
+
+                    <button
+                        type="button"
+                        class="auth-tab"
+                        id="signupTab"
+                    >
+                        Create Account
+                    </button>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    class="auth-message"
+                    id="authMessage"
+                ></div>
+
+
+                <!-- =================================================
+                     LOGIN FORM
+                ================================================== -->
+
+                <form
+                    class="auth-form active"
+                    id="loginForm"
+                    novalidate
+                >
+
+                    <div class="field">
+
+                        <label for="loginEmail">
+                            Email address
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-envelope"></i>
+
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-lock-alt"></i>
+
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="loginPassword"
+                                aria-label="Show password"
+                            >
+                                <i class="bx bx-show"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="loginRole">
+                            Account type
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-user-check"></i>
+
+                            <select id="loginRole">
+
+                                <option value="customer">
+                                    Customer
+                                </option>
+
+                                <option value="salon_owner">
+                                    Salon Owner
+                                </option>
+
+                                <option value="admin">
+                                    Admin
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="role-note">
+
+                        <strong>Important:</strong>
+                        K@si verifies your actual role from
+                        your Firestore account profile.
+                        The selected account type does not
+                        override your registered role.
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit"
+                        id="loginBtn"
+                    >
+
+                        <i class="bx bx-log-in"></i>
+
+                        Sign In
+
+                    </button>
+
+                </form>
+
+
+                <!-- =================================================
+                     SIGNUP FORM
+                ================================================== -->
+
+                <form
+                    class="auth-form"
+                    id="signupForm"
+                    novalidate
+                >
+
+                    <div class="field">
+
+                        <label for="signupName">
+                            Full name
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-user"></i>
+
+                            <input
+                                type="text"
+                                id="signupName"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="signupEmail">
+                            Email address
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-envelope"></i>
+
+                            <input
+                                type="email"
+                                id="signupEmail"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="signupPassword">
+                            Password
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-lock-alt"></i>
+
+                            <input
+                                type="password"
+                                id="signupPassword"
+                                placeholder="At least 6 characters"
+                                autocomplete="new-password"
+                                minlength="6"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="signupPassword"
+                                aria-label="Show password"
+                            >
+                                <i class="bx bx-show"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="signupPasswordConfirm">
+                            Confirm password
+                        </label>
+
+                        <div class="input-wrap">
+
+                            <i class="bx bx-check-shield"></i>
+
+                            <input
+                                type="password"
+                                id="signupPasswordConfirm"
+                                placeholder="Repeat your password"
+                                autocomplete="new-password"
+                                minlength="6"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-target="signupPasswordConfirm"
+                                aria-label="Show password"
+                            >
+                                <i class="bx bx-show"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="role-note">
+
+                        New accounts created here are
+                        <strong>Customer</strong> accounts.
+
+                        Salon owners should use the
+                        <strong>Salon Owner</strong> registration
+                        page.
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit"
+                        id="signupBtn"
+                    >
+
+                        <i class="bx bx-user-plus"></i>
+
+                        Create Account
+
+                    </button>
+
+                </form>
+
+
+                <div class="owner-link">
+
+                    <i class="bx bx-store"></i>
+
+                    Are you a salon owner?
+
+                    <a href="owners.html">
+                        Owner Portal
+                    </a>
+
+                </div>
+
+
+                <div class="auth-footer">
+
+                    By continuing, you agree to use K@si Web
+                    responsibly and keep your account information
+                    accurate.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         CUSTOMER APP
+    ========================================================= -->
+
+    <div
+        class="app-shell"
+        id="appShell"
+    >
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <a
+                href="home.html"
+                class="brand"
+            >
+                K<span>@</span>si
+            </a>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="icon-btn"
+                    id="refreshBtn"
+                    aria-label="Refresh"
+                    type="button"
+                >
+
+                    <i class="bx bx-refresh"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <main class="page">
+
+            <!-- =================================================
+                 WELCOME
+            ================================================== -->
+
+            <section class="welcome">
+
+                <div class="welcome-label">
+
+                    <span class="online-dot"></span>
+
+                    YOUR K@SI SPACE
+
+                </div>
+
+
+                <h1>
+
+                    Welcome back,
+                    <span id="userName">Fresh</span>.
+
+                </h1>
+
+
+                <p>
+
+                    Your next cut is closer than you think.
+                    Discover local barbers, explore services
+                    and book your time.
+
+                </p>
+
+            </section>
+
+
+            <!-- =================================================
+                 FEATURED CUTS
+            ================================================== -->
+
+            <section class="featured-section">
+
+                <div class="featured-head">
+
+                    <div>
+
+                        <div class="eyebrow">
+                            Featured
+                        </div>
+
+                        <h2>
+                            Fresh looks.
+                        </h2>
+
+                    </div>
+
+                    <p>
+                        Swipe to explore
+                    </p>
+
+                </div>
+
+
+                <div class="swipe-track">
+
+
+                    <article class="swipe-card">
+
+                        <img
+                            src="7847041D.jpg"
+                            alt="Featured K@si grooming style"
+                            loading="eager"
+                        >
+
+                        <div class="card-content">
+
+                            <div class="card-number">
+                                01
+                            </div>
+
+                            <h3>
+                                Fresh by design.
+                            </h3>
+
+                            <p>
+                                Discover a look that matches
+                                your style and your vibe.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="swipe-card">
+
+                        <img
+                            src="37BA0E35.jpg"
+                            alt="Kasi Taper Fade"
+                            loading="lazy"
+                        >
+
+                        <div class="card-content">
+
+                            <div class="card-number">
+                                02
+                            </div>
+
+                            <h3>
+                                Kasi Taper Fade.
+                            </h3>
+
+                            <p>
+                                Clean lines. Fresh finish.
+                                Your next signature look.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="swipe-card">
+
+                        <img
+                            src="8627A569.jpg"
+                            alt="Featured barber style"
+                            loading="lazy"
+                        >
+
+                        <div class="card-content">
+
+                            <div class="card-number">
+                                03
+                            </div>
+
+                            <h3>
+                                Your style.
+                            </h3>
+
+                            <p>
+                                Explore local grooming
+                                talent through K@si.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="swipe-card">
+
+                        <img
+                            src="A3886FFD.jpg"
+                            alt="Classic clean haircut"
+                            loading="lazy"
+                        >
+
+                        <div class="card-content">
+
+                            <div class="card-number">
+                                04
+                            </div>
+
+                            <h3>
+                                Classic clean.
+                            </h3>
+
+                            <p>
+                                Timeless cuts from
+                                local professionals.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="swipe-card">
+
+                        <img
+                            src="B307F46B.jpg"
+                            alt="Line design haircut"
+                            loading="lazy"
+                        >
+
+                        <div class="card-content">
+
+                            <div class="card-number">
+                                05
+                            </div>
+
+                            <h3>
+                                Make your mark.
+                            </h3>
+
+                            <p>
+                                Stand out with a cut
+                                built around your style.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <div class="swipe-hint">
+
+                    <i class="bx bx-left-arrow-alt"></i>
+
+                    Swipe
+
+                    <i class="bx bx-right-arrow-alt"></i>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <section class="section">
+
+                <div class="section-head">
+
+                    <div class="eyebrow">
+                        Quick access
+                    </div>
+
+                    <h2>
+                        Make your move.
+                    </h2>
+
+                </div>
+
+
+                <div class="action-grid">
+
+
+                    <a
+                        href="salons.html"
+                        class="action-card"
+                    >
+
+                        <span class="action-arrow">
+                            <i class="bx bx-right-arrow-alt"></i>
+                        </span>
+
+                        <div class="action-icon">
+
+                            <i class="bx bx-search-alt-2"></i>
+
+                        </div>
+
+                        <h3>
+                            Explore Salons
+                        </h3>
+
+                        <p>
+                            Discover barbers and salons
+                            around you.
+                        </p>
+
+                    </a>
+
+
+                    <a
+                        href="#bookings"
+                        class="action-card"
+                    >
+
+                        <span class="action-arrow">
+                            <i class="bx bx-right-arrow-alt"></i>
+                        </span>
+
+                        <div class="action-icon">
+
+                            <i class="bx bx-calendar-check"></i>
+
+                        </div>
+
+                        <h3>
+                            My Bookings
+                        </h3>
+
+                        <p>
+                            See your upcoming appointments
+                            and booking status.
+                        </p>
+
+                    </a>
+
+
+                    <a
+                        href="#profile"
+                        class="action-card"
+                    >
+
+                        <span class="action-arrow">
+                            <i class="bx bx-right-arrow-alt"></i>
+                        </span>
+
+                        <div class="action-icon">
+
+                            <i class="bx bx-user"></i>
+
+                        </div>
+
+                        <h3>
+                            My Account
+                        </h3>
+
+                        <p>
+                            Manage your K@si account
+                            information.
+                        </p>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 BOOKINGS
+            ================================================== -->
+
+            <section
+                class="section"
+                id="bookings"
+            >
+
+                <div class="section-head">
+
+                    <div class="eyebrow">
+                        Your schedule
+                    </div>
+
+                    <h2>
+                        Upcoming bookings.
+                    </h2>
+
+                </div>
+
+
+                <div class="booking-panel">
+
+                    <div class="booking-top">
+
+                        <strong>
+                            My appointments
+                        </strong>
+
+                        <a href="salons.html">
+
+                            Book a cut
+
+                            <i class="bx bx-right-arrow-alt"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="booking-content"
+                        id="bookingContent"
+                    >
+
+                        <div class="empty-icon">
+
+                            <i class="bx bx-calendar"></i>
+
+                        </div>
+
+                        <h3>
+                            Your next cut starts here.
+                        </h3>
+
+                        <p>
+
+                            You don't have any bookings showing
+                            yet. Find a salon and reserve your
+                            preferred time.
+
+                        </p>
 
                         <a
                             href="salons.html"
                             class="btn btn-primary"
                         >
 
-                            Find a Salon
+                            Explore Salons
 
                             <i class="bx bx-right-arrow-alt"></i>
 
                         </a>
 
-
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            id="logoutBtn"
-                        >
-
-                            Sign Out
-
-                            <i class="bx bx-log-out"></i>
-
-                        </button>
-
-
                     </div>
-
-
-                    <div class="elite-footnote">
-
-                        <i class="bx bx-check-circle"></i>
-
-                        Your K@si account is active.
-
-                    </div>
-
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-    </main>
+            <!-- =================================================
+                 DISCOVER
+            ================================================== -->
+
+            <section class="section">
+
+                <div class="discover-card">
+
+                    <div class="discover-bg"></div>
+
+                    <div class="discover-content">
+
+                        <div class="eyebrow">
+                            Discover
+                        </div>
+
+                        <h2>
+                            Your barber
+                            is waiting.
+                        </h2>
+
+                        <p>
+
+                            Explore local grooming businesses,
+                            compare services and find the style
+                            that fits you.
+
+                        </p>
+
+                        <a
+                            href="salons.html"
+                            class="btn btn-primary"
+                        >
+
+                            Discover Salons
+
+                            <i class="bx bx-compass"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ELITE
+            ================================================== -->
+
+            <section class="elite-section">
+
+                <div class="section-head">
+
+                    <div class="eyebrow">
+                        K@si Elite
+                    </div>
+
+                    <h2>
+                        The standard is higher.
+                    </h2>
+
+                </div>
+
+
+                <div class="elite-card">
+
+                    <div class="elite-image">
+
+                        <img
+                            src="C00719B.jpg"
+                            alt="K@si Elite Cuts"
+                            loading="lazy"
+                        >
+
+                    </div>
+
+
+                    <div class="elite-content">
+
+                        <div class="elite-label">
+
+                            <i class="bx bx-sparkles"></i>
+
+                            Elite cuts only
+
+                        </div>
+
+
+                        <h2>
+                            Look sharp.
+                            Feel sharper.
+                        </h2>
+
+
+                        <p>
+
+                            Your next great look is waiting.
+                            Discover local barbers, compare
+                            services and reserve your preferred
+                            time — without standing in line.
+
+                        </p>
+
+
+                        <div class="buttons">
+
+                            <a
+                                href="salons.html"
+                                class="btn btn-primary"
+                            >
+
+                                Find a Salon
+
+                                <i class="bx bx-right-arrow-alt"></i>
+
+                            </a>
+
+
+                            <a
+                                href="#bookings"
+                                class="btn btn-secondary"
+                            >
+
+                                My Bookings
+
+                                <i class="bx bx-calendar"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <section
+                class="section"
+                id="profile"
+            >
+
+                <div class="section-head">
+
+                    <div class="eyebrow">
+                        Account
+                    </div>
+
+                    <h2>
+                        Your K@si profile.
+                    </h2>
+
+                </div>
+
+
+                <div class="profile-panel">
+
+                    <div
+                        class="avatar"
+                        id="avatar"
+                    >
+                        K
+                    </div>
+
+
+                    <div class="profile-info">
+
+                        <strong id="profileName">
+                            K@si Customer
+                        </strong>
+
+                        <span id="profileEmail">
+                            Loading account...
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="logout"
+                        id="logoutBtn"
+                        type="button"
+                    >
+
+                        Sign Out
+
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- =====================================================
+             BOTTOM NAV
+        ====================================================== -->
+
+        <nav class="bottom-nav">
+
+            <a
+                href="home.html"
+                class="nav-item active"
+            >
+
+                <i class="bx bxs-home"></i>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <a
+                href="salons.html"
+                class="nav-item"
+            >
+
+                <i class="bx bx-store"></i>
+
+                <span>
+                    Salons
+                </span>
+
+            </a>
+
+
+            <a
+                href="#profile"
+                class="nav-item"
+            >
+
+                <i class="bx bx-user"></i>
+
+                <span>
+                    Account
+                </span>
+
+            </a>
+
+        </nav>
+
+    </div>
 
 
     <!-- =========================================================
-         BOTTOM NAVIGATION
+         TOAST
     ========================================================= -->
 
-    <nav
-        class="bottom-nav"
-        aria-label="Main navigation"
-    >
-
-
-        <a
-            href="home.html"
-            class="nav-item active"
-        >
-
-            <i class="bx bxs-home"></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
-
-
-        <a
-            href="salons.html"
-            class="nav-item"
-        >
-
-            <i class="bx bx-store"></i>
-
-            <span>
-                Salons
-            </span>
-
-        </a>
-
-
-        <a
-            href="salons.html"
-            class="nav-item"
-        >
-
-            <i class="bx bx-calendar-check"></i>
-
-            <span>
-                Bookings
-            </span>
-
-        </a>
-
-
-    </nav>
+    <div
+        class="toast"
+        id="toast"
+    ></div>
 
 
     <!-- =========================================================
@@ -1306,6 +3496,9 @@
            INITIALIZE FIREBASE
         ========================================================= */
 
+        let auth = null;
+        let db = null;
+
         try {
 
             if (!firebase.apps.length) {
@@ -1316,11 +3509,17 @@
 
             }
 
-            window.firebaseAuth =
+            auth =
                 firebase.auth();
 
-            window.firebaseDB =
+            db =
                 firebase.firestore();
+
+            window.firebaseAuth =
+                auth;
+
+            window.firebaseDB =
+                db;
 
         } catch (error) {
 
@@ -1339,68 +3538,154 @@
         const loading =
             document.getElementById("loading");
 
-        const loadingText =
-            document.getElementById("loadingText");
+        const loaderText =
+            document.getElementById("loaderText");
 
-        const refreshBtn =
-            document.getElementById("refreshBtn");
+        const authScreen =
+            document.getElementById("authScreen");
+
+        const appShell =
+            document.getElementById("appShell");
+
+        const loginTab =
+            document.getElementById("loginTab");
+
+        const signupTab =
+            document.getElementById("signupTab");
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const signupForm =
+            document.getElementById("signupForm");
+
+        const authTitle =
+            document.getElementById("authTitle");
+
+        const authSubtitle =
+            document.getElementById("authSubtitle");
+
+        const authMessage =
+            document.getElementById("authMessage");
+
+        const loginBtn =
+            document.getElementById("loginBtn");
+
+        const signupBtn =
+            document.getElementById("signupBtn");
+
+        const userName =
+            document.getElementById("userName");
+
+        const profileName =
+            document.getElementById("profileName");
+
+        const profileEmail =
+            document.getElementById("profileEmail");
+
+        const avatar =
+            document.getElementById("avatar");
 
         const logoutBtn =
             document.getElementById("logoutBtn");
 
+        const refreshBtn =
+            document.getElementById("refreshBtn");
+
+        const bookingContent =
+            document.getElementById("bookingContent");
+
+        const toast =
+            document.getElementById("toast");
+
+        document.getElementById("authYear").textContent =
+            new Date().getFullYear();
+
 
         /* =========================================================
-           SESSION STORAGE KEYS
-           
-           This controls the ONE-TIME redirect.
+           STATE
         ========================================================= */
 
-        const REDIRECT_KEY =
-            "kasi_auth_redirected";
+        let currentUser = null;
 
-        const ROLE_REDIRECT_KEY =
-            "kasi_role_destination";
+        let authReady = false;
+
+        let redirectInProgress = false;
+
+        let toastTimer = null;
 
 
         /* =========================================================
            HELPERS
         ========================================================= */
 
-        function setLoadingText(message) {
+        function showLoading(message) {
 
-            if (loadingText) {
+            if (loaderText) {
 
-                loadingText.textContent =
-                    message;
+                loaderText.textContent =
+                    message || "Loading K@si...";
 
             }
 
-        }
-
-
-        function showLoading(message) {
-
-            setLoadingText(message);
-
-            loading.classList.remove(
-                "hide"
-            );
+            loading.classList.remove("hide");
 
         }
 
 
         function hideLoading() {
 
-            setTimeout(
-                function() {
+            loading.classList.add("hide");
 
-                    loading.classList.add(
-                        "hide"
-                    );
+        }
 
-                },
-                250
-            );
+
+        function showToast(message) {
+
+            toast.textContent =
+                message;
+
+            toast.classList.add("show");
+
+            clearTimeout(toastTimer);
+
+            toastTimer =
+                setTimeout(
+                    function() {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    3000
+                );
+
+        }
+
+
+        function showAuthMessage(
+            message,
+            type = "error"
+        ) {
+
+            authMessage.textContent =
+                message;
+
+            authMessage.className =
+                "auth-message show " +
+                type;
+
+        }
+
+
+        function clearAuthMessage() {
+
+            authMessage.textContent =
+                "";
+
+            authMessage.className =
+                "auth-message";
 
         }
 
@@ -1408,241 +3693,1680 @@
         function normalizeRole(role) {
 
             if (!role) {
-                return "";
+                return "customer";
             }
 
-            return String(role)
-                .trim()
-                .toLowerCase()
-                .replace(/[\s-]+/g, "_");
+            const value =
+                String(role)
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[_-]+/g, " ")
+                    .replace(/\s+/g, " ");
+
+            if (
+                value === "admin" ||
+                value === "administrator" ||
+                value === "super admin" ||
+                value === "superadmin"
+            ) {
+
+                return "admin";
+
+            }
+
+            if (
+                value === "salon owner" ||
+                value === "salonowner" ||
+                value === "owner" ||
+                value === "barber owner" ||
+                value === "barberowner"
+            ) {
+
+                return "salon_owner";
+
+            }
+
+            return "customer";
+
+        }
+
+
+        function friendlyRole(role) {
+
+            if (role === "admin") {
+                return "Admin";
+            }
+
+            if (role === "salon_owner") {
+                return "Salon Owner";
+            }
+
+            return "Customer";
+
+        }
+
+
+        function getFirstName(user, profileData = null) {
+
+            if (profileData) {
+
+                const profileNameValue =
+                    profileData.name ||
+                    profileData.displayName ||
+                    profileData.fullName;
+
+                if (profileNameValue) {
+
+                    return String(
+                        profileNameValue
+                    )
+                        .trim()
+                        .split(/\s+/)[0];
+
+                }
+
+            }
+
+
+            if (
+                user &&
+                user.displayName
+            ) {
+
+                return user.displayName
+                    .trim()
+                    .split(/\s+/)[0];
+
+            }
+
+
+            if (
+                user &&
+                user.email
+            ) {
+
+                const localPart =
+                    user.email
+                        .split("@")[0]
+                        .replace(/[0-9]/g, "");
+
+                if (localPart) {
+
+                    return localPart
+                        .charAt(0)
+                        .toUpperCase() +
+                        localPart.slice(1);
+
+                }
+
+            }
+
+
+            return "Fresh";
+
+        }
+
+
+        function getProfileName(
+            user,
+            profileData = null
+        ) {
+
+            if (profileData) {
+
+                const name =
+                    profileData.name ||
+                    profileData.displayName ||
+                    profileData.fullName;
+
+                if (name) {
+                    return String(name).trim();
+                }
+
+            }
+
+            if (
+                user &&
+                user.displayName
+            ) {
+
+                return user.displayName.trim();
+
+            }
+
+            return getFirstName(user);
 
         }
 
 
         /* =========================================================
-           FIND USER ROLE
-           
-           Checks both common field names so the page continues
-           working with existing K@si user documents.
+           AUTH SCREEN TABS
         ========================================================= */
 
-        async function getUserRole(user) {
+        function showLogin() {
 
-            if (
-                !user ||
-                !window.firebaseDB
-            ) {
+            loginTab.classList.add("active");
 
-                return "";
+            signupTab.classList.remove("active");
 
+            loginForm.classList.add("active");
+
+            signupForm.classList.remove("active");
+
+            authTitle.textContent =
+                "Sign in to K@si.";
+
+            authSubtitle.textContent =
+                "Continue to your personal grooming space.";
+
+            clearAuthMessage();
+
+        }
+
+
+        function showSignup() {
+
+            signupTab.classList.add("active");
+
+            loginTab.classList.remove("active");
+
+            signupForm.classList.add("active");
+
+            loginForm.classList.remove("active");
+
+            authTitle.textContent =
+                "Create your K@si account.";
+
+            authSubtitle.textContent =
+                "Join K@si and start discovering local grooming.";
+
+            clearAuthMessage();
+
+        }
+
+
+        loginTab.addEventListener(
+            "click",
+            showLogin
+        );
+
+
+        signupTab.addEventListener(
+            "click",
+            showSignup
+        );
+
+
+        /* =========================================================
+           PASSWORD VISIBILITY
+        ========================================================= */
+
+        document
+            .querySelectorAll(".password-toggle")
+            .forEach(
+                function(button) {
+
+                    button.addEventListener(
+                        "click",
+                        function() {
+
+                            const targetId =
+                                button.dataset.target;
+
+                            const input =
+                                document.getElementById(
+                                    targetId
+                                );
+
+                            if (!input) {
+                                return;
+                            }
+
+                            const icon =
+                                button.querySelector("i");
+
+                            if (
+                                input.type ===
+                                "password"
+                            ) {
+
+                                input.type =
+                                    "text";
+
+                                icon.className =
+                                    "bx bx-hide";
+
+                                button.setAttribute(
+                                    "aria-label",
+                                    "Hide password"
+                                );
+
+                            } else {
+
+                                input.type =
+                                    "password";
+
+                                icon.className =
+                                    "bx bx-show";
+
+                                button.setAttribute(
+                                    "aria-label",
+                                    "Show password"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           READ USER PROFILE
+        ========================================================= */
+
+        async function getUserProfile(user) {
+
+            if (!user || !db) {
+                return null;
             }
-
 
             try {
 
-                const userDoc =
-                    await window.firebaseDB
+                const snapshot =
+                    await db
                         .collection("users")
                         .doc(user.uid)
                         .get();
 
+                if (
+                    snapshot.exists
+                ) {
 
-                if (!userDoc.exists) {
-
-                    return "";
+                    return snapshot.data();
 
                 }
 
-
-                const data =
-                    userDoc.data() || {};
-
-
-                const role =
-                    normalizeRole(
-                        data.role ||
-                        data.Role ||
-                        data.userRole ||
-                        data.user_type ||
-                        data.userType
-                    );
-
-
-                return role;
-
             } catch (error) {
 
-                console.error(
-                    "Unable to read user role:",
+                console.warn(
+                    "Could not read user profile:",
                     error
                 );
 
-                return "";
-
             }
+
+            return null;
 
         }
 
 
         /* =========================================================
-           DESTINATION BY ROLE
+           GET VERIFIED ROLE
+           FIRESTORE IS THE SOURCE OF TRUTH
+        ========================================================= */
+
+        async function getVerifiedRole(
+            user,
+            selectedRole = "customer"
+        ) {
+
+            if (!user) {
+                return "customer";
+            }
+
+
+            const profile =
+                await getUserProfile(user);
+
+
+            if (profile) {
+
+                const storedRole =
+                    profile.role ||
+                    profile.Role ||
+                    profile.userRole ||
+                    profile.user_type ||
+                    profile.accountType;
+
+                if (storedRole) {
+
+                    return normalizeRole(
+                        storedRole
+                    );
+
+                }
+
+            }
+
+
+            /*
+                No Firestore role found.
+
+                We do NOT trust a selected admin or
+                owner role from the login screen.
+
+                Unknown users are treated as customers.
+            */
+
+            return "customer";
+
+        }
+
+
+        /* =========================================================
+           ROLE ROUTING
         ========================================================= */
 
         function getRoleDestination(role) {
 
-            role =
-                normalizeRole(role);
+            switch (role) {
+
+                case "admin":
+
+                    return "admin.html";
+
+
+                case "salon_owner":
+
+                    return "owners.html";
+
+
+                case "customer":
+
+                default:
+
+                    return "salons.html";
+
+            }
+
+        }
+
+
+        async function routeAfterAuthentication(
+            user,
+            source
+        ) {
+
+            if (
+                !user ||
+                redirectInProgress
+            ) {
+
+                return;
+
+            }
+
+
+            redirectInProgress =
+                true;
+
+
+            showLoading(
+                "Checking your K@si account..."
+            );
+
+
+            try {
+
+                const selectedRole =
+                    document.getElementById(
+                        "loginRole"
+                    )?.value ||
+                    "customer";
+
+
+                const role =
+                    await getVerifiedRole(
+                        user,
+                        selectedRole
+                    );
+
+
+                const destination =
+                    getRoleDestination(
+                        role
+                    );
+
+
+                /*
+                    This flag is consumed by the destination
+                    page if it needs to know that the user
+                    has just authenticated.
+
+                    It prevents an auth listener from
+                    repeatedly redirecting.
+                */
+
+                sessionStorage.setItem(
+                    "justLoggedIn",
+                    "true"
+                );
+
+                sessionStorage.setItem(
+                    "userRole",
+                    role
+                );
+
+
+                if (
+                    role === "salon_owner"
+                ) {
+
+                    sessionStorage.setItem(
+                        "ownerUid",
+                        user.uid
+                    );
+
+                }
+
+
+                showToast(
+                    "Signed in as " +
+                    friendlyRole(role) +
+                    "."
+                );
+
+
+                /*
+                    Give Firebase a moment to finish its
+                    local auth state update before navigation.
+                */
+
+                setTimeout(
+                    function() {
+
+                        window.location.replace(
+                            destination
+                        );
+
+                    },
+                    350
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Role routing error:",
+                    error
+                );
+
+                redirectInProgress =
+                    false;
+
+                hideLoading();
+
+                showAuthMessage(
+                    "We could not verify your account role. Please try again."
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           LOGIN
+        ========================================================= */
+
+        loginForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                if (
+                    !auth ||
+                    !db
+                ) {
+
+                    showAuthMessage(
+                        "Firebase is not available. Please refresh the page."
+                    );
+
+                    return;
+
+                }
+
+
+                const email =
+                    document
+                        .getElementById("loginEmail")
+                        .value
+                        .trim()
+                        .toLowerCase();
+
+
+                const password =
+                    document
+                        .getElementById("loginPassword")
+                        .value;
+
+
+                if (!email) {
+
+                    showAuthMessage(
+                        "Please enter your email address."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!password) {
+
+                    showAuthMessage(
+                        "Please enter your password."
+                    );
+
+                    return;
+
+                }
+
+
+                loginBtn.disabled =
+                    true;
+
+                loginBtn.innerHTML =
+                    `
+                    <i class="bx bx-loader-alt bx-spin"></i>
+                    Signing in...
+                    `;
+
+                clearAuthMessage();
+
+
+                try {
+
+                    const credential =
+                        await auth.signInWithEmailAndPassword(
+                            email,
+                            password
+                        );
+
+
+                    /*
+                        Explicitly route here after successful
+                        login. The auth state listener will NOT
+                        perform another redirect.
+                    */
+
+                    await routeAfterAuthentication(
+                        credential.user,
+                        "login"
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+
+                    let message =
+                        "Unable to sign in. Please check your details.";
+
+
+                    switch (error.code) {
+
+                        case "auth/invalid-email":
+
+                            message =
+                                "Please enter a valid email address.";
+
+                            break;
+
+
+                        case "auth/user-not-found":
+
+                            message =
+                                "No K@si account was found with this email.";
+
+                            break;
+
+
+                        case "auth/wrong-password":
+
+                            message =
+                                "The password is incorrect.";
+
+                            break;
+
+
+                        case "auth/invalid-credential":
+
+                            message =
+                                "The email or password is incorrect.";
+
+                            break;
+
+
+                        case "auth/too-many-requests":
+
+                            message =
+                                "Too many attempts. Please wait and try again.";
+
+                            break;
+
+
+                        case "auth/user-disabled":
+
+                            message =
+                                "This account has been disabled.";
+
+                            break;
+
+                    }
+
+
+                    showAuthMessage(
+                        message
+                    );
+
+
+                    loginBtn.disabled =
+                        false;
+
+                    loginBtn.innerHTML =
+                        `
+                        <i class="bx bx-log-in"></i>
+                        Sign In
+                        `;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           SIGNUP
+        ========================================================= */
+
+        signupForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                if (
+                    !auth ||
+                    !db
+                ) {
+
+                    showAuthMessage(
+                        "Firebase is not available. Please refresh the page."
+                    );
+
+                    return;
+
+                }
+
+
+                const name =
+                    document
+                        .getElementById("signupName")
+                        .value
+                        .trim();
+
+
+                const email =
+                    document
+                        .getElementById("signupEmail")
+                        .value
+                        .trim()
+                        .toLowerCase();
+
+
+                const password =
+                    document
+                        .getElementById("signupPassword")
+                        .value;
+
+
+                const confirmPassword =
+                    document
+                        .getElementById(
+                            "signupPasswordConfirm"
+                        )
+                        .value;
+
+
+                if (!name) {
+
+                    showAuthMessage(
+                        "Please enter your full name."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!email) {
+
+                    showAuthMessage(
+                        "Please enter your email address."
+                    );
+
+                    return;
+
+                }
+
+
+                if (password.length < 6) {
+
+                    showAuthMessage(
+                        "Your password must contain at least 6 characters."
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    password !==
+                    confirmPassword
+                ) {
+
+                    showAuthMessage(
+                        "Your passwords do not match."
+                    );
+
+                    return;
+
+                }
+
+
+                signupBtn.disabled =
+                    true;
+
+                signupBtn.innerHTML =
+                    `
+                    <i class="bx bx-loader-alt bx-spin"></i>
+                    Creating account...
+                    `;
+
+                clearAuthMessage();
+
+
+                try {
+
+                    /*
+                        Create Firebase Authentication user.
+                    */
+
+                    const credential =
+                        await auth.createUserWithEmailAndPassword(
+                            email,
+                            password
+                        );
+
+
+                    const user =
+                        credential.user;
+
+
+                    /*
+                        Set Firebase display name.
+                    */
+
+                    try {
+
+                        await user.updateProfile({
+
+                            displayName:
+                                name
+
+                        });
+
+                    } catch (profileError) {
+
+                        console.warn(
+                            "Display name update failed:",
+                            profileError
+                        );
+
+                    }
+
+
+                    /*
+                        Create the Firestore profile.
+
+                        New accounts from this page are ALWAYS
+                        customers. This prevents somebody from
+                        selecting "admin" or "owner" and creating
+                        themselves as a privileged account.
+                    */
+
+                    await db
+                        .collection("users")
+                        .doc(user.uid)
+                        .set(
+                            {
+                                uid:
+                                    user.uid,
+
+                                name:
+                                    name,
+
+                                displayName:
+                                    name,
+
+                                email:
+                                    email,
+
+                                role:
+                                    "customer",
+
+                                createdAt:
+                                    firebase.firestore
+                                        .FieldValue
+                                        .serverTimestamp(),
+
+                                updatedAt:
+                                    firebase.firestore
+                                        .FieldValue
+                                        .serverTimestamp()
+                            },
+                            {
+                                merge: true
+                            }
+                        );
+
+
+                    showAuthMessage(
+                        "Account created successfully. Taking you to salons...",
+                        "success"
+                    );
+
+
+                    /*
+                        Customer signup always goes to salons.
+                    */
+
+                    sessionStorage.setItem(
+                        "justLoggedIn",
+                        "true"
+                    );
+
+                    sessionStorage.setItem(
+                        "userRole",
+                        "customer"
+                    );
+
+
+                    setTimeout(
+                        function() {
+
+                            window.location.replace(
+                                "salons.html"
+                            );
+
+                        },
+                        500
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Signup error:",
+                        error
+                    );
+
+
+                    let message =
+                        "Unable to create your account.";
+
+
+                    switch (error.code) {
+
+                        case "auth/email-already-in-use":
+
+                            message =
+                                "An account with this email already exists. Please sign in instead.";
+
+                            break;
+
+
+                        case "auth/invalid-email":
+
+                            message =
+                                "Please enter a valid email address.";
+
+                            break;
+
+
+                        case "auth/weak-password":
+
+                            message =
+                                "Your password is too weak. Use at least 6 characters.";
+
+                            break;
+
+
+                        case "auth/network-request-failed":
+
+                            message =
+                                "Network error. Please check your internet connection.";
+
+                            break;
+
+                    }
+
+
+                    showAuthMessage(
+                        message
+                    );
+
+
+                    signupBtn.disabled =
+                        false;
+
+                    signupBtn.innerHTML =
+                        `
+                        <i class="bx bx-user-plus"></i>
+                        Create Account
+                        `;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           LOAD CUSTOMER PROFILE
+        ========================================================= */
+
+        async function loadUser(user) {
+
+            if (!user) {
+                return;
+            }
+
+
+            currentUser =
+                user;
+
+
+            let profile =
+                null;
+
+
+            if (db) {
+
+                profile =
+                    await getUserProfile(
+                        user
+                    );
+
+            }
+
+
+            const firstName =
+                getFirstName(
+                    user,
+                    profile
+                );
+
+
+            const fullName =
+                getProfileName(
+                    user,
+                    profile
+                );
+
+
+            userName.textContent =
+                firstName;
+
+
+            profileName.textContent =
+                fullName ||
+                "K@si Customer";
+
+
+            profileEmail.textContent =
+                user.email ||
+                "K@si account";
+
+
+            avatar.textContent =
+                firstName
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            /*
+                Only customers should see this page as
+                their actual dashboard.
+
+                Owners/admins who manually open home.html
+                are not automatically redirected. They can
+                use their own portal. This avoids redirect
+                loops.
+            */
+
+            const role =
+                profile
+                    ? normalizeRole(
+                        profile.role ||
+                        profile.Role ||
+                        profile.userRole
+                    )
+                    : "customer";
 
 
             if (
                 role === "admin" ||
-                role === "administrator"
+                role === "salon_owner"
             ) {
 
-                return "admin.html";
-
-            }
-
-
-            if (
-                role === "salon_owner" ||
-                role === "owner" ||
-                role === "salonowner"
-            ) {
-
-                return "owners.html";
-
-            }
-
-
-            return "salons.html";
-
-        }
-
-
-        /* =========================================================
-           ONE-TIME POST LOGIN REDIRECT
-           
-           Important:
-           
-           - First authenticated arrival can redirect.
-           - Once redirected, sessionStorage remembers it.
-           - Returning to home.html will NOT redirect again.
-        ========================================================= */
-
-        async function handleFirstAuthenticatedVisit(user) {
-
-            if (!user) {
-
-                showLoading(
-                    "Please sign in..."
+                showToast(
+                    "This account belongs to the " +
+                    friendlyRole(role) +
+                    " portal."
                 );
 
-                window.location.replace(
-                    "index.html"
-                );
-
-                return;
-
             }
 
 
-            const alreadyRedirected =
-                sessionStorage.getItem(
-                    REDIRECT_KEY
-                );
-
-
-            /*
-
-                If this session has already been redirected,
-                keep the user on home.html.
-
-            */
-
-            if (
-                alreadyRedirected === "true"
-            ) {
-
-                hideLoading();
-
-                return;
-
-            }
-
-
-            /*
-
-                First authenticated visit.
-
-                Read role and redirect once.
-
-            */
-
-            showLoading(
-                "Preparing your K@si space..."
-            );
-
-
-            const role =
-                await getUserRole(user);
-
-
-            const destination =
-                getRoleDestination(role);
-
-
-            sessionStorage.setItem(
-                REDIRECT_KEY,
-                "true"
-            );
-
-
-            sessionStorage.setItem(
-                ROLE_REDIRECT_KEY,
-                destination
-            );
-
-
-            /*
-
-                Give Firebase a moment to complete auth state
-                stabilization before navigating.
-
-            */
-
-            setTimeout(
-                function() {
-
-                    window.location.replace(
-                        destination
-                    );
-
-                },
-                350
+            await loadBookings(
+                user
             );
 
         }
 
 
         /* =========================================================
-           AUTH STATE
+           LOAD BOOKINGS
         ========================================================= */
 
-        if (
-            window.firebaseAuth
-        ) {
+        async function loadBookings(user) {
 
-            window.firebaseAuth
-                .onAuthStateChanged(
-                    function(user) {
+            if (
+                !user ||
+                !db
+            ) {
 
-                        handleFirstAuthenticatedVisit(
-                            user
+                return;
+
+            }
+
+
+            bookingContent.innerHTML =
+                `
+                <div class="empty-icon">
+                    <i class="bx bx-loader-alt bx-spin"></i>
+                </div>
+
+                <h3>
+                    Loading your bookings.
+                </h3>
+
+                <p>
+                    Checking your upcoming appointments...
+                </p>
+                `;
+
+
+            try {
+
+                /*
+                    We intentionally query only by userId.
+
+                    This avoids requiring a Firestore composite
+                    index for userId + date.
+
+                    Sorting is performed locally.
+                */
+
+                const snapshot =
+                    await db
+                        .collection("bookings")
+                        .where(
+                            "userId",
+                            "==",
+                            user.uid
+                        )
+                        .get();
+
+
+                const bookings = [];
+
+
+                snapshot.forEach(
+                    function(doc) {
+
+                        const data =
+                            doc.data();
+
+                        bookings.push(
+                            {
+                                id:
+                                    doc.id,
+                                ...data
+                            }
                         );
 
                     }
                 );
+
+
+                bookings.sort(
+                    function(a, b) {
+
+                        const dateA =
+                            String(
+                                a.date || ""
+                            );
+
+                        const timeA =
+                            String(
+                                a.time || ""
+                            );
+
+                        const dateB =
+                            String(
+                                b.date || ""
+                            );
+
+                        const timeB =
+                            String(
+                                b.time || ""
+                            );
+
+                        return (
+                            dateA +
+                            " " +
+                            timeA
+                        ).localeCompare(
+                            dateB +
+                            " " +
+                            timeB
+                        );
+
+                    }
+                );
+
+
+                const upcoming =
+                    bookings.filter(
+                        function(booking) {
+
+                            const date =
+                                String(
+                                    booking.date ||
+                                    ""
+                                );
+
+                            if (!date) {
+                                return true;
+                            }
+
+                            return date >=
+                                getTodayISO();
+
+                        }
+                    );
+
+
+                /*
+                    Show newest/upcoming bookings first,
+                    with a reasonable maximum.
+                */
+
+                const visible =
+                    upcoming
+                        .slice(0, 5);
+
+
+                if (
+                    visible.length === 0
+                ) {
+
+                    bookingContent.innerHTML =
+                        `
+                        <div class="empty-icon">
+                            <i class="bx bx-calendar"></i>
+                        </div>
+
+                        <h3>
+                            Your next cut starts here.
+                        </h3>
+
+                        <p>
+                            You don't have any upcoming bookings.
+                            Find a salon and reserve your
+                            preferred time.
+                        </p>
+
+                        <a
+                            href="salons.html"
+                            class="btn btn-primary"
+                        >
+                            Explore Salons
+                            <i class="bx bx-right-arrow-alt"></i>
+                        </a>
+                        `;
+
+                    return;
+
+                }
+
+
+                let html =
+                    `
+                    <div class="booking-list">
+                    `;
+
+
+                visible.forEach(
+                    function(booking) {
+
+                        const salon =
+                            booking.salonName ||
+                            "K@si Salon";
+
+                        const service =
+                            booking.service ||
+                            "Grooming service";
+
+                        const date =
+                            formatBookingDate(
+                                booking.date
+                            );
+
+                        const time =
+                            booking.time ||
+                            "Time pending";
+
+                        const status =
+                            String(
+                                booking.status ||
+                                "pending"
+                            )
+                                .toLowerCase();
+
+
+                        let statusClass =
+                            "status-" +
+                            status;
+
+                        if (
+                            ![
+                                "pending",
+                                "approved",
+                                "completed",
+                                "declined",
+                                "cancelled"
+                            ].includes(status)
+                        ) {
+
+                            statusClass =
+                                "status-pending";
+
+                        }
+
+
+                        html +=
+                            `
+                            <div class="booking-item">
+
+                                <div class="booking-item-main">
+
+                                    <strong>
+                                        ${escapeHTML(salon)}
+                                    </strong>
+
+                                    <span>
+                                        ${escapeHTML(service)}
+                                        ·
+                                        ${escapeHTML(date)}
+                                        ·
+                                        ${escapeHTML(time)}
+                                    </span>
+
+                                </div>
+
+                                <span
+                                    class="booking-status ${statusClass}"
+                                >
+                                    ${escapeHTML(status)}
+                                </span>
+
+                            </div>
+                            `;
+
+                    }
+                );
+
+
+                html +=
+                    `
+                    </div>
+
+                    <div style="margin-top:18px;text-align:center;">
+
+                        <a
+                            href="salons.html"
+                            class="btn btn-secondary"
+                        >
+
+                            Book another cut
+
+                            <i class="bx bx-right-arrow-alt"></i>
+
+                        </a>
+
+                    </div>
+                    `;
+
+
+                bookingContent.innerHTML =
+                    html;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Booking loading error:",
+                    error
+                );
+
+
+                bookingContent.innerHTML =
+                    `
+                    <div class="empty-icon">
+                        <i class="bx bx-calendar-x"></i>
+                    </div>
+
+                    <h3>
+                        Your bookings are unavailable.
+                    </h3>
+
+                    <p>
+                        We could not load your appointments
+                        right now. You can still browse salons
+                        and make a booking.
+                    </p>
+
+                    <a
+                        href="salons.html"
+                        class="btn btn-primary"
+                    >
+                        Explore Salons
+                        <i class="bx bx-right-arrow-alt"></i>
+                    </a>
+                    `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           DATE HELPERS
+        ========================================================= */
+
+        function getTodayISO() {
+
+            const now =
+                new Date();
+
+            const year =
+                now.getFullYear();
+
+            const month =
+                String(
+                    now.getMonth() + 1
+                ).padStart(2, "0");
+
+            const day =
+                String(
+                    now.getDate()
+                ).padStart(2, "0");
+
+            return (
+                year +
+                "-" +
+                month +
+                "-" +
+                day
+            );
+
+        }
+
+
+        function formatBookingDate(dateString) {
+
+            if (!dateString) {
+                return "Date pending";
+            }
+
+
+            const parts =
+                String(
+                    dateString
+                ).split("-");
+
+
+            if (
+                parts.length !== 3
+            ) {
+
+                return dateString;
+
+            }
+
+
+            const date =
+                new Date(
+                    Number(parts[0]),
+                    Number(parts[1]) - 1,
+                    Number(parts[2])
+                );
+
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return dateString;
+
+            }
+
+
+            return date.toLocaleDateString(
+                "en-ZA",
+                {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           HTML ESCAPE
+        ========================================================= */
+
+        function escapeHTML(value) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================================================
+           SHOW CUSTOMER APP
+        ========================================================= */
+
+        function showApp() {
+
+            document.body.classList.remove(
+                "auth-mode"
+            );
+
+            authScreen.classList.add(
+                "hidden"
+            );
+
+            appShell.classList.add(
+                "visible"
+            );
+
+        }
+
+
+        /* =========================================================
+           SHOW AUTH SCREEN
+        ========================================================= */
+
+        function showAuth() {
+
+            document.body.classList.add(
+                "auth-mode"
+            );
+
+            appShell.classList.remove(
+                "visible"
+            );
+
+            authScreen.classList.remove(
+                "hidden"
+            );
+
+            showLogin();
+
+        }
+
+
+        /* =========================================================
+           AUTH STATE LISTENER
+        ========================================================= */
+
+        if (auth) {
+
+            auth.onAuthStateChanged(
+                async function(user) {
+
+                    /*
+                        Firebase can fire this listener during
+                        the login process.
+
+                        IMPORTANT:
+                        We deliberately DO NOT redirect from
+                        this listener.
+
+                        Successful login/signup functions above
+                        perform the single redirect.
+
+                        This prevents redirect loops.
+                    */
+
+                    authReady =
+                        true;
+
+
+                    if (user) {
+
+                        currentUser =
+                            user;
+
+
+                        /*
+                            If justLoggedIn is present, the
+                            login/signup function is already
+                            handling the redirect.
+                        */
+
+                        const justLoggedIn =
+                            sessionStorage.getItem(
+                                "justLoggedIn"
+                            );
+
+
+                        if (
+                            justLoggedIn ===
+                            "true"
+                        ) {
+
+                            showLoading(
+                                "Opening your K@si space..."
+                            );
+
+                            return;
+
+                        }
+
+
+                        /*
+                            User manually opened home.html
+                            while already authenticated.
+
+                            Show the home page instead of
+                            redirecting repeatedly.
+                        */
+
+                        showApp();
+
+                        await loadUser(
+                            user
+                        );
+
+                        setTimeout(
+                            hideLoading,
+                            250
+                        );
+
+                    } else {
+
+                        currentUser =
+                            null;
+
+                        showAuth();
+
+                        hideLoading();
+
+                    }
+
+                }
+            );
 
         } else {
 
@@ -1650,19 +5374,12 @@
                 "Firebase Auth unavailable."
             );
 
-            showLoading(
-                "Authentication is unavailable."
-            );
+            showAuth();
 
-            setTimeout(
-                function() {
+            hideLoading();
 
-                    window.location.replace(
-                        "index.html"
-                    );
-
-                },
-                800
+            showAuthMessage(
+                "Firebase could not be initialized. Please check your connection and Firebase configuration."
             );
 
         }
@@ -1670,61 +5387,64 @@
 
         /* =========================================================
            LOGOUT
-           
-           Clear the one-time redirect marker so the next login
-           can redirect again.
         ========================================================= */
 
         logoutBtn.addEventListener(
             "click",
             async function() {
 
-                if (
-                    !window.firebaseAuth
-                ) {
-
+                if (!auth) {
                     return;
-
                 }
 
 
                 logoutBtn.disabled =
                     true;
 
-
-                logoutBtn.innerHTML =
-                    `
-                    <i class="bx bx-loader-alt bx-spin"></i>
-                    Signing out...
-                    `;
+                logoutBtn.textContent =
+                    "Signing out...";
 
 
                 try {
 
-                    showLoading(
-                        "Signing out..."
-                    );
-
-
-                    await window.firebaseAuth
-                        .signOut();
-
+                    /*
+                        Remove one-time routing flags before
+                        signing out.
+                    */
 
                     sessionStorage.removeItem(
-                        REDIRECT_KEY
+                        "justLoggedIn"
                     );
 
                     sessionStorage.removeItem(
-                        ROLE_REDIRECT_KEY
+                        "userRole"
+                    );
+
+                    sessionStorage.removeItem(
+                        "ownerUid"
+                    );
+
+                    sessionStorage.removeItem(
+                        "ownerSalonId"
+                    );
+
+                    sessionStorage.removeItem(
+                        "justCreatedSalon"
                     );
 
 
-                    sessionStorage.clear();
+                    await auth.signOut();
 
+
+                    /*
+                        Marketing landing page is the correct
+                        destination after logout.
+                    */
 
                     window.location.replace(
                         "index.html"
                     );
+
 
                 } catch (error) {
 
@@ -1734,18 +5454,16 @@
                     );
 
 
-                    hideLoading();
-
-
                     logoutBtn.disabled =
                         false;
 
+                    logoutBtn.textContent =
+                        "Sign Out";
 
-                    logoutBtn.innerHTML =
-                        `
-                        Sign Out
-                        <i class="bx bx-log-out"></i>
-                        `;
+
+                    showToast(
+                        "Could not sign out. Please try again."
+                    );
 
                 }
 
@@ -1781,6 +5499,45 @@
 
 
         /* =========================================================
+           BOTTOM NAV
+        ========================================================= */
+
+        document
+            .querySelectorAll(".nav-item")
+            .forEach(
+                function(item) {
+
+                    item.addEventListener(
+                        "click",
+                        function() {
+
+                            document
+                                .querySelectorAll(
+                                    ".nav-item"
+                                )
+                                .forEach(
+                                    function(nav) {
+
+                                        nav.classList.remove(
+                                            "active"
+                                        );
+
+                                    }
+                                );
+
+
+                            item.classList.add(
+                                "active"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
            PREVENT STALE PAGE AFTER LOGOUT
         ========================================================= */
 
@@ -1790,22 +5547,11 @@
 
                 if (
                     event.persisted &&
-                    window.firebaseAuth &&
-                    !window.firebaseAuth.currentUser
+                    auth &&
+                    !auth.currentUser
                 ) {
 
-                    sessionStorage.removeItem(
-                        REDIRECT_KEY
-                    );
-
-                    sessionStorage.removeItem(
-                        ROLE_REDIRECT_KEY
-                    );
-
-
-                    window.location.replace(
-                        "index.html"
-                    );
+                    showAuth();
 
                 }
 
@@ -1814,51 +5560,34 @@
 
 
         /* =========================================================
-           BROWSER BACK BUTTON PROTECTION
-           
-           When the user has signed out, do not allow the cached
-           authenticated home screen to remain visible.
+           CLEAR ONE-TIME REDIRECT FLAG
+           ONLY WHEN WE ARE NOT IN A LOGIN REDIRECT
         ========================================================= */
 
         window.addEventListener(
-            "popstate",
+            "load",
             function() {
 
-                if (
-                    window.firebaseAuth &&
-                    !window.firebaseAuth.currentUser
-                ) {
+                /*
+                    Do not immediately delete the flag here.
 
-                    window.location.replace(
-                        "index.html"
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =========================================================
-           INITIAL LOADING TIMEOUT
-           
-           Prevent an infinite loader in case Firebase is slow.
-        ========================================================= */
-
-        setTimeout(
-            function() {
+                    The destination page gets a chance to consume
+                    it. We only use it on this page to stop an
+                    already-authenticated account from being
+                    repeatedly redirected.
+                */
 
                 if (
-                    window.firebaseAuth &&
-                    window.firebaseAuth.currentUser
+                    !sessionStorage.getItem(
+                        "justLoggedIn"
+                    )
                 ) {
 
                     hideLoading();
 
                 }
 
-            },
-            6000
+            }
         );
 
     </script>
