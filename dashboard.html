@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,10 +9,7 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta
-        name="theme-color"
-        content="#07070d"
-    >
+    <meta name="theme-color" content="#07070d">
 
     <meta
         name="description"
@@ -22,18 +18,22 @@
 
     <title>K@si Web | Admin Control Centre</title>
 
-    <!-- =====================================================
-         BOXICONS
-    ====================================================== -->
-
+    <!-- =========================================================
+         ICONS
+    ========================================================== -->
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
+    <!-- =========================================================
+         FIREBASE
+    ========================================================== -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <style>
-
         /* =====================================================
            RESET
         ====================================================== */
@@ -44,1337 +44,2706 @@
             box-sizing: border-box;
         }
 
-
-        :root {
-
-            --bg: #07070d;
-            --bg2: #0c0c16;
-
-            --card: rgba(20,20,34,.82);
-            --card2: rgba(27,27,45,.92);
-
-            --blue: #3b82f6;
-            --blue2: #2563eb;
-
-            --purple: #8b5cf6;
-            --purple2: #6d28d9;
-
-            --green: #22c55e;
-            --orange: #f59e0b;
-            --red: #ef4444;
-
-            --text: #ffffff;
-            --muted: #a7a7c4;
-
-            --border: rgba(255,255,255,.08);
-
-            --radius: 20px;
-
-            --shadow:
-                0 20px 60px rgba(0,0,0,.45);
+        html {
+            scroll-behavior: smooth;
         }
 
-
-        /* =====================================================
-           BODY
-        ====================================================== */
-
         body {
-
             min-height: 100vh;
-
-            color: var(--text);
-
             font-family:
                 Inter,
-                system-ui,
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
+                Roboto,
+                Arial,
                 sans-serif;
 
+            color: #ffffff;
+
             background:
-
                 radial-gradient(
-                    circle at 10% 0%,
-                    rgba(59,130,246,.14),
+                    circle at 15% 0%,
+                    rgba(59, 130, 246, .18),
                     transparent 30%
                 ),
-
                 radial-gradient(
-                    circle at 90% 10%,
-                    rgba(139,92,246,.15),
+                    circle at 90% 15%,
+                    rgba(139, 92, 246, .18),
                     transparent 30%
                 ),
+                #07070d;
 
-                var(--bg);
-
-            padding-bottom: 100px;
+            overflow-x: hidden;
         }
 
+        button,
+        input,
+        select {
+            font: inherit;
+        }
 
-        body::before {
+        button {
+            cursor: pointer;
+        }
 
-            content: "";
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
+        /* =====================================================
+           VARIABLES
+        ====================================================== */
+
+        :root {
+            --bg: #07070d;
+            --panel: rgba(17, 17, 29, .78);
+            --panel-2: rgba(23, 23, 39, .88);
+
+            --blue: #3b82f6;
+            --blue-light: #60a5fa;
+
+            --purple: #8b5cf6;
+            --purple-light: #a78bfa;
+
+            --green: #22c55e;
+            --red: #ef4444;
+            --orange: #f59e0b;
+
+            --text: #ffffff;
+            --muted: #9ca3af;
+
+            --border: rgba(255,255,255,.08);
+
+            --shadow:
+                0 20px 60px rgba(0,0,0,.35);
+
+            --radius: 22px;
+        }
+
+        /* =====================================================
+           LOADING SCREEN
+        ====================================================== */
+
+        #loadingScreen {
             position: fixed;
-
             inset: 0;
+            z-index: 9999;
 
-            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
 
-            background:
-
-                linear-gradient(
-                    rgba(255,255,255,.015) 1px,
-                    transparent 1px
-                ),
-
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,.015) 1px,
-                    transparent 1px
-                );
-
-            background-size: 40px 40px;
-
-            mask-image:
-                linear-gradient(
-                    to bottom,
-                    black,
-                    transparent 90%
-                );
-
-            z-index: -1;
+            background: #07070d;
         }
 
+        .loader-logo {
+            width: 74px;
+            height: 74px;
+
+            border-radius: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 28px;
+            font-weight: 900;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 15px 45px rgba(59,130,246,.28);
+
+            margin-bottom: 20px;
+        }
+
+        .loader-spinner {
+            width: 32px;
+            height: 32px;
+
+            border: 3px solid rgba(255,255,255,.12);
+            border-top-color: var(--blue-light);
+
+            border-radius: 50%;
+
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* =====================================================
+           ACCESS DENIED
+        ====================================================== */
+
+        #accessDenied {
+            display: none;
+
+            min-height: 100vh;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+        }
+
+        .denied-card {
+            width: min(440px, 100%);
+
+            padding: 36px 26px;
+
+            text-align: center;
+
+            background: var(--panel);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 26px;
+
+            backdrop-filter: blur(20px);
+
+            box-shadow: var(--shadow);
+        }
+
+        .denied-icon {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 34px;
+
+            color: #fff;
+
+            background:
+                rgba(239,68,68,.15);
+
+            border:
+                1px solid rgba(239,68,68,.25);
+        }
+
+        .denied-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .denied-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* =====================================================
+           APP
+        ====================================================== */
+
+        #app {
+            display: none;
+        }
 
         /* =====================================================
            TOP BAR
         ====================================================== */
 
         .topbar {
-
             position: sticky;
-
             top: 0;
-
             z-index: 1000;
 
+            height: 76px;
+
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
 
-            padding:
-
-                14px
-                max(18px, env(safe-area-inset-right))
-                14px
-                max(18px, env(safe-area-inset-left));
+            padding: 0 28px;
 
             background:
-                rgba(7,7,13,.84);
-
-            backdrop-filter: blur(22px);
-
-            -webkit-backdrop-filter: blur(22px);
+                rgba(7,7,13,.82);
 
             border-bottom:
                 1px solid var(--border);
-        }
 
+            backdrop-filter: blur(22px);
+        }
 
         .brand {
-
             display: flex;
-
             align-items: center;
-
-            gap: 11px;
+            gap: 12px;
         }
 
+        .brand-logo {
+            width: 42px;
+            height: 42px;
 
-        .brand-icon {
+            border-radius: 13px;
 
-            width: 44px;
-            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 900;
 
             background:
-
                 linear-gradient(
                     135deg,
                     var(--blue),
                     var(--purple)
                 );
-
-            box-shadow:
-
-                0 8px 30px
-                rgba(59,130,246,.25);
-
-            font-size: 23px;
         }
 
-
-        .brand-text h1 {
-
-            font-size: 18px;
-
-            font-weight: 950;
-
-            letter-spacing: -.5px;
+        .brand-text strong {
+            display: block;
+            font-size: 16px;
         }
-
 
         .brand-text span {
-
             display: block;
-
             margin-top: 2px;
 
             color: var(--muted);
 
-            font-size: 10px;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1.4px;
+            font-size: 11px;
         }
-
 
         .top-actions {
-
             display: flex;
-
-            gap: 8px;
+            align-items: center;
+            gap: 10px;
         }
 
-
         .icon-btn {
-
             width: 42px;
             height: 42px;
 
-            display: grid;
-
-            place-items: center;
+            border-radius: 13px;
 
             border:
-
                 1px solid var(--border);
+
+            background:
+                rgba(255,255,255,.04);
+
+            color: #fff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            transition: .2s ease;
+        }
+
+        .icon-btn:hover {
+            background:
+                rgba(255,255,255,.09);
+
+            transform: translateY(-1px);
+        }
+
+        .logout-btn {
+            height: 42px;
+
+            padding: 0 15px;
 
             border-radius: 13px;
 
-            background:
-                rgba(255,255,255,.045);
+            border: none;
 
-            color: white;
-
-            cursor: pointer;
-
-            transition: .2s;
-        }
-
-
-        .icon-btn:hover {
-
-            transform:
-                translateY(-2px);
+            color: #fff;
 
             background:
-                rgba(255,255,255,.09);
+                rgba(239,68,68,.13);
+
+            border:
+                1px solid rgba(239,68,68,.2);
+
+            display: flex;
+            align-items: center;
+            gap: 7px;
         }
 
+        /* =====================================================
+           LAYOUT
+        ====================================================== */
 
-        .icon-btn.logout:hover {
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
 
-            color: #ff7777;
+        /* =====================================================
+           SIDEBAR
+        ====================================================== */
+
+        .sidebar {
+            width: 245px;
+
+            flex-shrink: 0;
+
+            padding: 22px 15px;
+
+            border-right:
+                1px solid var(--border);
+
+            background:
+                rgba(8,8,16,.52);
+        }
+
+        .nav-label {
+            padding: 10px 13px;
+
+            color: #6b7280;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .side-link {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 12px 13px;
+
+            border: 1px solid transparent;
+
+            border-radius: 14px;
+
+            color: #a1a1aa;
+
+            background: transparent;
+
+            text-align: left;
+
+            transition: .2s ease;
+        }
+
+        .side-link i {
+            font-size: 20px;
+        }
+
+        .side-link:hover,
+        .side-link.active {
+            color: #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.14),
+                    rgba(139,92,246,.12)
+                );
 
             border-color:
-                rgba(239,68,68,.25);
-
-            background:
-                rgba(239,68,68,.10);
+                rgba(96,165,250,.14);
         }
 
+        .side-link.active i {
+            color: var(--blue-light);
+        }
+
+        .sidebar-bottom {
+            margin-top: 25px;
+            padding: 14px;
+        }
+
+        .admin-mini-card {
+            padding: 15px;
+
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.10),
+                    rgba(139,92,246,.10)
+                );
+
+            border:
+                1px solid var(--border);
+        }
+
+        .admin-mini-card small {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .admin-mini-card strong {
+            display: block;
+            margin-top: 4px;
+
+            font-size: 13px;
+
+            word-break: break-word;
+        }
 
         /* =====================================================
            MAIN
         ====================================================== */
 
-        .container {
+        main {
+            width: 100%;
+            min-width: 0;
 
-            width:
-                min(1450px, 100%);
+            padding: 30px;
 
-            margin:
-                0 auto;
-
-            padding:
-                24px 16px;
+            padding-bottom: 100px;
         }
 
+        .section {
+            display: none;
+
+            animation: fadeUp .3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* =====================================================
-           HERO
+           PAGE HEADER
         ====================================================== */
 
-        .hero {
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
 
-            position: relative;
+            gap: 20px;
 
-            overflow: hidden;
-
-            padding: 27px;
-
-            border:
-
-                1px solid var(--border);
-
-            border-radius: 26px;
-
-            background:
-
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.12),
-                    rgba(139,92,246,.09)
-                ),
-
-                var(--card);
-
-            box-shadow: var(--shadow);
+            margin-bottom: 25px;
         }
-
-
-        .hero::before {
-
-            content: "";
-
-            position: absolute;
-
-            width: 250px;
-            height: 250px;
-
-            right: -90px;
-            top: -100px;
-
-            border-radius: 50%;
-
-            background:
-
-                radial-gradient(
-                    circle,
-                    rgba(139,92,246,.30),
-                    transparent 70%
-                );
-        }
-
-
-        .hero::after {
-
-            content: "";
-
-            position: absolute;
-
-            width: 180px;
-            height: 180px;
-
-            left: -100px;
-            bottom: -110px;
-
-            border-radius: 50%;
-
-            background:
-
-                radial-gradient(
-                    circle,
-                    rgba(59,130,246,.18),
-                    transparent 70%
-                );
-        }
-
-
-        .hero-content {
-
-            position: relative;
-
-            z-index: 2;
-        }
-
 
         .eyebrow {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            padding:
-                7px 11px;
-
-            border:
-
-                1px solid
-                rgba(59,130,246,.22);
-
-            border-radius: 999px;
-
-            background:
-                rgba(59,130,246,.10);
-
-            color: #8db8ff;
-
-            font-size: 10px;
-
-            font-weight: 900;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1px;
-        }
-
-
-        .hero h2 {
-
-            margin-top: 14px;
-
-            max-width: 850px;
-
-            font-size:
-                clamp(28px, 6vw, 46px);
-
-            line-height: 1.05;
-
-            font-weight: 950;
-
-            letter-spacing: -1.8px;
-        }
-
-
-        .hero h2 span {
-
-            background:
-
-                linear-gradient(
-                    90deg,
-                    #60a5fa,
-                    #a78bfa
-                );
-
-            -webkit-background-clip: text;
-
-            background-clip: text;
-
-            color: transparent;
-        }
-
-
-        .hero p {
-
-            max-width: 700px;
-
-            margin-top: 13px;
-
-            color: var(--muted);
-
-            line-height: 1.6;
-
-            font-size: 14px;
-        }
-
-
-        .live-status {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            margin-top: 18px;
-
-            color: #a3a3bc;
+            color: var(--blue-light);
 
             font-size: 11px;
+            font-weight: 800;
 
-            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
         }
 
-
-        .live-dot {
-
-            width: 8px;
-            height: 8px;
-
-            border-radius: 50%;
-
-            background: var(--green);
-
-            box-shadow:
-
-                0 0 0 5px
-                rgba(34,197,94,.10),
-
-                0 0 15px
-                rgba(34,197,94,.65);
+        .page-header h1 {
+            font-size: clamp(27px, 4vw, 42px);
+            line-height: 1.08;
         }
 
-
-        /* =====================================================
-           QUICK NAV
-        ====================================================== */
-
-        .quick-nav {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 10px;
-
-            margin-top: 18px;
-        }
-
-
-        .nav-card {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 15px;
-
-            text-decoration: none;
-
-            color: white;
-
-            border:
-
-                1px solid var(--border);
-
-            border-radius: 17px;
-
-            background:
-                rgba(255,255,255,.035);
-
-            transition: .2s;
-        }
-
-
-        .nav-card:hover {
-
-            transform:
-                translateY(-2px);
-
-            border-color:
-                rgba(139,92,246,.35);
-
-            background:
-                rgba(139,92,246,.08);
-        }
-
-
-        .nav-card i {
-
-            width: 39px;
-            height: 39px;
-
-            display: grid;
-
-            place-items: center;
-
-            flex-shrink: 0;
-
-            border-radius: 11px;
-
-            background:
-
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.20),
-                    rgba(139,92,246,.20)
-                );
-
-            color: #8db8ff;
-
-            font-size: 21px;
-        }
-
-
-        .nav-card strong {
-
-            display: block;
-
-            font-size: 13px;
-        }
-
-
-        .nav-card small {
-
-            display: block;
-
-            margin-top: 3px;
+        .page-header p {
+            max-width: 680px;
 
             color: var(--muted);
 
-            font-size: 10px;
-        }
+            margin-top: 10px;
 
+            line-height: 1.6;
+        }
 
         /* =====================================================
-           SECTION TITLE
+           BUTTONS
         ====================================================== */
 
-        .section-title {
+        .primary-btn {
+            min-height: 44px;
 
-            display: flex;
+            padding: 0 17px;
 
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
+            gap: 8px;
 
-            justify-content: space-between;
-
-            gap: 15px;
-
-            margin:
-                28px 0 13px;
-        }
-
-
-        .section-title h3 {
-
-            font-size: 17px;
-
-            font-weight: 950;
-        }
-
-
-        .section-title span {
-
-            color: var(--muted);
-
-            font-size: 10px;
-
-            font-weight: 700;
-        }
-
-
-        /* =====================================================
-           STATS
-        ====================================================== */
-
-        .stats {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 12px;
-        }
-
-
-        .stat {
-
-            position: relative;
-
-            overflow: hidden;
-
-            padding: 18px;
-
-            border:
-
-                1px solid var(--border);
-
-            border-radius: var(--radius);
-
-            background:
-                var(--card);
-
-            box-shadow:
-                0 10px 30px
-                rgba(0,0,0,.20);
-        }
-
-
-        .stat::after {
-
-            content: "";
-
-            position: absolute;
-
-            width: 110px;
-            height: 110px;
-
-            right: -50px;
-            bottom: -55px;
-
-            border-radius: 50%;
-
-            background:
-
-                radial-gradient(
-                    circle,
-                    rgba(139,92,246,.20),
-                    transparent 70%
-                );
-        }
-
-
-        .stat-icon {
-
-            width: 39px;
-            height: 39px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 11px;
-
-            color: #7db1ff;
-
-            background:
-                rgba(59,130,246,.10);
-
-            font-size: 20px;
-        }
-
-
-        .stat h4 {
-
-            margin-top: 14px;
-
-            font-size: 27px;
-
-            font-weight: 950;
-        }
-
-
-        .stat p {
-
-            margin-top: 3px;
-
-            color: var(--muted);
-
-            font-size: 10px;
-
-            font-weight: 700;
-        }
-
-
-        .stat.pending .stat-icon {
-
-            color: var(--orange);
-
-            background:
-                rgba(245,158,11,.10);
-        }
-
-
-        .stat.completed .stat-icon {
-
-            color: var(--green);
-
-            background:
-                rgba(34,197,94,.10);
-        }
-
-
-        .stat.revenue .stat-icon {
-
-            color: #c4a7ff;
-
-            background:
-                rgba(139,92,246,.10);
-        }
-
-
-        .stat.users .stat-icon {
-
-            color: #67e8f9;
-
-            background:
-                rgba(6,182,212,.10);
-        }
-
-
-        /* =====================================================
-           NEXT APPOINTMENT
-        ====================================================== */
-
-        .next-card {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            margin-top: 15px;
-
-            padding: 17px;
-
-            border:
-
-                1px solid
-                rgba(59,130,246,.18);
-
-            border-radius: 18px;
-
-            background:
-
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.08),
-                    rgba(139,92,246,.08)
-                );
-        }
-
-
-        .next-left {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            min-width: 0;
-        }
-
-
-        .next-icon {
-
-            width: 44px;
-            height: 44px;
-
-            display: grid;
-
-            place-items: center;
-
-            flex-shrink: 0;
+            border: none;
 
             border-radius: 13px;
 
-            background:
+            color: #fff;
 
+            font-weight: 750;
+
+            background:
                 linear-gradient(
                     135deg,
                     var(--blue),
                     var(--purple)
                 );
 
-            font-size: 21px;
+            box-shadow:
+                0 10px 28px rgba(59,130,246,.18);
+
+            transition: .2s ease;
         }
 
-
-        .next-card small {
-
-            display: block;
-
-            color: var(--muted);
-
-            font-size: 9px;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1px;
+        .primary-btn:hover {
+            transform: translateY(-2px);
         }
 
+        .secondary-btn {
+            min-height: 44px;
 
-        .next-card strong {
+            padding: 0 16px;
 
-            display: block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
 
-            margin-top: 3px;
+            border-radius: 13px;
 
-            font-size: 16px;
+            color: #fff;
 
-            white-space: nowrap;
+            background:
+                rgba(255,255,255,.04);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .danger-btn {
+            min-height: 40px;
+
+            padding: 0 13px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            border-radius: 11px;
+
+            color: #fca5a5;
+
+            background:
+                rgba(239,68,68,.08);
+
+            border:
+                1px solid rgba(239,68,68,.16);
+        }
+
+        /* =====================================================
+           STAT CARDS
+        ====================================================== */
+
+        .stats-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 15px;
+
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            position: relative;
 
             overflow: hidden;
 
-            text-overflow: ellipsis;
-        }
+            padding: 20px;
 
+            min-height: 145px;
 
-        #nextTime {
-
-            color: #b8a4ff;
-
-            font-size: 23px;
-
-            font-weight: 950;
-        }
-
-
-        /* =====================================================
-           TOOLBAR
-        ====================================================== */
-
-        .toolbar {
-
-            display: flex;
-
-            gap: 9px;
-
-            flex-wrap: wrap;
-
-            padding: 13px;
-
-            border:
-
-                1px solid var(--border);
-
-            border-radius: 18px;
+            border-radius: var(--radius);
 
             background:
-                var(--card);
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.065),
+                    rgba(255,255,255,.025)
+                );
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
         }
 
-
-        .search {
-
-            position: relative;
-
-            flex: 1;
-
-            min-width: 210px;
-        }
-
-
-        .search i {
+        .stat-card::after {
+            content: "";
 
             position: absolute;
 
-            left: 13px;
+            width: 100px;
+            height: 100px;
 
-            top: 50%;
+            right: -40px;
+            bottom: -45px;
 
-            transform:
-                translateY(-50%);
+            border-radius: 50%;
 
-            color: #777796;
+            background:
+                rgba(59,130,246,.10);
 
-            font-size: 18px;
+            filter: blur(10px);
         }
 
-
-        .search input {
-
-            width: 100%;
-
-            padding:
-                12px
-                13px
-                12px
-                40px;
-
-            outline: none;
-
-            border:
-
-                1px solid var(--border);
+        .stat-icon {
+            width: 40px;
+            height: 40px;
 
             border-radius: 12px;
 
-            background:
-                rgba(0,0,0,.20);
-
-            color: white;
-
-            font-size: 13px;
-        }
-
-
-        .search input::placeholder {
-
-            color: #6d6d89;
-        }
-
-
-        .search input:focus {
-
-            border-color:
-                rgba(59,130,246,.55);
-        }
-
-
-        .toolbar-btn {
-
-            display: inline-flex;
-
+            display: flex;
             align-items: center;
-
             justify-content: center;
 
-            gap: 7px;
+            margin-bottom: 15px;
 
-            padding:
-                11px 14px;
+            background:
+                rgba(59,130,246,.11);
+
+            color: var(--blue-light);
+
+            font-size: 21px;
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            color: var(--purple-light);
+            background: rgba(139,92,246,.12);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            color: #86efac;
+            background: rgba(34,197,94,.11);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            color: #fcd34d;
+            background: rgba(245,158,11,.11);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 850;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* =====================================================
+           PANELS
+        ====================================================== */
+
+        .panel {
+            padding: 21px;
+
+            border-radius: var(--radius);
+
+            background:
+                rgba(17,17,29,.72);
 
             border:
-
                 1px solid var(--border);
 
-            border-radius: 12px;
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .panel + .panel {
+            margin-top: 18px;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+        .panel-head h3 {
+            font-size: 17px;
+        }
+
+        .panel-head p {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           ELITE HERO
+        ====================================================== */
+
+        .elite-hero {
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 310px;
+
+            padding: 35px;
+
+            display: flex;
+            align-items: center;
+
+            border-radius: 28px;
+
+            margin-bottom: 24px;
 
             background:
-                rgba(255,255,255,.05);
+                radial-gradient(
+                    circle at 85% 25%,
+                    rgba(139,92,246,.30),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 20% 100%,
+                    rgba(59,130,246,.22),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #101024,
+                    #090913
+                );
 
-            color: white;
+            border:
+                1px solid rgba(139,92,246,.20);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.4);
+        }
+
+        .elite-hero::before {
+            content: "ELITE";
+
+            position: absolute;
+
+            right: -15px;
+            bottom: -55px;
+
+            font-size: 180px;
+            font-weight: 950;
+
+            color:
+                rgba(255,255,255,.025);
+
+            pointer-events: none;
+        }
+
+        .elite-content {
+            position: relative;
+            z-index: 1;
+
+            max-width: 680px;
+        }
+
+        .elite-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 7px 11px;
+
+            border-radius: 999px;
+
+            color: #ddd6fe;
+
+            background:
+                rgba(139,92,246,.12);
+
+            border:
+                1px solid rgba(139,92,246,.22);
+
+            font-size: 10px;
+            font-weight: 850;
+
+            letter-spacing: .1em;
+            text-transform: uppercase;
+
+            margin-bottom: 17px;
+        }
+
+        .elite-content h2 {
+            font-size: clamp(30px, 5vw, 54px);
+
+            line-height: 1;
+
+            letter-spacing: -.04em;
+        }
+
+        .elite-content h2 span {
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue-light),
+                    var(--purple-light)
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .elite-content p {
+            max-width: 620px;
+
+            margin: 16px 0 22px;
+
+            color: #a7a7b4;
+
+            line-height: 1.7;
+        }
+
+        .elite-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* =====================================================
+           QUICK ACTIONS
+        ====================================================== */
+
+        .quick-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 14px;
+        }
+
+        .quick-card {
+            min-height: 135px;
+
+            padding: 20px;
+
+            border-radius: 19px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+
+            transition: .2s ease;
 
             cursor: pointer;
-
-            font-size: 11px;
-
-            font-weight: 900;
-
-            transition: .2s;
         }
 
-
-        .toolbar-btn:hover {
-
-            transform:
-                translateY(-1px);
+        .quick-card:hover {
+            transform: translateY(-3px);
 
             background:
-                rgba(255,255,255,.09);
+                rgba(255,255,255,.055);
         }
 
+        .quick-card i {
+            display: block;
 
-        .toolbar-btn.danger {
+            font-size: 25px;
 
-            color: #ff8585;
+            margin-bottom: 14px;
 
-            border-color:
-                rgba(239,68,68,.18);
+            color: var(--blue-light);
         }
 
+        .quick-card:nth-child(2) i {
+            color: var(--purple-light);
+        }
+
+        .quick-card:nth-child(3) i {
+            color: #86efac;
+        }
+
+        .quick-card h4 {
+            font-size: 14px;
+        }
+
+        .quick-card p {
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
 
         /* =====================================================
            TABLE
         ====================================================== */
 
-        .table-card {
-
-            overflow: hidden;
-
-            border:
-
-                1px solid var(--border);
-
-            border-radius: 20px;
-
-            background:
-                var(--card);
-
-            box-shadow: var(--shadow);
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
         }
 
+        table {
+            width: 100%;
 
-        .table-head {
+            border-collapse: collapse;
 
-            display: flex;
+            min-width: 700px;
+        }
 
-            align-items: center;
+        th {
+            padding: 12px;
 
-            justify-content: space-between;
+            text-align: left;
 
-            gap: 10px;
+            color: #777987;
 
-            padding: 17px;
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .08em;
 
             border-bottom:
                 1px solid var(--border);
         }
 
-
-        .table-head h3 {
-
-            font-size: 15px;
-
-            font-weight: 950;
-        }
-
-
-        .booking-count {
-
-            padding:
-                5px 9px;
-
-            border-radius: 999px;
-
-            color: #8db8ff;
-
-            background:
-                rgba(59,130,246,.10);
-
-            font-size: 9px;
-
-            font-weight: 900;
-        }
-
-
-        .table-scroll {
-
-            width: 100%;
-
-            overflow-x: auto;
-        }
-
-
-        table {
-
-            width: 100%;
-
-            min-width: 1000px;
-
-            border-collapse: collapse;
-        }
-
-
-        th {
-
-            padding:
-                13px 15px;
-
-            text-align: left;
-
-            color: #777796;
-
-            background:
-                rgba(0,0,0,.15);
-
-            font-size: 9px;
-
-            text-transform: uppercase;
-
-            letter-spacing: .8px;
-        }
-
-
         td {
+            padding: 15px 12px;
 
-            padding:
-                15px;
+            color: #e5e7eb;
 
-            border-top:
-                1px solid
-                rgba(255,255,255,.045);
+            font-size: 13px;
 
-            color: #e7e7f5;
-
-            font-size: 12px;
-
-            vertical-align: middle;
+            border-bottom:
+                1px solid rgba(255,255,255,.05);
         }
 
-
-        tr:hover td {
-
+        tbody tr:hover {
             background:
-                rgba(255,255,255,.018);
+                rgba(255,255,255,.025);
         }
 
+        .empty-state {
+            padding: 45px 20px;
 
-        .customer-name {
+            text-align: center;
 
-            font-weight: 850;
+            color: var(--muted);
         }
 
+        .empty-state i {
+            display: block;
 
-        .sub {
+            font-size: 35px;
 
-            margin-top: 4px;
+            margin-bottom: 10px;
 
-            color: #8585a4;
-
-            font-size: 10px;
+            color: #4b5563;
         }
-
-
-        .time {
-
-            color: #a895ff;
-
-            font-weight: 950;
-        }
-
-
-        .price {
-
-            color: white;
-
-            font-weight: 900;
-        }
-
 
         /* =====================================================
            STATUS
         ====================================================== */
 
-        .status-pill {
-
+        .status {
             display: inline-flex;
-
             align-items: center;
 
-            padding:
-                6px 9px;
+            padding: 6px 9px;
 
             border-radius: 999px;
 
-            font-size: 9px;
-
-            font-weight: 950;
+            font-size: 10px;
+            font-weight: 800;
 
             text-transform: capitalize;
         }
 
-
-        .status-pending {
-
-            color: #ffc45e;
-
-            background:
-                rgba(245,158,11,.10);
+        .status.pending {
+            color: #fcd34d;
+            background: rgba(245,158,11,.10);
         }
 
+        .status.approved,
+        .status.active,
+        .status.completed {
+            color: #86efac;
+            background: rgba(34,197,94,.10);
+        }
 
-        .status-approved {
+        .status.declined,
+        .status.cancelled {
+            color: #fca5a5;
+            background: rgba(239,68,68,.10);
+        }
 
-            color: #76aaff;
+        /* =====================================================
+           SEARCH
+        ====================================================== */
+
+        .toolbar {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 18px;
+        }
+
+        .search-box {
+            position: relative;
+
+            width: min(380px, 100%);
+        }
+
+        .search-box i {
+            position: absolute;
+
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #6b7280;
+
+            font-size: 19px;
+        }
+
+        .search-box input {
+            width: 100%;
+
+            height: 44px;
+
+            padding:
+                0 14px 0 41px;
+
+            border-radius: 13px;
+
+            outline: none;
+
+            color: #fff;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .search-box input:focus {
+            border-color:
+                rgba(96,165,250,.4);
+        }
+
+        /* =====================================================
+           SALON CARDS
+        ====================================================== */
+
+        .salon-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 15px;
+        }
+
+        .salon-card {
+            overflow: hidden;
+
+            border-radius: 19px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .salon-image {
+            width: 100%;
+            height: 165px;
+
+            object-fit: cover;
+
+            display: block;
+
+            background: #11111b;
+        }
+
+        .salon-body {
+            padding: 16px;
+        }
+
+        .salon-body h4 {
+            font-size: 16px;
+        }
+
+        .salon-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin: 7px 0 14px;
+        }
+
+        .salon-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 14px;
+        }
+
+        .salon-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .small-btn {
+            flex: 1;
+
+            height: 38px;
+
+            border-radius: 10px;
+
+            border: 1px solid var(--border);
+
+            background:
+                rgba(255,255,255,.04);
+
+            color: #fff;
+
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           ACTIVITY
+        ====================================================== */
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 12px;
+
+            padding: 14px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                rgba(59,130,246,.10);
+
+            color: var(--blue-light);
+        }
+
+        .activity-text {
+            min-width: 0;
+        }
+
+        .activity-text strong {
+            display: block;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+        }
+
+        .activity-text span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        /* =====================================================
+           TWO COLUMNS
+        ====================================================== */
+
+        .two-column {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.4fr)
+                minmax(280px, .8fr);
+
+            gap: 18px;
+        }
+
+        /* =====================================================
+           ADMIN PROFILE
+        ====================================================== */
+
+        .profile-box {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 15px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 900;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+        }
+
+        .profile-info strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .profile-info span {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 3px;
+            word-break: break-word;
+        }
+
+        /* =====================================================
+           TOAST
+        ====================================================== */
+
+        #toast {
+            position: fixed;
+
+            left: 50%;
+            bottom: 28px;
+
+            transform:
+                translate(-50%, 30px);
+
+            z-index: 10000;
+
+            min-width: 240px;
+            max-width: calc(100% - 30px);
+
+            padding: 13px 17px;
+
+            border-radius: 14px;
+
+            color: #fff;
+
+            background:
+                rgba(25,25,38,.96);
+
+            border:
+                1px solid var(--border);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.4);
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition: .25s ease;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+        #toast.show {
+            opacity: 1;
+
+            transform:
+                translate(-50%, 0);
+        }
+
+        #toast.success {
+            border-color:
+                rgba(34,197,94,.25);
+        }
+
+        #toast.error {
+            border-color:
+                rgba(239,68,68,.25);
+        }
+
+        /* =====================================================
+           MOBILE NAV
+        ====================================================== */
+
+        .mobile-nav {
+            display: none;
+
+            position: fixed;
+
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+
+            z-index: 2000;
+
+            padding: 8px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(13,13,23,.92);
+
+            border:
+                1px solid var(--border);
+
+            backdrop-filter: blur(22px);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.45);
+        }
+
+        .mobile-nav-inner {
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 4px;
+        }
+
+        .mobile-link {
+            min-height: 50px;
+
+            border-radius: 14px;
+
+            color: #777987;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            gap: 2px;
+
+            font-size: 9px;
+        }
+
+        .mobile-link i {
+            font-size: 20px;
+        }
+
+        .mobile-link.active {
+            color: #fff;
 
             background:
                 rgba(59,130,246,.10);
         }
 
-
-        .status-completed {
-
-            color: #68e58e;
-
-            background:
-                rgba(34,197,94,.10);
+        .mobile-link.active i {
+            color: var(--blue-light);
         }
 
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
 
-        .status-declined {
+        @media (max-width: 1100px) {
 
-            color: #ff7777;
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
 
-            background:
-                rgba(239,68,68,.10);
+            .salon-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
         }
 
+        @media (max-width: 850px) {
 
-        .status-cancelled {
+            .sidebar {
+                display: none;
+            }
 
-            color: #ff7777;
+            main {
+                padding: 22px 16px 95px;
+            }
 
-            background:
-                rgba(239,68,68,.10);
+            .mobile-nav {
+                display: block;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .elite-hero {
+                padding: 27px 22px;
+            }
+
+            .elite-hero::before {
+                font-size: 110px;
+            }
         }
+
+        @media (max-width: 600px) {
+
+            .topbar {
+                height: 68px;
+                padding: 0 15px;
+            }
+
+            .brand-text span {
+                display: none;
+            }
+
+            .brand-logo {
+                width: 39px;
+                height: 39px;
+            }
+
+            .logout-btn span {
+                display: none;
+            }
+
+            .logout-btn {
+                width: 42px;
+                padding: 0;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+                gap: 10px;
+            }
+
+            .stat-card {
+                min-height: 130px;
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .elite-content h2 {
+                font-size: 36px;
+            }
+
+            .salon-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .panel {
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            .top-actions .icon-btn:first-child {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         LOADING
+    ========================================================== -->
+
+    <div id="loadingScreen">
+
+        <div class="loader-logo">
+            K@
+        </div>
+
+        <div class="loader-spinner"></div>
+
+        <p style="
+            margin-top:14px;
+            color:#777987;
+            font-size:12px;
+        ">
+            Securing admin access...
+        </p>
+
+    </div>
+
+
+    <!-- =========================================================
+         ACCESS DENIED
+    ========================================================== -->
+
+    <section id="accessDenied">
+
+        <div class="denied-card">
+
+            <div class="denied-icon">
+                <i class="bx bx-lock-alt"></i>
+            </div>
+
+            <h2>Admin Access Required</h2>
+
+            <p id="deniedMessage">
+                You do not have permission to access the K@si Web Admin Control Centre.
+            </p>
+
+            <button
+                class="primary-btn"
+                id="deniedHomeBtn"
+            >
+                <i class="bx bx-home"></i>
+                Return Home
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         APPLICATION
+    ========================================================== -->
+
+    <div id="app">
+
+        <!-- =====================================================
+             TOP BAR
+        ====================================================== -->
+
+        <header class="topbar">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    K@
+                </div>
+
+                <div class="brand-text">
+                    <strong>K@si Web</strong>
+                    <span>Elite Admin Control Centre</span>
+                </div>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="icon-btn"
+                    id="homeBtn"
+                    title="Go to home"
+                >
+                    <i class="bx bx-home"></i>
+                </button>
+
+                <button
+                    class="icon-btn"
+                    id="refreshBtn"
+                    title="Refresh dashboard"
+                >
+                    <i class="bx bx-refresh"></i>
+                </button>
+
+                <button
+                    class="logout-btn"
+                    id="logoutBtn"
+                >
+                    <i class="bx bx-log-out"></i>
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <div class="layout">
+
+            <!-- =================================================
+                 SIDEBAR
+            ================================================== -->
+
+            <aside class="sidebar">
+
+                <div class="nav-label">
+                    Control Centre
+                </div>
+
+                <nav class="side-nav">
+
+                    <button
+                        class="side-link active"
+                        data-section="overview"
+                    >
+                        <i class="bx bx-grid-alt"></i>
+                        <span>Overview</span>
+                    </button>
+
+                    <button
+                        class="side-link"
+                        data-section="salons"
+                    >
+                        <i class="bx bx-cut"></i>
+                        <span>Salons</span>
+                    </button>
+
+                    <button
+                        class="side-link"
+                        data-section="users"
+                    >
+                        <i class="bx bx-group"></i>
+                        <span>Users</span>
+                    </button>
+
+                    <button
+                        class="side-link"
+                        data-section="bookings"
+                    >
+                        <i class="bx bx-calendar-check"></i>
+                        <span>Bookings</span>
+                    </button>
+
+                    <button
+                        class="side-link"
+                        data-section="elite"
+                    >
+                        <i class="bx bx-crown"></i>
+                        <span>Elite</span>
+                    </button>
+
+                </nav>
+
+
+                <div class="nav-label" style="margin-top:20px;">
+                    Website
+                </div>
+
+                <nav class="side-nav">
+
+                    <button
+                        class="side-link"
+                        id="websiteHomeSide"
+                    >
+                        <i class="bx bx-globe"></i>
+                        <span>View Website</span>
+                    </button>
+
+                    <button
+                        class="side-link"
+                        id="accountSide"
+                    >
+                        <i class="bx bx-user"></i>
+                        <span>Home / Login</span>
+                    </button>
+
+                </nav>
+
+
+                <div class="sidebar-bottom">
+
+                    <div class="admin-mini-card">
+
+                        <small>
+                            SIGNED IN AS
+                        </small>
+
+                        <strong id="sideAdminEmail">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+            <!-- =================================================
+                 MAIN CONTENT
+            ================================================== -->
+
+            <main>
+
+
+                <!-- =============================================
+                     OVERVIEW
+                ============================================== -->
+
+                <section
+                    class="section active"
+                    id="overview"
+                >
+
+                    <div class="page-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                K@si Web Administration
+                            </div>
+
+                            <h1>
+                                Admin Control Centre
+                            </h1>
+
+                            <p>
+                                Manage the K@si marketplace, salons, users and bookings
+                                from one place.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATS -->
+
+                    <div class="stats-grid">
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                <i class="bx bx-cut"></i>
+                            </div>
+
+                            <div
+                                class="stat-value"
+                                id="salonCount"
+                            >
+                                0
+                            </div>
+
+                            <div class="stat-label">
+                                Registered Salons
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                <i class="bx bx-group"></i>
+                            </div>
+
+                            <div
+                                class="stat-value"
+                                id="userCount"
+                            >
+                                0
+                            </div>
+
+                            <div class="stat-label">
+                                Registered Users
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                <i class="bx bx-calendar-check"></i>
+                            </div>
+
+                            <div
+                                class="stat-value"
+                                id="bookingCount"
+                            >
+                                0
+                            </div>
+
+                            <div class="stat-label">
+                                Total Bookings
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                <i class="bx bx-time-five"></i>
+                            </div>
+
+                            <div
+                                class="stat-value"
+                                id="pendingCount"
+                            >
+                                0
+                            </div>
+
+                            <div class="stat-label">
+                                Pending Bookings
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ELITE HOME -->
+
+                    <div class="elite-hero">
+
+                        <div class="elite-content">
+
+                            <div class="elite-badge">
+                                <i class="bx bxs-crown"></i>
+                                K@si Elite
+                            </div>
+
+                            <h2>
+                                Built for the
+                                <span>best.</span>
+                            </h2>
+
+                            <p>
+                                The K@si Elite section is where premium salons,
+                                standout cuts and exceptional local grooming
+                                experiences can be showcased.
+                            </p>
+
+                            <div class="elite-actions">
+
+                                <button
+                                    class="primary-btn"
+                                    id="eliteHomeBtn"
+                                >
+                                    <i class="bx bx-home-alt"></i>
+                                    Open Elite Home
+                                </button>
+
+                                <button
+                                    class="secondary-btn"
+                                    data-section-target="salons"
+                                >
+                                    <i class="bx bx-cut"></i>
+                                    Manage Salons
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- QUICK ACTIONS -->
+
+                    <div class="panel">
+
+                        <div class="panel-head">
+
+                            <div>
+                                <h3>Quick Actions</h3>
+
+                                <p>
+                                    Jump directly to an admin task.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-grid">
+
+                            <div
+                                class="quick-card"
+                                data-section-target="salons"
+                            >
+
+                                <i class="bx bx-cut"></i>
+
+                                <h4>
+                                    Manage Salons
+                                </h4>
+
+                                <p>
+                                    Review registered salons and owners.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="quick-card"
+                                data-section-target="users"
+                            >
+
+                                <i class="bx bx-group"></i>
+
+                                <h4>
+                                    Manage Users
+                                </h4>
+
+                                <p>
+                                    View customers and salon owners.
+                                </p>
+
+                            </div>
+
+
+                            <div
+                                class="quick-card"
+                                data-section-target="bookings"
+                            >
+
+                                <i class="bx bx-calendar-check"></i>
+
+                                <h4>
+                                    View Bookings
+                                </h4>
+
+                                <p>
+                                    Monitor marketplace bookings.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RECENT ACTIVITY -->
+
+                    <div class="two-column" style="margin-top:18px;">
+
+                        <div class="panel">
+
+                            <div class="panel-head">
+
+                                <div>
+                                    <h3>Recent Bookings</h3>
+
+                                    <p>
+                                        Latest activity on K@si Web.
+                                    </p>
+                                </div>
+
+                                <button
+                                    class="secondary-btn"
+                                    data-section-target="bookings"
+                                >
+                                    View all
+                                </button>
+
+                            </div>
+
+                            <div id="recentBookings">
+
+                                <div class="empty-state">
+                                    <i class="bx bx-loader-alt bx-spin"></i>
+                                    Loading bookings...
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="panel">
+
+                            <div class="panel-head">
+
+                                <div>
+                                    <h3>Admin Profile</h3>
+
+                                    <p>
+                                        Current administrator.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="profile-box">
+
+                                <div
+                                    class="avatar"
+                                    id="adminAvatar"
+                                >
+                                    A
+                                </div>
+
+                                <div class="profile-info">
+
+                                    <strong>
+                                        K@si Administrator
+                                    </strong>
+
+                                    <span id="adminEmail">
+                                        Loading...
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     SALONS
+                ============================================== -->
+
+                <section
+                    class="section"
+                    id="salons"
+                >
+
+                    <div class="page-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                Marketplace
+                            </div>
+
+                            <h1>
+                                Salons
+                            </h1>
+
+                            <p>
+                                Review and manage salons registered on K@si Web.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="toolbar">
+
+                            <div class="search-box">
+
+                                <i class="bx bx-search"></i>
+
+                                <input
+                                    type="search"
+                                    id="salonSearch"
+                                    placeholder="Search salons..."
+                                >
+
+                            </div>
+
+                            <button
+                                class="secondary-btn"
+                                id="reloadSalons"
+                            >
+                                <i class="bx bx-refresh"></i>
+                                Refresh
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="salon-grid"
+                            id="salonGrid"
+                        >
+
+                            <div class="empty-state">
+                                <i class="bx bx-loader-alt bx-spin"></i>
+                                Loading salons...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     USERS
+                ============================================== -->
+
+                <section
+                    class="section"
+                    id="users"
+                >
+
+                    <div class="page-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                Community
+                            </div>
+
+                            <h1>
+                                Users
+                            </h1>
+
+                            <p>
+                                View customers and salon owners registered on the platform.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="toolbar">
+
+                            <div class="search-box">
+
+                                <i class="bx bx-search"></i>
+
+                                <input
+                                    type="search"
+                                    id="userSearch"
+                                    placeholder="Search users..."
+                                >
+
+                            </div>
+
+                            <button
+                                class="secondary-btn"
+                                id="reloadUsers"
+                            >
+                                <i class="bx bx-refresh"></i>
+                                Refresh
+                            </button>
+
+                        </div>
+
+
+                        <div class="table-wrap">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Joined</th>
+                                        <th>Status</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="usersTable">
+
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="empty-state">
+                                                <i class="bx bx-loader-alt bx-spin"></i>
+                                                Loading users...
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     BOOKINGS
+                ============================================== -->
+
+                <section
+                    class="section"
+                    id="bookings"
+                >
+
+                    <div class="page-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                Marketplace Activity
+                            </div>
+
+                            <h1>
+                                Bookings
+                            </h1>
+
+                            <p>
+                                Monitor appointments created through K@si Web.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="toolbar">
+
+                            <div class="search-box">
+
+                                <i class="bx bx-search"></i>
+
+                                <input
+                                    type="search"
+                                    id="bookingSearch"
+                                    placeholder="Search bookings..."
+                                >
+
+                            </div>
+
+                            <button
+                                class="secondary-btn"
+                                id="reloadBookings"
+                            >
+                                <i class="bx bx-refresh"></i>
+                                Refresh
+                            </button>
+
+                        </div>
+
+
+                        <div class="table-wrap">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Salon</th>
+                                        <th>Service</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="bookingsTable">
+
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="empty-state">
+                                                <i class="bx bx-loader-alt bx-spin"></i>
+                                                Loading bookings...
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     ELITE
+                ============================================== -->
+
+                <section
+                    class="section"
+                    id="elite"
+                >
+
+                    <div class="page-header">
+
+                        <div>
+
+                            <div class="eyebrow">
+                                Premium Marketplace
+                            </div>
+
+                            <h1>
+                                K@si Elite
+                            </h1>
+
+                            <p>
+                                Create the premium destination for standout salons,
+                                barbers and grooming experiences.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="elite-hero">
+
+                        <div class="elite-content">
+
+                            <div class="elite-badge">
+                                <i class="bx bxs-star"></i>
+                                Premium Experience
+                            </div>
+
+                            <h2>
+                                Elite cuts.
+                                <span>Elite people.</span>
+                            </h2>
+
+                            <p>
+                                Your Elite section can become the premium showcase
+                                inside K@si Web, highlighting selected salons,
+                                featured services and exceptional grooming work.
+                            </p>
+
+                            <div class="elite-actions">
+
+                                <button
+                                    class="primary-btn"
+                                    id="eliteWebsiteBtn"
+                                >
+                                    <i class="bx bx-globe"></i>
+                                    Open Home
+                                </button>
+
+                                <button
+                                    class="secondary-btn"
+                                    data-section-target="salons"
+                                >
+                                    <i class="bx bx-cut"></i>
+                                    Choose Salons
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-head">
+
+                            <div>
+                                <h3>
+                                    Elite Management
+                                </h3>
+
+                                <p>
+                                    Your premium section is ready for future
+                                    featured-salon controls.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="quick-grid">
+
+                            <div class="quick-card">
+
+                                <i class="bx bxs-crown"></i>
+
+                                <h4>
+                                    Featured Salons
+                                </h4>
+
+                                <p>
+                                    Select standout salons to appear in Elite.
+                                </p>
+
+                            </div>
+
+
+                            <div class="quick-card">
+
+                                <i class="bx bx-star"></i>
+
+                                <h4>
+                                    Featured Services
+                                </h4>
+
+                                <p>
+                                    Highlight premium services and experiences.
+                                </p>
+
+                            </div>
+
+
+                            <div class="quick-card">
+
+                                <i class="bx bx-image"></i>
+
+                                <h4>
+                                    Showcase
+                                </h4>
+
+                                <p>
+                                    Build a visual destination for elite work.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+
+        </div>
+
+
+        <!-- =====================================================
+             MOBILE NAV
+        ====================================================== -->
+
+        <nav class="mobile-nav">
+
+            <div class="mobile-nav-inner">
+
+                <button
+                    class="mobile-link active"
+                    data-section="overview"
+                >
+                    <i class="bx bx-grid-alt"></i>
+                    <span>Home</span>
+                </button>
+
+                <button
+                    class="mobile-link"
+                    data-section="salons"
+                >
+                    <i class="bx bx-cut"></i>
+                    <span>Salons</span>
+                </button>
+
+                <button
+                    class="mobile-link"
+                    data-section="users"
+                >
+                    <i class="bx bx-group"></i>
+                    <span>Users</span>
+                </button>
+
+                <button
+                    class="mobile-link"
+                    data-section="bookings"
+                >
+                    <i class="bx bx-calendar-check"></i>
+                    <span>Bookings</span>
+                </button>
+
+                <button
+                    class="mobile-link"
+                    data-section="elite"
+                >
+                    <i class="bx bxs-crown"></i>
+                    <span>Elite</span>
+                </button>
+
+            </div>
+
+        </nav>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
+
+    <div id="toast"></div>
+
+
+    <!-- =========================================================
+         ADMIN JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+
+        /* =====================================================
+           FIREBASE CONFIG
+           
+           IMPORTANT:
+           If your existing Firebase setup is loaded globally,
+           this file will use window.firebaseAuth and
+           window.firebaseDB.
+
+           If not, replace the values below with the SAME
+           Firebase config used by your other K@si pages.
+        ====================================================== */
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "kasi-web-d073f.firebaseapp.com",
+            projectId: "kasi-web-d073f",
+            storageBucket: "kasi-web-d073f.firebasestorage.app",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
 
         /* =====================================================
-           ACTIONS
+           FIREBASE INITIALIZATION
         ====================================================== */
 
-        .action-group {
+        let auth = window.firebaseAuth || null;
+        let db = window.firebaseDB || null;
 
-            display: flex;
+        try {
 
-            gap: 6px;
+            if (
+                !auth ||
+                !db
+            ) {
 
-            flex-wrap: wrap;
-        }
+                if (
+                    firebaseConfig.apiKey !== "YOUR_API_KEY"
+                ) {
 
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
 
-        .action-btn {
+                    auth = firebase.auth();
+                    db = firebase.firestore();
 
-            border: 0;
+                }
 
-            border-radius: 9px;
+            }
 
-            padding:
-                8px 10px;
+        } catch (error) {
 
-            color: white;
+            console.error(
+                "Firebase initialization error:",
+                error
+            );
 
-            cursor: pointer;
-
-            font-size: 9px;
-
-            font-weight: 950;
-
-            transition: .2s;
-        }
-
-
-        .action-btn:hover {
-
-            transform:
-                translateY(-1px);
-
-            filter:
-                brightness(1.12);
-        }
-
-
-        .approve {
-
-            background:
-                #2563eb;
-        }
-
-
-        .done {
-
-            background:
-                #16a34a;
-        }
-
-
-        .decline {
-
-            background:
-                #dc2626;
-        }
-
-
-        .delete {
-
-            background:
-                #991b1b;
-        }
-
-
-        .view {
-
-            background:
-                #6d28d9;
         }
 
 
@@ -1382,2990 +2751,1766 @@
            STATE
         ====================================================== */
 
-        .state {
+        let currentAdmin = null;
 
-            padding:
-                55px 20px;
-
-            text-align: center;
-
-            color: var(--muted);
-        }
-
-
-        .state i {
-
-            display: block;
-
-            margin-bottom: 10px;
-
-            color: #555573;
-
-            font-size: 42px;
-        }
-
-
-        .state strong {
-
-            display: block;
-
-            color: #d8d8e8;
-
-            font-size: 14px;
-        }
-
-
-        .state small {
-
-            display: block;
-
-            margin-top: 6px;
-
-            font-size: 10px;
-        }
-
-
-        .spinner {
-
-            width: 31px;
-            height: 31px;
-
-            margin:
-                0 auto 12px;
-
-            border:
-                3px solid
-                rgba(255,255,255,.10);
-
-            border-top-color:
-                var(--blue);
-
-            border-radius: 50%;
-
-            animation:
-                spin .8s linear infinite;
-        }
-
-
-        @keyframes spin {
-
-            to {
-                transform:
-                    rotate(360deg);
-            }
-        }
+        let allSalons = [];
+        let allUsers = [];
+        let allBookings = [];
 
 
         /* =====================================================
-           TOAST
+           DOM
         ====================================================== */
 
-        #toast {
+        const loadingScreen =
+            document.getElementById("loadingScreen");
 
-            position: fixed;
+        const accessDenied =
+            document.getElementById("accessDenied");
 
-            left: 50%;
-
-            bottom: 90px;
-
-            z-index: 9999;
-
-            width:
-                min(92%, 430px);
-
-            padding:
-                13px 16px;
-
-            transform:
-                translate(-50%, 20px);
-
-            opacity: 0;
-
-            pointer-events: none;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 14px;
-
-            background:
-                rgba(20,20,32,.96);
-
-            backdrop-filter:
-                blur(20px);
-
-            box-shadow:
-                var(--shadow);
-
-            color: white;
-
-            font-size: 12px;
-
-            font-weight: 800;
-
-            transition: .25s;
-        }
-
-
-        #toast.show {
-
-            opacity: 1;
-
-            transform:
-                translate(-50%, 0);
-        }
-
-
-        #toast.success {
-
-            border-color:
-                rgba(34,197,94,.30);
-        }
-
-
-        #toast.error {
-
-            border-color:
-                rgba(239,68,68,.30);
-        }
+        const app =
+            document.getElementById("app");
 
 
         /* =====================================================
-           BOTTOM NAV
+           HELPERS
         ====================================================== */
 
-        .bottom-nav {
+        function escapeHTML(value) {
 
-            position: fixed;
-
-            left: 0;
-            right: 0;
-            bottom: 0;
-
-            z-index: 900;
-
-            display: flex;
-
-            justify-content: center;
-
-            padding:
-
-                8px
-                max(12px, env(safe-area-inset-right))
-                calc(8px + env(safe-area-inset-bottom))
-                max(12px, env(safe-area-inset-left));
-
-            background:
-                rgba(7,7,13,.90);
-
-            backdrop-filter:
-                blur(20px);
-
-            -webkit-backdrop-filter:
-                blur(20px);
-
-            border-top:
-                1px solid var(--border);
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
 
-        .bottom-inner {
+        function showToast(
+            message,
+            type = "success"
+        ) {
 
-            width:
-                min(620px, 100%);
+            const toast =
+                document.getElementById("toast");
 
-            display: grid;
+            toast.textContent = message;
 
-            grid-template-columns:
-                repeat(4, 1fr);
+            toast.className =
+                "show " + type;
 
-            gap: 7px;
-        }
-
-
-        .bottom-nav a {
-
-            min-height: 51px;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 3px;
-
-            border-radius: 13px;
-
-            color: #73738f;
-
-            text-decoration: none;
-
-            font-size: 8px;
-
-            font-weight: 850;
-
-            transition: .2s;
-        }
-
-
-        .bottom-nav a i {
-
-            font-size: 20px;
-        }
-
-
-        .bottom-nav a.active {
-
-            color: #a895ff;
-
-            background:
-                rgba(139,92,246,.08);
-        }
-
-
-        /* =====================================================
-           ACCESS SCREEN
-        ====================================================== */
-
-        #accessScreen {
-
-            position: fixed;
-
-            inset: 0;
-
-            z-index: 10000;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 25px;
-
-            background:
-                var(--bg);
-        }
-
-
-        .access-card {
-
-            width:
-                min(420px, 100%);
-
-            padding: 30px;
-
-            text-align: center;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 24px;
-
-            background:
-                var(--card);
-
-            box-shadow:
-                var(--shadow);
-        }
-
-
-        .access-icon {
-
-            width: 65px;
-            height: 65px;
-
-            display: grid;
-
-            place-items: center;
-
-            margin:
-                0 auto 17px;
-
-            border-radius: 20px;
-
-            background:
-
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
-
-            font-size: 30px;
-        }
-
-
-        .access-card h2 {
-
-            font-size: 22px;
-
-            font-weight: 950;
-        }
-
-
-        .access-card p {
-
-            margin-top: 8px;
-
-            color: var(--muted);
-
-            line-height: 1.6;
-
-            font-size: 12px;
-        }
-
-
-        .access-spinner {
-
-            width: 28px;
-            height: 28px;
-
-            margin:
-                20px auto 0;
-
-            border:
-                3px solid
-                rgba(255,255,255,.10);
-
-            border-top-color:
-                var(--blue);
-
-            border-radius: 50%;
-
-            animation:
-                spin .8s linear infinite;
-        }
-
-
-        /* =====================================================
-           RESPONSIVE
-        ====================================================== */
-
-        @media (min-width: 700px) {
-
-            body {
-
-                padding-bottom: 30px;
-            }
-
-
-            .container {
-
-                padding:
-                    32px 24px;
-            }
-
-
-            .hero {
-
-                padding: 35px;
-            }
-
-
-            .stats {
-
-                grid-template-columns:
-                    repeat(5, 1fr);
-            }
-
-
-            .quick-nav {
-
-                grid-template-columns:
-                    repeat(2, 210px);
-            }
-
-
-            .bottom-nav {
-
-                display: none;
-            }
-        }
-
-
-        @media (min-width: 1000px) {
-
-            .topbar {
-
-                padding-left: 32px;
-
-                padding-right: 32px;
-            }
-
-
-            .container {
-
-                padding-left: 32px;
-
-                padding-right: 32px;
-            }
-
-
-            .stats {
-
-                gap: 16px;
-            }
-        }
-
-
-        @media (max-width: 450px) {
-
-            .hero {
-
-                padding: 21px;
-
-                border-radius: 21px;
-            }
-
-
-            .hero h2 {
-
-                font-size: 29px;
-            }
-
-
-            .stats {
-
-                gap: 9px;
-            }
-
-
-            .stat {
-
-                padding: 14px;
-            }
-
-
-            .stat h4 {
-
-                font-size: 23px;
-            }
-
-
-            .toolbar {
-
-                padding: 10px;
-            }
-
-
-            .toolbar-btn {
-
-                flex: 1;
-            }
-
-
-            .next-card {
-
-                padding: 14px;
-            }
-
-
-            #nextTime {
-
-                font-size: 19px;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<!-- =========================================================
-     ACCESS CHECK
-========================================================== -->
-
-<div id="accessScreen">
-
-    <div class="access-card">
-
-        <div class="access-icon">
-            <i class='bx bx-shield-quarter'></i>
-        </div>
-
-        <h2 id="accessTitle">
-            Verifying access
-        </h2>
-
-        <p id="accessMessage">
-            Please wait while K@si Web verifies your administrator
-            account.
-        </p>
-
-        <div class="access-spinner"></div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     TOP BAR
-========================================================== -->
-
-<header class="topbar">
-
-    <div class="brand">
-
-        <div class="brand-icon">
-            <i class='bx bx-crown'></i>
-        </div>
-
-        <div class="brand-text">
-
-            <h1>K@si Web</h1>
-
-            <span>
-                Elite Admin
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <div class="top-actions">
-
-        <button
-            class="icon-btn"
-            id="refreshBtn"
-            title="Refresh dashboard"
-            aria-label="Refresh dashboard"
-        >
-
-            <i class='bx bx-refresh'></i>
-
-        </button>
-
-
-        <button
-            class="icon-btn logout"
-            id="logoutBtnAdmin"
-            title="Logout"
-            aria-label="Logout"
-        >
-
-            <i class='bx bx-log-out'></i>
-
-        </button>
-
-    </div>
-
-</header>
-
-
-<!-- =========================================================
-     MAIN
-========================================================== -->
-
-<main class="container">
-
-
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <div class="eyebrow">
-
-                <i class='bx bx-shield-quarter'></i>
-
-                Administrator
-
-            </div>
-
-
-            <h2>
-
-                Welcome to the
-
-                <span>
-                    K@si Control Centre
-                </span>
-
-            </h2>
-
-
-            <p>
-
-                Manage the K@si Web marketplace from one elite
-                administration centre. Monitor bookings, salons,
-                customers and platform activity in real time.
-
-            </p>
-
-
-            <div class="live-status">
-
-                <span class="live-dot"></span>
-
-                <span id="connectionText">
-                    Connecting to Firestore...
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         QUICK NAV
-    ====================================================== -->
-
-    <div class="quick-nav">
-
-
-        <a
-            href="home.html"
-            class="nav-card"
-        >
-
-            <i class='bx bx-home-alt-2'></i>
-
-            <div>
-
-                <strong>
-                    K@si Home
-                </strong>
-
-                <small>
-                    Account & authentication
-                </small>
-
-            </div>
-
-        </a>
-
-
-        <a
-            href="salons.html"
-            class="nav-card"
-        >
-
-            <i class='bx bx-cut'></i>
-
-            <div>
-
-                <strong>
-                    Marketplace
-                </strong>
-
-                <small>
-                    View customer salon experience
-                </small>
-
-            </div>
-
-        </a>
-
-    </div>
-
-
-    <!-- =====================================================
-         PLATFORM STATS
-    ====================================================== -->
-
-    <div class="section-title">
-
-        <h3>
-            Platform Overview
-        </h3>
-
-        <span id="todayLabel">
-            South Africa
-        </span>
-
-    </div>
-
-
-    <section class="stats">
-
-
-        <article class="stat">
-
-            <div class="stat-icon">
-
-                <i class='bx bx-calendar-check'></i>
-
-            </div>
-
-            <h4 id="totalCount">
-                0
-            </h4>
-
-            <p>
-                Today's bookings
-            </p>
-
-        </article>
-
-
-        <article class="stat pending">
-
-            <div class="stat-icon">
-
-                <i class='bx bx-time-five'></i>
-
-            </div>
-
-            <h4 id="pendingCount">
-                0
-            </h4>
-
-            <p>
-                Pending
-            </p>
-
-        </article>
-
-
-        <article class="stat completed">
-
-            <div class="stat-icon">
-
-                <i class='bx bx-check-circle'></i>
-
-            </div>
-
-            <h4 id="completedCount">
-                0
-            </h4>
-
-            <p>
-                Completed
-            </p>
-
-        </article>
-
-
-        <article class="stat revenue">
-
-            <div class="stat-icon">
-
-                <i class='bx bx-money'></i>
-
-            </div>
-
-            <h4 id="totalRevenue">
-                R0
-            </h4>
-
-            <p>
-                Today's revenue
-            </p>
-
-        </article>
-
-
-        <article class="stat users">
-
-            <div class="stat-icon">
-
-                <i class='bx bx-group'></i>
-
-            </div>
-
-            <h4 id="userCount">
-                0
-            </h4>
-
-            <p>
-                Registered users
-            </p>
-
-        </article>
-
-    </section>
-
-
-    <!-- =====================================================
-         NEXT APPOINTMENT
-    ====================================================== -->
-
-    <div class="next-card">
-
-
-        <div class="next-left">
-
-            <div class="next-icon">
-
-                <i class='bx bx-alarm'></i>
-
-            </div>
-
-
-            <div>
-
-                <small>
-                    Next appointment
-                </small>
-
-                <strong id="nextCustomer">
-                    Waiting for booking
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <strong id="nextTime">
-            --:--
-        </strong>
-
-    </div>
-
-
-    <!-- =====================================================
-         BOOKINGS TITLE
-    ====================================================== -->
-
-    <div class="section-title">
-
-        <h3>
-            Today's Bookings
-        </h3>
-
-        <span id="bookingDate">
-            Loading...
-        </span>
-
-    </div>
-
-
-    <!-- =====================================================
-         TOOLBAR
-    ====================================================== -->
-
-    <div class="toolbar">
-
-
-        <div class="search">
-
-            <i class='bx bx-search'></i>
-
-            <input
-                type="search"
-                id="searchInput"
-                placeholder="Search customer, salon, service..."
-                autocomplete="off"
-            >
-
-        </div>
-
-
-        <button
-            class="toolbar-btn"
-            id="refreshBookingsBtn"
-        >
-
-            <i class='bx bx-refresh'></i>
-
-            Refresh
-
-        </button>
-
-
-        <button
-            class="toolbar-btn danger"
-            id="clearBtn"
-        >
-
-            <i class='bx bx-trash'></i>
-
-            Clear Today
-
-        </button>
-
-    </div>
-
-
-    <!-- =====================================================
-         BOOKING TABLE
-    ====================================================== -->
-
-    <section class="table-card">
-
-
-        <div class="table-head">
-
-            <h3>
-                Booking Management
-            </h3>
-
-
-            <span
-                class="booking-count"
-                id="visibleCount"
-            >
-                0 bookings
-            </span>
-
-        </div>
-
-
-        <div class="table-scroll">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Salon
-                        </th>
-
-                        <th>
-                            Customer
-                        </th>
-
-                        <th>
-                            Phone
-                        </th>
-
-                        <th>
-                            Time
-                        </th>
-
-                        <th>
-                            Service
-                        </th>
-
-                        <th>
-                            Price
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Action
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="tableBody">
-
-                    <tr>
-
-                        <td colspan="8">
-
-                            <div class="state">
-
-                                <div class="spinner"></div>
-
-                                <strong>
-                                    Loading bookings...
-                                </strong>
-
-                                <small>
-                                    Connecting to K@si Web
-                                </small>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-</main>
-
-
-<!-- =========================================================
-     TOAST
-========================================================== -->
-
-<div id="toast"></div>
-
-
-<!-- =========================================================
-     BOTTOM NAV
-========================================================== -->
-
-<nav class="bottom-nav">
-
-    <div class="bottom-inner">
-
-
-        <a href="home.html">
-
-            <i class='bx bx-home-alt-2'></i>
-
-            <span>
-                Home
-            </span>
-
-        </a>
-
-
-        <a
-            href="salons.html"
-        >
-
-            <i class='bx bx-cut'></i>
-
-            <span>
-                Salons
-            </span>
-
-        </a>
-
-
-        <a
-            href="admin.html"
-            class="active"
-        >
-
-            <i class='bx bx-bar-chart-alt-2'></i>
-
-            <span>
-                Admin
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            id="bottomLogout"
-        >
-
-            <i class='bx bx-log-out'></i>
-
-            <span>
-                Logout
-            </span>
-
-        </a>
-
-    </div>
-
-</nav>
-
-
-<!-- =========================================================
-     FIREBASE BRIDGE
-========================================================== -->
-
-<!--
-    IMPORTANT
-
-    Keep your existing Firebase bridge before admin.js.
-
-    It must expose:
-
-    window.firebaseAuth
-    window.firebaseDB
-    window.onAuthState
-    window.dbDoc
-    window.dbGet
-    window.collection
-    window.onSnapshot
-    window.query
-    window.where
-    window.getDocs
-    window.updateDoc
-    window.removeDoc
-    window.logOut
--->
-
-
-<script src="admin.js"></script>
-
-
-</body>
-
-</html>
-
-"admin.js"
-
-And because this new HTML depends on the role architecture, use this matching "admin.js" rather than the old one:
-
-:::writing{variant="document" id="74106" title="K@si Web — Complete Admin JavaScript"}
-
-/* ============================================================
-   K@si Web
-   ADMIN CONTROL CENTRE
-   ============================================================ */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    "use strict";
-
-
-    /* =========================================================
-       FIREBASE BRIDGE
-    ========================================================= */
-
-    const auth = window.firebaseAuth;
-    const db = window.firebaseDB;
-
-    const onAuthState =
-        window.onAuthState;
-
-    const dbDoc =
-        window.dbDoc;
-
-    const dbGet =
-        window.dbGet;
-
-    const collection =
-        window.collection;
-
-    const onSnapshot =
-        window.onSnapshot;
-
-    const query =
-        window.query;
-
-    const where =
-        window.where;
-
-    const getDocs =
-        window.getDocs;
-
-    const updateDoc =
-        window.updateDoc;
-
-    const removeDoc =
-        window.removeDoc;
-
-    const logOut =
-        window.logOut;
-
-
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
-
-    const accessScreen =
-        document.getElementById("accessScreen");
-
-    const accessTitle =
-        document.getElementById("accessTitle");
-
-    const accessMessage =
-        document.getElementById("accessMessage");
-
-    const tableBody =
-        document.getElementById("tableBody");
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-    const refreshBtn =
-        document.getElementById("refreshBtn");
-
-    const refreshBookingsBtn =
-        document.getElementById("refreshBookingsBtn");
-
-    const logoutBtn =
-        document.getElementById("logoutBtnAdmin");
-
-    const bottomLogout =
-        document.getElementById("bottomLogout");
-
-    const clearBtn =
-        document.getElementById("clearBtn");
-
-    const totalCount =
-        document.getElementById("totalCount");
-
-    const pendingCount =
-        document.getElementById("pendingCount");
-
-    const completedCount =
-        document.getElementById("completedCount");
-
-    const totalRevenue =
-        document.getElementById("totalRevenue");
-
-    const userCount =
-        document.getElementById("userCount");
-
-    const visibleCount =
-        document.getElementById("visibleCount");
-
-    const nextCustomer =
-        document.getElementById("nextCustomer");
-
-    const nextTime =
-        document.getElementById("nextTime");
-
-    const bookingDate =
-        document.getElementById("bookingDate");
-
-    const todayLabel =
-        document.getElementById("todayLabel");
-
-    const connectionText =
-        document.getElementById("connectionText");
-
-    const toast =
-        document.getElementById("toast");
-
-
-    /* =========================================================
-       STATE
-    ========================================================= */
-
-    let currentUser = null;
-
-    let bookings = [];
-
-    let unsubscribeBookings = null;
-
-    let unsubscribeUsers = null;
-
-    let isAdminVerified = false;
-
-
-    /* =========================================================
-       SAFETY CHECK
-    ========================================================= */
-
-    if (
-        !auth ||
-        !db ||
-        !onAuthState ||
-        !dbDoc ||
-        !dbGet
-    ) {
-
-        showAccessError(
-            "Firebase unavailable",
-            "K@si Web could not connect to Firebase."
-        );
-
-        return;
-    }
-
-
-    /* =========================================================
-       SOUTH AFRICAN DATE
-    ========================================================= */
-
-    function todayZA() {
-
-        return new Intl.DateTimeFormat(
-            "en-CA",
-            {
-                timeZone: "Africa/Johannesburg",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
-            }
-        ).format(
-            new Date()
-        );
-    }
-
-
-    /* =========================================================
-       DISPLAY DATE
-    ========================================================= */
-
-    function displayToday() {
-
-        const now = new Date();
-
-        const formatted =
-            new Intl.DateTimeFormat(
-                "en-ZA",
-                {
-                    timeZone: "Africa/Johannesburg",
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                }
-            ).format(now);
-
-        bookingDate.textContent =
-            formatted;
-
-        todayLabel.textContent =
-            "South Africa • " +
-            formatted;
-    }
-
-
-    /* =========================================================
-       TOAST
-    ========================================================= */
-
-    function showToast(
-        message,
-        type = "success"
-    ) {
-
-        if (!toast) return;
-
-        toast.textContent =
-            message;
-
-        toast.className =
-            "";
-
-        toast.classList.add(
-            type,
-            "show"
-        );
-
-        clearTimeout(
-            showToast.timer
-        );
-
-        showToast.timer =
-            setTimeout(() => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            }, 3200);
-    }
-
-
-    /* =========================================================
-       ACCESS ERROR
-    ========================================================= */
-
-    function showAccessError(
-        title,
-        message
-    ) {
-
-        if (accessTitle)
-            accessTitle.textContent =
-                title;
-
-        if (accessMessage)
-            accessMessage.textContent =
-                message;
-
-        const spinner =
-            document.querySelector(
-                ".access-spinner"
+            clearTimeout(
+                window.__toastTimer
             );
 
-        if (spinner)
-            spinner.style.display =
-                "none";
-    }
+            window.__toastTimer =
+                setTimeout(() => {
+
+                    toast.className = "";
+
+                }, 2800);
+
+        }
 
 
-    /* =========================================================
-       HIDE ACCESS SCREEN
-    ========================================================= */
+        function formatDate(value) {
 
-    function hideAccessScreen() {
-
-        if (!accessScreen)
-            return;
-
-        accessScreen.style.opacity =
-            "0";
-
-        accessScreen.style.pointerEvents =
-            "none";
-
-        setTimeout(() => {
-
-            accessScreen.style.display =
-                "none";
-
-        }, 250);
-    }
-
-
-    /* =========================================================
-       AUTHENTICATION
-       ONLY ADMIN MAY ENTER
-    ========================================================= */
-
-    onAuthState(
-        auth,
-        async (user) => {
-
-            if (!user) {
-
-                window.location.replace(
-                    "home.html"
-                );
-
-                return;
+            if (!value) {
+                return "—";
             }
-
-
-            currentUser =
-                user;
-
 
             try {
 
-                const userRef =
-                    dbDoc(
-                        db,
-                        "users",
-                        user.uid
-                    );
-
-
-                const userSnap =
-                    await dbGet(
-                        userRef
-                    );
-
-
-                if (!userSnap.exists()) {
-
-                    showAccessError(
-                        "Account not found",
-                        "Your K@si Web account profile could not be found."
-                    );
-
-                    setTimeout(() => {
-
-                        window.location.replace(
-                            "home.html"
-                        );
-
-                    }, 1800);
-
-                    return;
-                }
-
-
-                const userData =
-                    userSnap.data() || {};
-
-
-                const role =
-                    String(
-                        userData.role ||
-                        userData.Role ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
-                /* =================================================
-                   ADMIN
-                ================================================= */
-
                 if (
-                    role !== "admin"
+                    value &&
+                    typeof value.toDate === "function"
                 ) {
 
-                    if (
-                        role === "salon_owner"
-                    ) {
+                    value = value.toDate();
 
-                        window.location.replace(
-                            "owners.html"
-                        );
+                } else if (
+                    typeof value === "string"
+                ) {
 
-                    } else {
+                    value = new Date(value);
 
-                        window.location.replace(
-                            "salons.html"
-                        );
+                }
+
+                if (!(value instanceof Date)) {
+                    return "—";
+                }
+
+                if (Number.isNaN(value.getTime())) {
+                    return "—";
+                }
+
+                return value.toLocaleDateString(
+                    "en-ZA",
+                    {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    }
+                );
+
+            } catch {
+
+                return "—";
+
+            }
+
+        }
+
+
+        function formatDateTime(value) {
+
+            if (!value) {
+                return "—";
+            }
+
+            try {
+
+                if (
+                    value &&
+                    typeof value.toDate === "function"
+                ) {
+
+                    value = value.toDate();
+
+                } else {
+
+                    value = new Date(value);
+
+                }
+
+                if (Number.isNaN(value.getTime())) {
+                    return "—";
+                }
+
+                return value.toLocaleString(
+                    "en-ZA",
+                    {
+                        day: "2-digit",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+            } catch {
+
+                return "—";
+
+            }
+
+        }
+
+
+        function getInitials(email) {
+
+            if (!email) {
+                return "A";
+            }
+
+            return email
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+        function normalizeRole(user) {
+
+            return (
+                user.role ||
+                user.Role ||
+                user.userRole ||
+                "customer"
+            )
+            .toString()
+            .toLowerCase();
+
+        }
+
+
+        function isAdminRole(role) {
+
+            const normalized =
+                String(role || "")
+                    .trim()
+                    .toLowerCase();
+
+            return (
+                normalized === "admin" ||
+                normalized === "administrator" ||
+                normalized === "super_admin" ||
+                normalized === "superadmin"
+            );
+
+        }
+
+
+        /* =====================================================
+           AUTHORIZATION
+        ====================================================== */
+
+        function denyAccess(message) {
+
+            loadingScreen.style.display = "none";
+
+            app.style.display = "none";
+
+            accessDenied.style.display = "flex";
+
+            document.getElementById(
+                "deniedMessage"
+            ).textContent =
+                message ||
+                "You do not have permission to access this page.";
+
+        }
+
+
+        async function checkAdminAccess(user) {
+
+            if (!user) {
+
+                denyAccess(
+                    "Please sign in with an administrator account to continue."
+                );
+
+                return false;
+
+            }
+
+            currentAdmin = user;
+
+            let role = "";
+
+            /* -----------------------------------------------
+               FIRST: CHECK CUSTOM CLAIM
+            ------------------------------------------------ */
+
+            try {
+
+                const token =
+                    await user.getIdTokenResult(true);
+
+                role =
+                    token.claims?.role ||
+                    token.claims?.userRole ||
+                    "";
+
+            } catch (error) {
+
+                console.warn(
+                    "Could not read custom claims:",
+                    error
+                );
+
+            }
+
+
+            /* -----------------------------------------------
+               SECOND: CHECK FIRESTORE USER DOCUMENT
+            ------------------------------------------------ */
+
+            if (!isAdminRole(role)) {
+
+                try {
+
+                    const userSnap =
+                        await db
+                            .collection("users")
+                            .doc(user.uid)
+                            .get();
+
+                    if (userSnap.exists) {
+
+                        const data =
+                            userSnap.data() || {};
+
+                        role =
+                            data.role ||
+                            data.Role ||
+                            data.userRole ||
+                            "";
 
                     }
 
-                    return;
+                } catch (error) {
+
+                    console.error(
+                        "Could not read user role:",
+                        error
+                    );
+
                 }
 
-
-                /* =================================================
-                   ADMIN VERIFIED
-                ================================================= */
-
-                isAdminVerified =
-                    true;
+            }
 
 
-                hideAccessScreen();
+            /* -----------------------------------------------
+               ADMIN DECISION
+            ------------------------------------------------ */
+
+            if (!isAdminRole(role)) {
+
+                denyAccess(
+                    "Your account is signed in, but it does not have the admin role."
+                );
+
+                return false;
+
+            }
+
+            return true;
+
+        }
 
 
-                connectionText.textContent =
-                    "Live Firestore connection";
+        /* =====================================================
+           SHOW APP
+        ====================================================== */
+
+        function showApp() {
+
+            loadingScreen.style.display = "none";
+
+            accessDenied.style.display = "none";
+
+            app.style.display = "block";
+
+        }
 
 
-                displayToday();
+        /* =====================================================
+           UPDATE ADMIN PROFILE
+        ====================================================== */
+
+        function updateAdminProfile() {
+
+            if (!currentAdmin) {
+                return;
+            }
+
+            const email =
+                currentAdmin.email ||
+                "Administrator";
+
+            document.getElementById(
+                "adminEmail"
+            ).textContent = email;
+
+            document.getElementById(
+                "sideAdminEmail"
+            ).textContent = email;
+
+            document.getElementById(
+                "adminAvatar"
+            ).textContent =
+                getInitials(email);
+
+        }
 
 
-                loadBookings();
+        /* =====================================================
+           NAVIGATION
+        ====================================================== */
+
+        function openSection(sectionId) {
+
+            const sections =
+                document.querySelectorAll(".section");
+
+            sections.forEach(section => {
+
+                section.classList.remove("active");
+
+            });
+
+            const target =
+                document.getElementById(sectionId);
+
+            if (target) {
+
+                target.classList.add("active");
+
+            }
 
 
-                loadUserCount();
+            document
+                .querySelectorAll(
+                    ".side-link[data-section]"
+                )
+                .forEach(button => {
 
+                    button.classList.toggle(
+                        "active",
+                        button.dataset.section === sectionId
+                    );
+
+                });
+
+
+            document
+                .querySelectorAll(
+                    ".mobile-link[data-section]"
+                )
+                .forEach(button => {
+
+                    button.classList.toggle(
+                        "active",
+                        button.dataset.section === sectionId
+                    );
+
+                });
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /* =====================================================
+           SALONS
+        ====================================================== */
+
+        async function loadSalons() {
+
+            if (!db) {
+                return;
+            }
+
+            const grid =
+                document.getElementById("salonGrid");
+
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="bx bx-loader-alt bx-spin"></i>
+                    Loading salons...
+                </div>
+            `;
+
+            try {
+
+                const snapshot =
+                    await db
+                        .collection("salons")
+                        .get();
+
+                allSalons = [];
+
+                snapshot.forEach(doc => {
+
+                    allSalons.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+
+                });
+
+
+                allSalons.sort((a, b) => {
+
+                    return String(
+                        a.name || ""
+                    ).localeCompare(
+                        String(b.name || "")
+                    );
+
+                });
+
+
+                document.getElementById(
+                    "salonCount"
+                ).textContent =
+                    allSalons.length;
+
+
+                renderSalons(
+                    allSalons
+                );
 
             } catch (error) {
 
                 console.error(
-                    "Admin verification error:",
+                    "Salon loading error:",
                     error
                 );
 
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bx bx-error-circle"></i>
+                        Unable to load salons.
+                    </div>
+                `;
 
-                showAccessError(
-                    "Verification failed",
-                    "K@si Web could not verify your administrator account."
+                showToast(
+                    "Could not load salons.",
+                    "error"
                 );
-
-
-                setTimeout(() => {
-
-                    window.location.replace(
-                        "home.html"
-                    );
-
-                }, 1800);
 
             }
 
         }
-    );
 
 
-    /* =========================================================
-       LOAD BOOKINGS
-    ========================================================= */
+        function renderSalons(salons) {
 
-    function loadBookings() {
+            const grid =
+                document.getElementById("salonGrid");
 
-        if (!isAdminVerified)
-            return;
+            if (!salons.length) {
 
-
-        if (unsubscribeBookings) {
-
-            unsubscribeBookings();
-
-            unsubscribeBookings =
-                null;
-        }
-
-
-        tableBody.innerHTML = `
-
-            <tr>
-
-                <td colspan="8">
-
-                    <div class="state">
-
-                        <div class="spinner"></div>
-
-                        <strong>
-                            Loading bookings...
-                        </strong>
-
-                        <small>
-                            Reading today's appointments
-                        </small>
-
+                grid.innerHTML = `
+                    <div class="empty-state"
+                         style="grid-column:1/-1;">
+                        <i class="bx bx-cut"></i>
+                        No salons found.
                     </div>
+                `;
 
-                </td>
+                return;
 
-            </tr>
-        `;
+            }
 
 
-        try {
+            grid.innerHTML =
+                salons.map(salon => {
 
-            const bookingsRef =
-                collection(
-                    db,
-                    "bookings"
+                    const name =
+                        salon.name ||
+                        "Unnamed Salon";
+
+                    const location =
+                        salon.location ||
+                        "Location not provided";
+
+                    const image =
+                        salon.image ||
+                        salon.imageUrl ||
+                        "9C00E0.jpeg";
+
+                    const owner =
+                        salon.ownerEmail ||
+                        salon.email ||
+                        "Owner not provided";
+
+                    const ownerId =
+                        salon.ownerId ||
+                        "—";
+
+                    return `
+
+                        <article class="salon-card">
+
+                            <img
+                                class="salon-image"
+                                src="${escapeHTML(image)}"
+                                alt="${escapeHTML(name)}"
+                                onerror="
+                                    this.onerror=null;
+                                    this.src='9C00E0.jpeg';
+                                "
+                            >
+
+                            <div class="salon-body">
+
+                                <h4>
+                                    ${escapeHTML(name)}
+                                </h4>
+
+                                <div class="salon-location">
+
+                                    <i class="bx bx-map"></i>
+
+                                    ${escapeHTML(location)}
+
+                                </div>
+
+                                <div class="salon-meta">
+
+                                    <span class="status active">
+                                        Active
+                                    </span>
+
+                                    <span style="
+                                        color:#777987;
+                                        font-size:10px;
+                                    ">
+                                        Owner ID:
+                                        ${escapeHTML(
+                                            ownerId
+                                        ).slice(0,12)}
+                                    </span>
+
+                                </div>
+
+                                <div style="
+                                    color:#8b8b99;
+                                    font-size:11px;
+                                    margin-bottom:12px;
+                                    word-break:break-word;
+                                ">
+                                    ${escapeHTML(owner)}
+                                </div>
+
+                                <div class="salon-actions">
+
+                                    <button
+                                        class="small-btn"
+                                        onclick="
+                                            viewSalon(
+                                                '${escapeHTML(salon.id)}'
+                                            )
+                                        "
+                                    >
+                                        View
+                                    </button>
+
+                                    <button
+                                        class="danger-btn"
+                                        onclick="
+                                            deleteSalon(
+                                                '${escapeHTML(salon.id)}'
+                                            )
+                                        "
+                                    >
+                                        <i class="bx bx-trash"></i>
+                                        Delete
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }).join("");
+
+        }
+
+
+        function viewSalon(id) {
+
+            const salon =
+                allSalons.find(
+                    item => item.id === id
                 );
 
+            if (!salon) {
+                return;
+            }
 
-            /*
-                We intentionally avoid requiring
-                a Firestore composite index.
+            const services =
+                Array.isArray(salon.services)
+                    ? salon.services
+                    : [];
 
-                We retrieve bookings and filter
-                today's date locally.
-            */
+            const serviceText =
+                services.length
+                    ? services
+                        .map(service => {
 
-            unsubscribeBookings =
-                onSnapshot(
-                    bookingsRef,
-                    (snapshot) => {
-
-                        const today =
-                            todayZA();
-
-
-                        bookings =
-                            [];
-
-
-                        snapshot.forEach(
-                            (docSnap) => {
-
-                                const data =
-                                    docSnap.data() || {};
-
-
-                                const date =
-                                    normalizeDate(
-                                        data
-                                    );
-
-
-                                if (
-                                    date ===
-                                    today
-                                ) {
-
-                                    bookings.push({
-
-                                        id:
-                                            docSnap.id,
-
-                                        ...data
-
-                                    });
-
-                                }
-
+                            if (
+                                typeof service ===
+                                "string"
+                            ) {
+                                return service;
                             }
-                        );
+
+                            return (
+                                service.name ||
+                                service.title ||
+                                "Service"
+                            ) +
+                            (
+                                service.price != null
+                                    ? " — R" +
+                                      service.price
+                                    : ""
+                            );
+
+                        })
+                        .join(", ")
+                    : "No services listed";
+
+            alert(
+                "Salon: " +
+                (salon.name || "Unnamed") +
+                "\n\n" +
+                "Location: " +
+                (salon.location || "—") +
+                "\n\n" +
+                "Hours: " +
+                (salon.hours || "—") +
+                "\n\n" +
+                "Owner: " +
+                (
+                    salon.ownerEmail ||
+                    salon.email ||
+                    "—"
+                ) +
+                "\n\n" +
+                "Services: " +
+                serviceText
+            );
+
+        }
 
 
-                        bookings.sort(
-                            compareBookingTime
-                        );
+        async function deleteSalon(id) {
 
-
-                        renderBookings(
-                            bookings
-                        );
-
-
-                        updateStats(
-                            bookings
-                        );
-
-
-                        updateNextAppointment(
-                            bookings
-                        );
-
-
-                        connectionText.textContent =
-                            "Live Firestore connection";
-
-                    },
-
-                    (error) => {
-
-                        console.error(
-                            "Bookings listener error:",
-                            error
-                        );
-
-
-                        tableBody.innerHTML = `
-
-                            <tr>
-
-                                <td colspan="8">
-
-                                    <div class="state">
-
-                                        <i class='bx bx-error-circle'></i>
-
-                                        <strong>
-                                            Could not load bookings
-                                        </strong>
-
-                                        <small>
-                                            ${escapeHtml(
-                                                error.message ||
-                                                "Firestore error"
-                                            )}
-                                        </small>
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-                        `;
-
-
-                        connectionText.textContent =
-                            "Firestore connection error";
-
-
-                        showToast(
-                            "Unable to load bookings.",
-                            "error"
-                        );
-
-                    }
+            const salon =
+                allSalons.find(
+                    item => item.id === id
                 );
 
+            if (!salon) {
+                return;
+            }
 
-        } catch (error) {
+            const name =
+                salon.name ||
+                "this salon";
 
-            console.error(
-                "loadBookings:",
-                error
-            );
+            const confirmed =
+                confirm(
+                    `Delete "${name}" from K@si Web?\n\nThis action cannot be undone.`
+                );
 
-            showToast(
-                "Could not load bookings.",
-                "error"
-            );
-        }
-    }
+            if (!confirmed) {
+                return;
+            }
 
+            try {
 
-    /* =========================================================
-       NORMALIZE BOOKING DATE
-    ========================================================= */
+                await db
+                    .collection("salons")
+                    .doc(id)
+                    .delete();
 
-    function normalizeDate(
-        data
-    ) {
+                showToast(
+                    "Salon deleted."
+                );
 
-        const value =
-            data.date ||
-            data.bookingDate ||
-            data.appointmentDate ||
-            "";
+                await loadSalons();
 
+            } catch (error) {
 
-        if (!value)
-            return "";
+                console.error(
+                    "Delete salon error:",
+                    error
+                );
 
+                showToast(
+                    "Could not delete salon.",
+                    "error"
+                );
 
-        if (
-            typeof value ===
-            "string"
-        ) {
+            }
 
-            return value
-                .slice(0, 10);
-        }
-
-
-        if (
-            value &&
-            typeof value.toDate ===
-            "function"
-        ) {
-
-            return new Intl.DateTimeFormat(
-                "en-CA",
-                {
-                    timeZone:
-                        "Africa/Johannesburg",
-                    year:
-                        "numeric",
-                    month:
-                        "2-digit",
-                    day:
-                        "2-digit"
-                }
-            ).format(
-                value.toDate()
-            );
         }
 
 
-        return "";
-    }
+        /* =====================================================
+           USERS
+        ====================================================== */
 
+        async function loadUsers() {
 
-    /* =========================================================
-       NORMALIZE TIME
-    ========================================================= */
+            if (!db) {
+                return;
+            }
 
-    function normalizeTime(
-        data
-    ) {
+            const tbody =
+                document.getElementById(
+                    "usersTable"
+                );
 
-        const value =
-            data.time ||
-            data.bookingTime ||
-            data.appointmentTime ||
-            "";
-
-
-        if (!value)
-            return "00:00";
-
-
-        return String(
-            value
-        ).trim();
-    }
-
-
-    /* =========================================================
-       COMPARE TIMES
-    ========================================================= */
-
-    function compareBookingTime(
-        a,
-        b
-    ) {
-
-        return normalizeTime(a)
-            .localeCompare(
-                normalizeTime(b)
-            );
-    }
-
-
-    /* =========================================================
-       RENDER BOOKINGS
-    ========================================================= */
-
-    function renderBookings(
-        list
-    ) {
-
-        const search =
-            String(
-                searchInput?.value ||
-                ""
-            )
-            .toLowerCase()
-            .trim();
-
-
-        const filtered =
-            list.filter(
-                (booking) => {
-
-                    if (!search)
-                        return true;
-
-
-                    const text = [
-
-                        booking.salonName,
-
-                        booking.salon,
-
-                        booking.customerName,
-
-                        booking.custName,
-
-                        booking.name,
-
-                        booking.phone,
-
-                        booking.custPhone,
-
-                        booking.service,
-
-                        booking.serviceType,
-
-                        booking.status
-
-                    ]
-                    .filter(Boolean)
-                    .join(" ")
-                    .toLowerCase();
-
-
-                    return text.includes(
-                        search
-                    );
-
-                }
-            );
-
-
-        visibleCount.textContent =
-            `${filtered.length} booking${
-                filtered.length === 1
-                    ? ""
-                    : "s"
-            }`;
-
-
-        if (!filtered.length) {
-
-            tableBody.innerHTML = `
-
+            tbody.innerHTML = `
                 <tr>
-
-                    <td colspan="8">
-
-                        <div class="state">
-
-                            <i class='bx bx-calendar-x'></i>
-
-                            <strong>
-                                ${
-                                    search
-                                        ? "No matching bookings"
-                                        : "No bookings today"
-                                }
-                            </strong>
-
-                            <small>
-                                ${
-                                    search
-                                        ? "Try another search."
-                                        : "New appointments will appear here automatically."
-                                }
-                            </small>
-
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <i class="bx bx-loader-alt bx-spin"></i>
+                            Loading users...
                         </div>
-
                     </td>
-
                 </tr>
             `;
 
-            return;
-        }
+            try {
 
+                const snapshot =
+                    await db
+                        .collection("users")
+                        .get();
 
-        tableBody.innerHTML =
-            filtered.map(
-                createBookingRow
-            ).join("");
-    }
+                allUsers = [];
 
+                snapshot.forEach(doc => {
 
-    /* =========================================================
-       CREATE BOOKING ROW
-    ========================================================= */
+                    allUsers.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
 
-    function createBookingRow(
-        booking
-    ) {
+                });
 
-        const salon =
-            booking.salonName ||
-            booking.salon ||
-            "Unknown salon";
 
+                allUsers.sort((a, b) => {
 
-        const customer =
-            booking.customerName ||
-            booking.custName ||
-            booking.name ||
-            "Customer";
+                    const aDate =
+                        a.createdAt?.toDate
+                            ? a.createdAt.toDate()
+                            : new Date(0);
 
+                    const bDate =
+                        b.createdAt?.toDate
+                            ? b.createdAt.toDate()
+                            : new Date(0);
 
-        const phone =
-            booking.customerPhone ||
-            booking.custPhone ||
-            booking.phone ||
-            "—";
+                    return bDate - aDate;
 
+                });
 
-        const service =
-            booking.serviceName ||
-            booking.serviceType ||
-            booking.service ||
-            "Service";
 
+                document.getElementById(
+                    "userCount"
+                ).textContent =
+                    allUsers.length;
 
-        const price =
-            Number(
-                booking.price ||
-                booking.servicePrice ||
-                0
-            );
 
+                renderUsers(
+                    allUsers
+                );
 
-        const time =
-            normalizeTime(
-                booking
-            );
+            } catch (error) {
 
+                console.error(
+                    "Users loading error:",
+                    error
+                );
 
-        const status =
-            String(
-                booking.status ||
-                "pending"
-            )
-            .toLowerCase();
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bx bx-error-circle"></i>
+                                Unable to load users.
+                            </div>
+                        </td>
+                    </tr>
+                `;
 
-
-        const safeStatus =
-            normalizeStatus(
-                status
-            );
-
-
-        let actions = "";
-
-
-        if (
-            safeStatus ===
-            "pending"
-        ) {
-
-            actions += `
-
-                <button
-                    class="action-btn approve"
-                    data-action="approve"
-                    data-id="${escapeAttr(
-                        booking.id
-                    )}"
-                >
-                    Approve
-                </button>
-
-
-                <button
-                    class="action-btn decline"
-                    data-action="decline"
-                    data-id="${escapeAttr(
-                        booking.id
-                    )}"
-                >
-                    Decline
-                </button>
-            `;
-        }
-
-
-        if (
-            safeStatus ===
-            "approved"
-        ) {
-
-            actions += `
-
-                <button
-                    class="action-btn done"
-                    data-action="completed"
-                    data-id="${escapeAttr(
-                        booking.id
-                    )}"
-                >
-                    Complete
-                </button>
-            `;
-        }
-
-
-        actions += `
-
-            <button
-                class="action-btn delete"
-                data-action="delete"
-                data-id="${escapeAttr(
-                    booking.id
-                )}"
-            >
-                Delete
-            </button>
-        `;
-
-
-        return `
-
-            <tr>
-
-                <td>
-
-                    <div class="customer-name">
-
-                        ${escapeHtml(
-                            salon
-                        )}
-
-                    </div>
-
-                    <div class="sub">
-
-                        ${escapeHtml(
-                            booking.location ||
-                            ""
-                        )}
-
-                    </div>
-
-                </td>
-
-
-                <td>
-
-                    <div class="customer-name">
-
-                        ${escapeHtml(
-                            customer
-                        )}
-
-                    </div>
-
-                    <div class="sub">
-
-                        ${escapeHtml(
-                            booking.userId ||
-                            ""
-                        )}
-
-                    </div>
-
-                </td>
-
-
-                <td>
-
-                    ${escapeHtml(
-                        phone
-                    )}
-
-                </td>
-
-
-                <td>
-
-                    <span class="time">
-
-                        ${escapeHtml(
-                            time
-                        )}
-
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    ${escapeHtml(
-                        service
-                    )}
-
-                </td>
-
-
-                <td>
-
-                    <span class="price">
-
-                        R${formatMoney(
-                            price
-                        )}
-
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <span
-                        class="status-pill status-${escapeAttr(
-                            safeStatus
-                        )}"
-                    >
-
-                        ${escapeHtml(
-                            safeStatus
-                        )}
-
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <div class="action-group">
-
-                        ${actions}
-
-                    </div>
-
-                </td>
-
-            </tr>
-        `;
-    }
-
-
-    /* =========================================================
-       STATUS NORMALIZATION
-    ========================================================= */
-
-    function normalizeStatus(
-        status
-    ) {
-
-        const allowed = [
-
-            "pending",
-
-            "approved",
-
-            "completed",
-
-            "declined",
-
-            "cancelled"
-
-        ];
-
-
-        if (
-            allowed.includes(
-                status
-            )
-        ) {
-
-            return status;
-        }
-
-
-        return "pending";
-    }
-
-
-    /* =========================================================
-       UPDATE STATS
-    ========================================================= */
-
-    function updateStats(
-        list
-    ) {
-
-        let pending = 0;
-
-        let completed = 0;
-
-        let revenue = 0;
-
-
-        list.forEach(
-            (booking) => {
-
-                const status =
-                    String(
-                        booking.status ||
-                        "pending"
-                    )
-                    .toLowerCase();
-
-
-                if (
-                    status ===
-                    "pending"
-                ) {
-
-                    pending++;
-                }
-
-
-                if (
-                    status ===
-                    "completed"
-                ) {
-
-                    completed++;
-
-
-                    revenue += Number(
-                        booking.price ||
-                        booking.servicePrice ||
-                        0
-                    );
-                }
+                showToast(
+                    "Could not load users.",
+                    "error"
+                );
 
             }
-        );
+
+        }
 
 
-        totalCount.textContent =
-            list.length;
+        function renderUsers(users) {
+
+            const tbody =
+                document.getElementById(
+                    "usersTable"
+                );
+
+            if (!users.length) {
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bx bx-group"></i>
+                                No users found.
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
 
 
-        pendingCount.textContent =
-            pending;
+            tbody.innerHTML =
+                users.map(user => {
+
+                    const role =
+                        normalizeRole(user);
+
+                    const email =
+                        user.email ||
+                        "—";
+
+                    const name =
+                        user.name ||
+                        user.displayName ||
+                        user.fullName ||
+                        email.split("@")[0] ||
+                        "User";
+
+                    return `
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    ${escapeHTML(name)}
+                                </strong>
+
+                            </td>
+
+                            <td>
+                                ${escapeHTML(email)}
+                            </td>
+
+                            <td>
+
+                                <span class="status ${
+                                    isAdminRole(role)
+                                        ? "approved"
+                                        : role === "salon_owner"
+                                            ? "pending"
+                                            : "active"
+                                }">
+
+                                    ${escapeHTML(
+                                        role.replace(
+                                            /_/g,
+                                            " "
+                                        )
+                                    )}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+                                ${formatDate(
+                                    user.createdAt
+                                )}
+                            </td>
+
+                            <td>
+
+                                <span class="status active">
+                                    Active
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }).join("");
+
+        }
 
 
-        completedCount.textContent =
-            completed;
+        /* =====================================================
+           BOOKINGS
+        ====================================================== */
+
+        async function loadBookings() {
+
+            if (!db) {
+                return;
+            }
+
+            const tbody =
+                document.getElementById(
+                    "bookingsTable"
+                );
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="bx bx-loader-alt bx-spin"></i>
+                            Loading bookings...
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            try {
+
+                const snapshot =
+                    await db
+                        .collection("bookings")
+                        .get();
+
+                allBookings = [];
+
+                snapshot.forEach(doc => {
+
+                    allBookings.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+
+                });
 
 
-        totalRevenue.textContent =
-            "R" +
-            formatMoney(
-                revenue
-            );
-    }
+                allBookings.sort((a, b) => {
+
+                    const aDate =
+                        a.createdAt?.toDate
+                            ? a.createdAt.toDate()
+                            : new Date(0);
+
+                    const bDate =
+                        b.createdAt?.toDate
+                            ? b.createdAt.toDate()
+                            : new Date(0);
+
+                    return bDate - aDate;
+
+                });
 
 
-    /* =========================================================
-       NEXT APPOINTMENT
-    ========================================================= */
-
-    function updateNextAppointment(
-        list
-    ) {
-
-        const now =
-            new Date();
+                document.getElementById(
+                    "bookingCount"
+                ).textContent =
+                    allBookings.length;
 
 
-        const currentMinutes =
-            now.getHours() * 60 +
-            now.getMinutes();
+                const pending =
+                    allBookings.filter(
+                        booking =>
+                            String(
+                                booking.status ||
+                                "pending"
+                            ).toLowerCase() ===
+                            "pending"
+                    ).length;
 
 
-        const upcoming =
-            list
-            .filter(
-                (booking) => {
+                document.getElementById(
+                    "pendingCount"
+                ).textContent =
+                    pending;
+
+
+                renderBookings(
+                    allBookings
+                );
+
+                renderRecentBookings(
+                    allBookings.slice(0, 5)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Bookings loading error:",
+                    error
+                );
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="bx bx-error-circle"></i>
+                                Unable to load bookings.
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                showToast(
+                    "Could not load bookings.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        function renderBookings(bookings) {
+
+            const tbody =
+                document.getElementById(
+                    "bookingsTable"
+                );
+
+            if (!bookings.length) {
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="bx bx-calendar-x"></i>
+                                No bookings found.
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            tbody.innerHTML =
+                bookings.map(booking => {
 
                     const status =
                         String(
                             booking.status ||
                             "pending"
-                        )
-                        .toLowerCase();
+                        ).toLowerCase();
+
+                    return `
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        booking.customerName ||
+                                        booking.custName ||
+                                        booking.name ||
+                                        "Customer"
+                                    )}
+                                </strong>
+
+                                <div style="
+                                    color:#777987;
+                                    font-size:10px;
+                                    margin-top:4px;
+                                ">
+                                    ${escapeHTML(
+                                        booking.customerPhone ||
+                                        booking.custPhone ||
+                                        ""
+                                    )}
+                                </div>
+
+                            </td>
+
+                            <td>
+                                ${escapeHTML(
+                                    booking.salonName ||
+                                    booking.salon ||
+                                    booking.salonId ||
+                                    "—"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHTML(
+                                    booking.service ||
+                                    booking.serviceType ||
+                                    "—"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHTML(
+                                    booking.date ||
+                                    booking.bookingDate ||
+                                    "—"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHTML(
+                                    booking.time ||
+                                    booking.bookingTime ||
+                                    "—"
+                                )}
+                            </td>
+
+                            <td>
+
+                                <span class="status ${
+                                    status === "pending"
+                                        ? "pending"
+                                        : status === "approved"
+                                            ? "approved"
+                                            : status === "completed"
+                                                ? "completed"
+                                                : status === "declined"
+                                                    ? "declined"
+                                                    : status === "cancelled"
+                                                        ? "cancelled"
+                                                        : "pending"
+                                }">
+
+                                    ${escapeHTML(status)}
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }).join("");
+
+        }
 
 
-                    if (
-                        status ===
-                        "declined"
-                    )
-                        return false;
+        function renderRecentBookings(bookings) {
+
+            const container =
+                document.getElementById(
+                    "recentBookings"
+                );
+
+            if (!bookings.length) {
+
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="bx bx-calendar-x"></i>
+                        No bookings yet.
+                    </div>
+                `;
+
+                return;
+
+            }
 
 
-                    if (
-                        status ===
-                        "cancelled"
-                    )
-                        return false;
+            container.innerHTML =
+                `<div class="activity-list">` +
+
+                bookings.map(booking => {
+
+                    const customer =
+                        booking.customerName ||
+                        booking.custName ||
+                        booking.name ||
+                        "Customer";
+
+                    const service =
+                        booking.service ||
+                        booking.serviceType ||
+                        "Booking";
+
+                    const status =
+                        String(
+                            booking.status ||
+                            "pending"
+                        ).toLowerCase();
+
+                    return `
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                <i class="bx bx-calendar-check"></i>
+                            </div>
+
+                            <div class="activity-text">
+
+                                <strong>
+                                    ${escapeHTML(customer)}
+                                    booked
+                                    ${escapeHTML(service)}
+                                </strong>
+
+                                <span>
+                                    ${formatDateTime(
+                                        booking.createdAt
+                                    )}
+                                    ·
+                                    ${escapeHTML(status)}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join("") +
+
+                `</div>`;
+
+        }
 
 
-                    const time =
-                        normalizeTime(
-                            booking
+        /* =====================================================
+           SEARCH
+        ====================================================== */
+
+        document
+            .getElementById("salonSearch")
+            .addEventListener(
+                "input",
+                function () {
+
+                    const query =
+                        this.value
+                            .trim()
+                            .toLowerCase();
+
+                    if (!query) {
+
+                        renderSalons(
+                            allSalons
                         );
 
+                        return;
 
-                    const parts =
-                        time.split(":");
+                    }
 
+                    const filtered =
+                        allSalons.filter(
+                            salon => {
 
-                    if (
-                        parts.length <
-                        2
-                    )
-                        return true;
+                                const text =
+                                    [
+                                        salon.name,
+                                        salon.location,
+                                        salon.ownerEmail,
+                                        salon.email
+                                    ]
+                                    .join(" ")
+                                    .toLowerCase();
 
+                                return text.includes(
+                                    query
+                                );
 
-                    const minutes =
-                        Number(
-                            parts[0]
-                        ) * 60 +
-                        Number(
-                            parts[1]
+                            }
                         );
 
-
-                    return (
-                        minutes >=
-                        currentMinutes
+                    renderSalons(
+                        filtered
                     );
 
                 }
             );
 
 
-        if (!upcoming.length) {
+        document
+            .getElementById("userSearch")
+            .addEventListener(
+                "input",
+                function () {
 
-            nextCustomer.textContent =
-                "No upcoming appointment";
+                    const query =
+                        this.value
+                            .trim()
+                            .toLowerCase();
 
+                    if (!query) {
 
-            nextTime.textContent =
-                "--:--";
+                        renderUsers(
+                            allUsers
+                        );
 
+                        return;
 
-            return;
-        }
-
-
-        const next =
-            upcoming[0];
-
-
-        nextCustomer.textContent =
-
-            next.customerName ||
-            next.custName ||
-            next.name ||
-            "Customer";
-
-
-        nextTime.textContent =
-            normalizeTime(
-                next
-            );
-    }
-
-
-    /* =========================================================
-       USER COUNT
-    ========================================================= */
-
-    async function loadUserCount() {
-
-        try {
-
-            const usersRef =
-                collection(
-                    db,
-                    "users"
-                );
-
-
-            if (
-                !getDocs
-            ) {
-
-                userCount.textContent =
-                    "—";
-
-                return;
-            }
-
-
-            const snapshot =
-                await getDocs(
-                    usersRef
-                );
-
-
-            userCount.textContent =
-                snapshot.size;
-
-
-        } catch (error) {
-
-            console.error(
-                "User count error:",
-                error
-            );
-
-
-            userCount.textContent =
-                "—";
-        }
-    }
-
-
-    /* =========================================================
-       SEARCH
-    ========================================================= */
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            () => {
-
-                renderBookings(
-                    bookings
-                );
-
-            }
-        );
-    }
-
-
-    /* =========================================================
-       TABLE ACTIONS
-    ========================================================= */
-
-    tableBody.addEventListener(
-        "click",
-        async (event) => {
-
-            const button =
-                event.target.closest(
-                    "[data-action]"
-                );
-
-
-            if (!button)
-                return;
-
-
-            const action =
-                button.dataset.action;
-
-
-            const id =
-                button.dataset.id;
-
-
-            if (!id)
-                return;
-
-
-            await handleBookingAction(
-                action,
-                id
-            );
-        }
-    );
-
-
-    /* =========================================================
-       BOOKING ACTION
-    ========================================================= */
-
-    async function handleBookingAction(
-        action,
-        id
-    ) {
-
-        if (
-            !currentUser ||
-            !isAdminVerified
-        ) {
-
-            showToast(
-                "Admin access required.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const bookingRef =
-            dbDoc(
-                db,
-                "bookings",
-                id
-            );
-
-
-        try {
-
-
-            if (
-                action ===
-                "approve"
-            ) {
-
-                await updateDoc(
-                    bookingRef,
-                    {
-                        status:
-                            "approved"
                     }
-                );
 
+                    const filtered =
+                        allUsers.filter(
+                            user => {
 
-                showToast(
-                    "Booking approved."
-                );
+                                const text =
+                                    [
+                                        user.name,
+                                        user.displayName,
+                                        user.fullName,
+                                        user.email,
+                                        normalizeRole(user)
+                                    ]
+                                    .join(" ")
+                                    .toLowerCase();
 
-                return;
-            }
+                                return text.includes(
+                                    query
+                                );
 
+                            }
+                        );
 
-            if (
-                action ===
-                "decline"
-            ) {
-
-                await updateDoc(
-                    bookingRef,
-                    {
-                        status:
-                            "declined"
-                    }
-                );
-
-
-                showToast(
-                    "Booking declined."
-                );
-
-                return;
-            }
-
-
-            if (
-                action ===
-                "completed"
-            ) {
-
-                await updateDoc(
-                    bookingRef,
-                    {
-                        status:
-                            "completed"
-                    }
-                );
-
-
-                showToast(
-                    "Booking marked as completed."
-                );
-
-                return;
-            }
-
-
-            if (
-                action ===
-                "delete"
-            ) {
-
-                const confirmed =
-                    window.confirm(
-                        "Delete this booking permanently?"
+                    renderUsers(
+                        filtered
                     );
 
-
-                if (!confirmed)
-                    return;
-
-
-                await removeDoc(
-                    bookingRef
-                );
-
-
-                showToast(
-                    "Booking deleted."
-                );
-
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                "Booking action error:",
-                error
-            );
-
-
-            showToast(
-                error.message ||
-                "Could not update booking.",
-                "error"
-            );
-        }
-    }
-
-
-    /* =========================================================
-       REFRESH
-    ========================================================= */
-
-    function refreshDashboard() {
-
-        if (!isAdminVerified)
-            return;
-
-
-        displayToday();
-
-        loadBookings();
-
-        loadUserCount();
-
-
-        showToast(
-            "Dashboard refreshed."
-        );
-    }
-
-
-    if (refreshBtn) {
-
-        refreshBtn.addEventListener(
-            "click",
-            refreshDashboard
-        );
-    }
-
-
-    if (refreshBookingsBtn) {
-
-        refreshBookingsBtn.addEventListener(
-            "click",
-            refreshDashboard
-        );
-    }
-
-
-    /* =========================================================
-       CLEAR TODAY
-       ========================================================= */
-
-    if (clearBtn) {
-
-        clearBtn.addEventListener(
-            "click",
-            async () => {
-
-                if (
-                    !isAdminVerified
-                )
-                    return;
-
-
-                if (
-                    !bookings.length
-                ) {
-
-                    showToast(
-                        "There are no bookings to clear.",
-                        "error"
-                    );
-
-                    return;
                 }
+            );
 
 
-                const confirmed =
-                    window.confirm(
-                        `Delete all ${bookings.length} bookings from today? This cannot be undone.`
+        document
+            .getElementById("bookingSearch")
+            .addEventListener(
+                "input",
+                function () {
+
+                    const query =
+                        this.value
+                            .trim()
+                            .toLowerCase();
+
+                    if (!query) {
+
+                        renderBookings(
+                            allBookings
+                        );
+
+                        return;
+
+                    }
+
+                    const filtered =
+                        allBookings.filter(
+                            booking => {
+
+                                const text =
+                                    [
+                                        booking.customerName,
+                                        booking.custName,
+                                        booking.customerPhone,
+                                        booking.custPhone,
+                                        booking.salonName,
+                                        booking.salon,
+                                        booking.salonId,
+                                        booking.service,
+                                        booking.serviceType,
+                                        booking.date,
+                                        booking.time,
+                                        booking.status
+                                    ]
+                                    .join(" ")
+                                    .toLowerCase();
+
+                                return text.includes(
+                                    query
+                                );
+
+                            }
+                        );
+
+                    renderBookings(
+                        filtered
                     );
 
-
-                if (!confirmed)
-                    return;
-
-
-                clearBtn.disabled =
-                    true;
+                }
+            );
 
 
-                try {
+        /* =====================================================
+           REFRESH
+        ====================================================== */
 
-                    for (
-                        const booking
-                        of bookings
-                    ) {
+        async function refreshEverything() {
 
-                        await removeDoc(
-                            dbDoc(
-                                db,
-                                "bookings",
-                                booking.id
-                            )
+            showToast(
+                "Refreshing admin data..."
+            );
+
+            await Promise.all([
+                loadSalons(),
+                loadUsers(),
+                loadBookings()
+            ]);
+
+            showToast(
+                "Admin data refreshed."
+            );
+
+        }
+
+
+        document
+            .getElementById("refreshBtn")
+            .addEventListener(
+                "click",
+                refreshEverything
+            );
+
+
+        document
+            .getElementById("reloadSalons")
+            .addEventListener(
+                "click",
+                loadSalons
+            );
+
+
+        document
+            .getElementById("reloadUsers")
+            .addEventListener(
+                "click",
+                loadUsers
+            );
+
+
+        document
+            .getElementById("reloadBookings")
+            .addEventListener(
+                "click",
+                loadBookings
+            );
+
+
+        /* =====================================================
+           NAV BUTTONS
+        ====================================================== */
+
+        document
+            .querySelectorAll(
+                ".side-link[data-section]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openSection(
+                            button.dataset.section
+                        );
+
+                    }
+                );
+
+            });
+
+
+        document
+            .querySelectorAll(
+                ".mobile-link[data-section]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openSection(
+                            button.dataset.section
+                        );
+
+                    }
+                );
+
+            });
+
+
+        document
+            .querySelectorAll(
+                "[data-section-target]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openSection(
+                            button.dataset.sectionTarget
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /* =====================================================
+           WEBSITE NAVIGATION
+        ====================================================== */
+
+        function goHome() {
+
+            window.location.href =
+                "home.html";
+
+        }
+
+
+        document
+            .getElementById("homeBtn")
+            .addEventListener(
+                "click",
+                goHome
+            );
+
+
+        document
+            .getElementById("websiteHomeSide")
+            .addEventListener(
+                "click",
+                goHome
+            );
+
+
+        document
+            .getElementById("accountSide")
+            .addEventListener(
+                "click",
+                goHome
+            );
+
+
+        document
+            .getElementById("eliteHomeBtn")
+            .addEventListener(
+                "click",
+                goHome
+            );
+
+
+        document
+            .getElementById("eliteWebsiteBtn")
+            .addEventListener(
+                "click",
+                goHome
+            );
+
+
+        document
+            .getElementById("deniedHomeBtn")
+            .addEventListener(
+                "click",
+                goHome
+            );
+
+
+        /* =====================================================
+           LOGOUT
+        ====================================================== */
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                async () => {
+
+                    const confirmed =
+                        confirm(
+                            "Log out of the K@si Web Admin?"
+                        );
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+                    try {
+
+                        if (auth) {
+
+                            await auth.signOut();
+
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Logout error:",
+                            error
                         );
 
                     }
 
-
-                    showToast(
-                        "Today's bookings cleared."
+                    sessionStorage.removeItem(
+                        "adminUid"
                     );
 
-
-                } catch (error) {
-
-                    console.error(
-                        "Clear bookings error:",
-                        error
+                    sessionStorage.removeItem(
+                        "adminEmail"
                     );
 
+                    window.location.href =
+                        "home.html";
 
-                    showToast(
-                        "Some bookings could not be deleted.",
-                        "error"
-                    );
-
-                } finally {
-
-                    clearBtn.disabled =
-                        false;
                 }
-
-            }
-        );
-    }
+            );
 
 
-    /* =========================================================
-       LOGOUT
-    ========================================================= */
+        /* =====================================================
+           INITIALIZATION
+        ====================================================== */
 
-    async function logoutAdmin(
-        event
-    ) {
+        async function initializeAdmin() {
 
-        if (event)
-            event.preventDefault();
+            if (!auth || !db) {
 
-
-        try {
-
-            if (
-                typeof logOut ===
-                "function"
-            ) {
-
-                await logOut(
-                    auth
+                denyAccess(
+                    "Firebase is not configured on this page. Make sure your K@si Firebase setup is loaded."
                 );
 
-            } else {
-
-                await auth.signOut();
+                return;
 
             }
 
 
-            window.location.replace(
-                "home.html"
+            auth.onAuthStateChanged(
+                async user => {
+
+                    if (!user) {
+
+                        denyAccess(
+                            "Please sign in with an administrator account."
+                        );
+
+                        return;
+
+                    }
+
+
+                    const allowed =
+                        await checkAdminAccess(
+                            user
+                        );
+
+
+                    if (!allowed) {
+                        return;
+                    }
+
+
+                    updateAdminProfile();
+
+                    showApp();
+
+
+                    await Promise.all([
+                        loadSalons(),
+                        loadUsers(),
+                        loadBookings()
+                    ]);
+
+                }
             );
 
-
-        } catch (error) {
-
-            console.error(
-                "Logout error:",
-                error
-            );
-
-
-            showToast(
-                "Could not log out.",
-                "error"
-            );
         }
-    }
 
 
-    if (logoutBtn) {
+        /* =====================================================
+           START
+        ====================================================== */
 
-        logoutBtn.addEventListener(
-            "click",
-            logoutAdmin
-        );
-    }
+        initializeAdmin();
 
+    </script>
 
-    if (bottomLogout) {
+</body>
 
-        bottomLogout.addEventListener(
-            "click",
-            logoutAdmin
-        );
-    }
-
-
-    /* =========================================================
-       MONEY FORMAT
-    ========================================================= */
-
-    function formatMoney(
-        value
-    ) {
-
-        const number =
-            Number(value) || 0;
-
-
-        return number.toLocaleString(
-            "en-ZA",
-            {
-                minimumFractionDigits:
-                    0,
-                maximumFractionDigits:
-                    2
-            }
-        );
-    }
-
-
-    /* =========================================================
-       HTML ESCAPING
-    ========================================================= */
-
-    function escapeHtml(
-        value
-    ) {
-
-        return String(
-            value ?? ""
-        )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-    }
-
-
-    function escapeAttr(
-        value
-    ) {
-
-        return escapeHtml(
-            value
-        );
-    }
-
-
-});
-
-Important: your existing Firebase bridge must be loaded before "admin.js". The new admin code deliberately uses your existing "window.firebaseAuth", "window.firebaseDB", "window.dbDoc", "window.dbGet", etc., rather than creating a second Firebase initialization.
-
-This gives you the clean architecture we discussed, with "home.html" as the single authentication/role-routing gateway and "admin.html" only admitting users whose Firestore role is "admin".
+    </html>
