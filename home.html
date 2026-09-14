@@ -17,37 +17,28 @@
 
     <meta
         name="description"
-        content="K@si Web — Discover local salons, barbers and fresh styles."
+        content="K@si Web — Your local beauty and grooming marketplace."
     >
 
     <title>K@si Web | Home</title>
 
-    <link rel="manifest" href="manifest.json">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
+    <!-- Icons -->
     <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet"
-    >
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <style>
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         html {
@@ -55,1718 +46,801 @@
         }
 
         body {
-
-            min-height: 100vh;
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
 
             background:
                 radial-gradient(
-                    circle at 85% 5%,
-                    rgba(124,58,237,.18),
-                    transparent 30%
+                    circle at top right,
+                    rgba(99, 102, 241, .18),
+                    transparent 35%
                 ),
                 radial-gradient(
-                    circle at 5% 30%,
-                    rgba(59,130,246,.10),
-                    transparent 30%
+                    circle at bottom left,
+                    rgba(139, 92, 246, .12),
+                    transparent 35%
                 ),
                 #07070d;
 
             color: #fff;
-
-            font-family: "Inter", sans-serif;
-
+            min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        body.dashboard-mode {
-            padding-bottom: 105px;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
         }
 
         button,
         input {
-            font-family: inherit;
+            font: inherit;
         }
 
-        /* =========================================
+        button {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* =========================
            LOADING
-        ========================================= */
+        ========================= */
 
-        #loading {
-
+        #loadingScreen {
             position: fixed;
-
             inset: 0;
-
-            z-index: 99999;
+            z-index: 9999;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
             background: #07070d;
-
-            transition:
-                opacity .35s ease,
-                visibility .35s ease;
         }
 
-        #loading.hide {
-
-            opacity: 0;
-
-            visibility: hidden;
-
-            pointer-events: none;
+        .loaderBox {
+            text-align: center;
         }
 
-        .loader-box {
+        .loaderLogo {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 22px;
 
             display: flex;
-
-            flex-direction: column;
-
             align-items: center;
-
-            gap: 15px;
-        }
-
-        .loader {
-
-            width: 38px;
-            height: 38px;
-
-            border:
-                3px solid
-                rgba(255,255,255,.10);
-
-            border-top-color:
-                #8b5cf6;
-
-            border-right-color:
-                #3b82f6;
-
-            border-radius: 50%;
-
-            animation:
-                spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-
-            to {
-                transform: rotate(360deg);
-            }
-
-        }
-
-        .loader-text {
-
-            font-size: .68rem;
-
-            text-transform: uppercase;
-
-            letter-spacing: .15em;
-
-            color:
-                rgba(255,255,255,.40);
-        }
-
-        /* =========================================
-           COMMON
-        ========================================= */
-
-        .page {
-
-            width:
-                min(1180px,90%);
-
-            margin:
-                0 auto;
-        }
-
-        .brand {
-
-            font-size: 1.35rem;
-
-            font-weight: 800;
-
-            letter-spacing: -.05em;
-        }
-
-        .brand span {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #60a5fa,
-                    #8b5cf6
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-        .btn {
-
-            min-height: 50px;
-
-            display: inline-flex;
-
-            align-items: center;
-
             justify-content: center;
-
-            gap: 8px;
-
-            padding:
-                0 20px;
-
-            border-radius: 14px;
-
-            border: none;
-
-            cursor: pointer;
-
-            font-size: .84rem;
-
-            font-weight: 800;
-
-            transition: .25s ease;
-        }
-
-        .btn:hover {
-
-            transform:
-                translateY(-2px);
-        }
-
-        .btn-primary {
-
-            color: #fff;
 
             background:
                 linear-gradient(
                     135deg,
                     #3b82f6,
-                    #7c3aed
+                    #8b5cf6
                 );
 
+            font-size: 30px;
+            font-weight: 900;
+
             box-shadow:
-                0 15px 45px
-                rgba(59,130,246,.20);
+                0 15px 50px rgba(59, 130, 246, .25);
         }
 
-        .btn-secondary {
+        .spinner {
+            width: 34px;
+            height: 34px;
 
-            color: #fff;
+            margin: 0 auto 14px;
 
-            background:
-                rgba(255,255,255,.06);
+            border: 3px solid rgba(255,255,255,.12);
+            border-top-color: #8b5cf6;
 
-            border:
-                1px solid
-                rgba(255,255,255,.12);
+            border-radius: 50%;
+
+            animation: spin .8s linear infinite;
         }
 
-        /* =========================================
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loadingText {
+            color: #a1a1aa;
+            font-size: 14px;
+        }
+
+        /* =========================
            AUTH PAGE
-        ========================================= */
+        ========================= */
 
         #authPage {
-
             min-height: 100vh;
 
-            display: none;
-
+            display: flex;
             align-items: center;
-
             justify-content: center;
 
-            padding:
-                35px 0;
+            padding: 30px 18px;
         }
 
-        body.auth-mode #authPage {
-            display: flex;
+        .authContainer {
+            width: 100%;
+            max-width: 460px;
         }
 
-        .auth-wrapper {
-
-            width:
-                min(480px,92%);
-
-            margin: auto;
-        }
-
-        .auth-brand {
-
+        .brand {
             text-align: center;
-
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
 
-        .auth-brand .brand {
+        .brandLogo {
+            width: 72px;
+            height: 72px;
 
-            font-size: 2rem;
-        }
+            margin: 0 auto 15px;
 
-        .auth-brand p {
+            border-radius: 23px;
 
-            color:
-                rgba(255,255,255,.43);
-
-            font-size: .75rem;
-
-            margin-top: 8px;
-        }
-
-        .auth-card {
-
-            padding:
-                clamp(25px,6vw,38px);
-
-            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             background:
                 linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.075),
-                    rgba(255,255,255,.025)
+                    135deg,
+                    #2563eb,
+                    #8b5cf6
                 );
 
-            border:
-                1px solid
-                rgba(255,255,255,.10);
+            font-size: 30px;
+            font-weight: 900;
 
             box-shadow:
-                0 35px 100px
-                rgba(0,0,0,.40);
-
-            backdrop-filter:
-                blur(25px);
+                0 20px 60px rgba(99, 102, 241, .25);
         }
 
-        .auth-heading {
-
-            margin-bottom: 25px;
+        .brand h1 {
+            font-size: 29px;
+            font-weight: 900;
+            letter-spacing: -.8px;
         }
 
-        .auth-heading .eyebrow {
-
-            color:
-                #a78bfa;
-
-            font-size: .66rem;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .15em;
-
-            margin-bottom: 10px;
+        .brand p {
+            margin-top: 7px;
+            color: #a1a1aa;
+            font-size: 14px;
         }
 
-        .auth-heading h1 {
+        .authCard {
+            background:
+                rgba(17, 17, 27, .82);
 
-            font-family:
-                "Playfair Display",
-                serif;
+            border:
+                1px solid rgba(255,255,255,.08);
 
-            font-size:
-                clamp(2rem,8vw,3rem);
+            border-radius: 28px;
 
-            line-height: 1;
+            padding: 26px;
 
-            letter-spacing: -.045em;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
 
-            margin-bottom: 10px;
+            box-shadow:
+                0 25px 80px rgba(0,0,0,.35);
         }
 
-        .auth-heading p {
-
-            color:
-                rgba(255,255,255,.48);
-
-            font-size: .77rem;
-
-            line-height: 1.6;
-        }
-
-        /* AUTH TABS */
-
-        .auth-tabs {
-
+        .authTabs {
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 5px;
+            grid-template-columns: 1fr 1fr;
 
             padding: 5px;
 
-            margin-bottom: 25px;
+            margin-bottom: 24px;
 
             border-radius: 14px;
 
-            background:
-                rgba(0,0,0,.25);
-
-            border:
-                1px solid
-                rgba(255,255,255,.06);
+            background: rgba(255,255,255,.05);
         }
 
-        .auth-tab {
+        .authTab {
+            border: 0;
+            background: transparent;
 
-            min-height: 42px;
+            color: #8f8f99;
 
-            border: none;
+            padding: 11px;
 
             border-radius: 10px;
 
-            color:
-                rgba(255,255,255,.42);
+            font-weight: 700;
+        }
 
+        .authTab.active {
             background:
-                transparent;
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
 
-            cursor: pointer;
+            color: white;
+        }
 
-            font-size: .76rem;
-
+        .formTitle {
+            font-size: 23px;
             font-weight: 800;
-
-            transition: .2s;
+            margin-bottom: 5px;
         }
 
-        .auth-tab.active {
-
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.09);
+        .formSubtitle {
+            color: #8f8f99;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
 
-        /* FORM */
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .field {
-
+        .inputGroup {
             margin-bottom: 15px;
         }
 
-        .field label {
-
+        .inputGroup label {
             display: block;
 
-            color:
-                rgba(255,255,255,.60);
+            color: #c4c4cc;
 
-            font-size: .70rem;
+            font-size: 13px;
+            font-weight: 600;
 
-            font-weight: 700;
-
-            margin-bottom: 8px;
+            margin-bottom: 7px;
         }
 
-        .input-wrap {
-
+        .inputWrap {
             position: relative;
         }
 
-        .input-wrap i {
-
+        .inputWrap i {
             position: absolute;
 
-            left: 15px;
-
+            left: 14px;
             top: 50%;
 
-            transform:
-                translateY(-50%);
+            transform: translateY(-50%);
 
-            color:
-                rgba(255,255,255,.32);
+            color: #777783;
 
-            font-size: 1.1rem;
-
-            pointer-events: none;
+            font-size: 19px;
         }
 
-        .field input {
-
+        .inputWrap input {
             width: 100%;
 
-            height: 51px;
+            border: 1px solid rgba(255,255,255,.09);
 
-            padding:
-                0 15px 0 45px;
+            background: rgba(255,255,255,.045);
+
+            color: white;
 
             border-radius: 13px;
 
+            padding:
+                13px
+                13px
+                13px
+                44px;
+
             outline: none;
-
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.045);
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
-
-            font-size: .80rem;
 
             transition: .2s;
         }
 
-        .field input::placeholder {
-
-            color:
-                rgba(255,255,255,.25);
-        }
-
-        .field input:focus {
-
-            border-color:
-                rgba(139,92,246,.65);
+        .inputWrap input:focus {
+            border-color: #6366f1;
 
             background:
                 rgba(255,255,255,.065);
 
             box-shadow:
-                0 0 0 3px
-                rgba(139,92,246,.08);
+                0 0 0 3px rgba(99,102,241,.10);
         }
 
-        .password-toggle {
-
-            position: absolute;
-
-            right: 13px;
-
-            top: 50%;
-
-            transform:
-                translateY(-50%);
-
-            border: none;
-
-            background: transparent;
-
-            color:
-                rgba(255,255,255,.35);
-
-            cursor: pointer;
-
-            font-size: 1.1rem;
+        .inputWrap input::placeholder {
+            color: #5f5f69;
         }
 
-        /* ROLE */
+        .roleTitle {
+            color: #c4c4cc;
 
-        .role-box {
+            font-size: 13px;
+            font-weight: 600;
 
-            margin:
-                5px 0 17px;
+            margin-bottom: 9px;
         }
 
-        .role-label {
-
-            color:
-                rgba(255,255,255,.60);
-
-            font-size: .70rem;
-
-            font-weight: 700;
-
-            margin-bottom: 8px;
-
-            display: block;
-        }
-
-        .role-options {
-
+        .roleOptions {
             display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
 
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 8px;
+            margin-bottom: 17px;
         }
 
-        .role-option {
-
+        .roleOption {
             position: relative;
         }
 
-        .role-option input {
-
+        .roleOption input {
             position: absolute;
-
             opacity: 0;
-
-            pointer-events: none;
         }
 
-        .role-option label {
-
-            min-height: 58px;
-
+        .roleLabel {
             display: flex;
-
             align-items: center;
+            gap: 9px;
 
-            gap: 10px;
-
-            padding: 10px;
+            padding: 12px;
 
             border-radius: 13px;
 
-            cursor: pointer;
+            border:
+                1px solid rgba(255,255,255,.08);
 
             background:
                 rgba(255,255,255,.035);
 
-            border:
-                1px solid
-                rgba(255,255,255,.08);
+            color: #aaaab3;
 
-            color:
-                rgba(255,255,255,.45);
-
-            font-size: .70rem;
-
+            font-size: 13px;
             font-weight: 700;
 
-            transition: .2s;
+            cursor: pointer;
         }
 
-        .role-option label i {
-
-            font-size: 1.2rem;
+        .roleLabel i {
+            font-size: 20px;
         }
 
-        .role-option input:checked + label {
-
-            color: #fff;
-
-            border-color:
-                rgba(139,92,246,.65);
+        .roleOption input:checked + .roleLabel {
+            border-color: #6366f1;
 
             background:
-                rgba(124,58,237,.12);
+                rgba(99,102,241,.13);
+
+            color: white;
         }
 
-        .auth-submit {
-
+        .primaryBtn {
             width: 100%;
 
-            margin-top: 5px;
+            border: 0;
+
+            border-radius: 14px;
+
+            padding: 14px;
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: 800;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            box-shadow:
+                0 12px 30px rgba(59,130,246,.18);
+
+            transition:
+                transform .2s,
+                box-shadow .2s,
+                opacity .2s;
         }
 
-        .auth-message {
+        .primaryBtn:hover {
+            transform: translateY(-1px);
 
-            display: none;
+            box-shadow:
+                0 16px 38px rgba(99,102,241,.25);
+        }
 
+        .primaryBtn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
             margin-top: 15px;
 
             padding: 12px 14px;
 
             border-radius: 12px;
 
-            font-size: .70rem;
+            font-size: 13px;
 
-            line-height: 1.5;
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
+            display: none;
         }
 
-        .auth-message.show {
+        .message.show {
             display: block;
         }
 
-        .auth-message.error {
-
-            color:
-                #fecaca;
-
-            background:
-                rgba(239,68,68,.08);
-
-            border-color:
-                rgba(239,68,68,.16);
+        .message.error {
+            background: rgba(239,68,68,.10);
+            border: 1px solid rgba(239,68,68,.20);
+            color: #fca5a5;
         }
 
-        .auth-message.success {
-
-            color:
-                #bbf7d0;
-
-            background:
-                rgba(34,197,94,.08);
-
-            border-color:
-                rgba(34,197,94,.16);
+        .message.success {
+            background: rgba(34,197,94,.10);
+            border: 1px solid rgba(34,197,94,.20);
+            color: #86efac;
         }
 
-        .back-landing {
-
+        .backLanding {
             display: flex;
 
+            align-items: center;
             justify-content: center;
 
-            margin-top: 22px;
+            gap: 5px;
 
-            color:
-                rgba(255,255,255,.40);
+            margin-top: 20px;
 
-            font-size: .70rem;
+            color: #858590;
+
+            text-decoration: none;
+
+            font-size: 13px;
         }
 
-        .back-landing:hover {
-            color: #fff;
+        .backLanding:hover {
+            color: white;
         }
 
-        /* =========================================
+        /* =========================
            CUSTOMER DASHBOARD
-        ========================================= */
+        ========================= */
 
         #dashboardPage {
-            display: none;
+            min-height: 100vh;
+            padding-bottom: 95px;
         }
 
-        body.dashboard-mode #dashboardPage {
-            display: block;
-        }
-
-        .topbar {
-
-            position: sticky;
-
-            top: 0;
-
-            z-index: 2000;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
+        .dashboardHeader {
             padding:
-                16px
-                max(5%, calc((100vw - 1180px) / 2));
+                25px
+                18px
+                20px;
 
-            background:
-                rgba(7,7,13,.82);
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.07);
-
-            backdrop-filter:
-                blur(20px);
-        }
-
-        .refresh-btn {
-
-            width: 42px;
-            height: 42px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 13px;
-
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.05);
-
-            border:
-                1px solid
-                rgba(255,255,255,.09);
-
-            cursor: pointer;
-
-            font-size: 1.2rem;
-        }
-
-        .welcome {
-
-            padding:
-                55px 0 30px;
-        }
-
-        .welcome-label {
+            max-width: 1100px;
+            margin: auto;
 
             display: flex;
-
             align-items: center;
-
-            gap: 8px;
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: .67rem;
-
-            font-weight: 700;
-
-            letter-spacing: .08em;
-        }
-
-        .online-dot {
-
-            width: 7px;
-            height: 7px;
-
-            border-radius: 50%;
-
-            background: #60a5fa;
-
-            box-shadow:
-                0 0 12px
-                rgba(96,165,250,.8);
-        }
-
-        .welcome h1 {
-
-            margin:
-                13px 0 14px;
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(2.4rem,7vw,4.5rem);
-
-            line-height: .97;
-
-            letter-spacing: -.05em;
-        }
-
-        .welcome h1 span {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #fff,
-                    #93c5fd,
-                    #a78bfa
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-        .welcome p {
-
-            max-width: 560px;
-
-            color:
-                rgba(255,255,255,.48);
-
-            font-size: .80rem;
-
-            line-height: 1.7;
-        }
-
-        /* FEATURED */
-
-        .section-heading {
-
-            display: flex;
-
-            align-items: flex-end;
-
             justify-content: space-between;
-
-            margin-bottom: 18px;
-        }
-
-        .eyebrow {
-
-            color:
-                #a78bfa;
-
-            font-size: .64rem;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .15em;
-
-            margin-bottom: 8px;
-        }
-
-        .section-heading h2 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(1.8rem,5vw,2.7rem);
-
-            letter-spacing: -.04em;
-        }
-
-        .section-heading small {
-
-            color:
-                rgba(255,255,255,.30);
-
-            font-size: .63rem;
-        }
-
-        .swipe-track {
-
-            display: flex;
 
             gap: 15px;
-
-            overflow-x: auto;
-
-            scroll-snap-type:
-                x mandatory;
-
-            padding:
-                2px 2px 20px;
-
-            scrollbar-width: none;
         }
 
-        .swipe-track::-webkit-scrollbar {
-            display: none;
+        .welcomeText small {
+            color: #858590;
+            font-size: 12px;
         }
 
-        .swipe-card {
+        .welcomeText h1 {
+            margin-top: 4px;
 
-            position: relative;
+            font-size: 25px;
+            font-weight: 900;
 
-            flex:
-                0 0
-                clamp(275px,78vw,390px);
-
-            height:
-                clamp(390px,65vw,470px);
-
-            overflow: hidden;
-
-            border-radius: 27px;
-
-            scroll-snap-align: start;
-
-            background: #11111a;
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
+            letter-spacing: -.5px;
         }
 
-        .swipe-card img {
+        .avatar {
+            width: 48px;
+            height: 48px;
 
-            width: 100%;
-            height: 100%;
+            flex-shrink: 0;
 
-            object-fit: cover;
-
-            display: block;
-
-            transition: .6s ease;
-        }
-
-        .swipe-card:hover img {
-            transform: scale(1.04);
-        }
-
-        .swipe-card::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    0deg,
-                    rgba(3,3,8,.95),
-                    rgba(3,3,8,.30) 55%,
-                    transparent 80%
-                );
-        }
-
-        .card-content {
-
-            position: absolute;
-
-            z-index: 2;
-
-            left: 22px;
-            right: 22px;
-            bottom: 22px;
-        }
-
-        .card-number {
-
-            width: 34px;
-            height: 34px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 10px;
-
-            margin-bottom: 12px;
-
-            background:
-                rgba(255,255,255,.10);
-
-            border:
-                1px solid
-                rgba(255,255,255,.12);
-
-            font-size: .66rem;
-
-            font-weight: 800;
-        }
-
-        .card-content h3 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size: 1.8rem;
-
-            margin-bottom: 7px;
-        }
-
-        .card-content p {
-
-            color:
-                rgba(255,255,255,.57);
-
-            font-size: .75rem;
-
-            line-height: 1.55;
-        }
-
-        .swipe-hint {
+            border-radius: 16px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
-
-            gap: 7px;
-
-            color:
-                rgba(255,255,255,.28);
-
-            font-size: .63rem;
-        }
-
-        /* SECTIONS */
-
-        .dashboard-section {
-
-            padding-top: 65px;
-        }
-
-        /* QUICK ACTIONS */
-
-        .action-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap: 13px;
-        }
-
-        .action-card {
-
-            position: relative;
-
-            min-height: 165px;
-
-            padding: 23px;
-
-            border-radius: 21px;
 
             background:
                 linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.065),
-                    rgba(255,255,255,.025)
+                    135deg,
+                    #2563eb,
+                    #8b5cf6
                 );
 
-            border:
-                1px solid
-                rgba(255,255,255,.08);
+            font-size: 18px;
+            font-weight: 900;
 
-            transition: .25s;
+            box-shadow:
+                0 10px 30px rgba(59,130,246,.18);
         }
 
-        .action-card:hover {
+        .dashboardContent {
+            width: 100%;
+            max-width: 1100px;
 
-            transform:
-                translateY(-4px);
+            margin: auto;
 
-            border-color:
-                rgba(139,92,246,.35);
+            padding: 0 18px;
         }
 
-        .action-icon {
-
-            width: 46px;
-            height: 46px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 14px;
-
-            margin-bottom: 23px;
-
-            background:
-                rgba(124,58,237,.12);
-
-            color:
-                #a78bfa;
-
-            font-size: 1.3rem;
-        }
-
-        .action-card h3 {
-
-            font-size: .92rem;
-
-            margin-bottom: 7px;
-        }
-
-        .action-card p {
-
-            color:
-                rgba(255,255,255,.43);
-
-            font-size: .72rem;
-
-            line-height: 1.55;
-        }
-
-        .action-arrow {
-
-            position: absolute;
-
-            top: 22px;
-            right: 22px;
-
-            color:
-                rgba(255,255,255,.25);
-
-            font-size: 1.1rem;
-        }
-
-        /* BOOKINGS */
-
-        .booking-panel {
+        .heroCard {
+            position: relative;
 
             overflow: hidden;
 
             border-radius: 24px;
 
-            background:
-                rgba(255,255,255,.035);
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-        }
-
-        .booking-top {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding: 20px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.07);
-        }
-
-        .booking-top strong {
-            font-size: .85rem;
-        }
-
-        .booking-top a {
-
-            color:
-                #93c5fd;
-
-            font-size: .68rem;
-
-            font-weight: 800;
-        }
-
-        .booking-content {
-
-            padding: 35px 20px;
-
-            text-align: center;
-        }
-
-        .empty-icon {
-
-            width: 64px;
-            height: 64px;
-
-            display: grid;
-
-            place-items: center;
-
-            margin:
-                0 auto 16px;
-
-            border-radius: 19px;
-
-            background:
-                rgba(59,130,246,.08);
-
-            color:
-                #60a5fa;
-
-            font-size: 1.7rem;
-        }
-
-        .booking-content h3 {
-
-            font-size: .95rem;
-
-            margin-bottom: 8px;
-        }
-
-        .booking-content p {
-
-            max-width: 420px;
-
-            margin:
-                0 auto 20px;
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: .73rem;
-
-            line-height: 1.6;
-        }
-
-        /* DISCOVER */
-
-        .discover-card {
-
-            position: relative;
-
-            min-height: 300px;
-
-            display: flex;
-
-            align-items: flex-end;
-
-            overflow: hidden;
-
-            border-radius: 25px;
-
-            background:
-                radial-gradient(
-                    circle at 75% 30%,
-                    rgba(139,92,246,.38),
-                    transparent 27%
-                ),
-                radial-gradient(
-                    circle at 50% 90%,
-                    rgba(59,130,246,.20),
-                    transparent 35%
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-        }
-
-        .discover-card::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
+            padding: 25px;
 
             background:
                 linear-gradient(
-                    100deg,
-                    rgba(7,7,13,.96),
-                    rgba(7,7,13,.48),
-                    rgba(7,7,13,.20)
+                    135deg,
+                    rgba(37,99,235,.23),
+                    rgba(124,58,237,.20)
                 );
-        }
-
-        .discover-content {
-
-            position: relative;
-
-            z-index: 2;
-
-            padding: 30px;
-
-            max-width: 620px;
-        }
-
-        .discover-content h2 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(2rem,6vw,3.5rem);
-
-            line-height: .95;
-
-            letter-spacing: -.045em;
-
-            margin-bottom: 13px;
-        }
-
-        .discover-content p {
-
-            color:
-                rgba(255,255,255,.50);
-
-            font-size: .78rem;
-
-            line-height: 1.65;
-
-            margin-bottom: 20px;
-        }
-
-        /* ELITE */
-
-        .elite-section {
-
-            padding-top: 75px;
-        }
-
-        .elite-card {
-
-            position: relative;
-
-            min-height:
-                clamp(430px,65vw,590px);
-
-            display: flex;
-
-            align-items: flex-end;
-
-            overflow: hidden;
-
-            border-radius: 30px;
 
             border:
-                1px solid
-                rgba(255,255,255,.10);
-
-            background: #11111a;
-        }
-
-        .elite-image {
-
-            position: absolute;
-
-            inset: 0;
-        }
-
-        .elite-image img {
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-
-            filter:
-                brightness(.62)
-                saturate(.88);
-        }
-
-        .elite-image::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    0deg,
-                    rgba(3,3,8,.98),
-                    rgba(3,3,8,.45) 50%,
-                    rgba(3,3,8,.08)
-                );
-        }
-
-        .elite-content {
-
-            position: relative;
-
-            z-index: 2;
-
-            max-width: 680px;
-
-            padding: 35px;
-        }
-
-        .elite-label {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            padding:
-                8px 12px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(255,255,255,.09);
-
-            border:
-                1px solid
-                rgba(255,255,255,.12);
-
-            color:
-                rgba(255,255,255,.80);
-
-            font-size: .63rem;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .10em;
-
-            margin-bottom: 18px;
-        }
-
-        .elite-label i {
-            color: #a78bfa;
-        }
-
-        .elite-content h2 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(2.3rem,7vw,4.6rem);
-
-            line-height: .94;
-
-            letter-spacing: -.05em;
-
-            margin-bottom: 15px;
-        }
-
-        .elite-content p {
-
-            max-width: 570px;
-
-            color:
-                rgba(255,255,255,.62);
-
-            font-size: .80rem;
-
-            line-height: 1.65;
+                1px solid rgba(255,255,255,.08);
 
             margin-bottom: 22px;
         }
 
-        /* PROFILE */
+        .heroCard::after {
+            content: "";
 
-        .profile-panel {
+            position: absolute;
 
-            display: grid;
+            width: 160px;
+            height: 160px;
 
-            grid-template-columns:
-                auto 1fr auto;
+            right: -60px;
+            top: -60px;
 
-            align-items: center;
-
-            gap: 17px;
-
-            padding: 21px;
-
-            border-radius: 22px;
+            border-radius: 50%;
 
             background:
-                rgba(255,255,255,.04);
+                rgba(139,92,246,.15);
 
-            border:
-                1px solid
-                rgba(255,255,255,.08);
+            filter: blur(5px);
         }
 
-        .avatar {
-
-            width: 58px;
-            height: 58px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 18px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #7c3aed
-                );
-
-            font-size: 1.35rem;
-
-            font-weight: 800;
-        }
-
-        .profile-info strong {
+        .heroCard i {
+            font-size: 34px;
 
             display: block;
 
-            font-size: .88rem;
-
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
-        .profile-info span {
+        .heroCard h2 {
+            font-size: 23px;
+            font-weight: 900;
 
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: .69rem;
+            margin-bottom: 7px;
         }
 
-        .logout {
+        .heroCard p {
+            color: #c2c2cb;
 
-            padding:
-                10px 14px;
+            font-size: 13px;
+            line-height: 1.6;
 
-            border-radius: 11px;
-
-            color:
-                #fca5a5;
-
-            background:
-                rgba(239,68,68,.07);
-
-            border:
-                1px solid
-                rgba(239,68,68,.13);
-
-            cursor: pointer;
-
-            font-size: .69rem;
-
-            font-weight: 800;
+            max-width: 550px;
         }
 
-        /* =========================================
-           BOTTOM NAV
-        ========================================= */
-
-        .bottom-nav {
-
-            position: fixed;
-
-            left: 50%;
-
-            bottom: 14px;
-
-            transform:
-                translateX(-50%);
-
-            z-index: 3000;
-
-            width:
-                min(500px,92%);
-
+        .dashboardGrid {
             display: grid;
 
             grid-template-columns:
-                repeat(3,1fr);
+                repeat(
+                    auto-fit,
+                    minmax(190px, 1fr)
+                );
 
-            padding: 7px;
+            gap: 14px;
+        }
+
+        .dashboardCard {
+            display: block;
+
+            text-decoration: none;
+
+            padding: 21px;
 
             border-radius: 21px;
 
             background:
-                rgba(15,15,24,.92);
+                rgba(18,18,28,.82);
 
             border:
-                1px solid
-                rgba(255,255,255,.10);
+                1px solid rgba(255,255,255,.07);
 
-            backdrop-filter:
-                blur(22px);
+            color: white;
 
-            box-shadow:
-                0 20px 60px
-                rgba(0,0,0,.45);
+            transition:
+                transform .2s,
+                border-color .2s;
         }
 
-        .nav-item {
+        .dashboardCard:hover {
+            transform: translateY(-3px);
 
-            min-height: 57px;
+            border-color:
+                rgba(139,92,246,.35);
+        }
+
+        .cardIcon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 14px;
 
             display: flex;
-
-            flex-direction: column;
-
             align-items: center;
-
             justify-content: center;
 
-            gap: 4px;
+            background:
+                rgba(99,102,241,.13);
 
-            border-radius: 15px;
+            color: #a78bfa;
 
-            color:
-                rgba(255,255,255,.38);
+            font-size: 22px;
 
-            font-size: .61rem;
+            margin-bottom: 14px;
+        }
+
+        .dashboardCard h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .dashboardCard p {
+            color: #858590;
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .logoutBtn {
+            width: 100%;
+
+            margin-top: 22px;
+
+            border:
+                1px solid rgba(239,68,68,.18);
+
+            background:
+                rgba(239,68,68,.07);
+
+            color: #fca5a5;
+
+            border-radius: 14px;
+
+            padding: 13px;
 
             font-weight: 700;
         }
 
-        .nav-item i {
-            font-size: 1.25rem;
+        .logoutBtn:hover {
+            background:
+                rgba(239,68,68,.12);
         }
 
-        .nav-item.active {
+        /* =========================
+           BOTTOM NAV
+        ========================= */
 
-            color: #fff;
+        .bottomNav {
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 100;
+
+            display: flex;
+            justify-content: center;
+
+            padding:
+                10px
+                15px
+                calc(10px + env(safe-area-inset-bottom));
 
             background:
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.17),
-                    rgba(124,58,237,.18)
-                );
+                rgba(7,7,13,.90);
+
+            border-top:
+                1px solid rgba(255,255,255,.07);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
         }
 
-        .nav-item.active i {
+        .navInner {
+            width: 100%;
+            max-width: 650px;
+
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+        }
+
+        .navItem {
+            text-decoration: none;
+
+            color: #777783;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            gap: 3px;
+
+            padding: 6px;
+
+            border-radius: 12px;
+
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .navItem i {
+            font-size: 21px;
+        }
+
+        .navItem.active,
+        .navItem:hover {
             color: #a78bfa;
+
+            background:
+                rgba(139,92,246,.08);
         }
 
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
+        /* =========================
+           MOBILE
+        ========================= */
 
-        @media (max-width: 850px) {
+        @media (max-width: 500px) {
 
-            .action-grid {
-                grid-template-columns:
-                    repeat(2,1fr);
+            .authCard {
+                padding: 21px;
+                border-radius: 23px;
             }
 
-        }
-
-        @media (max-width: 600px) {
-
-            .page {
-                width: 90%;
+            .brand h1 {
+                font-size: 25px;
             }
 
-            .topbar {
-                padding:
-                    15px 5%;
+            .dashboardHeader {
+                padding-top: 20px;
             }
 
-            .welcome {
-                padding-top: 40px;
+            .welcomeText h1 {
+                font-size: 22px;
             }
 
-            .swipe-card {
-                flex-basis: 82vw;
-            }
-
-            .action-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .action-card {
-                min-height: 145px;
-            }
-
-            .profile-panel {
-
-                grid-template-columns:
-                    auto 1fr;
-            }
-
-            .logout {
-
-                grid-column:
-                    1 / -1;
-
-                width: 100%;
-            }
-
-            .elite-content {
-                padding: 25px;
-            }
-
-            .discover-content {
-                padding: 25px;
+            .heroCard {
+                padding: 21px;
             }
 
         }
@@ -1775,682 +849,429 @@
 
 </head>
 
-
 <body>
 
+    <!-- =========================
+         LOADING SCREEN
+    ========================= -->
 
-<!-- =====================================================
-     LOADING
-====================================================== -->
+    <div id="loadingScreen">
 
-<div id="loading">
+        <div class="loaderBox">
 
-    <div class="loader-box">
+            <div class="loaderLogo">
+                K@
+            </div>
 
-        <div class="loader"></div>
+            <div class="spinner"></div>
 
-        <div class="loader-text">
-            Loading K@si
+            <div class="loadingText">
+                Loading K@si Web...
+            </div>
+
         </div>
 
     </div>
 
-</div>
 
+    <!-- =========================
+         AUTH PAGE
+    ========================= -->
 
-<!-- =====================================================
-     AUTH PAGE
-     THIS IS ONLY SHOWN WHEN USER IS LOGGED OUT
-====================================================== -->
+    <section id="authPage" class="hidden">
 
-<section id="authPage">
+        <div class="authContainer">
 
-    <div class="auth-wrapper">
+            <div class="brand">
 
-
-        <div class="auth-brand">
-
-            <a
-                href="index.html"
-                class="brand"
-            >
-                K<span>@</span>si
-            </a>
-
-            <p>
-                Your local beauty & grooming marketplace.
-            </p>
-
-        </div>
-
-
-        <div class="auth-card">
-
-
-            <div class="auth-heading">
-
-                <div class="eyebrow">
-                    Welcome to K@si
+                <div class="brandLogo">
+                    K@
                 </div>
 
-                <h1 id="authTitle">
-                    Your next fresh cut.
-                </h1>
+                <h1>K@si Web</h1>
 
-                <p id="authSubtitle">
-                    Sign in or create your K@si account
-                    to discover salons and book your next look.
+                <p>
+                    Your local beauty & grooming marketplace
                 </p>
 
             </div>
 
 
-            <!-- AUTH TABS -->
+            <div class="authCard">
 
-            <div class="auth-tabs">
+                <!-- TABS -->
 
-                <button
-                    class="auth-tab active"
-                    id="loginTab"
-                    type="button"
+                <div class="authTabs">
+
+                    <button
+                        type="button"
+                        class="authTab active"
+                        id="loginTab"
+                    >
+                        Login
+                    </button>
+
+                    <button
+                        type="button"
+                        class="authTab"
+                        id="signupTab"
+                    >
+                        Sign Up
+                    </button>
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <div id="loginForm">
+
+                    <div class="formTitle">
+                        Welcome back
+                    </div>
+
+                    <div class="formSubtitle">
+                        Login to continue to K@si Web.
+                    </div>
+
+
+                    <div class="inputGroup">
+
+                        <label for="loginEmail">
+                            Email address
+                        </label>
+
+                        <div class="inputWrap">
+
+                            <i class="bx bx-envelope"></i>
+
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="inputGroup">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <div class="inputWrap">
+
+                            <i class="bx bx-lock-alt"></i>
+
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                placeholder="Your password"
+                                autocomplete="current-password"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="primaryBtn"
+                        id="loginBtn"
+                    >
+                        <i class="bx bx-log-in"></i>
+                        Login
+                    </button>
+
+
+                    <div
+                        id="loginMsg"
+                        class="message"
+                    ></div>
+
+                </div>
+
+
+                <!-- SIGNUP -->
+
+                <div
+                    id="signupForm"
+                    class="hidden"
                 >
-                    Log In
-                </button>
 
-                <button
-                    class="auth-tab"
-                    id="signupTab"
-                    type="button"
-                >
-                    Sign Up
-                </button>
+                    <div class="formTitle">
+                        Create your account
+                    </div>
 
-            </div>
+                    <div class="formSubtitle">
+                        Join K@si Web today.
+                    </div>
 
 
-            <!-- ==============================
-                 LOGIN
-            =============================== -->
+                    <div class="inputGroup">
 
-            <form
-                class="auth-form active"
-                id="loginForm"
-            >
+                        <label for="signupName">
+                            Full name
+                        </label>
 
-                <div class="field">
+                        <div class="inputWrap">
 
-                    <label for="loginEmail">
-                        Email
-                    </label>
+                            <i class="bx bx-user"></i>
 
-                    <div class="input-wrap">
+                            <input
+                                type="text"
+                                id="signupName"
+                                placeholder="Your name"
+                                autocomplete="name"
+                            >
 
-                        <i class="bx bx-envelope"></i>
-
-                        <input
-                            id="loginEmail"
-                            type="email"
-                            placeholder="you@example.com"
-                            autocomplete="email"
-                            required
-                        >
+                        </div>
 
                     </div>
 
-                </div>
 
+                    <div class="inputGroup">
 
-                <div class="field">
+                        <label for="signupEmail">
+                            Email address
+                        </label>
 
-                    <label for="loginPassword">
-                        Password
-                    </label>
+                        <div class="inputWrap">
 
-                    <div class="input-wrap">
+                            <i class="bx bx-envelope"></i>
 
-                        <i class="bx bx-lock-alt"></i>
+                            <input
+                                type="email"
+                                id="signupEmail"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                            >
 
-                        <input
-                            id="loginPassword"
-                            type="password"
-                            placeholder="Your password"
-                            autocomplete="current-password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            data-target="loginPassword"
-                        >
-
-                            <i class="bx bx-show"></i>
-
-                        </button>
+                        </div>
 
                     </div>
 
-                </div>
 
+                    <div class="inputGroup">
 
-                <button
-                    type="submit"
-                    class="btn btn-primary auth-submit"
-                    id="loginBtn"
-                >
+                        <label for="signupPassword">
+                            Password
+                        </label>
 
-                    Log In
+                        <div class="inputWrap">
 
-                    <i class="bx bx-right-arrow-alt"></i>
+                            <i class="bx bx-lock-alt"></i>
 
-                </button>
+                            <input
+                                type="password"
+                                id="signupPassword"
+                                placeholder="At least 6 characters"
+                                autocomplete="new-password"
+                            >
 
-            </form>
-
-
-            <!-- ==============================
-                 SIGN UP
-            =============================== -->
-
-            <form
-                class="auth-form"
-                id="signupForm"
-            >
-
-                <div class="field">
-
-                    <label for="signupName">
-                        Your Name
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-user"></i>
-
-                        <input
-                            id="signupName"
-                            type="text"
-                            placeholder="Your name"
-                            autocomplete="name"
-                            required
-                        >
+                        </div>
 
                     </div>
 
-                </div>
 
-
-                <div class="field">
-
-                    <label for="signupEmail">
-                        Email
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-envelope"></i>
-
-                        <input
-                            id="signupEmail"
-                            type="email"
-                            placeholder="you@example.com"
-                            autocomplete="email"
-                            required
-                        >
-
+                    <div class="roleTitle">
+                        I want to use K@si Web as:
                     </div>
 
-                </div>
 
+                    <div class="roleOptions">
 
-                <div class="field">
-
-                    <label for="signupPassword">
-                        Password
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-lock-alt"></i>
-
-                        <input
-                            id="signupPassword"
-                            type="password"
-                            placeholder="At least 6 characters"
-                            autocomplete="new-password"
-                            minlength="6"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            data-target="signupPassword"
-                        >
-
-                            <i class="bx bx-show"></i>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="role-box">
-
-                    <span class="role-label">
-                        Account type
-                    </span>
-
-                    <div class="role-options">
-
-
-                        <div class="role-option">
+                        <div class="roleOption">
 
                             <input
                                 type="radio"
-                                id="roleCustomer"
                                 name="signupRole"
+                                id="customerRole"
                                 value="customer"
                                 checked
                             >
 
-                            <label for="roleCustomer">
+                            <label
+                                for="customerRole"
+                                class="roleLabel"
+                            >
 
                                 <i class="bx bx-user"></i>
 
-                                <span>
-                                    Customer
-                                </span>
+                                Customer
 
                             </label>
 
                         </div>
 
 
-                        <div class="role-option">
+                        <div class="roleOption">
 
                             <input
                                 type="radio"
-                                id="roleOwner"
                                 name="signupRole"
+                                id="ownerRole"
                                 value="salon_owner"
                             >
 
-                            <label for="roleOwner">
+                            <label
+                                for="ownerRole"
+                                class="roleLabel"
+                            >
 
                                 <i class="bx bx-store"></i>
 
-                                <span>
-                                    Salon Owner
-                                </span>
+                                Salon Owner
 
                             </label>
 
                         </div>
 
-
                     </div>
+
+
+                    <button
+                        type="button"
+                        class="primaryBtn"
+                        id="signupBtn"
+                    >
+                        <i class="bx bx-user-plus"></i>
+                        Create Account
+                    </button>
+
+
+                    <div
+                        id="signupMsg"
+                        class="message"
+                    ></div>
 
                 </div>
 
-
-                <button
-                    type="submit"
-                    class="btn btn-primary auth-submit"
-                    id="signupBtn"
-                >
-
-                    Create Account
-
-                    <i class="bx bx-user-plus"></i>
-
-                </button>
-
-            </form>
+            </div>
 
 
-            <div
-                class="auth-message"
-                id="authMessage"
-            ></div>
-
+            <a
+                href="index.html"
+                class="backLanding"
+            >
+                <i class="bx bx-left-arrow-alt"></i>
+                Back to K@si Web
+            </a>
 
         </div>
 
-
-        <a
-            href="index.html"
-            class="back-landing"
-        >
-
-            <i class="bx bx-left-arrow-alt"></i>
-
-            &nbsp; Back to K@si
-
-        </a>
+    </section>
 
 
-    </div>
+    <!-- =========================
+         CUSTOMER DASHBOARD
+    ========================= -->
 
-</section>
+    <section
+        id="dashboardPage"
+        class="hidden"
+    >
 
+        <header class="dashboardHeader">
 
-<!-- =====================================================
-     CUSTOMER DASHBOARD
-     HIDDEN UNTIL CUSTOMER IS AUTHENTICATED
-====================================================== -->
-
-<section id="dashboardPage">
-
-
-    <!-- TOP BAR -->
-
-    <header class="topbar">
-
-        <a
-            href="home.html"
-            class="brand"
-        >
-            K<span>@</span>si
-        </a>
-
-
-        <button
-            class="refresh-btn"
-            id="refreshBtn"
-            type="button"
-            aria-label="Refresh"
-        >
-
-            <i class="bx bx-refresh"></i>
-
-        </button>
-
-    </header>
-
-
-    <main class="page">
-
-
-        <!-- WELCOME -->
-
-        <section class="welcome">
-
-            <div class="welcome-label">
-
-                <span class="online-dot"></span>
-
-                YOUR K@SI SPACE
-
-            </div>
-
-
-            <h1>
-
-                Welcome back,
-                <span id="userName">
-                    Fresh
-                </span>.
-
-            </h1>
-
-
-            <p>
-
-                Your next cut is closer than you think.
-                Discover local barbers, explore services
-                and book your time.
-
-            </p>
-
-        </section>
-
-
-        <!-- FEATURED -->
-
-        <section>
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Featured
-                    </div>
-
-                    <h2>
-                        Fresh looks.
-                    </h2>
-
-                </div>
+            <div class="welcomeText">
 
                 <small>
-                    Swipe to explore
+                    Web For Kasi People
                 </small>
 
-            </div>
-
-
-            <div class="swipe-track">
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="7847041D.jpg"
-                        alt="Fresh grooming style"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            01
-                        </div>
-
-                        <h3>
-                            Fresh by design.
-                        </h3>
-
-                        <p>
-                            Discover a look that matches
-                            your style and your vibe.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="37BA0E35.jpg"
-                        alt="Kasi Taper Fade"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            02
-                        </div>
-
-                        <h3>
-                            Kasi Taper Fade.
-                        </h3>
-
-                        <p>
-                            Clean lines. Fresh finish.
-                            Your next signature look.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="8627A569.jpg"
-                        alt="Kasi style"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            03
-                        </div>
-
-                        <h3>
-                            Your style.
-                        </h3>
-
-                        <p>
-                            Explore local grooming talent
-                            through K@si.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="A3886FFD.jpg"
-                        alt="Classic clean haircut"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            04
-                        </div>
-
-                        <h3>
-                            Classic clean.
-                        </h3>
-
-                        <p>
-                            Timeless cuts from
-                            local professionals.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="B307F46B.jpg"
-                        alt="Line design haircut"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            05
-                        </div>
-
-                        <h3>
-                            Make your mark.
-                        </h3>
-
-                        <p>
-                            Stand out with a cut
-                            built around your style.
-                        </p>
-
-                    </div>
-
-                </article>
-
+                <h1 id="welcomeName">
+                    Welcome
+                </h1>
 
             </div>
 
 
-            <div class="swipe-hint">
-
-                <i class="bx bx-left-arrow-alt"></i>
-
-                Swipe
-
-                <i class="bx bx-right-arrow-alt"></i>
-
+            <div
+                class="avatar"
+                id="userAvatar"
+            >
+                K
             </div>
 
-        </section>
+        </header>
 
 
-        <!-- QUICK ACTIONS -->
+        <main class="dashboardContent">
 
-        <section class="dashboard-section">
+            <div class="heroCard">
 
-            <div class="section-heading">
+                <i class="bx bx-cut"></i>
 
-                <div>
+                <h2>
+                    Find your next fresh look.
+                </h2>
 
-                    <div class="eyebrow">
-                        Quick access
-                    </div>
-
-                    <h2>
-                        Make your move.
-                    </h2>
-
-                </div>
+                <p>
+                    Discover local barbers and salons,
+                    compare services and book your next
+                    appointment with K@si Web.
+                </p>
 
             </div>
 
 
-            <div class="action-grid">
-
+            <div class="dashboardGrid">
 
                 <a
                     href="salons.html"
-                    class="action-card"
+                    class="dashboardCard"
                 >
 
-                    <span class="action-arrow">
-                        <i class="bx bx-right-arrow-alt"></i>
-                    </span>
-
-                    <div class="action-icon">
-
-                        <i class="bx bx-search-alt-2"></i>
-
+                    <div class="cardIcon">
+                        <i class="bx bx-store"></i>
                     </div>
 
                     <h3>
-                        Explore Salons
+                        Find Salons
                     </h3>
 
                     <p>
-                        Discover barbers and salons
-                        around you.
+                        Browse local salons,
+                        barbers and available services.
                     </p>
 
                 </a>
 
 
                 <a
-                    href="#bookings"
-                    class="action-card"
+                    href="salons.html"
+                    class="dashboardCard"
                 >
 
-                    <span class="action-arrow">
-                        <i class="bx bx-right-arrow-alt"></i>
-                    </span>
+                    <div class="cardIcon">
+                        <i class="bx bx-calendar"></i>
+                    </div>
 
-                    <div class="action-icon">
+                    <h3>
+                        Book Appointment
+                    </h3>
 
-                        <i class="bx bx-calendar-check"></i>
+                    <p>
+                        Choose a service,
+                        date and time that works for you.
+                    </p>
 
+                </a>
+
+
+                <a
+                    href="salons.html"
+                    class="dashboardCard"
+                >
+
+                    <div class="cardIcon">
+                        <i class="bx bx-history"></i>
                     </div>
 
                     <h3>
@@ -2458,1515 +1279,429 @@
                     </h3>
 
                     <p>
-                        See your upcoming appointments
-                        and booking status.
+                        View and manage your
+                        salon appointments.
                     </p>
 
+                </a>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="logoutBtn"
+                id="logoutBtn"
+            >
+                <i class="bx bx-log-out"></i>
+                Logout
+            </button>
+
+        </main>
+
+
+        <!-- BOTTOM NAV -->
+
+        <nav class="bottomNav">
+
+            <div class="navInner">
+
+                <a
+                    href="home.html"
+                    class="navItem active"
+                >
+                    <i class="bx bx-home"></i>
+                    <span>Home</span>
                 </a>
 
 
                 <a
-                    href="#profile"
-                    class="action-card"
+                    href="salons.html"
+                    class="navItem"
                 >
-
-                    <span class="action-arrow">
-                        <i class="bx bx-right-arrow-alt"></i>
-
-                    </span>
-
-                    <div class="action-icon">
-
-                        <i class="bx bx-user"></i>
-
-                    </div>
-
-                    <h3>
-                        My Account
-                    </h3>
-
-                    <p>
-                        Manage your K@si account.
-                    </p>
-
+                    <i class="bx bx-store"></i>
+                    <span>Salons</span>
                 </a>
 
 
-            </div>
-
-        </section>
-
-
-        <!-- BOOKINGS -->
-
-        <section
-            class="dashboard-section"
-            id="bookings"
-        >
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Your schedule
-                    </div>
-
-                    <h2>
-                        Upcoming bookings.
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="booking-panel">
-
-                <div class="booking-top">
-
-                    <strong>
-                        My appointments
-                    </strong>
-
-                    <a href="salons.html">
-
-                        Book a cut
-
-                        <i class="bx bx-right-arrow-alt"></i>
-
-                    </a>
-
-                </div>
-
-
-                <div class="booking-content">
-
-                    <div class="empty-icon">
-
-                        <i class="bx bx-calendar"></i>
-
-                    </div>
-
-                    <h3>
-                        Your next cut starts here.
-                    </h3>
-
-                    <p>
-
-                        You don't have any bookings showing
-                        yet. Find a salon and reserve your
-                        preferred time.
-
-                    </p>
-
-                    <a
-                        href="salons.html"
-                        class="btn btn-primary"
-                    >
-
-                        Explore Salons
-
-                        <i class="bx bx-right-arrow-alt"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- DISCOVER -->
-
-        <section class="dashboard-section">
-
-            <div class="discover-card">
-
-                <div class="discover-content">
-
-                    <div class="eyebrow">
-                        Discover
-                    </div>
-
-                    <h2>
-                        Your barber
-                        is waiting.
-                    </h2>
-
-                    <p>
-
-                        Explore local grooming businesses,
-                        compare services and find the style
-                        that fits you.
-
-                    </p>
-
-                    <a
-                        href="salons.html"
-                        class="btn btn-primary"
-                    >
-
-                        Discover Salons
-
-                        <i class="bx bx-compass"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ELITE -->
-
-        <section class="elite-section">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        K@si Elite
-                    </div>
-
-                    <h2>
-                        The standard is higher.
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="elite-card">
-
-                <div class="elite-image">
-
-                    <img
-                        src="C00719B.jpg"
-                        alt="K@si Elite Cuts"
-                    >
-
-                </div>
-
-
-                <div class="elite-content">
-
-                    <div class="elite-label">
-
-                        <i class="bx bx-sparkles"></i>
-
-                        Elite cuts only
-
-                    </div>
-
-
-                    <h2>
-                        Look sharp.
-                        Feel sharper.
-                    </h2>
-
-
-                    <p>
-
-                        Your next great look is waiting.
-                        Discover local barbers, compare
-                        services and reserve your preferred
-                        time — without standing in line.
-
-                    </p>
-
-
-                    <div
-                        style="
-                            display:flex;
-                            flex-wrap:wrap;
-                            gap:10px;
-                        "
-                    >
-
-                        <a
-                            href="salons.html"
-                            class="btn btn-primary"
-                        >
-
-                            Find a Salon
-
-                            <i class="bx bx-right-arrow-alt"></i>
-
-                        </a>
-
-
-                        <a
-                            href="#bookings"
-                            class="btn btn-secondary"
-                        >
-
-                            My Bookings
-
-                            <i class="bx bx-calendar"></i>
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- PROFILE -->
-
-        <section
-            class="dashboard-section"
-            id="profile"
-        >
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Account
-                    </div>
-
-                    <h2>
-                        Your K@si profile.
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="profile-panel">
-
-                <div
-                    class="avatar"
-                    id="avatar"
+                <a
+                    href="#"
+                    class="navItem"
+                    id="logoutNav"
                 >
-                    K
-                </div>
-
-
-                <div class="profile-info">
-
-                    <strong id="profileName">
-                        K@si Customer
-                    </strong>
-
-                    <span id="profileEmail">
-                        Loading account...
-                    </span>
-
-                </div>
-
-
-                <button
-                    class="logout"
-                    id="logoutBtn"
-                    type="button"
-                >
-
-                    Sign Out
-
-                </button>
+                    <i class="bx bx-log-out"></i>
+                    <span>Logout</span>
+                </a>
 
             </div>
 
-        </section>
+        </nav>
 
+    </section>
 
-    </main>
 
+    <!-- =========================
+         FIREBASE + APP
+    ========================= -->
 
-    <!-- CUSTOMER NAV -->
+    <script>
 
-    <nav class="bottom-nav">
+        /* ==========================================
+           FIREBASE CONFIG
+        ========================================== */
 
-        <a
-            href="home.html"
-            class="nav-item active"
-        >
+        const firebaseConfig = {
 
-            <i class="bx bxs-home"></i>
+            apiKey:
+                "YOUR_FIREBASE_API_KEY",
 
-            <span>
-                Home
-            </span>
+            authDomain:
+                "kasi-web-d073f.firebaseapp.com",
 
-        </a>
+            projectId:
+                "kasi-web-d073f",
 
+            storageBucket:
+                "kasi-web-d073f.firebasestorage.app",
 
-        <a
-            href="salons.html"
-            class="nav-item"
-        >
+            messagingSenderId:
+                "YOUR_MESSAGING_SENDER_ID",
 
-            <i class="bx bx-store"></i>
+            appId:
+                "YOUR_FIREBASE_APP_ID"
 
-            <span>
-                Salons
-            </span>
+        };
 
-        </a>
 
+        /* ==========================================
+           INITIALIZE FIREBASE
+        ========================================== */
 
-        <a
-            href="#profile"
-            class="nav-item"
-        >
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
-            <i class="bx bx-user"></i>
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-            <span>
-                Account
-            </span>
 
-        </a>
+        /* ==========================================
+           ELEMENTS
+        ========================================== */
 
-    </nav>
+        const loadingScreen =
+            document.getElementById("loadingScreen");
 
+        const authPage =
+            document.getElementById("authPage");
 
-</section>
+        const dashboardPage =
+            document.getElementById("dashboardPage");
 
+        const loginTab =
+            document.getElementById("loginTab");
 
-<!-- =====================================================
-     FIREBASE
-====================================================== -->
+        const signupTab =
+            document.getElementById("signupTab");
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+        const loginForm =
+            document.getElementById("loginForm");
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+        const signupForm =
+            document.getElementById("signupForm");
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+        const loginBtn =
+            document.getElementById("loginBtn");
 
+        const signupBtn =
+            document.getElementById("signupBtn");
 
-<script>
+        const logoutBtn =
+            document.getElementById("logoutBtn");
 
-    /* =====================================================
-       FIREBASE CONFIG
-    ===================================================== */
+        const logoutNav =
+            document.getElementById("logoutNav");
 
-    const firebaseConfig = {
+        const loginMsg =
+            document.getElementById("loginMsg");
 
-        apiKey:
-            "AIzaSyCjmaSIPBngB3F3bhP1AH4Frfn4Mz1QXHk",
+        const signupMsg =
+            document.getElementById("signupMsg");
 
-        authDomain:
-            "kasi-web-d073f.firebaseapp.com",
+        const welcomeName =
+            document.getElementById("welcomeName");
 
-        databaseURL:
-            "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+        const userAvatar =
+            document.getElementById("userAvatar");
 
-        projectId:
-            "kasi-web-d073f",
 
-        storageBucket:
-            "kasi-web-d073f.firebasestorage.app",
+        /* ==========================================
+           REDIRECT LOCK
+           
+           THIS IS THE IMPORTANT PART.
+           
+           It prevents Firebase events or double
+           clicks from causing multiple redirects.
+        ========================================== */
 
-        messagingSenderId:
-            "105918157571",
+        let redirectInProgress = false;
 
-        appId:
-            "1:105918157571:web:8d646"
 
-    };
+        /* ==========================================
+           LOADING
+        ========================================== */
 
+        function showLoading() {
 
-    /* =====================================================
-       INITIALIZE FIREBASE
-    ===================================================== */
+            loadingScreen.classList.remove("hidden");
 
-    if (!firebase.apps.length) {
+            authPage.classList.add("hidden");
 
-        firebase.initializeApp(
-            firebaseConfig
-        );
-
-    }
-
-
-    const auth =
-        firebase.auth();
-
-    const db =
-        firebase.firestore();
-
-
-    window.firebaseAuth =
-        auth;
-
-    window.firebaseDB =
-        db;
-
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const loading =
-        document.getElementById("loading");
-
-    const authPage =
-        document.getElementById("authPage");
-
-    const dashboardPage =
-        document.getElementById("dashboardPage");
-
-    const loginTab =
-        document.getElementById("loginTab");
-
-    const signupTab =
-        document.getElementById("signupTab");
-
-    const loginForm =
-        document.getElementById("loginForm");
-
-    const signupForm =
-        document.getElementById("signupForm");
-
-    const authTitle =
-        document.getElementById("authTitle");
-
-    const authSubtitle =
-        document.getElementById("authSubtitle");
-
-    const authMessage =
-        document.getElementById("authMessage");
-
-    const loginBtn =
-        document.getElementById("loginBtn");
-
-    const signupBtn =
-        document.getElementById("signupBtn");
-
-    const logoutBtn =
-        document.getElementById("logoutBtn");
-
-    const refreshBtn =
-        document.getElementById("refreshBtn");
-
-
-    /* =====================================================
-       SHOW LOADING
-    ===================================================== */
-
-    function showLoading() {
-
-        loading.classList.remove("hide");
-
-    }
-
-
-    /* =====================================================
-       HIDE LOADING
-    ===================================================== */
-
-    function hideLoading() {
-
-        setTimeout(
-            function() {
-
-                loading.classList.add("hide");
-
-            },
-            250
-        );
-
-    }
-
-
-    /* =====================================================
-       AUTH MODE
-    ===================================================== */
-
-    function showAuthPage() {
-
-        document.body.classList.remove(
-            "dashboard-mode"
-        );
-
-        document.body.classList.add(
-            "auth-mode"
-        );
-
-        hideLoading();
-
-    }
-
-
-    /* =====================================================
-       DASHBOARD MODE
-    ===================================================== */
-
-    function showDashboard() {
-
-        document.body.classList.remove(
-            "auth-mode"
-        );
-
-        document.body.classList.add(
-            "dashboard-mode"
-        );
-
-        hideLoading();
-
-    }
-
-
-    /* =====================================================
-       AUTH MESSAGE
-    ===================================================== */
-
-    function showMessage(
-        message,
-        type = "error"
-    ) {
-
-        authMessage.textContent =
-            message;
-
-        authMessage.className =
-            "auth-message show " + type;
-
-    }
-
-
-    function clearMessage() {
-
-        authMessage.textContent = "";
-
-        authMessage.className =
-            "auth-message";
-
-    }
-
-
-    /* =====================================================
-       SWITCH LOGIN / SIGNUP
-    ===================================================== */
-
-    function showLogin() {
-
-        loginTab.classList.add("active");
-
-        signupTab.classList.remove("active");
-
-        loginForm.classList.add("active");
-
-        signupForm.classList.remove("active");
-
-        authTitle.textContent =
-            "Your next fresh cut.";
-
-        authSubtitle.textContent =
-            "Sign in to your K@si account and continue discovering local salons.";
-
-        clearMessage();
-
-    }
-
-
-    function showSignup() {
-
-        signupTab.classList.add("active");
-
-        loginTab.classList.remove("active");
-
-        signupForm.classList.add("active");
-
-        loginForm.classList.remove("active");
-
-        authTitle.textContent =
-            "Join K@si.";
-
-        authSubtitle.textContent =
-            "Create your account and discover your next fresh look.";
-
-        clearMessage();
-
-    }
-
-
-    loginTab.addEventListener(
-        "click",
-        showLogin
-    );
-
-
-    signupTab.addEventListener(
-        "click",
-        showSignup
-    );
-
-
-    /* =====================================================
-       PASSWORD TOGGLE
-    ===================================================== */
-
-    document.querySelectorAll(
-        ".password-toggle"
-    ).forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function() {
-
-                    const target =
-                        document.getElementById(
-                            button.dataset.target
-                        );
-
-                    const icon =
-                        button.querySelector("i");
-
-
-                    if (
-                        target.type === "password"
-                    ) {
-
-                        target.type =
-                            "text";
-
-                        icon.className =
-                            "bx bx-hide";
-
-                    }
-
-                    else {
-
-                        target.type =
-                            "password";
-
-                        icon.className =
-                            "bx bx-show";
-
-                    }
-
-                }
-            );
+            dashboardPage.classList.add("hidden");
 
         }
-    );
 
 
-    /* =====================================================
-       GET USER ROLE
-    ===================================================== */
+        function showAuthPage() {
 
-    async function getUserRole(
-        user
-    ) {
+            loadingScreen.classList.add("hidden");
 
-        try {
+            authPage.classList.remove("hidden");
 
-            const snapshot =
-                await db
-                    .collection("users")
-                    .doc(user.uid)
-                    .get();
+            dashboardPage.classList.add("hidden");
+
+        }
 
 
-            if (!snapshot.exists) {
+        function showDashboard() {
+
+            loadingScreen.classList.add("hidden");
+
+            authPage.classList.add("hidden");
+
+            dashboardPage.classList.remove("hidden");
+
+        }
+
+
+        /* ==========================================
+           MESSAGES
+        ========================================== */
+
+        function showMessage(element, message, type) {
+
+            element.textContent = message;
+
+            element.className =
+                "message show " + type;
+
+        }
+
+
+        function clearMessage(element) {
+
+            element.textContent = "";
+
+            element.className = "message";
+
+        }
+
+
+        /* ==========================================
+           GET USER ROLE
+        ========================================== */
+
+        async function getUserRole(user) {
+
+            if (!user) {
+                return "customer";
+            }
+
+            try {
+
+                const userRef =
+                    db.collection("users").doc(user.uid);
+
+                const snap =
+                    await userRef.get();
+
+                if (!snap.exists) {
+
+                    return "customer";
+
+                }
+
+                const data =
+                    snap.data() || {};
+
+                const rawRole =
+                    data.role ||
+                    data.Role ||
+                    "customer";
+
+                return String(rawRole)
+                    .trim()
+                    .toLowerCase();
+
+            } catch (error) {
+
+                console.error(
+                    "Could not get user role:",
+                    error
+                );
 
                 return "customer";
 
             }
 
-
-            const data =
-                snapshot.data();
-
-
-            return String(
-                data.role ||
-                data.Role ||
-                "customer"
-            )
-            .trim()
-            .toLowerCase();
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Could not get user role:",
-                error
-            );
-
-            return "customer";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       REDIRECT AFTER LOGIN/SIGNUP
-       
-       IMPORTANT:
-       This redirect happens only after the user
-       actually logs in or signs up.
-    ===================================================== */
-
-    async function redirectAfterAuth(
-        user
-    ) {
-
-        showLoading();
-
-
-        const role =
-            await getUserRole(user);
-
-
-        /*
-           CUSTOMER
-        */
-
-        if (
-            role === "customer" ||
-            role === ""
-        ) {
-
-            sessionStorage.setItem(
-                "kasiRole",
-                "customer"
-            );
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-
-            window.location.replace(
-                "salons.html"
-            );
-
-            return;
-
         }
 
 
-        /*
-           SALON OWNER
-        */
+        /* ==========================================
+           REDIRECT ONCE
+           
+           ONLY LOGIN / SIGNUP SHOULD CALL THIS.
+           
+           DO NOT call this from onAuthStateChanged.
+        ========================================== */
 
-        if (
-            role === "salon_owner" ||
-            role === "owner"
-        ) {
+        async function redirectOnce(user) {
 
-            sessionStorage.setItem(
-                "kasiRole",
-                "salon_owner"
-            );
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-
-            window.location.replace(
-                "owners.html"
-            );
-
-            return;
-
-        }
-
-
-        /*
-           ADMIN
-        */
-
-        if (
-            role === "admin"
-        ) {
-
-            sessionStorage.setItem(
-                "kasiRole",
-                "admin"
-            );
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-
-            window.location.replace(
-                "admin.html"
-            );
-
-            return;
-
-        }
-
-
-        /*
-           Unknown role:
-           treat as customer.
-        */
-
-        window.location.replace(
-            "salons.html"
-        );
-
-    }
-
-
-    /* =====================================================
-       CREATE FIRESTORE USER PROFILE
-    ===================================================== */
-
-    async function createUserProfile(
-        user,
-        name,
-        role
-    ) {
-
-        const userRef =
-            db
-                .collection("users")
-                .doc(user.uid);
-
-
-        await userRef.set(
-            {
-
-                name:
-                    name,
-
-                displayName:
-                    name,
-
-                email:
-                    user.email || "",
-
-                role:
-                    role,
-
-                uid:
-                    user.uid,
-
-                createdAt:
-                    firebase.firestore.FieldValue.serverTimestamp(),
-
-                updatedAt:
-                    firebase.firestore.FieldValue.serverTimestamp()
-
-            },
-            {
-                merge: true
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       SIGN UP
-    ===================================================== */
-
-    signupForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            clearMessage();
-
-
-            const name =
-                document
-                    .getElementById("signupName")
-                    .value
-                    .trim();
-
-
-            const email =
-                document
-                    .getElementById("signupEmail")
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                document
-                    .getElementById("signupPassword")
-                    .value;
-
-
-            const role =
-                document
-                    .querySelector(
-                        'input[name="signupRole"]:checked'
-                    )
-                    .value;
-
-
-            if (!name) {
-
-                showMessage(
-                    "Please enter your name."
-                );
-
+            if (!user) {
                 return;
-
             }
 
-
-            if (!email) {
-
-                showMessage(
-                    "Please enter your email."
-                );
-
+            if (redirectInProgress) {
                 return;
-
             }
 
+            redirectInProgress = true;
 
-            if (password.length < 6) {
-
-                showMessage(
-                    "Password must be at least 6 characters."
-                );
-
-                return;
-
-            }
-
-
-            signupBtn.disabled = true;
-
-            signupBtn.innerHTML =
-                `
-                Creating account...
-                <i class="bx bx-loader-alt bx-spin"></i>
-                `;
-
+            showLoading();
 
             try {
 
-                /*
-                   CREATE FIREBASE AUTH ACCOUNT
-                */
-
-                const result =
-                    await auth
-                        .createUserWithEmailAndPassword(
-                            email,
-                            password
-                        );
+                const role =
+                    await getUserRole(user);
 
 
-                const user =
-                    result.user;
+                /* Save current session */
 
-
-                /*
-                   SAVE NAME TO FIREBASE AUTH
-                */
-
-                await user.updateProfile(
-                    {
-                        displayName:
-                            name
-                    }
+                sessionStorage.setItem(
+                    "kasiUid",
+                    user.uid
                 );
 
-
-                /*
-                   CREATE FIRESTORE PROFILE
-                */
-
-                await createUserProfile(
-                    user,
-                    name,
+                sessionStorage.setItem(
+                    "kasiRole",
                     role
                 );
 
 
-                /*
-                   REDIRECT ONCE
-                */
-
-                await redirectAfterAuth(
-                    user
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Signup error:",
-                    error
-                );
-
-
-                let message =
-                    "Could not create your account.";
-
+                /* =========================
+                   CUSTOMER
+                ========================= */
 
                 if (
-                    error.code ===
-                    "auth/email-already-in-use"
+                    role === "customer" ||
+                    role === ""
                 ) {
 
-                    message =
-                        "This email already has an account. Please log in instead.";
+                    window.location.replace(
+                        "salons.html"
+                    );
 
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-email"
-                ) {
-
-                    message =
-                        "Please enter a valid email address.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/weak-password"
-                ) {
-
-                    message =
-                        "Your password is too weak. Use at least 6 characters.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "permission-denied"
-                ) {
-
-                    message =
-                        "Account created, but your K@si profile could not be saved. Check your Firestore rules.";
-
+                    return;
                 }
 
 
-                showMessage(
-                    message,
-                    "error"
-                );
-
-
-                signupBtn.disabled = false;
-
-                signupBtn.innerHTML =
-                    `
-                    Create Account
-                    <i class="bx bx-user-plus"></i>
-                    `;
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       LOGIN
-    ===================================================== */
-
-    loginForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            clearMessage();
-
-
-            const email =
-                document
-                    .getElementById("loginEmail")
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                document
-                    .getElementById("loginPassword")
-                    .value;
-
-
-            if (!email || !password) {
-
-                showMessage(
-                    "Please enter your email and password."
-                );
-
-                return;
-
-            }
-
-
-            loginBtn.disabled = true;
-
-            loginBtn.innerHTML =
-                `
-                Logging in...
-                <i class="bx bx-loader-alt bx-spin"></i>
-                `;
-
-
-            try {
-
-                const result =
-                    await auth
-                        .signInWithEmailAndPassword(
-                            email,
-                            password
-                        );
-
-
-                const user =
-                    result.user;
-
-
-                /*
-                   ROLE CHECK + ONE-TIME REDIRECT
-                */
-
-                await redirectAfterAuth(
-                    user
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Login error:",
-                    error
-                );
-
-
-                let message =
-                    "Login failed. Please try again.";
-
+                /* =========================
+                   SALON OWNER
+                ========================= */
 
                 if (
-                    error.code ===
-                    "auth/user-not-found"
+                    role === "salon_owner" ||
+                    role === "owner"
                 ) {
 
-                    message =
-                        "No K@si account was found with this email.";
+                    window.location.replace(
+                        "owners.html"
+                    );
 
-                }
-
-                else if (
-                    error.code ===
-                    "auth/wrong-password"
-                ) {
-
-                    message =
-                        "Incorrect password.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-credential"
-                ) {
-
-                    message =
-                        "The email or password is incorrect.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-email"
-                ) {
-
-                    message =
-                        "Please enter a valid email address.";
-
+                    return;
                 }
 
 
-                showMessage(
-                    message,
-                    "error"
-                );
+                /* =========================
+                   ADMIN
+                ========================= */
+
+                if (role === "admin") {
+
+                    window.location.replace(
+                        "admin.html"
+                    );
+
+                    return;
+                }
 
 
-                loginBtn.disabled = false;
+                /* =========================
+                   UNKNOWN ROLE
+                   
+                   Default to customer.
+                ========================= */
 
-                loginBtn.innerHTML =
-                    `
-                    Log In
-                    <i class="bx bx-right-arrow-alt"></i>
-                    `;
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       LOAD CUSTOMER HOME
-    ===================================================== */
-
-    async function loadCustomerHome(
-        user
-    ) {
-
-        if (!user) {
-
-            showAuthPage();
-
-            return;
-
-        }
-
-
-        try {
-
-            const profile =
-                await db
-                    .collection("users")
-                    .doc(user.uid)
-                    .get();
-
-
-            let data = {};
-
-
-            if (profile.exists) {
-
-                data =
-                    profile.data();
-
-            }
-
-
-            const role =
-                String(
-                    data.role ||
-                    data.Role ||
+                sessionStorage.setItem(
+                    "kasiRole",
                     "customer"
-                )
-                .trim()
-                .toLowerCase();
-
-
-            /*
-               OWNER CANNOT USE CUSTOMER HOME
-            */
-
-            if (
-                role === "salon_owner" ||
-                role === "owner"
-            ) {
-
-                window.location.replace(
-                    "owners.html"
                 );
 
-                return;
+                window.location.replace(
+                    "salons.html"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Redirect error:",
+                    error
+                );
+
+                redirectInProgress = false;
+
+                showAuthPage();
+
+                showMessage(
+                    loginMsg,
+                    "Your account was found, but we could not determine your account type. Please try again.",
+                    "error"
+                );
 
             }
 
-
-            /*
-               ADMIN CANNOT USE CUSTOMER HOME
-            */
-
-            if (
-                role === "admin"
-            ) {
-
-                window.location.replace(
-                    "admin.html"
-                );
-
-                return;
-
-            }
-
-
-            /*
-               CUSTOMER HOME
-            */
-
-            const displayName =
-                data.name ||
-                data.displayName ||
-                data.fullName ||
-                user.displayName ||
-                "Fresh";
-
-
-            const firstName =
-                String(displayName)
-                    .trim()
-                    .split(/\s+/)[0] ||
-                    "Fresh";
-
-
-            document
-                .getElementById("userName")
-                .textContent =
-                firstName;
-
-
-            document
-                .getElementById("profileName")
-                .textContent =
-                data.name ||
-                data.displayName ||
-                data.fullName ||
-                user.displayName ||
-                "K@si Customer";
-
-
-            document
-                .getElementById("profileEmail")
-                .textContent =
-                user.email ||
-                "K@si account";
-
-
-            document
-                .getElementById("avatar")
-                .textContent =
-                firstName
-                    .charAt(0)
-                    .toUpperCase();
-
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-            sessionStorage.setItem(
-                "kasiRole",
-                "customer"
-            );
-
-
-            showDashboard();
-
         }
 
-        catch (error) {
 
-            console.error(
-                "Customer home error:",
-                error
-            );
+        /* ==========================================
+           LOAD CUSTOMER HOME
+           
+           IMPORTANT:
+           
+           This function DOES NOT redirect normal
+           customers to salons.html.
+           
+           That means when a customer opens:
+           
+               home.html
+           
+           after already being logged in, they
+           remain on home.html.
+        ========================================== */
 
-
-            /*
-               Even if the Firestore profile cannot
-               load, keep the authenticated customer
-               in the customer UI.
-            */
-
-            const fallback =
-                user.displayName ||
-                (
-                    user.email
-                        ? user.email.split("@")[0]
-                        : "Fresh"
-                );
-
-
-            const firstName =
-                fallback
-                    .trim()
-                    .split(/\s+/)[0] ||
-                    "Fresh";
-
-
-            document
-                .getElementById("userName")
-                .textContent =
-                firstName;
-
-
-            document
-                .getElementById("profileName")
-                .textContent =
-                user.displayName ||
-                "K@si Customer";
-
-
-            document
-                .getElementById("profileEmail")
-                .textContent =
-                user.email ||
-                "K@si account";
-
-
-            document
-                .getElementById("avatar")
-                .textContent =
-                firstName
-                    .charAt(0)
-                    .toUpperCase();
-
-
-            showDashboard();
-
-        }
-
-    }
-
-
-    /* =====================================================
-       AUTH STATE
-       
-       IMPORTANT:
-       We do NOT automatically redirect an already
-       authenticated customer to salons.html here.
-       
-       This is what makes the Home button work:
-       
-       salons.html → Home → home.html
-       
-       Once home.html sees the authenticated customer,
-       it shows the dashboard and hides signup/login.
-    ===================================================== */
-
-    auth.onAuthStateChanged(
-        async function(user) {
-
-            showLoading();
-
+        async function loadCustomerHome(user) {
 
             if (!user) {
-
-                /*
-                   Not signed in:
-                   show Login / Sign Up.
-                */
 
                 showAuthPage();
 
@@ -3975,47 +1710,570 @@
             }
 
 
-            /*
-               Already signed in:
-               show customer Home.
+            try {
 
-               DO NOT redirect to salons.html here.
-            */
+                const role =
+                    await getUserRole(user);
 
-            await loadCustomerHome(
-                user
-            );
+
+                /* =========================
+                   OWNER
+                ========================= */
+
+                if (
+                    role === "salon_owner" ||
+                    role === "owner"
+                ) {
+
+                    showLoading();
+
+                    window.location.replace(
+                        "owners.html"
+                    );
+
+                    return;
+                }
+
+
+                /* =========================
+                   ADMIN
+                ========================= */
+
+                if (role === "admin") {
+
+                    showLoading();
+
+                    window.location.replace(
+                        "admin.html"
+                    );
+
+                    return;
+                }
+
+
+                /* =========================
+                   CUSTOMER
+                ========================= */
+
+                const userSnap =
+                    await db
+                        .collection("users")
+                        .doc(user.uid)
+                        .get();
+
+                let name =
+                    user.displayName ||
+                    "K@si User";
+
+                let email =
+                    user.email || "";
+
+
+                if (userSnap.exists) {
+
+                    const data =
+                        userSnap.data() || {};
+
+                    name =
+                        data.name ||
+                        data.fullName ||
+                        data.displayName ||
+                        name;
+
+                    email =
+                        data.email ||
+                        email;
+
+                }
+
+
+                welcomeName.textContent =
+                    `Welcome, ${name}`;
+
+
+                const firstLetter =
+                    String(name)
+                        .trim()
+                        .charAt(0)
+                        .toUpperCase() || "K";
+
+                userAvatar.textContent =
+                    firstLetter;
+
+
+                sessionStorage.setItem(
+                    "kasiUid",
+                    user.uid
+                );
+
+                sessionStorage.setItem(
+                    "kasiRole",
+                    "customer"
+                );
+
+
+                /*
+                 * CUSTOMER STAYS ON HOME.HTML
+                 */
+
+                showDashboard();
+
+            } catch (error) {
+
+                console.error(
+                    "Customer home error:",
+                    error
+                );
+
+                showAuthPage();
+
+                showMessage(
+                    loginMsg,
+                    "Unable to load your account. Please try again.",
+                    "error"
+                );
+
+            }
 
         }
-    );
 
 
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
+        /* ==========================================
+           AUTH TABS
+        ========================================== */
 
-    logoutBtn.addEventListener(
-        "click",
-        async function() {
+        loginTab.addEventListener(
+            "click",
+            function() {
 
-            logoutBtn.disabled = true;
+                loginTab.classList.add("active");
 
-            logoutBtn.textContent =
-                "Signing out...";
+                signupTab.classList.remove("active");
 
+                loginForm.classList.remove("hidden");
+
+                signupForm.classList.add("hidden");
+
+                clearMessage(loginMsg);
+
+                clearMessage(signupMsg);
+
+            }
+        );
+
+
+        signupTab.addEventListener(
+            "click",
+            function() {
+
+                signupTab.classList.add("active");
+
+                loginTab.classList.remove("active");
+
+                signupForm.classList.remove("hidden");
+
+                loginForm.classList.add("hidden");
+
+                clearMessage(loginMsg);
+
+                clearMessage(signupMsg);
+
+            }
+        );
+
+
+        /* ==========================================
+           LOGIN
+           
+           redirectOnce() is called ONLY here.
+        ========================================== */
+
+        loginBtn.addEventListener(
+            "click",
+            async function() {
+
+                clearMessage(loginMsg);
+
+                const email =
+                    document
+                        .getElementById("loginEmail")
+                        .value
+                        .trim();
+
+                const password =
+                    document
+                        .getElementById("loginPassword")
+                        .value;
+
+
+                if (!email || !password) {
+
+                    showMessage(
+                        loginMsg,
+                        "Please enter your email and password.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                loginBtn.disabled = true;
+
+                loginBtn.innerHTML =
+                    '<i class="bx bx-loader-alt bx-spin"></i> Logging in...';
+
+
+                try {
+
+                    const result =
+                        await auth.signInWithEmailAndPassword(
+                            email,
+                            password
+                        );
+
+
+                    /*
+                     * ONLY HERE:
+                     * Redirect after explicit login.
+                     */
+
+                    await redirectOnce(
+                        result.user
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+                    let message =
+                        "Unable to login. Please try again.";
+
+
+                    if (
+                        error.code ===
+                        "auth/user-not-found"
+                    ) {
+
+                        message =
+                            "No account was found with this email.";
+
+                    } else if (
+                        error.code ===
+                        "auth/wrong-password"
+                    ) {
+
+                        message =
+                            "Incorrect password.";
+
+                    } else if (
+                        error.code ===
+                        "auth/invalid-credential"
+                    ) {
+
+                        message =
+                            "Incorrect email or password.";
+
+                    } else if (
+                        error.code ===
+                        "auth/invalid-email"
+                    ) {
+
+                        message =
+                            "Please enter a valid email address.";
+
+                    } else if (
+                        error.code ===
+                        "auth/too-many-requests"
+                    ) {
+
+                        message =
+                            "Too many attempts. Please wait and try again.";
+
+                    }
+
+
+                    showMessage(
+                        loginMsg,
+                        message,
+                        "error"
+                    );
+
+                    loginBtn.disabled = false;
+
+                    loginBtn.innerHTML =
+                        '<i class="bx bx-log-in"></i> Login';
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           SIGNUP
+           
+           redirectOnce() is called ONLY here.
+        ========================================== */
+
+        signupBtn.addEventListener(
+            "click",
+            async function() {
+
+                clearMessage(signupMsg);
+
+                const name =
+                    document
+                        .getElementById("signupName")
+                        .value
+                        .trim();
+
+                const email =
+                    document
+                        .getElementById("signupEmail")
+                        .value
+                        .trim();
+
+                const password =
+                    document
+                        .getElementById("signupPassword")
+                        .value;
+
+                const roleInput =
+                    document.querySelector(
+                        'input[name="signupRole"]:checked'
+                    );
+
+                const role =
+                    roleInput
+                        ? roleInput.value
+                        : "customer";
+
+
+                if (!name) {
+
+                    showMessage(
+                        signupMsg,
+                        "Please enter your name.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                if (!email) {
+
+                    showMessage(
+                        signupMsg,
+                        "Please enter your email address.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                if (password.length < 6) {
+
+                    showMessage(
+                        signupMsg,
+                        "Password must contain at least 6 characters.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                signupBtn.disabled = true;
+
+                signupBtn.innerHTML =
+                    '<i class="bx bx-loader-alt bx-spin"></i> Creating account...';
+
+
+                try {
+
+                    const result =
+                        await auth
+                            .createUserWithEmailAndPassword(
+                                email,
+                                password
+                            );
+
+
+                    const user =
+                        result.user;
+
+
+                    /*
+                     * Update Firebase Auth profile.
+                     */
+
+                    await user.updateProfile({
+
+                        displayName: name
+
+                    });
+
+
+                    /*
+                     * Create Firestore user profile.
+                     */
+
+                    await db
+                        .collection("users")
+                        .doc(user.uid)
+                        .set({
+
+                            uid: user.uid,
+
+                            name: name,
+
+                            fullName: name,
+
+                            displayName: name,
+
+                            email: email,
+
+                            role: role,
+
+                            createdAt:
+                                firebase.firestore.FieldValue
+                                    .serverTimestamp()
+
+                        }, {
+                            merge: true
+                        });
+
+
+                    /*
+                     * Save role locally.
+                     */
+
+                    sessionStorage.setItem(
+                        "kasiUid",
+                        user.uid
+                    );
+
+                    sessionStorage.setItem(
+                        "kasiRole",
+                        role
+                    );
+
+
+                    /*
+                     * ONLY HERE:
+                     * Redirect after signup.
+                     */
+
+                    await redirectOnce(user);
+
+                } catch (error) {
+
+                    console.error(
+                        "Signup error:",
+                        error
+                    );
+
+                    let message =
+                        "Unable to create your account.";
+
+                    if (
+                        error.code ===
+                        "auth/email-already-in-use"
+                    ) {
+
+                        message =
+                            "An account with this email already exists.";
+
+                    } else if (
+                        error.code ===
+                        "auth/invalid-email"
+                    ) {
+
+                        message =
+                            "Please enter a valid email address.";
+
+                    } else if (
+                        error.code ===
+                        "auth/weak-password"
+                    ) {
+
+                        message =
+                            "Please choose a stronger password.";
+
+                    } else if (
+                        error.code ===
+                        "auth/network-request-failed"
+                    ) {
+
+                        message =
+                            "Network error. Please check your internet connection.";
+
+                    }
+
+
+                    showMessage(
+                        signupMsg,
+                        message,
+                        "error"
+                    );
+
+                    signupBtn.disabled = false;
+
+                    signupBtn.innerHTML =
+                        '<i class="bx bx-user-plus"></i> Create Account';
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           LOGOUT
+        ========================================== */
+
+        async function logoutUser(event) {
+
+            if (event) {
+                event.preventDefault();
+            }
 
             try {
 
-                sessionStorage.clear();
+                showLoading();
 
+                sessionStorage.removeItem(
+                    "kasiUid"
+                );
+
+                sessionStorage.removeItem(
+                    "kasiRole"
+                );
 
                 await auth.signOut();
 
 
                 /*
-                   After logout the user returns
-                   to the public LANDING PAGE.
-                */
+                 * Logout always goes to the
+                 * landing/marketing page.
+                 */
+
+                window.location.replace(
+                    "index.html"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
 
                 window.location.replace(
                     "index.html"
@@ -4023,72 +2281,102 @@
 
             }
 
-            catch (error) {
-
-                console.error(
-                    "Logout error:",
-                    error
-                );
+        }
 
 
-                logoutBtn.disabled = false;
+        logoutBtn.addEventListener(
+            "click",
+            logoutUser
+        );
 
-                logoutBtn.textContent =
-                    "Sign Out";
+
+        logoutNav.addEventListener(
+            "click",
+            logoutUser
+        );
+
+
+        /* ==========================================
+           FIREBASE AUTH STATE
+           
+           IMPORTANT:
+           
+           DO NOT call redirectOnce() here.
+           
+           This is what prevents a customer who
+           simply opens home.html from immediately
+           being sent back to salons.html.
+        ========================================== */
+
+        auth.onAuthStateChanged(
+            async function(user) {
+
+                showLoading();
+
+
+                if (!user) {
+
+                    showAuthPage();
+
+                    return;
+
+                }
+
+
+                /*
+                 * Already logged in.
+                 *
+                 * Load home normally.
+                 *
+                 * Customer stays on home.html.
+                 *
+                 * Owner/admin are still protected
+                 * and sent to their correct pages.
+                 */
+
+                await loadCustomerHome(user);
 
             }
-
-        }
-    );
+        );
 
 
-    /* =====================================================
-       REFRESH
-    ===================================================== */
+        /* ==========================================
+           ENTER KEY SUPPORT
+        ========================================== */
 
-    refreshBtn.addEventListener(
-        "click",
-        function() {
+        document
+            .getElementById("loginPassword")
+            .addEventListener(
+                "keydown",
+                function(event) {
 
-            refreshBtn.innerHTML =
-                `
-                <i class="bx bx-loader-alt bx-spin"></i>
-                `;
+                    if (event.key === "Enter") {
 
+                        loginBtn.click();
 
-            setTimeout(
-                function() {
+                    }
 
-                    window.location.reload();
-
-                },
-                350
+                }
             );
 
-        }
-    );
+
+        document
+            .getElementById("signupPassword")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        signupBtn.click();
+
+                    }
+
+                }
+            );
 
 
-    /* =====================================================
-       BACK/FORWARD CACHE PROTECTION
-    ===================================================== */
-
-    window.addEventListener(
-        "pageshow",
-        function(event) {
-
-            if (
-                event.persisted
-            ) {
-
-                window.location.reload();
-
-            }
-
-        }
-    );
-
-</script>
+    </script>
 
 </body>
 
