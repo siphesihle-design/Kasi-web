@@ -17,7 +17,7 @@
 
     <meta
         name="description"
-        content="K@si Web — Discover local salons, barbers and fresh styles."
+        content="K@si Web — Discover elite local grooming, salons and fresh cuts."
     >
 
     <title>K@si Web | Home</title>
@@ -44,6 +44,10 @@
 
     <style>
 
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
             margin: 0;
             padding: 0;
@@ -55,19 +59,18 @@
         }
 
         body {
-
             min-height: 100vh;
 
             background:
                 radial-gradient(
-                    circle at 85% 5%,
+                    circle at 85% 8%,
                     rgba(124,58,237,.18),
-                    transparent 30%
+                    transparent 28%
                 ),
                 radial-gradient(
-                    circle at 5% 30%,
+                    circle at 8% 40%,
                     rgba(59,130,246,.10),
-                    transparent 30%
+                    transparent 28%
                 ),
                 #07070d;
 
@@ -76,132 +79,92 @@
             font-family: "Inter", sans-serif;
 
             overflow-x: hidden;
-        }
 
-        body.dashboard-mode {
             padding-bottom: 105px;
         }
 
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button,
-        input {
-            font-family: inherit;
-        }
-
-        /* =========================================
-           LOADING
-        ========================================= */
-
-        #loading {
+        body::before {
+            content: "";
 
             position: fixed;
 
             inset: 0;
 
-            z-index: 99999;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            background: #07070d;
-
-            transition:
-                opacity .35s ease,
-                visibility .35s ease;
-        }
-
-        #loading.hide {
-
-            opacity: 0;
-
-            visibility: hidden;
-
             pointer-events: none;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.015),
+                    transparent 25%
+                );
+
+            z-index: -1;
         }
 
-        .loader-box {
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+
+        /* =========================================================
+           TOP BAR
+        ========================================================= */
+
+        .topbar {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
 
             display: flex;
 
-            flex-direction: column;
-
             align-items: center;
 
-            gap: 15px;
+            justify-content: space-between;
+
+            padding:
+                17px
+                max(5%, calc((100vw - 1180px) / 2));
+
+            background:
+                rgba(7,7,13,.82);
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.07);
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
         }
 
-        .loader {
 
-            width: 38px;
-            height: 38px;
-
-            border:
-                3px solid
-                rgba(255,255,255,.10);
-
-            border-top-color:
-                #8b5cf6;
-
-            border-right-color:
-                #3b82f6;
-
-            border-radius: 50%;
-
-            animation:
-                spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-
-            to {
-                transform: rotate(360deg);
-            }
-
-        }
-
-        .loader-text {
-
-            font-size: .68rem;
-
-            text-transform: uppercase;
-
-            letter-spacing: .15em;
-
-            color:
-                rgba(255,255,255,.40);
-        }
-
-        /* =========================================
-           COMMON
-        ========================================= */
-
-        .page {
-
-            width:
-                min(1180px,90%);
-
-            margin:
-                0 auto;
-        }
+        /* =========================================================
+           BRAND
+        ========================================================= */
 
         .brand {
-
             font-size: 1.35rem;
 
             font-weight: 800;
 
-            letter-spacing: -.05em;
+            letter-spacing: -.055em;
         }
 
         .brand span {
-
             background:
                 linear-gradient(
                     90deg,
@@ -215,581 +178,20 @@
             color: transparent;
         }
 
-        .btn {
 
-            min-height: 50px;
+        /* =========================================================
+           TOP ACTIONS
+        ========================================================= */
 
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 8px;
-
-            padding:
-                0 20px;
-
-            border-radius: 14px;
-
-            border: none;
-
-            cursor: pointer;
-
-            font-size: .84rem;
-
-            font-weight: 800;
-
-            transition: .25s ease;
-        }
-
-        .btn:hover {
-
-            transform:
-                translateY(-2px);
-        }
-
-        .btn-primary {
-
-            color: #fff;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #7c3aed
-                );
-
-            box-shadow:
-                0 15px 45px
-                rgba(59,130,246,.20);
-        }
-
-        .btn-secondary {
-
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.06);
-
-            border:
-                1px solid
-                rgba(255,255,255,.12);
-        }
-
-        /* =========================================
-           AUTH PAGE
-        ========================================= */
-
-        #authPage {
-
-            min-height: 100vh;
-
-            display: none;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding:
-                35px 0;
-        }
-
-        body.auth-mode #authPage {
-            display: flex;
-        }
-
-        .auth-wrapper {
-
-            width:
-                min(480px,92%);
-
-            margin: auto;
-        }
-
-        .auth-brand {
-
-            text-align: center;
-
-            margin-bottom: 30px;
-        }
-
-        .auth-brand .brand {
-
-            font-size: 2rem;
-        }
-
-        .auth-brand p {
-
-            color:
-                rgba(255,255,255,.43);
-
-            font-size: .75rem;
-
-            margin-top: 8px;
-        }
-
-        .auth-card {
-
-            padding:
-                clamp(25px,6vw,38px);
-
-            border-radius: 28px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.075),
-                    rgba(255,255,255,.025)
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
-
-            box-shadow:
-                0 35px 100px
-                rgba(0,0,0,.40);
-
-            backdrop-filter:
-                blur(25px);
-        }
-
-        .auth-heading {
-
-            margin-bottom: 25px;
-        }
-
-        .auth-heading .eyebrow {
-
-            color:
-                #a78bfa;
-
-            font-size: .66rem;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .15em;
-
-            margin-bottom: 10px;
-        }
-
-        .auth-heading h1 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(2rem,8vw,3rem);
-
-            line-height: 1;
-
-            letter-spacing: -.045em;
-
-            margin-bottom: 10px;
-        }
-
-        .auth-heading p {
-
-            color:
-                rgba(255,255,255,.48);
-
-            font-size: .77rem;
-
-            line-height: 1.6;
-        }
-
-        /* AUTH TABS */
-
-        .auth-tabs {
-
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 5px;
-
-            padding: 5px;
-
-            margin-bottom: 25px;
-
-            border-radius: 14px;
-
-            background:
-                rgba(0,0,0,.25);
-
-            border:
-                1px solid
-                rgba(255,255,255,.06);
-        }
-
-        .auth-tab {
-
-            min-height: 42px;
-
-            border: none;
-
-            border-radius: 10px;
-
-            color:
-                rgba(255,255,255,.42);
-
-            background:
-                transparent;
-
-            cursor: pointer;
-
-            font-size: .76rem;
-
-            font-weight: 800;
-
-            transition: .2s;
-        }
-
-        .auth-tab.active {
-
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.09);
-        }
-
-        /* FORM */
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .field {
-
-            margin-bottom: 15px;
-        }
-
-        .field label {
-
-            display: block;
-
-            color:
-                rgba(255,255,255,.60);
-
-            font-size: .70rem;
-
-            font-weight: 700;
-
-            margin-bottom: 8px;
-        }
-
-        .input-wrap {
-
-            position: relative;
-        }
-
-        .input-wrap i {
-
-            position: absolute;
-
-            left: 15px;
-
-            top: 50%;
-
-            transform:
-                translateY(-50%);
-
-            color:
-                rgba(255,255,255,.32);
-
-            font-size: 1.1rem;
-
-            pointer-events: none;
-        }
-
-        .field input {
-
-            width: 100%;
-
-            height: 51px;
-
-            padding:
-                0 15px 0 45px;
-
-            border-radius: 13px;
-
-            outline: none;
-
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.045);
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
-
-            font-size: .80rem;
-
-            transition: .2s;
-        }
-
-        .field input::placeholder {
-
-            color:
-                rgba(255,255,255,.25);
-        }
-
-        .field input:focus {
-
-            border-color:
-                rgba(139,92,246,.65);
-
-            background:
-                rgba(255,255,255,.065);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(139,92,246,.08);
-        }
-
-        .password-toggle {
-
-            position: absolute;
-
-            right: 13px;
-
-            top: 50%;
-
-            transform:
-                translateY(-50%);
-
-            border: none;
-
-            background: transparent;
-
-            color:
-                rgba(255,255,255,.35);
-
-            cursor: pointer;
-
-            font-size: 1.1rem;
-        }
-
-        /* ROLE */
-
-        .role-box {
-
-            margin:
-                5px 0 17px;
-        }
-
-        .role-label {
-
-            color:
-                rgba(255,255,255,.60);
-
-            font-size: .70rem;
-
-            font-weight: 700;
-
-            margin-bottom: 8px;
-
-            display: block;
-        }
-
-        .role-options {
-
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 8px;
-        }
-
-        .role-option {
-
-            position: relative;
-        }
-
-        .role-option input {
-
-            position: absolute;
-
-            opacity: 0;
-
-            pointer-events: none;
-        }
-
-        .role-option label {
-
-            min-height: 58px;
-
+        .top-actions {
             display: flex;
 
             align-items: center;
 
             gap: 10px;
-
-            padding: 10px;
-
-            border-radius: 13px;
-
-            cursor: pointer;
-
-            background:
-                rgba(255,255,255,.035);
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-
-            color:
-                rgba(255,255,255,.45);
-
-            font-size: .70rem;
-
-            font-weight: 700;
-
-            transition: .2s;
         }
 
-        .role-option label i {
-
-            font-size: 1.2rem;
-        }
-
-        .role-option input:checked + label {
-
-            color: #fff;
-
-            border-color:
-                rgba(139,92,246,.65);
-
-            background:
-                rgba(124,58,237,.12);
-        }
-
-        .auth-submit {
-
-            width: 100%;
-
-            margin-top: 5px;
-        }
-
-        .auth-message {
-
-            display: none;
-
-            margin-top: 15px;
-
-            padding: 12px 14px;
-
-            border-radius: 12px;
-
-            font-size: .70rem;
-
-            line-height: 1.5;
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-        }
-
-        .auth-message.show {
-            display: block;
-        }
-
-        .auth-message.error {
-
-            color:
-                #fecaca;
-
-            background:
-                rgba(239,68,68,.08);
-
-            border-color:
-                rgba(239,68,68,.16);
-        }
-
-        .auth-message.success {
-
-            color:
-                #bbf7d0;
-
-            background:
-                rgba(34,197,94,.08);
-
-            border-color:
-                rgba(34,197,94,.16);
-        }
-
-        .back-landing {
-
-            display: flex;
-
-            justify-content: center;
-
-            margin-top: 22px;
-
-            color:
-                rgba(255,255,255,.40);
-
-            font-size: .70rem;
-        }
-
-        .back-landing:hover {
-            color: #fff;
-        }
-
-        /* =========================================
-           CUSTOMER DASHBOARD
-        ========================================= */
-
-        #dashboardPage {
-            display: none;
-        }
-
-        body.dashboard-mode #dashboardPage {
-            display: block;
-        }
-
-        .topbar {
-
-            position: sticky;
-
-            top: 0;
-
-            z-index: 2000;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding:
-                16px
-                max(5%, calc((100vw - 1180px) / 2));
-
-            background:
-                rgba(7,7,13,.82);
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.07);
-
-            backdrop-filter:
-                blur(20px);
-        }
-
-        .refresh-btn {
-
+        .icon-btn {
             width: 42px;
             height: 42px;
 
@@ -799,606 +201,120 @@
 
             border-radius: 13px;
 
-            color: #fff;
-
-            background:
-                rgba(255,255,255,.05);
-
             border:
                 1px solid
                 rgba(255,255,255,.09);
 
+            background:
+                rgba(255,255,255,.05);
+
+            color: #fff;
+
             cursor: pointer;
 
             font-size: 1.2rem;
+
+            transition:
+                transform .2s ease,
+                background .2s ease,
+                border-color .2s ease;
         }
 
-        .welcome {
+        .icon-btn:hover {
+            background:
+                rgba(255,255,255,.10);
+
+            transform:
+                translateY(-1px);
+
+            border-color:
+                rgba(255,255,255,.16);
+        }
+
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+            width: min(1180px,90%);
+
+            margin: 0 auto;
+        }
+
+
+        /* =========================================================
+           HIDDEN AUTH-DEPENDENT CONTENT
+           
+           These sections remain in the file for future use,
+           but the authenticated home experience focuses only
+           on the Elite section.
+        ========================================================= */
+
+        .customer-content {
+            display: none !important;
+        }
+
+
+        /* =========================================================
+           ELITE SECTION
+        ========================================================= */
+
+        .elite-section {
+            min-height:
+                calc(100vh - 120px);
 
             padding:
-                55px 0 30px;
-        }
-
-        .welcome-label {
+                65px 0 45px;
 
             display: flex;
 
-            align-items: center;
+            flex-direction: column;
 
-            gap: 8px;
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: .67rem;
-
-            font-weight: 700;
-
-            letter-spacing: .08em;
+            justify-content: center;
         }
 
-        .online-dot {
-
-            width: 7px;
-            height: 7px;
-
-            border-radius: 50%;
-
-            background: #60a5fa;
-
-            box-shadow:
-                0 0 12px
-                rgba(96,165,250,.8);
-        }
-
-        .welcome h1 {
-
-            margin:
-                13px 0 14px;
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(2.4rem,7vw,4.5rem);
-
-            line-height: .97;
-
-            letter-spacing: -.05em;
-        }
-
-        .welcome h1 span {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #fff,
-                    #93c5fd,
-                    #a78bfa
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-        .welcome p {
-
-            max-width: 560px;
-
-            color:
-                rgba(255,255,255,.48);
-
-            font-size: .80rem;
-
-            line-height: 1.7;
-        }
-
-        /* FEATURED */
-
-        .section-heading {
-
-            display: flex;
-
-            align-items: flex-end;
-
-            justify-content: space-between;
-
-            margin-bottom: 18px;
+        .elite-section .section-head {
+            margin-bottom: 22px;
         }
 
         .eyebrow {
-
-            color:
-                #a78bfa;
-
-            font-size: .64rem;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .15em;
-
-            margin-bottom: 8px;
-        }
-
-        .section-heading h2 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size:
-                clamp(1.8rem,5vw,2.7rem);
-
-            letter-spacing: -.04em;
-        }
-
-        .section-heading small {
-
-            color:
-                rgba(255,255,255,.30);
-
-            font-size: .63rem;
-        }
-
-        .swipe-track {
-
-            display: flex;
-
-            gap: 15px;
-
-            overflow-x: auto;
-
-            scroll-snap-type:
-                x mandatory;
-
-            padding:
-                2px 2px 20px;
-
-            scrollbar-width: none;
-        }
-
-        .swipe-track::-webkit-scrollbar {
-            display: none;
-        }
-
-        .swipe-card {
-
-            position: relative;
-
-            flex:
-                0 0
-                clamp(275px,78vw,390px);
-
-            height:
-                clamp(390px,65vw,470px);
-
-            overflow: hidden;
-
-            border-radius: 27px;
-
-            scroll-snap-align: start;
-
-            background: #11111a;
-
-            border:
-                1px solid
-                rgba(255,255,255,.10);
-        }
-
-        .swipe-card img {
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-
-            display: block;
-
-            transition: .6s ease;
-        }
-
-        .swipe-card:hover img {
-            transform: scale(1.04);
-        }
-
-        .swipe-card::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    0deg,
-                    rgba(3,3,8,.95),
-                    rgba(3,3,8,.30) 55%,
-                    transparent 80%
-                );
-        }
-
-        .card-content {
-
-            position: absolute;
-
-            z-index: 2;
-
-            left: 22px;
-            right: 22px;
-            bottom: 22px;
-        }
-
-        .card-number {
-
-            width: 34px;
-            height: 34px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 10px;
-
-            margin-bottom: 12px;
-
-            background:
-                rgba(255,255,255,.10);
-
-            border:
-                1px solid
-                rgba(255,255,255,.12);
-
-            font-size: .66rem;
-
-            font-weight: 800;
-        }
-
-        .card-content h3 {
-
-            font-family:
-                "Playfair Display",
-                serif;
-
-            font-size: 1.8rem;
-
-            margin-bottom: 7px;
-        }
-
-        .card-content p {
-
-            color:
-                rgba(255,255,255,.57);
-
-            font-size: .75rem;
-
-            line-height: 1.55;
-        }
-
-        .swipe-hint {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 7px;
-
-            color:
-                rgba(255,255,255,.28);
-
-            font-size: .63rem;
-        }
-
-        /* SECTIONS */
-
-        .dashboard-section {
-
-            padding-top: 65px;
-        }
-
-        /* QUICK ACTIONS */
-
-        .action-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap: 13px;
-        }
-
-        .action-card {
-
-            position: relative;
-
-            min-height: 165px;
-
-            padding: 23px;
-
-            border-radius: 21px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.065),
-                    rgba(255,255,255,.025)
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-
-            transition: .25s;
-        }
-
-        .action-card:hover {
-
-            transform:
-                translateY(-4px);
-
-            border-color:
-                rgba(139,92,246,.35);
-        }
-
-        .action-icon {
-
-            width: 46px;
-            height: 46px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 14px;
-
-            margin-bottom: 23px;
-
-            background:
-                rgba(124,58,237,.12);
-
-            color:
-                #a78bfa;
-
-            font-size: 1.3rem;
-        }
-
-        .action-card h3 {
-
-            font-size: .92rem;
-
-            margin-bottom: 7px;
-        }
-
-        .action-card p {
-
-            color:
-                rgba(255,255,255,.43);
-
-            font-size: .72rem;
-
-            line-height: 1.55;
-        }
-
-        .action-arrow {
-
-            position: absolute;
-
-            top: 22px;
-            right: 22px;
-
-            color:
-                rgba(255,255,255,.25);
-
-            font-size: 1.1rem;
-        }
-
-        /* BOOKINGS */
-
-        .booking-panel {
-
-            overflow: hidden;
-
-            border-radius: 24px;
-
-            background:
-                rgba(255,255,255,.035);
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-        }
-
-        .booking-top {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding: 20px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.07);
-        }
-
-        .booking-top strong {
-            font-size: .85rem;
-        }
-
-        .booking-top a {
-
-            color:
-                #93c5fd;
+            color: #a78bfa;
 
             font-size: .68rem;
 
             font-weight: 800;
+
+            letter-spacing: .16em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
         }
 
-        .booking-content {
-
-            padding: 35px 20px;
-
-            text-align: center;
-        }
-
-        .empty-icon {
-
-            width: 64px;
-            height: 64px;
-
-            display: grid;
-
-            place-items: center;
-
-            margin:
-                0 auto 16px;
-
-            border-radius: 19px;
-
-            background:
-                rgba(59,130,246,.08);
-
-            color:
-                #60a5fa;
-
-            font-size: 1.7rem;
-        }
-
-        .booking-content h3 {
-
-            font-size: .95rem;
-
-            margin-bottom: 8px;
-        }
-
-        .booking-content p {
-
-            max-width: 420px;
-
-            margin:
-                0 auto 20px;
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: .73rem;
-
-            line-height: 1.6;
-        }
-
-        /* DISCOVER */
-
-        .discover-card {
-
-            position: relative;
-
-            min-height: 300px;
-
-            display: flex;
-
-            align-items: flex-end;
-
-            overflow: hidden;
-
-            border-radius: 25px;
-
-            background:
-                radial-gradient(
-                    circle at 75% 30%,
-                    rgba(139,92,246,.38),
-                    transparent 27%
-                ),
-                radial-gradient(
-                    circle at 50% 90%,
-                    rgba(59,130,246,.20),
-                    transparent 35%
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-        }
-
-        .discover-card::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    100deg,
-                    rgba(7,7,13,.96),
-                    rgba(7,7,13,.48),
-                    rgba(7,7,13,.20)
-                );
-        }
-
-        .discover-content {
-
-            position: relative;
-
-            z-index: 2;
-
-            padding: 30px;
-
-            max-width: 620px;
-        }
-
-        .discover-content h2 {
-
+        .section-head h2 {
             font-family:
                 "Playfair Display",
                 serif;
 
             font-size:
-                clamp(2rem,6vw,3.5rem);
+                clamp(2rem,5vw,3.3rem);
 
-            line-height: .95;
+            line-height: .98;
 
             letter-spacing: -.045em;
-
-            margin-bottom: 13px;
         }
 
-        .discover-content p {
 
-            color:
-                rgba(255,255,255,.50);
-
-            font-size: .78rem;
-
-            line-height: 1.65;
-
-            margin-bottom: 20px;
-        }
-
-        /* ELITE */
-
-        .elite-section {
-
-            padding-top: 75px;
-        }
+        /* =========================================================
+           ELITE CARD
+        ========================================================= */
 
         .elite-card {
-
             position: relative;
 
             min-height:
-                clamp(430px,65vw,590px);
+                clamp(500px,72vh,720px);
 
             display: flex;
 
@@ -1406,72 +322,124 @@
 
             overflow: hidden;
 
-            border-radius: 30px;
+            border-radius: 32px;
+
+            background:
+                #101018;
 
             border:
                 1px solid
                 rgba(255,255,255,.10);
 
-            background: #11111a;
+            box-shadow:
+                0 35px 100px
+                rgba(0,0,0,.45);
         }
 
-        .elite-image {
 
+        /* =========================================================
+           ELITE IMAGE
+        ========================================================= */
+
+        .elite-image {
             position: absolute;
 
             inset: 0;
         }
 
         .elite-image img {
-
             width: 100%;
             height: 100%;
 
+            display: block;
+
             object-fit: cover;
 
+            object-position: center;
+
             filter:
-                brightness(.62)
-                saturate(.88);
+                brightness(.56)
+                saturate(.92);
+
+            transform:
+                scale(1.01);
+
+            transition:
+                transform 1.4s ease;
         }
 
-        .elite-image::after {
+        .elite-card:hover .elite-image img {
+            transform:
+                scale(1.045);
+        }
 
+        .elite-image::before {
             content: "";
 
             position: absolute;
 
             inset: 0;
 
+            z-index: 1;
+
             background:
-                linear-gradient(
-                    0deg,
-                    rgba(3,3,8,.98),
-                    rgba(3,3,8,.45) 50%,
-                    rgba(3,3,8,.08)
+                radial-gradient(
+                    circle at 70% 25%,
+                    rgba(139,92,246,.28),
+                    transparent 32%
                 );
         }
 
-        .elite-content {
+        .elite-image::after {
+            content: "";
 
-            position: relative;
+            position: absolute;
+
+            inset: 0;
 
             z-index: 2;
 
-            max-width: 680px;
-
-            padding: 35px;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(3,3,8,.10) 0%,
+                    rgba(3,3,8,.18) 22%,
+                    rgba(3,3,8,.48) 51%,
+                    rgba(3,3,8,.97) 100%
+                );
         }
 
-        .elite-label {
 
+        /* =========================================================
+           ELITE CONTENT
+        ========================================================= */
+
+        .elite-content {
+            position: relative;
+
+            z-index: 5;
+
+            width: min(760px,100%);
+
+            padding: 42px;
+        }
+
+
+        /* =========================================================
+           ELITE BADGE
+        ========================================================= */
+
+        .elite-label {
             display: inline-flex;
 
             align-items: center;
 
-            gap: 7px;
+            gap: 8px;
 
             padding:
-                8px 12px;
+                9px 14px;
+
+            margin-bottom: 20px;
 
             border-radius: 999px;
 
@@ -1480,91 +448,147 @@
 
             border:
                 1px solid
-                rgba(255,255,255,.12);
+                rgba(255,255,255,.13);
+
+            backdrop-filter:
+                blur(14px);
+
+            -webkit-backdrop-filter:
+                blur(14px);
 
             color:
-                rgba(255,255,255,.80);
+                rgba(255,255,255,.88);
 
-            font-size: .63rem;
+            font-size: .68rem;
 
             font-weight: 800;
 
-            text-transform: uppercase;
-
             letter-spacing: .10em;
 
-            margin-bottom: 18px;
+            text-transform: uppercase;
         }
 
         .elite-label i {
-            color: #a78bfa;
+            color: #c4b5fd;
+
+            font-size: 1rem;
         }
 
-        .elite-content h2 {
 
+        /* =========================================================
+           ELITE TITLE
+        ========================================================= */
+
+        .elite-content h1 {
             font-family:
                 "Playfair Display",
                 serif;
 
             font-size:
-                clamp(2.3rem,7vw,4.6rem);
+                clamp(3rem,8vw,6.4rem);
 
-            line-height: .94;
+            line-height:
+                .90;
 
-            letter-spacing: -.05em;
+            letter-spacing:
+                -.055em;
 
-            margin-bottom: 15px;
+            max-width:
+                760px;
+
+            margin-bottom:
+                19px;
         }
+
+        .elite-content h1 span {
+            display: inline;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff 0%,
+                    #c4b5fd 52%,
+                    #93c5fd 100%
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        /* =========================================================
+           ELITE DESCRIPTION
+        ========================================================= */
 
         .elite-content p {
-
-            max-width: 570px;
+            max-width:
+                620px;
 
             color:
-                rgba(255,255,255,.62);
+                rgba(255,255,255,.66);
 
-            font-size: .80rem;
+            line-height:
+                1.7;
 
-            line-height: 1.65;
+            font-size:
+                .88rem;
 
-            margin-bottom: 22px;
+            margin-bottom:
+                26px;
         }
 
-        /* PROFILE */
 
-        .profile-panel {
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
 
-            display: grid;
+        .buttons {
+            display: flex;
 
-            grid-template-columns:
-                auto 1fr auto;
+            flex-wrap: wrap;
+
+            gap: 11px;
+        }
+
+        .btn {
+            min-height: 52px;
+
+            display: inline-flex;
 
             align-items: center;
 
-            gap: 17px;
+            justify-content: center;
 
-            padding: 21px;
+            gap: 8px;
 
-            border-radius: 22px;
+            padding:
+                0 21px;
 
-            background:
-                rgba(255,255,255,.04);
+            border-radius: 14px;
 
-            border:
-                1px solid
-                rgba(255,255,255,.08);
+            font-size: .84rem;
+
+            font-weight: 800;
+
+            border: 0;
+
+            cursor: pointer;
+
+            transition:
+                transform .22s ease,
+                box-shadow .22s ease,
+                background .22s ease;
         }
 
-        .avatar {
+        .btn:hover {
+            transform:
+                translateY(-3px);
+        }
 
-            width: 58px;
-            height: 58px;
-
-            display: grid;
-
-            place-items: center;
-
-            border-radius: 18px;
+        .btn-primary {
+            color: #fff;
 
             background:
                 linear-gradient(
@@ -1573,58 +597,69 @@
                     #7c3aed
                 );
 
-            font-size: 1.35rem;
-
-            font-weight: 800;
+            box-shadow:
+                0 16px 42px
+                rgba(59,130,246,.22);
         }
 
-        .profile-info strong {
-
-            display: block;
-
-            font-size: .88rem;
-
-            margin-bottom: 5px;
+        .btn-primary:hover {
+            box-shadow:
+                0 20px 55px
+                rgba(59,130,246,.34);
         }
 
-        .profile-info span {
-
-            color:
-                rgba(255,255,255,.42);
-
-            font-size: .69rem;
-        }
-
-        .logout {
-
-            padding:
-                10px 14px;
-
-            border-radius: 11px;
-
-            color:
-                #fca5a5;
+        .btn-secondary {
+            color: #fff;
 
             background:
-                rgba(239,68,68,.07);
+                rgba(255,255,255,.07);
 
             border:
                 1px solid
-                rgba(239,68,68,.13);
+                rgba(255,255,255,.13);
 
-            cursor: pointer;
+            backdrop-filter:
+                blur(12px);
 
-            font-size: .69rem;
-
-            font-weight: 800;
+            -webkit-backdrop-filter:
+                blur(12px);
         }
 
-        /* =========================================
+
+        /* =========================================================
+           ELITE FOOTNOTE
+        ========================================================= */
+
+        .elite-footnote {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-top: 20px;
+
+            color:
+                rgba(255,255,255,.34);
+
+            font-size: .66rem;
+
+            letter-spacing: .02em;
+        }
+
+        .elite-footnote i {
+            color:
+                #a78bfa;
+
+            font-size: 1rem;
+        }
+
+
+        /* =========================================================
            BOTTOM NAV
-        ========================================= */
+        ========================================================= */
 
         .bottom-nav {
-
             position: fixed;
 
             left: 50%;
@@ -1649,7 +684,7 @@
             border-radius: 21px;
 
             background:
-                rgba(15,15,24,.92);
+                rgba(15,15,24,.90);
 
             border:
                 1px solid
@@ -1658,13 +693,15 @@
             backdrop-filter:
                 blur(22px);
 
+            -webkit-backdrop-filter:
+                blur(22px);
+
             box-shadow:
                 0 20px 60px
                 rgba(0,0,0,.45);
         }
 
         .nav-item {
-
             min-height: 57px;
 
             display: flex;
@@ -1680,25 +717,34 @@
             border-radius: 15px;
 
             color:
-                rgba(255,255,255,.38);
+                rgba(255,255,255,.40);
 
-            font-size: .61rem;
+            font-size: .62rem;
 
-            font-weight: 700;
+            font-weight: 600;
+
+            transition:
+                .2s ease;
         }
 
         .nav-item i {
             font-size: 1.25rem;
         }
 
-        .nav-item.active {
+        .nav-item:hover {
+            color: #fff;
 
+            background:
+                rgba(255,255,255,.05);
+        }
+
+        .nav-item.active {
             color: #fff;
 
             background:
                 linear-gradient(
                     135deg,
-                    rgba(59,130,246,.17),
+                    rgba(59,130,246,.18),
                     rgba(124,58,237,.18)
                 );
         }
@@ -1707,20 +753,130 @@
             color: #a78bfa;
         }
 
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
 
-        @media (max-width: 850px) {
+        /* =========================================================
+           AUTH / REDIRECT LOADER
+        ========================================================= */
 
-            .action-grid {
-                grid-template-columns:
-                    repeat(2,1fr);
+        .loading {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 9000;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                #07070d;
+
+            transition:
+                opacity .35s ease;
+        }
+
+        .loading.hide {
+            opacity: 0;
+
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 38px;
+            height: 38px;
+
+            border:
+                3px solid
+                rgba(255,255,255,.10);
+
+            border-top-color:
+                #8b5cf6;
+
+            border-right-color:
+                #3b82f6;
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+
+            margin-bottom: 15px;
+        }
+
+        .loading-text {
+            color:
+                rgba(255,255,255,.48);
+
+            font-size: .74rem;
+
+            letter-spacing: .03em;
+        }
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
             }
 
         }
 
+
+        /* =========================================================
+           DESKTOP
+        ========================================================= */
+
+        @media (min-width: 1000px) {
+
+            .elite-section {
+                padding-top: 48px;
+                padding-bottom: 35px;
+            }
+
+            .elite-card {
+                min-height: 650px;
+            }
+
+            .elite-content {
+                padding: 50px;
+            }
+
+        }
+
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (max-width: 850px) {
+
+            .elite-content h1 {
+                font-size:
+                    clamp(2.8rem,9vw,5rem);
+            }
+
+            .elite-card {
+                min-height:
+                    620px;
+            }
+
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
         @media (max-width: 600px) {
+
+            body {
+                padding-bottom: 100px;
+            }
 
             .page {
                 width: 90%;
@@ -1731,42 +887,127 @@
                     15px 5%;
             }
 
-            .welcome {
-                padding-top: 40px;
+            .elite-section {
+                min-height:
+                    calc(100vh - 90px);
+
+                padding:
+                    34px 0 25px;
             }
 
-            .swipe-card {
-                flex-basis: 82vw;
+            .elite-section .section-head {
+                margin-bottom:
+                    16px;
             }
 
-            .action-grid {
-                grid-template-columns: 1fr;
+            .section-head h2 {
+                font-size:
+                    2rem;
             }
 
-            .action-card {
-                min-height: 145px;
-            }
+            .elite-card {
+                min-height:
+                    580px;
 
-            .profile-panel {
-
-                grid-template-columns:
-                    auto 1fr;
-            }
-
-            .logout {
-
-                grid-column:
-                    1 / -1;
-
-                width: 100%;
+                border-radius:
+                    25px;
             }
 
             .elite-content {
-                padding: 25px;
+                padding:
+                    25px;
             }
 
-            .discover-content {
-                padding: 25px;
+            .elite-content h1 {
+                font-size:
+                    clamp(2.65rem,14vw,4.3rem);
+
+                line-height:
+                    .91;
+            }
+
+            .elite-content p {
+                font-size:
+                    .79rem;
+
+                line-height:
+                    1.65;
+            }
+
+            .buttons {
+                flex-direction:
+                    column;
+            }
+
+            .btn {
+                width:
+                    100%;
+            }
+
+            .elite-footnote {
+                line-height:
+                    1.5;
+            }
+
+            .bottom-nav {
+                width:
+                    94%;
+            }
+
+        }
+
+
+        /* =========================================================
+           SMALL PHONES
+        ========================================================= */
+
+        @media (max-width: 390px) {
+
+            .elite-card {
+                min-height:
+                    545px;
+            }
+
+            .elite-content {
+                padding:
+                    21px;
+            }
+
+            .elite-content h1 {
+                font-size:
+                    2.55rem;
+            }
+
+            .elite-label {
+                font-size:
+                    .61rem;
+            }
+
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior:
+                    auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration:
+                    .01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+
+                transition-duration:
+                    .01ms !important;
             }
 
         }
@@ -1779,882 +1020,110 @@
 <body>
 
 
-<!-- =====================================================
-     LOADING
-====================================================== -->
+    <!-- =========================================================
+         LOADING / AUTH REDIRECT SCREEN
+    ========================================================= -->
 
-<div id="loading">
-
-    <div class="loader-box">
+    <div
+        class="loading"
+        id="loading"
+    >
 
         <div class="loader"></div>
 
-        <div class="loader-text">
-            Loading K@si
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     AUTH PAGE
-     THIS IS ONLY SHOWN WHEN USER IS LOGGED OUT
-====================================================== -->
-
-<section id="authPage">
-
-    <div class="auth-wrapper">
-
-
-        <div class="auth-brand">
-
-            <a
-                href="index.html"
-                class="brand"
-            >
-                K<span>@</span>si
-            </a>
-
-            <p>
-                Your local beauty & grooming marketplace.
-            </p>
-
-        </div>
-
-
-        <div class="auth-card">
-
-
-            <div class="auth-heading">
-
-                <div class="eyebrow">
-                    Welcome to K@si
-                </div>
-
-                <h1 id="authTitle">
-                    Your next fresh cut.
-                </h1>
-
-                <p id="authSubtitle">
-                    Sign in or create your K@si account
-                    to discover salons and book your next look.
-                </p>
-
-            </div>
-
-
-            <!-- AUTH TABS -->
-
-            <div class="auth-tabs">
-
-                <button
-                    class="auth-tab active"
-                    id="loginTab"
-                    type="button"
-                >
-                    Log In
-                </button>
-
-                <button
-                    class="auth-tab"
-                    id="signupTab"
-                    type="button"
-                >
-                    Sign Up
-                </button>
-
-            </div>
-
-
-            <!-- ==============================
-                 LOGIN
-            =============================== -->
-
-            <form
-                class="auth-form active"
-                id="loginForm"
-            >
-
-                <div class="field">
-
-                    <label for="loginEmail">
-                        Email
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-envelope"></i>
-
-                        <input
-                            id="loginEmail"
-                            type="email"
-                            placeholder="you@example.com"
-                            autocomplete="email"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label for="loginPassword">
-                        Password
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-lock-alt"></i>
-
-                        <input
-                            id="loginPassword"
-                            type="password"
-                            placeholder="Your password"
-                            autocomplete="current-password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            data-target="loginPassword"
-                        >
-
-                            <i class="bx bx-show"></i>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary auth-submit"
-                    id="loginBtn"
-                >
-
-                    Log In
-
-                    <i class="bx bx-right-arrow-alt"></i>
-
-                </button>
-
-            </form>
-
-
-            <!-- ==============================
-                 SIGN UP
-            =============================== -->
-
-            <form
-                class="auth-form"
-                id="signupForm"
-            >
-
-                <div class="field">
-
-                    <label for="signupName">
-                        Your Name
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-user"></i>
-
-                        <input
-                            id="signupName"
-                            type="text"
-                            placeholder="Your name"
-                            autocomplete="name"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label for="signupEmail">
-                        Email
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-envelope"></i>
-
-                        <input
-                            id="signupEmail"
-                            type="email"
-                            placeholder="you@example.com"
-                            autocomplete="email"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label for="signupPassword">
-                        Password
-                    </label>
-
-                    <div class="input-wrap">
-
-                        <i class="bx bx-lock-alt"></i>
-
-                        <input
-                            id="signupPassword"
-                            type="password"
-                            placeholder="At least 6 characters"
-                            autocomplete="new-password"
-                            minlength="6"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            data-target="signupPassword"
-                        >
-
-                            <i class="bx bx-show"></i>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="role-box">
-
-                    <span class="role-label">
-                        Account type
-                    </span>
-
-                    <div class="role-options">
-
-
-                        <div class="role-option">
-
-                            <input
-                                type="radio"
-                                id="roleCustomer"
-                                name="signupRole"
-                                value="customer"
-                                checked
-                            >
-
-                            <label for="roleCustomer">
-
-                                <i class="bx bx-user"></i>
-
-                                <span>
-                                    Customer
-                                </span>
-
-                            </label>
-
-                        </div>
-
-
-                        <div class="role-option">
-
-                            <input
-                                type="radio"
-                                id="roleOwner"
-                                name="signupRole"
-                                value="salon_owner"
-                            >
-
-                            <label for="roleOwner">
-
-                                <i class="bx bx-store"></i>
-
-                                <span>
-                                    Salon Owner
-                                </span>
-
-                            </label>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary auth-submit"
-                    id="signupBtn"
-                >
-
-                    Create Account
-
-                    <i class="bx bx-user-plus"></i>
-
-                </button>
-
-            </form>
-
-
-            <div
-                class="auth-message"
-                id="authMessage"
-            ></div>
-
-
-        </div>
-
-
-        <a
-            href="index.html"
-            class="back-landing"
+        <div
+            class="loading-text"
+            id="loadingText"
         >
-
-            <i class="bx bx-left-arrow-alt"></i>
-
-            &nbsp; Back to K@si
-
-        </a>
-
+            Checking your K@si account...
+        </div>
 
     </div>
 
-</section>
 
-
-<!-- =====================================================
-     CUSTOMER DASHBOARD
-     HIDDEN UNTIL CUSTOMER IS AUTHENTICATED
-====================================================== -->
-
-<section id="dashboardPage">
-
-
-    <!-- TOP BAR -->
+    <!-- =========================================================
+         TOP BAR
+    ========================================================= -->
 
     <header class="topbar">
 
         <a
             href="home.html"
             class="brand"
+            aria-label="K@si Home"
         >
             K<span>@</span>si
         </a>
 
 
-        <button
-            class="refresh-btn"
-            id="refreshBtn"
-            type="button"
-            aria-label="Refresh"
-        >
+        <div class="top-actions">
 
-            <i class="bx bx-refresh"></i>
+            <button
+                type="button"
+                class="icon-btn"
+                id="refreshBtn"
+                aria-label="Refresh"
+                title="Refresh"
+            >
 
-        </button>
+                <i class="bx bx-refresh"></i>
+
+            </button>
+
+        </div>
 
     </header>
 
 
+    <!-- =========================================================
+         MAIN CONTENT
+         
+         Only the Elite section is intentionally visible after
+         authentication.
+    ========================================================= -->
+
     <main class="page">
 
 
-        <!-- WELCOME -->
-
-        <section class="welcome">
-
-            <div class="welcome-label">
-
-                <span class="online-dot"></span>
-
-                YOUR K@SI SPACE
-
-            </div>
-
-
-            <h1>
-
-                Welcome back,
-                <span id="userName">
-                    Fresh
-                </span>.
-
-            </h1>
-
-
-            <p>
-
-                Your next cut is closer than you think.
-                Discover local barbers, explore services
-                and book your time.
-
-            </p>
-
-        </section>
-
-
-        <!-- FEATURED -->
-
-        <section>
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Featured
-                    </div>
-
-                    <h2>
-                        Fresh looks.
-                    </h2>
-
-                </div>
-
-                <small>
-                    Swipe to explore
-                </small>
-
-            </div>
-
-
-            <div class="swipe-track">
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="7847041D.jpg"
-                        alt="Fresh grooming style"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            01
-                        </div>
-
-                        <h3>
-                            Fresh by design.
-                        </h3>
-
-                        <p>
-                            Discover a look that matches
-                            your style and your vibe.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="37BA0E35.jpg"
-                        alt="Kasi Taper Fade"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            02
-                        </div>
-
-                        <h3>
-                            Kasi Taper Fade.
-                        </h3>
-
-                        <p>
-                            Clean lines. Fresh finish.
-                            Your next signature look.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="8627A569.jpg"
-                        alt="Kasi style"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            03
-                        </div>
-
-                        <h3>
-                            Your style.
-                        </h3>
-
-                        <p>
-                            Explore local grooming talent
-                            through K@si.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="A3886FFD.jpg"
-                        alt="Classic clean haircut"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            04
-                        </div>
-
-                        <h3>
-                            Classic clean.
-                        </h3>
-
-                        <p>
-                            Timeless cuts from
-                            local professionals.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-                <article class="swipe-card">
-
-                    <img
-                        src="B307F46B.jpg"
-                        alt="Line design haircut"
-                    >
-
-                    <div class="card-content">
-
-                        <div class="card-number">
-                            05
-                        </div>
-
-                        <h3>
-                            Make your mark.
-                        </h3>
-
-                        <p>
-                            Stand out with a cut
-                            built around your style.
-                        </p>
-
-                    </div>
-
-                </article>
-
-
-            </div>
-
-
-            <div class="swipe-hint">
-
-                <i class="bx bx-left-arrow-alt"></i>
-
-                Swipe
-
-                <i class="bx bx-right-arrow-alt"></i>
-
-            </div>
-
-        </section>
-
-
-        <!-- QUICK ACTIONS -->
-
-        <section class="dashboard-section">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Quick access
-                    </div>
-
-                    <h2>
-                        Make your move.
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="action-grid">
-
-
-                <a
-                    href="salons.html"
-                    class="action-card"
-                >
-
-                    <span class="action-arrow">
-                        <i class="bx bx-right-arrow-alt"></i>
-                    </span>
-
-                    <div class="action-icon">
-
-                        <i class="bx bx-search-alt-2"></i>
-
-                    </div>
-
-                    <h3>
-                        Explore Salons
-                    </h3>
-
-                    <p>
-                        Discover barbers and salons
-                        around you.
-                    </p>
-
-                </a>
-
-
-                <a
-                    href="#bookings"
-                    class="action-card"
-                >
-
-                    <span class="action-arrow">
-                        <i class="bx bx-right-arrow-alt"></i>
-                    </span>
-
-                    <div class="action-icon">
-
-                        <i class="bx bx-calendar-check"></i>
-
-                    </div>
-
-                    <h3>
-                        My Bookings
-                    </h3>
-
-                    <p>
-                        See your upcoming appointments
-                        and booking status.
-                    </p>
-
-                </a>
-
-
-                <a
-                    href="#profile"
-                    class="action-card"
-                >
-
-                    <span class="action-arrow">
-                        <i class="bx bx-right-arrow-alt"></i>
-
-                    </span>
-
-                    <div class="action-icon">
-
-                        <i class="bx bx-user"></i>
-
-                    </div>
-
-                    <h3>
-                        My Account
-                    </h3>
-
-                    <p>
-                        Manage your K@si account.
-                    </p>
-
-                </a>
-
-
-            </div>
-
-        </section>
-
-
-        <!-- BOOKINGS -->
-
-        <section
-            class="dashboard-section"
-            id="bookings"
-        >
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Your schedule
-                    </div>
-
-                    <h2>
-                        Upcoming bookings.
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="booking-panel">
-
-                <div class="booking-top">
-
-                    <strong>
-                        My appointments
-                    </strong>
-
-                    <a href="salons.html">
-
-                        Book a cut
-
-                        <i class="bx bx-right-arrow-alt"></i>
-
-                    </a>
-
-                </div>
-
-
-                <div class="booking-content">
-
-                    <div class="empty-icon">
-
-                        <i class="bx bx-calendar"></i>
-
-                    </div>
-
-                    <h3>
-                        Your next cut starts here.
-                    </h3>
-
-                    <p>
-
-                        You don't have any bookings showing
-                        yet. Find a salon and reserve your
-                        preferred time.
-
-                    </p>
-
-                    <a
-                        href="salons.html"
-                        class="btn btn-primary"
-                    >
-
-                        Explore Salons
-
-                        <i class="bx bx-right-arrow-alt"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- DISCOVER -->
-
-        <section class="dashboard-section">
-
-            <div class="discover-card">
-
-                <div class="discover-content">
-
-                    <div class="eyebrow">
-                        Discover
-                    </div>
-
-                    <h2>
-                        Your barber
-                        is waiting.
-                    </h2>
-
-                    <p>
-
-                        Explore local grooming businesses,
-                        compare services and find the style
-                        that fits you.
-
-                    </p>
-
-                    <a
-                        href="salons.html"
-                        class="btn btn-primary"
-                    >
-
-                        Discover Salons
-
-                        <i class="bx bx-compass"></i>
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ELITE -->
+        <!-- =====================================================
+             ELITE SECTION
+        ====================================================== -->
 
         <section class="elite-section">
 
-            <div class="section-heading">
+            <div class="section-head">
 
-                <div>
-
-                    <div class="eyebrow">
-                        K@si Elite
-                    </div>
-
-                    <h2>
-                        The standard is higher.
-                    </h2>
-
+                <div class="eyebrow">
+                    K@si Elite
                 </div>
+
+                <h2>
+                    The standard is higher.
+                </h2>
 
             </div>
 
 
             <div class="elite-card">
 
+
+                <!-- IMAGE -->
+
                 <div class="elite-image">
 
                     <img
                         src="C00719B.jpg"
                         alt="K@si Elite Cuts"
+                        loading="eager"
                     >
 
                 </div>
 
 
+                <!-- CONTENT -->
+
                 <div class="elite-content">
+
 
                     <div class="elite-label">
 
@@ -2665,29 +1134,28 @@
                     </div>
 
 
-                    <h2>
+                    <h1>
+
                         Look sharp.
-                        Feel sharper.
-                    </h2>
+                        <span>
+                            Feel sharper.
+                        </span>
+
+                    </h1>
 
 
                     <p>
 
                         Your next great look is waiting.
-                        Discover local barbers, compare
-                        services and reserve your preferred
-                        time — without standing in line.
+                        Discover local barbers and salons,
+                        compare services and reserve your
+                        preferred time without standing in line.
 
                     </p>
 
 
-                    <div
-                        style="
-                            display:flex;
-                            flex-wrap:wrap;
-                            gap:10px;
-                        "
-                    >
+                    <div class="buttons">
+
 
                         <a
                             href="salons.html"
@@ -2701,82 +1169,32 @@
                         </a>
 
 
-                        <a
-                            href="#bookings"
+                        <button
+                            type="button"
                             class="btn btn-secondary"
+                            id="logoutBtn"
                         >
 
-                            My Bookings
+                            Sign Out
 
-                            <i class="bx bx-calendar"></i>
+                            <i class="bx bx-log-out"></i>
 
-                        </a>
+                        </button>
+
 
                     </div>
 
-                </div>
 
-            </div>
+                    <div class="elite-footnote">
 
-        </section>
+                        <i class="bx bx-check-circle"></i>
 
+                        Your K@si account is active.
 
-        <!-- PROFILE -->
-
-        <section
-            class="dashboard-section"
-            id="profile"
-        >
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        Account
                     </div>
 
-                    <h2>
-                        Your K@si profile.
-                    </h2>
 
                 </div>
-
-            </div>
-
-
-            <div class="profile-panel">
-
-                <div
-                    class="avatar"
-                    id="avatar"
-                >
-                    K
-                </div>
-
-
-                <div class="profile-info">
-
-                    <strong id="profileName">
-                        K@si Customer
-                    </strong>
-
-                    <span id="profileEmail">
-                        Loading account...
-                    </span>
-
-                </div>
-
-
-                <button
-                    class="logout"
-                    id="logoutBtn"
-                    type="button"
-                >
-
-                    Sign Out
-
-                </button>
 
             </div>
 
@@ -2786,9 +1204,15 @@
     </main>
 
 
-    <!-- CUSTOMER NAV -->
+    <!-- =========================================================
+         BOTTOM NAVIGATION
+    ========================================================= -->
 
-    <nav class="bottom-nav">
+    <nav
+        class="bottom-nav"
+        aria-label="Main navigation"
+    >
+
 
         <a
             href="home.html"
@@ -2819,1276 +1243,625 @@
 
 
         <a
-            href="#profile"
+            href="salons.html"
             class="nav-item"
         >
 
-            <i class="bx bx-user"></i>
+            <i class="bx bx-calendar-check"></i>
 
             <span>
-                Account
+                Bookings
             </span>
 
         </a>
 
+
     </nav>
 
 
-</section>
+    <!-- =========================================================
+         FIREBASE
+    ========================================================= -->
 
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 
-<!-- =====================================================
-     FIREBASE
-====================================================== -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script>
 
+        /* =========================================================
+           FIREBASE CONFIG
+        ========================================================= */
 
-<script>
+        const firebaseConfig = {
 
-    /* =====================================================
-       FIREBASE CONFIG
-    ===================================================== */
+            apiKey:
+                "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
 
-    const firebaseConfig = {
+            authDomain:
+                "kasi-web-d073f.firebaseapp.com",
 
-        apiKey:
-            "AIzaSyCjmaSIPBngB3F3bhP1AH4Frfn4Mz1QXHk",
+            databaseURL:
+                "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
 
-        authDomain:
-            "kasi-web-d073f.firebaseapp.com",
+            projectId:
+                "kasi-web-d073f",
 
-        databaseURL:
-            "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+            storageBucket:
+                "kasi-web-d073f.firebasestorage.app",
 
-        projectId:
-            "kasi-web-d073f",
+            messagingSenderId:
+                "105918157571",
 
-        storageBucket:
-            "kasi-web-d073f.firebasestorage.app",
+            appId:
+                "1:105918157571:web:8d646"
 
-        messagingSenderId:
-            "105918157571",
+        };
 
-        appId:
-            "1:105918157571:web:8d646"
 
-    };
-
-
-    /* =====================================================
-       INITIALIZE FIREBASE
-    ===================================================== */
-
-    if (!firebase.apps.length) {
-
-        firebase.initializeApp(
-            firebaseConfig
-        );
-
-    }
-
-
-    const auth =
-        firebase.auth();
-
-    const db =
-        firebase.firestore();
-
-
-    window.firebaseAuth =
-        auth;
-
-    window.firebaseDB =
-        db;
-
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const loading =
-        document.getElementById("loading");
-
-    const authPage =
-        document.getElementById("authPage");
-
-    const dashboardPage =
-        document.getElementById("dashboardPage");
-
-    const loginTab =
-        document.getElementById("loginTab");
-
-    const signupTab =
-        document.getElementById("signupTab");
-
-    const loginForm =
-        document.getElementById("loginForm");
-
-    const signupForm =
-        document.getElementById("signupForm");
-
-    const authTitle =
-        document.getElementById("authTitle");
-
-    const authSubtitle =
-        document.getElementById("authSubtitle");
-
-    const authMessage =
-        document.getElementById("authMessage");
-
-    const loginBtn =
-        document.getElementById("loginBtn");
-
-    const signupBtn =
-        document.getElementById("signupBtn");
-
-    const logoutBtn =
-        document.getElementById("logoutBtn");
-
-    const refreshBtn =
-        document.getElementById("refreshBtn");
-
-
-    /* =====================================================
-       SHOW LOADING
-    ===================================================== */
-
-    function showLoading() {
-
-        loading.classList.remove("hide");
-
-    }
-
-
-    /* =====================================================
-       HIDE LOADING
-    ===================================================== */
-
-    function hideLoading() {
-
-        setTimeout(
-            function() {
-
-                loading.classList.add("hide");
-
-            },
-            250
-        );
-
-    }
-
-
-    /* =====================================================
-       AUTH MODE
-    ===================================================== */
-
-    function showAuthPage() {
-
-        document.body.classList.remove(
-            "dashboard-mode"
-        );
-
-        document.body.classList.add(
-            "auth-mode"
-        );
-
-        hideLoading();
-
-    }
-
-
-    /* =====================================================
-       DASHBOARD MODE
-    ===================================================== */
-
-    function showDashboard() {
-
-        document.body.classList.remove(
-            "auth-mode"
-        );
-
-        document.body.classList.add(
-            "dashboard-mode"
-        );
-
-        hideLoading();
-
-    }
-
-
-    /* =====================================================
-       AUTH MESSAGE
-    ===================================================== */
-
-    function showMessage(
-        message,
-        type = "error"
-    ) {
-
-        authMessage.textContent =
-            message;
-
-        authMessage.className =
-            "auth-message show " + type;
-
-    }
-
-
-    function clearMessage() {
-
-        authMessage.textContent = "";
-
-        authMessage.className =
-            "auth-message";
-
-    }
-
-
-    /* =====================================================
-       SWITCH LOGIN / SIGNUP
-    ===================================================== */
-
-    function showLogin() {
-
-        loginTab.classList.add("active");
-
-        signupTab.classList.remove("active");
-
-        loginForm.classList.add("active");
-
-        signupForm.classList.remove("active");
-
-        authTitle.textContent =
-            "Your next fresh cut.";
-
-        authSubtitle.textContent =
-            "Sign in to your K@si account and continue discovering local salons.";
-
-        clearMessage();
-
-    }
-
-
-    function showSignup() {
-
-        signupTab.classList.add("active");
-
-        loginTab.classList.remove("active");
-
-        signupForm.classList.add("active");
-
-        loginForm.classList.remove("active");
-
-        authTitle.textContent =
-            "Join K@si.";
-
-        authSubtitle.textContent =
-            "Create your account and discover your next fresh look.";
-
-        clearMessage();
-
-    }
-
-
-    loginTab.addEventListener(
-        "click",
-        showLogin
-    );
-
-
-    signupTab.addEventListener(
-        "click",
-        showSignup
-    );
-
-
-    /* =====================================================
-       PASSWORD TOGGLE
-    ===================================================== */
-
-    document.querySelectorAll(
-        ".password-toggle"
-    ).forEach(
-        function(button) {
-
-            button.addEventListener(
-                "click",
-                function() {
-
-                    const target =
-                        document.getElementById(
-                            button.dataset.target
-                        );
-
-                    const icon =
-                        button.querySelector("i");
-
-
-                    if (
-                        target.type === "password"
-                    ) {
-
-                        target.type =
-                            "text";
-
-                        icon.className =
-                            "bx bx-hide";
-
-                    }
-
-                    else {
-
-                        target.type =
-                            "password";
-
-                        icon.className =
-                            "bx bx-show";
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       GET USER ROLE
-    ===================================================== */
-
-    async function getUserRole(
-        user
-    ) {
+        /* =========================================================
+           INITIALIZE FIREBASE
+        ========================================================= */
 
         try {
 
-            const snapshot =
-                await db
-                    .collection("users")
-                    .doc(user.uid)
-                    .get();
+            if (!firebase.apps.length) {
 
-
-            if (!snapshot.exists) {
-
-                return "customer";
+                firebase.initializeApp(
+                    firebaseConfig
+                );
 
             }
 
+            window.firebaseAuth =
+                firebase.auth();
 
-            const data =
-                snapshot.data();
+            window.firebaseDB =
+                firebase.firestore();
 
-
-            return String(
-                data.role ||
-                data.Role ||
-                "customer"
-            )
-            .trim()
-            .toLowerCase();
-
-        }
-
-        catch (error) {
+        } catch (error) {
 
             console.error(
-                "Could not get user role:",
+                "Firebase initialization error:",
                 error
             );
 
-            return "customer";
-
         }
 
-    }
+
+        /* =========================================================
+           ELEMENTS
+        ========================================================= */
+
+        const loading =
+            document.getElementById("loading");
+
+        const loadingText =
+            document.getElementById("loadingText");
+
+        const refreshBtn =
+            document.getElementById("refreshBtn");
+
+        const logoutBtn =
+            document.getElementById("logoutBtn");
 
 
-    /* =====================================================
-       REDIRECT AFTER LOGIN/SIGNUP
-       
-       IMPORTANT:
-       This redirect happens only after the user
-       actually logs in or signs up.
-    ===================================================== */
+        /* =========================================================
+           SESSION STORAGE KEYS
+           
+           This controls the ONE-TIME redirect.
+        ========================================================= */
 
-    async function redirectAfterAuth(
-        user
-    ) {
+        const REDIRECT_KEY =
+            "kasi_auth_redirected";
 
-        showLoading();
+        const ROLE_REDIRECT_KEY =
+            "kasi_role_destination";
 
 
-        const role =
-            await getUserRole(user);
+        /* =========================================================
+           HELPERS
+        ========================================================= */
 
+        function setLoadingText(message) {
 
-        /*
-           CUSTOMER
-        */
+            if (loadingText) {
 
-        if (
-            role === "customer" ||
-            role === ""
-        ) {
+                loadingText.textContent =
+                    message;
 
-            sessionStorage.setItem(
-                "kasiRole",
-                "customer"
-            );
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-
-            window.location.replace(
-                "salons.html"
-            );
-
-            return;
+            }
 
         }
 
 
-        /*
-           SALON OWNER
-        */
+        function showLoading(message) {
 
-        if (
-            role === "salon_owner" ||
-            role === "owner"
-        ) {
+            setLoadingText(message);
 
-            sessionStorage.setItem(
-                "kasiRole",
-                "salon_owner"
+            loading.classList.remove(
+                "hide"
             );
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-
-            window.location.replace(
-                "owners.html"
-            );
-
-            return;
 
         }
 
 
-        /*
-           ADMIN
-        */
+        function hideLoading() {
 
-        if (
-            role === "admin"
-        ) {
+            setTimeout(
+                function() {
 
-            sessionStorage.setItem(
-                "kasiRole",
-                "admin"
+                    loading.classList.add(
+                        "hide"
+                    );
+
+                },
+                250
             );
 
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-
-            window.location.replace(
-                "admin.html"
-            );
-
-            return;
-
         }
 
 
-        /*
-           Unknown role:
-           treat as customer.
-        */
+        function normalizeRole(role) {
 
-        window.location.replace(
-            "salons.html"
-        );
-
-    }
-
-
-    /* =====================================================
-       CREATE FIRESTORE USER PROFILE
-    ===================================================== */
-
-    async function createUserProfile(
-        user,
-        name,
-        role
-    ) {
-
-        const userRef =
-            db
-                .collection("users")
-                .doc(user.uid);
-
-
-        await userRef.set(
-            {
-
-                name:
-                    name,
-
-                displayName:
-                    name,
-
-                email:
-                    user.email || "",
-
-                role:
-                    role,
-
-                uid:
-                    user.uid,
-
-                createdAt:
-                    firebase.firestore.FieldValue.serverTimestamp(),
-
-                updatedAt:
-                    firebase.firestore.FieldValue.serverTimestamp()
-
-            },
-            {
-                merge: true
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       SIGN UP
-    ===================================================== */
-
-    signupForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            clearMessage();
-
-
-            const name =
-                document
-                    .getElementById("signupName")
-                    .value
-                    .trim();
-
-
-            const email =
-                document
-                    .getElementById("signupEmail")
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                document
-                    .getElementById("signupPassword")
-                    .value;
-
-
-            const role =
-                document
-                    .querySelector(
-                        'input[name="signupRole"]:checked'
-                    )
-                    .value;
-
-
-            if (!name) {
-
-                showMessage(
-                    "Please enter your name."
-                );
-
-                return;
-
+            if (!role) {
+                return "";
             }
 
-
-            if (!email) {
-
-                showMessage(
-                    "Please enter your email."
-                );
-
-                return;
-
-            }
-
-
-            if (password.length < 6) {
-
-                showMessage(
-                    "Password must be at least 6 characters."
-                );
-
-                return;
-
-            }
-
-
-            signupBtn.disabled = true;
-
-            signupBtn.innerHTML =
-                `
-                Creating account...
-                <i class="bx bx-loader-alt bx-spin"></i>
-                `;
-
-
-            try {
-
-                /*
-                   CREATE FIREBASE AUTH ACCOUNT
-                */
-
-                const result =
-                    await auth
-                        .createUserWithEmailAndPassword(
-                            email,
-                            password
-                        );
-
-
-                const user =
-                    result.user;
-
-
-                /*
-                   SAVE NAME TO FIREBASE AUTH
-                */
-
-                await user.updateProfile(
-                    {
-                        displayName:
-                            name
-                    }
-                );
-
-
-                /*
-                   CREATE FIRESTORE PROFILE
-                */
-
-                await createUserProfile(
-                    user,
-                    name,
-                    role
-                );
-
-
-                /*
-                   REDIRECT ONCE
-                */
-
-                await redirectAfterAuth(
-                    user
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Signup error:",
-                    error
-                );
-
-
-                let message =
-                    "Could not create your account.";
-
-
-                if (
-                    error.code ===
-                    "auth/email-already-in-use"
-                ) {
-
-                    message =
-                        "This email already has an account. Please log in instead.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-email"
-                ) {
-
-                    message =
-                        "Please enter a valid email address.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/weak-password"
-                ) {
-
-                    message =
-                        "Your password is too weak. Use at least 6 characters.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "permission-denied"
-                ) {
-
-                    message =
-                        "Account created, but your K@si profile could not be saved. Check your Firestore rules.";
-
-                }
-
-
-                showMessage(
-                    message,
-                    "error"
-                );
-
-
-                signupBtn.disabled = false;
-
-                signupBtn.innerHTML =
-                    `
-                    Create Account
-                    <i class="bx bx-user-plus"></i>
-                    `;
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       LOGIN
-    ===================================================== */
-
-    loginForm.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            clearMessage();
-
-
-            const email =
-                document
-                    .getElementById("loginEmail")
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                document
-                    .getElementById("loginPassword")
-                    .value;
-
-
-            if (!email || !password) {
-
-                showMessage(
-                    "Please enter your email and password."
-                );
-
-                return;
-
-            }
-
-
-            loginBtn.disabled = true;
-
-            loginBtn.innerHTML =
-                `
-                Logging in...
-                <i class="bx bx-loader-alt bx-spin"></i>
-                `;
-
-
-            try {
-
-                const result =
-                    await auth
-                        .signInWithEmailAndPassword(
-                            email,
-                            password
-                        );
-
-
-                const user =
-                    result.user;
-
-
-                /*
-                   ROLE CHECK + ONE-TIME REDIRECT
-                */
-
-                await redirectAfterAuth(
-                    user
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Login error:",
-                    error
-                );
-
-
-                let message =
-                    "Login failed. Please try again.";
-
-
-                if (
-                    error.code ===
-                    "auth/user-not-found"
-                ) {
-
-                    message =
-                        "No K@si account was found with this email.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/wrong-password"
-                ) {
-
-                    message =
-                        "Incorrect password.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-credential"
-                ) {
-
-                    message =
-                        "The email or password is incorrect.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-email"
-                ) {
-
-                    message =
-                        "Please enter a valid email address.";
-
-                }
-
-
-                showMessage(
-                    message,
-                    "error"
-                );
-
-
-                loginBtn.disabled = false;
-
-                loginBtn.innerHTML =
-                    `
-                    Log In
-                    <i class="bx bx-right-arrow-alt"></i>
-                    `;
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       LOAD CUSTOMER HOME
-    ===================================================== */
-
-    async function loadCustomerHome(
-        user
-    ) {
-
-        if (!user) {
-
-            showAuthPage();
-
-            return;
-
-        }
-
-
-        try {
-
-            const profile =
-                await db
-                    .collection("users")
-                    .doc(user.uid)
-                    .get();
-
-
-            let data = {};
-
-
-            if (profile.exists) {
-
-                data =
-                    profile.data();
-
-            }
-
-
-            const role =
-                String(
-                    data.role ||
-                    data.Role ||
-                    "customer"
-                )
+            return String(role)
                 .trim()
-                .toLowerCase();
+                .toLowerCase()
+                .replace(/[\s-]+/g, "_");
+
+        }
 
 
-            /*
-               OWNER CANNOT USE CUSTOMER HOME
-            */
+        /* =========================================================
+           FIND USER ROLE
+           
+           Checks both common field names so the page continues
+           working with existing K@si user documents.
+        ========================================================= */
+
+        async function getUserRole(user) {
+
+            if (
+                !user ||
+                !window.firebaseDB
+            ) {
+
+                return "";
+
+            }
+
+
+            try {
+
+                const userDoc =
+                    await window.firebaseDB
+                        .collection("users")
+                        .doc(user.uid)
+                        .get();
+
+
+                if (!userDoc.exists) {
+
+                    return "";
+
+                }
+
+
+                const data =
+                    userDoc.data() || {};
+
+
+                const role =
+                    normalizeRole(
+                        data.role ||
+                        data.Role ||
+                        data.userRole ||
+                        data.user_type ||
+                        data.userType
+                    );
+
+
+                return role;
+
+            } catch (error) {
+
+                console.error(
+                    "Unable to read user role:",
+                    error
+                );
+
+                return "";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           DESTINATION BY ROLE
+        ========================================================= */
+
+        function getRoleDestination(role) {
+
+            role =
+                normalizeRole(role);
+
+
+            if (
+                role === "admin" ||
+                role === "administrator"
+            ) {
+
+                return "admin.html";
+
+            }
+
 
             if (
                 role === "salon_owner" ||
-                role === "owner"
+                role === "owner" ||
+                role === "salonowner"
             ) {
 
-                window.location.replace(
-                    "owners.html"
-                );
-
-                return;
+                return "owners.html";
 
             }
 
 
-            /*
-               ADMIN CANNOT USE CUSTOMER HOME
-            */
-
-            if (
-                role === "admin"
-            ) {
-
-                window.location.replace(
-                    "admin.html"
-                );
-
-                return;
-
-            }
-
-
-            /*
-               CUSTOMER HOME
-            */
-
-            const displayName =
-                data.name ||
-                data.displayName ||
-                data.fullName ||
-                user.displayName ||
-                "Fresh";
-
-
-            const firstName =
-                String(displayName)
-                    .trim()
-                    .split(/\s+/)[0] ||
-                    "Fresh";
-
-
-            document
-                .getElementById("userName")
-                .textContent =
-                firstName;
-
-
-            document
-                .getElementById("profileName")
-                .textContent =
-                data.name ||
-                data.displayName ||
-                data.fullName ||
-                user.displayName ||
-                "K@si Customer";
-
-
-            document
-                .getElementById("profileEmail")
-                .textContent =
-                user.email ||
-                "K@si account";
-
-
-            document
-                .getElementById("avatar")
-                .textContent =
-                firstName
-                    .charAt(0)
-                    .toUpperCase();
-
-
-            sessionStorage.setItem(
-                "kasiUid",
-                user.uid
-            );
-
-            sessionStorage.setItem(
-                "kasiRole",
-                "customer"
-            );
-
-
-            showDashboard();
+            return "salons.html";
 
         }
 
-        catch (error) {
 
-            console.error(
-                "Customer home error:",
-                error
-            );
+        /* =========================================================
+           ONE-TIME POST LOGIN REDIRECT
+           
+           Important:
+           
+           - First authenticated arrival can redirect.
+           - Once redirected, sessionStorage remembers it.
+           - Returning to home.html will NOT redirect again.
+        ========================================================= */
 
-
-            /*
-               Even if the Firestore profile cannot
-               load, keep the authenticated customer
-               in the customer UI.
-            */
-
-            const fallback =
-                user.displayName ||
-                (
-                    user.email
-                        ? user.email.split("@")[0]
-                        : "Fresh"
-                );
-
-
-            const firstName =
-                fallback
-                    .trim()
-                    .split(/\s+/)[0] ||
-                    "Fresh";
-
-
-            document
-                .getElementById("userName")
-                .textContent =
-                firstName;
-
-
-            document
-                .getElementById("profileName")
-                .textContent =
-                user.displayName ||
-                "K@si Customer";
-
-
-            document
-                .getElementById("profileEmail")
-                .textContent =
-                user.email ||
-                "K@si account";
-
-
-            document
-                .getElementById("avatar")
-                .textContent =
-                firstName
-                    .charAt(0)
-                    .toUpperCase();
-
-
-            showDashboard();
-
-        }
-
-    }
-
-
-    /* =====================================================
-       AUTH STATE
-       
-       IMPORTANT:
-       We do NOT automatically redirect an already
-       authenticated customer to salons.html here.
-       
-       This is what makes the Home button work:
-       
-       salons.html → Home → home.html
-       
-       Once home.html sees the authenticated customer,
-       it shows the dashboard and hides signup/login.
-    ===================================================== */
-
-    auth.onAuthStateChanged(
-        async function(user) {
-
-            showLoading();
-
+        async function handleFirstAuthenticatedVisit(user) {
 
             if (!user) {
 
-                /*
-                   Not signed in:
-                   show Login / Sign Up.
-                */
-
-                showAuthPage();
-
-                return;
-
-            }
-
-
-            /*
-               Already signed in:
-               show customer Home.
-
-               DO NOT redirect to salons.html here.
-            */
-
-            await loadCustomerHome(
-                user
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
-    logoutBtn.addEventListener(
-        "click",
-        async function() {
-
-            logoutBtn.disabled = true;
-
-            logoutBtn.textContent =
-                "Signing out...";
-
-
-            try {
-
-                sessionStorage.clear();
-
-
-                await auth.signOut();
-
-
-                /*
-                   After logout the user returns
-                   to the public LANDING PAGE.
-                */
+                showLoading(
+                    "Please sign in..."
+                );
 
                 window.location.replace(
                     "index.html"
                 );
 
+                return;
+
             }
 
-            catch (error) {
 
-                console.error(
-                    "Logout error:",
-                    error
+            const alreadyRedirected =
+                sessionStorage.getItem(
+                    REDIRECT_KEY
                 );
 
 
-                logoutBtn.disabled = false;
+            /*
 
-                logoutBtn.textContent =
-                    "Sign Out";
+                If this session has already been redirected,
+                keep the user on home.html.
+
+            */
+
+            if (
+                alreadyRedirected === "true"
+            ) {
+
+                hideLoading();
+
+                return;
 
             }
 
-        }
-    );
+
+            /*
+
+                First authenticated visit.
+
+                Read role and redirect once.
+
+            */
+
+            showLoading(
+                "Preparing your K@si space..."
+            );
 
 
-    /* =====================================================
-       REFRESH
-    ===================================================== */
+            const role =
+                await getUserRole(user);
 
-    refreshBtn.addEventListener(
-        "click",
-        function() {
 
-            refreshBtn.innerHTML =
-                `
-                <i class="bx bx-loader-alt bx-spin"></i>
-                `;
+            const destination =
+                getRoleDestination(role);
 
+
+            sessionStorage.setItem(
+                REDIRECT_KEY,
+                "true"
+            );
+
+
+            sessionStorage.setItem(
+                ROLE_REDIRECT_KEY,
+                destination
+            );
+
+
+            /*
+
+                Give Firebase a moment to complete auth state
+                stabilization before navigating.
+
+            */
 
             setTimeout(
                 function() {
 
-                    window.location.reload();
+                    window.location.replace(
+                        destination
+                    );
 
                 },
                 350
             );
 
         }
-    );
 
 
-    /* =====================================================
-       BACK/FORWARD CACHE PROTECTION
-    ===================================================== */
+        /* =========================================================
+           AUTH STATE
+        ========================================================= */
 
-    window.addEventListener(
-        "pageshow",
-        function(event) {
+        if (
+            window.firebaseAuth
+        ) {
 
-            if (
-                event.persisted
-            ) {
+            window.firebaseAuth
+                .onAuthStateChanged(
+                    function(user) {
 
-                window.location.reload();
+                        handleFirstAuthenticatedVisit(
+                            user
+                        );
 
-            }
+                    }
+                );
+
+        } else {
+
+            console.error(
+                "Firebase Auth unavailable."
+            );
+
+            showLoading(
+                "Authentication is unavailable."
+            );
+
+            setTimeout(
+                function() {
+
+                    window.location.replace(
+                        "index.html"
+                    );
+
+                },
+                800
+            );
 
         }
-    );
 
-</script>
+
+        /* =========================================================
+           LOGOUT
+           
+           Clear the one-time redirect marker so the next login
+           can redirect again.
+        ========================================================= */
+
+        logoutBtn.addEventListener(
+            "click",
+            async function() {
+
+                if (
+                    !window.firebaseAuth
+                ) {
+
+                    return;
+
+                }
+
+
+                logoutBtn.disabled =
+                    true;
+
+
+                logoutBtn.innerHTML =
+                    `
+                    <i class="bx bx-loader-alt bx-spin"></i>
+                    Signing out...
+                    `;
+
+
+                try {
+
+                    showLoading(
+                        "Signing out..."
+                    );
+
+
+                    await window.firebaseAuth
+                        .signOut();
+
+
+                    sessionStorage.removeItem(
+                        REDIRECT_KEY
+                    );
+
+                    sessionStorage.removeItem(
+                        ROLE_REDIRECT_KEY
+                    );
+
+
+                    sessionStorage.clear();
+
+
+                    window.location.replace(
+                        "index.html"
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+
+                    hideLoading();
+
+
+                    logoutBtn.disabled =
+                        false;
+
+
+                    logoutBtn.innerHTML =
+                        `
+                        Sign Out
+                        <i class="bx bx-log-out"></i>
+                        `;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           REFRESH
+        ========================================================= */
+
+        refreshBtn.addEventListener(
+            "click",
+            function() {
+
+                refreshBtn.innerHTML =
+                    `
+                    <i class="bx bx-loader-alt bx-spin"></i>
+                    `;
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.reload();
+
+                    },
+                    350
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           PREVENT STALE PAGE AFTER LOGOUT
+        ========================================================= */
+
+        window.addEventListener(
+            "pageshow",
+            function(event) {
+
+                if (
+                    event.persisted &&
+                    window.firebaseAuth &&
+                    !window.firebaseAuth.currentUser
+                ) {
+
+                    sessionStorage.removeItem(
+                        REDIRECT_KEY
+                    );
+
+                    sessionStorage.removeItem(
+                        ROLE_REDIRECT_KEY
+                    );
+
+
+                    window.location.replace(
+                        "index.html"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           BROWSER BACK BUTTON PROTECTION
+           
+           When the user has signed out, do not allow the cached
+           authenticated home screen to remain visible.
+        ========================================================= */
+
+        window.addEventListener(
+            "popstate",
+            function() {
+
+                if (
+                    window.firebaseAuth &&
+                    !window.firebaseAuth.currentUser
+                ) {
+
+                    window.location.replace(
+                        "index.html"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIAL LOADING TIMEOUT
+           
+           Prevent an infinite loader in case Firebase is slow.
+        ========================================================= */
+
+        setTimeout(
+            function() {
+
+                if (
+                    window.firebaseAuth &&
+                    window.firebaseAuth.currentUser
+                ) {
+
+                    hideLoading();
+
+                }
+
+            },
+            6000
+        );
+
+    </script>
 
 </body>
 
