@@ -10,262 +10,1864 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta name="theme-color" content="#07070d">
+    <meta
+        name="theme-color"
+        content="#07070d"
+    >
 
     <meta
         name="description"
-        content="K@si Web Elite Salon Owner Dashboard"
+        content="K@si Web Elite Admin Control Centre"
     >
 
-    <title>K@si Web | Owner Dashboard</title>
+    <title>K@si Web | Admin Control Centre</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <!-- =====================================================
+         BOXICONS
+    ====================================================== -->
 
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
+
     <style>
 
+        /* =====================================================
+           RESET
+        ====================================================== */
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+
+        :root {
+
+            --bg: #07070d;
+            --bg2: #0c0c16;
+
+            --card: rgba(20,20,34,.82);
+            --card2: rgba(27,27,45,.92);
+
+            --blue: #3b82f6;
+            --blue2: #2563eb;
+
+            --purple: #8b5cf6;
+            --purple2: #6d28d9;
+
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+
+            --text: #ffffff;
+            --muted: #a7a7c4;
+
+            --border: rgba(255,255,255,.08);
+
+            --radius: 20px;
+
+            --shadow:
+                0 20px 60px rgba(0,0,0,.45);
         }
+
+
+        /* =====================================================
+           BODY
+        ====================================================== */
 
         body {
-            margin: 0;
+
             min-height: 100vh;
-            font-family: "Inter", sans-serif;
-            color: white;
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
             background:
+
                 radial-gradient(
-                    circle at 15% 10%,
-                    rgba(59, 130, 246, .18),
-                    transparent 28%
-                ),
-                radial-gradient(
-                    circle at 85% 15%,
-                    rgba(139, 92, 246, .18),
+                    circle at 10% 0%,
+                    rgba(59,130,246,.14),
                     transparent 30%
                 ),
-                linear-gradient(
-                    135deg,
-                    #030712 0%,
-                    #07070d 45%,
-                    #0b0820 100%
-                );
+
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(139,92,246,.15),
+                    transparent 30%
+                ),
+
+                var(--bg);
+
+            padding-bottom: 100px;
         }
 
-        .serif {
-            font-family: "Playfair Display", serif;
-        }
 
-        .glass {
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
             background:
+
+                linear-gradient(
+                    rgba(255,255,255,.015) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.015) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 90%
+                );
+
+            z-index: -1;
+        }
+
+
+        /* =====================================================
+           TOP BAR
+        ====================================================== */
+
+        .topbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+
+                14px
+                max(18px, env(safe-area-inset-right))
+                14px
+                max(18px, env(safe-area-inset-left));
+
+            background:
+                rgba(7,7,13,.84);
+
+            backdrop-filter: blur(22px);
+
+            -webkit-backdrop-filter: blur(22px);
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+        }
+
+
+        .brand-icon {
+
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            background:
+
                 linear-gradient(
                     135deg,
-                    rgba(255,255,255,.075),
-                    rgba(255,255,255,.025)
+                    var(--blue),
+                    var(--purple)
                 );
-            border: 1px solid rgba(255,255,255,.09);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+
             box-shadow:
-                0 20px 60px rgba(0,0,0,.28);
+
+                0 8px 30px
+                rgba(59,130,246,.25);
+
+            font-size: 23px;
         }
 
-        .glass-dark {
-            background: rgba(3,7,18,.72);
-            border: 1px solid rgba(255,255,255,.07);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+
+        .brand-text h1 {
+
+            font-size: 18px;
+
+            font-weight: 950;
+
+            letter-spacing: -.5px;
         }
 
-        .gradient-text {
+
+        .brand-text span {
+
+            display: block;
+
+            margin-top: 2px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.4px;
+        }
+
+
+        .top-actions {
+
+            display: flex;
+
+            gap: 8px;
+        }
+
+
+        .icon-btn {
+
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+
+            place-items: center;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: 13px;
+
             background:
+                rgba(255,255,255,.045);
+
+            color: white;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+
+        .icon-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(255,255,255,.09);
+        }
+
+
+        .icon-btn.logout:hover {
+
+            color: #ff7777;
+
+            border-color:
+                rgba(239,68,68,.25);
+
+            background:
+                rgba(239,68,68,.10);
+        }
+
+
+        /* =====================================================
+           MAIN
+        ====================================================== */
+
+        .container {
+
+            width:
+                min(1450px, 100%);
+
+            margin:
+                0 auto;
+
+            padding:
+                24px 16px;
+        }
+
+
+        /* =====================================================
+           HERO
+        ====================================================== */
+
+        .hero {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 27px;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: 26px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.12),
+                    rgba(139,92,246,.09)
+                ),
+
+                var(--card);
+
+            box-shadow: var(--shadow);
+        }
+
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 250px;
+            height: 250px;
+
+            right: -90px;
+            top: -100px;
+
+            border-radius: 50%;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    rgba(139,92,246,.30),
+                    transparent 70%
+                );
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            left: -100px;
+            bottom: -110px;
+
+            border-radius: 50%;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    rgba(59,130,246,.18),
+                    transparent 70%
+                );
+        }
+
+
+        .hero-content {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                7px 11px;
+
+            border:
+
+                1px solid
+                rgba(59,130,246,.22);
+
+            border-radius: 999px;
+
+            background:
+                rgba(59,130,246,.10);
+
+            color: #8db8ff;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        .hero h2 {
+
+            margin-top: 14px;
+
+            max-width: 850px;
+
+            font-size:
+                clamp(28px, 6vw, 46px);
+
+            line-height: 1.05;
+
+            font-weight: 950;
+
+            letter-spacing: -1.8px;
+        }
+
+
+        .hero h2 span {
+
+            background:
+
                 linear-gradient(
                     90deg,
                     #60a5fa,
-                    #8b5cf6,
-                    #c084fc
+                    #a78bfa
                 );
+
             -webkit-background-clip: text;
+
             background-clip: text;
+
             color: transparent;
         }
 
-        .gradient-button {
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #7c3aed
-                );
-            box-shadow:
-                0 10px 30px rgba(59,130,246,.22);
+
+        .hero p {
+
+            max-width: 700px;
+
+            margin-top: 13px;
+
+            color: var(--muted);
+
+            line-height: 1.6;
+
+            font-size: 14px;
         }
 
-        .gradient-button:hover {
-            filter: brightness(1.12);
-            transform: translateY(-1px);
+
+        .live-status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 18px;
+
+            color: #a3a3bc;
+
+            font-size: 11px;
+
+            font-weight: 700;
         }
 
-        .hidden {
-            display: none !important;
-        }
 
-        .loader {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,.12);
-            border-top-color: #60a5fa;
-            border-right-color: #8b5cf6;
-            animation: spin .8s linear infinite;
-        }
+        .live-dot {
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn .35s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .pulse-dot {
             width: 8px;
             height: 8px;
+
             border-radius: 50%;
-            background: #22c55e;
+
+            background: var(--green);
+
             box-shadow:
-                0 0 0 5px rgba(34,197,94,.10);
+
+                0 0 0 5px
+                rgba(34,197,94,.10),
+
+                0 0 15px
+                rgba(34,197,94,.65);
         }
 
-        .status-badge {
-            white-space: nowrap;
+
+        /* =====================================================
+           QUICK NAV
+        ====================================================== */
+
+        .quick-nav {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-top: 18px;
         }
 
-        .booking-card {
-            transition:
-                transform .2s ease,
-                border-color .2s ease,
-                background .2s ease;
-        }
 
-        .booking-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(139,92,246,.28);
+        .nav-card {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 15px;
+
+            text-decoration: none;
+
+            color: white;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: 17px;
+
             background:
-                rgba(15,23,42,.85);
+                rgba(255,255,255,.035);
+
+            transition: .2s;
         }
 
-        .nav-button {
-            transition: .2s ease;
+
+        .nav-card:hover {
+
+            transform:
+                translateY(-2px);
+
+            border-color:
+                rgba(139,92,246,.35);
+
+            background:
+                rgba(139,92,246,.08);
         }
 
-        .nav-button:hover {
-            background: rgba(255,255,255,.07);
-            transform: translateY(-1px);
+
+        .nav-card i {
+
+            width: 39px;
+            height: 39px;
+
+            display: grid;
+
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.20),
+                    rgba(139,92,246,.20)
+                );
+
+            color: #8db8ff;
+
+            font-size: 21px;
         }
 
-        .stat-card {
+
+        .nav-card strong {
+
+            display: block;
+
+            font-size: 13px;
+        }
+
+
+        .nav-card small {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ====================================================== */
+
+        .section-title {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin:
+                28px 0 13px;
+        }
+
+
+        .section-title h3 {
+
+            font-size: 17px;
+
+            font-weight: 950;
+        }
+
+
+        .section-title span {
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           STATS
+        ====================================================== */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .stat {
+
             position: relative;
+
             overflow: hidden;
+
+            padding: 18px;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            background:
+                var(--card);
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,.20);
         }
 
-        .stat-card::after {
+
+        .stat::after {
+
             content: "";
+
             position: absolute;
-            width: 100px;
-            height: 100px;
-            right: -40px;
-            top: -40px;
+
+            width: 110px;
+            height: 110px;
+
+            right: -50px;
+            bottom: -55px;
+
             border-radius: 50%;
-            background: rgba(96,165,250,.08);
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    rgba(139,92,246,.20),
+                    transparent 70%
+                );
         }
 
-        .modal-backdrop {
-            background: rgba(0,0,0,.72);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+
+        .stat-icon {
+
+            width: 39px;
+            height: 39px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 11px;
+
+            color: #7db1ff;
+
+            background:
+                rgba(59,130,246,.10);
+
+            font-size: 20px;
         }
 
-        .toast {
-            animation:
-                toastIn .3s ease,
-                toastOut .3s ease 3.7s forwards;
+
+        .stat h4 {
+
+            margin-top: 14px;
+
+            font-size: 27px;
+
+            font-weight: 950;
         }
 
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .stat p {
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 700;
         }
 
-        @keyframes toastOut {
-            to {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+
+        .stat.pending .stat-icon {
+
+            color: var(--orange);
+
+            background:
+                rgba(245,158,11,.10);
         }
 
-        ::-webkit-scrollbar {
-            width: 7px;
+
+        .stat.completed .stat-icon {
+
+            color: var(--green);
+
+            background:
+                rgba(34,197,94,.10);
         }
 
-        ::-webkit-scrollbar-track {
-            background: #030712;
+
+        .stat.revenue .stat-icon {
+
+            color: #c4a7ff;
+
+            background:
+                rgba(139,92,246,.10);
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+
+        .stat.users .stat-icon {
+
+            color: #67e8f9;
+
+            background:
+                rgba(6,182,212,.10);
+        }
+
+
+        /* =====================================================
+           NEXT APPOINTMENT
+        ====================================================== */
+
+        .next-card {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-top: 15px;
+
+            padding: 17px;
+
+            border:
+
+                1px solid
+                rgba(59,130,246,.18);
+
+            border-radius: 18px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.08),
+                    rgba(139,92,246,.08)
+                );
+        }
+
+
+        .next-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            min-width: 0;
+        }
+
+
+        .next-icon {
+
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 13px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            font-size: 21px;
+        }
+
+
+        .next-card small {
+
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        .next-card strong {
+
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 16px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        #nextTime {
+
+            color: #b8a4ff;
+
+            font-size: 23px;
+
+            font-weight: 950;
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+        ====================================================== */
+
+        .toolbar {
+
+            display: flex;
+
+            gap: 9px;
+
+            flex-wrap: wrap;
+
+            padding: 13px;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            background:
+                var(--card);
+        }
+
+
+        .search {
+
+            position: relative;
+
+            flex: 1;
+
+            min-width: 210px;
+        }
+
+
+        .search i {
+
+            position: absolute;
+
+            left: 13px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #777796;
+
+            font-size: 18px;
+        }
+
+
+        .search input {
+
+            width: 100%;
+
+            padding:
+                12px
+                13px
+                12px
+                40px;
+
+            outline: none;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            background:
+                rgba(0,0,0,.20);
+
+            color: white;
+
+            font-size: 13px;
+        }
+
+
+        .search input::placeholder {
+
+            color: #6d6d89;
+        }
+
+
+        .search input:focus {
+
+            border-color:
+                rgba(59,130,246,.55);
+        }
+
+
+        .toolbar-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            padding:
+                11px 14px;
+
+            border:
+
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            transition: .2s;
+        }
+
+
+        .toolbar-btn:hover {
+
+            transform:
+                translateY(-1px);
+
+            background:
+                rgba(255,255,255,.09);
+        }
+
+
+        .toolbar-btn.danger {
+
+            color: #ff8585;
+
+            border-color:
+                rgba(239,68,68,.18);
+        }
+
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        .table-card {
+
+            overflow: hidden;
+
+            border:
+
+                1px solid var(--border);
+
             border-radius: 20px;
+
+            background:
+                var(--card);
+
+            box-shadow: var(--shadow);
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
+
+        .table-head {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            padding: 17px;
+
+            border-bottom:
+                1px solid var(--border);
         }
 
-        @media (max-width: 640px) {
 
-            .mobile-scroll {
-                overflow-x: auto;
-                scrollbar-width: none;
+        .table-head h3 {
+
+            font-size: 15px;
+
+            font-weight: 950;
+        }
+
+
+        .booking-count {
+
+            padding:
+                5px 9px;
+
+            border-radius: 999px;
+
+            color: #8db8ff;
+
+            background:
+                rgba(59,130,246,.10);
+
+            font-size: 9px;
+
+            font-weight: 900;
+        }
+
+
+        .table-scroll {
+
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            min-width: 1000px;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            padding:
+                13px 15px;
+
+            text-align: left;
+
+            color: #777796;
+
+            background:
+                rgba(0,0,0,.15);
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .8px;
+        }
+
+
+        td {
+
+            padding:
+                15px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.045);
+
+            color: #e7e7f5;
+
+            font-size: 12px;
+
+            vertical-align: middle;
+        }
+
+
+        tr:hover td {
+
+            background:
+                rgba(255,255,255,.018);
+        }
+
+
+        .customer-name {
+
+            font-weight: 850;
+        }
+
+
+        .sub {
+
+            margin-top: 4px;
+
+            color: #8585a4;
+
+            font-size: 10px;
+        }
+
+
+        .time {
+
+            color: #a895ff;
+
+            font-weight: 950;
+        }
+
+
+        .price {
+
+            color: white;
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           STATUS
+        ====================================================== */
+
+        .status-pill {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding:
+                6px 9px;
+
+            border-radius: 999px;
+
+            font-size: 9px;
+
+            font-weight: 950;
+
+            text-transform: capitalize;
+        }
+
+
+        .status-pending {
+
+            color: #ffc45e;
+
+            background:
+                rgba(245,158,11,.10);
+        }
+
+
+        .status-approved {
+
+            color: #76aaff;
+
+            background:
+                rgba(59,130,246,.10);
+        }
+
+
+        .status-completed {
+
+            color: #68e58e;
+
+            background:
+                rgba(34,197,94,.10);
+        }
+
+
+        .status-declined {
+
+            color: #ff7777;
+
+            background:
+                rgba(239,68,68,.10);
+        }
+
+
+        .status-cancelled {
+
+            color: #ff7777;
+
+            background:
+                rgba(239,68,68,.10);
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ====================================================== */
+
+        .action-group {
+
+            display: flex;
+
+            gap: 6px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .action-btn {
+
+            border: 0;
+
+            border-radius: 9px;
+
+            padding:
+                8px 10px;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            font-weight: 950;
+
+            transition: .2s;
+        }
+
+
+        .action-btn:hover {
+
+            transform:
+                translateY(-1px);
+
+            filter:
+                brightness(1.12);
+        }
+
+
+        .approve {
+
+            background:
+                #2563eb;
+        }
+
+
+        .done {
+
+            background:
+                #16a34a;
+        }
+
+
+        .decline {
+
+            background:
+                #dc2626;
+        }
+
+
+        .delete {
+
+            background:
+                #991b1b;
+        }
+
+
+        .view {
+
+            background:
+                #6d28d9;
+        }
+
+
+        /* =====================================================
+           STATE
+        ====================================================== */
+
+        .state {
+
+            padding:
+                55px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+
+        .state i {
+
+            display: block;
+
+            margin-bottom: 10px;
+
+            color: #555573;
+
+            font-size: 42px;
+        }
+
+
+        .state strong {
+
+            display: block;
+
+            color: #d8d8e8;
+
+            font-size: 14px;
+        }
+
+
+        .state small {
+
+            display: block;
+
+            margin-top: 6px;
+
+            font-size: 10px;
+        }
+
+
+        .spinner {
+
+            width: 31px;
+            height: 31px;
+
+            margin:
+                0 auto 12px;
+
+            border:
+                3px solid
+                rgba(255,255,255,.10);
+
+            border-top-color:
+                var(--blue);
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+        }
+
+
+        /* =====================================================
+           TOAST
+        ====================================================== */
+
+        #toast {
+
+            position: fixed;
+
+            left: 50%;
+
+            bottom: 90px;
+
+            z-index: 9999;
+
+            width:
+                min(92%, 430px);
+
+            padding:
+                13px 16px;
+
+            transform:
+                translate(-50%, 20px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 14px;
+
+            background:
+                rgba(20,20,32,.96);
+
+            backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                var(--shadow);
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            transition: .25s;
+        }
+
+
+        #toast.show {
+
+            opacity: 1;
+
+            transform:
+                translate(-50%, 0);
+        }
+
+
+        #toast.success {
+
+            border-color:
+                rgba(34,197,94,.30);
+        }
+
+
+        #toast.error {
+
+            border-color:
+                rgba(239,68,68,.30);
+        }
+
+
+        /* =====================================================
+           BOTTOM NAV
+        ====================================================== */
+
+        .bottom-nav {
+
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 900;
+
+            display: flex;
+
+            justify-content: center;
+
+            padding:
+
+                8px
+                max(12px, env(safe-area-inset-right))
+                calc(8px + env(safe-area-inset-bottom))
+                max(12px, env(safe-area-inset-left));
+
+            background:
+                rgba(7,7,13,.90);
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            border-top:
+                1px solid var(--border);
+        }
+
+
+        .bottom-inner {
+
+            width:
+                min(620px, 100%);
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 7px;
+        }
+
+
+        .bottom-nav a {
+
+            min-height: 51px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 3px;
+
+            border-radius: 13px;
+
+            color: #73738f;
+
+            text-decoration: none;
+
+            font-size: 8px;
+
+            font-weight: 850;
+
+            transition: .2s;
+        }
+
+
+        .bottom-nav a i {
+
+            font-size: 20px;
+        }
+
+
+        .bottom-nav a.active {
+
+            color: #a895ff;
+
+            background:
+                rgba(139,92,246,.08);
+        }
+
+
+        /* =====================================================
+           ACCESS SCREEN
+        ====================================================== */
+
+        #accessScreen {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 10000;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 25px;
+
+            background:
+                var(--bg);
+        }
+
+
+        .access-card {
+
+            width:
+                min(420px, 100%);
+
+            padding: 30px;
+
+            text-align: center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 24px;
+
+            background:
+                var(--card);
+
+            box-shadow:
+                var(--shadow);
+        }
+
+
+        .access-icon {
+
+            width: 65px;
+            height: 65px;
+
+            display: grid;
+
+            place-items: center;
+
+            margin:
+                0 auto 17px;
+
+            border-radius: 20px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            font-size: 30px;
+        }
+
+
+        .access-card h2 {
+
+            font-size: 22px;
+
+            font-weight: 950;
+        }
+
+
+        .access-card p {
+
+            margin-top: 8px;
+
+            color: var(--muted);
+
+            line-height: 1.6;
+
+            font-size: 12px;
+        }
+
+
+        .access-spinner {
+
+            width: 28px;
+            height: 28px;
+
+            margin:
+                20px auto 0;
+
+            border:
+                3px solid
+                rgba(255,255,255,.10);
+
+            border-top-color:
+                var(--blue);
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (min-width: 700px) {
+
+            body {
+
+                padding-bottom: 30px;
             }
 
-            .mobile-scroll::-webkit-scrollbar {
+
+            .container {
+
+                padding:
+                    32px 24px;
+            }
+
+
+            .hero {
+
+                padding: 35px;
+            }
+
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(5, 1fr);
+            }
+
+
+            .quick-nav {
+
+                grid-template-columns:
+                    repeat(2, 210px);
+            }
+
+
+            .bottom-nav {
+
                 display: none;
             }
+        }
 
+
+        @media (min-width: 1000px) {
+
+            .topbar {
+
+                padding-left: 32px;
+
+                padding-right: 32px;
+            }
+
+
+            .container {
+
+                padding-left: 32px;
+
+                padding-right: 32px;
+            }
+
+
+            .stats {
+
+                gap: 16px;
+            }
+        }
+
+
+        @media (max-width: 450px) {
+
+            .hero {
+
+                padding: 21px;
+
+                border-radius: 21px;
+            }
+
+
+            .hero h2 {
+
+                font-size: 29px;
+            }
+
+
+            .stats {
+
+                gap: 9px;
+            }
+
+
+            .stat {
+
+                padding: 14px;
+            }
+
+
+            .stat h4 {
+
+                font-size: 23px;
+            }
+
+
+            .toolbar {
+
+                padding: 10px;
+            }
+
+
+            .toolbar-btn {
+
+                flex: 1;
+            }
+
+
+            .next-card {
+
+                padding: 14px;
+            }
+
+
+            #nextTime {
+
+                font-size: 19px;
+            }
         }
 
     </style>
@@ -277,28 +1879,27 @@
 
 
 <!-- =========================================================
-     LOADING SCREEN
-========================================================= -->
+     ACCESS CHECK
+========================================================== -->
 
-<div
-    id="loadingScreen"
-    class="fixed inset-0 z-[100] flex items-center justify-center bg-[#030712]"
->
+<div id="accessScreen">
 
-    <div class="text-center px-6">
+    <div class="access-card">
 
-        <div class="loader mx-auto mb-6"></div>
-
-        <div class="mb-2 text-2xl font-black">
-            K<span class="gradient-text">@</span>si
+        <div class="access-icon">
+            <i class='bx bx-shield-quarter'></i>
         </div>
 
-        <p
-            id="loadingText"
-            class="text-sm text-gray-400"
-        >
-            Checking your account...
+        <h2 id="accessTitle">
+            Verifying access
+        </h2>
+
+        <p id="accessMessage">
+            Please wait while K@si Web verifies your administrator
+            account.
         </p>
+
+        <div class="access-spinner"></div>
 
     </div>
 
@@ -306,3417 +1907,2360 @@
 
 
 <!-- =========================================================
-     ACCESS DENIED
-========================================================= -->
+     TOP BAR
+========================================================== -->
 
-<section
-    id="accessDenied"
-    class="hidden min-h-screen items-center justify-center px-5"
->
+<header class="topbar">
 
-    <div class="glass w-full max-w-lg rounded-[2rem] p-8 text-center">
+    <div class="brand">
 
-        <div
-            class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-red-500/10 text-4xl text-red-400"
-        >
-            <i class="bx bx-lock-alt"></i>
+        <div class="brand-icon">
+            <i class='bx bx-crown'></i>
         </div>
 
-        <p
-            class="mb-2 text-xs font-bold uppercase tracking-[.25em] text-red-400"
-        >
-            Restricted Area
-        </p>
+        <div class="brand-text">
 
-        <h1 class="serif text-4xl font-bold">
-            Owner Access Required
-        </h1>
+            <h1>K@si Web</h1>
 
-        <p
-            id="accessDeniedMessage"
-            class="mx-auto mt-4 max-w-md text-gray-400"
-        >
-            This dashboard is only available to verified K@si salon owners.
-        </p>
-
-        <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center">
-
-            <a
-                href="home.html"
-                class="gradient-button rounded-xl px-6 py-3 font-bold transition"
-            >
-                <i class="bx bx-log-in mr-1"></i>
-                Go to Login
-            </a>
-
-            <a
-                href="index.html"
-                class="rounded-xl border border-white/10 px-6 py-3 font-bold text-gray-300 transition hover:bg-white/5 hover:text-white"
-            >
-                Back Home
-            </a>
+            <span>
+                Elite Admin
+            </span>
 
         </div>
 
     </div>
 
-</section>
+
+    <div class="top-actions">
+
+        <button
+            class="icon-btn"
+            id="refreshBtn"
+            title="Refresh dashboard"
+            aria-label="Refresh dashboard"
+        >
+
+            <i class='bx bx-refresh'></i>
+
+        </button>
+
+
+        <button
+            class="icon-btn logout"
+            id="logoutBtnAdmin"
+            title="Logout"
+            aria-label="Logout"
+        >
+
+            <i class='bx bx-log-out'></i>
+
+        </button>
+
+    </div>
+
+</header>
 
 
 <!-- =========================================================
-     MAIN DASHBOARD
-========================================================= -->
+     MAIN
+========================================================== -->
 
-<div
-    id="dashboard"
-    class="hidden min-h-screen"
->
+<main class="container">
 
 
     <!-- =====================================================
-         HEADER
+         HERO
     ====================================================== -->
 
-    <header
-        class="sticky top-0 z-50 border-b border-white/10 bg-[#030712]/85 backdrop-blur-xl"
-    >
+    <section class="hero">
 
-        <div
-            class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8"
-        >
+        <div class="hero-content">
 
-            <div class="flex min-w-0 items-center gap-3">
+            <div class="eyebrow">
 
-                <div
-                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 text-lg font-black shadow-lg shadow-blue-900/20"
-                >
-                    K@
-                </div>
+                <i class='bx bx-shield-quarter'></i>
 
-                <div class="min-w-0">
-
-                    <p
-                        class="text-[10px] font-bold uppercase tracking-[.25em] text-blue-400"
-                    >
-                        Salon Owner
-                    </p>
-
-                    <h1
-                        id="headerSalonName"
-                        class="truncate text-lg font-black sm:text-xl"
-                    >
-                        Owner Dashboard
-                    </h1>
-
-                </div>
+                Administrator
 
             </div>
 
 
-            <div class="flex items-center gap-2">
+            <h2>
 
-                <a
-                    href="index.html"
-                    class="nav-button hidden rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-gray-300 sm:inline-flex sm:items-center sm:gap-2"
-                >
-                    <i class="bx bx-home-alt-2"></i>
-                    Home
-                </a>
+                Welcome to the
 
-                <a
-                    href="salons.html"
-                    class="nav-button hidden rounded-xl border border-white/10 px-3 py-2 text-sm font-semibold text-gray-300 sm:inline-flex sm:items-center sm:gap-2"
-                >
-                    <i class="bx bx-store"></i>
-                    Salons
-                </a>
+                <span>
+                    K@si Control Centre
+                </span>
 
-                <button
-                    id="logoutButton"
-                    class="nav-button flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-sm font-semibold text-red-300"
-                >
-                    <i class="bx bx-log-out"></i>
-                    <span class="hidden sm:inline">
-                        Logout
-                    </span>
-                </button>
+            </h2>
 
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
-
-    <main
-        class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8"
-    >
-
-
-        <!-- =================================================
-             WELCOME
-        ================================================== -->
-
-        <section
-            class="glass relative mb-6 overflow-hidden rounded-[2rem] p-6 sm:p-8"
-        >
-
-            <div
-                class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-blue-600/10 blur-3xl"
-            ></div>
-
-            <div
-                class="absolute -bottom-20 left-1/3 h-56 w-56 rounded-full bg-violet-600/10 blur-3xl"
-            ></div>
-
-
-            <div
-                class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
-            >
-
-                <div>
-
-                    <div
-                        class="mb-3 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-3 py-1.5 text-xs font-semibold text-green-300"
-                    >
-
-                        <span class="pulse-dot"></span>
-
-                        <span>
-                            Owner account active
-                        </span>
-
-                    </div>
-
-
-                    <p
-                        class="text-sm font-semibold text-blue-400"
-                    >
-                        Welcome back
-                    </p>
-
-                    <h2
-                        id="welcomeName"
-                        class="serif mt-1 text-4xl font-bold leading-tight sm:text-5xl"
-                    >
-                        Your Salon
-                    </h2>
-
-                    <p
-                        class="mt-3 max-w-2xl text-sm leading-6 text-gray-400 sm:text-base"
-                    >
-                        Manage your appointments, monitor your salon and keep
-                        your customers moving through their fresh-cut journey.
-                    </p>
-
-                </div>
-
-
-                <div
-                    class="glass-dark rounded-2xl p-4 lg:min-w-[270px]"
-                >
-
-                    <p
-                        class="text-xs font-bold uppercase tracking-widest text-gray-500"
-                    >
-                        Signed in as
-                    </p>
-
-                    <p
-                        id="ownerEmail"
-                        class="mt-2 break-all text-sm font-semibold text-white"
-                    >
-                        —
-                    </p>
-
-                    <p
-                        id="ownerIdDisplay"
-                        class="mt-2 break-all font-mono text-[10px] text-gray-500"
-                    >
-                        —
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             QUICK NAV
-        ================================================== -->
-
-        <div
-            class="mobile-scroll mb-6 flex gap-2 pb-1"
-        >
-
-            <button
-                data-scroll="overviewSection"
-                class="quickNav active rounded-xl border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm font-semibold text-blue-300"
-            >
-                <i class="bx bx-grid-alt mr-1"></i>
-                Overview
-            </button>
-
-            <button
-                data-scroll="bookingsSection"
-                class="quickNav rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-gray-400 transition hover:bg-white/5 hover:text-white"
-            >
-                <i class="bx bx-calendar mr-1"></i>
-                Bookings
-            </button>
-
-            <button
-                data-scroll="salonSection"
-                class="quickNav rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-gray-400 transition hover:bg-white/5 hover:text-white"
-            >
-                <i class="bx bx-store mr-1"></i>
-                My Salon
-            </button>
-
-        </div>
-
-
-        <!-- =================================================
-             OVERVIEW
-        ================================================== -->
-
-        <section id="overviewSection">
-
-
-            <!-- STATS -->
-
-            <div
-                class="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
-            >
-
-
-                <div class="glass stat-card rounded-2xl p-5">
-
-                    <div
-                        class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-500/10 text-xl text-blue-400"
-                    >
-                        <i class="bx bx-calendar-check"></i>
-                    </div>
-
-                    <p class="text-sm text-gray-400">
-                        Total Bookings
-                    </p>
-
-                    <p
-                        id="totalBookings"
-                        class="mt-1 text-3xl font-black"
-                    >
-                        0
-                    </p>
-
-                </div>
-
-
-                <div class="glass stat-card rounded-2xl p-5">
-
-                    <div
-                        class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-500/10 text-xl text-yellow-400"
-                    >
-                        <i class="bx bx-time-five"></i>
-                    </div>
-
-                    <p class="text-sm text-gray-400">
-                        Pending
-                    </p>
-
-                    <p
-                        id="pendingBookings"
-                        class="mt-1 text-3xl font-black text-yellow-400"
-                    >
-                        0
-                    </p>
-
-                </div>
-
-
-                <div class="glass stat-card rounded-2xl p-5">
-
-                    <div
-                        class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 text-xl text-green-400"
-                    >
-                        <i class="bx bx-check-circle"></i>
-                    </div>
-
-                    <p class="text-sm text-gray-400">
-                        Confirmed
-                    </p>
-
-                    <p
-                        id="confirmedBookings"
-                        class="mt-1 text-3xl font-black text-green-400"
-                    >
-                        0
-                    </p>
-
-                </div>
-
-
-                <div class="glass stat-card rounded-2xl p-5">
-
-                    <div
-                        class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-500/10 text-xl text-violet-400"
-                    >
-                        <i class="bx bx-calendar-star"></i>
-                    </div>
-
-                    <p class="text-sm text-gray-400">
-                        Today
-                    </p>
-
-                    <p
-                        id="todayBookings"
-                        class="mt-1 text-3xl font-black text-violet-400"
-                    >
-                        0
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- SECONDARY STATS -->
-
-            <div
-                class="mb-6 grid gap-4 md:grid-cols-3"
-            >
-
-                <div class="glass rounded-2xl p-5">
-
-                    <div class="flex items-center justify-between">
-
-                        <div>
-
-                            <p class="text-sm text-gray-400">
-                                Completed
-                            </p>
-
-                            <p
-                                id="completedBookings"
-                                class="mt-1 text-2xl font-black"
-                            >
-                                0
-                            </p>
-
-                        </div>
-
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-500/10 text-xl text-blue-400"
-                        >
-                            <i class="bx bx-badge-check"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="glass rounded-2xl p-5">
-
-                    <div class="flex items-center justify-between">
-
-                        <div>
-
-                            <p class="text-sm text-gray-400">
-                                Cancelled
-                            </p>
-
-                            <p
-                                id="cancelledBookings"
-                                class="mt-1 text-2xl font-black"
-                            >
-                                0
-                            </p>
-
-                        </div>
-
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10 text-xl text-red-400"
-                        >
-                            <i class="bx bx-x-circle"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="glass rounded-2xl p-5">
-
-                    <div class="flex items-center justify-between">
-
-                        <div>
-
-                            <p class="text-sm text-gray-400">
-                                Confirmed Value
-                            </p>
-
-                            <p
-                                id="confirmedRevenue"
-                                class="mt-1 text-2xl font-black"
-                            >
-                                R0
-                            </p>
-
-                        </div>
-
-                        <div
-                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-xl text-emerald-400"
-                        >
-                            <i class="bx bx-wallet"></i>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- SALON STATUS -->
-
-            <section
-                id="salonSection"
-                class="glass mb-6 rounded-[2rem] p-6"
-            >
-
-                <div
-                    class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
-                >
-
-                    <div>
-
-                        <p
-                            class="text-xs font-bold uppercase tracking-[.2em] text-blue-400"
-                        >
-                            Your Business
-                        </p>
-
-                        <h2
-                            id="salonName"
-                            class="serif mt-1 text-3xl font-bold"
-                        >
-                            Loading...
-                        </h2>
-
-                    </div>
-
-
-                    <div
-                        id="salonStatus"
-                        class="flex w-fit items-center gap-2 rounded-full bg-yellow-500/10 px-4 py-2 text-xs font-bold text-yellow-300"
-                    >
-                        <i class="bx bx-loader-alt bx-spin"></i>
-                        Finding salon...
-                    </div>
-
-                </div>
-
-
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
-
-                    <div class="glass-dark rounded-2xl p-4">
-
-                        <div
-                            class="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400"
-                        >
-                            <i class="bx bx-map"></i>
-                        </div>
-
-                        <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Location
-                        </p>
-
-                        <p
-                            id="salonLocation"
-                            class="mt-1 font-semibold"
-                        >
-                            —
-                        </p>
-
-                    </div>
-
-
-                    <div class="glass-dark rounded-2xl p-4">
-
-                        <div
-                            class="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400"
-                        >
-                            <i class="bx bx-time"></i>
-                        </div>
-
-                        <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Hours
-                        </p>
-
-                        <p
-                            id="salonHours"
-                            class="mt-1 font-semibold"
-                        >
-                            —
-                        </p>
-
-                    </div>
-
-
-                    <div class="glass-dark rounded-2xl p-4">
-
-                        <div
-                            class="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-green-500/10 text-green-400"
-                        >
-                            <i class="bx bx-spa"></i>
-                        </div>
-
-                        <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Services
-                        </p>
-
-                        <p
-                            id="serviceCount"
-                            class="mt-1 font-semibold"
-                        >
-                            0 services
-                        </p>
-
-                    </div>
-
-
-                    <div class="glass-dark rounded-2xl p-4">
-
-                        <div
-                            class="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500/10 text-orange-400"
-                        >
-                            <i class="bx bx-fingerprint"></i>
-                        </div>
-
-                        <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Salon ID
-                        </p>
-
-                        <p
-                            id="salonIdDisplay"
-                            class="mt-1 truncate font-mono text-xs text-gray-300"
-                        >
-                            —
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="mt-4 rounded-2xl border border-blue-500/10 bg-blue-500/5 p-4"
-                >
-
-                    <div class="flex gap-3">
-
-                        <i
-                            class="bx bx-info-circle mt-0.5 text-lg text-blue-400"
-                        ></i>
-
-                        <div>
-
-                            <p class="font-semibold text-blue-200">
-                                Your salon is connected to your owner account
-                            </p>
-
-                            <p
-                                class="mt-1 text-xs leading-5 text-gray-400"
-                            >
-                                Bookings are matched using your Firebase owner
-                                UID and salon ID. No owner ID is hardcoded into
-                                this dashboard.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </section>
-
-
-        <!-- =================================================
-             BOOKINGS
-        ================================================== -->
-
-        <section
-            id="bookingsSection"
-            class="glass rounded-[2rem] p-5 sm:p-6"
-        >
-
-            <div
-                class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
-            >
-
-                <div>
-
-                    <p
-                        class="text-xs font-bold uppercase tracking-[.2em] text-violet-400"
-                    >
-                        Appointments
-                    </p>
-
-                    <h2 class="serif mt-1 text-3xl font-bold">
-                        Customer Bookings
-                    </h2>
-
-                    <p class="mt-1 text-sm text-gray-400">
-                        Review and manage your salon appointments.
-                    </p>
-
-                </div>
-
-
-                <div class="flex flex-wrap gap-2">
-
-                    <select
-                        id="statusFilter"
-                        class="rounded-xl border border-white/10 bg-gray-900 px-3 py-2.5 text-sm font-semibold text-white outline-none focus:border-blue-500"
-                    >
-
-                        <option value="all">
-                            All bookings
-                        </option>
-
-                        <option value="pending">
-                            Pending
-                        </option>
-
-                        <option value="confirmed">
-                            Confirmed
-                        </option>
-
-                        <option value="completed">
-                            Completed
-                        </option>
-
-                        <option value="cancelled">
-                            Cancelled
-                        </option>
-
-                    </select>
-
-
-                    <button
-                        id="refreshButton"
-                        class="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10"
-                    >
-                        <i class="bx bx-refresh mr-1"></i>
-                        Refresh
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="bookingMessage"
-                class="rounded-2xl border border-white/5 bg-gray-950/60 p-8 text-center"
-            >
-
-                <div
-                    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 text-2xl text-blue-400"
-                >
-                    <i class="bx bx-loader-alt bx-spin"></i>
-                </div>
-
-                <p class="font-semibold">
-                    Loading bookings...
-                </p>
-
-                <p class="mt-1 text-sm text-gray-500">
-                    Connecting to your appointment data.
-                </p>
-
-            </div>
-
-
-            <div
-                id="bookingsList"
-                class="hidden space-y-4"
-            ></div>
-
-        </section>
-
-
-        <!-- =================================================
-             MOBILE NAV
-        ================================================== -->
-
-        <div class="mt-8 grid grid-cols-3 gap-2 sm:hidden">
-
-            <a
-                href="index.html"
-                class="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-center text-xs font-semibold text-gray-300"
-            >
-                <i class="bx bx-home-alt-2 block text-lg"></i>
-                Home
-            </a>
-
-            <a
-                href="salons.html"
-                class="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-center text-xs font-semibold text-gray-300"
-            >
-                <i class="bx bx-store block text-lg"></i>
-                Salons
-            </a>
-
-            <button
-                id="mobileLogout"
-                class="rounded-xl border border-red-500/10 bg-red-500/5 px-3 py-3 text-center text-xs font-semibold text-red-300"
-            >
-                <i class="bx bx-log-out block text-lg"></i>
-                Logout
-            </button>
-
-        </div>
-
-
-        <!-- FOOTER -->
-
-        <footer
-            class="py-10 text-center text-xs text-gray-600"
-        >
 
             <p>
-                © <span id="footerYear"></span> K@si Web
+
+                Manage the K@si Web marketplace from one elite
+                administration centre. Monitor bookings, salons,
+                customers and platform activity in real time.
+
             </p>
 
-            <p class="mt-1">
-                Your cut. Your time.
-            </p>
 
-        </footer>
+            <div class="live-status">
 
-    </main>
+                <span class="live-dot"></span>
 
-</div>
+                <span id="connectionText">
+                    Connecting to Firestore...
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
 
 
-<!-- =========================================================
-     BOOKING ACTION MODAL
-========================================================= -->
+    <!-- =====================================================
+         QUICK NAV
+    ====================================================== -->
 
-<div
-    id="actionModal"
-    class="modal-backdrop fixed inset-0 z-[80] hidden items-center justify-center p-5"
->
+    <div class="quick-nav">
 
-    <div
-        class="glass w-full max-w-md rounded-[2rem] p-6"
-    >
 
-        <div class="flex items-start justify-between gap-4">
+        <a
+            href="home.html"
+            class="nav-card"
+        >
+
+            <i class='bx bx-home-alt-2'></i>
 
             <div>
 
-                <p
-                    id="modalEyebrow"
-                    class="text-xs font-bold uppercase tracking-[.2em] text-blue-400"
-                >
-                    Booking
-                </p>
+                <strong>
+                    K@si Home
+                </strong>
 
-                <h2
-                    id="modalTitle"
-                    class="serif mt-1 text-2xl font-bold"
-                >
-                    Update booking
-                </h2>
+                <small>
+                    Account & authentication
+                </small>
 
             </div>
 
-            <button
-                id="closeModal"
-                class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 text-gray-400 transition hover:bg-white/5 hover:text-white"
-            >
-                <i class="bx bx-x text-xl"></i>
-            </button>
-
-        </div>
+        </a>
 
 
-        <p
-            id="modalMessage"
-            class="mt-4 text-sm leading-6 text-gray-400"
+        <a
+            href="salons.html"
+            class="nav-card"
         >
-            Are you sure you want to update this booking?
-        </p>
 
+            <i class='bx bx-cut'></i>
 
-        <div
-            id="modalBookingInfo"
-            class="mt-5 rounded-2xl bg-gray-950/60 p-4"
-        ></div>
+            <div>
 
+                <strong>
+                    Marketplace
+                </strong>
 
-        <div class="mt-6 flex gap-3">
+                <small>
+                    View customer salon experience
+                </small>
 
-            <button
-                id="cancelModal"
-                class="flex-1 rounded-xl border border-white/10 px-4 py-3 font-semibold text-gray-300 transition hover:bg-white/5"
-            >
-                Cancel
-            </button>
+            </div>
 
-            <button
-                id="confirmAction"
-                class="gradient-button flex-1 rounded-xl px-4 py-3 font-bold transition"
-            >
-                Confirm
-            </button>
-
-        </div>
+        </a>
 
     </div>
 
-</div>
+
+    <!-- =====================================================
+         PLATFORM STATS
+    ====================================================== -->
+
+    <div class="section-title">
+
+        <h3>
+            Platform Overview
+        </h3>
+
+        <span id="todayLabel">
+            South Africa
+        </span>
+
+    </div>
+
+
+    <section class="stats">
+
+
+        <article class="stat">
+
+            <div class="stat-icon">
+
+                <i class='bx bx-calendar-check'></i>
+
+            </div>
+
+            <h4 id="totalCount">
+                0
+            </h4>
+
+            <p>
+                Today's bookings
+            </p>
+
+        </article>
+
+
+        <article class="stat pending">
+
+            <div class="stat-icon">
+
+                <i class='bx bx-time-five'></i>
+
+            </div>
+
+            <h4 id="pendingCount">
+                0
+            </h4>
+
+            <p>
+                Pending
+            </p>
+
+        </article>
+
+
+        <article class="stat completed">
+
+            <div class="stat-icon">
+
+                <i class='bx bx-check-circle'></i>
+
+            </div>
+
+            <h4 id="completedCount">
+                0
+            </h4>
+
+            <p>
+                Completed
+            </p>
+
+        </article>
+
+
+        <article class="stat revenue">
+
+            <div class="stat-icon">
+
+                <i class='bx bx-money'></i>
+
+            </div>
+
+            <h4 id="totalRevenue">
+                R0
+            </h4>
+
+            <p>
+                Today's revenue
+            </p>
+
+        </article>
+
+
+        <article class="stat users">
+
+            <div class="stat-icon">
+
+                <i class='bx bx-group'></i>
+
+            </div>
+
+            <h4 id="userCount">
+                0
+            </h4>
+
+            <p>
+                Registered users
+            </p>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         NEXT APPOINTMENT
+    ====================================================== -->
+
+    <div class="next-card">
+
+
+        <div class="next-left">
+
+            <div class="next-icon">
+
+                <i class='bx bx-alarm'></i>
+
+            </div>
+
+
+            <div>
+
+                <small>
+                    Next appointment
+                </small>
+
+                <strong id="nextCustomer">
+                    Waiting for booking
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <strong id="nextTime">
+            --:--
+        </strong>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOOKINGS TITLE
+    ====================================================== -->
+
+    <div class="section-title">
+
+        <h3>
+            Today's Bookings
+        </h3>
+
+        <span id="bookingDate">
+            Loading...
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+    ====================================================== -->
+
+    <div class="toolbar">
+
+
+        <div class="search">
+
+            <i class='bx bx-search'></i>
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search customer, salon, service..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <button
+            class="toolbar-btn"
+            id="refreshBookingsBtn"
+        >
+
+            <i class='bx bx-refresh'></i>
+
+            Refresh
+
+        </button>
+
+
+        <button
+            class="toolbar-btn danger"
+            id="clearBtn"
+        >
+
+            <i class='bx bx-trash'></i>
+
+            Clear Today
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOOKING TABLE
+    ====================================================== -->
+
+    <section class="table-card">
+
+
+        <div class="table-head">
+
+            <h3>
+                Booking Management
+            </h3>
+
+
+            <span
+                class="booking-count"
+                id="visibleCount"
+            >
+                0 bookings
+            </span>
+
+        </div>
+
+
+        <div class="table-scroll">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Salon
+                        </th>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Time
+                        </th>
+
+                        <th>
+                            Service
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="tableBody">
+
+                    <tr>
+
+                        <td colspan="8">
+
+                            <div class="state">
+
+                                <div class="spinner"></div>
+
+                                <strong>
+                                    Loading bookings...
+                                </strong>
+
+                                <small>
+                                    Connecting to K@si Web
+                                </small>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
 
 
 <!-- =========================================================
      TOAST
-========================================================= -->
+========================================================== -->
 
-<div
-    id="toastContainer"
-    class="fixed bottom-5 left-1/2 z-[120] hidden w-[calc(100%-2rem)] max-w-md -translate-x-1/2"
-></div>
+<div id="toast"></div>
 
 
 <!-- =========================================================
-     FIREBASE
-========================================================= -->
+     BOTTOM NAV
+========================================================== -->
 
-<script type="module">
+<nav class="bottom-nav">
 
-    import {
-        initializeApp
-    } from
-    "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    <div class="bottom-inner">
 
 
-    import {
-        getAuth,
-        onAuthStateChanged,
-        signOut
-    } from
-    "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+        <a href="home.html">
 
+            <i class='bx bx-home-alt-2'></i>
 
-    import {
-        getFirestore,
-        collection,
-        doc,
-        getDoc,
-        getDocs,
-        query,
-        where,
-        onSnapshot,
-        updateDoc,
-        serverTimestamp
-    } from
-    "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+            <span>
+                Home
+            </span>
 
+        </a>
 
-    /* ========================================================
-       FIREBASE CONFIG
-    ======================================================== */
 
-    const firebaseConfig = {
+        <a
+            href="salons.html"
+        >
 
-        apiKey:
-            "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+            <i class='bx bx-cut'></i>
 
-        authDomain:
-            "kasi-web-d073f.firebaseapp.com",
+            <span>
+                Salons
+            </span>
 
-        databaseURL:
-            "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+        </a>
 
-        projectId:
-            "kasi-web-d073f",
 
-        storageBucket:
-            "kasi-web-d073f.firebasestorage.app",
+        <a
+            href="admin.html"
+            class="active"
+        >
 
-        messagingSenderId:
-            "105918157571",
+            <i class='bx bx-bar-chart-alt-2'></i>
 
-        appId:
-            "1:105918157571:web:8d646",
+            <span>
+                Admin
+            </span>
 
-        measurementId:
-            "G-Q8QVN2T54S"
+        </a>
 
-    };
 
+        <a
+            href="#"
+            id="bottomLogout"
+        >
 
-    /* ========================================================
-       INITIALIZE
-    ======================================================== */
+            <i class='bx bx-log-out'></i>
 
-    const app =
-        initializeApp(firebaseConfig);
+            <span>
+                Logout
+            </span>
 
-    const auth =
-        getAuth(app);
+        </a>
 
-    const db =
-        getFirestore(app);
+    </div>
 
+</nav>
 
-    /* ========================================================
-       DOM
-    ======================================================== */
 
-    const loadingScreen =
-        document.getElementById(
-            "loadingScreen"
-        );
+<!-- =========================================================
+     FIREBASE BRIDGE
+========================================================== -->
 
-    const loadingText =
-        document.getElementById(
-            "loadingText"
-        );
+<!--
+    IMPORTANT
 
-    const dashboard =
-        document.getElementById(
-            "dashboard"
-        );
+    Keep your existing Firebase bridge before admin.js.
 
-    const accessDenied =
-        document.getElementById(
-            "accessDenied"
-        );
-
-    const accessDeniedMessage =
-        document.getElementById(
-            "accessDeniedMessage"
-        );
-
-    const logoutButton =
-        document.getElementById(
-            "logoutButton"
-        );
-
-    const mobileLogout =
-        document.getElementById(
-            "mobileLogout"
-        );
-
-
-    let currentUser =
-        null;
-
-    let currentSalon =
-        null;
-
-    let currentBookings =
-        [];
-
-    let unsubscribeBookings =
-        null;
-
-    let redirecting =
-        false;
-
-
-    /* ========================================================
-       YEAR
-    ======================================================== */
-
-    document.getElementById(
-        "footerYear"
-    ).textContent =
-        new Date().getFullYear();
-
-
-    /* ========================================================
-       ESCAPE HTML
-    ======================================================== */
-
-    function escapeHtml(value) {
+    It must expose:
 
-        if (
-            value === null ||
-            value === undefined
-        ) {
-            return "";
-        }
+    window.firebaseAuth
+    window.firebaseDB
+    window.onAuthState
+    window.dbDoc
+    window.dbGet
+    window.collection
+    window.onSnapshot
+    window.query
+    window.where
+    window.getDocs
+    window.updateDoc
+    window.removeDoc
+    window.logOut
+-->
 
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
 
-    }
+<script src="admin.js"></script>
 
 
-    /* ========================================================
-       NORMALIZE ROLE
-    ======================================================== */
+</body>
 
-    function normalizeRole(value) {
+</html>
 
-        const role =
-            String(
-                value || ""
-            )
-            .trim()
-            .toLowerCase()
-            .replace(
-                /-/g,
-                "_"
-            )
-            .replace(
-                /\s+/g,
-                "_"
-            );
+"admin.js"
 
+And because this new HTML depends on the role architecture, use this matching "admin.js" rather than the old one:
 
-        if (
-            role === "admin" ||
-            role === "administrator"
-        ) {
-            return "admin";
-        }
+:::writing{variant="document" id="74106" title="K@si Web — Complete Admin JavaScript"}
 
+/* ============================================================
+   K@si Web
+   ADMIN CONTROL CENTRE
+   ============================================================ */
 
-        if (
-            role === "salon_owner" ||
-            role === "owner" ||
-            role === "barber_owner" ||
-            role === "barberowner"
-        ) {
-            return "salon_owner";
-        }
+document.addEventListener("DOMContentLoaded", () => {
 
+    "use strict";
 
-        return "customer";
 
-    }
+    /* =========================================================
+       FIREBASE BRIDGE
+    ========================================================= */
 
+    const auth = window.firebaseAuth;
+    const db = window.firebaseDB;
 
-    /* ========================================================
-       GET VERIFIED ROLE
-    ======================================================== */
+    const onAuthState =
+        window.onAuthState;
 
-    async function getVerifiedRole(user) {
+    const dbDoc =
+        window.dbDoc;
 
-        const userRef =
-            doc(
-                db,
-                "users",
-                user.uid
-            );
+    const dbGet =
+        window.dbGet;
 
+    const collection =
+        window.collection;
 
-        const userSnapshot =
-            await getDoc(userRef);
+    const onSnapshot =
+        window.onSnapshot;
 
+    const query =
+        window.query;
 
-        if (
-            !userSnapshot.exists()
-        ) {
+    const where =
+        window.where;
 
-            return {
-                role: "customer",
-                profile: {}
-            };
+    const getDocs =
+        window.getDocs;
 
-        }
+    const updateDoc =
+        window.updateDoc;
 
+    const removeDoc =
+        window.removeDoc;
 
-        const profile =
-            userSnapshot.data() || {};
+    const logOut =
+        window.logOut;
 
 
-        const rawRole =
-            profile.role ??
-            profile.Role ??
-            profile.userRole ??
-            profile.user_type ??
-            profile.accountType ??
-            "";
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
 
+    const accessScreen =
+        document.getElementById("accessScreen");
 
-        return {
+    const accessTitle =
+        document.getElementById("accessTitle");
 
-            role:
-                normalizeRole(rawRole),
+    const accessMessage =
+        document.getElementById("accessMessage");
 
-            profile
+    const tableBody =
+        document.getElementById("tableBody");
 
-        };
+    const searchInput =
+        document.getElementById("searchInput");
 
-    }
+    const refreshBtn =
+        document.getElementById("refreshBtn");
 
+    const refreshBookingsBtn =
+        document.getElementById("refreshBookingsBtn");
 
-    /* ========================================================
-       SHOW ACCESS DENIED
-    ======================================================== */
+    const logoutBtn =
+        document.getElementById("logoutBtnAdmin");
 
-    function showAccessDenied(message) {
+    const bottomLogout =
+        document.getElementById("bottomLogout");
 
-        loadingScreen.classList.add(
-            "hidden"
-        );
+    const clearBtn =
+        document.getElementById("clearBtn");
 
-        dashboard.classList.add(
-            "hidden"
-        );
+    const totalCount =
+        document.getElementById("totalCount");
 
-        accessDenied.classList.remove(
-            "hidden"
-        );
+    const pendingCount =
+        document.getElementById("pendingCount");
 
-        accessDenied.classList.add(
-            "flex"
-        );
+    const completedCount =
+        document.getElementById("completedCount");
 
-        accessDeniedMessage.textContent =
-            message ||
-            "This dashboard is only available to verified salon owners.";
+    const totalRevenue =
+        document.getElementById("totalRevenue");
 
-    }
+    const userCount =
+        document.getElementById("userCount");
 
+    const visibleCount =
+        document.getElementById("visibleCount");
 
-    /* ========================================================
-       SHOW DASHBOARD
-    ======================================================== */
+    const nextCustomer =
+        document.getElementById("nextCustomer");
 
-    function showDashboard() {
+    const nextTime =
+        document.getElementById("nextTime");
 
-        loadingScreen.classList.add(
-            "hidden"
-        );
+    const bookingDate =
+        document.getElementById("bookingDate");
 
-        accessDenied.classList.add(
-            "hidden"
-        );
+    const todayLabel =
+        document.getElementById("todayLabel");
 
-        accessDenied.classList.remove(
-            "flex"
-        );
+    const connectionText =
+        document.getElementById("connectionText");
 
-        dashboard.classList.remove(
-            "hidden"
-        );
+    const toast =
+        document.getElementById("toast");
 
-    }
 
+    /* =========================================================
+       STATE
+    ========================================================= */
 
-    /* ========================================================
-       REDIRECT ONCE
-    ======================================================== */
+    let currentUser = null;
 
-    function redirectOnce(url) {
+    let bookings = [];
 
-        if (redirecting) {
-            return;
-        }
+    let unsubscribeBookings = null;
 
-        redirecting = true;
+    let unsubscribeUsers = null;
 
-        sessionStorage.setItem(
-            "justLoggedIn",
-            "true"
-        );
+    let isAdminVerified = false;
 
-        window.location.replace(
-            url
-        );
 
-    }
+    /* =========================================================
+       SAFETY CHECK
+    ========================================================= */
 
-
-    /* ========================================================
-       FIND SALON
-    ======================================================== */
-
-    async function findOwnerSalon(
-        user,
-        profile
+    if (
+        !auth ||
+        !db ||
+        !onAuthState ||
+        !dbDoc ||
+        !dbGet
     ) {
 
-        /*
-         * METHOD 1
-         *
-         * Use salonId saved in users/{uid}.
-         */
+        showAccessError(
+            "Firebase unavailable",
+            "K@si Web could not connect to Firebase."
+        );
 
-        const savedSalonId =
-            profile?.salonId ||
-            profile?.salonID ||
-            profile?.salon_id;
+        return;
+    }
 
 
-        if (savedSalonId) {
+    /* =========================================================
+       SOUTH AFRICAN DATE
+    ========================================================= */
 
-            try {
+    function todayZA() {
 
-                const savedRef =
-                    doc(
-                        db,
-                        "salons",
-                        savedSalonId
-                    );
-
-
-                const savedSnapshot =
-                    await getDoc(savedRef);
-
-
-                if (
-                    savedSnapshot.exists()
-                ) {
-
-                    const data =
-                        savedSnapshot.data();
-
-
-                    /*
-                     * Security check.
-                     *
-                     * The salon must belong
-                     * to this Firebase user.
-                     */
-
-                    if (
-                        data.ownerId ===
-                        user.uid
-                    ) {
-
-                        return {
-
-                            id:
-                                savedSnapshot.id,
-
-                            ...data
-
-                        };
-
-                    }
-
-                }
-
-            } catch (error) {
-
-                console.warn(
-                    "Saved salon lookup failed:",
-                    error
-                );
-
+        return new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone: "Africa/Johannesburg",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
             }
-
-        }
-
-
-        /*
-         * METHOD 2
-         *
-         * Find salon by ownerId.
-         */
-
-        const ownerQuery =
-            query(
-                collection(
-                    db,
-                    "salons"
-                ),
-                where(
-                    "ownerId",
-                    "==",
-                    user.uid
-                )
-            );
-
-
-        const ownerSnapshot =
-            await getDocs(
-                ownerQuery
-            );
-
-
-        if (
-            !ownerSnapshot.empty
-        ) {
-
-            const salonDoc =
-                ownerSnapshot.docs[0];
-
-
-            return {
-
-                id:
-                    salonDoc.id,
-
-                ...salonDoc.data()
-
-            };
-
-        }
-
-
-        /*
-         * METHOD 3
-         *
-         * Support older project structure:
-         * salon_{uid}
-         */
-
-        const oldSalonId =
-            `salon_${user.uid}`;
-
-
-        const oldSalonRef =
-            doc(
-                db,
-                "salons",
-                oldSalonId
-            );
-
-
-        const oldSalonSnapshot =
-            await getDoc(
-                oldSalonRef
-            );
-
-
-        if (
-            oldSalonSnapshot.exists()
-        ) {
-
-            const data =
-                oldSalonSnapshot.data();
-
-
-            /*
-             * Do not accept another
-             * owner's salon.
-             */
-
-            if (
-                !data.ownerId ||
-                data.ownerId ===
-                user.uid
-            ) {
-
-                return {
-
-                    id:
-                        oldSalonSnapshot.id,
-
-                    ...data
-
-                };
-
-            }
-
-        }
-
-
-        return null;
-
-    }
-
-
-    /* ========================================================
-       NORMALIZE SERVICES
-    ======================================================== */
-
-    function normalizeServices(
-        services
-    ) {
-
-        if (
-            !Array.isArray(services)
-        ) {
-            return [];
-        }
-
-
-        return services
-            .map(
-                service => {
-
-                    if (
-                        typeof service ===
-                        "string"
-                    ) {
-
-                        return {
-                            name:
-                                service,
-                            price:
-                                null
-                        };
-
-                    }
-
-
-                    if (
-                        service &&
-                        typeof service ===
-                        "object"
-                    ) {
-
-                        return {
-
-                            name:
-                                service.name ||
-                                service.title ||
-                                service.service ||
-                                "Service",
-
-                            price:
-                                service.price ??
-                                null
-
-                        };
-
-                    }
-
-
-                    return null;
-
-                }
-            )
-            .filter(Boolean);
-
-    }
-
-
-    /* ========================================================
-       LOAD SALON
-    ======================================================== */
-
-    async function loadSalon(
-        user,
-        profile
-    ) {
-
-        const salonStatus =
-            document.getElementById(
-                "salonStatus"
-            );
-
-
-        salonStatus.innerHTML = `
-            <i class="bx bx-loader-alt bx-spin"></i>
-            Finding salon...
-        `;
-
-
-        salonStatus.className =
-            "flex w-fit items-center gap-2 rounded-full bg-yellow-500/10 px-4 py-2 text-xs font-bold text-yellow-300";
-
-
-        try {
-
-            const salon =
-                await findOwnerSalon(
-                    user,
-                    profile
-                );
-
-
-            if (!salon) {
-
-                currentSalon =
-                    null;
-
-
-                salonStatus.innerHTML = `
-                    <i class="bx bx-error-circle"></i>
-                    No salon linked
-                `;
-
-
-                salonStatus.className =
-                    "flex w-fit items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 text-xs font-bold text-red-300";
-
-
-                document.getElementById(
-                    "salonName"
-                ).textContent =
-                    "Salon not found";
-
-
-                document.getElementById(
-                    "headerSalonName"
-                ).textContent =
-                    "Owner Dashboard";
-
-
-                document.getElementById(
-                    "welcomeName"
-                ).textContent =
-                    "Salon Setup Required";
-
-
-                document.getElementById(
-                    "salonLocation"
-                ).textContent =
-                    "Not provided";
-
-
-                document.getElementById(
-                    "salonHours"
-                ).textContent =
-                    "Not provided";
-
-
-                document.getElementById(
-                    "salonIdDisplay"
-                ).textContent =
-                    "No salon ID";
-
-
-                document.getElementById(
-                    "serviceCount"
-                ).textContent =
-                    "0 services";
-
-
-                showToast(
-                    "Your owner account is active, but no salon is linked to it.",
-                    "warning"
-                );
-
-
-                document.getElementById(
-                    "bookingMessage"
-                ).innerHTML = `
-                    <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-yellow-500/10 text-2xl text-yellow-400">
-                        <i class="bx bx-store"></i>
-                    </div>
-
-                    <p class="font-semibold">
-                        No salon linked yet
-                    </p>
-
-                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">
-                        Your account is verified as a salon owner, but Firestore
-                        does not currently contain a salon connected to your UID.
-                    </p>
-
-                    <a
-                        href="salons.html"
-                        class="mt-5 inline-flex rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-bold transition hover:bg-white/10"
-                    >
-                        <i class="bx bx-store mr-2"></i>
-                        View Salons
-                    </a>
-                `;
-
-
-                document.getElementById(
-                    "bookingMessage"
-                ).classList.remove(
-                    "hidden"
-                );
-
-
-                document.getElementById(
-                    "bookingsList"
-                ).classList.add(
-                    "hidden"
-                );
-
-
-                return;
-
-            }
-
-
-            currentSalon =
-                salon;
-
-
-            const name =
-                salon.name ||
-                salon.salonName ||
-                "My Salon";
-
-
-            const location =
-                salon.location ||
-                salon.address ||
-                "Location not provided";
-
-
-            const hours =
-                salon.hours ||
-                salon.openingHours ||
-                "Hours not provided";
-
-
-            const services =
-                normalizeServices(
-                    salon.services
-                );
-
-
-            document.getElementById(
-                "salonName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "headerSalonName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "welcomeName"
-            ).textContent =
-                name;
-
-
-            document.getElementById(
-                "salonLocation"
-            ).textContent =
-                location;
-
-
-            document.getElementById(
-                "salonHours"
-            ).textContent =
-                hours;
-
-
-            document.getElementById(
-                "salonIdDisplay"
-            ).textContent =
-                salon.id;
-
-
-            document.getElementById(
-                "serviceCount"
-            ).textContent =
-                `${services.length} service${services.length === 1 ? "" : "s"}`;
-
-
-            salonStatus.innerHTML = `
-                <span class="pulse-dot"></span>
-                Salon connected
-            `;
-
-
-            salonStatus.className =
-                "flex w-fit items-center gap-2 rounded-full bg-green-500/10 px-4 py-2 text-xs font-bold text-green-300";
-
-
-            loadBookings(
-                user,
-                salon
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Salon loading error:",
-                error
-            );
-
-
-            const salonStatus =
-                document.getElementById(
-                    "salonStatus"
-                );
-
-
-            salonStatus.innerHTML = `
-                <i class="bx bx-error-circle"></i>
-                Unable to load
-            `;
-
-
-            salonStatus.className =
-                "flex w-fit items-center gap-2 rounded-full bg-red-500/10 px-4 py-2 text-xs font-bold text-red-300";
-
-
-            document.getElementById(
-                "bookingMessage"
-            ).innerHTML = `
-                <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-2xl text-red-400">
-                    <i class="bx bx-error"></i>
-                </div>
-
-                <p class="font-semibold">
-                    Unable to load your salon
-                </p>
-
-                <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">
-                    Check your Firestore permissions and make sure your salon
-                    document contains the correct ownerId.
-                </p>
-            `;
-
-        }
-
-    }
-
-
-    /* ========================================================
-       LOAD BOOKINGS
-    ======================================================== */
-
-    function loadBookings(
-        user,
-        salon
-    ) {
-
-        if (
-            unsubscribeBookings
-        ) {
-
-            unsubscribeBookings();
-
-            unsubscribeBookings =
-                null;
-
-        }
-
-
-        const bookingsQuery =
-            query(
-                collection(
-                    db,
-                    "bookings"
-                ),
-                where(
-                    "ownerId",
-                    "==",
-                    user.uid
-                )
-            );
-
-
-        unsubscribeBookings =
-            onSnapshot(
-
-                bookingsQuery,
-
-                snapshot => {
-
-                    const bookings =
-                        [];
-
-
-                    snapshot.forEach(
-                        bookingSnapshot => {
-
-                            const data =
-                                bookingSnapshot.data();
-
-
-                            /*
-                             * Critical salon check.
-                             *
-                             * Only display bookings
-                             * belonging to this salon.
-                             */
-
-                            if (
-                                data.salonId ===
-                                salon.id
-                            ) {
-
-                                bookings.push({
-
-                                    id:
-                                        bookingSnapshot.id,
-
-                                    ...data
-
-                                });
-
-                            }
-
-                        }
-                    );
-
-
-                    bookings.sort(
-                        (a, b) => {
-
-                            const dateA =
-                                `${a.date || ""} ${a.time || ""}`;
-
-                            const dateB =
-                                `${b.date || ""} ${b.time || ""}`;
-
-
-                            return dateB.localeCompare(
-                                dateA
-                            );
-
-                        }
-                    );
-
-
-                    currentBookings =
-                        bookings;
-
-
-                    renderBookings(
-                        bookings
-                    );
-
-
-                    updateStats(
-                        bookings
-                    );
-
-                },
-
-                error => {
-
-                    console.error(
-                        "Bookings listener error:",
-                        error
-                    );
-
-
-                    document.getElementById(
-                        "bookingMessage"
-                    ).innerHTML = `
-                        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-2xl text-red-400">
-                            <i class="bx bx-shield-x"></i>
-                        </div>
-
-                        <p class="font-semibold">
-                            Bookings could not be loaded
-                        </p>
-
-                        <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-gray-500">
-                            Firebase rejected the bookings request.
-                            Check your Firestore rules and ensure admins and
-                            owners have the correct read permissions.
-                        </p>
-                    `;
-
-
-                    document.getElementById(
-                        "bookingMessage"
-                    ).classList.remove(
-                        "hidden"
-                    );
-
-
-                    document.getElementById(
-                        "bookingsList"
-                    ).classList.add(
-                        "hidden"
-                    );
-
-                }
-
-            );
-
-    }
-
-
-    /* ========================================================
-       FORMAT PRICE
-    ======================================================== */
-
-    function formatPrice(
-        price
-    ) {
-
-        if (
-            price === null ||
-            price === undefined ||
-            price === ""
-        ) {
-
-            return "—";
-
-        }
-
-
-        const numeric =
-            Number(price);
-
-
-        if (
-            Number.isNaN(numeric)
-        ) {
-
-            return escapeHtml(
-                String(price)
-            );
-
-        }
-
-
-        return `R${numeric.toLocaleString(
-            "en-ZA"
-        )}`;
-
-    }
-
-
-    /* ========================================================
-       STATUS CLASS
-    ======================================================== */
-
-    function getStatusClass(
-        status
-    ) {
-
-        switch (
-            String(
-                status || "pending"
-            ).toLowerCase()
-        ) {
-
-            case "confirmed":
-
-                return "bg-green-500/10 text-green-300 border-green-500/20";
-
-
-            case "completed":
-
-                return "bg-blue-500/10 text-blue-300 border-blue-500/20";
-
-
-            case "cancelled":
-
-                return "bg-red-500/10 text-red-300 border-red-500/20";
-
-
-            case "declined":
-
-                return "bg-red-500/10 text-red-300 border-red-500/20";
-
-
-            default:
-
-                return "bg-yellow-500/10 text-yellow-300 border-yellow-500/20";
-
-        }
-
-    }
-
-
-    /* ========================================================
-       STATUS ICON
-    ======================================================== */
-
-    function getStatusIcon(
-        status
-    ) {
-
-        switch (
-            String(
-                status || "pending"
-            ).toLowerCase()
-        ) {
-
-            case "confirmed":
-                return "bx-check-circle";
-
-            case "completed":
-                return "bx-badge-check";
-
-            case "cancelled":
-            case "declined":
-                return "bx-x-circle";
-
-            default:
-                return "bx-time-five";
-
-        }
-
-    }
-
-
-    /* ========================================================
-       RENDER BOOKINGS
-    ======================================================== */
-
-    function renderBookings(
-        bookings
-    ) {
-
-        const list =
-            document.getElementById(
-                "bookingsList"
-            );
-
-        const message =
-            document.getElementById(
-                "bookingMessage"
-            );
-
-        const filter =
-            document.getElementById(
-                "statusFilter"
-            ).value;
-
-
-        let filtered =
-            [...bookings];
-
-
-        if (
-            filter !== "all"
-        ) {
-
-            filtered =
-                filtered.filter(
-                    booking =>
-                        String(
-                            booking.status ||
-                            "pending"
-                        ).toLowerCase() ===
-                        filter
-                );
-
-        }
-
-
-        if (
-            !filtered.length
-        ) {
-
-            message.innerHTML = `
-
-                <div
-                    class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-2xl text-gray-500"
-                >
-                    <i class="bx bx-calendar-x"></i>
-                </div>
-
-                <p class="font-semibold">
-                    ${
-                        filter === "all"
-                            ? "No bookings yet"
-                            : `No ${escapeHtml(filter)} bookings`
-                    }
-                </p>
-
-                <p class="mt-1 text-sm text-gray-500">
-                    ${
-                        filter === "all"
-                            ? "Customer appointments will appear here when they book your salon."
-                            : "Try another booking status."
-                    }
-                </p>
-
-            `;
-
-
-            message.classList.remove(
-                "hidden"
-            );
-
-            list.classList.add(
-                "hidden"
-            );
-
-            return;
-
-        }
-
-
-        message.classList.add(
-            "hidden"
+        ).format(
+            new Date()
         );
-
-        list.classList.remove(
-            "hidden"
-        );
-
-
-        list.innerHTML =
-            filtered
-                .map(
-                    booking =>
-                        renderBookingCard(
-                            booking
-                        )
-                )
-                .join("");
-
     }
 
 
-    /* ========================================================
-       RENDER BOOKING CARD
-    ======================================================== */
+    /* =========================================================
+       DISPLAY DATE
+    ========================================================= */
 
-    function renderBookingCard(
-        booking
-    ) {
+    function displayToday() {
 
-        const status =
-            String(
-                booking.status ||
-                "pending"
-            ).toLowerCase();
+        const now = new Date();
 
-
-        const customerName =
-            booking.customerName ||
-            booking.name ||
-            "Customer";
-
-
-        const phone =
-            booking.customerPhone ||
-            booking.phone ||
-            "No phone number";
-
-
-        const email =
-            booking.customerEmail ||
-            booking.email ||
-            "";
-
-
-        let actions = "";
-
-
-        if (
-            status === "pending"
-        ) {
-
-            actions = `
-
-                <button
-                    onclick="window.manageBooking('${escapeHtml(booking.id)}','confirmed')"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-green-600/15 px-3 py-2.5 text-sm font-bold text-green-300 transition hover:bg-green-600/25"
-                >
-                    <i class="bx bx-check"></i>
-                    Approve
-                </button>
-
-                <button
-                    onclick="window.manageBooking('${escapeHtml(booking.id)}','declined')"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-600/10 px-3 py-2.5 text-sm font-bold text-red-300 transition hover:bg-red-600/20"
-                >
-                    <i class="bx bx-x"></i>
-                    Decline
-                </button>
-
-            `;
-
-        }
-
-        else if (
-            status === "confirmed"
-        ) {
-
-            actions = `
-
-                <button
-                    onclick="window.manageBooking('${escapeHtml(booking.id)}','completed')"
-                    class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600/15 px-3 py-2.5 text-sm font-bold text-blue-300 transition hover:bg-blue-600/25"
-                >
-                    <i class="bx bx-badge-check"></i>
-                    Mark Completed
-                </button>
-
-                <button
-                    onclick="window.manageBooking('${escapeHtml(booking.id)}','cancelled')"
-                    class="flex items-center justify-center gap-2 rounded-xl bg-red-600/10 px-4 py-2.5 text-sm font-bold text-red-300 transition hover:bg-red-600/20"
-                >
-                    <i class="bx bx-x"></i>
-                    Cancel
-                </button>
-
-            `;
-
-        }
-
-        else {
-
-            actions = `
-
-                <span class="text-xs text-gray-500">
-                    No actions available
-                </span>
-
-            `;
-
-        }
-
-
-        return `
-
-            <article
-                class="booking-card fade-in rounded-2xl border border-white/5 bg-gray-950/55 p-5"
-            >
-
-                <!-- TOP -->
-
-                <div
-                    class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
-                >
-
-                    <div class="flex min-w-0 gap-4">
-
-                        <div
-                            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600/20 to-violet-600/20 text-xl text-blue-300"
-                        >
-                            <i class="bx bx-user"></i>
-                        </div>
-
-                        <div class="min-w-0">
-
-                            <h3
-                                class="truncate text-lg font-bold"
-                            >
-                                ${escapeHtml(
-                                    customerName
-                                )}
-                            </h3>
-
-                            <div
-                                class="mt-1 flex flex-col gap-1 text-xs text-gray-500 sm:flex-row sm:gap-3"
-                            >
-
-                                <span>
-                                    <i class="bx bx-phone mr-1"></i>
-                                    ${escapeHtml(
-                                        phone
-                                    )}
-                                </span>
-
-                                ${
-                                    email
-                                        ? `
-                                            <span class="truncate">
-                                                <i class="bx bx-envelope mr-1"></i>
-                                                ${escapeHtml(email)}
-                                            </span>
-                                          `
-                                        : ""
-                                }
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <span
-                        class="status-badge flex w-fit items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold capitalize ${getStatusClass(status)}"
-                    >
-                        <i class="bx ${getStatusIcon(status)}"></i>
-                        ${escapeHtml(status)}
-                    </span>
-
-                </div>
-
-
-                <!-- DETAILS -->
-
-                <div
-                    class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4"
-                >
-
-                    <div
-                        class="rounded-xl bg-white/[.025] p-3"
-                    >
-
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-wider text-gray-600"
-                        >
-                            Service
-                        </p>
-
-                        <p
-                            class="mt-1 truncate text-sm font-semibold"
-                        >
-                            ${escapeHtml(
-                                booking.service ||
-                                "—"
-                            )}
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="rounded-xl bg-white/[.025] p-3"
-                    >
-
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-wider text-gray-600"
-                        >
-                            Price
-                        </p>
-
-                        <p
-                            class="mt-1 text-sm font-semibold"
-                        >
-                            ${formatPrice(
-                                booking.price
-                            )}
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="rounded-xl bg-white/[.025] p-3"
-                    >
-
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-wider text-gray-600"
-                        >
-                            Date
-                        </p>
-
-                        <p
-                            class="mt-1 text-sm font-semibold"
-                        >
-                            ${escapeHtml(
-                                booking.date ||
-                                "—"
-                            )}
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="rounded-xl bg-white/[.025] p-3"
-                    >
-
-                        <p
-                            class="text-[10px] font-bold uppercase tracking-wider text-gray-600"
-                        >
-                            Time
-                        </p>
-
-                        <p
-                            class="mt-1 text-sm font-semibold"
-                        >
-                            ${escapeHtml(
-                                booking.time ||
-                                "—"
-                            )}
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ACTIONS -->
-
-                ${
-                    status === "pending" ||
-                    status === "confirmed"
-                        ? `
-                            <div
-                                class="mt-5 flex flex-col gap-2 border-t border-white/5 pt-4 sm:flex-row"
-                            >
-                                ${actions}
-                            </div>
-                          `
-                        : ""
-                }
-
-            </article>
-
-        `;
-
-    }
-
-
-    /* ========================================================
-       UPDATE STATS
-    ======================================================== */
-
-    function updateStats(
-        bookings
-    ) {
-
-        const count =
-            status =>
-                bookings.filter(
-                    booking =>
-                        String(
-                            booking.status ||
-                            "pending"
-                        ).toLowerCase() ===
-                        status
-                ).length;
-
-
-        const pending =
-            count("pending");
-
-
-        const confirmed =
-            count("confirmed");
-
-
-        const completed =
-            count("completed");
-
-
-        const cancelled =
-            bookings.filter(
-                booking => {
-
-                    const status =
-                        String(
-                            booking.status ||
-                            ""
-                        ).toLowerCase();
-
-
-                    return (
-                        status ===
-                        "cancelled" ||
-                        status ===
-                        "declined"
-                    );
-
-                }
-            ).length;
-
-
-        const today =
-            todayString();
-
-
-        const todayCount =
-            bookings.filter(
-                booking =>
-                    booking.date ===
-                    today
-            ).length;
-
-
-        const revenue =
-            bookings
-                .filter(
-                    booking =>
-                        String(
-                            booking.status ||
-                            ""
-                        ).toLowerCase() ===
-                        "confirmed"
-                )
-                .reduce(
-                    (
-                        total,
-                        booking
-                    ) => {
-
-                        const price =
-                            Number(
-                                booking.price
-                            );
-
-
-                        return (
-                            total +
-                            (
-                                Number.isFinite(
-                                    price
-                                )
-                                    ? price
-                                    : 0
-                            )
-                        );
-
-                    },
-                    0
-                );
-
-
-        document.getElementById(
-            "totalBookings"
-        ).textContent =
-            bookings.length;
-
-
-        document.getElementById(
-            "pendingBookings"
-        ).textContent =
-            pending;
-
-
-        document.getElementById(
-            "confirmedBookings"
-        ).textContent =
-            confirmed;
-
-
-        document.getElementById(
-            "todayBookings"
-        ).textContent =
-            todayCount;
-
-
-        document.getElementById(
-            "completedBookings"
-        ).textContent =
-            completed;
-
-
-        document.getElementById(
-            "cancelledBookings"
-        ).textContent =
-            cancelled;
-
-
-        document.getElementById(
-            "confirmedRevenue"
-        ).textContent =
-            `R${revenue.toLocaleString(
-                "en-ZA"
-            )}`;
-
-    }
-
-
-    /* ========================================================
-       TODAY
-    ======================================================== */
-
-    function todayString() {
-
-        /*
-         * South Africa local date.
-         */
-
-        const now =
-            new Date();
-
-
-        const parts =
+        const formatted =
             new Intl.DateTimeFormat(
-                "en-CA",
+                "en-ZA",
                 {
-                    timeZone:
-                        "Africa/Johannesburg",
-
-                    year:
-                        "numeric",
-
-                    month:
-                        "2-digit",
-
-                    day:
-                        "2-digit"
+                    timeZone: "Africa/Johannesburg",
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
                 }
-            ).formatToParts(now);
+            ).format(now);
 
+        bookingDate.textContent =
+            formatted;
 
-        const values = {};
-
-
-        parts.forEach(
-            part => {
-
-                values[
-                    part.type
-                ] =
-                    part.value;
-
-            }
-        );
-
-
-        return `${values.year}-${values.month}-${values.day}`;
-
+        todayLabel.textContent =
+            "South Africa • " +
+            formatted;
     }
 
 
-    /* ========================================================
-       BOOKING ACTION
-    ======================================================== */
-
-    window.manageBooking =
-        function (
-            bookingId,
-            newStatus
-        ) {
-
-            const booking =
-                currentBookings.find(
-                    item =>
-                        item.id ===
-                        bookingId
-                );
-
-
-            if (!booking) {
-
-                showToast(
-                    "Booking could not be found.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            openActionModal(
-                booking,
-                newStatus
-            );
-
-        };
-
-
-    /* ========================================================
-       OPEN ACTION MODAL
-    ======================================================== */
-
-    let pendingAction =
-        null;
-
-
-    function openActionModal(
-        booking,
-        newStatus
-    ) {
-
-        pendingAction = {
-
-            booking,
-            newStatus
-
-        };
-
-
-        const modal =
-            document.getElementById(
-                "actionModal"
-            );
-
-
-        const title =
-            document.getElementById(
-                "modalTitle"
-            );
-
-
-        const message =
-            document.getElementById(
-                "modalMessage"
-            );
-
-
-        const info =
-            document.getElementById(
-                "modalBookingInfo"
-            );
-
-
-        const confirmButton =
-            document.getElementById(
-                "confirmAction"
-            );
-
-
-        const customer =
-            booking.customerName ||
-            booking.name ||
-            "Customer";
-
-
-        const statusText =
-            newStatus ===
-            "confirmed"
-                ? "approve"
-                : newStatus ===
-                  "declined"
-                    ? "decline"
-                    : newStatus ===
-                      "completed"
-                        ? "mark this booking as completed"
-                        : "cancel this booking";
-
-
-        title.textContent =
-            `${
-                newStatus === "confirmed"
-                    ? "Approve"
-                    : newStatus === "declined"
-                        ? "Decline"
-                        : newStatus === "completed"
-                            ? "Complete"
-                            : "Cancel"
-            } Booking`;
-
-
-        message.textContent =
-            `Are you sure you want to ${statusText} for ${customer}?`;
-
-
-        info.innerHTML = `
-
-            <div class="grid grid-cols-2 gap-3">
-
-                <div>
-
-                    <p class="text-xs text-gray-500">
-                        Customer
-                    </p>
-
-                    <p class="mt-1 text-sm font-semibold">
-                        ${escapeHtml(customer)}
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <p class="text-xs text-gray-500">
-                        Service
-                    </p>
-
-                    <p class="mt-1 text-sm font-semibold">
-                        ${escapeHtml(
-                            booking.service ||
-                            "—"
-                        )}
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <p class="text-xs text-gray-500">
-                        Date
-                    </p>
-
-                    <p class="mt-1 text-sm font-semibold">
-                        ${escapeHtml(
-                            booking.date ||
-                            "—"
-                        )}
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <p class="text-xs text-gray-500">
-                        Time
-                    </p>
-
-                    <p class="mt-1 text-sm font-semibold">
-                        ${escapeHtml(
-                            booking.time ||
-                            "—"
-                        )}
-                    </p>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        if (
-            newStatus ===
-            "confirmed"
-        ) {
-
-            confirmButton.className =
-                "gradient-button flex-1 rounded-xl px-4 py-3 font-bold transition";
-
-            confirmButton.textContent =
-                "Approve";
-
-        }
-
-        else if (
-            newStatus ===
-            "declined" ||
-            newStatus ===
-            "cancelled"
-        ) {
-
-            confirmButton.className =
-                "flex-1 rounded-xl bg-red-600 px-4 py-3 font-bold transition hover:bg-red-500";
-
-            confirmButton.textContent =
-                newStatus ===
-                "declined"
-                    ? "Decline"
-                    : "Cancel";
-
-        }
-
-        else {
-
-            confirmButton.className =
-                "flex-1 rounded-xl bg-blue-600 px-4 py-3 font-bold transition hover:bg-blue-500";
-
-            confirmButton.textContent =
-                "Complete";
-
-        }
-
-
-        modal.classList.remove(
-            "hidden"
-        );
-
-        modal.classList.add(
-            "flex"
-        );
-
-    }
-
-
-    /* ========================================================
-       CLOSE MODAL
-    ======================================================== */
-
-    function closeActionModal() {
-
-        const modal =
-            document.getElementById(
-                "actionModal"
-            );
-
-
-        modal.classList.add(
-            "hidden"
-        );
-
-        modal.classList.remove(
-            "flex"
-        );
-
-
-        pendingAction =
-            null;
-
-    }
-
-
-    document.getElementById(
-        "closeModal"
-    ).addEventListener(
-        "click",
-        closeActionModal
-    );
-
-
-    document.getElementById(
-        "cancelModal"
-    ).addEventListener(
-        "click",
-        closeActionModal
-    );
-
-
-    document.getElementById(
-        "actionModal"
-    ).addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
-                "actionModal"
-            ) {
-
-                closeActionModal();
-
-            }
-
-        }
-    );
-
-
-    /* ========================================================
-       CONFIRM ACTION
-    ======================================================== */
-
-    document.getElementById(
-        "confirmAction"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            if (
-                !pendingAction ||
-                !currentUser ||
-                !currentSalon
-            ) {
-
-                return;
-
-            }
-
-
-            const {
-                booking,
-                newStatus
-            } =
-                pendingAction;
-
-
-            const button =
-                document.getElementById(
-                    "confirmAction"
-                );
-
-
-            button.disabled =
-                true;
-
-            button.textContent =
-                "Updating...";
-
-
-            try {
-
-                /*
-                 * Re-read the booking before
-                 * changing it.
-                 */
-
-                const bookingRef =
-                    doc(
-                        db,
-                        "bookings",
-                        booking.id
-                    );
-
-
-                const bookingSnapshot =
-                    await getDoc(
-                        bookingRef
-                    );
-
-
-                if (
-                    !bookingSnapshot.exists()
-                ) {
-
-                    throw new Error(
-                        "Booking no longer exists."
-                    );
-
-                }
-
-
-                const latest =
-                    bookingSnapshot.data();
-
-
-                /*
-                 * Security verification.
-                 */
-
-                if (
-                    latest.ownerId !==
-                    currentUser.uid
-                ) {
-
-                    throw new Error(
-                        "You are not the owner of this booking."
-                    );
-
-                }
-
-
-                if (
-                    latest.salonId !==
-                    currentSalon.id
-                ) {
-
-                    throw new Error(
-                        "This booking belongs to another salon."
-                    );
-
-                }
-
-
-                await updateDoc(
-                    bookingRef,
-                    {
-
-                        status:
-                            newStatus,
-
-                        updatedAt:
-                            serverTimestamp()
-
-                    }
-                );
-
-
-                closeActionModal();
-
-
-                showToast(
-                    `Booking ${newStatus}.`,
-                    "success"
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Booking update error:",
-                    error
-                );
-
-
-                showToast(
-                    error.message ||
-                    "Unable to update booking. Check your Firestore rules.",
-                    "error"
-                );
-
-
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    "Try Again";
-
-            }
-
-        }
-    );
-
-
-    /* ========================================================
-       FILTER
-    ======================================================== */
-
-    document.getElementById(
-        "statusFilter"
-    ).addEventListener(
-        "change",
-        () => {
-
-            renderBookings(
-                currentBookings
-            );
-
-        }
-    );
-
-
-    /* ========================================================
-       REFRESH
-    ======================================================== */
-
-    document.getElementById(
-        "refreshButton"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            if (
-                !currentUser ||
-                !currentSalon
-            ) {
-
-                showToast(
-                    "Your salon is not connected yet.",
-                    "warning"
-                );
-
-                return;
-
-            }
-
-
-            const button =
-                document.getElementById(
-                    "refreshButton"
-                );
-
-
-            button.disabled =
-                true;
-
-
-            button.innerHTML = `
-                <i class="bx bx-loader-alt bx-spin mr-1"></i>
-                Refreshing
-            `;
-
-
-            try {
-
-                const bookingsQuery =
-                    query(
-                        collection(
-                            db,
-                            "bookings"
-                        ),
-                        where(
-                            "ownerId",
-                            "==",
-                            currentUser.uid
-                        )
-                    );
-
-
-                const snapshot =
-                    await getDocs(
-                        bookingsQuery
-                    );
-
-
-                const bookings =
-                    [];
-
-
-                snapshot.forEach(
-                    bookingSnapshot => {
-
-                        const data =
-                            bookingSnapshot.data();
-
-
-                        if (
-                            data.salonId ===
-                            currentSalon.id
-                        ) {
-
-                            bookings.push({
-
-                                id:
-                                    bookingSnapshot.id,
-
-                                ...data
-
-                            });
-
-                        }
-
-                    }
-                );
-
-
-                bookings.sort(
-                    (a, b) =>
-                        `${b.date || ""} ${b.time || ""}`
-                            .localeCompare(
-                                `${a.date || ""} ${a.time || ""}`
-                            )
-                );
-
-
-                currentBookings =
-                    bookings;
-
-
-                renderBookings(
-                    bookings
-                );
-
-
-                updateStats(
-                    bookings
-                );
-
-
-                showToast(
-                    "Bookings refreshed.",
-                    "success"
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    error
-                );
-
-
-                showToast(
-                    "Unable to refresh bookings.",
-                    "error"
-                );
-
-            }
-
-
-            button.disabled =
-                false;
-
-
-            button.innerHTML = `
-                <i class="bx bx-refresh mr-1"></i>
-                Refresh
-            `;
-
-        }
-    );
-
-
-    /* ========================================================
+    /* =========================================================
        TOAST
-    ======================================================== */
+    ========================================================= */
 
     function showToast(
         message,
         type = "success"
     ) {
 
-        const container =
-            document.getElementById(
-                "toastContainer"
-            );
+        if (!toast) return;
 
+        toast.textContent =
+            message;
 
-        const icon =
-            type === "success"
-                ? "bx-check-circle"
-                : type === "warning"
-                    ? "bx-error"
-                    : "bx-error-circle";
+        toast.className =
+            "";
 
-
-        const iconColor =
-            type === "success"
-                ? "text-green-400"
-                : type === "warning"
-                    ? "text-yellow-400"
-                    : "text-red-400";
-
-
-        container.innerHTML = `
-
-            <div
-                class="toast glass flex items-center gap-3 rounded-2xl px-4 py-3 shadow-2xl"
-            >
-
-                <i
-                    class="bx ${icon} text-xl ${iconColor}"
-                ></i>
-
-                <p class="text-sm font-semibold">
-                    ${escapeHtml(message)}
-                </p>
-
-            </div>
-
-        `;
-
-
-        container.classList.remove(
-            "hidden"
+        toast.classList.add(
+            type,
+            "show"
         );
 
+        clearTimeout(
+            showToast.timer
+        );
 
-        setTimeout(
-            () => {
+        showToast.timer =
+            setTimeout(() => {
 
-                container.classList.add(
-                    "hidden"
+                toast.classList.remove(
+                    "show"
                 );
 
-            },
-            4200
-        );
-
+            }, 3200);
     }
 
 
-    /* ========================================================
-       LOGOUT
-    ======================================================== */
+    /* =========================================================
+       ACCESS ERROR
+    ========================================================= */
 
-    async function logout() {
+    function showAccessError(
+        title,
+        message
+    ) {
 
-        if (
-            unsubscribeBookings
-        ) {
+        if (accessTitle)
+            accessTitle.textContent =
+                title;
+
+        if (accessMessage)
+            accessMessage.textContent =
+                message;
+
+        const spinner =
+            document.querySelector(
+                ".access-spinner"
+            );
+
+        if (spinner)
+            spinner.style.display =
+                "none";
+    }
+
+
+    /* =========================================================
+       HIDE ACCESS SCREEN
+    ========================================================= */
+
+    function hideAccessScreen() {
+
+        if (!accessScreen)
+            return;
+
+        accessScreen.style.opacity =
+            "0";
+
+        accessScreen.style.pointerEvents =
+            "none";
+
+        setTimeout(() => {
+
+            accessScreen.style.display =
+                "none";
+
+        }, 250);
+    }
+
+
+    /* =========================================================
+       AUTHENTICATION
+       ONLY ADMIN MAY ENTER
+    ========================================================= */
+
+    onAuthState(
+        auth,
+        async (user) => {
+
+            if (!user) {
+
+                window.location.replace(
+                    "home.html"
+                );
+
+                return;
+            }
+
+
+            currentUser =
+                user;
+
+
+            try {
+
+                const userRef =
+                    dbDoc(
+                        db,
+                        "users",
+                        user.uid
+                    );
+
+
+                const userSnap =
+                    await dbGet(
+                        userRef
+                    );
+
+
+                if (!userSnap.exists()) {
+
+                    showAccessError(
+                        "Account not found",
+                        "Your K@si Web account profile could not be found."
+                    );
+
+                    setTimeout(() => {
+
+                        window.location.replace(
+                            "home.html"
+                        );
+
+                    }, 1800);
+
+                    return;
+                }
+
+
+                const userData =
+                    userSnap.data() || {};
+
+
+                const role =
+                    String(
+                        userData.role ||
+                        userData.Role ||
+                        ""
+                    )
+                    .toLowerCase()
+                    .trim();
+
+
+                /* =================================================
+                   ADMIN
+                ================================================= */
+
+                if (
+                    role !== "admin"
+                ) {
+
+                    if (
+                        role === "salon_owner"
+                    ) {
+
+                        window.location.replace(
+                            "owners.html"
+                        );
+
+                    } else {
+
+                        window.location.replace(
+                            "salons.html"
+                        );
+
+                    }
+
+                    return;
+                }
+
+
+                /* =================================================
+                   ADMIN VERIFIED
+                ================================================= */
+
+                isAdminVerified =
+                    true;
+
+
+                hideAccessScreen();
+
+
+                connectionText.textContent =
+                    "Live Firestore connection";
+
+
+                displayToday();
+
+
+                loadBookings();
+
+
+                loadUserCount();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Admin verification error:",
+                    error
+                );
+
+
+                showAccessError(
+                    "Verification failed",
+                    "K@si Web could not verify your administrator account."
+                );
+
+
+                setTimeout(() => {
+
+                    window.location.replace(
+                        "home.html"
+                    );
+
+                }, 1800);
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       LOAD BOOKINGS
+    ========================================================= */
+
+    function loadBookings() {
+
+        if (!isAdminVerified)
+            return;
+
+
+        if (unsubscribeBookings) {
 
             unsubscribeBookings();
 
             unsubscribeBookings =
                 null;
-
         }
+
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="8">
+
+                    <div class="state">
+
+                        <div class="spinner"></div>
+
+                        <strong>
+                            Loading bookings...
+                        </strong>
+
+                        <small>
+                            Reading today's appointments
+                        </small>
+
+                    </div>
+
+                </td>
+
+            </tr>
+        `;
 
 
         try {
 
-            sessionStorage.removeItem(
-                "userRole"
-            );
-
-            sessionStorage.removeItem(
-                "ownerUid"
-            );
-
-            sessionStorage.removeItem(
-                "ownerSalonId"
-            );
-
-            sessionStorage.removeItem(
-                "justLoggedIn"
-            );
+            const bookingsRef =
+                collection(
+                    db,
+                    "bookings"
+                );
 
 
-            await signOut(
-                auth
+            /*
+                We intentionally avoid requiring
+                a Firestore composite index.
+
+                We retrieve bookings and filter
+                today's date locally.
+            */
+
+            unsubscribeBookings =
+                onSnapshot(
+                    bookingsRef,
+                    (snapshot) => {
+
+                        const today =
+                            todayZA();
+
+
+                        bookings =
+                            [];
+
+
+                        snapshot.forEach(
+                            (docSnap) => {
+
+                                const data =
+                                    docSnap.data() || {};
+
+
+                                const date =
+                                    normalizeDate(
+                                        data
+                                    );
+
+
+                                if (
+                                    date ===
+                                    today
+                                ) {
+
+                                    bookings.push({
+
+                                        id:
+                                            docSnap.id,
+
+                                        ...data
+
+                                    });
+
+                                }
+
+                            }
+                        );
+
+
+                        bookings.sort(
+                            compareBookingTime
+                        );
+
+
+                        renderBookings(
+                            bookings
+                        );
+
+
+                        updateStats(
+                            bookings
+                        );
+
+
+                        updateNextAppointment(
+                            bookings
+                        );
+
+
+                        connectionText.textContent =
+                            "Live Firestore connection";
+
+                    },
+
+                    (error) => {
+
+                        console.error(
+                            "Bookings listener error:",
+                            error
+                        );
+
+
+                        tableBody.innerHTML = `
+
+                            <tr>
+
+                                <td colspan="8">
+
+                                    <div class="state">
+
+                                        <i class='bx bx-error-circle'></i>
+
+                                        <strong>
+                                            Could not load bookings
+                                        </strong>
+
+                                        <small>
+                                            ${escapeHtml(
+                                                error.message ||
+                                                "Firestore error"
+                                            )}
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        `;
+
+
+                        connectionText.textContent =
+                            "Firestore connection error";
+
+
+                        showToast(
+                            "Unable to load bookings.",
+                            "error"
+                        );
+
+                    }
+                );
+
+
+        } catch (error) {
+
+            console.error(
+                "loadBookings:",
+                error
             );
+
+            showToast(
+                "Could not load bookings.",
+                "error"
+            );
+        }
+    }
+
+
+    /* =========================================================
+       NORMALIZE BOOKING DATE
+    ========================================================= */
+
+    function normalizeDate(
+        data
+    ) {
+
+        const value =
+            data.date ||
+            data.bookingDate ||
+            data.appointmentDate ||
+            "";
+
+
+        if (!value)
+            return "";
+
+
+        if (
+            typeof value ===
+            "string"
+        ) {
+
+            return value
+                .slice(0, 10);
+        }
+
+
+        if (
+            value &&
+            typeof value.toDate ===
+            "function"
+        ) {
+
+            return new Intl.DateTimeFormat(
+                "en-CA",
+                {
+                    timeZone:
+                        "Africa/Johannesburg",
+                    year:
+                        "numeric",
+                    month:
+                        "2-digit",
+                    day:
+                        "2-digit"
+                }
+            ).format(
+                value.toDate()
+            );
+        }
+
+
+        return "";
+    }
+
+
+    /* =========================================================
+       NORMALIZE TIME
+    ========================================================= */
+
+    function normalizeTime(
+        data
+    ) {
+
+        const value =
+            data.time ||
+            data.bookingTime ||
+            data.appointmentTime ||
+            "";
+
+
+        if (!value)
+            return "00:00";
+
+
+        return String(
+            value
+        ).trim();
+    }
+
+
+    /* =========================================================
+       COMPARE TIMES
+    ========================================================= */
+
+    function compareBookingTime(
+        a,
+        b
+    ) {
+
+        return normalizeTime(a)
+            .localeCompare(
+                normalizeTime(b)
+            );
+    }
+
+
+    /* =========================================================
+       RENDER BOOKINGS
+    ========================================================= */
+
+    function renderBookings(
+        list
+    ) {
+
+        const search =
+            String(
+                searchInput?.value ||
+                ""
+            )
+            .toLowerCase()
+            .trim();
+
+
+        const filtered =
+            list.filter(
+                (booking) => {
+
+                    if (!search)
+                        return true;
+
+
+                    const text = [
+
+                        booking.salonName,
+
+                        booking.salon,
+
+                        booking.customerName,
+
+                        booking.custName,
+
+                        booking.name,
+
+                        booking.phone,
+
+                        booking.custPhone,
+
+                        booking.service,
+
+                        booking.serviceType,
+
+                        booking.status
+
+                    ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
+
+
+                    return text.includes(
+                        search
+                    );
+
+                }
+            );
+
+
+        visibleCount.textContent =
+            `${filtered.length} booking${
+                filtered.length === 1
+                    ? ""
+                    : "s"
+            }`;
+
+
+        if (!filtered.length) {
+
+            tableBody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="8">
+
+                        <div class="state">
+
+                            <i class='bx bx-calendar-x'></i>
+
+                            <strong>
+                                ${
+                                    search
+                                        ? "No matching bookings"
+                                        : "No bookings today"
+                                }
+                            </strong>
+
+                            <small>
+                                ${
+                                    search
+                                        ? "Try another search."
+                                        : "New appointments will appear here automatically."
+                                }
+                            </small>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        tableBody.innerHTML =
+            filtered.map(
+                createBookingRow
+            ).join("");
+    }
+
+
+    /* =========================================================
+       CREATE BOOKING ROW
+    ========================================================= */
+
+    function createBookingRow(
+        booking
+    ) {
+
+        const salon =
+            booking.salonName ||
+            booking.salon ||
+            "Unknown salon";
+
+
+        const customer =
+            booking.customerName ||
+            booking.custName ||
+            booking.name ||
+            "Customer";
+
+
+        const phone =
+            booking.customerPhone ||
+            booking.custPhone ||
+            booking.phone ||
+            "—";
+
+
+        const service =
+            booking.serviceName ||
+            booking.serviceType ||
+            booking.service ||
+            "Service";
+
+
+        const price =
+            Number(
+                booking.price ||
+                booking.servicePrice ||
+                0
+            );
+
+
+        const time =
+            normalizeTime(
+                booking
+            );
+
+
+        const status =
+            String(
+                booking.status ||
+                "pending"
+            )
+            .toLowerCase();
+
+
+        const safeStatus =
+            normalizeStatus(
+                status
+            );
+
+
+        let actions = "";
+
+
+        if (
+            safeStatus ===
+            "pending"
+        ) {
+
+            actions += `
+
+                <button
+                    class="action-btn approve"
+                    data-action="approve"
+                    data-id="${escapeAttr(
+                        booking.id
+                    )}"
+                >
+                    Approve
+                </button>
+
+
+                <button
+                    class="action-btn decline"
+                    data-action="decline"
+                    data-id="${escapeAttr(
+                        booking.id
+                    )}"
+                >
+                    Decline
+                </button>
+            `;
+        }
+
+
+        if (
+            safeStatus ===
+            "approved"
+        ) {
+
+            actions += `
+
+                <button
+                    class="action-btn done"
+                    data-action="completed"
+                    data-id="${escapeAttr(
+                        booking.id
+                    )}"
+                >
+                    Complete
+                </button>
+            `;
+        }
+
+
+        actions += `
+
+            <button
+                class="action-btn delete"
+                data-action="delete"
+                data-id="${escapeAttr(
+                    booking.id
+                )}"
+            >
+                Delete
+            </button>
+        `;
+
+
+        return `
+
+            <tr>
+
+                <td>
+
+                    <div class="customer-name">
+
+                        ${escapeHtml(
+                            salon
+                        )}
+
+                    </div>
+
+                    <div class="sub">
+
+                        ${escapeHtml(
+                            booking.location ||
+                            ""
+                        )}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <div class="customer-name">
+
+                        ${escapeHtml(
+                            customer
+                        )}
+
+                    </div>
+
+                    <div class="sub">
+
+                        ${escapeHtml(
+                            booking.userId ||
+                            ""
+                        )}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHtml(
+                        phone
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span class="time">
+
+                        ${escapeHtml(
+                            time
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHtml(
+                        service
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span class="price">
+
+                        R${formatMoney(
+                            price
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="status-pill status-${escapeAttr(
+                            safeStatus
+                        )}"
+                    >
+
+                        ${escapeHtml(
+                            safeStatus
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <div class="action-group">
+
+                        ${actions}
+
+                    </div>
+
+                </td>
+
+            </tr>
+        `;
+    }
+
+
+    /* =========================================================
+       STATUS NORMALIZATION
+    ========================================================= */
+
+    function normalizeStatus(
+        status
+    ) {
+
+        const allowed = [
+
+            "pending",
+
+            "approved",
+
+            "completed",
+
+            "declined",
+
+            "cancelled"
+
+        ];
+
+
+        if (
+            allowed.includes(
+                status
+            )
+        ) {
+
+            return status;
+        }
+
+
+        return "pending";
+    }
+
+
+    /* =========================================================
+       UPDATE STATS
+    ========================================================= */
+
+    function updateStats(
+        list
+    ) {
+
+        let pending = 0;
+
+        let completed = 0;
+
+        let revenue = 0;
+
+
+        list.forEach(
+            (booking) => {
+
+                const status =
+                    String(
+                        booking.status ||
+                        "pending"
+                    )
+                    .toLowerCase();
+
+
+                if (
+                    status ===
+                    "pending"
+                ) {
+
+                    pending++;
+                }
+
+
+                if (
+                    status ===
+                    "completed"
+                ) {
+
+                    completed++;
+
+
+                    revenue += Number(
+                        booking.price ||
+                        booking.servicePrice ||
+                        0
+                    );
+                }
+
+            }
+        );
+
+
+        totalCount.textContent =
+            list.length;
+
+
+        pendingCount.textContent =
+            pending;
+
+
+        completedCount.textContent =
+            completed;
+
+
+        totalRevenue.textContent =
+            "R" +
+            formatMoney(
+                revenue
+            );
+    }
+
+
+    /* =========================================================
+       NEXT APPOINTMENT
+    ========================================================= */
+
+    function updateNextAppointment(
+        list
+    ) {
+
+        const now =
+            new Date();
+
+
+        const currentMinutes =
+            now.getHours() * 60 +
+            now.getMinutes();
+
+
+        const upcoming =
+            list
+            .filter(
+                (booking) => {
+
+                    const status =
+                        String(
+                            booking.status ||
+                            "pending"
+                        )
+                        .toLowerCase();
+
+
+                    if (
+                        status ===
+                        "declined"
+                    )
+                        return false;
+
+
+                    if (
+                        status ===
+                        "cancelled"
+                    )
+                        return false;
+
+
+                    const time =
+                        normalizeTime(
+                            booking
+                        );
+
+
+                    const parts =
+                        time.split(":");
+
+
+                    if (
+                        parts.length <
+                        2
+                    )
+                        return true;
+
+
+                    const minutes =
+                        Number(
+                            parts[0]
+                        ) * 60 +
+                        Number(
+                            parts[1]
+                        );
+
+
+                    return (
+                        minutes >=
+                        currentMinutes
+                    );
+
+                }
+            );
+
+
+        if (!upcoming.length) {
+
+            nextCustomer.textContent =
+                "No upcoming appointment";
+
+
+            nextTime.textContent =
+                "--:--";
+
+
+            return;
+        }
+
+
+        const next =
+            upcoming[0];
+
+
+        nextCustomer.textContent =
+
+            next.customerName ||
+            next.custName ||
+            next.name ||
+            "Customer";
+
+
+        nextTime.textContent =
+            normalizeTime(
+                next
+            );
+    }
+
+
+    /* =========================================================
+       USER COUNT
+    ========================================================= */
+
+    async function loadUserCount() {
+
+        try {
+
+            const usersRef =
+                collection(
+                    db,
+                    "users"
+                );
+
+
+            if (
+                !getDocs
+            ) {
+
+                userCount.textContent =
+                    "—";
+
+                return;
+            }
+
+
+            const snapshot =
+                await getDocs(
+                    usersRef
+                );
+
+
+            userCount.textContent =
+                snapshot.size;
+
+
+        } catch (error) {
+
+            console.error(
+                "User count error:",
+                error
+            );
+
+
+            userCount.textContent =
+                "—";
+        }
+    }
+
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            () => {
+
+                renderBookings(
+                    bookings
+                );
+
+            }
+        );
+    }
+
+
+    /* =========================================================
+       TABLE ACTIONS
+    ========================================================= */
+
+    tableBody.addEventListener(
+        "click",
+        async (event) => {
+
+            const button =
+                event.target.closest(
+                    "[data-action]"
+                );
+
+
+            if (!button)
+                return;
+
+
+            const action =
+                button.dataset.action;
+
+
+            const id =
+                button.dataset.id;
+
+
+            if (!id)
+                return;
+
+
+            await handleBookingAction(
+                action,
+                id
+            );
+        }
+    );
+
+
+    /* =========================================================
+       BOOKING ACTION
+    ========================================================= */
+
+    async function handleBookingAction(
+        action,
+        id
+    ) {
+
+        if (
+            !currentUser ||
+            !isAdminVerified
+        ) {
+
+            showToast(
+                "Admin access required.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const bookingRef =
+            dbDoc(
+                db,
+                "bookings",
+                id
+            );
+
+
+        try {
+
+
+            if (
+                action ===
+                "approve"
+            ) {
+
+                await updateDoc(
+                    bookingRef,
+                    {
+                        status:
+                            "approved"
+                    }
+                );
+
+
+                showToast(
+                    "Booking approved."
+                );
+
+                return;
+            }
+
+
+            if (
+                action ===
+                "decline"
+            ) {
+
+                await updateDoc(
+                    bookingRef,
+                    {
+                        status:
+                            "declined"
+                    }
+                );
+
+
+                showToast(
+                    "Booking declined."
+                );
+
+                return;
+            }
+
+
+            if (
+                action ===
+                "completed"
+            ) {
+
+                await updateDoc(
+                    bookingRef,
+                    {
+                        status:
+                            "completed"
+                    }
+                );
+
+
+                showToast(
+                    "Booking marked as completed."
+                );
+
+                return;
+            }
+
+
+            if (
+                action ===
+                "delete"
+            ) {
+
+                const confirmed =
+                    window.confirm(
+                        "Delete this booking permanently?"
+                    );
+
+
+                if (!confirmed)
+                    return;
+
+
+                await removeDoc(
+                    bookingRef
+                );
+
+
+                showToast(
+                    "Booking deleted."
+                );
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Booking action error:",
+                error
+            );
+
+
+            showToast(
+                error.message ||
+                "Could not update booking.",
+                "error"
+            );
+        }
+    }
+
+
+    /* =========================================================
+       REFRESH
+    ========================================================= */
+
+    function refreshDashboard() {
+
+        if (!isAdminVerified)
+            return;
+
+
+        displayToday();
+
+        loadBookings();
+
+        loadUserCount();
+
+
+        showToast(
+            "Dashboard refreshed."
+        );
+    }
+
+
+    if (refreshBtn) {
+
+        refreshBtn.addEventListener(
+            "click",
+            refreshDashboard
+        );
+    }
+
+
+    if (refreshBookingsBtn) {
+
+        refreshBookingsBtn.addEventListener(
+            "click",
+            refreshDashboard
+        );
+    }
+
+
+    /* =========================================================
+       CLEAR TODAY
+       ========================================================= */
+
+    if (clearBtn) {
+
+        clearBtn.addEventListener(
+            "click",
+            async () => {
+
+                if (
+                    !isAdminVerified
+                )
+                    return;
+
+
+                if (
+                    !bookings.length
+                ) {
+
+                    showToast(
+                        "There are no bookings to clear.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                const confirmed =
+                    window.confirm(
+                        `Delete all ${bookings.length} bookings from today? This cannot be undone.`
+                    );
+
+
+                if (!confirmed)
+                    return;
+
+
+                clearBtn.disabled =
+                    true;
+
+
+                try {
+
+                    for (
+                        const booking
+                        of bookings
+                    ) {
+
+                        await removeDoc(
+                            dbDoc(
+                                db,
+                                "bookings",
+                                booking.id
+                            )
+                        );
+
+                    }
+
+
+                    showToast(
+                        "Today's bookings cleared."
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Clear bookings error:",
+                        error
+                    );
+
+
+                    showToast(
+                        "Some bookings could not be deleted.",
+                        "error"
+                    );
+
+                } finally {
+
+                    clearBtn.disabled =
+                        false;
+                }
+
+            }
+        );
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    async function logoutAdmin(
+        event
+    ) {
+
+        if (event)
+            event.preventDefault();
+
+
+        try {
+
+            if (
+                typeof logOut ===
+                "function"
+            ) {
+
+                await logOut(
+                    auth
+                );
+
+            } else {
+
+                await auth.signOut();
+
+            }
 
 
             window.location.replace(
                 "home.html"
             );
+
 
         } catch (error) {
 
@@ -3727,322 +4271,101 @@
 
 
             showToast(
-                "Unable to sign out.",
+                "Could not log out.",
                 "error"
             );
-
         }
-
     }
 
 
-    logoutButton.addEventListener(
-        "click",
-        logout
-    );
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            logoutAdmin
+        );
+    }
 
 
-    mobileLogout.addEventListener(
-        "click",
-        logout
-    );
+    if (bottomLogout) {
+
+        bottomLogout.addEventListener(
+            "click",
+            logoutAdmin
+        );
+    }
 
 
-    /* ========================================================
-       QUICK NAVIGATION
-    ======================================================== */
+    /* =========================================================
+       MONEY FORMAT
+    ========================================================= */
 
-    document.querySelectorAll(
-        ".quickNav"
-    ).forEach(
-        button => {
+    function formatMoney(
+        value
+    ) {
 
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const targetId =
-                        button.dataset.scroll;
+        const number =
+            Number(value) || 0;
 
 
-                    const target =
-                        document.getElementById(
-                            targetId
-                        );
-
-
-                    if (target) {
-
-                        target.scrollIntoView({
-                            behavior:
-                                "smooth",
-                            block:
-                                "start"
-                        });
-
-                    }
-
-
-                    document.querySelectorAll(
-                        ".quickNav"
-                    ).forEach(
-                        item => {
-
-                            item.classList.remove(
-                                "active",
-                                "border-blue-500/30",
-                                "bg-blue-500/10",
-                                "text-blue-300"
-                            );
-
-                            item.classList.add(
-                                "border-white/10",
-                                "text-gray-400"
-                            );
-
-                        }
-                    );
-
-
-                    button.classList.add(
-                        "active",
-                        "border-blue-500/30",
-                        "bg-blue-500/10",
-                        "text-blue-300"
-                    );
-
-                    button.classList.remove(
-                        "border-white/10",
-                        "text-gray-400"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    /* ========================================================
-       AUTH STATE
-    ======================================================== */
-
-    onAuthStateChanged(
-        auth,
-        async user => {
-
-            console.log(
-                "K@si owner auth state:",
-                user
-            );
-
-
-            if (!user) {
-
-                if (
-                    unsubscribeBookings
-                ) {
-
-                    unsubscribeBookings();
-
-                    unsubscribeBookings =
-                        null;
-
-                }
-
-
-                loadingScreen.classList.add(
-                    "hidden"
-                );
-
-
-                /*
-                 * This page is protected.
-                 * Guests go to home.html.
-                 */
-
-                redirectOnce(
-                    "home.html"
-                );
-
-                return;
-
+        return number.toLocaleString(
+            "en-ZA",
+            {
+                minimumFractionDigits:
+                    0,
+                maximumFractionDigits:
+                    2
             }
-
-
-            currentUser =
-                user;
-
-
-            loadingText.textContent =
-                "Verifying owner permissions...";
-
-
-            try {
-
-                const verified =
-                    await getVerifiedRole(
-                        user
-                    );
-
-
-                console.log(
-                    "Verified role:",
-                    verified.role
-                );
-
-
-                /*
-                 * ADMIN
-                 */
-
-                if (
-                    verified.role ===
-                    "admin"
-                ) {
-
-                    redirectOnce(
-                        "admin.html"
-                    );
-
-                    return;
-
-                }
-
-
-                /*
-                 * NOT OWNER
-                 */
-
-                if (
-                    verified.role !==
-                    "salon_owner"
-                ) {
-
-                    await signOut(
-                        auth
-                    );
-
-
-                    showAccessDenied(
-                        "Your K@si account is not registered as a salon owner. Customer accounts cannot access the owner dashboard."
-                    );
-
-
-                    return;
-
-                }
-
-
-                /*
-                 * VERIFIED OWNER
-                 */
-
-                sessionStorage.setItem(
-                    "userRole",
-                    "salon_owner"
-                );
-
-
-                sessionStorage.setItem(
-                    "ownerUid",
-                    user.uid
-                );
-
-
-                document.getElementById(
-                    "ownerEmail"
-                ).textContent =
-                    user.email ||
-                    "No email";
-
-
-                document.getElementById(
-                    "ownerIdDisplay"
-                ).textContent =
-                    `UID: ${user.uid}`;
-
-
-                showDashboard();
-
-
-                loadingText.textContent =
-                    "Loading your salon...";
-
-
-                await loadSalon(
-                    user,
-                    verified.profile
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Owner verification error:",
-                    error
-                );
-
-
-                showAccessDenied(
-                    "We could not verify your K@si owner account. Please sign in again."
-                );
-
-            }
-
-        }
-    );
-
-
-    /* ========================================================
-       ESC KEY
-    ======================================================== */
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeActionModal();
-
-            }
-
-        }
-    );
-
-
-    /* ========================================================
-       DEBUG
-    ======================================================== */
-
-    console.log(
-        "======================================"
-    );
-
-    console.log(
-        "K@si Web Owner Dashboard"
-    );
-
-    console.log(
-        "Firebase Project:",
-        firebaseConfig.projectId
-    );
-
-    console.log(
-        "Owner ID is NEVER hardcoded."
-    );
-
-    console.log(
-        "======================================"
-    );
-
-</script>
-
-
-</body>
-
-    </html>
+        );
+    }
+
+
+    /* =========================================================
+       HTML ESCAPING
+    ========================================================= */
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+    }
+
+
+    function escapeAttr(
+        value
+    ) {
+
+        return escapeHtml(
+            value
+        );
+    }
+
+
+});
+
+Important: your existing Firebase bridge must be loaded before "admin.js". The new admin code deliberately uses your existing "window.firebaseAuth", "window.firebaseDB", "window.dbDoc", "window.dbGet", etc., rather than creating a second Firebase initialization.
+
+This gives you the clean architecture we discussed, with "home.html" as the single authentication/role-routing gateway and "admin.html" only admitting users whose Firestore role is "admin".
