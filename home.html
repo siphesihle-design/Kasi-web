@@ -3839,6 +3839,31 @@
         }
 
 
+        function getTodayISO() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+
+        function formatBookingDate(dateStr) {
+            if (!dateStr) return "Date pending";
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) return dateStr;
+                return date.toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric"
+                });
+            } catch (e) {
+                return dateStr;
+            }
+        }
+
+
         /* =========================================================
            AUTH SCREEN TABS
         ========================================================= */
@@ -5010,103 +5035,37 @@
                                 "cancelled"
                             ].includes(status)
                         ) {
-
-                            statusClass =
-                                "status-pending";
-
+                            statusClass = "status-pending";
                         }
 
-
-                        html +=
-                            `
+                        html += `
                             <div class="booking-item">
-
                                 <div class="booking-item-main">
-
-                                    <strong>
-                                        ${escapeHTML(salon)}
-                                    </strong>
-
-                                    <span>
-                                        ${escapeHTML(service)}
-                                        ·
-                                        ${escapeHTML(date)}
-                                        ·
-                                        ${escapeHTML(time)}
-                                    </span>
-
+                                    <strong>${salon}</strong>
+                                    <span>${service}</span>
+                                    <span><i class="bx bx-time-five"></i> ${date} at ${time}</span>
                                 </div>
-
-                                <span
-                                    class="booking-status ${statusClass}"
-                                >
-                                    ${escapeHTML(status)}
-                                </span>
-
+                                <span class="booking-status ${statusClass}">${status}</span>
                             </div>
-                            `;
+                        `;
 
                     }
                 );
 
-
-                html +=
-                    `
-                    </div>
-
-                    <div style="margin-top:18px;text-align:center;">
-
-                        <a
-                            href="salons.html"
-                            class="btn btn-secondary"
-                        >
-
-                            Book another cut
-
-                            <i class="bx bx-right-arrow-alt"></i>
-
-                        </a>
-
-                    </div>
-                    `;
-
-
-                bookingContent.innerHTML =
-                    html;
-
+                html += `</div>`;
+                bookingContent.innerHTML = html;
 
             } catch (error) {
 
-                console.error(
-                    "Booking loading error:",
-                    error
-                );
+                console.error("Error loading bookings:", error);
 
-
-                bookingContent.innerHTML =
-                    `
+                bookingContent.innerHTML = `
                     <div class="empty-icon">
-                        <i class="bx bx-calendar-x"></i>
+                        <i class="bx bx-error-circle"></i>
                     </div>
-
-                    <h3>
-                        Your bookings are unavailable.
-                    </h3>
-
-                    <p>
-                        We could not load your appointments
-                        right now. You can still browse salons
-                        and make a booking.
-                    </p>
-
-                    <a
-                        href="salons.html"
-                        class="btn btn-primary"
-                    >
-                        Explore Salons
-                        <i class="bx bx-right-arrow-alt"></i>
-                    </a>
-                    `;
+                    <h3>Could not load bookings.</h3>
+                    <p>There was a problem retrieving your schedule. Please refresh.</p>
+                `;
 
             }
 
@@ -5114,164 +5073,52 @@
 
 
         /* =========================================================
-           DATE HELPERS
+           LOGOUT & REFRESH
         ========================================================= */
 
-        function getTodayISO() {
+        if (logoutBtn) {
 
-            const now =
-                new Date();
+            logoutBtn.addEventListener("click", async function() {
 
-            const year =
-                now.getFullYear();
+                showLoading("Signing out...");
 
-            const month =
-                String(
-                    now.getMonth() + 1
-                ).padStart(2, "0");
+                try {
 
-            const day =
-                String(
-                    now.getDate()
-                ).padStart(2, "0");
+                    sessionStorage.clear();
 
-            return (
-                year +
-                "-" +
-                month +
-                "-" +
-                day
-            );
+                    if (auth) {
+                        await auth.signOut();
+                    }
 
-        }
+                    showToast("Signed out successfully.");
 
+                } catch (error) {
 
-        function formatBookingDate(dateString) {
+                    console.error("Logout error:", error);
 
-            if (!dateString) {
-                return "Date pending";
-            }
+                    hideLoading();
 
+                    showToast("Failed to sign out. Please try again.");
 
-            const parts =
-                String(
-                    dateString
-                ).split("-");
-
-
-            if (
-                parts.length !== 3
-            ) {
-
-                return dateString;
-
-            }
-
-
-            const date =
-                new Date(
-                    Number(parts[0]),
-                    Number(parts[1]) - 1,
-                    Number(parts[2])
-                );
-
-
-            if (
-                Number.isNaN(
-                    date.getTime()
-                )
-            ) {
-
-                return dateString;
-
-            }
-
-
-            return date.toLocaleDateString(
-                "en-ZA",
-                {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric"
                 }
-            );
+
+            });
 
         }
 
 
-        /* =========================================================
-           HTML ESCAPE
-        ========================================================= */
+        if (refreshBtn) {
 
-        function escapeHTML(value) {
+            refreshBtn.addEventListener("click", function() {
 
-            return String(
-                value ?? ""
-            )
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
+                if (currentUser) {
+                    showToast("Refreshing schedule...");
+                    loadBookings(currentUser);
+                } else {
+                    window.location.reload();
+                }
 
-        }
-
-
-        /* =========================================================
-           SHOW CUSTOMER APP
-        ========================================================= */
-
-        function showApp() {
-
-            document.body.classList.remove(
-                "auth-mode"
-            );
-
-            authScreen.classList.add(
-                "hidden"
-            );
-
-            appShell.classList.add(
-                "visible"
-            );
-
-        }
-
-
-        /* =========================================================
-           SHOW AUTH SCREEN
-        ========================================================= */
-
-        function showAuth() {
-
-            document.body.classList.add(
-                "auth-mode"
-            );
-
-            appShell.classList.remove(
-                "visible"
-            );
-
-            authScreen.classList.remove(
-                "hidden"
-            );
-
-            showLogin();
+            });
 
         }
 
@@ -5282,316 +5129,58 @@
 
         if (auth) {
 
-            auth.onAuthStateChanged(
-                async function(user) {
+            auth.onAuthStateChanged(async function(user) {
+
+                authReady = true;
+
+                if (user) {
 
                     /*
-                        Firebase can fire this listener during
-                        the login process.
-
-                        IMPORTANT:
-                        We deliberately DO NOT redirect from
-                        this listener.
-
-                        Successful login/signup functions above
-                        perform the single redirect.
-
-                        This prevents redirect loops.
+                        User is logged in.
+                        Hide the auth screen and display the app shell.
                     */
 
-                    authReady =
-                        true;
+                    document.body.classList.remove("auth-mode");
 
+                    authScreen.classList.add("hidden");
 
-                    if (user) {
+                    appShell.classList.add("visible");
 
-                        currentUser =
-                            user;
+                    hideLoading();
 
+                    await loadUser(user);
 
-                        /*
-                            If justLoggedIn is present, the
-                            login/signup function is already
-                            handling the redirect.
-                        */
-
-                        const justLoggedIn =
-                            sessionStorage.getItem(
-                                "justLoggedIn"
-                            );
-
-
-                        if (
-                            justLoggedIn ===
-                            "true"
-                        ) {
-
-                            showLoading(
-                                "Opening your K@si space..."
-                            );
-
-                            return;
-
-                        }
-
-
-                        /*
-                            User manually opened home.html
-                            while already authenticated.
-
-                            Show the home page instead of
-                            redirecting repeatedly.
-                        */
-
-                        showApp();
-
-                        await loadUser(
-                            user
-                        );
-
-                        setTimeout(
-                            hideLoading,
-                            250
-                        );
-
-                    } else {
-
-                        currentUser =
-                            null;
-
-                        showAuth();
-
-                        hideLoading();
-
-                    }
-
-                }
-            );
-
-        } else {
-
-            console.error(
-                "Firebase Auth unavailable."
-            );
-
-            showAuth();
-
-            hideLoading();
-
-            showAuthMessage(
-                "Firebase could not be initialized. Please check your connection and Firebase configuration."
-            );
-
-        }
-
-
-        /* =========================================================
-           LOGOUT
-        ========================================================= */
-
-        logoutBtn.addEventListener(
-            "click",
-            async function() {
-
-                if (!auth) {
-                    return;
-                }
-
-
-                logoutBtn.disabled =
-                    true;
-
-                logoutBtn.textContent =
-                    "Signing out...";
-
-
-                try {
+                } else {
 
                     /*
-                        Remove one-time routing flags before
-                        signing out.
+                        User is not logged in.
+                        Show the auth screen and hide the app shell.
                     */
 
-                    sessionStorage.removeItem(
-                        "justLoggedIn"
-                    );
+                    currentUser = null;
 
-                    sessionStorage.removeItem(
-                        "userRole"
-                    );
+                    document.body.classList.add("auth-mode");
 
-                    sessionStorage.removeItem(
-                        "ownerUid"
-                    );
+                    authScreen.classList.remove("hidden");
 
-                    sessionStorage.removeItem(
-                        "ownerSalonId"
-                    );
-
-                    sessionStorage.removeItem(
-                        "justCreatedSalon"
-                    );
-
-
-                    await auth.signOut();
-
-
-                    /*
-                        Marketing landing page is the correct
-                        destination after logout.
-                    */
-
-                    window.location.replace(
-                        "index.html"
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Logout error:",
-                        error
-                    );
-
-
-                    logoutBtn.disabled =
-                        false;
-
-                    logoutBtn.textContent =
-                        "Sign Out";
-
-
-                    showToast(
-                        "Could not sign out. Please try again."
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =========================================================
-           REFRESH
-        ========================================================= */
-
-        refreshBtn.addEventListener(
-            "click",
-            function() {
-
-                refreshBtn.innerHTML =
-                    `
-                    <i class="bx bx-loader-alt bx-spin"></i>
-                    `;
-
-
-                setTimeout(
-                    function() {
-
-                        window.location.reload();
-
-                    },
-                    350
-                );
-
-            }
-        );
-
-
-        /* =========================================================
-           BOTTOM NAV
-        ========================================================= */
-
-        document
-            .querySelectorAll(".nav-item")
-            .forEach(
-                function(item) {
-
-                    item.addEventListener(
-                        "click",
-                        function() {
-
-                            document
-                                .querySelectorAll(
-                                    ".nav-item"
-                                )
-                                .forEach(
-                                    function(nav) {
-
-                                        nav.classList.remove(
-                                            "active"
-                                        );
-
-                                    }
-                                );
-
-
-                            item.classList.add(
-                                "active"
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-
-        /* =========================================================
-           PREVENT STALE PAGE AFTER LOGOUT
-        ========================================================= */
-
-        window.addEventListener(
-            "pageshow",
-            function(event) {
-
-                if (
-                    event.persisted &&
-                    auth &&
-                    !auth.currentUser
-                ) {
-
-                    showAuth();
-
-                }
-
-            }
-        );
-
-
-        /* =========================================================
-           CLEAR ONE-TIME REDIRECT FLAG
-           ONLY WHEN WE ARE NOT IN A LOGIN REDIRECT
-        ========================================================= */
-
-        window.addEventListener(
-            "load",
-            function() {
-
-                /*
-                    Do not immediately delete the flag here.
-
-                    The destination page gets a chance to consume
-                    it. We only use it on this page to stop an
-                    already-authenticated account from being
-                    repeatedly redirected.
-                */
-
-                if (
-                    !sessionStorage.getItem(
-                        "justLoggedIn"
-                    )
-                ) {
+                    appShell.classList.remove("visible");
 
                     hideLoading();
 
                 }
 
-            }
-        );
+            });
+
+        } else {
+
+            hideLoading();
+
+            showAuthMessage("Firebase features are offline. Check your setup.");
+
+        }
 
     </script>
 
 </body>
 
-    </html>
+</html>
