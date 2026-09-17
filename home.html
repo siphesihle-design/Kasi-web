@@ -1,2373 +1,2708 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#07070d">
+
+<meta
+    name="description"
+    content="K@si Web — Your local beauty and grooming marketplace."
+>
+
+<title>K@si Web | Home</title>
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+    rel="stylesheet"
+>
+
+<style>
+
+:root {
+    --bg: #07070d;
+    --bg-soft: #0b0b13;
+    --panel: rgba(18, 18, 29, .76);
+    --panel-strong: rgba(24, 24, 38, .92);
+    --border: rgba(255,255,255,.09);
+
+    --blue: #3b82f6;
+    --blue-dark: #2563eb;
+    --purple: #8b5cf6;
+
+    --text: #ffffff;
+    --muted: #a7a7b7;
+
+    --success: #22c55e;
+    --danger: #ef4444;
+
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --radius-sm: 12px;
+
+    --shadow:
+        0 25px 80px rgba(0,0,0,.45);
+
+    --transition:
+        .25s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(59,130,246,.14),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(139,92,246,.12),
+            transparent 28%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    font-family: "Inter", sans-serif;
+
+    overflow-x: hidden;
+}
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
-
-    <meta
-        name="theme-color"
-        content="#07070d"
-    >
-
-    <meta
-        name="description"
-        content="K@si Web — Your local beauty and grooming marketplace."
-    >
-
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent"
-    >
-
-    <title>K@si Web | Home</title>
-
-    <link rel="manifest" href="manifest.json">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet"
-    >
-
-    <!--
-        ============================================================
-        FIREBASE COMPAT SDK
-        ============================================================
-    -->
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-
-    <style>
-
-        /* =========================================================
-           RESET
-        ========================================================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(
-                    circle at 15% 10%,
-                    rgba(59, 130, 246, 0.12),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 85% 20%,
-                    rgba(139, 92, 246, 0.12),
-                    transparent 30%
-                ),
-                #07070d;
-            color: #f7f7fb;
-            font-family: "Inter", sans-serif;
-            overflow-x: hidden;
-        }
-
-        body.authenticated {
-            min-height: 100vh;
-        }
-
-        button,
-        input,
-        select {
-            font: inherit;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        img {
-            max-width: 100%;
-            display: block;
-        }
-
-
-        /* =========================================================
-           VARIABLES
-        ========================================================= */
-
-        :root {
-            --bg: #07070d;
-            --bg-soft: #0b0b13;
-            --panel: rgba(18, 18, 28, 0.86);
-            --panel-strong: #10101a;
-            --panel-light: #171722;
-
-            --border: rgba(255, 255, 255, 0.09);
-            --border-strong: rgba(255, 255, 255, 0.15);
-
-            --text: #f8f8fc;
-            --muted: #9999aa;
-            --muted-light: #b8b8c6;
-
-            --blue: #3b82f6;
-            --blue-dark: #2563eb;
-            --purple: #8b5cf6;
-            --purple-dark: #7c3aed;
-
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-
-            --shadow:
-                0 25px 70px rgba(0, 0, 0, 0.45);
-
-            --radius: 24px;
-            --radius-small: 14px;
-        }
-
-
-        /* =========================================================
-           BACKGROUND
-        ========================================================= */
-
-        .background-orb {
-            position: fixed;
-            width: 420px;
-            height: 420px;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.16;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .orb-one {
-            top: -180px;
-            left: -150px;
-            background: var(--blue);
-        }
-
-        .orb-two {
-            right: -170px;
-            top: 25%;
-            background: var(--purple);
-        }
-
-        .orb-three {
-            bottom: -200px;
-            left: 30%;
-            background: #4338ca;
-        }
-
-
-        /* =========================================================
-           NAVBAR
-        ========================================================= */
-
-        .navbar {
-            width: 100%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-
-            background:
-                rgba(7, 7, 13, 0.78);
-
-            border-bottom:
-                1px solid rgba(255, 255, 255, 0.07);
-
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-        }
-
-        .nav-inner {
-            width: min(1180px, calc(100% - 32px));
-            min-height: 76px;
-            margin: auto;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 900;
-            font-size: 1.25rem;
-            letter-spacing: -0.03em;
-        }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 14px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
-
-            box-shadow:
-                0 10px 30px rgba(59, 130, 246, 0.28);
-
-            font-size: 1.35rem;
-        }
-
-        .brand span {
-            font-family: "Playfair Display", serif;
-            font-size: 1.35rem;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-btn {
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.04);
-            color: var(--text);
-
-            padding: 11px 17px;
-            border-radius: 13px;
-
-            transition:
-                transform .2s ease,
-                background .2s ease,
-                border-color .2s ease;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-1px);
-            background: rgba(255,255,255,0.08);
-            border-color: var(--border-strong);
-        }
-
-        .nav-btn.primary {
-            border: none;
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
-        }
-
-
-        /* =========================================================
-           HERO
-        ========================================================= */
-
-        .hero {
-            width: min(1180px, calc(100% - 32px));
-            margin: auto;
-
-            min-height: 470px;
-
-            display: grid;
-            grid-template-columns: 1.15fr .85fr;
-
-            align-items: center;
-
-            gap: 50px;
-
-            padding:
-                70px 0 55px;
-        }
-
-        .hero-copy {
-            position: relative;
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-
-            padding: 8px 13px;
-
-            border: 1px solid rgba(59, 130, 246, 0.22);
-            border-radius: 999px;
-
-            color: #cddcff;
-
-            background:
-                rgba(59, 130, 246, 0.08);
-
-            font-size: .82rem;
-            font-weight: 700;
-
-            margin-bottom: 22px;
-        }
-
-        .eyebrow i {
-            color: var(--blue);
-        }
-
-        .hero h1 {
-            font-family: "Playfair Display", serif;
-
-            font-size:
-                clamp(
-                    3rem,
-                    7vw,
-                    5.7rem
-                );
-
-            line-height: .95;
-            letter-spacing: -0.055em;
-
-            max-width: 760px;
-        }
-
-        .hero h1 .gradient {
-            background:
-                linear-gradient(
-                    100deg,
-                    #fff,
-                    #a7c7ff 40%,
-                    #b9a3ff
-                );
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
 
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .hero-description {
-            margin-top: 25px;
-
-            max-width: 650px;
-
-            color: var(--muted-light);
+    background:
+        linear-gradient(
+            rgba(255,255,255,.012) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.012) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
 
-            font-size:
-                clamp(
-                    1rem,
-                    2vw,
-                    1.16rem
-                );
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 80%
+        );
+
+    z-index: -1;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    border: none;
+}
 
-            line-height: 1.8;
-        }
+img {
+    display: block;
+    max-width: 100%;
+}
 
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-
-            margin-top: 30px;
-        }
-
-        .main-btn {
-            min-height: 50px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
+/* =========================================================
+   LOADING
+========================================================= */
 
-            border-radius: 15px;
+#loadingScreen {
+    position: fixed;
+    inset: 0;
 
-            padding:
-                0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            border: 1px solid var(--border);
-
-            background:
-                rgba(255,255,255,0.045);
+    background: #07070d;
 
-            color: var(--text);
-
-            font-weight: 800;
+    z-index: 9999;
 
-            transition:
-                transform .2s ease,
-                box-shadow .2s ease,
-                border-color .2s ease;
-        }
+    transition:
+        opacity .35s ease,
+        visibility .35s ease;
+}
 
-        .main-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--border-strong);
-        }
+#loadingScreen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
 
-        .main-btn.primary {
-            border: none;
+.loading-box {
+    width: min(90%, 360px);
+    padding: 32px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
+    border: 1px solid var(--border);
+    border-radius: 25px;
 
-            box-shadow:
-                0 14px 35px rgba(59, 130, 246, .22);
-        }
+    background: rgba(18,18,29,.85);
 
+    backdrop-filter: blur(25px);
 
-        /* =========================================================
-           HERO VISUAL
-        ========================================================= */
+    text-align: center;
 
-        .hero-visual {
-            position: relative;
-            min-height: 390px;
+    box-shadow: var(--shadow);
+}
 
-            display: grid;
-            place-items: center;
-        }
+.loading-logo {
+    width: 62px;
+    height: 62px;
 
-        .visual-card {
-            width: min(100%, 400px);
-            aspect-ratio: .88;
+    margin: 0 auto 20px;
 
-            border-radius: 34px;
+    border-radius: 20px;
 
-            overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            border:
-                1px solid rgba(255,255,255,.12);
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(59,130,246,.15),
-                    rgba(139,92,246,.08)
-                );
+    font-size: 27px;
+    font-weight: 800;
 
-            box-shadow:
-                0 35px 90px rgba(0,0,0,.48);
+    box-shadow:
+        0 12px 35px rgba(59,130,246,.25);
+}
 
-            position: relative;
-        }
+.loading-box h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
 
-        .visual-card::before {
-            content: "";
+.loading-box p {
+    color: var(--muted);
+    font-size: 14px;
+}
 
-            position: absolute;
-            inset: 0;
+.loader {
+    width: 38px;
+    height: 38px;
 
-            background:
-                radial-gradient(
-                    circle at 50% 20%,
-                    rgba(255,255,255,.18),
-                    transparent 30%
-                );
+    margin: 24px auto 0;
 
-            z-index: 1;
-            pointer-events: none;
-        }
+    border-radius: 50%;
 
-        .visual-image {
-            width: 100%;
-            height: 100%;
+    border:
+        3px solid rgba(255,255,255,.08);
 
-            object-fit: cover;
+    border-top-color: var(--blue);
 
-            opacity: .78;
+    animation:
+        spin .8s linear infinite;
+}
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #10172d,
-                    #21173b
-                );
-        }
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-        .visual-overlay {
-            position: absolute;
-            inset: auto 18px 18px 18px;
+/* =========================================================
+   NAVBAR
+========================================================= */
 
-            z-index: 2;
+.navbar {
+    position: sticky;
+    top: 0;
 
-            padding: 20px;
+    z-index: 1000;
 
-            border:
-                1px solid rgba(255,255,255,.1);
+    width: 100%;
 
-            border-radius: 22px;
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
 
-            background:
-                rgba(7,7,13,.72);
+    background:
+        rgba(7,7,13,.78);
 
-            backdrop-filter:
-                blur(20px);
-        }
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
 
-        .visual-overlay small {
-            color: #aaaabd;
-            display: block;
-            margin-bottom: 7px;
-        }
+.nav-inner {
+    width: min(1200px, calc(100% - 32px));
 
-        .visual-overlay strong {
-            font-size: 1.35rem;
-        }
+    min-height: 76px;
 
-        .floating-badge {
-            position: absolute;
+    margin: auto;
 
-            display: flex;
-            align-items: center;
-            gap: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            padding:
-                12px 15px;
+    gap: 20px;
+}
 
-            border:
-                1px solid rgba(255,255,255,.11);
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
 
-            background:
-                rgba(15,15,24,.84);
+    font-weight: 800;
+    letter-spacing: -.4px;
+}
 
-            backdrop-filter:
-                blur(18px);
+.brand-icon {
+    width: 43px;
+    height: 43px;
 
-            border-radius: 16px;
+    border-radius: 14px;
 
-            box-shadow:
-                0 18px 50px rgba(0,0,0,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            font-size: .82rem;
-            font-weight: 700;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-        .badge-one {
-            top: 12%;
-            left: -30px;
-        }
+    font-size: 20px;
 
-        .badge-two {
-            right: -30px;
-            bottom: 15%;
-        }
+    box-shadow:
+        0 10px 28px rgba(59,130,246,.20);
+}
 
-        .badge-icon {
-            width: 32px;
-            height: 32px;
+.brand-text {
+    font-size: 18px;
+}
 
-            display: grid;
-            place-items: center;
+.brand-text span {
+    color: var(--blue);
+}
 
-            border-radius: 10px;
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-            background:
-                rgba(59,130,246,.15);
+.nav-link {
+    padding: 11px 15px;
 
-            color: #8eb8ff;
-        }
+    border-radius: 11px;
 
+    color: #cfcfda;
 
-        /* =========================================================
-           AUTH AREA
-        ========================================================= */
+    font-size: 14px;
+    font-weight: 600;
 
-        .auth-section {
-            width: min(760px, calc(100% - 32px));
+    transition: var(--transition);
+}
 
-            margin:
-                10px auto 70px;
-        }
+.nav-link:hover {
+    color: #fff;
+    background: rgba(255,255,255,.06);
+}
 
-        .auth-card {
-            position: relative;
+.account-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-            border:
-                1px solid var(--border);
+    padding: 11px 16px;
 
-            border-radius:
-                30px;
+    border-radius: 13px;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(18,18,28,.96),
-                    rgba(10,10,16,.95)
-                );
+    color: #fff;
 
-            box-shadow:
-                var(--shadow);
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-            padding:
-                clamp(22px, 5vw, 40px);
+    cursor: pointer;
 
-            overflow: hidden;
-        }
+    font-weight: 700;
+    font-size: 14px;
 
-        .auth-card::before {
-            content: "";
+    box-shadow:
+        0 10px 25px rgba(59,130,246,.18);
 
-            position: absolute;
+    transition: var(--transition);
+}
 
-            width: 240px;
-            height: 240px;
+.account-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 35px rgba(59,130,246,.28);
+}
 
-            top: -130px;
-            right: -100px;
+.account-btn:active {
+    transform: scale(.98);
+}
 
-            border-radius: 50%;
+/* =========================================================
+   MAIN
+========================================================= */
 
-            background:
-                rgba(139,92,246,.12);
+main {
+    width: min(1200px, calc(100% - 32px));
+    margin: auto;
+}
 
-            filter: blur(20px);
+/* =========================================================
+   HERO
+========================================================= */
 
-            pointer-events: none;
-        }
+.hero {
+    min-height: calc(100vh - 76px);
 
-        .auth-header {
-            position: relative;
-            z-index: 1;
-        }
+    display: grid;
 
-        .auth-header h2 {
-            font-size:
-                clamp(
-                    2rem,
-                    5vw,
-                    3rem
-                );
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(320px, .85fr);
 
-            letter-spacing: -.045em;
-        }
+    align-items: center;
 
-        .auth-header p {
-            color: var(--muted);
+    gap: 70px;
 
-            line-height: 1.7;
+    padding:
+        70px 0
+        80px;
+}
 
-            margin-top: 9px;
-        }
+.hero-copy {
+    max-width: 650px;
+}
 
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 
-        /* =========================================================
-           AUTH TABS
-        ========================================================= */
+    margin-bottom: 20px;
 
-        .auth-tabs {
-            position: relative;
-            z-index: 2;
+    padding: 8px 13px;
 
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+    border:
+        1px solid rgba(59,130,246,.22);
 
-            gap: 5px;
+    border-radius: 999px;
 
-            margin-top: 28px;
+    color: #b9d2ff;
 
-            padding: 5px;
+    background:
+        rgba(59,130,246,.08);
 
-            border-radius: 18px;
+    font-size: 12px;
+    font-weight: 700;
 
-            background:
-                rgba(0,0,0,.35);
-        }
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
 
-        .auth-tab {
-            min-height: 50px;
+.eyebrow i {
+    color: var(--blue);
+    font-size: 16px;
+}
 
-            border: none;
+.hero h1 {
+    font-family: "Playfair Display", serif;
 
-            border-radius: 14px;
+    font-size:
+        clamp(48px, 7vw, 86px);
 
-            color: #9999a7;
+    line-height: .98;
 
-            background: transparent;
+    letter-spacing: -2.8px;
 
-            font-weight: 700;
+    margin-bottom: 24px;
+}
 
-            transition:
-                .2s ease;
-        }
+.hero h1 span {
+    display: block;
 
-        .auth-tab.active {
-            color: white;
+    background:
+        linear-gradient(
+            135deg,
+            #fff,
+            #b8c8ff 48%,
+            #a78bfa
+        );
 
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.28),
-                    rgba(139,92,246,.25)
-                );
+    -webkit-background-clip: text;
+    background-clip: text;
 
-            box-shadow:
-                inset 0 0 0 1px rgba(255,255,255,.07);
-        }
+    color: transparent;
+}
 
+.hero-description {
+    max-width: 580px;
 
-        /* =========================================================
-           ALERTS
-        ========================================================= */
+    color: var(--muted);
 
-        .alert {
-            display: none;
+    font-size: 17px;
+    line-height: 1.8;
 
-            margin-top: 24px;
+    margin-bottom: 32px;
+}
 
-            padding:
-                16px 18px;
+.hero-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 
-            border-radius:
-                17px;
+    gap: 12px;
+}
 
-            border:
-                1px solid transparent;
-        }
+.primary-btn,
+.secondary-btn {
+    min-height: 52px;
 
-        .alert.show {
-            display: block;
-        }
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-        .alert-title {
-            display: flex;
-            align-items: center;
-            gap: 9px;
+    gap: 9px;
 
-            font-weight: 800;
+    padding:
+        0 20px;
 
-            margin-bottom: 6px;
-        }
+    border-radius: 14px;
 
-        .alert-message {
-            color: #c6c6d0;
+    font-size: 14px;
+    font-weight: 700;
 
-            line-height: 1.55;
+    cursor: pointer;
 
-            font-size: .92rem;
-        }
+    transition: var(--transition);
+}
 
-        .alert.error {
-            background:
-                rgba(239,68,68,.09);
+.primary-btn {
+    color: #fff;
 
-            border-color:
-                rgba(239,68,68,.25);
-        }
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-        .alert.error .alert-title {
-            color: #ff9e9e;
-        }
+    box-shadow:
+        0 12px 35px rgba(59,130,246,.20);
+}
 
-        .alert.success {
-            background:
-                rgba(34,197,94,.08);
+.primary-btn:hover {
+    transform: translateY(-2px);
 
-            border-color:
-                rgba(34,197,94,.22);
-        }
+    box-shadow:
+        0 16px 40px rgba(59,130,246,.30);
+}
 
-        .alert.success .alert-title {
-            color: #8bf0a8;
-        }
+.secondary-btn {
+    color: #fff;
 
-        .alert.info {
-            background:
-                rgba(59,130,246,.08);
+    border:
+        1px solid rgba(255,255,255,.10);
 
-            border-color:
-                rgba(59,130,246,.22);
-        }
+    background:
+        rgba(255,255,255,.045);
+}
 
-        .alert.info .alert-title {
-            color: #9fc4ff;
-        }
+.secondary-btn:hover {
+    background:
+        rgba(255,255,255,.08);
 
+    transform: translateY(-2px);
+}
 
-        /* =========================================================
-           FORM
-        ========================================================= */
+/* =========================================================
+   SWIPE CAROUSEL
+========================================================= */
 
-        .auth-form {
-            margin-top: 27px;
-        }
+.hero-visual {
+    width: 100%;
+}
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
+.hero-carousel {
+    position: relative;
 
-        .form-group {
-            margin-bottom: 18px;
-        }
+    width: 100%;
 
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
+    overflow: hidden;
 
-        .form-label {
-            display: block;
+    border-radius: 30px;
 
-            color: #d4d4df;
+    border:
+        1px solid rgba(255,255,255,.10);
 
-            font-size: .91rem;
+    background:
+        rgba(255,255,255,.03);
 
-            font-weight: 600;
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.50);
 
-            margin-bottom: 9px;
-        }
+    user-select: none;
+    touch-action: pan-y;
+}
 
-        .input-wrap {
-            position: relative;
-        }
+.hero-carousel::before {
+    content: "";
 
-        .input-icon {
-            position: absolute;
+    position: absolute;
+    inset: 0;
 
-            left: 16px;
-            top: 50%;
+    z-index: 3;
 
-            transform:
-                translateY(-50%);
+    pointer-events: none;
 
-            color: #777787;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.03),
+            transparent 45%,
+            rgba(0,0,0,.65)
+        );
+}
 
-            font-size: 1.15rem;
+.carousel-track {
+    display: flex;
 
-            pointer-events: none;
-        }
+    width: 100%;
 
-        .form-input,
-        .form-select {
-            width: 100%;
+    transition:
+        transform .55s cubic-bezier(.22,.61,.36,1);
+}
 
-            min-height: 56px;
+.carousel-slide {
+    position: relative;
 
-            padding:
-                0 16px 0 47px;
+    flex:
+        0 0 100%;
 
-            border:
-                1px solid rgba(255,255,255,.09);
+    aspect-ratio: 4 / 5;
 
-            border-radius:
-                16px;
+    overflow: hidden;
+}
 
-            outline: none;
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
 
-            color: white;
+    object-fit: cover;
 
-            background:
-                rgba(255,255,255,.035);
+    pointer-events: none;
 
-            transition:
-                border-color .2s ease,
-                background .2s ease,
-                box-shadow .2s ease;
-        }
+    transform: scale(1.01);
 
-        .form-select {
-            padding-left: 47px;
-            appearance: auto;
-        }
+    transition:
+        transform 1s ease;
+}
 
-        .form-input::placeholder {
-            color: #686875;
-        }
+.carousel-slide.active img {
+    transform: scale(1.045);
+}
 
-        .form-input:focus,
-        .form-select:focus {
-            border-color:
-                rgba(59,130,246,.65);
+.carousel-caption {
+    position: absolute;
 
-            background:
-                rgba(255,255,255,.055);
+    left: 20px;
+    right: 20px;
+    bottom: 22px;
 
-            box-shadow:
-                0 0 0 4px rgba(59,130,246,.08);
-        }
+    z-index: 5;
 
-        .password-toggle {
-            position: absolute;
+    padding: 17px 18px;
 
-            right: 14px;
-            top: 50%;
+    border:
+        1px solid rgba(255,255,255,.10);
 
-            transform:
-                translateY(-50%);
+    border-radius: 17px;
 
-            width: 36px;
-            height: 36px;
+    background:
+        rgba(7,7,13,.55);
 
-            display: grid;
-            place-items: center;
+    backdrop-filter: blur(14px);
+}
 
-            border: none;
+.carousel-caption small {
+    display: block;
 
-            border-radius: 10px;
+    margin-bottom: 4px;
 
-            color: #a3a3b2;
+    color: #aeb9d8;
 
-            background: transparent;
+    font-size: 11px;
+    font-weight: 700;
 
-            font-size: 1.25rem;
-        }
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
 
-        .password-toggle:hover {
-            background:
-                rgba(255,255,255,.07);
-        }
+.carousel-caption strong {
+    font-size: 17px;
+}
 
-        .password-input {
-            padding-right: 55px;
-        }
+.carousel-arrow {
+    position: absolute;
 
-        .field-help {
-            color: #777786;
+    top: 50%;
 
-            font-size: .78rem;
+    z-index: 10;
 
-            line-height: 1.5;
+    width: 43px;
+    height: 43px;
 
-            margin-top: 8px;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    border:
+        1px solid rgba(255,255,255,.13);
 
-        /* =========================================================
-           ACCOUNT TYPE
-        ========================================================= */
+    border-radius: 50%;
 
-        .account-info {
-            margin-top: 9px;
+    color: #fff;
 
-            padding:
-                12px 14px;
+    background:
+        rgba(7,7,13,.55);
 
-            border-radius: 14px;
+    backdrop-filter: blur(12px);
 
-            background:
-                rgba(255,255,255,.025);
+    cursor: pointer;
 
-            border:
-                1px solid rgba(255,255,255,.055);
+    transform:
+        translateY(-50%);
 
-            color: #8e8e9d;
+    transition: var(--transition);
+}
 
-            font-size: .82rem;
+.carousel-arrow:hover {
+    background:
+        rgba(59,130,246,.85);
 
-            line-height: 1.55;
-        }
+    border-color:
+        rgba(255,255,255,.25);
 
-        .account-info strong {
-            color: #c6c6d2;
-        }
+    transform:
+        translateY(-50%) scale(1.05);
+}
 
+.carousel-arrow.prev {
+    left: 15px;
+}
 
-        /* =========================================================
-           SUBMIT
-        ========================================================= */
+.carousel-arrow.next {
+    right: 15px;
+}
 
-        .submit-btn {
-            width: 100%;
+.carousel-arrow i {
+    font-size: 23px;
+}
 
-            min-height: 58px;
+.carousel-dots {
+    position: absolute;
 
-            margin-top: 5px;
+    left: 50%;
+    bottom: 14px;
 
-            border: none;
+    z-index: 12;
 
-            border-radius: 17px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
 
-            color: white;
+    transform:
+        translateX(-50%);
+}
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
+.carousel-dot {
+    width: 7px;
+    height: 7px;
 
-            font-size: 1rem;
+    border-radius: 50%;
 
-            font-weight: 900;
+    background:
+        rgba(255,255,255,.42);
 
-            box-shadow:
-                0 15px 35px rgba(59,130,246,.2);
+    cursor: pointer;
 
-            transition:
-                transform .2s ease,
-                filter .2s ease,
-                opacity .2s ease;
-        }
+    transition: var(--transition);
+}
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.06);
-        }
+.carousel-dot.active {
+    width: 23px;
 
-        .submit-btn:disabled {
-            cursor: not-allowed;
-            opacity: .6;
-            transform: none;
-        }
+    border-radius: 999px;
 
-        .submit-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-        }
+    background:
+        #fff;
+}
 
-        .spinner {
-            width: 19px;
-            height: 19px;
+.swipe-hint {
+    position: absolute;
 
-            border-radius: 50%;
+    top: 16px;
+    left: 50%;
 
-            border:
-                2px solid rgba(255,255,255,.3);
+    z-index: 8;
 
-            border-top-color: white;
+    transform:
+        translateX(-50%);
 
-            animation:
-                spin .7s linear infinite;
-        }
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+    padding: 7px 11px;
 
+    border:
+        1px solid rgba(255,255,255,.09);
 
-        /* =========================================================
-           AUTH FOOTER
-        ========================================================= */
+    border-radius: 999px;
 
-        .auth-footer {
-            text-align: center;
+    background:
+        rgba(7,7,13,.48);
 
-            color: #777786;
+    backdrop-filter: blur(10px);
 
-            font-size: .82rem;
+    color: rgba(255,255,255,.72);
 
-            line-height: 1.6;
+    font-size: 10px;
+    font-weight: 600;
 
-            margin-top: 18px;
-        }
+    pointer-events: none;
 
-        .auth-footer strong {
-            color: #aeb4c6;
-        }
+    opacity: 1;
 
+    transition:
+        opacity .5s ease;
+}
 
-        /* =========================================================
-           LOGGED IN PANEL
-        ========================================================= */
+.swipe-hint.hidden {
+    opacity: 0;
+}
 
-        .account-panel {
-            display: none;
-        }
+/* =========================================================
+   STATS
+========================================================= */
 
-        .account-panel.show {
-            display: block;
-        }
+.hero-stats {
+    display: flex;
+    flex-wrap: wrap;
 
-        .account-summary {
-            margin-top: 28px;
+    gap: 30px;
 
-            display: flex;
-            align-items: center;
+    margin-top: 40px;
+}
 
-            gap: 15px;
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
 
-            padding:
-                18px;
+.stat strong {
+    font-size: 21px;
+}
 
-            border-radius:
-                19px;
+.stat span {
+    color: var(--muted);
 
-            border:
-                1px solid var(--border);
+    font-size: 12px;
+}
 
-            background:
-                rgba(255,255,255,.035);
-        }
+/* =========================================================
+   AUTH SECTION
+========================================================= */
 
-        .account-avatar {
-            width: 52px;
-            height: 52px;
+.section {
+    padding:
+        100px 0;
+}
 
-            flex: 0 0 52px;
+.section-heading {
+    max-width: 680px;
 
-            display: grid;
-            place-items: center;
+    margin-bottom: 38px;
+}
 
-            border-radius: 16px;
+.section-label {
+    display: block;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
+    margin-bottom: 10px;
 
-            font-size: 1.3rem;
-        }
+    color: var(--blue);
 
-        .account-details {
-            min-width: 0;
-        }
+    font-size: 12px;
+    font-weight: 800;
 
-        .account-email {
-            font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+}
 
-            overflow: hidden;
+.section-heading h2 {
+    font-family: "Playfair Display", serif;
 
-            text-overflow: ellipsis;
+    font-size:
+        clamp(36px, 5vw, 56px);
 
-            white-space: nowrap;
-        }
+    line-height: 1.05;
 
-        .account-role {
-            display: inline-flex;
+    letter-spacing: -1.5px;
 
-            margin-top: 5px;
+    margin-bottom: 15px;
+}
 
-            padding:
-                4px 9px;
+.section-heading p {
+    color: var(--muted);
 
-            border-radius: 999px;
+    line-height: 1.75;
+}
 
-            color: #c6d8ff;
+/* =========================================================
+   AUTH CARD
+========================================================= */
 
-            background:
-                rgba(59,130,246,.1);
+.auth-wrap {
+    display: grid;
 
-            font-size: .72rem;
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(280px, .7fr);
 
-            font-weight: 800;
+    gap: 25px;
+}
 
-            text-transform: uppercase;
-        }
+.auth-card,
+.auth-side-card {
+    border:
+        1px solid var(--border);
 
-        .account-actions {
-            display: grid;
+    border-radius: var(--radius-lg);
 
-            grid-template-columns:
-                1fr 1fr;
+    background:
+        var(--panel);
 
-            gap: 10px;
+    backdrop-filter: blur(25px);
 
-            margin-top: 18px;
-        }
+    box-shadow: var(--shadow);
+}
 
-        .secondary-btn {
-            min-height: 50px;
+.auth-card {
+    padding: 30px;
+}
 
-            border:
-                1px solid var(--border);
+.auth-side-card {
+    padding: 30px;
 
-            border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-            color: white;
+.auth-tabs {
+    display: grid;
 
-            background:
-                rgba(255,255,255,.035);
+    grid-template-columns: 1fr 1fr;
 
-            font-weight: 800;
-        }
+    padding: 5px;
 
-        .secondary-btn:hover {
-            background:
-                rgba(255,255,255,.07);
-        }
+    margin-bottom: 28px;
 
-        .secondary-btn.danger {
-            color: #ffabab;
+    border-radius: 14px;
 
-            border-color:
-                rgba(239,68,68,.2);
-        }
+    background:
+        rgba(255,255,255,.045);
+}
 
+.auth-tab {
+    padding: 12px;
 
-        /* =========================================================
-           ELITE SECTION
-        ========================================================= */
+    border-radius: 10px;
 
-        .elite-section {
-            width:
-                min(
-                    1180px,
-                    calc(100% - 32px)
-                );
+    color: var(--muted);
 
-            margin:
-                0 auto 80px;
-        }
+    background: transparent;
 
-        .section-heading {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 20px;
+    cursor: pointer;
 
-            margin-bottom: 25px;
-        }
+    font-weight: 700;
+    font-size: 13px;
 
-        .section-heading h2 {
-            font-family:
-                "Playfair Display",
-                serif;
+    transition: var(--transition);
+}
 
-            font-size:
-                clamp(
-                    2rem,
-                    5vw,
-                    3rem
-                );
+.auth-tab.active {
+    color: #fff;
 
-            letter-spacing: -.04em;
-        }
+    background:
+        rgba(255,255,255,.09);
+}
 
-        .section-heading p {
-            color: var(--muted);
+.auth-form {
+    display: flex;
+    flex-direction: column;
 
-            max-width: 500px;
+    gap: 16px;
+}
 
-            line-height: 1.6;
-        }
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-        .elite-grid {
-            display: grid;
+.field label {
+    color: #d7d7e0;
 
-            grid-template-columns:
-                repeat(
-                    3,
-                    1fr
-                );
+    font-size: 12px;
+    font-weight: 700;
+}
 
-            gap: 18px;
-        }
+.field input,
+.field select {
+    width: 100%;
 
-        .elite-card {
-            min-height: 260px;
+    min-height: 50px;
 
-            padding:
-                25px;
+    padding:
+        0 15px;
 
-            border-radius:
-                24px;
+    border:
+        1px solid rgba(255,255,255,.08);
 
-            border:
-                1px solid var(--border);
+    border-radius: 13px;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.045),
-                    rgba(255,255,255,.015)
-                );
+    outline: none;
 
-            position: relative;
+    color: #fff;
 
-            overflow: hidden;
+    background:
+        rgba(255,255,255,.045);
 
-            transition:
-                transform .25s ease,
-                border-color .25s ease;
-        }
+    transition: var(--transition);
+}
 
-        .elite-card:hover {
-            transform:
-                translateY(-5px);
+.field input::placeholder {
+    color: #6e6e7e;
+}
 
-            border-color:
-                rgba(139,92,246,.3);
-        }
+.field input:focus,
+.field select:focus {
+    border-color:
+        rgba(59,130,246,.65);
 
-        .elite-card::after {
-            content: "";
+    background:
+        rgba(59,130,246,.055);
 
-            position: absolute;
+    box-shadow:
+        0 0 0 4px rgba(59,130,246,.08);
+}
 
-            width: 180px;
-            height: 180px;
+.field select option {
+    color: #111;
+}
 
-            border-radius: 50%;
+.password-wrap {
+    position: relative;
+}
 
-            right: -80px;
-            bottom: -90px;
+.password-wrap input {
+    padding-right: 48px;
+}
 
-            background:
-                rgba(139,92,246,.13);
+.password-toggle {
+    position: absolute;
 
-            filter: blur(10px);
-        }
+    right: 10px;
+    top: 50%;
 
-        .elite-number {
-            color: #707080;
+    width: 35px;
+    height: 35px;
 
-            font-size: .76rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            font-weight: 900;
+    transform:
+        translateY(-50%);
 
-            letter-spacing: .12em;
+    color: #9d9dab;
 
-            text-transform: uppercase;
-        }
+    background: transparent;
 
-        .elite-icon {
-            width: 50px;
-            height: 50px;
+    cursor: pointer;
 
-            display: grid;
-            place-items: center;
+    border-radius: 9px;
+}
 
-            margin-top: 22px;
+.password-toggle:hover {
+    color: #fff;
+    background: rgba(255,255,255,.06);
+}
 
-            border-radius: 15px;
+.auth-submit {
+    min-height: 53px;
 
-            color: #a9c7ff;
+    margin-top: 5px;
 
-            background:
-                rgba(59,130,246,.1);
+    border-radius: 14px;
 
-            font-size: 1.4rem;
-        }
+    color: #fff;
 
-        .elite-card h3 {
-            margin-top: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-            font-size: 1.25rem;
-        }
+    cursor: pointer;
 
-        .elite-card p {
-            color: var(--muted);
+    font-size: 14px;
+    font-weight: 800;
 
-            line-height: 1.65;
+    transition: var(--transition);
+}
 
-            margin-top: 9px;
+.auth-submit:hover {
+    transform: translateY(-2px);
+}
 
-            font-size: .9rem;
-        }
+.auth-submit:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
 
+.auth-message {
+    min-height: 20px;
 
-        /* =========================================================
-           QUICK LINKS
-        ========================================================= */
+    color: var(--muted);
 
-        .quick-section {
-            width:
-                min(
-                    1180px,
-                    calc(100% - 32px)
-                );
+    font-size: 12px;
 
-            margin:
-                0 auto 80px;
-        }
+    line-height: 1.5;
+}
 
-        .quick-grid {
-            display: grid;
+.auth-info {
+    padding: 13px 14px;
 
-            grid-template-columns:
-                repeat(
-                    4,
-                    1fr
-                );
+    border:
+        1px solid rgba(59,130,246,.12);
 
-            gap: 13px;
-        }
+    border-radius: 13px;
 
-        .quick-card {
-            padding:
-                19px;
+    color: #aebce0;
 
-            border:
-                1px solid var(--border);
+    background:
+        rgba(59,130,246,.045);
 
-            border-radius:
-                18px;
+    font-size: 12px;
 
-            background:
-                rgba(255,255,255,.025);
+    line-height: 1.6;
+}
 
-            transition:
-                transform .2s ease,
-                background .2s ease;
-        }
+.auth-info i {
+    color: var(--blue);
 
-        .quick-card:hover {
-            transform:
-                translateY(-3px);
+    margin-right: 5px;
+}
 
-            background:
-                rgba(255,255,255,.05);
-        }
+/* =========================================================
+   LOGGED IN PANEL
+========================================================= */
 
-        .quick-card i {
-            font-size: 1.35rem;
+#accountPanel {
+    display: none;
 
-            color:
-                #9bbcff;
-        }
+    padding: 5px 0;
+}
 
-        .quick-card strong {
-            display: block;
+.account-profile {
+    display: flex;
+    align-items: center;
 
-            margin-top: 12px;
-        }
+    gap: 15px;
 
-        .quick-card span {
-            display: block;
+    padding: 17px;
 
-            margin-top: 5px;
+    margin-bottom: 20px;
 
-            color: var(--muted);
+    border:
+        1px solid rgba(255,255,255,.08);
 
-            font-size: .8rem;
-        }
+    border-radius: 17px;
 
+    background:
+        rgba(255,255,255,.035);
+}
 
-        /* =========================================================
-           FOOTER
-        ========================================================= */
+.profile-avatar {
+    width: 50px;
+    height: 50px;
 
-        footer {
-            width:
-                min(
-                    1180px,
-                    calc(100% - 32px)
-                );
+    flex-shrink: 0;
 
-            margin:
-                0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            padding:
-                25px 0 35px;
+    border-radius: 15px;
 
-            border-top:
-                1px solid rgba(255,255,255,.06);
+    color: #fff;
 
-            color: #6f6f7d;
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-            font-size: .78rem;
-        }
+    font-weight: 800;
+    font-size: 19px;
+}
 
-        .footer-inner {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+.profile-info {
+    min-width: 0;
+}
 
+.profile-info strong {
+    display: block;
 
-        /* =========================================================
-           PAGE LOADER
-        ========================================================= */
+    margin-bottom: 3px;
 
-        .page-loader {
-            position: fixed;
+    overflow: hidden;
 
-            inset: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-            z-index: 5000;
+.profile-info span {
+    display: block;
 
-            display: flex;
+    color: var(--muted);
 
-            align-items: center;
+    font-size: 12px;
+}
 
-            justify-content: center;
+.role-badge {
+    display: inline-flex;
 
-            background:
-                #07070d;
+    margin-top: 7px;
 
-            transition:
-                opacity .35s ease,
-                visibility .35s ease;
-        }
+    padding: 4px 8px;
 
-        .page-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+    border-radius: 999px;
 
-        .loader-content {
-            text-align: center;
-        }
+    color: #bcd4ff;
 
-        .loader-logo {
-            width: 64px;
-            height: 64px;
+    background:
+        rgba(59,130,246,.10);
 
-            margin: 0 auto 18px;
+    font-size: 10px;
+    font-weight: 800;
 
-            display: grid;
-            place-items: center;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
 
-            border-radius: 20px;
+.account-actions {
+    display: grid;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--purple)
-                );
+    grid-template-columns: 1fr 1fr;
 
-            font-size: 1.8rem;
+    gap: 10px;
+}
 
-            box-shadow:
-                0 20px 50px rgba(59,130,246,.22);
-        }
+.account-action {
+    min-height: 48px;
 
-        .loader-content p {
-            color: #81818e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            font-size: .82rem;
-        }
+    gap: 8px;
 
+    border:
+        1px solid rgba(255,255,255,.08);
 
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
+    border-radius: 13px;
 
-        @media (max-width: 900px) {
+    color: #fff;
 
-            .hero {
-                grid-template-columns: 1fr;
+    background:
+        rgba(255,255,255,.045);
 
-                padding-top: 50px;
+    cursor: pointer;
 
-                gap: 35px;
-            }
+    font-size: 13px;
+    font-weight: 700;
 
-            .hero-visual {
-                min-height: 350px;
-            }
+    transition: var(--transition);
+}
 
-            .visual-card {
-                width:
-                    min(
-                        100%,
-                        360px
-                    );
-            }
+.account-action:hover {
+    background:
+        rgba(255,255,255,.08);
+}
 
-            .badge-one {
-                left:
-                    max(
-                        0px,
-                        calc(
-                            50% - 205px
-                        )
-                    );
-            }
+.account-action.primary {
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--purple)
+        );
 
-            .badge-two {
-                right:
-                    max(
-                        0px,
-                        calc(
-                            50% - 205px
-                        )
-                    );
-            }
+    border-color: transparent;
+}
 
-            .elite-grid {
-                grid-template-columns:
-                    1fr 1fr;
-            }
+.account-action.logout {
+    color: #ffb1b1;
+}
 
-            .quick-grid {
-                grid-template-columns:
-                    1fr 1fr;
-            }
-        }
+/* =========================================================
+   AUTH SIDE
+========================================================= */
 
+.auth-side-card h3 {
+    font-family:
+        "Playfair Display",
+        serif;
 
-        @media (max-width: 650px) {
+    font-size: 30px;
 
-            .nav-inner {
-                min-height: 68px;
-            }
+    line-height: 1.15;
 
-            .nav-btn {
-                padding:
-                    9px 12px;
+    margin-bottom: 13px;
+}
 
-                font-size: .8rem;
-            }
+.auth-side-card > p {
+    color: var(--muted);
 
-            .brand span {
-                font-size: 1.15rem;
-            }
+    font-size: 14px;
 
-            .brand-icon {
-                width: 38px;
-                height: 38px;
-            }
+    line-height: 1.75;
+}
 
-            .hero {
-                padding-top: 40px;
-            }
+.feature-list {
+    display: flex;
+    flex-direction: column;
 
-            .hero h1 {
-                font-size:
-                    clamp(
-                        2.8rem,
-                        15vw,
-                        4.3rem
-                    );
-            }
+    gap: 15px;
 
-            .hero-actions {
-                display: grid;
-                grid-template-columns: 1fr;
-            }
+    margin-top: 30px;
+}
 
-            .main-btn {
-                width: 100%;
-            }
+.feature-item {
+    display: flex;
+    gap: 12px;
+}
 
-            .hero-visual {
-                min-height: 310px;
-            }
+.feature-icon {
+    width: 38px;
+    height: 38px;
 
-            .visual-card {
-                width: 85%;
-            }
+    flex-shrink: 0;
 
-            .floating-badge {
-                font-size: .7rem;
-                padding: 9px 11px;
-            }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            .badge-one {
-                left: 0;
-            }
+    border-radius: 12px;
 
-            .badge-two {
-                right: 0;
-            }
+    color: #bcd4ff;
 
-            .auth-section {
-                width:
-                    min(
-                        100%,
-                        calc(100% - 20px)
-                    );
-            }
+    background:
+        rgba(59,130,246,.09);
+}
 
-            .auth-card {
-                border-radius:
-                    23px;
+.feature-item strong {
+    display: block;
 
-                padding:
-                    21px 17px;
-            }
+    margin-bottom: 3px;
 
-            .form-grid {
-                grid-template-columns:
-                    1fr;
-                gap: 0;
-            }
+    font-size: 13px;
+}
 
-            .form-group.full {
-                grid-column: auto;
-            }
+.feature-item span {
+    color: var(--muted);
 
-            .elite-section,
-            .quick-section {
-                width:
-                    min(
-                        100%,
-                        calc(100% - 20px)
-                    );
-            }
+    font-size: 11px;
 
-            .elite-grid {
-                grid-template-columns:
-                    1fr;
-            }
+    line-height: 1.5;
+}
 
-            .quick-grid {
-                grid-template-columns:
-                    1fr 1fr;
-            }
+/* =========================================================
+   ELITE SECTION
+========================================================= */
 
-            .section-heading {
-                display: block;
-            }
+.elite-section {
+    position: relative;
 
-            .section-heading p {
-                margin-top: 8px;
-            }
+    overflow: hidden;
 
-            .account-actions {
-                grid-template-columns:
-                    1fr;
-            }
+    padding:
+        80px 30px;
 
-            footer {
-                width:
-                    min(
-                        100%,
-                        calc(100% - 20px)
-                    );
-            }
-        }
+    border:
+        1px solid rgba(255,255,255,.08);
 
+    border-radius:
+        32px;
 
-        @media (max-width: 400px) {
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(59,130,246,.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(139,92,246,.14),
+            transparent 32%
+        ),
+        rgba(18,18,29,.72);
 
-            .quick-grid {
-                grid-template-columns:
-                    1fr;
-            }
+    box-shadow: var(--shadow);
+}
 
-            .auth-tabs {
-                border-radius:
-                    15px;
-            }
+.elite-content {
+    position: relative;
 
-            .auth-tab {
-                font-size:
-                    .88rem;
-            }
-        }
+    z-index: 2;
 
-    </style>
+    max-width: 700px;
+}
 
+.elite-content .section-label {
+    color: #a78bfa;
+}
+
+.elite-content h2 {
+    font-family:
+        "Playfair Display",
+        serif;
+
+    font-size:
+        clamp(38px, 6vw, 65px);
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+
+    margin-bottom: 20px;
+}
+
+.elite-content p {
+    color: #aaaaba;
+
+    max-width: 620px;
+
+    line-height: 1.8;
+
+    margin-bottom: 28px;
+}
+
+.elite-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-top: 45px;
+}
+
+.elite-card {
+    padding: 22px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    transition: var(--transition);
+}
+
+.elite-card:hover {
+    transform: translateY(-5px);
+
+    background:
+        rgba(255,255,255,.055);
+}
+
+.elite-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 14px;
+
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.8),
+            rgba(139,92,246,.8)
+        );
+
+    font-size: 20px;
+}
+
+.elite-card h3 {
+    margin-bottom: 8px;
+
+    font-size: 15px;
+}
+
+.elite-card p {
+    margin: 0;
+
+    font-size: 12px;
+
+    line-height: 1.65;
+}
+
+/* =========================================================
+   QUICK LINKS
+========================================================= */
+
+.quick-links {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+}
+
+.quick-link {
+    padding: 22px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    transition: var(--transition);
+}
+
+.quick-link:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(59,130,246,.25);
+
+    background:
+        rgba(59,130,246,.055);
+}
+
+.quick-link i {
+    display: block;
+
+    margin-bottom: 15px;
+
+    color: var(--blue);
+
+    font-size: 24px;
+}
+
+.quick-link strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-size: 14px;
+}
+
+.quick-link span {
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    width: min(1200px, calc(100% - 32px));
+
+    margin:
+        30px auto 0;
+
+    padding:
+        35px 0 45px;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.footer-brand {
+    color: #aaaaba;
+
+    font-size: 12px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 15px;
+
+    color: #777788;
+
+    font-size: 11px;
+}
+
+.footer-links a:hover {
+    color: #fff;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+#toastContainer {
+    position: fixed;
+
+    right: 18px;
+    bottom: 18px;
+
+    z-index: 10000;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    width: min(360px, calc(100% - 36px));
+}
+
+.toast {
+    padding: 14px 16px;
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    border-radius: 14px;
+
+    color: #fff;
+
+    background:
+        rgba(18,18,29,.92);
+
+    backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.4);
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    animation:
+        toastIn .3s ease;
+}
+
+.toast.success {
+    border-color:
+        rgba(34,197,94,.25);
+}
+
+.toast.error {
+    border-color:
+        rgba(239,68,68,.25);
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .hero {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+
+        padding-top: 50px;
+    }
+
+    .hero-copy {
+        max-width: 700px;
+    }
+
+    .hero-visual {
+        width: min(650px, 100%);
+
+        margin: auto;
+    }
+
+    .auth-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+
+    .nav-inner {
+        min-height: 68px;
+    }
+
+    .nav-links .nav-link {
+        display: none;
+    }
+
+    .brand-text {
+        font-size: 16px;
+    }
+
+    .brand-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    main {
+        width:
+            min(
+                100% - 24px,
+                1200px
+            );
+    }
+
+    .hero {
+        min-height: auto;
+
+        padding:
+            42px 0
+            60px;
+    }
+
+    .hero h1 {
+        font-size:
+            clamp(46px, 15vw, 68px);
+
+        letter-spacing: -2px;
+    }
+
+    .hero-description {
+        font-size: 15px;
+    }
+
+    .hero-actions {
+        display: grid;
+
+        grid-template-columns: 1fr;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+    }
+
+    .hero-carousel {
+        border-radius: 23px;
+    }
+
+    .carousel-slide {
+        aspect-ratio: 4 / 5;
+    }
+
+    .carousel-arrow {
+        width: 38px;
+        height: 38px;
+    }
+
+    .carousel-arrow.prev {
+        left: 10px;
+    }
+
+    .carousel-arrow.next {
+        right: 10px;
+    }
+
+    .carousel-caption {
+        left: 12px;
+        right: 12px;
+        bottom: 13px;
+
+        padding: 13px;
+    }
+
+    .carousel-caption strong {
+        font-size: 14px;
+    }
+
+    .swipe-hint {
+        top: 11px;
+    }
+
+    .hero-stats {
+        gap: 20px;
+    }
+
+    .section {
+        padding:
+            70px 0;
+    }
+
+    .auth-card,
+    .auth-side-card {
+        padding: 21px;
+    }
+
+    .elite-section {
+        padding:
+            55px 20px;
+
+        border-radius: 24px;
+    }
+
+    .elite-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .account-btn span {
+        display: none;
+    }
+
+    .account-btn {
+        width: 42px;
+        height: 42px;
+
+        padding: 0;
+
+        justify-content: center;
+    }
+
+    .account-btn i {
+        font-size: 19px;
+    }
+
+    .account-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
 </head>
-
 
 <body>
 
-    <!-- =========================================================
-         BACKGROUND
-    ========================================================== -->
+<!-- =======================================================
+     LOADING SCREEN
+======================================================= -->
 
-    <div class="background-orb orb-one"></div>
-    <div class="background-orb orb-two"></div>
-    <div class="background-orb orb-three"></div>
+<div id="loadingScreen">
+
+    <div class="loading-box">
+
+        <div class="loading-logo">
+            K@
+        </div>
+
+        <h2>K@si Web</h2>
+
+        <p>
+            Preparing your grooming space...
+        </p>
+
+        <div class="loader"></div>
+
+    </div>
+
+</div>
 
 
-    <!-- =========================================================
-         PAGE LOADER
-    ========================================================== -->
+<!-- =======================================================
+     NAVBAR
+======================================================= -->
 
-    <div
-        class="page-loader"
-        id="pageLoader"
-    >
+<header class="navbar">
 
-        <div class="loader-content">
+    <div class="nav-inner">
 
-            <div class="loader-logo">
-                <i class="bx bx-cut"></i>
+        <a
+            href="index.html"
+            class="brand"
+        >
+
+            <div class="brand-icon">
+                <i class='bx bx-cut'></i>
             </div>
 
-            <p>
-                Loading K@si Web...
-            </p>
+            <div class="brand-text">
+                K@si <span>Web</span>
+            </div>
+
+        </a>
+
+        <nav class="nav-links">
+
+            <!-- HOME GOES TO LANDING PAGE -->
+            <a
+                href="index.html"
+                class="nav-link"
+            >
+                Home
+            </a>
+
+            <a
+                href="salons.html"
+                class="nav-link"
+            >
+                Salons
+            </a>
+
+            <button
+                type="button"
+                class="account-btn"
+                id="navAccountButton"
+            >
+
+                <i class='bx bx-user-circle'></i>
+
+                <span>
+                    Account
+                </span>
+
+            </button>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
+
+<main>
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<section class="hero">
+
+    <div class="hero-copy">
+
+        <div class="eyebrow">
+
+            <i class='bx bx-sparkles'></i>
+
+            Your local beauty & grooming marketplace
+
+        </div>
+
+        <h1>
+
+            Fresh cuts.
+
+            <span>
+                No lines.
+            </span>
+
+        </h1>
+
+        <p class="hero-description">
+
+            Discover local barbers and salons,
+            compare services, and book your next
+            fresh look without the waiting-room hassle.
+
+        </p>
+
+        <div class="hero-actions">
+
+            <a
+                href="#auth"
+                class="primary-btn"
+            >
+
+                <i class='bx bx-log-in'></i>
+
+                Sign in / Create account
+
+            </a>
+
+            <a
+                href="salons.html"
+                class="secondary-btn"
+            >
+
+                <i class='bx bx-search'></i>
+
+                Explore salons
+
+            </a>
+
+        </div>
+
+        <div class="hero-stats">
+
+            <div class="stat">
+
+                <strong>
+                    Local
+                </strong>
+
+                <span>
+                    Kasi businesses
+                </span>
+
+            </div>
+
+            <div class="stat">
+
+                <strong>
+                    Simple
+                </strong>
+
+                <span>
+                    Online booking
+                </span>
+
+            </div>
+
+            <div class="stat">
+
+                <strong>
+                    Elite
+                </strong>
+
+                <span>
+                    Grooming experience
+                </span>
+
+            </div>
 
         </div>
 
     </div>
 
 
-    <!-- =========================================================
-         NAVIGATION
-    ========================================================== -->
+    <!-- ===================================================
+         SWIPE CAROUSEL
+    ==================================================== -->
 
-    <nav class="navbar">
+    <div class="hero-visual">
 
-        <div class="nav-inner">
+        <div
+            class="hero-carousel"
+            id="heroCarousel"
+        >
 
-            <a
-                href="index.html"
-                class="brand"
+            <div
+                class="carousel-track"
+                id="carouselTrack"
             >
 
-                <div class="brand-icon">
-                    <i class="bx bx-cut"></i>
+                <!-- SLIDE 1 -->
+
+                <div
+                    class="carousel-slide active"
+                >
+
+                    <img
+                        src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
+                        alt="K@si grooming"
+                        draggable="false"
+                    >
+
+                    <div class="carousel-caption">
+
+                        <small>
+                            K@si Web
+                        </small>
+
+                        <strong>
+                            Your cut. Your time.
+                        </strong>
+
+                    </div>
+
                 </div>
 
-                <span>
-                    K@si Web
-                </span>
 
-            </a>
+                <!-- SLIDE 2 -->
 
-
-            <div class="nav-actions">
-
-                <a
-                    href="index.html"
-                    class="nav-btn"
+                <div
+                    class="carousel-slide"
                 >
-                    Home
-                </a>
+
+                    <img
+                        src="37BA0E35.jpg"
+                        alt="Kasi taper fade"
+                        draggable="false"
+                    >
+
+                    <div class="carousel-caption">
+
+                        <small>
+                            Fresh look
+                        </small>
+
+                        <strong>
+                            Kasi Taper Fade
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SLIDE 3 -->
+
+                <div
+                    class="carousel-slide"
+                >
+
+                    <img
+                        src="7847041D.jpg"
+                        alt="Burst fade and beard"
+                        draggable="false"
+                    >
+
+                    <div class="carousel-caption">
+
+                        <small>
+                            Grooming
+                        </small>
+
+                        <strong>
+                            Burst Fade & Beard
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SLIDE 4 -->
+
+                <div
+                    class="carousel-slide"
+                >
+
+                    <img
+                        src="A3886FFD.jpg"
+                        alt="Classic clean cut"
+                        draggable="false"
+                    >
+
+                    <div class="carousel-caption">
+
+                        <small>
+                            Classic
+                        </small>
+
+                        <strong>
+                            Clean Cut
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SLIDE 5 -->
+
+                <div
+                    class="carousel-slide"
+                >
+
+                    <img
+                        src="B307F46B.jpg"
+                        alt="Line design cut"
+                        draggable="false"
+                    >
+
+                    <div class="carousel-caption">
+
+                        <small>
+                            Signature
+                        </small>
+
+                        <strong>
+                            Line Design Cut
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SWIPE HINT -->
+
+            <div
+                class="swipe-hint"
+                id="swipeHint"
+            >
+
+                <i class='bx bx-swipe'></i>
+
+                Swipe
+
+            </div>
+
+
+            <!-- PREVIOUS -->
+
+            <button
+                type="button"
+                class="carousel-arrow prev"
+                id="carouselPrev"
+                aria-label="Previous image"
+            >
+
+                <i class='bx bx-chevron-left'></i>
+
+            </button>
+
+
+            <!-- NEXT -->
+
+            <button
+                type="button"
+                class="carousel-arrow next"
+                id="carouselNext"
+                aria-label="Next image"
+            >
+
+                <i class='bx bx-chevron-right'></i>
+
+            </button>
+
+
+            <!-- DOTS -->
+
+            <div
+                class="carousel-dots"
+                id="carouselDots"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     AUTH
+======================================================= -->
+
+<section
+    class="section"
+    id="auth"
+>
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            Your account
+        </span>
+
+        <h2>
+            One account.
+            Your K@si journey.
+        </h2>
+
+        <p>
+            Sign in to continue to your account,
+            or create a new customer or salon-owner
+            account.
+        </p>
+
+    </div>
+
+
+    <div class="auth-wrap">
+
+
+        <!-- AUTH CARD -->
+
+        <div class="auth-card">
+
+
+            <!-- LOGIN / SIGNUP TABS -->
+
+            <div class="auth-tabs">
 
                 <button
-                    class="nav-btn primary"
-                    id="navAccountButton"
                     type="button"
+                    class="auth-tab active"
+                    id="signInTab"
                 >
-                    Account
+                    Sign in
+                </button>
+
+                <button
+                    type="button"
+                    class="auth-tab"
+                    id="signUpTab"
+                >
+                    Create account
                 </button>
 
             </div>
 
-        </div>
 
-    </nav>
+            <!-- FORM -->
 
+            <form
+                id="authForm"
+                class="auth-form"
+            >
 
-    <!-- =========================================================
-         HERO
-    ========================================================== -->
-
-    <main>
-
-        <section class="hero">
-
-            <div class="hero-copy">
-
-                <div class="eyebrow">
-                    <i class="bx bxs-bolt-circle"></i>
-                    Your local beauty & grooming marketplace
-                </div>
-
-                <h1>
-                    Fresh cuts.
-                    <span class="gradient">
-                        No lines.
-                    </span>
-                </h1>
-
-                <p class="hero-description">
-                    Discover local barbers, salons and grooming
-                    professionals. Compare services, explore
-                    your options and book your next fresh look
-                    through K@si Web.
-                </p>
-
-                <div class="hero-actions">
-
-                    <a
-                        href="#auth"
-                        class="main-btn primary"
-                    >
-                        <i class="bx bx-log-in-circle"></i>
-                        Sign in
-                    </a>
-
-                    <a
-                        href="salons.html"
-                        class="main-btn"
-                    >
-                        <i class="bx bx-store"></i>
-                        Explore salons
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="hero-visual">
-
-                <div class="floating-badge badge-one">
-
-                    <div class="badge-icon">
-                        <i class="bx bx-map"></i>
-                    </div>
-
-                    <span>
-                        Local salons
-                    </span>
-
-                </div>
-
-
-                <div class="visual-card">
-
-                    <img
-                        class="visual-image"
-                        src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
-                        alt="K@si Web grooming showcase"
-                        onerror="this.style.display='none'"
-                    >
-
-                    <div class="visual-overlay">
-
-                        <small>
-                            K@si Web Elite
-                        </small>
-
-                        <strong>
-                            Your Cut. Your Time.
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="floating-badge badge-two">
-
-                    <div class="badge-icon">
-                        <i class="bx bx-calendar-check"></i>
-                    </div>
-
-                    <span>
-                        Easy booking
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             AUTH SECTION
-        ====================================================== -->
-
-        <section
-            class="auth-section"
-            id="auth"
-        >
-
-            <div class="auth-card">
-
-
-                <!-- =================================================
-                     AUTH HEADER
-                ================================================== -->
-
-                <div class="auth-header">
-
-                    <h2 id="authTitle">
-                        Welcome back
-                    </h2>
-
-                    <p id="authSubtitle">
-                        Sign in to continue to your K@si Web account.
-                    </p>
-
-                </div>
-
-
-                <!-- =================================================
-                     TABS
-                ================================================== -->
-
-                <div class="auth-tabs">
-
-                    <button
-                        class="auth-tab active"
-                        id="signInTab"
-                        type="button"
-                    >
-                        Sign In
-                    </button>
-
-                    <button
-                        class="auth-tab"
-                        id="signUpTab"
-                        type="button"
-                    >
-                        Create Account
-                    </button>
-
-                </div>
-
-
-                <!-- =================================================
-                     ALERT
-                ================================================== -->
+                <!-- FULL NAME -->
 
                 <div
-                    class="alert"
-                    id="authAlert"
-                    role="alert"
+                    class="field"
+                    id="fullNameField"
+                    style="display:none;"
                 >
 
-                    <div
-                        class="alert-title"
-                        id="alertTitle"
-                    ></div>
+                    <label for="fullName">
+                        Full name
+                    </label>
 
-                    <div
-                        class="alert-message"
-                        id="alertMessage"
-                    ></div>
+                    <input
+                        type="text"
+                        id="fullName"
+                        autocomplete="name"
+                        placeholder="Your full name"
+                    >
 
                 </div>
 
 
-                <!-- =================================================
-                     AUTH FORM
-                ================================================== -->
+                <!-- EMAIL -->
 
-                <form
-                    class="auth-form"
-                    id="authForm"
-                    novalidate
-                >
+                <div class="field">
 
-                    <div class="form-grid">
+                    <label for="email">
+                        Email address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        autocomplete="email"
+                        placeholder="you@example.com"
+                        required
+                    >
+
+                </div>
 
 
-                        <!-- =========================================
-                             FULL NAME
-                        ========================================== -->
+                <!-- PASSWORD -->
 
-                        <div
-                            class="form-group full"
-                            id="nameGroup"
-                            style="display:none;"
+                <div class="field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            type="password"
+                            id="password"
+                            autocomplete="current-password"
+                            placeholder="Enter your password"
+                            required
                         >
 
-                            <label
-                                class="form-label"
-                                for="fullName"
-                            >
-                                Full name
-                            </label>
-
-                            <div class="input-wrap">
-
-                                <i class="bx bx-user input-icon"></i>
-
-                                <input
-                                    class="form-input"
-                                    id="fullName"
-                                    name="fullName"
-                                    type="text"
-                                    autocomplete="name"
-                                    placeholder="Your full name"
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =========================================
-                             EMAIL
-                        ========================================== -->
-
-                        <div class="form-group full">
-
-                            <label
-                                class="form-label"
-                                for="email"
-                            >
-                                Email address
-                            </label>
-
-                            <div class="input-wrap">
-
-                                <i class="bx bx-envelope input-icon"></i>
-
-                                <input
-                                    class="form-input"
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autocomplete="email"
-                                    placeholder="you@example.com"
-                                    required
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =========================================
-                             PASSWORD
-                        ========================================== -->
-
-                        <div class="form-group">
-
-                            <label
-                                class="form-label"
-                                for="password"
-                            >
-                                Password
-                            </label>
-
-                            <div class="input-wrap">
-
-                                <i class="bx bx-lock-alt input-icon"></i>
-
-                                <input
-                                    class="form-input password-input"
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autocomplete="current-password"
-                                    placeholder="Enter your password"
-                                    required
-                                >
-
-                                <button
-                                    class="password-toggle"
-                                    type="button"
-                                    data-target="password"
-                                    aria-label="Show password"
-                                >
-
-                                    <i class="bx bx-show"></i>
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =========================================
-                             CONFIRM PASSWORD
-                        ========================================== -->
-
-                        <div
-                            class="form-group"
-                            id="confirmPasswordGroup"
-                            style="display:none;"
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="password"
+                            aria-label="Show password"
                         >
 
-                            <label
-                                class="form-label"
-                                for="confirmPassword"
-                            >
-                                Confirm password
-                            </label>
+                            <i class='bx bx-show'></i>
 
-                            <div class="input-wrap">
-
-                                <i class="bx bx-lock input-icon"></i>
-
-                                <input
-                                    class="form-input password-input"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    type="password"
-                                    autocomplete="new-password"
-                                    placeholder="Repeat your password"
-                                >
-
-                                <button
-                                    class="password-toggle"
-                                    type="button"
-                                    data-target="confirmPassword"
-                                    aria-label="Show password"
-                                >
-
-                                    <i class="bx bx-show"></i>
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =========================================
-                             ACCOUNT TYPE
-                        ========================================== -->
-
-                        <div class="form-group full">
-
-                            <label
-                                class="form-label"
-                                for="accountType"
-                            >
-                                Account type
-                            </label>
-
-                            <div class="input-wrap">
-
-                                <i class="bx bx-user-circle input-icon"></i>
-
-                                <select
-                                    class="form-select"
-                                    id="accountType"
-                                    name="accountType"
-                                >
-
-                                    <option value="customer">
-                                        Client / Customer
-                                    </option>
-
-                                    <option value="salon_owner">
-                                        Salon Owner
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div class="account-info">
-
-                                <strong>
-                                    Important:
-                                </strong>
-
-                                Your selection does not directly
-                                grant permissions. K@si Web uses
-                                the role stored in your Firestore
-                                <strong>
-                                    users/{uid}
-                                </strong>
-                                profile as the source of truth.
-
-                                Admin accounts are assigned the
-                                <strong>
-                                    admin
-                                </strong>
-                                role in Firestore and are not
-                                created by selecting an option here.
-
-                            </div>
-
-                        </div>
+                        </button>
 
                     </div>
 
+                </div>
 
-                    <!-- =================================================
-                         SUBMIT
-                    ================================================== -->
 
-                    <button
-                        class="submit-btn"
-                        id="submitButton"
-                        type="submit"
+                <!-- CONFIRM PASSWORD -->
+
+                <div
+                    class="field"
+                    id="confirmPasswordField"
+                    style="display:none;"
+                >
+
+                    <label for="confirmPassword">
+                        Confirm password
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            autocomplete="new-password"
+                            placeholder="Confirm your password"
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="confirmPassword"
+                            aria-label="Show password"
+                        >
+
+                            <i class='bx bx-show'></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCOUNT TYPE -->
+
+                <div
+                    class="field"
+                    id="accountTypeField"
+                    style="display:none;"
+                >
+
+                    <label for="accountType">
+                        Account type
+                    </label>
+
+                    <select
+                        id="accountType"
                     >
+
+                        <option value="customer">
+                            Customer / Client
+                        </option>
+
+                        <option value="salon_owner">
+                            Salon Owner
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- INFO -->
+
+                <div class="auth-info">
+
+                    <i class='bx bx-info-circle'></i>
+
+                    Your account role is stored in
+                    Firestore under
+                    <strong>
+                        users/{uid}
+                    </strong>.
+                    Admin accounts are managed separately
+                    and cannot be created from this form.
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    class="auth-message"
+                    id="authMessage"
+                ></div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                    id="authSubmit"
+                >
+
+                    Sign in
+
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 ACCOUNT PANEL
+            ================================================== -->
+
+            <div id="accountPanel">
+
+                <div class="account-profile">
+
+                    <div
+                        class="profile-avatar"
+                        id="profileAvatar"
+                    >
+                        K
+                    </div>
+
+                    <div class="profile-info">
+
+                        <strong id="profileName">
+                            K@si User
+                        </strong>
+
+                        <span id="profileEmail">
+                            user@example.com
+                        </span>
 
                         <span
-                            class="submit-content"
-                            id="submitContent"
+                            class="role-badge"
+                            id="profileRole"
                         >
-
-                            <i class="bx bx-log-in-circle"></i>
-
-                            <span id="submitText">
-                                Sign In
-                            </span>
-
+                            CUSTOMER
                         </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="auth-info">
+
+                    <i class='bx bx-shield-quarter'></i>
+
+                    Your Firebase account is active.
+                    Press continue to open the correct
+                    area for your account role.
+
+                </div>
+
+
+                <div
+                    class="account-actions"
+                    style="margin-top:15px;"
+                >
+
+                    <button
+                        type="button"
+                        class="account-action primary"
+                        id="continueButton"
+                    >
+
+                        <i class='bx bx-right-arrow-alt'></i>
+
+                        Continue
 
                     </button>
 
+                    <button
+                        type="button"
+                        class="account-action logout"
+                        id="logoutButton"
+                    >
 
-                    <div class="auth-footer">
+                        <i class='bx bx-log-out'></i>
 
-                        <span id="footerText">
-                            New to K@si Web?
-                        </span>
+                        Sign out
 
-                        <strong id="footerAction">
-                            Create an account above.
-                        </strong>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AUTH SIDE -->
+
+        <div class="auth-side-card">
+
+            <div>
+
+                <h3>
+                    Built for your local grooming scene.
+                </h3>
+
+                <p>
+                    K@si Web connects customers with
+                    local grooming businesses while giving
+                    salon owners their own workspace.
+                </p>
+
+                <div class="feature-list">
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class='bx bx-map'></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Discover local salons
+                            </strong>
+
+                            <span>
+                                Explore available grooming
+                                businesses and their services.
+                            </span>
+
+                        </div>
 
                     </div>
 
-                </form>
 
+                    <div class="feature-item">
 
-                <!-- =================================================
-                     ALREADY AUTHENTICATED PANEL
-                ================================================== -->
-
-                <div
-                    class="account-panel"
-                    id="accountPanel"
-                >
-
-                    <div class="account-summary">
-
-                        <div class="account-avatar">
-                            <i class="bx bx-user"></i>
+                        <div class="feature-icon">
+                            <i class='bx bx-calendar'></i>
                         </div>
 
-                        <div class="account-details">
+                        <div>
 
-                            <div
-                                class="account-email"
-                                id="accountEmail"
-                            >
-                                Loading...
-                            </div>
+                            <strong>
+                                Book your time
+                            </strong>
 
-                            <div
-                                class="account-role"
-                                id="accountRole"
-                            >
-                                Account
-                            </div>
+                            <span>
+                                Choose a service and send
+                                your booking request.
+                            </span>
 
                         </div>
 
                     </div>
 
 
-                    <div class="account-actions">
+                    <div class="feature-item">
 
-                        <button
-                            class="secondary-btn"
-                            id="continueButton"
-                            type="button"
-                        >
-                            <i class="bx bx-right-arrow-alt"></i>
-                            Continue
-                        </button>
+                        <div class="feature-icon">
+                            <i class='bx bx-store'></i>
+                        </div>
 
-                        <button
-                            class="secondary-btn danger"
-                            id="logoutButton"
-                            type="button"
-                        >
-                            <i class="bx bx-log-out"></i>
-                            Sign Out
-                        </button>
+                        <div>
+
+                            <strong>
+                                Grow your salon
+                            </strong>
+
+                            <span>
+                                Salon owners get their own
+                                dedicated workspace.
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -2375,2040 +2710,2355 @@
 
             </div>
 
-        </section>
+        </div>
+
+    </div>
+
+</section>
 
 
-        <!-- =====================================================
-             ELITE SECTION
-        ====================================================== -->
+<!-- =======================================================
+     ELITE SECTION
+======================================================= -->
 
-        <section class="elite-section">
+<section
+    class="section"
+    id="elite"
+>
 
-            <div class="section-heading">
+    <div class="elite-section">
 
-                <div>
+        <div class="elite-content">
 
-                    <div class="eyebrow">
-                        <i class="bx bxs-crown"></i>
-                        K@si Web Elite
-                    </div>
+            <span class="section-label">
+                K@si Web Elite
+            </span>
 
-                    <h2>
-                        Built around your look.
-                    </h2>
+            <h2>
+                Grooming,
+                upgraded.
+            </h2>
+
+            <p>
+                A cleaner way to discover local
+                grooming talent, find the service you
+                want and manage your appointments.
+                Everything starts from one simple account.
+            </p>
+
+            <a
+                href="#auth"
+                class="primary-btn"
+            >
+
+                <i class='bx bx-sparkles'></i>
+
+                Enter K@si Web
+
+            </a>
+
+        </div>
+
+
+        <div class="elite-grid">
+
+            <div class="elite-card">
+
+                <div class="elite-icon">
+
+                    <i class='bx bx-search-alt'></i>
 
                 </div>
 
+                <h3>
+                    Discover
+                </h3>
+
                 <p>
-                    One place for customers, salon owners and
-                    the people behind the K@si Web marketplace.
+                    Browse local salons and grooming
+                    services in one place.
                 </p>
 
             </div>
 
 
-            <div class="elite-grid">
+            <div class="elite-card">
 
+                <div class="elite-icon">
 
-                <article class="elite-card">
-
-                    <div class="elite-number">
-                        01 / Discover
-                    </div>
-
-                    <div class="elite-icon">
-                        <i class="bx bx-store-alt"></i>
-                    </div>
-
-                    <h3>
-                        Find your salon
-                    </h3>
-
-                    <p>
-                        Explore local grooming businesses,
-                        services and salon information in one
-                        simple marketplace.
-                    </p>
-
-                </article>
-
-
-                <article class="elite-card">
-
-                    <div class="elite-number">
-                        02 / Book
-                    </div>
-
-                    <div class="elite-icon">
-                        <i class="bx bx-calendar-check"></i>
-                    </div>
-
-                    <h3>
-                        Book with ease
-                    </h3>
-
-                    <p>
-                        Choose a service, date and time and
-                        send your booking request directly
-                        through K@si Web.
-                    </p>
-
-                </article>
-
-
-                <article class="elite-card">
-
-                    <div class="elite-number">
-                        03 / Manage
-                    </div>
-
-                    <div class="elite-icon">
-                        <i class="bx bx-dashboard"></i>
-                    </div>
-
-                    <h3>
-                        Your K@si space
-                    </h3>
-
-                    <p>
-                        Customers, salon owners and admins
-                        receive the experience appropriate
-                        to their Firestore role.
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             QUICK LINKS
-        ====================================================== -->
-
-        <section class="quick-section">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <div class="eyebrow">
-                        <i class="bx bx-grid-alt"></i>
-                        K@si Web
-                    </div>
-
-                    <h2>
-                        Everything connected.
-                    </h2>
+                    <i class='bx bx-calendar-check'></i>
 
                 </div>
 
-            </div>
+                <h3>
+                    Book
+                </h3>
 
-
-            <div class="quick-grid">
-
-                <a
-                    href="salons.html"
-                    class="quick-card"
-                >
-
-                    <i class="bx bx-store"></i>
-
-                    <strong>
-                        Salons
-                    </strong>
-
-                    <span>
-                        Discover local salons
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="#auth"
-                    class="quick-card"
-                >
-
-                    <i class="bx bx-user"></i>
-
-                    <strong>
-                        Account
-                    </strong>
-
-                    <span>
-                        Sign in or register
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="index.html"
-                    class="quick-card"
-                >
-
-                    <i class="bx bx-home-alt"></i>
-
-                    <strong>
-                        Landing
-                    </strong>
-
-                    <span>
-                        Back to K@si Web
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="#elite"
-                    class="quick-card"
-                    onclick="document.querySelector('.elite-section').scrollIntoView({behavior:'smooth'}); return false;"
-                >
-
-                    <i class="bx bxs-crown"></i>
-
-                    <strong>
-                        Elite
-                    </strong>
-
-                    <span>
-                        Explore the experience
-                    </span>
-
-                </a>
+                <p>
+                    Send booking requests without
+                    unnecessary waiting.
+                </p>
 
             </div>
 
-        </section>
 
-    </main>
+            <div class="elite-card">
 
+                <div class="elite-icon">
 
-    <!-- =========================================================
-         FOOTER
-    ========================================================== -->
+                    <i class='bx bx-dashboard'></i>
 
-    <footer>
+                </div>
 
-        <div class="footer-inner">
+                <h3>
+                    Manage
+                </h3>
 
-            <span>
-                © <span id="currentYear"></span> K@si Web
-            </span>
+                <p>
+                    Access the correct dashboard based
+                    on your Firebase account role.
+                </p>
 
-            <span>
-                Your Cut. Your Time.
-            </span>
+            </div>
 
         </div>
 
-    </footer>
+    </div>
+
+</section>
 
 
-    <!-- =========================================================
-         FIREBASE + APPLICATION JAVASCRIPT
-    ========================================================== -->
+<!-- =======================================================
+     QUICK LINKS
+======================================================= -->
 
-    <script>
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            Explore K@si
+        </span>
+
+        <h2>
+            Everything in one place.
+        </h2>
+
+        <p>
+            Jump straight into the part of K@si Web
+            you need.
+        </p>
+
+    </div>
+
+
+    <div class="quick-links">
+
+        <a
+            href="salons.html"
+            class="quick-link"
+        >
+
+            <i class='bx bx-store-alt'></i>
+
+            <strong>
+                Find salons
+            </strong>
+
+            <span>
+                Explore local grooming businesses.
+            </span>
+
+        </a>
+
+
+        <a
+            href="#auth"
+            class="quick-link"
+        >
+
+            <i class='bx bx-user'></i>
+
+            <strong>
+                Account
+            </strong>
+
+            <span>
+                Sign in or create your account.
+            </span>
+
+        </a>
+
+
+        <a
+            href="index.html"
+            class="quick-link"
+        >
+
+            <i class='bx bx-home-alt'></i>
+
+            <strong>
+                Landing page
+            </strong>
+
+            <span>
+                Return to the K@si Web introduction.
+            </span>
+
+        </a>
+
+
+        <a
+            href="#elite"
+            class="quick-link"
+        >
+
+            <i class='bx bx-crown'></i>
+
+            <strong>
+                Elite
+            </strong>
+
+            <span>
+                See what the K@si experience offers.
+            </span>
+
+        </a>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+    <div class="footer-brand">
+
+        © 2026 K@si Web.
+        Your cut. Your time.
+
+    </div>
+
+    <div class="footer-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="salons.html">
+            Salons
+        </a>
+
+        <a href="#auth">
+            Account
+        </a>
+
+        <a href="#elite">
+            Elite
+        </a>
+
+    </div>
+
+</footer>
+
+
+<!-- =======================================================
+     TOAST
+======================================================= -->
+
+<div id="toastContainer"></div>
+
+
+<!-- =======================================================
+     FIREBASE
+======================================================= -->
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyC9x5x5x5x5x5x5x5x5x5x5x5x5x5x5x",
+
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
+
+    projectId:
+        "kasi-web-d073f",
+
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
+
+    messagingSenderId:
+        "105918157571",
+
+    appId:
+        "1:105918157571:web:8d646"
+
+};
+
+
+/*
+    IMPORTANT:
+
+    Replace ONLY apiKey above with the exact API key
+    from your Firebase project if your deployed version
+    already uses a different key.
+
+    The rest of the routing code uses Firestore:
+        users/{uid}.role
+*/
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let firebaseAuth = null;
+
+let firebaseDB = null;
+
+let currentUser = null;
+
+let currentRole = null;
+
+let redirectInProgress = false;
+
+
+/* =========================================================
+   DOM HELPERS
+========================================================= */
+
+function $(id) {
+
+    return document.getElementById(id);
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const container =
+        $("toastContainer");
+
+    if (!container) {
+        return;
+    }
+
+    const toast =
+        document.createElement("div");
+
+    toast.className =
+        "toast " + type;
+
+    toast.textContent =
+        message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
+
+        toast.style.transform =
+            "translateY(10px)";
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 300);
+
+    }, 3500);
+
+}
+
+
+/* =========================================================
+   AUTH MESSAGE
+========================================================= */
+
+function setAuthMessage(
+    message,
+    isError = false
+) {
+
+    const box =
+        $("authMessage");
+
+    if (!box) {
+        return;
+    }
+
+    box.textContent =
+        message;
+
+    box.style.color =
+        isError
+            ? "#ff9b9b"
+            : "#a7a7b7";
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function hideLoading() {
+
+    const screen =
+        $("loadingScreen");
+
+    if (screen) {
+
+        screen.classList.add("hidden");
+
+    }
+
+}
+
+
+/* =========================================================
+   NORMALIZE ROLE
+========================================================= */
+
+function normalizeRole(role) {
+
+    if (!role) {
+        return null;
+    }
+
+    const normalized =
+        String(role)
+            .trim()
+            .toLowerCase()
+            .replace(/-/g, "_")
+            .replace(/\s+/g, "_");
+
+    if (
+        normalized === "admin" ||
+        normalized === "administrator"
+    ) {
+
+        return "admin";
+
+    }
+
+
+    if (
+        normalized === "salon_owner" ||
+        normalized === "salonowner" ||
+        normalized === "owner" ||
+        normalized === "salon_owner_account"
+    ) {
+
+        return "salon_owner";
+
+    }
+
+
+    if (
+        normalized === "customer" ||
+        normalized === "client" ||
+        normalized === "user"
+    ) {
+
+        return "customer";
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   GET ROLE FROM FIRESTORE
+========================================================= */
+
+async function getUserRole(
+    user
+) {
+
+    if (!user) {
+
+        throw new Error(
+            "No authenticated Firebase user found."
+        );
+
+    }
+
+    if (!firebaseDB) {
+
+        throw new Error(
+            "Firestore is not initialized."
+        );
+
+    }
+
+
+    const userRef =
+        firebaseDB
+            .collection("users")
+            .doc(user.uid);
+
+
+    const snapshot =
+        await userRef.get();
+
+
+    if (!snapshot.exists) {
+
+        throw new Error(
+            "Your Firebase account exists, but the users profile was not found."
+        );
+
+    }
+
+
+    const data =
+        snapshot.data() || {};
+
+
+    /*
+        Support old/new role field names.
+    */
+
+    const rawRole =
+        data.role ??
+        data.Role ??
+        data.userRole ??
+        data.accountRole ??
+        null;
+
+
+    const role =
+        normalizeRole(rawRole);
+
+
+    if (!role) {
+
+        throw new Error(
+            "Your account does not have a valid role in Firestore."
+        );
+
+    }
+
+
+    return role;
+
+}
+
+
+/* =========================================================
+   REDIRECT BY ROLE
+========================================================= */
+
+function redirectByRole(
+    role
+) {
+
+    const normalizedRole =
+        normalizeRole(role);
+
+
+    if (!normalizedRole) {
+
+        showToast(
+            "Your account role could not be determined.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (redirectInProgress) {
+        return;
+    }
+
+
+    redirectInProgress = true;
+
+    currentRole =
+        normalizedRole;
+
+
+    /*
+        ADMIN
+        --------------------------------
+        Firestore:
+            users/{uid}.role = "admin"
+
+        Destination:
+            admin.html
+    */
+
+    if (
+        normalizedRole === "admin"
+    ) {
+
+        window.location.href =
+            "admin.html";
+
+        return;
+
+    }
+
+
+    /*
+        SALON OWNER
+    */
+
+    if (
+        normalizedRole === "salon_owner"
+    ) {
+
+        window.location.href =
+            "owners.html";
+
+        return;
+
+    }
+
+
+    /*
+        CUSTOMER
+    */
+
+    if (
+        normalizedRole === "customer"
+    ) {
+
+        window.location.href =
+            "salons.html";
+
+        return;
+
+    }
+
+
+    redirectInProgress = false;
+
+}
+
+
+/* =========================================================
+   DISPLAY LOGGED IN ACCOUNT
+========================================================= */
+
+function showAuthenticatedAccount(
+    user,
+    role
+) {
+
+    const authForm =
+        $("authForm");
+
+    const accountPanel =
+        $("accountPanel");
+
+
+    if (authForm) {
+
+        authForm.style.display =
+            "none";
+
+    }
+
+
+    if (accountPanel) {
+
+        accountPanel.style.display =
+            "block";
+
+    }
+
+
+    const displayName =
+        user.displayName ||
+        "K@si User";
+
+
+    const email =
+        user.email ||
+        "";
+
+
+    $("profileName").textContent =
+        displayName;
+
+
+    $("profileEmail").textContent =
+        email;
+
+
+    $("profileRole").textContent =
+        role.replace("_", " ").toUpperCase();
+
+
+    const avatar =
+        displayName
+            .trim()
+            .charAt(0)
+            .toUpperCase() || "K";
+
+
+    $("profileAvatar").textContent =
+        avatar;
+
+}
+
+
+/* =========================================================
+   SHOW LOGIN FORM
+========================================================= */
+
+function showLoginForm() {
+
+    const authForm =
+        $("authForm");
+
+    const accountPanel =
+        $("accountPanel");
+
+
+    if (authForm) {
+
+        authForm.style.display =
+            "flex";
+
+    }
+
+
+    if (accountPanel) {
+
+        accountPanel.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   SET SIGN IN MODE
+========================================================= */
+
+function setSignInMode() {
+
+    $("signInTab")
+        .classList.add("active");
+
+    $("signUpTab")
+        .classList.remove("active");
+
+
+    $("fullNameField")
+        .style.display = "none";
+
+
+    $("confirmPasswordField")
+        .style.display = "none";
+
+
+    $("accountTypeField")
+        .style.display = "none";
+
+
+    $("fullName")
+        .required = false;
+
+
+    $("confirmPassword")
+        .required = false;
+
+
+    $("accountType")
+        .required = false;
+
+
+    $("authSubmit")
+        .textContent =
+            "Sign in";
+
+
+    $("password")
+        .autocomplete =
+            "current-password";
+
+
+    setAuthMessage("");
+
+}
+
+
+/* =========================================================
+   SET SIGN UP MODE
+========================================================= */
+
+function setSignUpMode() {
+
+    $("signUpTab")
+        .classList.add("active");
+
+    $("signInTab")
+        .classList.remove("active");
+
+
+    $("fullNameField")
+        .style.display = "flex";
+
+
+    $("confirmPasswordField")
+        .style.display = "flex";
+
+
+    $("accountTypeField")
+        .style.display = "flex";
+
+
+    $("fullName")
+        .required = true;
+
+
+    $("confirmPassword")
+        .required = true;
+
+
+    $("accountType")
+        .required = true;
+
+
+    $("authSubmit")
+        .textContent =
+            "Create account";
+
+
+    $("password")
+        .autocomplete =
+            "new-password";
+
+
+    setAuthMessage("");
+
+}
+
+
+/* =========================================================
+   SIGN IN
+========================================================= */
+
+async function signIn() {
+
+    const email =
+        $("email")
+            .value
+            .trim();
+
+
+    const password =
+        $("password")
+            .value;
+
+
+    if (!email || !password) {
+
+        setAuthMessage(
+            "Please enter your email and password.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        $("authSubmit");
+
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "Signing in...";
+
+
+    try {
+
+        const credential =
+            await firebaseAuth
+                .signInWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+
+        currentUser =
+            credential.user;
+
 
         /*
-        ============================================================
-        K@SI WEB FIREBASE CONFIGURATION
-        ============================================================
+            CRITICAL:
 
-        IMPORTANT:
-        This is the Firebase Web configuration for the K@si Web
-        project.
+            Read Firestore role AFTER authentication.
 
-        The Firebase Web API key is not the Firestore database ID.
-        ============================================================
+            This means an admin account is routed
+            according to:
+
+                users/{uid}.role
         */
 
-        const firebaseConfig = {
+        const role =
+            await getUserRole(
+                currentUser
+            );
 
-            apiKey:
-                "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
 
-            authDomain:
-                "kasi-web-d073f.firebaseapp.com",
+        currentRole =
+            role;
 
-            projectId:
-                "kasi-web-d073f",
 
-            storageBucket:
-                "kasi-web-d073f.firebasestorage.app",
+        showToast(
+            "Signed in successfully."
+        );
 
-            messagingSenderId:
-                "105918157571",
 
-            appId:
-                "1:105918157571:web:8d646"
+        /*
+            Redirect exactly once.
+        */
 
-        };
+        redirectByRole(
+            role
+        );
 
 
-        /* =========================================================
-           GLOBAL STATE
-        ========================================================= */
+    } catch (error) {
 
-        let firebaseReady = false;
+        console.error(
+            "SIGN IN ERROR:",
+            error
+        );
 
-        let firebaseAuth = null;
 
-        let firebaseDB = null;
+        setAuthMessage(
+            firebaseErrorMessage(error),
+            true
+        );
 
-        let currentUser = null;
 
-        let currentRole = null;
+        showToast(
+            firebaseErrorMessage(error),
+            "error"
+        );
 
-        let currentMode = "signin";
+    } finally {
 
-        let redirectInProgress = false;
+        button.disabled =
+            false;
 
+        button.textContent =
+            "Sign in";
 
-        /* =========================================================
-           DOM
-        ========================================================= */
+    }
 
-        const pageLoader =
-            document.getElementById("pageLoader");
+}
 
-        const authForm =
-            document.getElementById("authForm");
 
-        const authTitle =
-            document.getElementById("authTitle");
+/* =========================================================
+   SIGN UP
+========================================================= */
 
-        const authSubtitle =
-            document.getElementById("authSubtitle");
+async function signUp() {
 
-        const signInTab =
-            document.getElementById("signInTab");
+    const fullName =
+        $("fullName")
+            .value
+            .trim();
 
-        const signUpTab =
-            document.getElementById("signUpTab");
 
-        const nameGroup =
-            document.getElementById("nameGroup");
+    const email =
+        $("email")
+            .value
+            .trim();
 
-        const confirmPasswordGroup =
-            document.getElementById("confirmPasswordGroup");
 
-        const fullNameInput =
-            document.getElementById("fullName");
+    const password =
+        $("password")
+            .value;
 
-        const emailInput =
-            document.getElementById("email");
 
-        const passwordInput =
-            document.getElementById("password");
+    const confirmPassword =
+        $("confirmPassword")
+            .value;
 
-        const confirmPasswordInput =
-            document.getElementById("confirmPassword");
 
-        const accountType =
-            document.getElementById("accountType");
+    const selectedRole =
+        normalizeRole(
+            $("accountType")
+                .value
+        );
 
-        const submitButton =
-            document.getElementById("submitButton");
 
-        const submitText =
-            document.getElementById("submitText");
+    if (!fullName) {
 
-        const submitContent =
-            document.getElementById("submitContent");
+        setAuthMessage(
+            "Please enter your full name.",
+            true
+        );
 
-        const authAlert =
-            document.getElementById("authAlert");
+        return;
 
-        const alertTitle =
-            document.getElementById("alertTitle");
+    }
 
-        const alertMessage =
-            document.getElementById("alertMessage");
 
-        const footerText =
-            document.getElementById("footerText");
+    if (!email || !password) {
 
-        const footerAction =
-            document.getElementById("footerAction");
+        setAuthMessage(
+            "Please enter your email and password.",
+            true
+        );
 
-        const accountPanel =
-            document.getElementById("accountPanel");
+        return;
 
-        const accountEmail =
-            document.getElementById("accountEmail");
+    }
 
-        const accountRole =
-            document.getElementById("accountRole");
 
-        const continueButton =
-            document.getElementById("continueButton");
+    if (
+        password.length < 6
+    ) {
 
-        const logoutButton =
-            document.getElementById("logoutButton");
+        setAuthMessage(
+            "Password must be at least 6 characters.",
+            true
+        );
 
-        const navAccountButton =
-            document.getElementById("navAccountButton");
+        return;
 
+    }
 
-        /* =========================================================
-           YEAR
-        ========================================================= */
 
-        document.getElementById("currentYear").textContent =
-            new Date().getFullYear();
+    if (
+        password !== confirmPassword
+    ) {
 
+        setAuthMessage(
+            "Passwords do not match.",
+            true
+        );
 
-        /* =========================================================
-           FIREBASE INITIALIZATION
-        ========================================================= */
+        return;
 
-        function initializeFirebase() {
+    }
 
-            try {
 
-                if (
-                    !firebaseConfig.apiKey ||
-                    firebaseConfig.apiKey === "YOUR_API_KEY"
-                ) {
+    if (
+        selectedRole !== "customer" &&
+        selectedRole !== "salon_owner"
+    ) {
 
-                    throw new Error(
-                        "Firebase API key is missing."
-                    );
+        setAuthMessage(
+            "Please select a valid account type.",
+            true
+        );
 
-                }
+        return;
 
+    }
 
-                if (!firebase.apps.length) {
 
-                    firebase.initializeApp(
-                        firebaseConfig
-                    );
+    const button =
+        $("authSubmit");
 
-                }
 
+    button.disabled =
+        true;
 
-                firebaseAuth =
-                    firebase.auth();
+    button.textContent =
+        "Creating account...";
 
-                firebaseDB =
-                    firebase.firestore();
 
+    try {
 
-                /*
-                    Expose these globally.
+        /*
+            Create Firebase Auth account.
+        */
 
-                    This helps the other K@si Web pages if they
-                    use the same Firebase bridge pattern.
-                */
-
-                window.firebaseAuth =
-                    firebaseAuth;
-
-                window.firebaseDB =
-                    firebaseDB;
-
-                firebaseReady = true;
-
-                console.log(
-                    "K@si Web Firebase initialized successfully."
+        const credential =
+            await firebaseAuth
+                .createUserWithEmailAndPassword(
+                    email,
+                    password
                 );
 
 
-                setupAuthListener();
+        currentUser =
+            credential.user;
 
 
-            } catch (error) {
+        /*
+            Update Firebase Auth display name.
+        */
 
-                firebaseReady = false;
+        await currentUser
+            .updateProfile({
+                displayName:
+                    fullName
+            });
 
-                console.error(
-                    "Firebase initialization failed:",
-                    error
-                );
 
-                showAlert(
-                    "error",
-                    "Firebase initialization failed",
-                    getFirebaseErrorMessage(error)
-                );
+        /*
+            Create/update Firestore user profile.
 
-            } finally {
+            The ROLE SOURCE OF TRUTH is:
 
-                setTimeout(() => {
+                users/{uid}.role
+        */
 
-                    pageLoader.classList.add("hidden");
+        await firebaseDB
+            .collection("users")
+            .doc(currentUser.uid)
+            .set({
 
-                }, 500);
+                uid:
+                    currentUser.uid,
 
-            }
+                email:
+                    email,
+
+                displayName:
+                    fullName,
+
+                role:
+                    selectedRole,
+
+                createdAt:
+                    firebase.firestore.FieldValue.serverTimestamp(),
+
+                updatedAt:
+                    firebase.firestore.FieldValue.serverTimestamp()
+
+            }, {
+
+                merge: true
+
+            });
+
+
+        /*
+            Read role again from Firestore.
+
+            This ensures the redirect uses the
+            actual saved role.
+        */
+
+        const role =
+            await getUserRole(
+                currentUser
+            );
+
+
+        currentRole =
+            role;
+
+
+        showToast(
+            "Account created successfully."
+        );
+
+
+        redirectByRole(
+            role
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "SIGN UP ERROR:",
+            error
+        );
+
+
+        setAuthMessage(
+            firebaseErrorMessage(error),
+            true
+        );
+
+
+        showToast(
+            firebaseErrorMessage(error),
+            "error"
+        );
+
+    } finally {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "Create account";
+
+    }
+
+}
+
+
+/* =========================================================
+   ACCOUNT BUTTON
+========================================================= */
+
+async function continueToAccount() {
+
+    /*
+        IMPORTANT:
+
+        DO NOT trust only currentRole.
+
+        Every time the Account/Continue button is pressed,
+        we read users/{uid} again.
+
+        This fixes the problem where an admin is logged in
+        but the page still has a stale/null currentRole.
+    */
+
+
+    const user =
+        firebaseAuth
+            ? firebaseAuth.currentUser
+            : null;
+
+
+    if (!user) {
+
+        showToast(
+            "Please sign in first.",
+            "error"
+        );
+
+
+        const auth =
+            $("auth");
+
+
+        if (auth) {
+
+            auth.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
         }
 
 
-        /* =========================================================
-           AUTH STATE LISTENER
-        ========================================================== */
+        return;
 
-        function setupAuthListener() {
-
-            if (!firebaseAuth) {
-                return;
-            }
+    }
 
 
-            firebaseAuth.onAuthStateChanged(
-                async (user) => {
+    try {
 
-                    currentUser = user || null;
+        setAuthMessage(
+            "Checking your account role..."
+        );
 
 
-                    /*
-                        IMPORTANT:
+        /*
+            FRESH FIRESTORE ROLE CHECK.
+        */
 
-                        We deliberately DO NOT redirect here.
+        const role =
+            await getUserRole(
+                user
+            );
 
-                        Firebase can restore an existing session
-                        when the page loads. The user should not
-                        suddenly be redirected simply because the
-                        browser remembered the login.
 
-                        Redirect happens when the user explicitly
-                        logs in, signs up or presses Continue.
-                    */
+        console.log(
+            "K@si account role:",
+            role
+        );
 
-                    if (user) {
 
-                        document.body.classList.add(
-                            "authenticated"
-                        );
+        currentUser =
+            user;
 
-                        await loadCurrentUserProfile(
-                            user,
-                            false
-                        );
+        currentRole =
+            role;
+
+
+        /*
+            ADMIN WILL GO HERE:
+
+                role === "admin"
+
+                -> admin.html
+        */
+
+        redirectByRole(
+            role
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "ACCOUNT ROUTING ERROR:",
+            error
+        );
+
+
+        setAuthMessage(
+            error.message ||
+            "Could not determine your account role.",
+            true
+        );
+
+
+        showToast(
+            error.message ||
+            "Could not determine your account role.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NAV ACCOUNT BUTTON
+========================================================= */
+
+async function handleNavAccount() {
+
+    const user =
+        firebaseAuth
+            ? firebaseAuth.currentUser
+            : null;
+
+
+    if (!user) {
+
+        const auth =
+            $("auth");
+
+
+        if (auth) {
+
+            auth.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+
+        showToast(
+            "Sign in to open your account."
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        ALWAYS perform fresh role lookup.
+
+        Admin -> admin.html
+        Owner -> owners.html
+        Customer -> salons.html
+    */
+
+    await continueToAccount();
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout() {
+
+    try {
+
+        await firebaseAuth.signOut();
+
+
+        currentUser =
+            null;
+
+        currentRole =
+            null;
+
+        redirectInProgress =
+            false;
+
+
+        showLoginForm();
+
+        setSignInMode();
+
+
+        $("email").value =
+            "";
+
+        $("password").value =
+            "";
+
+        $("fullName").value =
+            "";
+
+        $("confirmPassword").value =
+            "";
+
+
+        showToast(
+            "You have been signed out."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "LOGOUT ERROR:",
+            error
+        );
+
+
+        showToast(
+            "Could not sign out.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FIREBASE ERROR MESSAGES
+========================================================= */
+
+function firebaseErrorMessage(
+    error
+) {
+
+    if (!error) {
+
+        return "Something went wrong.";
+
+    }
+
+
+    switch (
+        error.code
+    ) {
+
+        case "auth/invalid-email":
+
+            return "Please enter a valid email address.";
+
+        case "auth/user-not-found":
+
+            return "No account was found with that email.";
+
+        case "auth/wrong-password":
+
+            return "Incorrect email or password.";
+
+        case "auth/invalid-credential":
+
+            return "Incorrect email or password.";
+
+        case "auth/email-already-in-use":
+
+            return "An account with this email already exists.";
+
+        case "auth/weak-password":
+
+            return "Please choose a stronger password.";
+
+        case "auth/network-request-failed":
+
+            return "Network error. Check your internet connection.";
+
+        case "auth/too-many-requests":
+
+            return "Too many attempts. Please try again later.";
+
+        case "permission-denied":
+
+            return "Firebase denied access to your account profile.";
+
+        default:
+
+            return error.message ||
+                "Authentication failed.";
+
+    }
+
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLES
+========================================================= */
+
+function setupPasswordToggles() {
+
+    document
+        .querySelectorAll(
+            ".password-toggle"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const targetId =
+                        button.dataset.target;
+
+
+                    const input =
+                        $(targetId);
+
+
+                    if (!input) {
+                        return;
+                    }
+
+
+                    const icon =
+                        button.querySelector("i");
+
+
+                    if (
+                        input.type === "password"
+                    ) {
+
+                        input.type =
+                            "text";
+
+
+                        icon.className =
+                            "bx bx-hide";
+
 
                     } else {
 
-                        document.body.classList.remove(
-                            "authenticated"
-                        );
+                        input.type =
+                            "password";
 
-                        currentRole = null;
 
-                        showAuthenticationForm();
+                        icon.className =
+                            "bx bx-show";
 
                     }
 
                 }
             );
 
+        });
+
+}
+
+
+/* =========================================================
+   SWIPE CAROUSEL
+========================================================= */
+
+let carouselIndex =
+    0;
+
+let carouselTimer =
+    null;
+
+let touchStartX =
+    0;
+
+let touchStartY =
+    0;
+
+let isPointerDown =
+    false;
+
+
+function getCarouselElements() {
+
+    return {
+
+        carousel:
+            $("heroCarousel"),
+
+        track:
+            $("carouselTrack"),
+
+        slides:
+            document.querySelectorAll(
+                ".carousel-slide"
+            ),
+
+        dots:
+            $("carouselDots"),
+
+        hint:
+            $("swipeHint")
+
+    };
+
+}
+
+
+/* =========================================================
+   BUILD DOTS
+========================================================= */
+
+function buildCarouselDots() {
+
+    const {
+        slides,
+        dots
+    } =
+        getCarouselElements();
+
+
+    if (!dots) {
+        return;
+    }
+
+
+    dots.innerHTML =
+        "";
+
+
+    slides.forEach(
+        (slide, index) => {
+
+            const dot =
+                document.createElement(
+                    "button"
+                );
+
+
+            dot.type =
+                "button";
+
+
+            dot.className =
+                "carousel-dot" +
+                (
+                    index === 0
+                        ? " active"
+                        : ""
+                );
+
+
+            dot.setAttribute(
+                "aria-label",
+                `Go to image ${index + 1}`
+            );
+
+
+            dot.addEventListener(
+                "click",
+                () => {
+
+                    goToCarouselSlide(
+                        index
+                    );
+
+                    restartCarousel();
+
+                }
+            );
+
+
+            dots.appendChild(
+                dot
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE CAROUSEL
+========================================================= */
+
+function updateCarousel() {
+
+    const {
+        track,
+        slides,
+        dots
+    } =
+        getCarouselElements();
+
+
+    if (
+        !track ||
+        !slides.length
+    ) {
+
+        return;
+
+    }
+
+
+    carouselIndex =
+        Math.max(
+            0,
+            Math.min(
+                carouselIndex,
+                slides.length - 1
+            )
+        );
+
+
+    track.style.transform =
+        `translateX(-${carouselIndex * 100}%)`;
+
+
+    slides.forEach(
+        (slide, index) => {
+
+            slide.classList.toggle(
+                "active",
+                index === carouselIndex
+            );
+
+        }
+    );
+
+
+    if (dots) {
+
+        dots
+            .querySelectorAll(
+                ".carousel-dot"
+            )
+            .forEach(
+                (dot, index) => {
+
+                    dot.classList.toggle(
+                        "active",
+                        index === carouselIndex
+                    );
+
+                }
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   GO TO SLIDE
+========================================================= */
+
+function goToCarouselSlide(
+    index
+) {
+
+    const {
+        slides
+    } =
+        getCarouselElements();
+
+
+    if (!slides.length) {
+        return;
+    }
+
+
+    if (
+        index < 0
+    ) {
+
+        index =
+            slides.length - 1;
+
+    }
+
+
+    if (
+        index >= slides.length
+    ) {
+
+        index = 0;
+
+    }
+
+
+    carouselIndex =
+        index;
+
+
+    updateCarousel();
+
+}
+
+
+/* =========================================================
+   NEXT
+========================================================= */
+
+function nextCarousel() {
+
+    goToCarouselSlide(
+        carouselIndex + 1
+    );
+
+}
+
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
+
+function previousCarousel() {
+
+    goToCarouselSlide(
+        carouselIndex - 1
+    );
+
+}
+
+
+/* =========================================================
+   START AUTO SLIDE
+========================================================= */
+
+function startCarousel() {
+
+    stopCarousel();
+
+
+    carouselTimer =
+        setInterval(
+            () => {
+
+                nextCarousel();
+
+            },
+            4500
+        );
+
+}
+
+
+/* =========================================================
+   STOP AUTO SLIDE
+========================================================= */
+
+function stopCarousel() {
+
+    if (carouselTimer) {
+
+        clearInterval(
+            carouselTimer
+        );
+
+        carouselTimer =
+            null;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESTART AUTO SLIDE
+========================================================= */
+
+function restartCarousel() {
+
+    startCarousel();
+
+}
+
+
+/* =========================================================
+   TOUCH START
+========================================================= */
+
+function carouselTouchStart(
+    event
+) {
+
+    if (
+        !event.touches ||
+        !event.touches.length
+    ) {
+
+        return;
+
+    }
+
+
+    touchStartX =
+        event.touches[0].clientX;
+
+
+    touchStartY =
+        event.touches[0].clientY;
+
+
+    isPointerDown =
+        true;
+
+
+    stopCarousel();
+
+
+    const {
+        hint
+    } =
+        getCarouselElements();
+
+
+    if (hint) {
+
+        hint.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TOUCH END
+========================================================= */
+
+function carouselTouchEnd(
+    event
+) {
+
+    if (!isPointerDown) {
+        return;
+    }
+
+
+    isPointerDown =
+        false;
+
+
+    if (
+        !event.changedTouches ||
+        !event.changedTouches.length
+    ) {
+
+        startCarousel();
+
+        return;
+
+    }
+
+
+    const endX =
+        event.changedTouches[0].clientX;
+
+
+    const endY =
+        event.changedTouches[0].clientY;
+
+
+    const deltaX =
+        endX - touchStartX;
+
+
+    const deltaY =
+        endY - touchStartY;
+
+
+    /*
+        Only count a horizontal movement as a swipe.
+
+        Minimum horizontal movement = 45px.
+    */
+
+    if (
+        Math.abs(deltaX) >= 45 &&
+        Math.abs(deltaX) > Math.abs(deltaY)
+    ) {
+
+        if (deltaX < 0) {
+
+            nextCarousel();
+
+        } else {
+
+            previousCarousel();
+
         }
 
+    }
 
-        /* =========================================================
-           LOAD USER PROFILE
-        ========================================================== */
 
-        async function loadCurrentUserProfile(
-            user,
-            shouldRedirect
-        ) {
+    startCarousel();
 
-            if (!user || !firebaseDB) {
-                return null;
+}
+
+
+/* =========================================================
+   MOUSE ENTER
+========================================================= */
+
+function carouselMouseEnter() {
+
+    stopCarousel();
+
+}
+
+
+/* =========================================================
+   MOUSE LEAVE
+========================================================= */
+
+function carouselMouseLeave() {
+
+    startCarousel();
+
+}
+
+
+/* =========================================================
+   INITIALIZE CAROUSEL
+========================================================= */
+
+function initializeCarousel() {
+
+    const {
+        carousel
+    } =
+        getCarouselElements();
+
+
+    if (!carousel) {
+        return;
+    }
+
+
+    buildCarouselDots();
+
+    updateCarousel();
+
+    startCarousel();
+
+
+    const previous =
+        $("carouselPrev");
+
+
+    const next =
+        $("carouselNext");
+
+
+    if (previous) {
+
+        previous.addEventListener(
+            "click",
+            () => {
+
+                previousCarousel();
+
+                restartCarousel();
+
+            }
+        );
+
+    }
+
+
+    if (next) {
+
+        next.addEventListener(
+            "click",
+            () => {
+
+                nextCarousel();
+
+                restartCarousel();
+
+            }
+        );
+
+    }
+
+
+    carousel.addEventListener(
+        "touchstart",
+        carouselTouchStart,
+        {
+            passive: true
+        }
+    );
+
+
+    carousel.addEventListener(
+        "touchend",
+        carouselTouchEnd,
+        {
+            passive: true
+        }
+    );
+
+
+    carousel.addEventListener(
+        "mouseenter",
+        carouselMouseEnter
+    );
+
+
+    carousel.addEventListener(
+        "mouseleave",
+        carouselMouseLeave
+    );
+
+
+    /*
+        Hide swipe hint after a few seconds.
+    */
+
+    setTimeout(
+        () => {
+
+            const hint =
+                $("swipeHint");
+
+
+            if (hint) {
+
+                hint.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        },
+        5000
+    );
+
+}
+
+
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
+
+function setupAuthListener() {
+
+    firebaseAuth.onAuthStateChanged(
+        async user => {
+
+            currentUser =
+                user;
+
+
+            /*
+                IMPORTANT:
+
+                We DO NOT redirect here.
+
+                Firebase can restore an existing session
+                automatically. The user must press Account
+                or Continue to deliberately route to their
+                dashboard.
+
+                This prevents the home page from constantly
+                throwing users into another page.
+            */
+
+            if (!user) {
+
+                currentRole =
+                    null;
+
+                showLoginForm();
+
+                hideLoading();
+
+                return;
+
             }
 
 
             try {
 
-                const userRef =
-                    firebaseDB
-                        .collection("users")
-                        .doc(user.uid);
-
-
-                const snapshot =
-                    await userRef.get();
-
-
-                if (!snapshot.exists) {
-
-                    /*
-                        If Auth exists but profile doesn't,
-                        do not invent a role.
-                    */
-
-                    currentRole = null;
-
-                    showLoggedInPanel(
-                        user,
-                        null
-                    );
-
-                    if (shouldRedirect) {
-
-                        showAlert(
-                            "error",
-                            "Account profile not found",
-                            "Your Firebase Authentication account exists, but your K@si Web Firestore profile could not be found."
-                        );
-
-                    }
-
-                    return null;
-                }
-
-
-                const data =
-                    snapshot.data() || {};
-
-
-                /*
-                    Role is read from Firestore.
-
-                    Support role / Role / userRole for compatibility
-                    with existing K@si documents.
-                */
-
                 const role =
-                    normalizeRole(
-                        data.role ||
-                        data.Role ||
-                        data.userRole
+                    await getUserRole(
+                        user
                     );
 
 
                 currentRole =
-                    role || null;
+                    role;
 
 
-                showLoggedInPanel(
+                showAuthenticatedAccount(
                     user,
-                    currentRole
-                );
-
-
-                if (shouldRedirect) {
-
-                    await redirectByRole(
-                        currentRole
-                    );
-
-                }
-
-
-                return currentRole;
-
-
-            } catch (error) {
-
-                console.error(
-                    "Unable to load user profile:",
-                    error
-                );
-
-
-                currentRole = null;
-
-
-                showLoggedInPanel(
-                    user,
-                    null
-                );
-
-
-                if (shouldRedirect) {
-
-                    showAlert(
-                        "error",
-                        "Profile lookup failed",
-                        getFirebaseErrorMessage(error)
-                    );
-
-                }
-
-
-                return null;
-
-            }
-
-        }
-
-
-        /* =========================================================
-           NORMALIZE ROLE
-        ========================================================== */
-
-        function normalizeRole(role) {
-
-            if (!role) {
-                return null;
-            }
-
-
-            const normalized =
-                String(role)
-                    .trim()
-                    .toLowerCase()
-                    .replace(/[\s-]+/g, "_");
-
-
-            if (
-                normalized === "admin" ||
-                normalized === "administrator"
-            ) {
-
-                return "admin";
-
-            }
-
-
-            if (
-                normalized === "salon_owner" ||
-                normalized === "salonowner" ||
-                normalized === "owner" ||
-                normalized === "salon_owner_account"
-            ) {
-
-                return "salon_owner";
-
-            }
-
-
-            if (
-                normalized === "customer" ||
-                normalized === "client" ||
-                normalized === "user"
-            ) {
-
-                return "customer";
-
-            }
-
-
-            return normalized;
-
-        }
-
-
-        /* =========================================================
-           ROLE ROUTING
-        ========================================================== */
-
-        async function redirectByRole(role) {
-
-            if (redirectInProgress) {
-                return;
-            }
-
-
-            let destination = null;
-
-
-            switch (normalizeRole(role)) {
-
-                case "admin":
-
-                    destination =
-                        "admin.html";
-
-                    break;
-
-
-                case "salon_owner":
-
-                    destination =
-                        "owners.html";
-
-                    break;
-
-
-                case "customer":
-
-                    destination =
-                        "salons.html";
-
-                    break;
-
-
-                default:
-
-                    /*
-                        Unknown roles are treated as customers
-                        for navigation purposes only.
-
-                        Permissions are NOT granted by this fallback.
-                    */
-
-                    destination =
-                        "salons.html";
-
-                    break;
-
-            }
-
-
-            if (!destination) {
-                return;
-            }
-
-
-            redirectInProgress = true;
-
-
-            showAlert(
-                "success",
-                "Login successful",
-                "Taking you to your K@si Web account..."
-            );
-
-
-            setLoading(
-                true,
-                "Opening your account..."
-            );
-
-
-            /*
-                Small delay allows Firebase to finish any pending
-                writes and gives the user visual confirmation.
-            */
-
-            await wait(450);
-
-
-            window.location.replace(
-                destination
-            );
-
-        }
-
-
-        /* =========================================================
-           AUTH FORM MODE
-        ========================================================== */
-
-        function setMode(mode) {
-
-            currentMode =
-                mode === "signup"
-                    ? "signup"
-                    : "signin";
-
-
-            clearAlert();
-
-
-            if (currentMode === "signup") {
-
-                signUpTab.classList.add("active");
-                signInTab.classList.remove("active");
-
-                authTitle.textContent =
-                    "Create your K@si account";
-
-                authSubtitle.textContent =
-                    "Join K@si Web and discover a better way to manage your grooming journey.";
-
-                nameGroup.style.display =
-                    "block";
-
-                confirmPasswordGroup.style.display =
-                    "block";
-
-                fullNameInput.required =
-                    true;
-
-                confirmPasswordInput.required =
-                    true;
-
-                passwordInput.autocomplete =
-                    "new-password";
-
-                submitText.textContent =
-                    "Create Account";
-
-                submitContent.innerHTML = `
-                    <i class="bx bx-user-plus"></i>
-                    <span id="submitText">Create Account</span>
-                `;
-
-                footerText.textContent =
-                    "Already have an account?";
-
-                footerAction.textContent =
-                    "Use Sign In above.";
-
-            } else {
-
-                signInTab.classList.add("active");
-                signUpTab.classList.remove("active");
-
-                authTitle.textContent =
-                    "Welcome back";
-
-                authSubtitle.textContent =
-                    "Sign in to continue to your K@si Web account.";
-
-                nameGroup.style.display =
-                    "none";
-
-                confirmPasswordGroup.style.display =
-                    "none";
-
-                fullNameInput.required =
-                    false;
-
-                confirmPasswordInput.required =
-                    false;
-
-                passwordInput.autocomplete =
-                    "current-password";
-
-                submitContent.innerHTML = `
-                    <i class="bx bx-log-in-circle"></i>
-                    <span id="submitText">Sign In</span>
-                `;
-
-                footerText.textContent =
-                    "New to K@si Web?";
-
-                footerAction.textContent =
-                    "Create an account above.";
-
-            }
-
-        }
-
-
-        /* =========================================================
-           SHOW AUTH FORM
-        ========================================================== */
-
-        function showAuthenticationForm() {
-
-            authForm.style.display =
-                "block";
-
-            accountPanel.classList.remove(
-                "show"
-            );
-
-            accountPanel.style.display =
-                "none";
-
-
-            /*
-                Keep the default login view.
-            */
-
-            if (!currentUser) {
-
-                setMode("signin");
-
-            }
-
-        }
-
-
-        /* =========================================================
-           SHOW LOGGED-IN PANEL
-        ========================================================== */
-
-        function showLoggedInPanel(
-            user,
-            role
-        ) {
-
-            if (!user) {
-                return;
-            }
-
-
-            authForm.style.display =
-                "none";
-
-
-            accountPanel.style.display =
-                "block";
-
-            accountPanel.classList.add(
-                "show"
-            );
-
-
-            accountEmail.textContent =
-                user.email ||
-                "Signed-in account";
-
-
-            accountRole.textContent =
-                formatRole(role);
-
-
-            if (role === "admin") {
-
-                continueButton.innerHTML =
-                    `<i class="bx bx-shield-quarter"></i> Open Admin`;
-
-            } else if (
-                role === "salon_owner"
-            ) {
-
-                continueButton.innerHTML =
-                    `<i class="bx bx-store"></i> Open Owner Area`;
-
-            } else {
-
-                continueButton.innerHTML =
-                    `<i class="bx bx-store-alt"></i> Explore Salons`;
-
-            }
-
-        }
-
-
-        /* =========================================================
-           FORMAT ROLE
-        ========================================================== */
-
-        function formatRole(role) {
-
-            switch (normalizeRole(role)) {
-
-                case "admin":
-                    return "Admin";
-
-                case "salon_owner":
-                    return "Salon Owner";
-
-                case "customer":
-                    return "Client / Customer";
-
-                default:
-                    return "Profile role not set";
-
-            }
-
-        }
-
-
-        /* =========================================================
-           SIGN IN
-        ========================================================== */
-
-        async function signIn() {
-
-            if (!firebaseReady || !firebaseAuth) {
-
-                showAlert(
-                    "error",
-                    "Firebase is not ready",
-                    "K@si Web could not initialize Firebase. Check the Firebase configuration in this file."
-                );
-
-                return;
-
-            }
-
-
-            const email =
-                emailInput.value.trim();
-
-            const password =
-                passwordInput.value;
-
-
-            if (!email) {
-
-                showAlert(
-                    "error",
-                    "Email required",
-                    "Please enter your email address."
-                );
-
-                emailInput.focus();
-
-                return;
-
-            }
-
-
-            if (!isValidEmail(email)) {
-
-                showAlert(
-                    "error",
-                    "Invalid email",
-                    "Please enter a valid email address."
-                );
-
-                emailInput.focus();
-
-                return;
-
-            }
-
-
-            if (!password) {
-
-                showAlert(
-                    "error",
-                    "Password required",
-                    "Please enter your password."
-                );
-
-                passwordInput.focus();
-
-                return;
-
-            }
-
-
-            try {
-
-                setLoading(
-                    true,
-                    "Signing in..."
-                );
-
-
-                clearAlert();
-
-
-                const credential =
-                    await firebaseAuth.signInWithEmailAndPassword(
-                        email,
-                        password
-                    );
-
-
-                const user =
-                    credential.user;
-
-
-                if (!user) {
-
-                    throw new Error(
-                        "Firebase did not return an authenticated user."
-                    );
-
-                }
-
-
-                currentUser =
-                    user;
-
-
-                /*
-                    IMPORTANT:
-                    Account type selection is ignored during login.
-
-                    The Firestore profile decides the role.
-                */
-
-                const role =
-                    await loadCurrentUserProfile(
-                        user,
-                        false
-                    );
-
-
-                if (!role) {
-
-                    setLoading(
-                        false,
-                        "Sign In"
-                    );
-
-                    showAlert(
-                        "error",
-                        "Account profile missing",
-                        "Authentication succeeded, but your K@si Web users profile does not contain a valid role."
-                    );
-
-                    return;
-
-                }
-
-
-                await redirectByRole(
                     role
                 );
 
 
             } catch (error) {
 
-                console.error(
-                    "Sign in error:",
+                console.warn(
+                    "Could not load user role:",
                     error
                 );
-
-
-                setLoading(
-                    false,
-                    "Sign In"
-                );
-
-
-                showAlert(
-                    "error",
-                    "Sign in failed",
-                    getFirebaseErrorMessage(error)
-                );
-
-            }
-
-        }
-
-
-        /* =========================================================
-           SIGN UP
-        ========================================================== */
-
-        async function signUp() {
-
-            if (!firebaseReady || !firebaseAuth || !firebaseDB) {
-
-                showAlert(
-                    "error",
-                    "Firebase is not ready",
-                    "K@si Web could not initialize Firebase. Check the Firebase configuration."
-                );
-
-                return;
-
-            }
-
-
-            const fullName =
-                fullNameInput.value.trim();
-
-            const email =
-                emailInput.value.trim();
-
-            const password =
-                passwordInput.value;
-
-            const confirmPassword =
-                confirmPasswordInput.value;
-
-            const selectedRole =
-                normalizeRole(
-                    accountType.value
-                );
-
-
-            if (!fullName) {
-
-                showAlert(
-                    "error",
-                    "Name required",
-                    "Please enter your full name."
-                );
-
-                fullNameInput.focus();
-
-                return;
-
-            }
-
-
-            if (fullName.length < 2) {
-
-                showAlert(
-                    "error",
-                    "Invalid name",
-                    "Please enter your full name."
-                );
-
-                fullNameInput.focus();
-
-                return;
-
-            }
-
-
-            if (!isValidEmail(email)) {
-
-                showAlert(
-                    "error",
-                    "Invalid email",
-                    "Please enter a valid email address."
-                );
-
-                emailInput.focus();
-
-                return;
-
-            }
-
-
-            if (password.length < 6) {
-
-                showAlert(
-                    "error",
-                    "Password too short",
-                    "Your password must contain at least 6 characters."
-                );
-
-                passwordInput.focus();
-
-                return;
-
-            }
-
-
-            if (password !== confirmPassword) {
-
-                showAlert(
-                    "error",
-                    "Passwords do not match",
-                    "Please make sure both password fields match."
-                );
-
-                confirmPasswordInput.focus();
-
-                return;
-
-            }
-
-
-            /*
-                Only supported signup roles are accepted.
-
-                Admin is deliberately not created from the browser.
-            */
-
-            if (
-                selectedRole !== "customer" &&
-                selectedRole !== "salon_owner"
-            ) {
-
-                showAlert(
-                    "error",
-                    "Invalid account type",
-                    "Please select Client / Customer or Salon Owner."
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                setLoading(
-                    true,
-                    "Creating your account..."
-                );
-
-
-                clearAlert();
-
-
-                const credential =
-                    await firebaseAuth
-                        .createUserWithEmailAndPassword(
-                            email,
-                            password
-                        );
-
-
-                const user =
-                    credential.user;
-
-
-                if (!user) {
-
-                    throw new Error(
-                        "Firebase did not return the new user."
-                    );
-
-                }
-
-
-                currentUser =
-                    user;
 
 
                 /*
-                    Save the profile.
-
-                    Firestore rules must allow the authenticated user
-                    to create their own profile.
+                    User can still see the page,
+                    but Continue/Account will perform
+                    the strict role check again.
                 */
 
-                await firebaseDB
-                    .collection("users")
-                    .doc(user.uid)
-                    .set(
-                        {
-                            email:
-                                email,
-
-                            role:
-                                selectedRole,
-
-                            displayName:
-                                fullName,
-
-                            createdAt:
-                                firebase.firestore.FieldValue.serverTimestamp(),
-
-                            updatedAt:
-                                firebase.firestore.FieldValue.serverTimestamp()
-                        },
-                        {
-                            merge: true
-                        }
-                    );
-
-
-                /*
-                    Refresh Firebase user's display name.
-                */
-
-                try {
-
-                    await user.updateProfile(
-                        {
-                            displayName:
-                                fullName
-                        }
-                    );
-
-                } catch (
-                    profileError
-                ) {
-
-                    console.warn(
-                        "Firebase Auth displayName update failed:",
-                        profileError
-                    );
-
-                }
-
-
-                const role =
-                    await loadCurrentUserProfile(
-                        user,
-                        false
-                    );
-
-
-                if (!role) {
-
-                    setLoading(
-                        false,
-                        "Create Account"
-                    );
-
-                    showAlert(
-                        "error",
-                        "Profile setup incomplete",
-                        "Your account was created, but K@si Web could not read the new Firestore profile."
-                    );
-
-                    return;
-
-                }
-
-
-                await redirectByRole(
-                    role
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Sign up error:",
-                    error
-                );
-
-
-                setLoading(
-                    false,
-                    "Create Account"
-                );
-
-
-                showAlert(
-                    "error",
-                    "Account creation failed",
-                    getFirebaseErrorMessage(error)
+                showAuthenticatedAccount(
+                    user,
+                    "Account"
                 );
 
             }
+
+
+            hideLoading();
 
         }
+    );
+
+}
 
 
-        /* =========================================================
-           LOGOUT
-        ========================================================== */
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
 
-        async function logout() {
+function initializeFirebase() {
 
-            if (!firebaseAuth) {
-                return;
-            }
+    try {
 
+        if (
+            !firebase.apps.length
+        ) {
 
-            try {
-
-                await firebaseAuth.signOut();
-
-
-                currentUser = null;
-                currentRole = null;
-                redirectInProgress = false;
-
-
-                clearForm();
-
-                clearAlert();
-
-
-                setMode(
-                    "signin"
-                );
-
-
-                showAlert(
-                    "success",
-                    "Signed out",
-                    "You have been signed out of your K@si Web account."
-                );
-
-
-                showAuthenticationForm();
-
-
-            } catch (error) {
-
-                console.error(
-                    "Logout error:",
-                    error
-                );
-
-
-                showAlert(
-                    "error",
-                    "Sign out failed",
-                    getFirebaseErrorMessage(error)
-                );
-
-            }
-
-        }
-
-
-        /* =========================================================
-           CONTINUE TO ACCOUNT
-        ========================================================== */
-
-        async function continueToAccount() {
-
-            if (!currentUser) {
-
-                document
-                    .getElementById("auth")
-                    .scrollIntoView(
-                        {
-                            behavior: "smooth"
-                        }
-                    );
-
-                return;
-
-            }
-
-
-            if (!currentRole) {
-
-                const role =
-                    await loadCurrentUserProfile(
-                        currentUser,
-                        false
-                    );
-
-
-                if (!role) {
-
-                    showAlert(
-                        "error",
-                        "Role not found",
-                        "Your Firestore users profile does not contain a valid K@si Web role."
-                    );
-
-                    return;
-
-                }
-
-            }
-
-
-            await redirectByRole(
-                currentRole
+            firebase.initializeApp(
+                firebaseConfig
             );
 
         }
 
 
-        /* =========================================================
-           NAV ACCOUNT
-        ========================================================== */
-
-        async function handleNavAccount() {
-
-            if (currentUser) {
-
-                await continueToAccount();
-
-                return;
-
-            }
+        firebaseAuth =
+            firebase.auth();
 
 
-            document
-                .getElementById("auth")
-                .scrollIntoView(
-                    {
-                        behavior: "smooth"
-                    }
-                );
-
-        }
+        firebaseDB =
+            firebase.firestore();
 
 
-        /* =========================================================
-           LOADING
-        ========================================================== */
+        /*
+            Expose globally.
 
-        function setLoading(
-            loading,
-            label
-        ) {
+            Other K@si pages can use the same
+            names if needed.
+        */
 
-            submitButton.disabled =
-                loading;
+        window.firebaseAuth =
+            firebaseAuth;
 
-
-            if (loading) {
-
-                submitContent.innerHTML = `
-                    <span class="spinner"></span>
-                    <span>${escapeHtml(label)}</span>
-                `;
-
-            } else {
-
-                if (
-                    currentMode === "signup"
-                ) {
-
-                    submitContent.innerHTML = `
-                        <i class="bx bx-user-plus"></i>
-                        <span>Create Account</span>
-                    `;
-
-                } else {
-
-                    submitContent.innerHTML = `
-                        <i class="bx bx-log-in-circle"></i>
-                        <span>Sign In</span>
-                    `;
-
-                }
-
-            }
-
-        }
+        window.firebaseDB =
+            firebaseDB;
 
 
-        /* =========================================================
-           ALERT
-        ========================================================== */
-
-        function showAlert(
-            type,
-            title,
-            message
-        ) {
-
-            authAlert.className =
-                "alert show " +
-                type;
+        setupAuthListener();
 
 
-            let icon =
-                "bx-info-circle";
+    } catch (error) {
 
-
-            if (type === "error") {
-                icon =
-                    "bx-error-circle";
-            }
-
-            if (type === "success") {
-                icon =
-                    "bx-check-circle";
-            }
-
-
-            alertTitle.innerHTML = `
-                <i class="bx ${icon}"></i>
-                ${escapeHtml(title)}
-            `;
-
-
-            alertMessage.textContent =
-                message;
-
-        }
-
-
-        function clearAlert() {
-
-            authAlert.className =
-                "alert";
-
-            alertTitle.textContent =
-                "";
-
-            alertMessage.textContent =
-                "";
-
-        }
-
-
-        /* =========================================================
-           FIREBASE ERROR MESSAGES
-        ========================================================== */
-
-        function getFirebaseErrorMessage(
+        console.error(
+            "Firebase initialization failed:",
             error
-        ) {
-
-            if (!error) {
-
-                return "An unknown error occurred.";
-
-            }
-
-
-            const code =
-                error.code ||
-                "";
-
-
-            const rawMessage =
-                error.message ||
-                "An unknown Firebase error occurred.";
-
-
-            switch (code) {
-
-                case "auth/api-key-not-valid":
-
-                    return (
-                        "The Firebase Web API key is invalid. " +
-                        "Open Firebase Console → Project settings → General → Your apps and copy the Web app configuration."
-                    );
-
-
-                case "auth/invalid-api-key":
-
-                    return (
-                        "The Firebase Web API key is invalid. " +
-                        "Check the apiKey in home.html against your Firebase Web app configuration."
-                    );
-
-
-                case "auth/invalid-email":
-
-                    return (
-                        "The email address is not valid."
-                    );
-
-
-                case "auth/user-disabled":
-
-                    return (
-                        "This Firebase account has been disabled."
-                    );
-
-
-                case "auth/user-not-found":
-
-                    return (
-                        "No Firebase Authentication account was found for this email address."
-                    );
-
-
-                case "auth/wrong-password":
-
-                case "auth/invalid-credential":
-
-                    return (
-                        "The email address or password is incorrect."
-                    );
-
-
-                case "auth/email-already-in-use":
-
-                    return (
-                        "An account with this email address already exists. Use Sign In instead."
-                    );
-
-
-                case "auth/weak-password":
-
-                    return (
-                        "The password is too weak. Use at least 6 characters."
-                    );
-
-
-                case "auth/network-request-failed":
-
-                    return (
-                        "Network request failed. Check your internet connection and try again."
-                    );
-
-
-                case "auth/too-many-requests":
-
-                    return (
-                        "Too many unsuccessful attempts were made. Please wait and try again."
-                    );
-
-
-                case "permission-denied":
-
-                    return (
-                        "Firestore denied access. Check your Firestore rules for the users collection."
-                    );
-
-
-                default:
-
-                    return cleanFirebaseMessage(
-                        rawMessage
-                    );
-
-            }
-
-        }
-
-
-        /* =========================================================
-           CLEAN FIREBASE MESSAGE
-        ========================================================== */
-
-        function cleanFirebaseMessage(
-            message
-        ) {
-
-            return String(message)
-                .replace(/^Firebase:\s*/i, "")
-                .replace(/\s*\(auth\/[^)]+\)\.?$/i, "")
-                .trim();
-
-        }
-
-
-        /* =========================================================
-           VALID EMAIL
-        ========================================================== */
-
-        function isValidEmail(
-            email
-        ) {
-
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                .test(email);
-
-        }
-
-
-        /* =========================================================
-           WAIT
-        ========================================================== */
-
-        function wait(
-            milliseconds
-        ) {
-
-            return new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        milliseconds
-                    )
-            );
-
-        }
-
-
-        /* =========================================================
-           CLEAR FORM
-        ========================================================== */
-
-        function clearForm() {
-
-            authForm.reset();
-
-            accountType.value =
-                "customer";
-
-        }
-
-
-        /* =========================================================
-           ESCAPE HTML
-        ========================================================== */
-
-        function escapeHtml(
-            value
-        ) {
-
-            return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-
-        }
-
-
-        /* =========================================================
-           PASSWORD VISIBILITY
-        ========================================================== */
-
-        document
-            .querySelectorAll(".password-toggle")
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            const targetId =
-                                button.dataset.target;
-
-                            const input =
-                                document.getElementById(
-                                    targetId
-                                );
-
-                            if (!input) {
-                                return;
-                            }
-
-
-                            if (
-                                input.type ===
-                                "password"
-                            ) {
-
-                                input.type =
-                                    "text";
-
-                                button.innerHTML =
-                                    `<i class="bx bx-hide"></i>`;
-
-                                button.setAttribute(
-                                    "aria-label",
-                                    "Hide password"
-                                );
-
-                            } else {
-
-                                input.type =
-                                    "password";
-
-                                button.innerHTML =
-                                    `<i class="bx bx-show"></i>`;
-
-                                button.setAttribute(
-                                    "aria-label",
-                                    "Show password"
-                                );
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
-
-        /* =========================================================
-           TAB EVENTS
-        ========================================================== */
-
-        signInTab.addEventListener(
-            "click",
-            () => {
-
-                if (currentUser) {
-                    return;
-                }
-
-                setMode("signin");
-
-            }
         );
 
 
-        signUpTab.addEventListener(
-            "click",
-            () => {
+        hideLoading();
 
-                if (currentUser) {
-                    return;
-                }
 
-                setMode("signup");
-
-            }
+        showToast(
+            "Firebase could not be initialized.",
+            "error"
         );
 
+    }
 
-        /* =========================================================
-           FORM SUBMIT
-        ========================================================== */
+}
 
-        authForm.addEventListener(
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+function setupAuthForm() {
+
+    $("authForm")
+        .addEventListener(
             "submit",
             async event => {
 
                 event.preventDefault();
 
 
-                if (
-                    submitButton.disabled
-                ) {
+                const signupMode =
+                    $("signUpTab")
+                        .classList
+                        .contains(
+                            "active"
+                        );
 
-                    return;
 
-                }
-
-
-                if (
-                    currentMode ===
-                    "signup"
-                ) {
+                if (signupMode) {
 
                     await signUp();
 
@@ -4421,72 +5071,100 @@
             }
         );
 
+}
 
-        /* =========================================================
-           BUTTON EVENTS
-        ========================================================== */
 
-        logoutButton.addEventListener(
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
+
+function setupEventListeners() {
+
+    /*
+        Auth tabs
+    */
+
+    $("signInTab")
+        .addEventListener(
             "click",
-            logout
+            setSignInMode
         );
 
 
-        continueButton.addEventListener(
+    $("signUpTab")
+        .addEventListener(
             "click",
-            continueToAccount
+            setSignUpMode
         );
 
 
-        navAccountButton.addEventListener(
+    /*
+        Account button in navbar
+    */
+
+    $("navAccountButton")
+        .addEventListener(
             "click",
             handleNavAccount
         );
 
 
-        /* =========================================================
-           KEYBOARD SUPPORT
-        ========================================================== */
+    /*
+        Continue account button
+    */
 
-        emailInput.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    passwordInput.focus();
-
-                }
-
-            }
+    $("continueButton")
+        .addEventListener(
+            "click",
+            continueToAccount
         );
 
 
-        passwordInput.addEventListener(
-            "keydown",
-            event => {
+    /*
+        Logout
+    */
 
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    authForm.requestSubmit();
-
-                }
-
-            }
+    $("logoutButton")
+        .addEventListener(
+            "click",
+            logout
         );
 
 
-        /* =========================================================
-           START FIREBASE
-        ========================================================== */
+    /*
+        Password buttons
+    */
+
+    setupPasswordToggles();
+
+
+    /*
+        Auth form
+    */
+
+    setupAuthForm();
+
+}
+
+
+/* =========================================================
+   START APPLICATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializeCarousel();
+
+        setupEventListeners();
 
         initializeFirebase();
 
-    </script>
+    }
+);
+
+</script>
 
 </body>
     </html>
