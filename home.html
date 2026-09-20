@@ -5018,54 +5018,81 @@
                             String(
                                 booking.status ||
                                 "pending"
-                            )
-                                .toLowerCase();
+                            ).toLowerCase();
 
+                        const badgeClass =
+                            "status-" + status;
 
-                        let statusClass =
-                            "status-" +
-                            status;
-
-                        if (
-                            ![
-                                "pending",
-                                "approved",
-                                "completed",
-                                "declined",
-                                "cancelled"
-                            ].includes(status)
-                        ) {
-                            statusClass = "status-pending";
-                        }
-
-                        html += `
+                        html +=
+                            `
                             <div class="booking-item">
+
                                 <div class="booking-item-main">
-                                    <strong>${salon}</strong>
-                                    <span>${service}</span>
-                                    <span><i class="bx bx-time-five"></i> ${date} at ${time}</span>
+
+                                    <strong>
+                                        ${salon}
+                                    </strong>
+
+                                    <span>
+                                        <i class="bx bx-cut"></i> ${service}
+                                    </span>
+
+                                    <span>
+                                        <i class="bx bx-time-five"></i> ${date} at ${time}
+                                    </span>
+
                                 </div>
-                                <span class="booking-status ${statusClass}">${status}</span>
+
+                                <div class="booking-status ${badgeClass}">
+                                    ${status}
+                                </div>
+
                             </div>
-                        `;
+                            `;
 
                     }
                 );
 
-                html += `</div>`;
-                bookingContent.innerHTML = html;
+
+                html +=
+                    `
+                    </div>
+                    `;
+
+
+                bookingContent.innerHTML =
+                    html;
 
             } catch (error) {
 
-                console.error("Error loading bookings:", error);
+                console.error(
+                    "Error loading bookings:",
+                    error
+                );
 
-                bookingContent.innerHTML = `
+                bookingContent.innerHTML =
+                    `
                     <div class="empty-icon">
                         <i class="bx bx-error-circle"></i>
                     </div>
-                    <h3>Could not load bookings.</h3>
-                    <p>There was a problem retrieving your schedule. Please refresh.</p>
-                `;
+
+                    <h3>
+                        Could not load bookings.
+                    </h3>
+
+                    <p>
+                        We encountered an issue fetching your appointments.
+                        Please tap refresh to try again.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="window.location.reload()"
+                    >
+                        Try Again
+                    </button>
+                    `;
 
             }
 
@@ -5073,109 +5100,143 @@
 
 
         /* =========================================================
-           LOGOUT & REFRESH
+           LOGOUT
         ========================================================= */
 
         if (logoutBtn) {
 
-            logoutBtn.addEventListener("click", async function() {
+            logoutBtn.addEventListener(
+                "click",
+                async function() {
 
-                showLoading("Signing out...");
-
-                try {
+                    showLoading("Signing out...");
 
                     sessionStorage.clear();
 
-                    if (auth) {
-                        await auth.signOut();
+                    try {
+
+                        if (auth) {
+                            await auth.signOut();
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Logout error:",
+                            error
+                        );
+
+                    } finally {
+
+                        window.location.reload();
+
                     }
 
-                    showToast("Signed out successfully.");
-
-                } catch (error) {
-
-                    console.error("Logout error:", error);
-
-                    hideLoading();
-
-                    showToast("Failed to sign out. Please try again.");
-
                 }
-
-            });
-
-        }
-
-
-        if (refreshBtn) {
-
-            refreshBtn.addEventListener("click", function() {
-
-                if (currentUser) {
-                    showToast("Refreshing schedule...");
-                    loadBookings(currentUser);
-                } else {
-                    window.location.reload();
-                }
-
-            });
+            );
 
         }
 
 
         /* =========================================================
-           AUTH STATE LISTENER
+           REFRESH BUTTON
+        ========================================================= */
+
+        if (refreshBtn) {
+
+            refreshBtn.addEventListener(
+                "click",
+                async function() {
+
+                    const icon =
+                        refreshBtn.querySelector("i");
+
+                    if (icon) {
+                        icon.classList.add("bx-spin");
+                    }
+
+                    if (currentUser) {
+
+                        await loadUser(currentUser);
+
+                        showToast("Dashboard refreshed.");
+
+                    }
+
+                    setTimeout(
+                        function() {
+
+                            if (icon) {
+                                icon.classList.remove("bx-spin");
+                            }
+
+                        },
+                        600
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           AUTH STATE LISTENER & SCREEN INITIALIZATION
         ========================================================= */
 
         if (auth) {
 
-            auth.onAuthStateChanged(async function(user) {
+            auth.onAuthStateChanged(
+                async function(user) {
 
-                authReady = true;
+                    authReady = true;
 
-                if (user) {
+                    if (user) {
 
-                    /*
-                        User is logged in.
-                        Hide the auth screen and display the app shell.
-                    */
+                        /*
+                            User is logged in:
+                            Show the App Shell, hide Auth Screen.
+                        */
 
-                    document.body.classList.remove("auth-mode");
+                        document.body.classList.remove("auth-mode");
 
-                    authScreen.classList.add("hidden");
+                        authScreen.classList.add("hidden");
 
-                    appShell.classList.add("visible");
+                        appShell.classList.add("visible");
 
-                    hideLoading();
+                        await loadUser(user);
 
-                    await loadUser(user);
+                        hideLoading();
 
-                } else {
+                    } else {
 
-                    /*
-                        User is not logged in.
-                        Show the auth screen and hide the app shell.
-                    */
+                        /*
+                            User is logged out:
+                            Show Auth Screen, hide App Shell.
+                        */
 
-                    currentUser = null;
+                        currentUser = null;
 
-                    document.body.classList.add("auth-mode");
+                        document.body.classList.add("auth-mode");
 
-                    authScreen.classList.remove("hidden");
+                        authScreen.classList.remove("hidden");
 
-                    appShell.classList.remove("visible");
+                        appShell.classList.remove("visible");
 
-                    hideLoading();
+                        hideLoading();
+
+                    }
 
                 }
-
-            });
+            );
 
         } else {
 
             hideLoading();
 
-            showAuthMessage("Firebase features are offline. Check your setup.");
+            showAuthMessage(
+                "Firebase initialization failure. Check your connection."
+            );
 
         }
 
@@ -5183,4 +5244,4 @@
 
 </body>
 
-    </html>
+</html>
