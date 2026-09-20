@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,22 +10,31 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta name="theme-color" content="#07070d">
+    <meta
+        name="theme-color"
+        content="#07070d"
+    >
 
     <meta
         name="description"
         content="K@si Web Elite Admin Control Centre"
     >
 
-    <title>K@si Web | Admin Control Centre</title>
-
-    <link rel="manifest" href="manifest.json">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>K@si Web | Elite Admin Control Centre</title>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="manifest"
+        href="manifest.json"
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
         rel="stylesheet"
     >
 
@@ -35,1533 +45,4041 @@
 
     <style>
 
-        /* =========================================================
-           RESET
-        ========================================================= */
+        /* =====================================================
+           K@si Web — ELITE DESIGN SYSTEM
+           ===================================================== */
+
+        :root {
+
+            --bg:
+                #07070d;
+
+            --bg-2:
+                #0b0b13;
+
+            --panel:
+                rgba(18, 18, 29, .78);
+
+            --panel-solid:
+                #11111b;
+
+            --panel-light:
+                rgba(255,255,255,.045);
+
+            --border:
+                rgba(255,255,255,.09);
+
+            --border-light:
+                rgba(255,255,255,.14);
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #9a9aac;
+
+            --muted-2:
+                #6d6d7c;
+
+            --blue:
+                #3b82f6;
+
+            --blue-2:
+                #60a5fa;
+
+            --purple:
+                #8b5cf6;
+
+            --green:
+                #22c55e;
+
+            --yellow:
+                #f59e0b;
+
+            --red:
+                #ef4444;
+
+            --cyan:
+                #06b6d4;
+
+            --shadow:
+                0 24px 80px rgba(0,0,0,.42);
+
+            --radius:
+                22px;
+
+            --sidebar:
+                250px;
+
+        }
+
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+
+            box-sizing:
+                border-box;
+
+            margin:
+                0;
+
+            padding:
+                0;
+
         }
+
 
         html {
-            scroll-behavior: smooth;
+
+            scroll-behavior:
+                smooth;
+
         }
 
+
         body {
-            min-height: 100vh;
+
+            min-height:
+                100vh;
+
             background:
                 radial-gradient(
-                    circle at 15% 10%,
-                    rgba(59, 130, 246, 0.13),
+                    circle at 15% 0%,
+                    rgba(59,130,246,.10),
                     transparent 30%
                 ),
                 radial-gradient(
-                    circle at 90% 20%,
-                    rgba(139, 92, 246, 0.12),
+                    circle at 85% 10%,
+                    rgba(139,92,246,.12),
                     transparent 28%
                 ),
-                #07070d;
+                var(--bg);
 
-            color: #ffffff;
+            color:
+                var(--text);
 
-            font-family: "Inter", sans-serif;
+            font-family:
+                "Inter",
+                sans-serif;
 
-            overflow-x: hidden;
+            overflow-x:
+                hidden;
+
         }
+
 
         button,
-        a,
-        input,
-        select {
-            font: inherit;
+        input {
+
+            font:
+                inherit;
+
         }
+
 
         button {
-            border: 0;
+
+            cursor:
+                pointer;
+
         }
+
 
         a {
-            color: inherit;
-            text-decoration: none;
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
         }
 
-        ::selection {
-            background: #3b82f6;
-            color: white;
+
+        /* =====================================================
+           BACKGROUND
+           ===================================================== */
+
+        .ambient {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            pointer-events:
+                none;
+
+            z-index:
+                -1;
+
+            overflow:
+                hidden;
+
         }
 
 
-        /* =========================================================
-           LOADING SCREEN
-        ========================================================= */
+        .ambient::before {
 
-        #loadingScreen {
-            position: fixed;
-            inset: 0;
+            content:
+                "";
 
-            z-index: 99999;
+            position:
+                absolute;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width:
+                420px;
+
+            height:
+                420px;
+
+            border-radius:
+                50%;
 
             background:
-                radial-gradient(
-                    circle at center,
-                    rgba(59, 130, 246, 0.12),
-                    transparent 45%
-                ),
-                #07070d;
+                rgba(59,130,246,.08);
+
+            filter:
+                blur(100px);
+
+            top:
+                -160px;
+
+            left:
+                -120px;
+
         }
 
-        .loading-box {
-            width: min(90%, 420px);
 
-            padding: 40px 28px;
+        .ambient::after {
 
-            text-align: center;
+            content:
+                "";
 
-            border: 1px solid rgba(255,255,255,0.1);
+            position:
+                absolute;
 
-            border-radius: 28px;
+            width:
+                480px;
 
-            background: rgba(255,255,255,0.035);
+            height:
+                480px;
 
-            backdrop-filter: blur(25px);
+            border-radius:
+                50%;
 
-            box-shadow:
-                0 30px 80px rgba(0,0,0,0.55);
+            background:
+                rgba(139,92,246,.08);
+
+            filter:
+                blur(120px);
+
+            right:
+                -180px;
+
+            bottom:
+                -200px;
+
         }
 
-        .loading-logo {
-            width: 72px;
-            height: 72px;
 
-            margin: 0 auto 22px;
+        /* =====================================================
+           SIDEBAR
+           ===================================================== */
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .sidebar {
 
-            border-radius: 22px;
+            position:
+                fixed;
+
+            left:
+                0;
+
+            top:
+                0;
+
+            bottom:
+                0;
+
+            width:
+                var(--sidebar);
+
+            padding:
+                22px 16px;
+
+            background:
+                rgba(8,8,14,.88);
+
+            backdrop-filter:
+                blur(24px);
+
+            -webkit-backdrop-filter:
+                blur(24px);
+
+            border-right:
+                1px solid var(--border);
+
+            z-index:
+                100;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+        }
+
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            padding:
+                8px 10px 25px;
+
+        }
+
+
+        .brand-logo {
+
+            width:
+                43px;
+
+            height:
+                43px;
+
+            border-radius:
+                14px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
 
             background:
                 linear-gradient(
                     135deg,
-                    #3b82f6,
-                    #8b5cf6
+                    var(--blue),
+                    var(--purple)
                 );
 
-            font-size: 30px;
-            font-weight: 900;
+            box-shadow:
+                0 10px 30px rgba(59,130,246,.22);
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                19px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .brand-text strong {
+
+            display:
+                block;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                19px;
+
+            letter-spacing:
+                .2px;
+
+        }
+
+
+        .brand-text span {
+
+            display:
+                block;
+
+            margin-top:
+                2px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1.6px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .nav-title {
+
+            padding:
+                8px 12px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                1.8px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .nav {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                6px;
+
+        }
+
+
+        .nav-link {
+
+            position:
+                relative;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+
+            min-height:
+                48px;
+
+            padding:
+                0 13px;
+
+            color:
+                var(--muted);
+
+            border:
+                1px solid transparent;
+
+            border-radius:
+                15px;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .nav-link i {
+
+            width:
+                21px;
+
+            font-size:
+                21px;
+
+        }
+
+
+        .nav-link span {
+
+            font-size:
+                13px;
+
+            font-weight:
+                600;
+
+        }
+
+
+        .nav-link:hover {
+
+            color:
+                white;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border-color:
+                var(--border);
+
+        }
+
+
+        .nav-link.active {
+
+            color:
+                white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59,130,246,.16),
+                    rgba(139,92,246,.12)
+                );
+
+            border-color:
+                rgba(96,165,250,.20);
+
+        }
+
+
+        .nav-link.active::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            left:
+                -1px;
+
+            top:
+                10px;
+
+            bottom:
+                10px;
+
+            width:
+                3px;
+
+            border-radius:
+                4px;
+
+            background:
+                linear-gradient(
+                    var(--blue),
+                    var(--purple)
+                );
+
+        }
+
+
+        .sidebar-bottom {
+
+            margin-top:
+                auto;
+
+        }
+
+
+        .admin-mini {
+
+            padding:
+                13px;
+
+            margin-bottom:
+                10px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                17px;
+
+            background:
+                rgba(255,255,255,.035);
+
+        }
+
+
+        .admin-mini-label {
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.3px;
+
+        }
+
+
+        .admin-mini-value {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            margin-top:
+                6px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .online-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--green);
 
             box-shadow:
-                0 15px 45px rgba(59,130,246,0.3);
-        }
+                0 0 12px rgba(34,197,94,.8);
 
-        .loading-box h2 {
-            margin-bottom: 8px;
-
-            font-size: 24px;
-            font-weight: 800;
-        }
-
-        .loading-box p {
-            color: #9ca3af;
-            font-size: 14px;
-        }
-
-        .spinner {
-            width: 36px;
-            height: 36px;
-
-            margin: 24px auto 0;
-
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #3b82f6;
-
-            border-radius: 50%;
-
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
         }
 
 
-        /* =========================================================
-           ACCESS DENIED
-        ========================================================= */
+        .logout {
 
-        #accessDenied {
-            position: fixed;
-            inset: 0;
+            width:
+                100%;
 
-            z-index: 99998;
+            min-height:
+                45px;
 
-            display: none;
+            display:
+                flex;
 
-            align-items: center;
-            justify-content: center;
+            align-items:
+                center;
 
-            padding: 20px;
+            gap:
+                11px;
 
-            background: #07070d;
+            padding:
+                0 13px;
+
+            color:
+                #ff8b8b;
+
+            background:
+                rgba(239,68,68,.05);
+
+            border:
+                1px solid rgba(239,68,68,.12);
+
+            border-radius:
+                14px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+            transition:
+                .2s ease;
+
         }
 
-        .denied-box {
-            width: min(100%, 460px);
 
-            padding: 40px 28px;
+        .logout:hover {
 
-            text-align: center;
+            background:
+                rgba(239,68,68,.10);
 
-            border: 1px solid rgba(239,68,68,0.2);
+            border-color:
+                rgba(239,68,68,.25);
 
-            border-radius: 28px;
+        }
+
+
+        /* =====================================================
+           MOBILE TOP BAR
+           ===================================================== */
+
+        .mobile-top {
+
+            display:
+                none;
+
+        }
+
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        .main {
+
+            min-height:
+                100vh;
+
+            margin-left:
+                var(--sidebar);
+
+            padding:
+                28px;
+
+        }
+
+
+        .topbar {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+
+            gap:
+                20px;
+
+            margin-bottom:
+                25px;
+
+        }
+
+
+        .eyebrow {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            color:
+                var(--blue-2);
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                2px;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .eyebrow i {
+
+            font-size:
+                15px;
+
+        }
+
+
+        .dashboard-title {
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(27px, 4vw, 42px);
+
+            line-height:
+                1.08;
+
+            letter-spacing:
+                -.7px;
+
+        }
+
+
+        .dashboard-title span {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #fff,
+                    #a5b4fc
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color:
+                transparent;
+
+        }
+
+
+        .subtitle {
+
+            max-width:
+                620px;
+
+            margin-top:
+                10px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        .top-actions {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+        }
+
+
+        .icon-btn {
+
+            width:
+                43px;
+
+            height:
+                43px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                var(--muted);
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                13px;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .icon-btn:hover {
+
+            color:
+                white;
+
+            border-color:
+                var(--border-light);
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        .icon-btn i {
+
+            font-size:
+                20px;
+
+        }
+
+
+        /* =====================================================
+           ELITE HERO
+           ===================================================== */
+
+        .elite-hero {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            min-height:
+                235px;
+
+            margin-bottom:
+                22px;
+
+            padding:
+                32px;
+
+            border:
+                1px solid rgba(255,255,255,.10);
+
+            border-radius:
+                28px;
+
+            background:
+                linear-gradient(
+                    115deg,
+                    rgba(22,25,45,.95),
+                    rgba(16,16,28,.92)
+                );
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .elite-hero::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                330px;
+
+            height:
+                330px;
+
+            right:
+                -100px;
+
+            top:
+                -150px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(59,130,246,.18);
+
+            filter:
+                blur(10px);
+
+        }
+
+
+        .elite-hero::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                230px;
+
+            height:
+                230px;
+
+            right:
+                130px;
+
+            bottom:
+                -160px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(139,92,246,.16);
+
+            filter:
+                blur(20px);
+
+        }
+
+
+        .hero-content {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            max-width:
+                650px;
+
+        }
+
+
+        .hero-badge {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                7px 11px;
+
+            margin-bottom:
+                17px;
+
+            border:
+                1px solid rgba(96,165,250,.18);
+
+            border-radius:
+                100px;
+
+            background:
+                rgba(59,130,246,.08);
+
+            color:
+                #a8c7ff;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.4px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .hero-badge i {
+
+            font-size:
+                14px;
+
+        }
+
+
+        .hero-title {
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(30px, 4vw, 49px);
+
+            line-height:
+                1.05;
+
+            margin-bottom:
+                11px;
+
+        }
+
+
+        .hero-title em {
+
+            font-style:
+                normal;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue-2),
+                    #c4b5fd
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color:
+                transparent;
+
+        }
+
+
+        .hero-description {
+
+            max-width:
+                590px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        .hero-actions {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            display:
+                flex;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                9px;
+
+            margin-top:
+                20px;
+
+        }
+
+
+        .primary-btn,
+        .secondary-btn {
+
+            min-height:
+                42px;
+
+            padding:
+                0 16px;
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                8px;
+
+            border-radius:
+                12px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .primary-btn {
+
+            color:
+                white;
+
+            border:
+                1px solid rgba(96,165,250,.35);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--blue),
+                    var(--purple)
+                );
+
+            box-shadow:
+                0 12px 28px rgba(59,130,246,.18);
+
+        }
+
+
+        .secondary-btn {
+
+            color:
+                #d8d8e3;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+        }
+
+
+        .primary-btn:hover,
+        .secondary-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        /* =====================================================
+           STAT CARDS
+           ===================================================== */
+
+        .stats {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0,1fr));
+
+            gap:
+                14px;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .stat-card {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            min-height:
+                135px;
+
+            padding:
+                19px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                20px;
+
+            background:
+                var(--panel);
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+        }
+
+
+        .stat-card::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                90px;
+
+            height:
+                90px;
+
+            border-radius:
+                50%;
+
+            right:
+                -35px;
+
+            bottom:
+                -40px;
+
+            background:
+                rgba(59,130,246,.07);
+
+            filter:
+                blur(5px);
+
+        }
+
+
+        .stat-top {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+        }
+
+
+        .stat-icon {
+
+            width:
+                39px;
+
+            height:
+                39px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid var(--border);
+
+        }
+
+
+        .stat-icon i {
+
+            font-size:
+                19px;
+
+        }
+
+
+        .stat-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            font-weight:
+                600;
+
+        }
+
+
+        .stat-number {
+
+            margin-top:
+                17px;
+
+            font-size:
+                27px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                -.5px;
+
+        }
+
+
+        .stat-note {
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+        }
+
+
+        /* =====================================================
+           CONTENT GRID
+           ===================================================== */
+
+        .content-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0,1fr) 280px;
+
+            gap:
+                18px;
+
+            align-items:
+                start;
+
+        }
+
+
+        .panel {
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                22px;
+
+            background:
+                var(--panel);
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .panel-header {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                15px;
+
+            padding:
+                19px 20px;
+
+            border-bottom:
+                1px solid var(--border);
+
+        }
+
+
+        .panel-heading {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                11px;
+
+        }
+
+
+        .panel-heading-icon {
+
+            width:
+                36px;
+
+            height:
+                36px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                1px solid rgba(96,165,250,.14);
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(59,130,246,.08);
+
+            color:
+                var(--blue-2);
+
+        }
+
+
+        .panel-heading h2 {
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .panel-heading p {
+
+            margin-top:
+                2px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+        }
+
+
+        .panel-actions {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+        }
+
+
+        .small-btn {
+
+            height:
+                35px;
+
+            padding:
+                0 11px;
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                6px;
+
+            color:
+                var(--muted);
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                10px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .small-btn:hover {
+
+            color:
+                white;
+
+            border-color:
+                var(--border-light);
+
+        }
+
+
+        .small-btn.danger {
+
+            color:
+                #ff9292;
+
+            border-color:
+                rgba(239,68,68,.14);
+
+            background:
+                rgba(239,68,68,.045);
+
+        }
+
+
+        /* =====================================================
+           SEARCH
+           ===================================================== */
+
+        .search-wrap {
+
+            padding:
+                15px 20px;
+
+            border-bottom:
+                1px solid var(--border);
+
+        }
+
+
+        .search {
+
+            position:
+                relative;
+
+        }
+
+
+        .search i {
+
+            position:
+                absolute;
+
+            left:
+                13px;
+
+            top:
+                50%;
+
+            transform:
+                translateY(-50%);
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                17px;
+
+        }
+
+
+        .search input {
+
+            width:
+                100%;
+
+            height:
+                41px;
+
+            padding:
+                0 13px 0 39px;
+
+            color:
+                white;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                11px;
+
+            outline:
+                none;
+
+            font-size:
+                11px;
+
+        }
+
+
+        .search input::placeholder {
+
+            color:
+                var(--muted-2);
+
+        }
+
+
+        .search input:focus {
+
+            border-color:
+                rgba(96,165,250,.35);
+
+            box-shadow:
+                0 0 0 3px rgba(59,130,246,.07);
+
+        }
+
+
+        /* =====================================================
+           TABLE
+           ===================================================== */
+
+        .table-wrap {
+
+            width:
+                100%;
+
+            overflow-x:
+                auto;
+
+        }
+
+
+        table {
+
+            width:
+                100%;
+
+            border-collapse:
+                collapse;
+
+            min-width:
+                760px;
+
+        }
+
+
+        th {
+
+            padding:
+                13px 17px;
+
+            color:
+                var(--muted-2);
+
+            background:
+                rgba(255,255,255,.018);
+
+            border-bottom:
+                1px solid var(--border);
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+            text-align:
+                left;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        td {
+
+            padding:
+                15px 17px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.055);
+
+            vertical-align:
+                middle;
+
+            font-size:
+                11px;
+
+        }
+
+
+        tbody tr {
+
+            transition:
+                .18s ease;
+
+        }
+
+
+        tbody tr:hover {
+
+            background:
+                rgba(255,255,255,.022);
+
+        }
+
+
+        tbody tr:last-child td {
+
+            border-bottom:
+                0;
+
+        }
+
+
+        td strong {
+
+            display:
+                block;
+
+            font-size:
+                11px;
+
+        }
+
+
+        .customer-name {
+
+            font-weight:
+                700;
+
+        }
+
+
+        .sub {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+        }
+
+
+        .price {
+
+            color:
+                #a7f3d0;
+
+        }
+
+
+        .time {
+
+            display:
+                inline-flex;
+
+            padding:
+                6px 8px;
+
+            border:
+                1px solid rgba(96,165,250,.14);
+
+            border-radius:
+                8px;
+
+            background:
+                rgba(59,130,246,.06);
+
+            color:
+                #bfdbfe;
+
+            font-weight:
+                800;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .status-pill {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                6px;
+
+            padding:
+                6px 9px;
+
+            border-radius:
+                100px;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .status-pill::before {
+
+            content:
+                "";
+
+            width:
+                5px;
+
+            height:
+                5px;
+
+            border-radius:
+                50%;
+
+        }
+
+
+        .status-pending {
+
+            color:
+                #fcd34d;
+
+            background:
+                rgba(245,158,11,.08);
+
+            border:
+                1px solid rgba(245,158,11,.14);
+
+        }
+
+
+        .status-pending::before {
+
+            background:
+                var(--yellow);
+
+        }
+
+
+        .status-approved {
+
+            color:
+                #93c5fd;
+
+            background:
+                rgba(59,130,246,.08);
+
+            border:
+                1px solid rgba(59,130,246,.14);
+
+        }
+
+
+        .status-approved::before {
+
+            background:
+                var(--blue);
+
+        }
+
+
+        .status-completed {
+
+            color:
+                #86efac;
+
+            background:
+                rgba(34,197,94,.08);
+
+            border:
+                1px solid rgba(34,197,94,.14);
+
+        }
+
+
+        .status-completed::before {
+
+            background:
+                var(--green);
+
+        }
+
+
+        .status-declined {
+
+            color:
+                #fca5a5;
+
+            background:
+                rgba(239,68,68,.08);
+
+            border:
+                1px solid rgba(239,68,68,.14);
+
+        }
+
+
+        .status-declined::before {
+
+            background:
+                var(--red);
+
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+           ===================================================== */
+
+        .action-group {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                5px;
+
+        }
+
+
+        .action-btn {
+
+            min-height:
+                29px;
+
+            padding:
+                0 8px;
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                4px;
+
+            border-radius:
+                8px;
+
+            font-size:
+                8px;
+
+            font-weight:
+                800;
+
+            border:
+                1px solid transparent;
+
+        }
+
+
+        .action-btn i {
+
+            font-size:
+                13px;
+
+        }
+
+
+        .action-btn.delete {
+
+            color:
+                #fca5a5;
+
+            background:
+                rgba(239,68,68,.06);
+
+            border-color:
+                rgba(239,68,68,.12);
+
+        }
+
+
+        .action-btn.approve {
+
+            color:
+                #93c5fd;
+
+            background:
+                rgba(59,130,246,.07);
+
+            border-color:
+                rgba(59,130,246,.14);
+
+        }
+
+
+        .action-btn.done {
+
+            color:
+                #86efac;
+
+            background:
+                rgba(34,197,94,.07);
+
+            border-color:
+                rgba(34,197,94,.14);
+
+        }
+
+
+        .action-btn:hover {
+
+            filter:
+                brightness(1.2);
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        /* =====================================================
+           VISIBLE COUNT
+           ===================================================== */
+
+        .table-footer {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            padding:
+                12px 20px;
+
+            color:
+                var(--muted-2);
+
+            border-top:
+                1px solid var(--border);
+
+            font-size:
+                9px;
+
+        }
+
+
+        /* =====================================================
+           SIDE PANEL
+           ===================================================== */
+
+        .side-stack {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                15px;
+
+        }
+
+
+        .today-card {
+
+            padding:
+                20px;
 
             background:
                 linear-gradient(
                     145deg,
-                    rgba(239,68,68,0.08),
-                    rgba(255,255,255,0.025)
+                    rgba(59,130,246,.09),
+                    rgba(139,92,246,.06)
                 );
+
+        }
+
+
+        .today-top {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+
+        }
+
+
+        .today-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .live {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                5px;
+
+            color:
+                #86efac;
+
+            font-size:
+                8px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .live::before {
+
+            content:
+                "";
+
+            width:
+                5px;
+
+            height:
+                5px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--green);
 
             box-shadow:
-                0 30px 80px rgba(0,0,0,0.6);
-        }
+                0 0 9px rgba(34,197,94,.8);
 
-        .denied-icon {
-            width: 72px;
-            height: 72px;
-
-            margin: 0 auto 20px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-
-            background: rgba(239,68,68,0.12);
-
-            color: #f87171;
-
-            font-size: 36px;
-        }
-
-        .denied-box h2 {
-            margin-bottom: 10px;
-
-            font-size: 26px;
-        }
-
-        .denied-box p {
-            margin-bottom: 25px;
-
-            color: #9ca3af;
-
-            line-height: 1.6;
         }
 
 
-        /* =========================================================
-           BUTTONS
-        ========================================================= */
+        .today-date {
 
-        .btn {
-            display: inline-flex;
+            margin-top:
+                9px;
 
-            align-items: center;
-            justify-content: center;
+            font-family:
+                "Playfair Display",
+                serif;
 
-            gap: 9px;
+            font-size:
+                19px;
 
-            min-height: 46px;
+        }
 
-            padding: 0 18px;
 
-            border-radius: 13px;
+        .today-time {
 
-            cursor: pointer;
+            margin-top:
+                4px;
+
+            color:
+                var(--blue-2);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .next {
+
+            padding:
+                20px;
+
+        }
+
+
+        .next-title {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .next-title i {
+
+            color:
+                var(--purple);
+
+            font-size:
+                17px;
+
+        }
+
+
+        .next-time {
+
+            margin-top:
+                15px;
+
+            font-size:
+                34px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                -1px;
+
+        }
+
+
+        .next-customer {
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        .quick-links {
+
+            padding:
+                18px;
+
+        }
+
+
+        .quick-title {
+
+            margin-bottom:
+                12px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .quick-link {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            min-height:
+                45px;
+
+            padding:
+                0 11px;
+
+            margin-top:
+                7px;
+
+            color:
+                var(--muted);
+
+            background:
+                rgba(255,255,255,.025);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                11px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
 
             transition:
-                transform .2s ease,
-                box-shadow .2s ease,
-                background .2s ease;
-        }
+                .2s ease;
 
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-primary {
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #6366f1
-                );
-
-            color: #fff;
-
-            box-shadow:
-                0 10px 30px rgba(59,130,246,0.2);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.06);
-
-            color: white;
-
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .btn-danger {
-            background: rgba(239,68,68,0.1);
-
-            color: #f87171;
-
-            border: 1px solid rgba(239,68,68,0.18);
         }
 
 
-        /* =========================================================
-           APP
-        ========================================================= */
+        .quick-link-left {
 
-        #app {
-            display: none;
+            display:
+                flex;
 
-            min-height: 100vh;
+            align-items:
+                center;
+
+            gap:
+                8px;
+
         }
 
 
-        /* =========================================================
-           SIDEBAR
-        ========================================================= */
+        .quick-link i {
 
-        .sidebar {
-            position: fixed;
+            font-size:
+                17px;
 
-            top: 0;
-            left: 0;
-            bottom: 0;
+        }
 
-            z-index: 1000;
 
-            width: 250px;
+        .quick-link:hover {
 
-            padding: 22px 15px;
+            color:
+                white;
 
-            display: flex;
-            flex-direction: column;
+            border-color:
+                rgba(96,165,250,.25);
 
             background:
-                linear-gradient(
-                    180deg,
-                    rgba(12,12,22,0.97),
-                    rgba(7,7,13,0.98)
-                );
-
-            border-right: 1px solid rgba(255,255,255,0.07);
-
-            backdrop-filter: blur(25px);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 8px 10px 25px;
-        }
-
-        .brand-logo {
-            width: 45px;
-            height: 45px;
-
-            flex-shrink: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 14px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #8b5cf6
-                );
-
-            font-weight: 900;
-            font-size: 20px;
-
-            box-shadow:
-                0 10px 30px rgba(59,130,246,0.22);
-        }
-
-        .brand-text strong {
-            display: block;
-
-            font-size: 17px;
-            font-weight: 900;
-        }
-
-        .brand-text span {
-            display: block;
-
-            margin-top: 2px;
-
-            color: #71717a;
-
-            font-size: 10px;
-            font-weight: 700;
-
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-        }
-
-        .nav-label {
-            padding: 12px 12px 8px;
-
-            color: #52525b;
-
-            font-size: 10px;
-            font-weight: 800;
-
-            letter-spacing: 1.5px;
-
-            text-transform: uppercase;
-        }
-
-        .nav {
-            display: flex;
-            flex-direction: column;
-
-            gap: 5px;
-        }
-
-        .nav-item {
-            position: relative;
-
-            display: flex;
-            align-items: center;
-
-            gap: 13px;
-
-            min-height: 48px;
-
-            padding: 0 13px;
-
-            border-radius: 13px;
-
-            color: #a1a1aa;
-
-            cursor: pointer;
-
-            transition:
-                background .2s ease,
-                color .2s ease,
-                transform .2s ease;
-        }
-
-        .nav-item i {
-            font-size: 21px;
-        }
-
-        .nav-item span {
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .nav-item:hover {
-            color: #fff;
-
-            background: rgba(255,255,255,0.055);
-
-            transform: translateX(2px);
-        }
-
-        .nav-item.active {
-            color: #fff;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(59,130,246,0.16),
-                    rgba(139,92,246,0.08)
-                );
-
-            border: 1px solid rgba(59,130,246,0.12);
-        }
-
-        .nav-item.active::before {
-            content: "";
-
-            position: absolute;
-
-            left: -15px;
-
-            width: 3px;
-            height: 25px;
-
-            border-radius: 0 5px 5px 0;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #3b82f6,
-                    #8b5cf6
-                );
-        }
-
-        .sidebar-bottom {
-            margin-top: auto;
-
-            padding-top: 15px;
-
-            border-top: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .admin-mini {
-            display: flex;
-            align-items: center;
-
-            gap: 10px;
-
-            padding: 12px;
-
-            margin-bottom: 10px;
-
-            border-radius: 15px;
-
-            background: rgba(255,255,255,0.035);
-        }
-
-        .admin-avatar {
-            width: 38px;
-            height: 38px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            flex-shrink: 0;
-
-            border-radius: 12px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #8b5cf6
-                );
-
-            font-weight: 900;
-        }
-
-        .admin-mini-info {
-            min-width: 0;
-        }
-
-        .admin-mini-info strong {
-            display: block;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            font-size: 12px;
-        }
-
-        .admin-mini-info span {
-            display: block;
-
-            margin-top: 2px;
-
-            color: #71717a;
-
-            font-size: 10px;
-        }
-
-
-        /* =========================================================
-           MOBILE TOP BAR
-        ========================================================= */
-
-        .mobile-top {
-            display: none;
-
-            position: fixed;
-
-            top: 0;
-            left: 0;
-            right: 0;
-
-            z-index: 900;
-
-            height: 70px;
-
-            padding: 0 16px;
-
-            align-items: center;
-            justify-content: space-between;
-
-            background: rgba(7,7,13,0.9);
-
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-
-            backdrop-filter: blur(20px);
-        }
-
-        .mobile-menu {
-            width: 42px;
-            height: 42px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 12px;
-
-            background: rgba(255,255,255,0.06);
-
-            color: white;
-
-            cursor: pointer;
-
-            font-size: 22px;
-        }
-
-        .mobile-title {
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-
-        /* =========================================================
-           MAIN
-        ========================================================= */
-
-        .main {
-            min-height: 100vh;
-
-            margin-left: 250px;
-
-            padding: 28px 30px 50px;
-        }
-
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 20px;
-
-            margin-bottom: 28px;
-        }
-
-        .page-title h1 {
-            font-family: "Playfair Display", serif;
-
-            font-size: clamp(28px, 4vw, 42px);
-
-            line-height: 1.05;
-        }
-
-        .page-title p {
-            margin-top: 8px;
-
-            color: #71717a;
-
-            font-size: 13px;
-        }
-
-        .top-actions {
-            display: flex;
-            gap: 9px;
-        }
-
-
-        /* =========================================================
-           HERO
-        ========================================================= */
-
-        .elite-hero {
-            position: relative;
-
-            overflow: hidden;
-
-            min-height: 265px;
-
-            margin-bottom: 25px;
-
-            padding: 34px;
-
-            border: 1px solid rgba(255,255,255,0.08);
-
-            border-radius: 26px;
-
-            background:
-                radial-gradient(
-                    circle at 85% 30%,
-                    rgba(139,92,246,0.2),
-                    transparent 32%
-                ),
-                radial-gradient(
-                    circle at 55% 100%,
-                    rgba(59,130,246,0.16),
-                    transparent 38%
-                ),
-                rgba(255,255,255,0.025);
-
-            box-shadow:
-                0 25px 70px rgba(0,0,0,0.25);
-        }
-
-        .hero-glow {
-            position: absolute;
-
-            width: 220px;
-            height: 220px;
-
-            right: -70px;
-            bottom: -100px;
-
-            border-radius: 50%;
+                rgba(59,130,246,.06);
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #8b5cf6
-                );
-
-            filter: blur(70px);
-
-            opacity: .18;
-        }
-
-        .hero-content {
-            position: relative;
-
-            z-index: 2;
-
-            max-width: 720px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-
-            gap: 7px;
-
-            margin-bottom: 17px;
-
-            padding: 7px 11px;
-
-            border: 1px solid rgba(59,130,246,0.2);
-
-            border-radius: 999px;
-
-            background: rgba(59,130,246,0.08);
-
-            color: #93c5fd;
-
-            font-size: 10px;
-            font-weight: 800;
-
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .hero-badge i {
-            font-size: 14px;
-        }
-
-        .elite-hero h2 {
-            font-family: "Playfair Display", serif;
-
-            font-size: clamp(29px, 5vw, 48px);
-
-            line-height: 1.04;
-
-            margin-bottom: 13px;
-        }
-
-        .elite-hero h2 span {
-            background:
-                linear-gradient(
-                    90deg,
-                    #60a5fa,
-                    #a78bfa
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-        .elite-hero p {
-            max-width: 620px;
-
-            color: #a1a1aa;
-
-            font-size: 14px;
-
-            line-height: 1.7;
-
-            margin-bottom: 22px;
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-
-            gap: 10px;
-        }
-
-
-        /* =========================================================
-           STAT CARDS
-        ========================================================= */
-
-        .stats-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-
-            gap: 14px;
-
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            position: relative;
-
-            overflow: hidden;
-
-            min-height: 145px;
-
-            padding: 20px;
-
-            border: 1px solid rgba(255,255,255,0.07);
-
-            border-radius: 20px;
-
-            background: rgba(255,255,255,0.035);
-
-            transition:
-                transform .2s ease,
-                border-color .2s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-
-            border-color: rgba(255,255,255,0.13);
-        }
-
-        .stat-icon {
-            width: 42px;
-            height: 42px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            margin-bottom: 17px;
-
-            border-radius: 13px;
-
-            background: rgba(59,130,246,0.1);
-
-            color: #60a5fa;
-
-            font-size: 21px;
-        }
-
-        .stat-card:nth-child(2) .stat-icon {
-            background: rgba(139,92,246,0.1);
-            color: #a78bfa;
-        }
-
-        .stat-card:nth-child(3) .stat-icon {
-            background: rgba(16,185,129,0.1);
-            color: #34d399;
-        }
-
-        .stat-card:nth-child(4) .stat-icon {
-            background: rgba(245,158,11,0.1);
-            color: #fbbf24;
-        }
-
-        .stat-label {
-            color: #71717a;
-
-            font-size: 11px;
-            font-weight: 700;
-
-            text-transform: uppercase;
-
-            letter-spacing: .7px;
-        }
-
-        .stat-value {
-            margin-top: 5px;
-
-            font-size: 28px;
-            font-weight: 900;
-        }
-
-
-        /* =========================================================
-           CONTENT GRID
-        ========================================================= */
-
-        .content-grid {
-            display: grid;
-
-            grid-template-columns:
-                minmax(0, 1.65fr)
-                minmax(280px, .75fr);
-
-            gap: 18px;
-        }
-
-        .panel {
-            overflow: hidden;
-
-            border: 1px solid rgba(255,255,255,0.07);
-
-            border-radius: 22px;
-
-            background: rgba(255,255,255,0.03);
-        }
-
-        .panel-header {
-            min-height: 66px;
-
-            padding: 0 20px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .panel-header h3 {
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .panel-header span {
-            color: #71717a;
-
-            font-size: 11px;
-        }
-
-        .panel-body {
-            padding: 18px;
-        }
-
-
-        /* =========================================================
-           BOOKINGS
-        ========================================================= */
-
-        .booking-list {
-            display: flex;
-            flex-direction: column;
-
-            gap: 9px;
-        }
-
-        .booking {
-            display: grid;
-
-            grid-template-columns:
-                42px
-                minmax(0, 1fr)
-                auto;
-
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 12px;
-
-            border-radius: 15px;
-
-            background: rgba(255,255,255,0.025);
-
-            border: 1px solid rgba(255,255,255,0.045);
-        }
-
-        .booking-avatar {
-            width: 42px;
-            height: 42px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 13px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(59,130,246,.2),
-                    rgba(139,92,246,.2)
-                );
-
-            color: #bfdbfe;
-
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .booking-main {
-            min-width: 0;
-        }
-
-        .booking-main strong {
-            display: block;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            font-size: 12px;
         }
-
-        .booking-main span {
-            display: block;
-
-            margin-top: 4px;
 
-            overflow: hidden;
 
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        /* =====================================================
+           LOADING / EMPTY
+           ===================================================== */
 
-            color: #71717a;
+        .state {
 
-            font-size: 10px;
-        }
+            min-height:
+                220px;
 
-        .booking-right {
-            text-align: right;
-        }
+            display:
+                flex;
 
-        .status {
-            display: inline-flex;
+            align-items:
+                center;
 
-            padding: 5px 8px;
+            justify-content:
+                center;
 
-            border-radius: 999px;
+            flex-direction:
+                column;
 
-            font-size: 9px;
-            font-weight: 800;
+            gap:
+                8px;
 
-            text-transform: uppercase;
-        }
+            text-align:
+                center;
 
-        .status.pending {
-            background: rgba(245,158,11,.1);
-            color: #fbbf24;
-        }
+            color:
+                var(--muted);
 
-        .status.confirmed {
-            background: rgba(16,185,129,.1);
-            color: #34d399;
         }
 
-        .status.completed {
-            background: rgba(59,130,246,.1);
-            color: #60a5fa;
-        }
 
-        .status.cancelled {
-            background: rgba(239,68,68,.1);
-            color: #f87171;
-        }
+        .state i {
 
-        .booking-date {
-            display: block;
+            font-size:
+                40px;
 
-            margin-top: 5px;
+            color:
+                var(--muted-2);
 
-            color: #52525b;
+            margin-bottom:
+                5px;
 
-            font-size: 9px;
         }
 
 
-        /* =========================================================
-           QUICK ACTIONS
-        ========================================================= */
+        .state strong {
 
-        .quick-actions {
-            display: grid;
+            color:
+                #dddde7;
 
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+            font-size:
+                12px;
 
-            gap: 9px;
         }
 
-        .quick-action {
-            min-height: 105px;
 
-            padding: 14px;
+        .state small {
 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            max-width:
+                350px;
 
-            border: 1px solid rgba(255,255,255,0.06);
+            color:
+                var(--muted-2);
 
-            border-radius: 16px;
+            font-size:
+                9px;
 
-            background: rgba(255,255,255,0.025);
+            line-height:
+                1.5;
 
-            cursor: pointer;
-
-            transition:
-                transform .2s ease,
-                background .2s ease;
         }
 
-        .quick-action:hover {
-            transform: translateY(-3px);
-
-            background: rgba(255,255,255,0.05);
-        }
 
-        .quick-action i {
-            width: 35px;
-            height: 35px;
+        .spinner {
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width:
+                30px;
 
-            border-radius: 11px;
+            height:
+                30px;
 
-            background: rgba(59,130,246,.1);
+            border:
+                2px solid rgba(255,255,255,.08);
 
-            color: #60a5fa;
+            border-top-color:
+                var(--blue);
 
-            font-size: 19px;
-        }
+            border-right-color:
+                var(--purple);
 
-        .quick-action:nth-child(2) i {
-            background: rgba(139,92,246,.1);
-            color: #a78bfa;
-        }
+            border-radius:
+                50%;
 
-        .quick-action:nth-child(3) i {
-            background: rgba(16,185,129,.1);
-            color: #34d399;
-        }
+            animation:
+                spin .75s linear infinite;
 
-        .quick-action:nth-child(4) i {
-            background: rgba(245,158,11,.1);
-            color: #fbbf24;
-        }
+            margin-bottom:
+                5px;
 
-        .quick-action strong {
-            font-size: 11px;
         }
-
 
-        /* =========================================================
-           EMPTY STATE
-        ========================================================= */
 
-        .empty {
-            padding: 35px 15px;
+        @keyframes spin {
 
-            text-align: center;
+            to {
 
-            color: #71717a;
-        }
-
-        .empty i {
-            display: block;
+                transform:
+                    rotate(360deg);
 
-            margin-bottom: 10px;
-
-            font-size: 32px;
-
-            color: #3f3f46;
-        }
+            }
 
-        .empty p {
-            font-size: 12px;
         }
 
 
-        /* =========================================================
+        /* =====================================================
            TOAST
-        ========================================================= */
+           ===================================================== */
 
         #toast {
-            position: fixed;
 
-            right: 22px;
-            bottom: 22px;
+            position:
+                fixed;
 
-            z-index: 999999;
+            left:
+                50%;
 
-            max-width: min(380px, calc(100vw - 40px));
+            bottom:
+                24px;
 
-            padding: 14px 17px;
+            transform:
+                translate(-50%, 25px);
 
-            display: flex;
-            align-items: center;
+            min-width:
+                230px;
 
-            gap: 10px;
+            max-width:
+                calc(100vw - 30px);
 
-            border: 1px solid rgba(255,255,255,0.09);
+            padding:
+                12px 16px;
 
-            border-radius: 14px;
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                13px;
 
             background:
-                rgba(18,18,28,0.96);
+                rgba(18,18,29,.95);
 
             box-shadow:
-                0 20px 50px rgba(0,0,0,.5);
+                0 20px 50px rgba(0,0,0,.45);
 
-            transform: translateY(25px);
+            backdrop-filter:
+                blur(20px);
 
-            opacity: 0;
-            pointer-events: none;
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            color:
+                white;
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            text-align:
+                center;
+
+            opacity:
+                0;
+
+            visibility:
+                hidden;
+
+            z-index:
+                1000;
 
             transition:
-                opacity .25s ease,
-                transform .25s ease;
+                .25s ease;
+
         }
+
 
         #toast.show {
-            opacity: 1;
 
-            transform: translateY(0);
-        }
+            opacity:
+                1;
 
-        #toast i {
-            color: #60a5fa;
+            visibility:
+                visible;
 
-            font-size: 20px;
-        }
+            transform:
+                translate(-50%, 0);
 
-        #toast.error i {
-            color: #f87171;
-        }
-
-        #toast span {
-            font-size: 12px;
-            font-weight: 600;
         }
 
 
-        /* =========================================================
-           MOBILE OVERLAY
-        ========================================================= */
+        #toast.success {
 
-        .sidebar-overlay {
-            display: none;
+            border-color:
+                rgba(34,197,94,.25);
 
-            position: fixed;
-            inset: 0;
-
-            z-index: 950;
-
-            background: rgba(0,0,0,.6);
-
-            backdrop-filter: blur(4px);
         }
 
 
-        /* =========================================================
+        #toast.error {
+
+            border-color:
+                rgba(239,68,68,.30);
+
+        }
+
+
+        /* =====================================================
+           ACCESS DENIED / LOADING SCREEN
+           ===================================================== */
+
+        .screen-overlay {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                500;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                20px;
+
+            background:
+                #07070d;
+
+        }
+
+
+        .screen-overlay.hidden {
+
+            display:
+                none;
+
+        }
+
+
+        .screen-card {
+
+            width:
+                min(410px, 100%);
+
+            padding:
+                30px;
+
+            text-align:
+                center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                25px;
+
+            background:
+                rgba(18,18,29,.88);
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .screen-icon {
+
+            width:
+                62px;
+
+            height:
+                62px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            margin:
+                0 auto 17px;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(59,130,246,.09);
+
+            border:
+                1px solid rgba(59,130,246,.15);
+
+            color:
+                var(--blue-2);
+
+        }
+
+
+        .screen-icon i {
+
+            font-size:
+                29px;
+
+        }
+
+
+        .screen-card h2 {
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                25px;
+
+        }
+
+
+        .screen-card p {
+
+            margin-top:
+                9px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* =====================================================
            RESPONSIVE
-        ========================================================= */
+           ===================================================== */
 
         @media (max-width: 1100px) {
 
-            .stats-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+            :root {
+
+                --sidebar:
+                    220px;
+
             }
 
-            .content-grid {
-                grid-template-columns: 1fr;
+
+            .main {
+
+                padding:
+                    22px;
+
             }
+
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(2, minmax(0,1fr));
+
+            }
+
+
+            .content-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .side-stack {
+
+                display:
+                    grid;
+
+                grid-template-columns:
+                    repeat(3, minmax(0,1fr));
+
+            }
+
         }
 
 
         @media (max-width: 760px) {
 
-            .mobile-top {
-                display: flex;
+            :root {
+
+                --sidebar:
+                    0px;
+
             }
+
 
             .sidebar {
-                transform: translateX(-105%);
 
-                transition: transform .25s ease;
+                display:
+                    none;
 
-                box-shadow:
-                    20px 0 70px rgba(0,0,0,.45);
             }
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
 
-            .sidebar-overlay.show {
-                display: block;
-            }
+            .mobile-top {
 
-            .main {
-                margin-left: 0;
+                position:
+                    sticky;
+
+                top:
+                    0;
+
+                z-index:
+                    90;
+
+                display:
+                    flex;
+
+                justify-content:
+                    space-between;
+
+                align-items:
+                    center;
+
+                height:
+                    64px;
 
                 padding:
-                    92px
-                    15px
-                    35px;
+                    0 15px;
+
+                background:
+                    rgba(7,7,13,.86);
+
+                border-bottom:
+                    1px solid var(--border);
+
+                backdrop-filter:
+                    blur(20px);
+
+                -webkit-backdrop-filter:
+                    blur(20px);
+
             }
+
+
+            .mobile-brand {
+
+                display:
+                    flex;
+
+                align-items:
+                    center;
+
+                gap:
+                    9px;
+
+            }
+
+
+            .mobile-brand-logo {
+
+                width:
+                    34px;
+
+                height:
+                    34px;
+
+                display:
+                    grid;
+
+                place-items:
+                    center;
+
+                border-radius:
+                    11px;
+
+                background:
+                    linear-gradient(
+                        135deg,
+                        var(--blue),
+                        var(--purple)
+                    );
+
+                font-family:
+                    "Playfair Display",
+                    serif;
+
+                font-weight:
+                    800;
+
+                font-size:
+                    15px;
+
+            }
+
+
+            .mobile-brand strong {
+
+                font-family:
+                    "Playfair Display",
+                    serif;
+
+                font-size:
+                    16px;
+
+            }
+
+
+            .main {
+
+                margin-left:
+                    0;
+
+                padding:
+                    17px 13px 30px;
+
+            }
+
 
             .topbar {
-                align-items: flex-start;
+
+                align-items:
+                    flex-start;
+
+                margin-bottom:
+                    17px;
+
             }
+
 
             .top-actions {
-                display: none;
+
+                display:
+                    none;
+
             }
+
+
+            .dashboard-title {
+
+                font-size:
+                    29px;
+
+            }
+
+
+            .subtitle {
+
+                font-size:
+                    11px;
+
+            }
+
 
             .elite-hero {
-                padding: 25px 20px;
 
-                min-height: auto;
+                min-height:
+                    0;
+
+                padding:
+                    24px 19px;
+
+                border-radius:
+                    21px;
+
             }
 
-            .stats-grid {
+
+            .hero-title {
+
+                font-size:
+                    31px;
+
+            }
+
+
+            .hero-description {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .hero-actions {
+
+                display:
+                    grid;
+
                 grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+                    1fr 1fr;
 
-                gap: 10px;
             }
+
+
+            .primary-btn,
+            .secondary-btn {
+
+                width:
+                    100%;
+
+                padding:
+                    0 9px;
+
+                font-size:
+                    9px;
+
+            }
+
+
+            .stats {
+
+                gap:
+                    9px;
+
+                margin-bottom:
+                    13px;
+
+            }
+
 
             .stat-card {
-                min-height: 125px;
 
-                padding: 15px;
+                min-height:
+                    111px;
+
+                padding:
+                    14px;
+
+                border-radius:
+                    17px;
+
             }
 
-            .stat-value {
-                font-size: 24px;
+
+            .stat-icon {
+
+                width:
+                    33px;
+
+                height:
+                    33px;
+
             }
+
+
+            .stat-icon i {
+
+                font-size:
+                    16px;
+
+            }
+
+
+            .stat-number {
+
+                margin-top:
+                    11px;
+
+                font-size:
+                    23px;
+
+            }
+
+
+            .stat-label {
+
+                font-size:
+                    9px;
+
+            }
+
+
+            .stat-note {
+
+                font-size:
+                    8px;
+
+            }
+
+
+            .panel {
+
+                border-radius:
+                    18px;
+
+            }
+
+
+            .panel-header {
+
+                padding:
+                    15px;
+
+            }
+
+
+            .panel-actions .small-btn span {
+
+                display:
+                    none;
+
+            }
+
+
+            .search-wrap {
+
+                padding:
+                    12px 15px;
+
+            }
+
+
+            .side-stack {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .today-card,
+            .next,
+            .quick-links {
+
+                padding:
+                    16px;
+
+            }
+
+
+            #toast {
+
+                bottom:
+                    18px;
+
+            }
+
         }
 
 
-        @media (max-width: 470px) {
+        @media (max-width: 420px) {
 
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .stats {
 
-            .stat-card {
-                min-height: 115px;
-            }
-
-            .stat-icon {
-                width: 36px;
-                height: 36px;
-
-                margin-bottom: 10px;
-
-                font-size: 18px;
-            }
-
-            .stat-value {
-                font-size: 21px;
-            }
-
-            .stat-label {
-                font-size: 9px;
-            }
-
-            .booking {
                 grid-template-columns:
-                    38px
-                    minmax(0, 1fr)
-                    auto;
+                    1fr 1fr;
 
-                gap: 8px;
             }
 
-            .booking-avatar {
-                width: 38px;
-                height: 38px;
+
+            .hero-actions {
+
+                grid-template-columns:
+                    1fr;
+
             }
 
-            .booking-right .status {
-                font-size: 8px;
+
+            .eyebrow {
+
+                font-size:
+                    8px;
+
             }
 
-            .quick-actions {
-                grid-template-columns: 1fr 1fr;
+
+            .dashboard-title {
+
+                font-size:
+                    25px;
+
             }
 
-            .hero-actions .btn {
-                width: 100%;
-            }
         }
 
     </style>
+
 </head>
 
 
 <body>
 
+    <div class="ambient"></div>
 
-    <!-- =========================================================
-         LOADING SCREEN
-    ========================================================= -->
 
-    <div id="loadingScreen">
+    <!-- =====================================================
+         AUTH LOADING
+         ===================================================== -->
 
-        <div class="loading-box">
+    <div
+        id="loadingScreen"
+        class="screen-overlay"
+    >
 
-            <div class="loading-logo">
+        <div class="screen-card">
+
+            <div class="screen-icon">
+
+                <div class="spinner"></div>
+
+            </div>
+
+            <h2>
+                K@si Web
+            </h2>
+
+            <p>
+                Verifying administrator access...
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCESS DENIED
+         ===================================================== -->
+
+    <div
+        id="accessDenied"
+        class="screen-overlay hidden"
+    >
+
+        <div class="screen-card">
+
+            <div class="screen-icon">
+
+                <i class="bx bx-lock-alt"></i>
+
+            </div>
+
+            <h2>
+                Access Restricted
+            </h2>
+
+            <p>
+                Administrator access is required
+                to enter the K@si Web Control Centre.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE HEADER
+         ===================================================== -->
+
+    <header class="mobile-top">
+
+        <a
+            href="home.html"
+            class="mobile-brand"
+        >
+
+            <div class="mobile-brand-logo">
                 K@
             </div>
 
-            <h2>Checking access</h2>
+            <strong>
+                K@si Web
+            </strong>
 
-            <p>
-                Verifying your K@si Web administrator account...
-            </p>
-
-            <div class="spinner"></div>
-
-        </div>
-
-    </div>
+        </a>
 
 
-    <!-- =========================================================
-         ACCESS DENIED
-    ========================================================= -->
-
-    <div id="accessDenied">
-
-        <div class="denied-box">
-
-            <div class="denied-icon">
-                <i class="bx bx-lock-alt"></i>
-            </div>
-
-            <h2>Admin Access Required</h2>
-
-            <p id="deniedMessage">
-                Your account does not have administrator access.
-            </p>
-
-            <button
-                class="btn btn-primary"
-                id="deniedHomeBtn"
-            >
-                <i class="bx bx-home-alt-2"></i>
-                Go Home
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- =========================================================
-         APPLICATION
-    ========================================================= -->
-
-    <div id="app">
-
-
-        <!-- MOBILE HEADER -->
-
-        <div class="mobile-top">
-
-            <button
-                class="mobile-menu"
-                id="mobileMenuBtn"
-                aria-label="Open menu"
-            >
-                <i class="bx bx-menu"></i>
-            </button>
-
-            <div class="mobile-title">
-                K@si Admin
-            </div>
-
-            <button
-                class="mobile-menu"
-                id="mobileHomeBtn"
-                aria-label="Home"
-            >
-                <i class="bx bx-home-alt-2"></i>
-            </button>
-
-        </div>
-
-
-        <!-- SIDEBAR OVERLAY -->
-
-        <div
-            class="sidebar-overlay"
-            id="sidebarOverlay"
-        ></div>
-
-
-        <!-- =====================================================
-             SIDEBAR
-        ====================================================== -->
-
-        <aside
-            class="sidebar"
-            id="sidebar"
+        <button
+            class="icon-btn"
+            id="mobileRefresh"
+            type="button"
+            title="Refresh"
         >
 
-            <div class="brand">
+            <i class="bx bx-refresh"></i>
 
-                <div class="brand-logo">
-                    K@
+        </button>
+
+    </header>
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+        <a
+            href="home.html"
+            class="brand"
+        >
+
+            <div class="brand-logo">
+                K@
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    K@si Web
+                </strong>
+
+                <span>
+                    Elite Control
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <div class="nav-title">
+            Control Centre
+        </div>
+
+
+        <nav class="nav">
+
+            <!-- HOME -->
+
+            <a
+                href="home.html"
+                class="nav-link"
+            >
+
+                <i class="bx bx-home-alt-2"></i>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <!-- ADMIN DASHBOARD -->
+
+            <a
+                href="#dashboard"
+                class="nav-link active"
+            >
+
+                <i class="bx bx-grid-alt"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- OWNERS -->
+
+            <a
+                href="owners.html"
+                class="nav-link"
+            >
+
+                <i class="bx bx-store-alt"></i>
+
+                <span>
+                    Owners
+                </span>
+
+            </a>
+
+
+            <!-- SALONS -->
+
+            <a
+                href="salons.html"
+                class="nav-link"
+            >
+
+                <i class="bx bx-cut"></i>
+
+                <span>
+                    Salons
+                </span>
+
+            </a>
+
+
+            <!-- ELITE -->
+
+            <a
+                href="#elite"
+                class="nav-link"
+                id="eliteNav"
+            >
+
+                <i class="bx bx-crown"></i>
+
+                <span>
+                    Elite
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-mini">
+
+                <div class="admin-mini-label">
+                    Current Access
                 </div>
 
-                <div class="brand-text">
+                <div class="admin-mini-value">
 
-                    <strong>K@si Web</strong>
+                    <span class="online-dot"></span>
+
+                    Administrator
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="logout"
+                id="logoutBtnAdmin"
+            >
+
+                <i class="bx bx-log-out"></i>
+
+                Sign out
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN APPLICATION
+         ===================================================== -->
+
+    <main
+        class="main"
+        id="app"
+    >
+
+        <!-- =================================================
+             TOPBAR
+             ================================================= -->
+
+        <section
+            class="topbar"
+            id="dashboard"
+        >
+
+            <div>
+
+                <div class="eyebrow">
+
+                    <i class="bx bx-shield-quarter"></i>
+
+                    K@si Web Administrator
+
+                </div>
+
+
+                <h1
+                    class="dashboard-title"
+                    id="dashboardTitle"
+                >
+
+                    Welcome to the
+                    <span>K@si Control Centre</span>
+
+                </h1>
+
+
+                <p class="subtitle">
+
+                    Manage today's customer bookings,
+                    monitor activity and keep the
+                    K@si marketplace running smoothly.
+
+                </p>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="icon-btn"
+                    id="refreshBtn"
+                    type="button"
+                    title="Refresh dashboard"
+                >
+
+                    <i class="bx bx-refresh"></i>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ELITE HERO
+             ================================================= -->
+
+        <section
+            class="elite-hero"
+            id="elite"
+        >
+
+            <div class="hero-content">
+
+                <div class="hero-badge">
+
+                    <i class="bx bx-crown"></i>
+
+                    Elite Administration
+
+                </div>
+
+
+                <h2 class="hero-title">
+
+                    Run K@si with
+                    <em>precision.</em>
+
+                </h2>
+
+
+                <p class="hero-description">
+
+                    Your central command space for
+                    bookings, salon activity and
+                    marketplace operations.
+
+                    Keep every customer experience
+                    moving with clarity and control.
+
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a
+                        href="home.html"
+                        class="primary-btn"
+                    >
+
+                        <i class="bx bx-home-alt-2"></i>
+
+                        Home
+
+                    </a>
+
+
+                    <a
+                        href="owners.html"
+                        class="secondary-btn"
+                    >
+
+                        <i class="bx bx-store-alt"></i>
+
+                        Owners
+
+                    </a>
+
+
+                    <a
+                        href="salons.html"
+                        class="secondary-btn"
+                    >
+
+                        <i class="bx bx-cut"></i>
+
+                        Salons
+
+                    </a>
+
+
+                    <a
+                        href="#dashboard"
+                        class="secondary-btn"
+                    >
+
+                        <i class="bx bx-bar-chart-alt-2"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             STATS
+             ================================================= -->
+
+        <section class="stats">
+
+
+            <!-- TOTAL -->
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-label">
+                        Today's Bookings
+                    </div>
+
+                    <div class="stat-icon">
+
+                        <i class="bx bx-calendar-event"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="totalCount"
+                >
+                    0
+                </div>
+
+
+                <div class="stat-note">
+                    All bookings for today
+                </div>
+
+            </article>
+
+
+            <!-- PENDING -->
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-label">
+                        Pending
+                    </div>
+
+                    <div class="stat-icon">
+
+                        <i class="bx bx-time-five"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="pendingCount"
+                >
+                    0
+                </div>
+
+
+                <div class="stat-note">
+                    Waiting for approval
+                </div>
+
+            </article>
+
+
+            <!-- COMPLETED -->
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-label">
+                        Completed
+                    </div>
+
+                    <div class="stat-icon">
+
+                        <i class="bx bx-check-double"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="completedCount"
+                >
+                    0
+                </div>
+
+
+                <div class="stat-note">
+                    Finished appointments
+                </div>
+
+            </article>
+
+
+            <!-- REVENUE -->
+
+            <article class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-label">
+                        Booking Value
+                    </div>
+
+                    <div class="stat-icon">
+
+                        <i class="bx bx-wallet"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="stat-number"
+                    id="totalRevenue"
+                >
+                    R0
+                </div>
+
+
+                <div class="stat-note">
+                    Today's booking value
+                </div>
+
+            </article>
+
+
+        </section>
+
+
+        <!-- =================================================
+             CONTENT
+             ================================================= -->
+
+        <section class="content-grid">
+
+
+            <!-- =================================================
+                 BOOKINGS
+                 ================================================= -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div class="panel-heading">
+
+                        <div class="panel-heading-icon">
+
+                            <i class="bx bx-calendar-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Today's Bookings
+                            </h2>
+
+                            <p>
+                                Live Firestore booking activity
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel-actions">
+
+                        <button
+                            class="small-btn"
+                            id="refreshBookingsBtn"
+                            type="button"
+                            title="Refresh bookings"
+                        >
+
+                            <i class="bx bx-refresh"></i>
+
+                            <span>
+                                Refresh
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            class="small-btn danger"
+                            id="clearBtn"
+                            type="button"
+                        >
+
+                            <i class="bx bx-trash"></i>
+
+                            <span>
+                                Clear Today
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="search-wrap">
+
+                    <div class="search">
+
+                        <i class="bx bx-search"></i>
+
+                        <input
+                            type="search"
+                            id="searchInput"
+                            placeholder="Search customer, salon, service, status..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE -->
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Salon
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Time
+                                </th>
+
+                                <th>
+                                    Service
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="tableBody">
+
+                            <tr>
+
+                                <td colspan="6">
+
+                                    <div class="state">
+
+                                        <div class="spinner"></div>
+
+                                        <strong>
+                                            Loading bookings...
+                                        </strong>
+
+                                        <small>
+                                            Connecting to K@si Web
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="table-footer">
 
                     <span>
-                        Admin Centre
+                        Live booking stream
+                    </span>
+
+                    <span id="visibleCount">
+                        0 bookings
                     </span>
 
                 </div>
@@ -1569,464 +4087,182 @@
             </div>
 
 
-            <div class="nav-label">
-                Control Centre
-            </div>
+            <!-- =================================================
+                 SIDE INFORMATION
+                 ================================================= -->
+
+            <div class="side-stack">
 
 
-            <nav class="nav">
+                <!-- TODAY -->
 
-                <!-- HOME -->
+                <div class="panel today-card">
 
-                <a
-                    href="home.html"
-                    class="nav-item active"
-                >
-                    <i class="bx bx-home-alt-2"></i>
-                    <span>Home</span>
-                </a>
+                    <div class="today-top">
 
+                        <div class="today-label">
+                            Control Centre
+                        </div>
 
-                <!-- OWNERS -->
+                        <div class="live">
+                            Live
+                        </div>
 
-                <a
-                    href="owners.html"
-                    class="nav-item"
-                >
-                    <i class="bx bx-store"></i>
-                    <span>Owners</span>
-                </a>
+                    </div>
 
-
-                <!-- ELITE -->
-
-                <a
-                    href="home.html#elite"
-                    class="nav-item"
-                    id="eliteNav"
-                >
-                    <i class="bx bx-crown"></i>
-                    <span>Elite</span>
-                </a>
-
-
-                <!-- SALONS -->
-
-                <a
-                    href="salons.html"
-                    class="nav-item"
-                >
-                    <i class="bx bx-cut"></i>
-                    <span>Salons</span>
-                </a>
-
-            </nav>
-
-
-            <div class="nav-label">
-                Account
-            </div>
-
-
-            <nav class="nav">
-
-                <button
-                    class="nav-item"
-                    id="refreshBtn"
-                    type="button"
-                >
-                    <i class="bx bx-refresh"></i>
-                    <span>Refresh Data</span>
-                </button>
-
-
-                <button
-                    class="nav-item"
-                    id="logoutBtn"
-                    type="button"
-                >
-                    <i class="bx bx-log-out"></i>
-                    <span>Logout</span>
-                </button>
-
-            </nav>
-
-
-            <div class="sidebar-bottom">
-
-                <div class="admin-mini">
 
                     <div
-                        class="admin-avatar"
-                        id="adminAvatar"
+                        class="today-date"
+                        id="bookingDate"
                     >
-                        A
+                        Loading date...
                     </div>
 
-                    <div class="admin-mini-info">
 
-                        <strong id="adminEmail">
-                            Admin
-                        </strong>
-
-                        <span>
-                            Administrator
-                        </span>
-
+                    <div
+                        class="today-time"
+                        id="todayLabel"
+                    >
+                        --:-- SAST
                     </div>
 
                 </div>
 
-            </div>
 
-        </aside>
+                <!-- NEXT APPOINTMENT -->
 
+                <div class="panel next">
 
-        <!-- =====================================================
-             MAIN CONTENT
-        ====================================================== -->
+                    <div class="next-title">
 
-        <main class="main">
+                        <i class="bx bx-alarm"></i>
 
+                        Next appointment
 
-            <!-- TOP BAR -->
-
-            <div class="topbar">
-
-                <div class="page-title">
-
-                    <h1>
-                        Admin Control Centre
-                    </h1>
-
-                    <p>
-                        Manage the K@si Web marketplace from one place.
-                    </p>
-
-                </div>
-
-
-                <div class="top-actions">
-
-                    <button
-                        class="btn btn-secondary"
-                        id="desktopHomeBtn"
-                    >
-                        <i class="bx bx-home-alt-2"></i>
-                        Home
-                    </button>
-
-                    <button
-                        class="btn btn-danger"
-                        id="desktopLogoutBtn"
-                    >
-                        <i class="bx bx-log-out"></i>
-                        Logout
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 ELITE HERO
-            ================================================== -->
-
-            <section
-                class="elite-hero"
-                id="elite"
-            >
-
-                <div class="hero-glow"></div>
-
-                <div class="hero-content">
-
-                    <div class="hero-badge">
-                        <i class="bx bx-crown"></i>
-                        K@si Web Elite
                     </div>
 
-                    <h2>
-                        Your marketplace.
-                        <span>Your control.</span>
-                    </h2>
 
-                    <p>
-                        Welcome to the K@si Web administrative command
-                        centre. Monitor salons, owners, users and bookings
-                        while keeping the experience clean, fast and elite.
-                    </p>
+                    <div
+                        class="next-time"
+                        id="nextTime"
+                    >
+                        --:--
+                    </div>
 
-                    <div class="hero-actions">
 
-                        <a
-                            href="home.html"
-                            class="btn btn-primary"
-                        >
+                    <div
+                        class="next-customer"
+                        id="nextCustomer"
+                    >
+                        No more appointments
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK LINKS -->
+
+                <div class="panel quick-links">
+
+                    <div class="quick-title">
+                        Quick Access
+                    </div>
+
+
+                    <a
+                        href="home.html"
+                        class="quick-link"
+                    >
+
+                        <div class="quick-link-left">
+
                             <i class="bx bx-home-alt-2"></i>
-                            Open Home
-                        </a>
 
-                        <a
-                            href="owners.html"
-                            class="btn btn-secondary"
-                        >
-                            <i class="bx bx-store"></i>
-                            Manage Owners
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 STATISTICS
-            ================================================== -->
-
-            <section class="stats-grid">
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-group"></i>
-                    </div>
-
-                    <div class="stat-label">
-                        Users
-                    </div>
-
-                    <div
-                        class="stat-value"
-                        id="usersCount"
-                    >
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-store-alt"></i>
-                    </div>
-
-                    <div class="stat-label">
-                        Salons
-                    </div>
-
-                    <div
-                        class="stat-value"
-                        id="salonsCount"
-                    >
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-calendar-check"></i>
-                    </div>
-
-                    <div class="stat-label">
-                        Bookings
-                    </div>
-
-                    <div
-                        class="stat-value"
-                        id="bookingsCount"
-                    >
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon">
-                        <i class="bx bx-time-five"></i>
-                    </div>
-
-                    <div class="stat-label">
-                        Pending
-                    </div>
-
-                    <div
-                        class="stat-value"
-                        id="pendingCount"
-                    >
-                        —
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 CONTENT
-            ================================================== -->
-
-            <section class="content-grid">
-
-
-                <!-- RECENT BOOKINGS -->
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-                            <h3>
-                                Recent Bookings
-                            </h3>
-                        </div>
-
-                        <span id="bookingSummary">
-                            Loading...
-                        </span>
-
-                    </div>
-
-                    <div class="panel-body">
-
-                        <div
-                            class="booking-list"
-                            id="bookingList"
-                        >
-
-                            <div class="empty">
-
-                                <i class="bx bx-loader-alt bx-spin"></i>
-
-                                <p>
-                                    Loading bookings...
-                                </p>
-
-                            </div>
+                            Home
 
                         </div>
 
-                    </div>
+                        <i class="bx bx-chevron-right"></i>
 
-                </div>
-
-
-                <!-- QUICK ACTIONS -->
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <h3>
-                            Quick Actions
-                        </h3>
-
-                    </div>
-
-                    <div class="panel-body">
-
-                        <div class="quick-actions">
+                    </a>
 
 
-                            <a
-                                href="home.html"
-                                class="quick-action"
-                            >
+                    <a
+                        href="owners.html"
+                        class="quick-link"
+                    >
 
-                                <i class="bx bx-home-alt-2"></i>
+                        <div class="quick-link-left">
 
-                                <strong>
-                                    Open Home
-                                </strong>
+                            <i class="bx bx-store-alt"></i>
 
-                            </a>
-
-
-                            <a
-                                href="owners.html"
-                                class="quick-action"
-                            >
-
-                                <i class="bx bx-store"></i>
-
-                                <strong>
-                                    Owners
-                                </strong>
-
-                            </a>
-
-
-                            <a
-                                href="salons.html"
-                                class="quick-action"
-                            >
-
-                                <i class="bx bx-cut"></i>
-
-                                <strong>
-                                    Salons
-                                </strong>
-
-                            </a>
-
-
-                            <button
-                                class="quick-action"
-                                id="quickRefresh"
-                                type="button"
-                            >
-
-                                <i class="bx bx-refresh"></i>
-
-                                <strong>
-                                    Refresh
-                                </strong>
-
-                            </button>
-
+                            Owners
 
                         </div>
 
-                    </div>
+                        <i class="bx bx-chevron-right"></i>
+
+                    </a>
+
+
+                    <a
+                        href="salons.html"
+                        class="quick-link"
+                    >
+
+                        <div class="quick-link-left">
+
+                            <i class="bx bx-cut"></i>
+
+                            Salons
+
+                        </div>
+
+                        <i class="bx bx-chevron-right"></i>
+
+                    </a>
+
+
+                    <a
+                        href="#elite"
+                        class="quick-link"
+                    >
+
+                        <div class="quick-link-left">
+
+                            <i class="bx bx-crown"></i>
+
+                            Elite
+
+                        </div>
+
+                        <i class="bx bx-chevron-right"></i>
+
+                    </a>
 
                 </div>
 
-            </section>
+            </div>
+
+        </section>
+
+    </main>
 
 
-        </main>
-
-    </div>
-
-
-    <!-- =========================================================
+    <!-- =====================================================
          TOAST
-    ========================================================= -->
+         ===================================================== -->
 
-    <div id="toast">
-
-        <i class="bx bx-info-circle"></i>
-
-        <span id="toastText">
-            Ready
-        </span>
-
-    </div>
+    <div
+        id="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
 
 
-    <!-- =========================================================
+    <!-- =====================================================
          FIREBASE
-    ========================================================= -->
+         ===================================================== -->
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 
@@ -2037,1100 +4273,2230 @@
 
     <script>
 
-        /* =======================================================
+        /* =====================================================
            FIREBASE CONFIG
-        ======================================================= */
+           
+           IMPORTANT:
+           Keep this the SAME Firebase configuration used
+           by your working home.html / salons.html.
+           ===================================================== */
 
         const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "kasi-web-d073f.firebaseapp.com",
-            projectId: "kasi-web-d073f",
-            storageBucket: "kasi-web-d073f.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_FIREBASE_APP_ID"
+
+            apiKey:
+                "YOUR_FIREBASE_API_KEY",
+
+            authDomain:
+                "kasi-web-d073f.firebaseapp.com",
+
+            projectId:
+                "kasi-web-d073f",
+
+            storageBucket:
+                "kasi-web-d073f.firebasestorage.app",
+
+            messagingSenderId:
+                "YOUR_MESSAGING_SENDER_ID",
+
+            appId:
+                "YOUR_FIREBASE_APP_ID"
+
         };
 
 
-        /* =======================================================
-           INITIALISE FIREBASE
-        ======================================================= */
+        if (
+            !firebase.apps.length
+        ) {
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+            firebase.initializeApp(
+                firebaseConfig
+            );
 
-        const auth = firebase.auth();
-
-        const db = firebase.firestore();
-
-
-        /* =======================================================
-           ELEMENTS
-        ======================================================= */
-
-        const loadingScreen =
-            document.getElementById("loadingScreen");
-
-        const accessDenied =
-            document.getElementById("accessDenied");
-
-        const deniedMessage =
-            document.getElementById("deniedMessage");
-
-        const app =
-            document.getElementById("app");
-
-        const usersCount =
-            document.getElementById("usersCount");
-
-        const salonsCount =
-            document.getElementById("salonsCount");
-
-        const bookingsCount =
-            document.getElementById("bookingsCount");
-
-        const pendingCount =
-            document.getElementById("pendingCount");
-
-        const bookingList =
-            document.getElementById("bookingList");
-
-        const bookingSummary =
-            document.getElementById("bookingSummary");
-
-        const adminEmail =
-            document.getElementById("adminEmail");
-
-        const adminAvatar =
-            document.getElementById("adminAvatar");
-
-        const toast =
-            document.getElementById("toast");
-
-        const toastText =
-            document.getElementById("toastText");
-
-        const sidebar =
-            document.getElementById("sidebar");
-
-        const sidebarOverlay =
-            document.getElementById("sidebarOverlay");
-
-
-        /* =======================================================
-           STATE
-        ======================================================= */
-
-        let currentAdmin = null;
-
-        let unsubscribeUsers = null;
-        let unsubscribeSalons = null;
-        let unsubscribeBookings = null;
-
-
-        /* =======================================================
-           TOAST
-        ======================================================= */
-
-        let toastTimer = null;
-
-        function showToast(message, isError = false) {
-
-            toastText.textContent = message;
-
-            toast.classList.toggle("error", isError);
-
-            toast.classList.add("show");
-
-            clearTimeout(toastTimer);
-
-            toastTimer = setTimeout(() => {
-
-                toast.classList.remove("show");
-
-            }, 3000);
         }
 
 
-        /* =======================================================
-           LOADING
-        ======================================================= */
-
-        function showLoading() {
-
-            loadingScreen.style.display = "flex";
-
-            accessDenied.style.display = "none";
-
-            app.style.display = "none";
-        }
+        window.firebaseAuth =
+            firebase.auth();
 
 
-        function hideLoading() {
-
-            loadingScreen.style.display = "none";
-        }
+        window.firebaseDB =
+            firebase.firestore();
 
 
-        /* =======================================================
-           ACCESS DENIED
-        ======================================================= */
+        /* =====================================================
+           FIREBASE GLOBAL HELPERS
+           ===================================================== */
 
-        function denyAccess(message) {
-
-            hideLoading();
-
-            app.style.display = "none";
-
-            accessDenied.style.display = "flex";
-
-            deniedMessage.textContent =
-                message ||
-                "Your account does not have administrator access.";
-        }
+        window.onAuthState =
+            firebase.auth
+                .onAuthStateChanged
+                .bind(
+                    firebase.auth()
+                );
 
 
-        /* =======================================================
-           NORMALISE ROLE
-        ======================================================= */
+        window.dbDoc =
+            firebase.firestore
+                .doc;
 
-        function normaliseRole(value) {
 
-            if (value === null || value === undefined) {
-                return "";
+        window.dbGet =
+            firebase.firestore
+                .getDoc;
+
+
+        window.removeDoc =
+            firebase.firestore
+                .deleteDoc;
+
+
+        window.collection =
+            firebase.firestore
+                .collection;
+
+
+        window.onSnapshot =
+            firebase.firestore
+                .onSnapshot;
+
+
+        window.query =
+            firebase.firestore
+                .query;
+
+
+        window.where =
+            firebase.firestore
+                .where;
+
+
+        window.getDocs =
+            firebase.firestore
+                .getDocs;
+
+
+        window.updateDoc =
+            firebase.firestore
+                .updateDoc;
+
+
+        window.logOut =
+            firebase.auth()
+                .signOut
+                .bind(
+                    firebase.auth()
+                );
+
+    </script>
+
+
+    <!-- =====================================================
+         ADMIN JAVASCRIPT
+         ===================================================== -->
+
+    <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /*
+    ============================================================
+       K@si Web — Elite Admin Dashboard
+       Version: 2.0
+    ============================================================
+    */
+
+
+    /* =========================================================
+       FIREBASE CHECK
+    ========================================================= */
+
+    if (!window.firebaseAuth || !window.firebaseDB) {
+
+        console.error(
+            "K@si Web: Firebase has not been initialized."
+        );
+
+        showToast(
+            "Firebase connection is not available.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const auth = window.firebaseAuth;
+    const db = window.firebaseDB;
+
+    const onAuthState = window.onAuthState;
+
+    const dbDoc = window.dbDoc;
+    const dbGet = window.dbGet;
+
+    const removeDoc = window.removeDoc;
+
+    const collection = window.collection;
+    const onSnapshot = window.onSnapshot;
+
+    const query = window.query;
+    const where = window.where;
+
+    const getDocs = window.getDocs;
+    const updateDoc = window.updateDoc;
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const tableBody =
+        document.getElementById("tableBody");
+
+    const totalCountEl =
+        document.getElementById("totalCount");
+
+    const pendingCountEl =
+        document.getElementById("pendingCount");
+
+    const completedCountEl =
+        document.getElementById("completedCount");
+
+    const totalRevenueEl =
+        document.getElementById("totalRevenue");
+
+    const clearBtn =
+        document.getElementById("clearBtn");
+
+    const logoutBtnAdmin =
+        document.getElementById("logoutBtnAdmin");
+
+    const dashboardTitle =
+        document.getElementById("dashboardTitle");
+
+    const nextTimeEl =
+        document.getElementById("nextTime");
+
+    const nextCustomerEl =
+        document.getElementById("nextCustomer");
+
+    const visibleCountEl =
+        document.getElementById("visibleCount");
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const refreshBtn =
+        document.getElementById("refreshBtn");
+
+    const refreshBookingsBtn =
+        document.getElementById("refreshBookingsBtn");
+
+    const bookingDateEl =
+        document.getElementById("bookingDate");
+
+    const todayLabelEl =
+        document.getElementById("todayLabel");
+
+    const loadingScreen =
+        document.getElementById("loadingScreen");
+
+    const accessDenied =
+        document.getElementById("accessDenied");
+
+    const mobileRefresh =
+        document.getElementById("mobileRefresh");
+
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let currentUser = null;
+
+    let currentUserRole = null;
+
+    let unsubscribeBookings = null;
+
+    let allBookings = [];
+
+    let dashboardReady = false;
+
+
+    /* =========================================================
+       SOUTH AFRICA DATE
+    ========================================================= */
+
+    function getSouthAfricaDate() {
+
+        return new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone: "Africa/Johannesburg",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
             }
+        ).format(new Date());
 
-            return String(value)
-                .trim()
-                .toLowerCase()
-                .replace(/[\s-]+/g, "_");
+    }
+
+
+    function getPrettyDate() {
+
+        return new Intl.DateTimeFormat(
+            "en-ZA",
+            {
+                timeZone: "Africa/Johannesburg",
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        ).format(new Date());
+
+    }
+
+
+    function getCurrentTime() {
+
+        return new Intl.DateTimeFormat(
+            "en-ZA",
+            {
+                timeZone: "Africa/Johannesburg",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false
+            }
+        ).format(new Date());
+
+    }
+
+
+    const todayStr =
+        getSouthAfricaDate();
+
+
+    if (bookingDateEl) {
+
+        bookingDateEl.textContent =
+            getPrettyDate();
+
+    }
+
+
+    if (todayLabelEl) {
+
+        todayLabelEl.textContent =
+            getCurrentTime() + " SAST";
+
+    }
+
+
+    /* =========================================================
+       HIDE LOADING
+    ========================================================= */
+
+    function hideLoading() {
+
+        if (loadingScreen) {
+
+            loadingScreen.classList.add(
+                "hidden"
+            );
+
         }
 
+    }
 
-        /* =======================================================
-           CHECK ADMIN ROLE
-        ======================================================= */
 
-        async function verifyAdmin(user) {
+    /* =========================================================
+       AUTHENTICATION
+    ========================================================= */
+
+    onAuthState(auth, async (user) => {
+
+        try {
 
             if (!user) {
 
-                denyAccess(
-                    "You must be logged in with an administrator account."
-                );
+                window.location.href =
+                    "index.html";
 
-                return false;
-            }
-
-
-            try {
-
-                /*
-                 * IMPORTANT:
-                 *
-                 * The document ID must match Firebase Auth UID.
-                 *
-                 * Example:
-                 *
-                 * users
-                 *   └── FIREBASE_AUTH_UID
-                 *         ├── email
-                 *         └── role: admin
-                 *
-                 */
-
-                const userRef =
-                    db.collection("users").doc(user.uid);
-
-                const snapshot =
-                    await userRef.get();
-
-
-                if (!snapshot.exists) {
-
-                    denyAccess(
-                        "Your Firebase account exists, but no users document was found for this account."
-                    );
-
-                    return false;
-                }
-
-
-                const data =
-                    snapshot.data() || {};
-
-
-                /*
-                 * Accept both:
-                 *
-                 * role
-                 *
-                 * Role
-                 *
-                 * This helps if an older document used
-                 * a capital R.
-                 */
-
-                const role =
-                    normaliseRole(
-                        data.role !== undefined
-                            ? data.role
-                            : data.Role
-                    );
-
-
-                console.log(
-                    "K@si Admin Role Check:",
-                    {
-                        uid: user.uid,
-                        email: user.email,
-                        role: role,
-                        userDocument: data
-                    }
-                );
-
-
-                if (role !== "admin") {
-
-                    denyAccess(
-                        "This account is recognised, but its Firestore role is not admin."
-                    );
-
-                    return false;
-                }
-
-
-                currentAdmin = {
-                    uid: user.uid,
-                    email: user.email || data.email || "",
-                    role: role,
-                    data: data
-                };
-
-
-                return true;
-
-            } catch (error) {
-
-                console.error(
-                    "Admin verification error:",
-                    error
-                );
-
-
-                denyAccess(
-                    "Unable to verify administrator access. Check your Firebase connection and Firestore rules."
-                );
-
-                return false;
-            }
-        }
-
-
-        /* =======================================================
-           START DASHBOARD
-        ======================================================= */
-
-        async function startDashboard(user) {
-
-            const allowed =
-                await verifyAdmin(user);
-
-
-            if (!allowed) {
                 return;
             }
+
+
+            currentUser = user;
+
+
+            console.log(
+                "K@si Admin:",
+                user.uid
+            );
+
+
+            const userRef =
+                dbDoc(
+                    db,
+                    "users",
+                    user.uid
+                );
+
+
+            const userSnap =
+                await dbGet(userRef);
+
+
+            if (!userSnap.exists()) {
+
+                hideLoading();
+
+                if (accessDenied) {
+
+                    accessDenied.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+
+                showToast(
+                    "Your K@si account profile was not found.",
+                    "error"
+                );
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "index.html";
+
+                }, 1500);
+
+                return;
+            }
+
+
+            const userData =
+                userSnap.data() || {};
+
+
+            currentUserRole =
+                String(
+                    userData.role ||
+                    userData.Role ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
+
+
+            console.log(
+                "K@si role:",
+                currentUserRole
+            );
+
+
+            /* ---------------------------------------------
+               ADMIN GUARD
+            --------------------------------------------- */
+
+            if (
+                currentUserRole !==
+                "admin"
+            ) {
+
+                hideLoading();
+
+                if (accessDenied) {
+
+                    accessDenied.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+
+                showToast(
+                    "Administrator access required.",
+                    "error"
+                );
+
+
+                setTimeout(() => {
+
+                    if (
+                        currentUserRole ===
+                        "salon_owner"
+                    ) {
+
+                        window.location.href =
+                            "owners.html";
+
+                    } else {
+
+                        window.location.href =
+                            "salons.html";
+
+                    }
+
+                }, 1200);
+
+                return;
+            }
+
+
+            /* ---------------------------------------------
+               ADMIN ACCEPTED
+            --------------------------------------------- */
+
+            dashboardReady = true;
 
 
             hideLoading();
 
-            accessDenied.style.display = "none";
 
-            app.style.display = "block";
+            if (dashboardTitle) {
 
+                dashboardTitle.innerHTML =
+                    'Welcome to the <span>K@si Control Centre</span>';
 
-            updateAdminUI();
-
-            startRealtimeData();
-        }
-
-
-        /* =======================================================
-           ADMIN UI
-        ======================================================= */
-
-        function updateAdminUI() {
-
-            const email =
-                currentAdmin?.email || "Administrator";
-
-
-            adminEmail.textContent = email;
-
-
-            adminAvatar.textContent =
-                email.charAt(0).toUpperCase();
-        }
-
-
-        /* =======================================================
-           REALTIME DATA
-        ======================================================= */
-
-        function startRealtimeData() {
-
-            stopRealtimeData();
-
-
-            /* USERS */
-
-            unsubscribeUsers =
-                db.collection("users")
-                    .onSnapshot(
-                        snapshot => {
-
-                            usersCount.textContent =
-                                snapshot.size;
-
-                        },
-                        error => {
-
-                            console.error(
-                                "Users error:",
-                                error
-                            );
-
-                            usersCount.textContent = "—";
-                        }
-                    );
-
-
-            /* SALONS */
-
-            unsubscribeSalons =
-                db.collection("salons")
-                    .onSnapshot(
-                        snapshot => {
-
-                            salonsCount.textContent =
-                                snapshot.size;
-
-                        },
-                        error => {
-
-                            console.error(
-                                "Salons error:",
-                                error
-                            );
-
-                            salonsCount.textContent = "—";
-                        }
-                    );
-
-
-            /* BOOKINGS */
-
-            unsubscribeBookings =
-                db.collection("bookings")
-                    .onSnapshot(
-                        snapshot => {
-
-                            bookingsCount.textContent =
-                                snapshot.size;
-
-
-                            let pending = 0;
-
-                            snapshot.forEach(doc => {
-
-                                const booking =
-                                    doc.data() || {};
-
-
-                                const status =
-                                    String(
-                                        booking.status || ""
-                                    )
-                                        .trim()
-                                        .toLowerCase();
-
-
-                                if (
-                                    status === "pending"
-                                ) {
-                                    pending++;
-                                }
-
-                            });
-
-
-                            pendingCount.textContent =
-                                pending;
-
-
-                            renderBookings(
-                                snapshot
-                            );
-
-                        },
-                        error => {
-
-                            console.error(
-                                "Bookings error:",
-                                error
-                            );
-
-                            bookingsCount.textContent = "—";
-                            pendingCount.textContent = "—";
-
-                            renderBookingError(
-                                error
-                            );
-                        }
-                    );
-        }
-
-
-        /* =======================================================
-           STOP REALTIME
-        ======================================================= */
-
-        function stopRealtimeData() {
-
-            if (unsubscribeUsers) {
-                unsubscribeUsers();
-                unsubscribeUsers = null;
-            }
-
-            if (unsubscribeSalons) {
-                unsubscribeSalons();
-                unsubscribeSalons = null;
-            }
-
-            if (unsubscribeBookings) {
-                unsubscribeBookings();
-                unsubscribeBookings = null;
-            }
-        }
-
-
-        /* =======================================================
-           RENDER BOOKINGS
-        ======================================================= */
-
-        function renderBookings(snapshot) {
-
-            const bookings = [];
-
-
-            snapshot.forEach(doc => {
-
-                bookings.push({
-                    id: doc.id,
-                    ...doc.data()
-                });
-
-            });
-
-
-            bookings.sort((a, b) => {
-
-                const aTime =
-                    getBookingTimestamp(a);
-
-                const bTime =
-                    getBookingTimestamp(b);
-
-                return bTime - aTime;
-            });
-
-
-            const recent =
-                bookings.slice(0, 8);
-
-
-            bookingSummary.textContent =
-                `${bookings.length} total`;
-
-
-            if (!recent.length) {
-
-                bookingList.innerHTML = `
-                    <div class="empty">
-                        <i class="bx bx-calendar-x"></i>
-                        <p>No bookings found yet.</p>
-                    </div>
-                `;
-
-                return;
             }
 
 
-            bookingList.innerHTML =
-                recent
-                    .map(
-                        booking =>
-                            createBookingHTML(booking)
-                    )
-                    .join("");
-        }
+            await startAdminDashboard();
 
 
-        /* =======================================================
-           BOOKING TIMESTAMP
-        ======================================================= */
+        } catch (error) {
 
-        function getBookingTimestamp(booking) {
-
-            const candidates = [
-                booking.createdAt,
-                booking.updatedAt,
-                booking.timestamp
-            ];
-
-
-            for (const value of candidates) {
-
-                if (!value) {
-                    continue;
-                }
-
-
-                if (
-                    value &&
-                    typeof value.toMillis === "function"
-                ) {
-                    return value.toMillis();
-                }
-
-
-                if (
-                    value &&
-                    typeof value.seconds === "number"
-                ) {
-                    return value.seconds * 1000;
-                }
-
-
-                const date =
-                    new Date(value);
-
-
-                if (!isNaN(date.getTime())) {
-                    return date.getTime();
-                }
-            }
-
-
-            return 0;
-        }
-
-
-        /* =======================================================
-           BOOKING HTML
-        ======================================================= */
-
-        function createBookingHTML(booking) {
-
-            const name =
-                booking.custName ||
-                booking.customerName ||
-                booking.name ||
-                "Customer";
-
-
-            const service =
-                booking.service ||
-                booking.serviceType ||
-                "Booking";
-
-
-            const status =
-                String(
-                    booking.status || "pending"
-                )
-                    .trim()
-                    .toLowerCase();
-
-
-            const safeStatus =
-                [
-                    "pending",
-                    "confirmed",
-                    "completed",
-                    "cancelled"
-                ].includes(status)
-                    ? status
-                    : "pending";
-
-
-            const date =
-                formatBookingDate(
-                    booking
-                );
-
-
-            const initial =
-                escapeHTML(
-                    name.charAt(0).toUpperCase()
-                );
-
-
-            return `
-                <div class="booking">
-
-                    <div class="booking-avatar">
-                        ${initial}
-                    </div>
-
-                    <div class="booking-main">
-
-                        <strong>
-                            ${escapeHTML(name)}
-                        </strong>
-
-                        <span>
-                            ${escapeHTML(service)}
-                        </span>
-
-                    </div>
-
-                    <div class="booking-right">
-
-                        <span class="status ${safeStatus}">
-                            ${escapeHTML(safeStatus)}
-                        </span>
-
-                        <span class="booking-date">
-                            ${escapeHTML(date)}
-                        </span>
-
-                    </div>
-
-                </div>
-            `;
-        }
-
-
-        /* =======================================================
-           BOOKING DATE
-        ======================================================= */
-
-        function formatBookingDate(booking) {
-
-            let value =
-                booking.createdAt ||
-                booking.updatedAt ||
-                booking.timestamp;
-
-
-            if (
-                value &&
-                typeof value.toDate === "function"
-            ) {
-
-                value =
-                    value.toDate();
-            }
-
-
-            if (
-                value &&
-                typeof value.seconds === "number"
-            ) {
-
-                value =
-                    new Date(
-                        value.seconds * 1000
-                    );
-            }
-
-
-            if (!(value instanceof Date)) {
-
-                value =
-                    value
-                        ? new Date(value)
-                        : null;
-            }
-
-
-            if (
-                !value ||
-                isNaN(value.getTime())
-            ) {
-
-                return "Recent";
-            }
-
-
-            return value.toLocaleDateString(
-                "en-ZA",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
+            console.error(
+                "K@si Admin authentication error:",
+                error
             );
-        }
 
 
-        /* =======================================================
-           BOOKING ERROR
-        ======================================================= */
-
-        function renderBookingError(error) {
-
-            bookingSummary.textContent =
-                "Unavailable";
-
-
-            bookingList.innerHTML = `
-                <div class="empty">
-
-                    <i class="bx bx-error-circle"></i>
-
-                    <p>
-                        Bookings could not be loaded.
-                    </p>
-
-                </div>
-            `;
-
-            console.error(error);
-        }
-
-
-        /* =======================================================
-           ESCAPE HTML
-        ======================================================= */
-
-        function escapeHTML(value) {
-
-            return String(value ?? "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-
-        /* =======================================================
-           REFRESH
-        ======================================================= */
-
-        async function refreshDashboard() {
-
-            if (!currentAdmin) {
-                return;
-            }
+            hideLoading();
 
 
             showToast(
-                "Refreshing dashboard..."
+                "Unable to load administrator account.",
+                "error"
             );
 
+        }
 
-            try {
-
-                const user =
-                    auth.currentUser;
+    });
 
 
-                if (!user) {
+    /* =========================================================
+       START DASHBOARD
+    ========================================================= */
 
-                    window.location.href =
-                        "home.html";
+    async function startAdminDashboard() {
 
-                    return;
-                }
-
-
-                const allowed =
-                    await verifyAdmin(user);
-
-
-                if (!allowed) {
-                    return;
-                }
-
-
-                startRealtimeData();
-
-
-                showToast(
-                    "Dashboard refreshed"
-                );
-
-            } catch (error) {
-
-                console.error(error);
-
-                showToast(
-                    "Refresh failed",
-                    true
-                );
-            }
+        if (!dashboardReady) {
+            return;
         }
 
 
-        /* =======================================================
-           LOGOUT
-        ======================================================= */
-
-        async function logout() {
-
-            try {
-
-                stopRealtimeData();
+        loadBookings();
 
 
-                sessionStorage.removeItem(
-                    "ownerUid"
-                );
-
-                sessionStorage.removeItem(
-                    "ownerSalonId"
-                );
-
-                sessionStorage.removeItem(
-                    "justLoggedIn"
-                );
-
-
-                await auth.signOut();
-
-
-                window.location.href =
-                    "home.html";
-
-            } catch (error) {
-
-                console.error(
-                    "Logout error:",
-                    error
-                );
-
-
-                showToast(
-                    "Could not log out",
-                    true
-                );
-            }
-        }
-
-
-        /* =======================================================
-           MOBILE SIDEBAR
-        ======================================================= */
-
-        function openSidebar() {
-
-            sidebar.classList.add("open");
-
-            sidebarOverlay.classList.add("show");
-        }
-
-
-        function closeSidebar() {
-
-            sidebar.classList.remove("open");
-
-            sidebarOverlay.classList.remove("show");
-        }
-
-
-        /* =======================================================
-           NAVIGATION
-        ======================================================= */
-
-        function goHome() {
-
-            window.location.href =
-                "home.html";
-        }
-
-
-        /* =======================================================
-           BUTTON EVENTS
-        ======================================================= */
-
-        document
-            .getElementById("logoutBtn")
-            .addEventListener(
-                "click",
-                logout
-            );
-
-
-        document
-            .getElementById("desktopLogoutBtn")
-            .addEventListener(
-                "click",
-                logout
-            );
-
-
-        document
-            .getElementById("refreshBtn")
-            .addEventListener(
-                "click",
-                refreshDashboard
-            );
-
-
-        document
-            .getElementById("quickRefresh")
-            .addEventListener(
-                "click",
-                refreshDashboard
-            );
-
-
-        document
-            .getElementById("desktopHomeBtn")
-            .addEventListener(
-                "click",
-                goHome
-            );
-
-
-        document
-            .getElementById("mobileHomeBtn")
-            .addEventListener(
-                "click",
-                goHome
-            );
-
-
-        document
-            .getElementById("deniedHomeBtn")
-            .addEventListener(
-                "click",
-                goHome
-            );
-
-
-        document
-            .getElementById("mobileMenuBtn")
-            .addEventListener(
-                "click",
-                openSidebar
-            );
-
-
-        sidebarOverlay.addEventListener(
-            "click",
-            closeSidebar
+        console.log(
+            "K@si Admin Dashboard started."
         );
 
-
-        /*
-         * Close mobile sidebar after clicking
-         * a navigation link.
-         */
-
-        document
-            .querySelectorAll(".nav a")
-            .forEach(link => {
-
-                link.addEventListener(
-                    "click",
-                    closeSidebar
-                );
-
-            });
+    }
 
 
-        /* =======================================================
-           ELITE BUTTON
-        ======================================================= */
+    /* =========================================================
+       LOAD TODAY'S BOOKINGS
+    ========================================================= */
 
-        document
-            .getElementById("eliteNav")
-            .addEventListener(
-                "click",
-                function() {
+    function loadBookings() {
 
-                    /*
-                     * Explicitly send the admin to:
-                     *
-                     * home.html#elite
-                     */
+        if (unsubscribeBookings) {
 
-                    window.location.href =
-                        "home.html#elite";
-                }
-            );
+            unsubscribeBookings();
+
+            unsubscribeBookings = null;
+
+        }
 
 
-        /* =======================================================
-           FIREBASE AUTH STATE
-        ======================================================= */
+        if (!tableBody) {
+            return;
+        }
+
 
         showLoading();
 
 
-        auth.onAuthStateChanged(
-            async function(user) {
+        try {
 
-                console.log(
-                    "Firebase Auth State:",
-                    user
-                        ? {
-                            uid: user.uid,
-                            email: user.email
-                        }
-                        : null
+            const bookingsRef =
+                collection(
+                    db,
+                    "bookings"
                 );
 
 
-                if (!user) {
+            const bookingsQuery =
+                query(
+                    bookingsRef,
+                    where(
+                        "date",
+                        "==",
+                        todayStr
+                    )
+                );
 
-                    denyAccess(
-                        "No signed-in account was found. Please sign in as an administrator first."
+
+            unsubscribeBookings =
+                onSnapshot(
+                    bookingsQuery,
+
+                    (snapshot) => {
+
+                        allBookings = [];
+
+
+                        snapshot.forEach(
+                            (docSnap) => {
+
+                                const data =
+                                    docSnap.data() || {};
+
+
+                                allBookings.push({
+
+                                    id:
+                                        docSnap.id,
+
+                                    ...data
+
+                                });
+
+                            }
+                        );
+
+
+                        allBookings.sort(
+                            (a, b) => {
+
+                                return compareTimes(
+                                    a.time,
+                                    b.time
+                                );
+
+                            }
+                        );
+
+
+                        renderBookings();
+
+                    },
+
+                    (error) => {
+
+                        console.error(
+                            "Booking listener error:",
+                            error
+                        );
+
+
+                        showError(
+                            "Could not load bookings.",
+                            error.message
+                        );
+
+                    }
+                );
+
+
+        } catch (error) {
+
+            console.error(
+                "Booking query error:",
+                error
+            );
+
+
+            showError(
+                "Could not connect to bookings.",
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       COMPARE TIMES
+    ========================================================= */
+
+    function compareTimes(
+        first,
+        second
+    ) {
+
+        const a =
+            convertTimeToMinutes(first);
+
+        const b =
+            convertTimeToMinutes(second);
+
+        return a - b;
+
+    }
+
+
+    function convertTimeToMinutes(time) {
+
+        if (!time) {
+            return 9999;
+        }
+
+
+        const value =
+            String(time)
+                .trim()
+                .toLowerCase();
+
+
+        const match =
+            value.match(
+                /^(\d{1,2}):(\d{2})(?:\s*(am|pm))?$/
+            );
+
+
+        if (!match) {
+            return 9999;
+        }
+
+
+        let hour =
+            parseInt(
+                match[1],
+                10
+            );
+
+
+        const minute =
+            parseInt(
+                match[2],
+                10
+            );
+
+
+        const meridiem =
+            match[3];
+
+
+        if (
+            meridiem === "pm" &&
+            hour < 12
+        ) {
+
+            hour += 12;
+
+        }
+
+
+        if (
+            meridiem === "am" &&
+            hour === 12
+        ) {
+
+            hour = 0;
+
+        }
+
+
+        return (
+            hour * 60 +
+            minute
+        );
+
+    }
+
+
+    /* =========================================================
+       RENDER BOOKINGS
+    ========================================================= */
+
+    function renderBookings() {
+
+        if (!tableBody) {
+            return;
+        }
+
+
+        const searchTerm =
+            searchInput
+                ? searchInput.value
+                    .trim()
+                    .toLowerCase()
+                : "";
+
+
+        let visibleBookings =
+            allBookings.filter(
+                bookingMatchesSearch
+            );
+
+
+        updateStats(
+            allBookings
+        );
+
+
+        updateNextAppointment(
+            allBookings
+        );
+
+
+        if (visibleCountEl) {
+
+            visibleCountEl.textContent =
+                visibleBookings.length +
+                (
+                    visibleBookings.length === 1
+                        ? " booking"
+                        : " bookings"
+                );
+
+        }
+
+
+        if (!visibleBookings.length) {
+
+            if (allBookings.length === 0) {
+
+                showEmpty(
+                    "No bookings for today.",
+                    "New customer bookings will appear here automatically."
+                );
+
+            } else {
+
+                showEmpty(
+                    "No matching bookings.",
+                    "Try a different search."
+                );
+
+            }
+
+            return;
+        }
+
+
+        tableBody.innerHTML = "";
+
+
+        visibleBookings.forEach(
+            (booking) => {
+
+                const row =
+                    createBookingRow(
+                        booking
                     );
 
-                    return;
+
+                tableBody.appendChild(row);
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       SEARCH
+    ========================================================= */
+
+    function bookingMatchesSearch(
+        booking
+    ) {
+
+        if (!searchInput) {
+            return true;
+        }
+
+
+        const term =
+            searchInput.value
+                .trim()
+                .toLowerCase();
+
+
+        if (!term) {
+            return true;
+        }
+
+
+        const searchable =
+            [
+
+                booking.salon,
+                booking.name,
+                booking.phone,
+                booking.service,
+                booking.status,
+                booking.time,
+                booking.date,
+                booking.userEmail
+
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+
+        return searchable.includes(term);
+
+    }
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            renderBookings
+        );
+
+    }
+
+
+    /* =========================================================
+       CREATE BOOKING ROW
+    ========================================================= */
+
+    function createBookingRow(
+        booking
+    ) {
+
+        const row =
+            document.createElement("tr");
+
+
+        const price =
+            Number(
+                booking.price
+            ) || 0;
+
+
+        const status =
+            normalizeStatus(
+                booking.status
+            );
+
+
+        const salon =
+            safeText(
+                booking.salon ||
+                "K@si Salon"
+            );
+
+
+        const customer =
+            safeText(
+                booking.name ||
+                "Customer"
+            );
+
+
+        const phone =
+            safeText(
+                booking.phone ||
+                "No phone"
+            );
+
+
+        const service =
+            safeText(
+                booking.service ||
+                "Service"
+            );
+
+
+        const time =
+            safeText(
+                booking.time ||
+                "--:--"
+            );
+
+
+        const statusInfo =
+            getStatusInfo(
+                status
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+
+                <strong>
+                    ${salon}
+                </strong>
+
+                <div class="sub">
+                    ${safeText(
+                        booking.salonId ||
+                        ""
+                    )}
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <div class="customer-name">
+                    ${customer}
+                </div>
+
+                <div class="sub">
+                    ${phone}
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <span class="time">
+                    ${time}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <strong>
+                    ${service}
+                </strong>
+
+                <div class="sub price">
+                    R${formatMoney(price)}
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <span
+                    class="status-pill ${statusInfo.className}"
+                >
+                    ${statusInfo.label}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <div class="action-group">
+
+                    ${getActionButtons(
+                        booking
+                    )}
+
+                </div>
+
+            </td>
+
+        `;
+
+
+        return row;
+
+    }
+
+
+    /* =========================================================
+       ACTION BUTTONS
+    ========================================================= */
+
+    function getActionButtons(
+        booking
+    ) {
+
+        const status =
+            normalizeStatus(
+                booking.status
+            );
+
+
+        let buttons = "";
+
+
+        buttons += `
+
+            <button
+                class="action-btn delete"
+                data-action="delete"
+                data-id="${escapeAttribute(
+                    booking.id
+                )}"
+                title="Delete booking"
+            >
+                <i class='bx bx-trash'></i>
+                Delete
+            </button>
+
+        `;
+
+
+        if (
+            status ===
+            "pending"
+        ) {
+
+            buttons += `
+
+                <button
+                    class="action-btn approve"
+                    data-action="approve"
+                    data-id="${escapeAttribute(
+                        booking.id
+                    )}"
+                >
+                    <i class='bx bx-check'></i>
+                    Approve
+                </button>
+
+            `;
+
+        }
+
+
+        if (
+            status ===
+            "approved"
+        ) {
+
+            buttons += `
+
+                <button
+                    class="action-btn done"
+                    data-action="complete"
+                    data-id="${escapeAttribute(
+                        booking.id
+                    )}"
+                >
+                    <i class='bx bx-check-double'></i>
+                    Done
+                </button>
+
+            `;
+
+        }
+
+
+        return buttons;
+
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    function normalizeStatus(
+        status
+    ) {
+
+        return String(
+            status ||
+            "pending"
+        )
+            .trim()
+            .toLowerCase();
+
+    }
+
+
+    function getStatusInfo(
+        status
+    ) {
+
+        switch (status) {
+
+            case "approved":
+
+                return {
+                    label: "Approved",
+                    className: "status-approved"
+                };
+
+
+            case "completed":
+
+                return {
+                    label: "Completed",
+                    className: "status-completed"
+                };
+
+
+            case "declined":
+
+                return {
+                    label: "Declined",
+                    className: "status-declined"
+                };
+
+
+            case "pending":
+
+            default:
+
+                return {
+                    label: "Pending",
+                    className: "status-pending"
+                };
+
+        }
+
+    }
+
+
+    /* =========================================================
+       STATISTICS
+    ========================================================= */
+
+    function updateStats(
+        bookings
+    ) {
+
+        let total = 0;
+
+        let pending = 0;
+
+        let completed = 0;
+
+        let revenue = 0;
+
+
+        bookings.forEach(
+            (booking) => {
+
+                total++;
+
+
+                const status =
+                    normalizeStatus(
+                        booking.status
+                    );
+
+
+                const price =
+                    Number(
+                        booking.price
+                    ) || 0;
+
+
+                revenue += price;
+
+
+                if (
+                    status ===
+                    "pending"
+                ) {
+
+                    pending++;
+
                 }
 
 
-                await startDashboard(user);
+                if (
+                    status ===
+                    "completed"
+                ) {
+
+                    completed++;
+
+                }
 
             }
         );
 
 
-        /* =======================================================
-           GLOBAL ERROR HANDLING
-        ======================================================= */
+        if (totalCountEl) {
 
-        window.addEventListener(
-            "error",
-            function(event) {
+            totalCountEl.textContent =
+                total;
 
-                console.error(
-                    "K@si Admin Error:",
-                    event.error || event.message
+        }
+
+
+        if (pendingCountEl) {
+
+            pendingCountEl.textContent =
+                pending;
+
+        }
+
+
+        if (completedCountEl) {
+
+            completedCountEl.textContent =
+                completed;
+
+        }
+
+
+        if (totalRevenueEl) {
+
+            totalRevenueEl.textContent =
+                "R" +
+                formatMoney(
+                    revenue
+                );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       NEXT APPOINTMENT
+    ========================================================= */
+
+    function updateNextAppointment(
+        bookings
+    ) {
+
+        if (
+            !nextTimeEl ||
+            !nextCustomerEl
+        ) {
+            return;
+        }
+
+
+        const nowMinutes =
+            convertTimeToMinutes(
+                getCurrentTime()
+            );
+
+
+        const upcoming =
+            bookings
+                .filter(
+                    booking => {
+
+                        const status =
+                            normalizeStatus(
+                                booking.status
+                            );
+
+
+                        if (
+                            status ===
+                            "completed"
+                        ) {
+                            return false;
+                        }
+
+
+                        const time =
+                            convertTimeToMinutes(
+                                booking.time
+                            );
+
+
+                        return (
+                            time >=
+                            nowMinutes
+                        );
+
+                    }
+                )
+                .sort(
+                    (a, b) =>
+                        compareTimes(
+                            a.time,
+                            b.time
+                        )
+                );
+
+
+        if (!upcoming.length) {
+
+            nextTimeEl.textContent =
+                "--:--";
+
+
+            nextCustomerEl.textContent =
+                "No more appointments";
+
+
+            return;
+
+        }
+
+
+        const next =
+            upcoming[0];
+
+
+        nextTimeEl.textContent =
+            next.time ||
+            "--:--";
+
+
+        nextCustomerEl.textContent =
+            next.name ||
+            "Customer";
+
+    }
+
+
+    /* =========================================================
+       BUTTON EVENTS
+    ========================================================= */
+
+    document.addEventListener(
+        "click",
+        async (event) => {
+
+            const button =
+                event.target.closest(
+                    "[data-action]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const action =
+                button.dataset.action;
+
+
+            const id =
+                button.dataset.id;
+
+
+            if (!id) {
+                return;
+            }
+
+
+            if (
+                currentUserRole !==
+                "admin"
+            ) {
+
+                showToast(
+                    "Administrator access required.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action ===
+                "delete"
+            ) {
+
+                await deleteBooking(
+                    id
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action ===
+                "approve"
+            ) {
+
+                await changeBookingStatus(
+                    id,
+                    "approved"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action ===
+                "complete"
+            ) {
+
+                await changeBookingStatus(
+                    id,
+                    "completed"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       CHANGE STATUS
+    ========================================================= */
+
+    async function changeBookingStatus(
+        id,
+        status
+    ) {
+
+        try {
+
+            showToast(
+                "Updating booking...",
+                "success"
+            );
+
+
+            const bookingRef =
+                dbDoc(
+                    db,
+                    "bookings",
+                    id
+                );
+
+
+            await updateDoc(
+                bookingRef,
+                {
+                    status:
+                        status
+                }
+            );
+
+
+            showToast(
+                status === "approved"
+                    ? "Booking approved."
+                    : "Booking marked as completed.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Status update failed:",
+                error
+            );
+
+
+            showToast(
+                "Could not update booking: " +
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       DELETE BOOKING
+    ========================================================= */
+
+    async function deleteBooking(
+        id
+    ) {
+
+        const booking =
+            allBookings.find(
+                item =>
+                    item.id === id
+            );
+
+
+        const customerName =
+            booking?.name ||
+            "this booking";
+
+
+        const confirmed =
+            confirm(
+                "Delete " +
+                customerName +
+                "'s booking?\n\n" +
+                "This cannot be undone."
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            showToast(
+                "Deleting booking...",
+                "success"
+            );
+
+
+            await removeDoc(
+                dbDoc(
+                    db,
+                    "bookings",
+                    id
+                )
+            );
+
+
+            showToast(
+                "Booking deleted.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Delete booking error:",
+                error
+            );
+
+
+            showToast(
+                "Delete failed: " +
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       CLEAR TODAY
+    ========================================================= */
+
+    if (clearBtn) {
+
+        clearBtn.addEventListener(
+            "click",
+            clearTodayBookings
+        );
+
+    }
+
+
+    async function clearTodayBookings() {
+
+        if (
+            currentUserRole !==
+            "admin"
+        ) {
+
+            showToast(
+                "Only administrators can clear bookings.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!allBookings.length) {
+
+            showToast(
+                "There are no bookings to clear.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const confirmed =
+            confirm(
+                "CLEAR ALL BOOKINGS FOR TODAY?\n\n" +
+                allBookings.length +
+                " booking(s) will be permanently deleted.\n\n" +
+                "This action cannot be undone."
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            showToast(
+                "Clearing today's bookings...",
+                "success"
+            );
+
+
+            if (
+                unsubscribeBookings
+            ) {
+
+                unsubscribeBookings();
+
+                unsubscribeBookings =
+                    null;
+
+            }
+
+
+            const bookingsRef =
+                collection(
+                    db,
+                    "bookings"
+                );
+
+
+            const q =
+                query(
+                    bookingsRef,
+                    where(
+                        "date",
+                        "==",
+                        todayStr
+                    )
+                );
+
+
+            const snapshot =
+                await getDocs(q);
+
+
+            const deletions =
+                snapshot.docs.map(
+                    docSnap =>
+                        removeDoc(
+                            dbDoc(
+                                db,
+                                "bookings",
+                                docSnap.id
+                            )
+                        )
+                );
+
+
+            await Promise.all(
+                deletions
+            );
+
+
+            allBookings = [];
+
+
+            renderBookings();
+
+
+            showToast(
+                "All today's bookings were cleared.",
+                "success"
+            );
+
+
+            setTimeout(
+                loadBookings,
+                500
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Clear bookings error:",
+                error
+            );
+
+
+            showToast(
+                "Clear failed: " +
+                error.message,
+                "error"
+            );
+
+
+            loadBookings();
+
+        }
+
+    }
+
+
+    /* =========================================================
+       REFRESH
+    ========================================================= */
+
+    function refreshDashboard() {
+
+        loadBookings();
+
+        showToast(
+            "Dashboard refreshed.",
+            "success"
+        );
+
+    }
+
+
+    if (refreshBtn) {
+
+        refreshBtn.addEventListener(
+            "click",
+            refreshDashboard
+        );
+
+    }
+
+
+    if (refreshBookingsBtn) {
+
+        refreshBookingsBtn.addEventListener(
+            "click",
+            refreshDashboard
+        );
+
+    }
+
+
+    if (mobileRefresh) {
+
+        mobileRefresh.addEventListener(
+            "click",
+            refreshDashboard
+        );
+
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    if (logoutBtnAdmin) {
+
+        logoutBtnAdmin.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    if (
+                        unsubscribeBookings
+                    ) {
+
+                        unsubscribeBookings();
+
+                        unsubscribeBookings =
+                            null;
+
+                    }
+
+
+                    if (
+                        typeof window.logOut ===
+                        "function"
+                    ) {
+
+                        await window.logOut(
+                            auth
+                        );
+
+                    } else {
+
+                        await auth.signOut();
+
+                    }
+
+
+                    window.location.href =
+                        "index.html";
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+
+                    showToast(
+                        "Logout failed.",
+                        "error"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       ELITE NAV
+    ========================================================= */
+
+    const eliteNav =
+        document.getElementById(
+            "eliteNav"
+        );
+
+
+    if (eliteNav) {
+
+        eliteNav.addEventListener(
+            "click",
+            () => {
+
+                setTimeout(
+                    () => {
+
+                        document
+                            .getElementById(
+                                "elite"
+                            )
+                            ?.scrollIntoView({
+                                behavior:
+                                    "smooth",
+                                block:
+                                    "start"
+                            });
+
+                    },
+                    50
                 );
 
             }
         );
 
+    }
 
-        window.addEventListener(
-            "unhandledrejection",
-            function(event) {
 
-                console.error(
-                    "K@si Admin Promise Error:",
-                    event.reason
-                );
+    /* =========================================================
+       LOADING STATE
+    ========================================================= */
 
+    function showLoading() {
+
+        if (!tableBody) {
+            return;
+        }
+
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="state">
+
+                        <div class="spinner"></div>
+
+                        <strong>
+                            Loading bookings...
+                        </strong>
+
+                        <small>
+                            Connecting to K@si Web
+                        </small>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    function showEmpty(
+        title,
+        message
+    ) {
+
+        if (!tableBody) {
+            return;
+        }
+
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="state">
+
+                        <i class='bx bx-calendar-x'></i>
+
+                        <strong>
+                            ${escapeHtml(title)}
+                        </strong>
+
+                        <small>
+                            ${escapeHtml(message)}
+                        </small>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    /* =========================================================
+       ERROR STATE
+    ========================================================= */
+
+    function showError(
+        title,
+        message
+    ) {
+
+        if (!tableBody) {
+            return;
+        }
+
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="state">
+
+                        <i class='bx bx-error-circle'></i>
+
+                        <strong>
+                            ${escapeHtml(title)}
+                        </strong>
+
+                        <small>
+                            ${escapeHtml(
+                                message ||
+                                "Please try again."
+                            )}
+                        </small>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        showToast(
+            title,
+            "error"
+        );
+
+    }
+
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    let toastTimer = null;
+
+
+    function showToast(
+        message,
+        type = "success"
+    ) {
+
+        const toast =
+            document.getElementById(
+                "toast"
+            );
+
+
+        if (!toast) {
+            return;
+        }
+
+
+        clearTimeout(
+            toastTimer
+        );
+
+
+        toast.textContent =
+            message;
+
+
+        toast.className =
+            "";
+
+
+        toast.classList.add(
+            type,
+            "show"
+        );
+
+
+        toastTimer =
+            setTimeout(
+                () => {
+
+                    toast.classList.remove(
+                        "show"
+                    );
+
+                },
+                2800
+            );
+
+    }
+
+
+    /* =========================================================
+       MONEY
+    ========================================================= */
+
+    function formatMoney(
+        value
+    ) {
+
+        const number =
+            Number(value) || 0;
+
+
+        return number.toLocaleString(
+            "en-ZA",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
             }
         );
 
+    }
+
+
+    /* =========================================================
+       SAFE HTML
+    ========================================================= */
+
+    function safeText(
+        value
+    ) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+
+        }
+
+
+        return escapeHtml(
+            String(value)
+        );
+
+    }
+
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(
+            value ?? ""
+        )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    function escapeAttribute(
+        value
+    ) {
+
+        return escapeHtml(
+            value
+        );
+
+    }
+
+
+    /* =========================================================
+       CLEANUP
+    ========================================================= */
+
+    window.addEventListener(
+        "beforeunload",
+        () => {
+
+            if (
+                unsubscribeBookings
+            ) {
+
+                unsubscribeBookings();
+
+            }
+
+        }
+    );
+
+
+});
 
     </script>
 
