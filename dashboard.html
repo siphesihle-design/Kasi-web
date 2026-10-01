@@ -1,5 +1,10 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="UTF-8"><meta
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
@@ -11,2169 +16,1316 @@
     content="K@si Web — Elite Admin Control Centre"
 >
 
-<title>K@si Web | Admin Control Centre</title>
-
-<!-- =====================================================
-     ICONS
-====================================================== -->
+<title>K@si Web | Elite Admin Control Centre</title>
 
 <link
     href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
     rel="stylesheet"
 >
 
-<!-- =====================================================
-     FIREBASE COMPAT
-====================================================== -->
-
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-
 <style>
 
-    /* =====================================================
-       K@SI WEB
-       ELITE ADMIN DASHBOARD
-       ===================================================== */
-
-    :root {
-
-        --bg:
-            #07070d;
-
-        --bg-soft:
-            #0d0d17;
-
-        --card:
-            rgba(20, 20, 34, .82);
-
-        --card-2:
-            rgba(27, 27, 45, .76);
-
-        --border:
-            rgba(255, 255, 255, .08);
-
-        --border-bright:
-            rgba(139, 92, 246, .35);
-
-        --blue:
-            #3b82f6;
-
-        --purple:
-            #8b5cf6;
-
-        --cyan:
-            #06b6d4;
-
-        --green:
-            #22c55e;
-
-        --orange:
-            #f59e0b;
-
-        --red:
-            #ef4444;
-
-        --text:
-            #ffffff;
-
-        --muted:
-            #9ca3af;
-
-        --muted-2:
-            #6b7280;
-
-        --shadow:
-            0 25px 70px rgba(0,0,0,.45);
-
-        --radius:
-            22px;
-    }
-
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-
-    body {
-
-        min-height: 100vh;
-
-        background:
-            radial-gradient(
-                circle at 10% 0%,
-                rgba(59,130,246,.15),
-                transparent 28%
-            ),
-            radial-gradient(
-                circle at 90% 10%,
-                rgba(139,92,246,.18),
-                transparent 30%
-            ),
-            var(--bg);
-
-        color: var(--text);
-
-        font-family:
-            Inter,
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-    }
-
-
-    button,
-    input,
-    select {
-
-        font: inherit;
-    }
-
-
-    button {
-        cursor: pointer;
-    }
-
-
-    a {
-        color: inherit;
-        text-decoration: none;
-    }
-
-
-    /* =====================================================
-       LOADING SCREEN
-    ====================================================== */
-
-    #loadingScreen {
-
-        position: fixed;
-
-        inset: 0;
-
-        z-index: 9999;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        background:
-            radial-gradient(
-                circle at center,
-                rgba(59,130,246,.14),
-                transparent 40%
-            ),
-            #07070d;
-    }
-
-
-    .loading-box {
-
-        width: min(90%, 360px);
-
-        text-align: center;
-    }
-
-
-    .logo {
-
-        width: 70px;
-
-        height: 70px;
-
-        margin: 0 auto 20px;
-
-        border-radius: 22px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        font-size: 27px;
-
-        font-weight: 900;
-
-        background:
-            linear-gradient(
-                135deg,
-                var(--blue),
-                var(--purple)
-            );
-
-        box-shadow:
-            0 20px 60px rgba(59,130,246,.3);
-    }
-
-
-    .loading-box h2 {
-
-        margin-bottom: 8px;
-
-        font-size: 24px;
-    }
-
-
-    .loading-box p {
-
-        color: var(--muted);
-
-        font-size: 14px;
-    }
-
-
-    .loader {
-
-        width: 35px;
-
-        height: 35px;
-
-        margin: 24px auto 0;
-
-        border: 3px solid rgba(255,255,255,.12);
-
-        border-top-color: var(--blue);
-
-        border-right-color: var(--purple);
-
-        border-radius: 50%;
-
-        animation:
-            spin .8s linear infinite;
-    }
-
-
-    @keyframes spin {
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-
-    /* =====================================================
-       ACCESS DENIED
-    ====================================================== */
-
-    #accessDenied {
-
-        display: none;
-
-        position: fixed;
-
-        inset: 0;
-
-        z-index: 9998;
-
-        align-items: center;
-
-        justify-content: center;
-
-        padding: 24px;
-
-        background: #07070d;
-    }
-
-
-    .denied-card {
-
-        width: min(100%, 430px);
-
-        padding: 35px;
-
-        text-align: center;
-
-        border: 1px solid rgba(239,68,68,.25);
-
-        border-radius: 25px;
-
-        background:
-            rgba(20,10,18,.9);
-
-        box-shadow: var(--shadow);
-    }
-
-
-    .denied-icon {
-
-        width: 70px;
-
-        height: 70px;
-
-        margin: 0 auto 20px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 50%;
-
-        background:
-            rgba(239,68,68,.12);
-
-        color: var(--red);
-
-        font-size: 35px;
-    }
-
-
-    .denied-card h2 {
-        margin-bottom: 10px;
-    }
-
-
-    .denied-card p {
-
-        color: var(--muted);
-
-        line-height: 1.6;
-
-        font-size: 14px;
-
-        margin-bottom: 20px;
-    }
-
-
-    .debug-info {
-
-        padding: 13px;
-
-        margin-bottom: 20px;
-
-        border-radius: 14px;
-
-        background: rgba(255,255,255,.04);
-
-        color: var(--muted);
-
-        font-size: 12px;
-
-        word-break: break-word;
-    }
-
-
-    /* =====================================================
-       APP
-    ====================================================== */
-
-    #app {
-
-        display: none;
-
-        min-height: 100vh;
-    }
-
-
-    /* =====================================================
-       SIDEBAR
-    ====================================================== */
-
-    .sidebar {
-
-        position: fixed;
-
-        left: 0;
-
-        top: 0;
-
-        bottom: 0;
-
-        z-index: 1000;
-
-        width: 250px;
-
-        padding: 22px 15px;
-
-        display: flex;
-
-        flex-direction: column;
-
-        border-right: 1px solid var(--border);
-
-        background:
-            rgba(8,8,16,.94);
-
-        backdrop-filter:
-            blur(25px);
-    }
-
-
-    .brand {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 12px;
-
-        padding: 5px 10px 25px;
-    }
-
-
-    .brand-mark {
-
-        width: 43px;
-
-        height: 43px;
-
-        flex-shrink: 0;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 14px;
-
-        font-weight: 900;
-
-        background:
-            linear-gradient(
-                135deg,
-                var(--blue),
-                var(--purple)
-            );
-    }
-
-
-    .brand-text strong {
-
-        display: block;
-
-        font-size: 17px;
-    }
-
-
-    .brand-text span {
-
-        display: block;
-
-        margin-top: 2px;
-
-        color: var(--muted);
-
-        font-size: 11px;
-    }
-
-
-    .nav-label {
-
-        padding: 10px 12px;
-
-        color: var(--muted-2);
-
-        font-size: 10px;
-
-        font-weight: 800;
-
-        letter-spacing: 1.5px;
-
-        text-transform: uppercase;
-    }
-
-
-    .nav {
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 5px;
-    }
-
-
-    .nav-btn {
-
-        width: 100%;
-
-        padding: 12px 13px;
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 12px;
-
-        border: 0;
-
-        border-radius: 14px;
-
-        background: transparent;
-
-        color: var(--muted);
-
-        text-align: left;
-
-        transition: .2s ease;
-    }
-
-
-    .nav-btn i {
-
-        width: 22px;
-
-        font-size: 20px;
-    }
-
-
-    .nav-btn:hover {
-
-        background:
-            rgba(255,255,255,.05);
-
-        color: white;
-    }
-
-
-    .nav-btn.active {
-
-        color: white;
-
-        background:
-            linear-gradient(
-                135deg,
-                rgba(59,130,246,.20),
-                rgba(139,92,246,.20)
-            );
-
-        border: 1px solid rgba(139,92,246,.2);
-    }
-
-
-    .sidebar-bottom {
-
-        margin-top: auto;
-    }
-
-
-    .admin-mini {
-
-        padding: 14px;
-
-        margin-bottom: 10px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 17px;
-
-        background:
-            rgba(255,255,255,.035);
-    }
-
-
-    .admin-mini-top {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 10px;
-    }
-
-
-    .avatar {
-
-        width: 36px;
-
-        height: 36px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 50%;
-
-        background:
-            linear-gradient(
-                135deg,
-                var(--blue),
-                var(--purple)
-            );
-
-        font-weight: 800;
-    }
-
-
-    .admin-mini strong {
-
-        display: block;
-
-        max-width: 145px;
-
-        overflow: hidden;
-
-        text-overflow: ellipsis;
-
-        white-space: nowrap;
-
-        font-size: 12px;
-    }
-
-
-    .admin-mini span {
-
-        color: var(--green);
-
-        font-size: 10px;
-    }
-
-
-    /* =====================================================
-       MAIN
-    ====================================================== */
-
-    .main {
-
-        min-height: 100vh;
-
-        margin-left: 250px;
-
-        padding: 22px 25px 100px;
-    }
-
-
-    /* =====================================================
-       TOPBAR
-    ====================================================== */
-
-    .topbar {
-
-        position: sticky;
-
-        top: 0;
-
-        z-index: 100;
-
-        min-height: 65px;
-
-        margin-bottom: 25px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 15px;
-
-        padding: 10px 0;
-
-        background:
-            linear-gradient(
-                var(--bg),
-                rgba(7,7,13,.82)
-            );
-
-        backdrop-filter:
-            blur(12px);
-    }
-
-
-    .mobile-menu {
-
-        display: none;
-
-        width: 42px;
-
-        height: 42px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 13px;
-
-        background: var(--card);
-
-        color: white;
-
-        font-size: 22px;
-    }
-
-
-    .page-heading h1 {
-
-        font-size: clamp(24px, 4vw, 34px);
-
-        letter-spacing: -.8px;
-    }
-
-
-    .page-heading p {
-
-        margin-top: 3px;
-
-        color: var(--muted);
-
-        font-size: 13px;
-    }
-
-
-    .top-actions {
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 8px;
-    }
-
-
-    .icon-btn {
-
-        width: 42px;
-
-        height: 42px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border: 1px solid var(--border);
-
-        border-radius: 13px;
-
-        background: var(--card);
-
-        color: white;
-
-        font-size: 20px;
-    }
-
-
-    .icon-btn:hover {
-
-        border-color:
-            var(--border-bright);
-    }
-
-
-    /* =====================================================
-       BUTTONS
-    ====================================================== */
-
-    .btn {
-
-        min-height: 42px;
-
-        padding: 0 15px;
-
-        display: inline-flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        gap: 8px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 13px;
-
-        background: rgba(255,255,255,.05);
-
-        color: white;
-
-        transition: .2s ease;
-    }
-
-
-    .btn:hover {
-
-        transform: translateY(-1px);
-
-        border-color:
-            rgba(255,255,255,.18);
-    }
-
-
-    .btn-primary {
-
-        border: 0;
-
-        background:
-            linear-gradient(
-                135deg,
-                var(--blue),
-                var(--purple)
-            );
-    }
-
-
-    .btn-danger {
-
-        color: #fecaca;
-
-        border-color:
-            rgba(239,68,68,.2);
-
-        background:
-            rgba(239,68,68,.08);
-    }
-
-
-    /* =====================================================
-       HERO
-    ====================================================== */
-
-    .elite-hero {
-
-        position: relative;
-
-        overflow: hidden;
-
-        padding: 30px;
-
-        margin-bottom: 24px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 27px;
-
-        background:
-            linear-gradient(
-                135deg,
-                rgba(59,130,246,.13),
-                rgba(139,92,246,.14)
-            );
-
-        box-shadow: var(--shadow);
-    }
-
-
-    .elite-hero::before {
-
-        content: "";
-
-        position: absolute;
-
-        width: 260px;
-
-        height: 260px;
-
-        right: -100px;
-
-        top: -120px;
-
-        border-radius: 50%;
-
-        background:
-            rgba(139,92,246,.22);
-
-        filter:
-            blur(25px);
-    }
-
-
-    .hero-content {
-
-        position: relative;
-
-        z-index: 1;
-    }
-
-
-    .hero-kicker {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        gap: 7px;
-
-        margin-bottom: 12px;
-
-        color: #c4b5fd;
-
-        font-size: 11px;
-
-        font-weight: 800;
-
-        letter-spacing: 1.5px;
-
-        text-transform: uppercase;
-    }
-
-
-    .hero-kicker i {
-
-        color: var(--green);
-    }
-
-
-    .elite-hero h2 {
-
-        max-width: 650px;
-
-        font-size: clamp(26px, 4vw, 42px);
-
-        line-height: 1.05;
-
-        letter-spacing: -1.2px;
-    }
-
-
-    .elite-hero p {
-
-        max-width: 650px;
-
-        margin-top: 12px;
-
-        color: #b6b7c5;
-
-        line-height: 1.6;
-
-        font-size: 14px;
-    }
-
-
-    .hero-actions {
-
-        display: flex;
-
-        flex-wrap: wrap;
-
-        gap: 9px;
-
-        margin-top: 20px;
-    }
-
-
-    /* =====================================================
-       STATS
-    ====================================================== */
-
-    .stats-grid {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr));
-
-        gap: 14px;
-
-        margin-bottom: 24px;
-    }
-
-
-    .stat-card {
-
-        padding: 19px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 20px;
-
-        background: var(--card);
-
-        box-shadow:
-            0 15px 45px rgba(0,0,0,.2);
-    }
-
-
-    .stat-top {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        margin-bottom: 17px;
-    }
-
-
-    .stat-icon {
-
-        width: 42px;
-
-        height: 42px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 13px;
-
-        background:
-            rgba(59,130,246,.12);
-
-        color: #93c5fd;
-
-        font-size: 21px;
-    }
-
-
-    .stat-card:nth-child(2) .stat-icon {
-
-        background:
-            rgba(139,92,246,.12);
-
-        color: #c4b5fd;
-    }
-
-
-    .stat-card:nth-child(3) .stat-icon {
-
-        background:
-            rgba(34,197,94,.12);
-
-        color: #86efac;
-    }
-
-
-    .stat-card:nth-child(4) .stat-icon {
-
-        background:
-            rgba(245,158,11,.12);
-
-        color: #fcd34d;
-    }
-
-
-    .stat-value {
-
-        font-size: 28px;
-
-        font-weight: 850;
-
-        letter-spacing: -1px;
-    }
-
-
-    .stat-label {
-
-        margin-top: 4px;
-
-        color: var(--muted);
-
-        font-size: 12px;
-    }
-
-
-    /* =====================================================
-       SECTION
-    ====================================================== */
-
-    .section {
-
-        display: none;
-    }
-
-
-    .section.active {
-
-        display: block;
-    }
-
-
-    .section-head {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 15px;
-
-        margin-bottom: 15px;
-    }
-
-
-    .section-head h2 {
-
-        font-size: 20px;
-    }
-
-
-    .section-head p {
-
-        margin-top: 3px;
-
-        color: var(--muted);
-
-        font-size: 12px;
-    }
-
-
-    /* =====================================================
-       DASHBOARD GRID
-    ====================================================== */
-
-    .dashboard-grid {
-
-        display: grid;
-
-        grid-template-columns:
-            minmax(0, 1.4fr)
-            minmax(300px, .8fr);
-
-        gap: 18px;
-    }
-
-
-    .panel {
-
-        overflow: hidden;
-
-        border: 1px solid var(--border);
-
-        border-radius: 21px;
-
-        background: var(--card);
-    }
-
-
-    .panel-head {
-
-        padding: 18px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        border-bottom: 1px solid var(--border);
-    }
-
-
-    .panel-head strong {
-
-        font-size: 14px;
-    }
-
-
-    .panel-head span {
-
-        color: var(--muted);
-
-        font-size: 11px;
-    }
-
-
-    .activity-list {
-
-        max-height: 430px;
-
-        overflow: auto;
-    }
-
-
-    .activity-item {
-
-        padding: 15px 18px;
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 12px;
-
-        border-bottom: 1px solid rgba(255,255,255,.045);
-    }
-
-
-    .activity-icon {
-
-        width: 37px;
-
-        height: 37px;
-
-        flex-shrink: 0;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 12px;
-
-        background:
-            rgba(59,130,246,.1);
-
-        color: #93c5fd;
-    }
-
-
-    .activity-text {
-
-        min-width: 0;
-
-        flex: 1;
-    }
-
-
-    .activity-text strong {
-
-        display: block;
-
-        font-size: 12px;
-    }
-
-
-    .activity-text span {
-
-        display: block;
-
-        margin-top: 3px;
-
-        overflow: hidden;
-
-        text-overflow: ellipsis;
-
-        white-space: nowrap;
-
-        color: var(--muted);
-
-        font-size: 11px;
-    }
-
-
-    .activity-time {
-
-        color: var(--muted-2);
-
-        font-size: 10px;
-
-        white-space: nowrap;
-    }
-
-
-    /* =====================================================
-       QUICK ACTIONS
-    ====================================================== */
-
-    .quick-actions {
-
-        display: grid;
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        gap: 10px;
-
-        padding: 15px;
-    }
-
-
-    .quick-action {
-
-        min-height: 105px;
-
-        padding: 15px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 17px;
-
-        background:
-            rgba(255,255,255,.035);
-
-        color: white;
-
-        text-align: left;
-
-        transition: .2s ease;
-    }
-
-
-    .quick-action:hover {
-
-        transform: translateY(-2px);
-
-        border-color:
-            var(--border-bright);
-
-        background:
-            rgba(139,92,246,.08);
-    }
-
-
-    .quick-action i {
-
-        display: block;
-
-        margin-bottom: 12px;
-
-        font-size: 23px;
-
-        color: #a78bfa;
-    }
-
-
-    .quick-action strong {
-
-        display: block;
-
-        font-size: 12px;
-    }
-
-
-    .quick-action span {
-
-        display: block;
-
-        margin-top: 4px;
-
-        color: var(--muted);
-
-        font-size: 10px;
-    }
-
-
-    /* =====================================================
-       TABLE TOOLBAR
-    ====================================================== */
-
-    .toolbar {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 10px;
-
-        margin-bottom: 15px;
-    }
-
-
-    .search-box {
-
-        position: relative;
-
-        flex: 1;
-
-        max-width: 430px;
-    }
-
-
-    .search-box i {
-
-        position: absolute;
-
-        left: 13px;
-
-        top: 50%;
-
-        transform:
-            translateY(-50%);
-
-        color: var(--muted);
-
-        font-size: 18px;
-    }
-
-
-    .search-box input {
-
-        width: 100%;
-
-        height: 44px;
-
-        padding: 0 14px 0 40px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 13px;
-
-        outline: none;
-
-        background:
-            rgba(255,255,255,.045);
-
-        color: white;
-    }
-
-
-    .search-box input:focus {
-
-        border-color:
-            rgba(59,130,246,.5);
-    }
-
-
-    .filter-select {
-
-        height: 44px;
-
-        padding: 0 12px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 13px;
-
-        outline: none;
-
-        background: #151522;
-
-        color: white;
-    }
-
-
-    /* =====================================================
-       DATA TABLE
-    ====================================================== */
-
-    .table-wrap {
-
-        overflow-x: auto;
-
-        border: 1px solid var(--border);
-
-        border-radius: 20px;
-
-        background: var(--card);
-    }
-
-
-    table {
-
-        width: 100%;
-
-        border-collapse: collapse;
-
-        min-width: 750px;
-    }
-
-
-    th {
-
-        padding: 14px 16px;
-
-        color: var(--muted);
-
-        font-size: 10px;
-
-        font-weight: 800;
-
-        letter-spacing: .8px;
-
-        text-align: left;
-
-        text-transform: uppercase;
-
-        border-bottom: 1px solid var(--border);
-    }
-
-
-    td {
-
-        padding: 15px 16px;
-
-        border-bottom: 1px solid rgba(255,255,255,.045);
-
-        font-size: 12px;
-
-        vertical-align: middle;
-    }
-
-
-    tbody tr:hover {
-
-        background:
-            rgba(255,255,255,.025);
-    }
-
-
-    .primary-cell strong {
-
-        display: block;
-
-        font-size: 12px;
-    }
-
-
-    .primary-cell span {
-
-        display: block;
-
-        max-width: 260px;
-
-        margin-top: 3px;
-
-        overflow: hidden;
-
-        text-overflow: ellipsis;
-
-        white-space: nowrap;
-
-        color: var(--muted);
-
-        font-size: 10px;
-    }
-
-
-    .badge {
-
-        display: inline-flex;
-
-        align-items: center;
-
-        padding: 5px 9px;
-
-        border-radius: 999px;
-
-        font-size: 9px;
-
-        font-weight: 800;
-
-        text-transform: uppercase;
-    }
-
-
-    .badge-green {
-
-        color: #86efac;
-
-        background:
-            rgba(34,197,94,.1);
-    }
-
-
-    .badge-blue {
-
-        color: #93c5fd;
-
-        background:
-            rgba(59,130,246,.1);
-    }
-
-
-    .badge-purple {
-
-        color: #c4b5fd;
-
-        background:
-            rgba(139,92,246,.1);
-    }
-
-
-    .badge-orange {
-
-        color: #fcd34d;
-
-        background:
-            rgba(245,158,11,.1);
-    }
-
-
-    .badge-red {
-
-        color: #fca5a5;
-
-        background:
-            rgba(239,68,68,.1);
-    }
-
-
-    .table-actions {
-
-        display: flex;
-
-        gap: 5px;
-    }
-
-
-    .small-btn {
-
-        width: 34px;
-
-        height: 34px;
-
-        display: inline-flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border: 1px solid var(--border);
-
-        border-radius: 10px;
-
-        background:
-            rgba(255,255,255,.04);
-
-        color: white;
-    }
-
-
-    .small-btn:hover {
-
-        border-color:
-            rgba(139,92,246,.4);
-    }
-
-
-    /* =====================================================
-       EMPTY
-    ====================================================== */
-
-    .empty {
-
-        padding: 50px 20px;
-
-        text-align: center;
-
-        color: var(--muted);
-    }
-
-
-    .empty i {
-
-        display: block;
-
-        margin-bottom: 10px;
-
-        font-size: 38px;
-
-        color: var(--muted-2);
-    }
-
-
-    .empty strong {
-
-        display: block;
-
-        margin-bottom: 5px;
-
-        color: white;
-
-        font-size: 14px;
-    }
-
-
-    .empty span {
-
-        font-size: 12px;
-    }
-
-
-    /* =====================================================
-       MODAL
-    ====================================================== */
-
-    .modal {
-
-        position: fixed;
-
-        inset: 0;
-
-        z-index: 5000;
-
-        display: none;
-
-        align-items: center;
-
-        justify-content: center;
-
-        padding: 20px;
-
-        background:
-            rgba(0,0,0,.72);
-
-        backdrop-filter:
-            blur(8px);
-    }
-
-
-    .modal.show {
-
-        display: flex;
-    }
-
-
-    .modal-card {
-
-        width: min(100%, 500px);
-
-        max-height: 90vh;
-
-        overflow: auto;
-
-        padding: 22px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 24px;
-
-        background:
-            #11111c;
-
-        box-shadow:
-            0 30px 100px rgba(0,0,0,.7);
-    }
-
-
-    .modal-head {
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: space-between;
-
-        gap: 15px;
-
-        margin-bottom: 18px;
-    }
-
-
-    .modal-head h3 {
-
-        font-size: 19px;
-    }
-
-
-    .modal-close {
-
-        width: 36px;
-
-        height: 36px;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border: 1px solid var(--border);
-
-        border-radius: 10px;
-
-        background: rgba(255,255,255,.04);
-
-        color: white;
-
-        font-size: 20px;
-    }
-
-
-    .detail-row {
-
-        display: grid;
-
-        grid-template-columns: 110px 1fr;
-
-        gap: 12px;
-
-        padding: 11px 0;
-
-        border-bottom: 1px solid rgba(255,255,255,.05);
-    }
-
-
-    .detail-row label {
-
-        color: var(--muted);
-
-        font-size: 11px;
-    }
-
-
-    .detail-row span {
-
-        color: white;
-
-        font-size: 12px;
-
-        word-break: break-word;
-    }
-
-
-    /* =====================================================
-       TOAST
-    ====================================================== */
-
-    #toastContainer {
-
-        position: fixed;
-
-        right: 18px;
-
-        bottom: 18px;
-
-        z-index: 10000;
-
-        display: flex;
-
-        flex-direction: column;
-
-        gap: 8px;
-    }
-
-
-    .toast {
-
-        max-width: 350px;
-
-        padding: 13px 16px;
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 10px;
-
-        border: 1px solid var(--border);
-
-        border-radius: 14px;
-
-        background:
-            rgba(20,20,32,.96);
-
-        box-shadow:
-            0 20px 50px rgba(0,0,0,.4);
-
-        font-size: 12px;
-
-        animation:
-            toastIn .25s ease;
-    }
-
-
-    .toast.success i {
-        color: var(--green);
-    }
-
-
-    .toast.error i {
-        color: var(--red);
-    }
-
-
-    .toast.info i {
-        color: var(--blue);
-    }
-
-
-    @keyframes toastIn {
-
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-
-    /* =====================================================
-       MOBILE NAV
-    ====================================================== */
-
-    .bottom-nav {
-
-        display: none;
-    }
-
-
-    /* =====================================================
-       RESPONSIVE
-    ====================================================== */
-
-    @media (max-width: 1100px) {
-
-        .stats-grid {
-
-            grid-template-columns:
-                repeat(2, 1fr);
-        }
-
-        .dashboard-grid {
-
-            grid-template-columns: 1fr;
-        }
-    }
-
-
-    @media (max-width: 800px) {
-
-        .sidebar {
-
-            transform:
-                translateX(-100%);
-
-            transition: .25s ease;
-        }
-
-
-        .sidebar.open {
-
-            transform:
-                translateX(0);
-        }
-
-
-        .main {
-
-            margin-left: 0;
-
-            padding:
-                12px 14px 90px;
-        }
-
-
-        .mobile-menu {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-        }
-
-
-        .topbar {
-
-            padding:
-                6px 0;
-        }
-
-
-        .page-heading {
-
-            flex: 1;
-        }
-
-
-        .page-heading p {
-
-            display: none;
-        }
-
-
-        .top-actions .desktop-action {
-
-            display: none;
-        }
-
-
-        .elite-hero {
-
-            padding: 23px;
-
-            border-radius: 22px;
-        }
-
-
-        .stats-grid {
-
-            gap: 9px;
-        }
-
-
-        .stat-card {
-
-            padding: 15px;
-        }
-
-
-        .stat-value {
-
-            font-size: 24px;
-        }
-
-
-        .toolbar {
-
-            align-items: stretch;
-
-            flex-direction: column;
-        }
-
-
-        .search-box {
-
-            max-width: none;
-        }
-
-
-        .filter-select {
-
-            width: 100%;
-        }
-
-
-        .bottom-nav {
-
-            position: fixed;
-
-            left: 10px;
-
-            right: 10px;
-
-            bottom: 10px;
-
-            z-index: 1500;
-
-            height: 65px;
-
-            padding: 7px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            border: 1px solid var(--border);
-
-            border-radius: 20px;
-
-            background:
-                rgba(12,12,22,.94);
-
-            backdrop-filter:
-                blur(25px);
-
-            box-shadow:
-                0 20px 60px rgba(0,0,0,.5);
-        }
-
-
-        .bottom-btn {
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 3px;
-
-            border: 0;
-
-            border-radius: 14px;
-
-            background: transparent;
-
-            color: var(--muted);
-
-            font-size: 9px;
-        }
-
-
-        .bottom-btn i {
-
-            font-size: 20px;
-        }
-
-
-        .bottom-btn.active {
-
-            color: white;
-
-            background:
-                rgba(139,92,246,.13);
-        }
-    }
-
-
-    @media (max-width: 480px) {
-
-        .stats-grid {
-
-            grid-template-columns:
-                repeat(2, 1fr);
-        }
-
-
-        .stat-icon {
-
-            width: 35px;
-
-            height: 35px;
-
-            font-size: 17px;
-        }
-
-
-        .stat-top {
-
-            margin-bottom: 12px;
-        }
-
-
-        .stat-label {
-
-            font-size: 10px;
-        }
-
-
-        .hero-actions {
-
-            flex-direction: column;
-        }
-
-
-        .hero-actions .btn {
-
-            width: 100%;
-        }
-
-
-        .quick-actions {
-
-            grid-template-columns:
-                repeat(2, 1fr);
-        }
-
-
-        .quick-action {
-
-            min-height: 95px;
-        }
-
-
-        .detail-row {
-
-            grid-template-columns:
-                90px 1fr;
-        }
-    }
+/* =========================================================
+   K@SI WEB — ELITE ADMIN CONTROL CENTRE
+========================================================= */
+
+:root{
+    --bg:#07070d;
+    --bg2:#0b0b13;
+    --card:rgba(18,18,30,.78);
+    --card2:rgba(25,25,41,.72);
+    --border:rgba(255,255,255,.075);
+    --border2:rgba(139,92,246,.28);
+
+    --blue:#3b82f6;
+    --purple:#8b5cf6;
+    --cyan:#06b6d4;
+    --green:#22c55e;
+    --orange:#f59e0b;
+    --red:#ef4444;
+
+    --text:#fff;
+    --muted:#9ca3af;
+    --muted2:#6b7280;
+
+    --shadow:0 20px 60px rgba(0,0,0,.35);
+
+    --radius:20px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(59,130,246,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(139,92,246,.12),
+            transparent 30%
+        ),
+        var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+#loadingScreen{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#07070d;
+}
+
+.loading-box{
+    width:min(90%,340px);
+    text-align:center;
+}
+
+.loading-logo{
+    width:64px;
+    height:64px;
+    margin:0 auto 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:19px;
+    background:linear-gradient(
+        135deg,
+        var(--blue),
+        var(--purple)
+    );
+    box-shadow:0 18px 45px rgba(59,130,246,.22);
+    font-size:25px;
+    font-weight:900;
+}
+
+.loading-box h2{
+    font-size:23px;
+    margin-bottom:6px;
+}
+
+.loading-box p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.loader{
+    width:31px;
+    height:31px;
+    margin:22px auto 0;
+    border:3px solid rgba(255,255,255,.10);
+    border-top-color:var(--blue);
+    border-right-color:var(--purple);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================================================
+   ACCESS DENIED
+========================================================= */
+
+#accessDenied{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:99998;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:#07070d;
+}
+
+.denied-card{
+    width:min(100%,420px);
+    padding:30px;
+    text-align:center;
+    border:1px solid rgba(239,68,68,.22);
+    border-radius:24px;
+    background:rgba(18,10,18,.92);
+    box-shadow:var(--shadow);
+}
+
+.denied-icon{
+    width:68px;
+    height:68px;
+    margin:0 auto 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:rgba(239,68,68,.10);
+    color:#f87171;
+    font-size:32px;
+}
+
+.denied-card h2{
+    margin-bottom:9px;
+}
+
+.denied-card p{
+    color:var(--muted);
+    line-height:1.6;
+    font-size:13px;
+    margin-bottom:18px;
+}
+
+.debug-info{
+    padding:12px;
+    margin-bottom:18px;
+    border-radius:13px;
+    background:rgba(255,255,255,.035);
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.55;
+    word-break:break-word;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    position:fixed;
+    inset:0 auto 0 0;
+    z-index:2000;
+    width:245px;
+    padding:20px 14px;
+    display:flex;
+    flex-direction:column;
+    border-right:1px solid var(--border);
+    background:rgba(8,8,16,.91);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:4px 9px 24px;
+}
+
+.brand-mark{
+    width:42px;
+    height:42px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:13px;
+    background:linear-gradient(
+        135deg,
+        var(--blue),
+        var(--purple)
+    );
+    font-weight:900;
+}
+
+.brand-text strong{
+    display:block;
+    font-size:16px;
+}
+
+.brand-text span{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.nav-label{
+    padding:10px 11px;
+    color:var(--muted2);
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.nav-btn{
+    width:100%;
+    min-height:43px;
+    padding:10px 12px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    border:1px solid transparent;
+    border-radius:13px;
+    background:transparent;
+    color:var(--muted);
+    text-align:left;
+    transition:.18s ease;
+}
+
+.nav-btn i{
+    width:21px;
+    font-size:19px;
+}
+
+.nav-btn:hover{
+    color:#fff;
+    background:rgba(255,255,255,.04);
+}
+
+.nav-btn.active{
+    color:#fff;
+    border-color:rgba(139,92,246,.18);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.15),
+            rgba(139,92,246,.15)
+        );
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.admin-mini{
+    padding:12px;
+    margin-bottom:8px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    background:rgba(255,255,255,.025);
+}
+
+.admin-mini-top{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.avatar{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        var(--blue),
+        var(--purple)
+    );
+    font-weight:800;
+    font-size:13px;
+}
+
+.admin-mini strong{
+    display:block;
+    max-width:145px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:11px;
+}
+
+.admin-mini span{
+    color:#4ade80;
+    font-size:9px;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+    min-height:100vh;
+    margin-left:245px;
+    padding:18px 23px 60px;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    min-height:62px;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:6px 0;
+    background:
+        linear-gradient(
+            var(--bg),
+            rgba(7,7,13,.88)
+        );
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+}
+
+.mobile-menu{
+    display:none;
+    width:41px;
+    height:41px;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--card);
+    color:#fff;
+    font-size:21px;
+}
+
+.page-heading{
+    min-width:0;
+}
+
+.page-heading h1{
+    font-size:clamp(23px,3.5vw,31px);
+    letter-spacing:-.7px;
+}
+
+.page-heading p{
+    margin-top:2px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.icon-btn,
+.btn{
+    min-height:41px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:rgba(255,255,255,.045);
+    color:#fff;
+}
+
+.icon-btn{
+    width:41px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+}
+
+.icon-btn:hover,
+.btn:hover{
+    border-color:var(--border2);
+}
+
+.btn{
+    padding:0 14px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    transition:.18s ease;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    border-color:transparent;
+    background:linear-gradient(
+        135deg,
+        var(--blue),
+        var(--purple)
+    );
+}
+
+.btn-danger{
+    color:#fecaca;
+    background:rgba(239,68,68,.07);
+    border-color:rgba(239,68,68,.18);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.elite-hero{
+    position:relative;
+    overflow:hidden;
+    margin-bottom:18px;
+    padding:25px;
+    border:1px solid var(--border);
+    border-radius:24px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.10),
+            rgba(139,92,246,.11)
+        );
+    box-shadow:var(--shadow);
+}
+
+.elite-hero::before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    right:-90px;
+    top:-120px;
+    border-radius:50%;
+    background:rgba(139,92,246,.17);
+    filter:blur(28px);
+}
+
+.hero-content{
+    position:relative;
+    z-index:1;
+}
+
+.hero-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:10px;
+    color:#c4b5fd;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+}
+
+.hero-kicker i{
+    color:#4ade80;
+    font-size:8px;
+}
+
+.elite-hero h2{
+    max-width:650px;
+    font-size:clamp(25px,4vw,39px);
+    line-height:1.06;
+    letter-spacing:-1.1px;
+}
+
+.elite-hero p{
+    max-width:670px;
+    margin-top:10px;
+    color:#aeb0bf;
+    line-height:1.55;
+    font-size:13px;
+}
+
+.hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:17px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:11px;
+    margin-bottom:18px;
+}
+
+.stat-card{
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--card);
+    box-shadow:0 12px 35px rgba(0,0,0,.16);
+}
+
+.stat-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:13px;
+}
+
+.stat-icon{
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    background:rgba(59,130,246,.10);
+    color:#93c5fd;
+    font-size:19px;
+}
+
+.stat-card:nth-child(2) .stat-icon{
+    background:rgba(139,92,246,.10);
+    color:#c4b5fd;
+}
+
+.stat-card:nth-child(3) .stat-icon{
+    background:rgba(34,197,94,.10);
+    color:#86efac;
+}
+
+.stat-card:nth-child(4) .stat-icon{
+    background:rgba(245,158,11,.10);
+    color:#fcd34d;
+}
+
+.stat-value{
+    font-size:26px;
+    font-weight:850;
+    letter-spacing:-1px;
+}
+
+.stat-label{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:13px;
+}
+
+.section-head h2{
+    font-size:19px;
+}
+
+.section-head p{
+    margin-top:2px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.45fr) minmax(290px,.75fr);
+    gap:14px;
+}
+
+.panel{
+    overflow:hidden;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--card);
+}
+
+.panel-head{
+    min-height:54px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+}
+
+.panel-head strong{
+    font-size:13px;
+}
+
+.panel-head span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.activity-list{
+    max-height:360px;
+    overflow:auto;
+}
+
+.activity-item{
+    min-height:62px;
+    padding:11px 16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid rgba(255,255,255,.035);
+}
+
+.activity-icon{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:rgba(59,130,246,.08);
+    color:#93c5fd;
+    font-size:17px;
+}
+
+.activity-text{
+    min-width:0;
+    flex:1;
+}
+
+.activity-text strong{
+    display:block;
+    font-size:11px;
+}
+
+.activity-text span{
+    display:block;
+    margin-top:2px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.activity-time{
+    color:var(--muted2);
+    font-size:9px;
+    white-space:nowrap;
+}
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    padding:12px;
+}
+
+.quick-action{
+    min-height:100px;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:rgba(255,255,255,.025);
+    color:#fff;
+    text-align:left;
+    transition:.18s ease;
+}
+
+.quick-action:hover{
+    transform:translateY(-2px);
+    border-color:var(--border2);
+    background:rgba(139,92,246,.06);
+}
+
+.quick-action i{
+    display:block;
+    margin-bottom:10px;
+    color:#a78bfa;
+    font-size:21px;
+}
+
+.quick-action strong{
+    display:block;
+    font-size:11px;
+}
+
+.quick-action span{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.35;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:12px;
+}
+
+.search-box{
+    position:relative;
+    flex:1;
+    max-width:420px;
+}
+
+.search-box i{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--muted);
+    font-size:17px;
+}
+
+.search-box input{
+    width:100%;
+    height:42px;
+    padding:0 12px 0 37px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    outline:none;
+    background:rgba(255,255,255,.035);
+    color:#fff;
+    font-size:12px;
+}
+
+.search-box input:focus{
+    border-color:rgba(59,130,246,.42);
+}
+
+.filter-select{
+    height:42px;
+    padding:0 11px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    outline:none;
+    background:#141420;
+    color:#fff;
+    font-size:11px;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--card);
+}
+
+table{
+    width:100%;
+    min-width:720px;
+    border-collapse:collapse;
+}
+
+th{
+    padding:12px 14px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.7px;
+    text-align:left;
+    text-transform:uppercase;
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:13px 14px;
+    border-bottom:1px solid rgba(255,255,255,.035);
+    font-size:11px;
+    vertical-align:middle;
+}
+
+tbody tr:hover{
+    background:rgba(255,255,255,.018);
+}
+
+.primary-cell strong{
+    display:block;
+    font-size:11px;
+}
+
+.primary-cell span{
+    display:block;
+    max-width:250px;
+    margin-top:2px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    padding:4px 8px;
+    border-radius:999px;
+    font-size:8px;
+    font-weight:800;
+    text-transform:uppercase;
+}
+
+.badge-green{
+    color:#86efac;
+    background:rgba(34,197,94,.09);
+}
+
+.badge-blue{
+    color:#93c5fd;
+    background:rgba(59,130,246,.09);
+}
+
+.badge-purple{
+    color:#c4b5fd;
+    background:rgba(139,92,246,.09);
+}
+
+.badge-orange{
+    color:#fcd34d;
+    background:rgba(245,158,11,.09);
+}
+
+.badge-red{
+    color:#fca5a5;
+    background:rgba(239,68,68,.09);
+}
+
+.table-actions{
+    display:flex;
+    gap:4px;
+}
+
+.small-btn{
+    width:32px;
+    height:32px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:rgba(255,255,255,.035);
+    color:#fff;
+}
+
+.small-btn:hover{
+    border-color:var(--border2);
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+    padding:38px 18px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.empty i{
+    display:block;
+    margin-bottom:9px;
+    color:var(--muted2);
+    font-size:32px;
+}
+
+.empty strong{
+    display:block;
+    margin-bottom:4px;
+    color:#fff;
+    font-size:12px;
+}
+
+.empty span{
+    font-size:10px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(7px);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-card{
+    width:min(100%,480px);
+    max-height:88vh;
+    overflow:auto;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:21px;
+    background:#11111c;
+    box-shadow:0 30px 90px rgba(0,0,0,.7);
+}
+
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.modal-head h3{
+    font-size:17px;
+}
+
+.modal-close{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:rgba(255,255,255,.04);
+    color:#fff;
+    font-size:19px;
+}
+
+.detail-row{
+    display:grid;
+    grid-template-columns:105px 1fr;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.detail-row label{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.detail-row span{
+    color:#fff;
+    font-size:11px;
+    word-break:break-word;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+#toastContainer{
+    position:fixed;
+    right:16px;
+    bottom:16px;
+    z-index:10000;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.toast{
+    max-width:330px;
+    padding:11px 14px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:rgba(18,18,30,.96);
+    box-shadow:0 18px 45px rgba(0,0,0,.4);
+    font-size:11px;
+    animation:toastIn .2s ease;
+}
+
+.toast.success i{
+    color:var(--green);
+}
+
+.toast.error i{
+    color:var(--red);
+}
+
+.toast.info i{
+    color:var(--blue);
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+.bottom-nav{
+    display:none;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.22s ease;
+        box-shadow:20px 0 50px rgba(0,0,0,.45);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:10px 13px 88px;
+    }
+
+    .mobile-menu{
+        display:flex;
+    }
+
+    .topbar{
+        min-height:57px;
+        margin-bottom:14px;
+    }
+
+    .page-heading p{
+        display:none;
+    }
+
+    .top-actions .desktop-action{
+        display:none;
+    }
+
+    .elite-hero{
+        padding:21px;
+        border-radius:20px;
+    }
+
+    .stats-grid{
+        gap:8px;
+    }
+
+    .stat-card{
+        padding:14px;
+    }
+
+    .stat-value{
+        font-size:23px;
+    }
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search-box{
+        max-width:none;
+    }
+
+    .filter-select{
+        width:100%;
+    }
+
+    .bottom-nav{
+        position:fixed;
+        left:9px;
+        right:9px;
+        bottom:9px;
+        z-index:2500;
+        height:63px;
+        padding:6px;
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        border:1px solid var(--border);
+        border-radius:19px;
+        background:rgba(11,11,20,.94);
+        backdrop-filter:blur(22px);
+        -webkit-backdrop-filter:blur(22px);
+        box-shadow:0 18px 55px rgba(0,0,0,.48);
+    }
+
+    .bottom-btn{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:2px;
+        border:0;
+        border-radius:13px;
+        background:transparent;
+        color:var(--muted);
+        font-size:8px;
+    }
+
+    .bottom-btn i{
+        font-size:19px;
+    }
+
+    .bottom-btn.active{
+        color:#fff;
+        background:rgba(139,92,246,.12);
+    }
+}
+
+@media(max-width:480px){
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stat-icon{
+        width:33px;
+        height:33px;
+        font-size:16px;
+    }
+
+    .stat-top{
+        margin-bottom:10px;
+    }
+
+    .stat-label{
+        font-size:9px;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+    }
+
+    .hero-actions .btn{
+        width:100%;
+    }
+
+    .quick-actions{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .quick-action{
+        min-height:90px;
+        padding:11px;
+    }
+
+    .detail-row{
+        grid-template-columns:85px 1fr;
+    }
+
+    .toast{
+        max-width:calc(100vw - 30px);
+    }
+}
 
 </style>
+</head>
 
-</head><body><!-- =====================================================
-     LOADING
-====================================================== -->
+<body>
+
+<!-- =========================================================
+     LOADING SCREEN
+========================================================= -->
 
 <div id="loadingScreen">
 
     <div class="loading-box">
 
-        <div class="logo">
+        <div class="loading-logo">
             K@
         </div>
 
@@ -2188,9 +1340,9 @@
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      ACCESS DENIED
-====================================================== -->
+========================================================= -->
 
 <div id="accessDenied">
 
@@ -2203,8 +1355,8 @@
         <h2>Admin Access Required</h2>
 
         <p>
-            This account is authenticated, but the Firestore
-            profile does not have the administrator role.
+            This account is authenticated, but its Firestore
+            profile does not have administrator access.
         </p>
 
         <div
@@ -2217,6 +1369,7 @@
         <button
             class="btn btn-primary"
             onclick="goHome()"
+            style="width:100%;"
         >
             <i class="bx bx-home"></i>
             Go Home
@@ -2224,8 +1377,8 @@
 
         <button
             class="btn"
-            style="margin-top:8px;width:100%;"
             onclick="logout()"
+            style="width:100%;margin-top:8px;"
         >
             <i class="bx bx-log-out"></i>
             Sign Out
@@ -2236,16 +1389,13 @@
 </div>
 
 
-<!-- =====================================================
-     APP
-====================================================== -->
+<!-- =========================================================
+     APPLICATION
+========================================================= -->
 
 <div id="app">
 
-
-    <!-- =================================================
-         SIDEBAR
-    ================================================== -->
+    <!-- SIDEBAR -->
 
     <aside
         class="sidebar"
@@ -2263,7 +1413,7 @@
                 <strong>K@si Web</strong>
 
                 <span>
-                    Admin Control Centre
+                    Elite Admin Centre
                 </span>
 
             </div>
@@ -2275,7 +1425,6 @@
             Management
         </div>
 
-
         <nav class="nav">
 
             <button
@@ -2286,7 +1435,6 @@
                 <span>Dashboard</span>
             </button>
 
-
             <button
                 class="nav-btn"
                 data-section="bookings"
@@ -2295,7 +1443,6 @@
                 <span>Bookings</span>
             </button>
 
-
             <button
                 class="nav-btn"
                 data-section="salons"
@@ -2303,7 +1450,6 @@
                 <i class="bx bx-store"></i>
                 <span>Salons</span>
             </button>
-
 
             <button
                 class="nav-btn"
@@ -2320,7 +1466,6 @@
             Website
         </div>
 
-
         <nav class="nav">
 
             <button
@@ -2331,7 +1476,6 @@
                 <span>Home</span>
             </button>
 
-
             <button
                 class="nav-btn"
                 onclick="goOwners()"
@@ -2339,7 +1483,6 @@
                 <i class="bx bx-cut"></i>
                 <span>Salon Owners</span>
             </button>
-
 
             <button
                 class="nav-btn"
@@ -2368,7 +1511,7 @@
                     <div>
 
                         <strong id="adminEmail">
-                            Admin
+                            Administrator
                         </strong>
 
                         <span>
@@ -2380,7 +1523,6 @@
                 </div>
 
             </div>
-
 
             <button
                 class="nav-btn"
@@ -2395,26 +1537,21 @@
     </aside>
 
 
-    <!-- =================================================
-         MAIN
-    ================================================== -->
+    <!-- MAIN -->
 
     <main class="main">
 
-
-        <!-- =================================================
-             TOP BAR
-        ================================================== -->
+        <!-- TOPBAR -->
 
         <header class="topbar">
 
             <button
                 class="mobile-menu"
                 onclick="toggleSidebar()"
+                aria-label="Open menu"
             >
                 <i class="bx bx-menu"></i>
             </button>
-
 
             <div class="page-heading">
 
@@ -2428,17 +1565,15 @@
 
             </div>
 
-
             <div class="top-actions">
 
                 <button
                     class="icon-btn"
-                    title="Refresh data"
+                    title="Refresh"
                     onclick="refreshData()"
                 >
                     <i class="bx bx-refresh"></i>
                 </button>
-
 
                 <button
                     class="btn btn-primary desktop-action"
@@ -2462,33 +1597,24 @@
             id="dashboard"
         >
 
-
             <div class="elite-hero">
 
                 <div class="hero-content">
 
                     <div class="hero-kicker">
-
                         <i class="bx bxs-circle"></i>
-
                         Live Administration
-
                     </div>
 
-
                     <h2>
-                        Run K@si Web from one
-                        powerful control centre.
+                        Your K@si Web command centre.
                     </h2>
 
-
                     <p>
-                        Monitor customers, salons and
-                        bookings in real time. Manage the
-                        marketplace while keeping the
-                        K@si experience clean and connected.
+                        Monitor bookings, salons and platform
+                        accounts from one clean administration
+                        dashboard.
                     </p>
-
 
                     <div class="hero-actions">
 
@@ -2500,7 +1626,6 @@
                             Manage Bookings
                         </button>
 
-
                         <button
                             class="btn"
                             onclick="showSection('salons')"
@@ -2508,7 +1633,6 @@
                             <i class="bx bx-store"></i>
                             Manage Salons
                         </button>
-
 
                         <button
                             class="btn"
@@ -2631,7 +1755,6 @@
 
             <div class="dashboard-grid">
 
-
                 <div class="panel">
 
                     <div class="panel-head">
@@ -2645,7 +1768,6 @@
                         </span>
 
                     </div>
-
 
                     <div
                         class="activity-list"
@@ -2661,7 +1783,7 @@
                             </strong>
 
                             <span>
-                                Waiting for Firestore data...
+                                Connecting to Firestore...
                             </span>
 
                         </div>
@@ -2685,16 +1807,13 @@
 
                     </div>
 
-
                     <div class="quick-actions">
-
 
                         <button
                             class="quick-action"
                             onclick="showSection('bookings')"
                         >
-
-                            <i class="bx bx-calendar"></i>
+                            <i class="bx bx-calendar-check"></i>
 
                             <strong>
                                 Bookings
@@ -2711,7 +1830,6 @@
                             class="quick-action"
                             onclick="showSection('salons')"
                         >
-
                             <i class="bx bx-store"></i>
 
                             <strong>
@@ -2729,15 +1847,14 @@
                             class="quick-action"
                             onclick="showSection('users')"
                         >
-
-                            <i class="bx bx-user"></i>
+                            <i class="bx bx-group"></i>
 
                             <strong>
                                 Users
                             </strong>
 
                             <span>
-                                Manage platform accounts
+                                View platform accounts
                             </span>
 
                         </button>
@@ -2747,7 +1864,6 @@
                             class="quick-action"
                             onclick="goOwners()"
                         >
-
                             <i class="bx bx-cut"></i>
 
                             <strong>
@@ -2759,7 +1875,6 @@
                             </span>
 
                         </button>
-
 
                     </div>
 
@@ -2814,7 +1929,6 @@
                         type="search"
                         id="bookingSearch"
                         placeholder="Search bookings..."
-                        oninput="renderBookings()"
                     >
 
                 </div>
@@ -2823,7 +1937,6 @@
                 <select
                     class="filter-select"
                     id="bookingFilter"
-                    onchange="renderBookings()"
                 >
 
                     <option value="all">
@@ -2859,38 +1972,18 @@
 
                         <tr>
 
-                            <th>
-                                Customer
-                            </th>
-
-                            <th>
-                                Service
-                            </th>
-
-                            <th>
-                                Date
-                            </th>
-
-                            <th>
-                                Time
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Action</th>
 
                         </tr>
 
                     </thead>
 
-
-                    <tbody id="bookingsBody">
-
-                    </tbody>
+                    <tbody id="bookingsBody"></tbody>
 
                 </table>
 
@@ -2943,7 +2036,6 @@
                         type="search"
                         id="salonSearch"
                         placeholder="Search salons..."
-                        oninput="renderSalons()"
                     >
 
                 </div>
@@ -2959,38 +2051,18 @@
 
                         <tr>
 
-                            <th>
-                                Salon
-                            </th>
-
-                            <th>
-                                Location
-                            </th>
-
-                            <th>
-                                Owner
-                            </th>
-
-                            <th>
-                                Rating
-                            </th>
-
-                            <th>
-                                Hours
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
+                            <th>Salon</th>
+                            <th>Location</th>
+                            <th>Owner</th>
+                            <th>Rating</th>
+                            <th>Hours</th>
+                            <th>Action</th>
 
                         </tr>
 
                     </thead>
 
-
-                    <tbody id="salonsBody">
-
-                    </tbody>
+                    <tbody id="salonsBody"></tbody>
 
                 </table>
 
@@ -3043,7 +2115,6 @@
                         type="search"
                         id="userSearch"
                         placeholder="Search users..."
-                        oninput="renderUsers()"
                     >
 
                 </div>
@@ -3052,7 +2123,6 @@
                 <select
                     class="filter-select"
                     id="userFilter"
-                    onchange="renderUsers()"
                 >
 
                     <option value="all">
@@ -3084,38 +2154,18 @@
 
                         <tr>
 
-                            <th>
-                                User
-                            </th>
-
-                            <th>
-                                Email
-                            </th>
-
-                            <th>
-                                Role
-                            </th>
-
-                            <th>
-                                Salon ID
-                            </th>
-
-                            <th>
-                                Created
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Salon ID</th>
+                            <th>Created</th>
+                            <th>Action</th>
 
                         </tr>
 
                     </thead>
 
-
-                    <tbody id="usersBody">
-
-                    </tbody>
+                    <tbody id="usersBody"></tbody>
 
                 </table>
 
@@ -3123,13 +2173,10 @@
 
         </section>
 
-
     </main>
 
 
-    <!-- =================================================
-         MOBILE BOTTOM NAV
-    ================================================== -->
+    <!-- MOBILE NAV -->
 
     <nav class="bottom-nav">
 
@@ -3137,47 +2184,32 @@
             class="bottom-btn active"
             data-section="dashboard"
         >
-
             <i class="bx bx-grid-alt"></i>
-
             Dashboard
-
         </button>
-
 
         <button
             class="bottom-btn"
             data-section="bookings"
         >
-
             <i class="bx bx-calendar-check"></i>
-
             Bookings
-
         </button>
-
 
         <button
             class="bottom-btn"
             data-section="salons"
         >
-
             <i class="bx bx-store"></i>
-
             Salons
-
         </button>
-
 
         <button
             class="bottom-btn"
             data-section="users"
         >
-
             <i class="bx bx-group"></i>
-
             Users
-
         </button>
 
     </nav>
@@ -3185,9 +2217,9 @@
 </div>
 
 
-<!-- =====================================================
-     DETAIL MODAL
-====================================================== -->
+<!-- =========================================================
+     MODAL
+========================================================= -->
 
 <div
     class="modal"
@@ -3212,2362 +2244,2104 @@
 
         </div>
 
-
-        <div id="modalContent">
-
-        </div>
+        <div id="modalContent"></div>
 
     </div>
 
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      TOAST
-====================================================== -->
+========================================================= -->
 
 <div id="toastContainer"></div>
 
 
-<!-- =====================================================
-     JAVASCRIPT
-====================================================== -->
-
 <script>
 
-    /* =====================================================
-       FIREBASE CONFIG
-    ====================================================== */
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
 
-    const firebaseConfig = {
+const firebaseConfig = {
 
-        apiKey:
-            "YOUR_FIREBASE_API_KEY",
+    apiKey:
+        "YOUR_FIREBASE_API_KEY",
 
-        authDomain:
-            "kasi-web-d073f.firebaseapp.com",
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
 
-        projectId:
-            "kasi-web-d073f",
+    projectId:
+        "kasi-web-d073f",
 
-        storageBucket:
-            "kasi-web-d073f.firebasestorage.app",
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
 
-        messagingSenderId:
-            "YOUR_MESSAGING_SENDER_ID",
+    messagingSenderId:
+        "YOUR_MESSAGING_SENDER_ID",
 
-        appId:
-            "YOUR_FIREBASE_APP_ID"
-    };
-
-
-    /*
-     * IMPORTANT:
-     *
-     * Replace ONLY the three YOUR_ values above if your
-     * existing Firebase configuration contains them.
-     *
-     * projectId is already set to:
-     * kasi-web-d073f
-     */
+    appId:
+        "YOUR_FIREBASE_APP_ID"
+};
 
 
-    if (!firebase.apps.length) {
-
-        firebase.initializeApp(firebaseConfig);
-    }
-
-
-    const auth =
-        firebase.auth();
-
-    const db =
-        firebase.firestore();
+/*
+    Keep your existing real Firebase values here.
+*/
 
 
-    /* =====================================================
-       STATE
-    ====================================================== */
+if(!firebase.apps.length){
+    firebase.initializeApp(firebaseConfig);
+}
 
-    let currentUser = null;
-
-    let currentAdminData = null;
-
-    let bookings = [];
-
-    let salons = [];
-
-    let users = [];
-
-    let unsubscribeBookings = null;
-
-    let unsubscribeSalons = null;
-
-    let unsubscribeUsers = null;
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 
-    /* =====================================================
-       DOM
-    ====================================================== */
+/* =========================================================
+   STATE
+========================================================= */
 
-    const loadingScreen =
-        document.getElementById("loadingScreen");
+let currentUser = null;
+let currentAdminData = null;
 
-    const accessDenied =
-        document.getElementById("accessDenied");
+let bookings = [];
+let salons = [];
+let users = [];
 
-    const app =
-        document.getElementById("app");
+let unsubscribeBookings = null;
+let unsubscribeSalons = null;
+let unsubscribeUsers = null;
 
-
-    /* =====================================================
-       AUTH + ADMIN VERIFICATION
-    ====================================================== */
-
-    auth.onAuthStateChanged(async user => {
-
-        currentUser = user;
+let listenersStarted = false;
 
 
-        if (!user) {
+/* =========================================================
+   DOM
+========================================================= */
 
-            showAccessDenied(
-                "No authenticated account was found."
-            );
+const loadingScreen =
+    document.getElementById("loadingScreen");
 
-            return;
-        }
+const accessDenied =
+    document.getElementById("accessDenied");
 
-
-        try {
-
-            await verifyAdmin(user);
-
-        } catch (error) {
-
-            console.error(
-                "Admin verification error:",
-                error
-            );
-
-            showAccessDenied(
-                "The administrator profile could not be verified."
-            );
-        }
-
-    });
+const app =
+    document.getElementById("app");
 
 
-    async function verifyAdmin(user) {
+/* =========================================================
+   AUTH
+========================================================= */
 
-        /*
-         * The important part of this version:
-         *
-         * We identify the signed-in Firebase Auth UID first.
-         * Then we read users/{UID}.
-         *
-         * We DO NOT use the admin email as the Firestore
-         * document ID.
-         *
-         * The Firestore document ID must match Firebase Auth UID.
-         */
+auth.onAuthStateChanged(async user => {
 
+    currentUser = user;
 
-        const userRef =
-            db.collection("users").doc(user.uid);
+    if(!user){
 
-
-        const snap =
-            await userRef.get();
-
-
-        if (!snap.exists) {
-
-            showAccessDenied(
-                "No Firestore users profile exists for this Firebase Auth UID."
-            );
-
-            return;
-        }
-
-
-        const data =
-            snap.data() || {};
-
-
-        /*
-         * Accept both role and Role because some of the
-         * older K@si documents used different capitalization.
-         */
-
-        const role =
-            String(
-                data.role ??
-                data.Role ??
-                ""
-            )
-            .trim()
-            .toLowerCase();
-
-
-        console.log(
-            "K@si Admin Verification:",
-            {
-                authUID: user.uid,
-                authEmail: user.email,
-                firestoreUID: snap.id,
-                role: role,
-                data: data
-            }
+        showAccessDenied(
+            "No authenticated account was found."
         );
 
+        return;
+    }
 
-        if (role !== "admin") {
+    try{
 
-            showAccessDenied(
-                "Your Firestore role is not set to admin."
-            );
+        await verifyAdmin(user);
 
-            return;
-        }
+    }catch(error){
 
-
-        /*
-         * SUCCESS
-         */
-
-        currentAdminData = data;
-
-
-        loadingScreen.style.display =
-            "none";
-
-        accessDenied.style.display =
-            "none";
-
-        app.style.display =
-            "block";
-
-
-        setupAdminIdentity(user, data);
-
-        startRealtimeListeners();
-
-        showToast(
-            "Administrator access verified.",
-            "success"
+        console.error(
+            "Admin verification error:",
+            error
         );
 
+        showAccessDenied(
+            "The administrator profile could not be verified."
+        );
     }
 
+});
 
-    /* =====================================================
-       ADMIN IDENTITY
-    ====================================================== */
 
-    function setupAdminIdentity(user, data) {
+/* =========================================================
+   ADMIN VERIFICATION
+========================================================= */
 
-        const email =
-            user.email ||
-            data.email ||
-            "Administrator";
+async function verifyAdmin(user){
 
+    const userRef =
+        db.collection("users").doc(user.uid);
 
-        document.getElementById(
-            "adminEmail"
-        ).textContent = email;
+    const snap =
+        await userRef.get();
 
+    if(!snap.exists){
 
-        const firstLetter =
-            email
-                .charAt(0)
-                .toUpperCase();
-
-
-        document.getElementById(
-            "adminAvatar"
-        ).textContent =
-            firstLetter;
-    }
-
-
-    /* =====================================================
-       ACCESS DENIED
-    ====================================================== */
-
-    function showAccessDenied(message) {
-
-        loadingScreen.style.display =
-            "none";
-
-        app.style.display =
-            "none";
-
-        accessDenied.style.display =
-            "flex";
-
-
-        let uid =
-            currentUser?.uid ||
-            "Not signed in";
-
-
-        let email =
-            currentUser?.email ||
-            "Unknown";
-
-
-        document.getElementById(
-            "deniedDebug"
-        ).innerHTML =
-
-            `
-                <strong>Account</strong><br>
-                ${escapeHtml(email)}
-                <br><br>
-
-                <strong>Firebase UID</strong><br>
-                ${escapeHtml(uid)}
-                <br><br>
-
-                <span>
-                    Check that this exact UID exists
-                    under Firestore:
-                    users / ${escapeHtml(uid)}
-                </span>
-            `;
-    }
-
-
-    /* =====================================================
-       REALTIME FIRESTORE
-    ====================================================== */
-
-    function startRealtimeListeners() {
-
-        /*
-         * Clear previous listeners first.
-         */
-
-        if (unsubscribeBookings)
-            unsubscribeBookings();
-
-        if (unsubscribeSalons)
-            unsubscribeSalons();
-
-        if (unsubscribeUsers)
-            unsubscribeUsers();
-
-
-        /* BOOKINGS */
-
-        unsubscribeBookings =
-            db.collection("bookings")
-                .onSnapshot(
-                    snapshot => {
-
-                        bookings =
-                            snapshot.docs.map(doc => ({
-                                id: doc.id,
-                                ...doc.data()
-                            }));
-
-
-                        updateStats();
-
-                        renderBookings();
-
-                        renderActivity();
-
-                    },
-
-                    error => {
-
-                        console.error(
-                            "Bookings listener:",
-                            error
-                        );
-
-                        showToast(
-                            "Could not load bookings.",
-                            "error"
-                        );
-                    }
-                );
-
-
-        /* SALONS */
-
-        unsubscribeSalons =
-            db.collection("salons")
-                .onSnapshot(
-                    snapshot => {
-
-                        salons =
-                            snapshot.docs.map(doc => ({
-                                id: doc.id,
-                                ...doc.data()
-                            }));
-
-
-                        updateStats();
-
-                        renderSalons();
-
-                        renderActivity();
-
-                    },
-
-                    error => {
-
-                        console.error(
-                            "Salons listener:",
-                            error
-                        );
-
-                        showToast(
-                            "Could not load salons.",
-                            "error"
-                        );
-                    }
-                );
-
-
-        /* USERS */
-
-        unsubscribeUsers =
-            db.collection("users")
-                .onSnapshot(
-                    snapshot => {
-
-                        users =
-                            snapshot.docs.map(doc => ({
-                                id: doc.id,
-                                ...doc.data()
-                            }));
-
-
-                        updateStats();
-
-                        renderUsers();
-
-                        renderActivity();
-
-                    },
-
-                    error => {
-
-                        console.error(
-                            "Users listener:",
-                            error
-                        );
-
-                        showToast(
-                            "Could not load users.",
-                            "error"
-                        );
-                    }
-                );
-    }
-
-
-    /* =====================================================
-       STATS
-    ====================================================== */
-
-    function updateStats() {
-
-        document.getElementById(
-            "statBookings"
-        ).textContent =
-            bookings.length;
-
-
-        document.getElementById(
-            "statSalons"
-        ).textContent =
-            salons.length;
-
-
-        document.getElementById(
-            "statUsers"
-        ).textContent =
-            users.length;
-
-
-        const pending =
-            bookings.filter(
-                booking =>
-                    normalizeStatus(
-                        booking.status
-                    ) === "pending"
-            ).length;
-
-
-        document.getElementById(
-            "statPending"
-        ).textContent =
-            pending;
-    }
-
-
-    /* =====================================================
-       BOOKINGS RENDER
-    ====================================================== */
-
-    function renderBookings() {
-
-        const body =
-            document.getElementById(
-                "bookingsBody"
-            );
-
-
-        const search =
-            (
-                document.getElementById(
-                    "bookingSearch"
-                )?.value || ""
-            )
-            .trim()
-            .toLowerCase();
-
-
-        const filter =
-            document.getElementById(
-                "bookingFilter"
-            )?.value ||
-            "all";
-
-
-        let data =
-            [...bookings];
-
-
-        data =
-            data.filter(booking => {
-
-                const text =
-                    [
-                        booking.custName,
-                        booking.customerName,
-                        booking.name,
-                        booking.service,
-                        booking.serviceType,
-                        booking.ownerId,
-                        booking.salonId,
-                        booking.status
-                    ]
-                    .join(" ")
-                    .toLowerCase();
-
-
-                const matchesSearch =
-                    !search ||
-                    text.includes(search);
-
-
-                const status =
-                    normalizeStatus(
-                        booking.status
-                    );
-
-
-                const matchesFilter =
-                    filter === "all" ||
-                    status === filter;
-
-
-                return (
-                    matchesSearch &&
-                    matchesFilter
-                );
-            });
-
-
-        data.sort(
-            (a, b) =>
-                timestampValue(
-                    b.createdAt
-                ) -
-                timestampValue(
-                    a.createdAt
-                )
+        showAccessDenied(
+            "No Firestore users profile exists for this Firebase Auth UID."
         );
 
-
-        if (!data.length) {
-
-            body.innerHTML =
-
-                `
-                <tr>
-                    <td colspan="6">
-                        <div class="empty">
-                            <i class="bx bx-calendar-x"></i>
-                            <strong>No bookings found</strong>
-                            <span>
-                                No bookings match your search or filter.
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-                `;
-
-            return;
-        }
-
-
-        body.innerHTML =
-            data.map(
-                booking => {
-
-                    const customer =
-                        booking.custName ||
-                        booking.customerName ||
-                        booking.name ||
-                        "Customer";
-
-
-                    const service =
-                        booking.service ||
-                        booking.serviceType ||
-                        "Service";
-
-
-                    const date =
-                        booking.custDate ||
-                        booking.date ||
-                        "—";
-
-
-                    const time =
-                        booking.custTime ||
-                        booking.time ||
-                        "—";
-
-
-                    const status =
-                        normalizeStatus(
-                            booking.status
-                        ) ||
-                        "pending";
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-
-                                <div class="primary-cell">
-
-                                    <strong>
-                                        ${escapeHtml(customer)}
-                                    </strong>
-
-                                    <span>
-                                        ${escapeHtml(
-                                            booking.custPhone ||
-                                            booking.phone ||
-                                            booking.userId ||
-                                            ""
-                                        )}
-                                    </span>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(service)}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(String(date))}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(String(time))}
-                            </td>
-
-
-                            <td>
-                                ${statusBadge(status)}
-                            </td>
-
-
-                            <td>
-
-                                <div class="table-actions">
-
-                                    <button
-                                        class="small-btn"
-                                        title="View booking"
-                                        onclick="viewBooking('${booking.id}')"
-                                    >
-                                        <i class="bx bx-show"></i>
-                                    </button>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
+        return;
     }
 
-
-    /* =====================================================
-       SALONS RENDER
-    ====================================================== */
-
-    function renderSalons() {
-
-        const body =
-            document.getElementById(
-                "salonsBody"
-            );
-
-
-        const search =
-            (
-                document.getElementById(
-                    "salonSearch"
-                )?.value || ""
-            )
-            .trim()
-            .toLowerCase();
-
-
-        let data =
-            [...salons];
-
-
-        data =
-            data.filter(salon => {
-
-                const text =
-                    [
-                        salon.name,
-                        salon.salonName,
-                        salon.location,
-                        salon.address,
-                        salon.ownerId,
-                        salon.email
-                    ]
-                    .join(" ")
-                    .toLowerCase();
-
-
-                return (
-                    !search ||
-                    text.includes(search)
-                );
-            });
-
-
-        data.sort(
-            (a, b) =>
-                String(
-                    a.name ||
-                    a.salonName ||
-                    ""
-                )
-                .localeCompare(
-                    String(
-                        b.name ||
-                        b.salonName ||
-                        ""
-                    )
-                )
-        );
-
-
-        if (!data.length) {
-
-            body.innerHTML =
-
-                `
-                <tr>
-                    <td colspan="6">
-
-                        <div class="empty">
-
-                            <i class="bx bx-store-alt"></i>
-
-                            <strong>
-                                No salons found
-                            </strong>
-
-                            <span>
-                                Registered salons will appear here.
-                            </span>
-
-                        </div>
-
-                    </td>
-                </tr>
-                `;
-
-            return;
-        }
-
-
-        body.innerHTML =
-            data.map(
-                salon => {
-
-                    const name =
-                        salon.name ||
-                        salon.salonName ||
-                        "Unnamed Salon";
-
-
-                    const location =
-                        salon.location ||
-                        salon.address ||
-                        "Location not provided";
-
-
-                    const owner =
-                        salon.ownerId ||
-                        salon.email ||
-                        "No owner ID";
-
-
-                    const rating =
-                        salon.rating ??
-                        "—";
-
-
-                    const hours =
-                        salon.hours ||
-                        salon.openingHours ||
-                        "—";
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-
-                                <div class="primary-cell">
-
-                                    <strong>
-                                        ${escapeHtml(name)}
-                                    </strong>
-
-                                    <span>
-                                        ID: ${escapeHtml(salon.id)}
-                                    </span>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(String(location))}
-                            </td>
-
-
-                            <td>
-
-                                <div class="primary-cell">
-
-                                    <strong>
-                                        ${escapeHtml(
-                                            String(owner)
-                                        )}
-                                    </strong>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="badge badge-orange">
-
-                                    <i
-                                        class="bx bxs-star"
-                                        style="margin-right:3px;"
-                                    ></i>
-
-                                    ${escapeHtml(
-                                        String(rating)
-                                    )}
-
-                                </span>
-
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(String(hours))}
-                            </td>
-
-
-                            <td>
-
-                                <div class="table-actions">
-
-                                    <button
-                                        class="small-btn"
-                                        title="View salon"
-                                        onclick="viewSalon('${salon.id}')"
-                                    >
-                                        <i class="bx bx-show"></i>
-                                    </button>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
-    }
-
-
-    /* =====================================================
-       USERS RENDER
-    ====================================================== */
-
-    function renderUsers() {
-
-        const body =
-            document.getElementById(
-                "usersBody"
-            );
-
-
-        const search =
-            (
-                document.getElementById(
-                    "userSearch"
-                )?.value || ""
-            )
-            .trim()
-            .toLowerCase();
-
-
-        const filter =
-            document.getElementById(
-                "userFilter"
-            )?.value ||
-            "all";
-
-
-        let data =
-            [...users];
-
-
-        data =
-            data.filter(user => {
-
-                const role =
-                    normalizeRole(
-                        user.role ??
-                        user.Role
-                    );
-
-
-                const text =
-                    [
-                        user.email,
-                        user.name,
-                        user.displayName,
-                        role,
-                        user.salonId,
-                        user.id
-                    ]
-                    .join(" ")
-                    .toLowerCase();
-
-
-                return (
-
-                    (!search ||
-                        text.includes(search))
-
-                    &&
-
-                    (
-                        filter === "all" ||
-                        role === filter
-                    )
-
-                );
-            });
-
-
-        data.sort(
-            (a, b) =>
-                String(
-                    a.email ||
-                    ""
-                )
-                .localeCompare(
-                    String(
-                        b.email ||
-                        ""
-                    )
-                )
-        );
-
-
-        if (!data.length) {
-
-            body.innerHTML =
-
-                `
-                <tr>
-                    <td colspan="6">
-
-                        <div class="empty">
-
-                            <i class="bx bx-user-x"></i>
-
-                            <strong>
-                                No users found
-                            </strong>
-
-                            <span>
-                                No accounts match your search.
-                            </span>
-
-                        </div>
-
-                    </td>
-                </tr>
-                `;
-
-            return;
-        }
-
-
-        body.innerHTML =
-            data.map(
-                user => {
-
-                    const role =
-                        normalizeRole(
-                            user.role ??
-                            user.Role
-                        ) ||
-                        "client";
-
-
-                    const email =
-                        user.email ||
-                        "No email";
-
-
-                    const name =
-                        user.name ||
-                        user.displayName ||
-                        "User";
-
-
-                    const salonId =
-                        user.salonId ||
-                        "—";
-
-
-                    return `
-
-                        <tr>
-
-                            <td>
-
-                                <div class="primary-cell">
-
-                                    <strong>
-                                        ${escapeHtml(name)}
-                                    </strong>
-
-                                    <span>
-                                        UID:
-                                        ${escapeHtml(user.id)}
-                                    </span>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(email)}
-                            </td>
-
-
-                            <td>
-                                ${roleBadge(role)}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(String(salonId))}
-                            </td>
-
-
-                            <td>
-                                ${formatDate(
-                                    user.createdAt
-                                )}
-                            </td>
-
-
-                            <td>
-
-                                <div class="table-actions">
-
-                                    <button
-                                        class="small-btn"
-                                        title="View user"
-                                        onclick="viewUser('${user.id}')"
-                                    >
-                                        <i class="bx bx-show"></i>
-                                    </button>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-
-                    `;
-                }
-            )
-            .join("");
-    }
-
-
-    /* =====================================================
-       ACTIVITY
-    ====================================================== */
-
-    function renderActivity() {
-
-        const list =
-            document.getElementById(
-                "activityList"
-            );
-
-
-        const events = [];
-
-
-        bookings.forEach(
-            booking => {
-
-                events.push({
-
-                    type:
-                        "booking",
-
-                    title:
-                        "New booking activity",
-
-                    text:
-                        booking.custName ||
-                        booking.customerName ||
-                        booking.service ||
-                        "Booking",
-
-                    time:
-                        booking.createdAt
-
-                });
-
-            }
-        );
-
-
-        salons.forEach(
-            salon => {
-
-                events.push({
-
-                    type:
-                        "salon",
-
-                    title:
-                        "Salon registered",
-
-                    text:
-                        salon.name ||
-                        salon.salonName ||
-                        "Salon",
-
-                    time:
-                        salon.createdAt
-
-                });
-
-            }
-        );
-
-
-        users.forEach(
-            user => {
-
-                events.push({
-
-                    type:
-                        "user",
-
-                    title:
-                        "User account",
-
-                    text:
-                        user.email ||
-                        user.name ||
-                        "User",
-
-                    time:
-                        user.createdAt
-
-                });
-
-            }
-        );
-
-
-        events.sort(
-            (a, b) =>
-                timestampValue(
-                    b.time
-                ) -
-                timestampValue(
-                    a.time
-                )
-        );
-
-
-        const recent =
-            events.slice(0, 12);
-
-
-        if (!recent.length) {
-
-            list.innerHTML =
-
-                `
-                <div class="empty">
-
-                    <i class="bx bx-pulse"></i>
-
-                    <strong>
-                        No activity yet
-                    </strong>
-
-                    <span>
-                        Activity will appear here as data is added.
-                    </span>
-
-                </div>
-                `;
-
-            return;
-        }
-
-
-        list.innerHTML =
-            recent.map(
-                event => {
-
-                    let icon =
-                        "bx-pulse";
-
-
-                    if (
-                        event.type ===
-                        "booking"
-                    )
-                        icon =
-                            "bx-calendar-check";
-
-
-                    if (
-                        event.type ===
-                        "salon"
-                    )
-                        icon =
-                            "bx-store";
-
-
-                    if (
-                        event.type ===
-                        "user"
-                    )
-                        icon =
-                            "bx-user";
-
-
-                    return `
-
-                        <div class="activity-item">
-
-                            <div class="activity-icon">
-
-                                <i class="bx ${icon}"></i>
-
-                            </div>
-
-
-                            <div class="activity-text">
-
-                                <strong>
-                                    ${escapeHtml(
-                                        event.title
-                                    )}
-                                </strong>
-
-                                <span>
-                                    ${escapeHtml(
-                                        String(
-                                            event.text
-                                        )
-                                    )}
-                                </span>
-
-                            </div>
-
-
-                            <div class="activity-time">
-
-                                ${timeAgo(
-                                    event.time
-                                )}
-
-                            </div>
-
-                        </div>
-
-                    `;
-                }
-            )
-            .join("");
-    }
-
-
-    /* =====================================================
-       VIEW BOOKING
-    ====================================================== */
-
-    function viewBooking(id) {
-
-        const booking =
-            bookings.find(
-                item =>
-                    item.id === id
-            );
-
-
-        if (!booking)
-            return;
-
-
-        document.getElementById(
-            "modalTitle"
-        ).textContent =
-            "Booking Details";
-
-
-        document.getElementById(
-            "modalContent"
-        ).innerHTML =
-
-            detailHTML({
-
-                "Booking ID":
-                    booking.id,
-
-                "Customer":
-                    booking.custName ||
-                    booking.customerName ||
-                    booking.name ||
-                    "—",
-
-                "Phone":
-                    booking.custPhone ||
-                    booking.phone ||
-                    "—",
-
-                "Service":
-                    booking.service ||
-                    booking.serviceType ||
-                    "—",
-
-                "Price":
-                    booking.price != null
-                        ? "R " +
-                          booking.price
-                        : "—",
-
-                "Date":
-                    booking.custDate ||
-                    booking.date ||
-                    "—",
-
-                "Time":
-                    booking.custTime ||
-                    booking.time ||
-                    "—",
-
-                "Status":
-                    booking.status ||
-                    "pending",
-
-                "Salon ID":
-                    booking.salonId ||
-                    "—",
-
-                "Owner ID":
-                    booking.ownerId ||
-                    "—",
-
-                "User ID":
-                    booking.userId ||
-                    "—"
-
-            });
-
-
-        openModal();
-    }
-
-
-    /* =====================================================
-       VIEW SALON
-    ====================================================== */
-
-    function viewSalon(id) {
-
-        const salon =
-            salons.find(
-                item =>
-                    item.id === id
-            );
-
-
-        if (!salon)
-            return;
-
-
-        document.getElementById(
-            "modalTitle"
-        ).textContent =
-            "Salon Details";
-
-
-        document.getElementById(
-            "modalContent"
-        ).innerHTML =
-
-            detailHTML({
-
-                "Document ID":
-                    salon.id,
-
-                "Name":
-                    salon.name ||
-                    salon.salonName ||
-                    "—",
-
-                "Location":
-                    salon.location ||
-                    salon.address ||
-                    "—",
-
-                "Owner ID":
-                    salon.ownerId ||
-                    "—",
-
-                "Email":
-                    salon.email ||
-                    "—",
-
-                "Rating":
-                    salon.rating ??
-                    "—",
-
-                "Hours":
-                    salon.hours ||
-                    salon.openingHours ||
-                    "—",
-
-                "Phone":
-                    salon.phone ||
-                    "—"
-
-            });
-
-
-        openModal();
-    }
-
-
-    /* =====================================================
-       VIEW USER
-    ====================================================== */
-
-    function viewUser(id) {
-
-        const user =
-            users.find(
-                item =>
-                    item.id === id
-            );
-
-
-        if (!user)
-            return;
-
-
-        const role =
-            normalizeRole(
-                user.role ??
-                user.Role
-            );
-
-
-        document.getElementById(
-            "modalTitle"
-        ).textContent =
-            "User Details";
-
-
-        document.getElementById(
-            "modalContent"
-        ).innerHTML =
-
-            detailHTML({
-
-                "Firebase UID":
-                    user.id,
-
-                "Name":
-                    user.name ||
-                    user.displayName ||
-                    "—",
-
-                "Email":
-                    user.email ||
-                    "—",
-
-                "Role":
-                    role ||
-                    "—",
-
-                "Salon ID":
-                    user.salonId ||
-                    "—",
-
-                "Created":
-                    formatDate(
-                        user.createdAt
-                    ),
-
-                "Updated":
-                    formatDate(
-                        user.updatedAt
-                    )
-
-            });
-
-
-        openModal();
-    }
-
-
-    /* =====================================================
-       DETAIL HTML
-    ====================================================== */
-
-    function detailHTML(data) {
-
-        return Object.entries(data)
-            .map(
-                ([key, value]) =>
-
-                    `
-                    <div class="detail-row">
-
-                        <label>
-                            ${escapeHtml(key)}
-                        </label>
-
-                        <span>
-                            ${escapeHtml(
-                                String(
-                                    value ??
-                                    "—"
-                                )
-                            )}
-                        </span>
-
-                    </div>
-                    `
-            )
-            .join("");
-    }
-
-
-    /* =====================================================
-       MODAL
-    ====================================================== */
-
-    function openModal() {
-
-        document
-            .getElementById(
-                "detailModal"
-            )
-            .classList.add("show");
-    }
-
-
-    function closeModal() {
-
-        document
-            .getElementById(
-                "detailModal"
-            )
-            .classList.remove("show");
-    }
-
-
-    function closeModalOutside(event) {
-
-        if (
-            event.target.id ===
-            "detailModal"
-        ) {
-
-            closeModal();
-        }
-    }
-
-
-    /* =====================================================
-       NAVIGATION
-    ====================================================== */
-
-    document
-        .querySelectorAll(
-            ".nav-btn[data-section], .bottom-btn[data-section]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        showSection(
-                            button.dataset.section
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-    function showSection(section) {
-
-        document
-            .querySelectorAll(
-                ".section"
-            )
-            .forEach(
-                item => {
-
-                    item.classList.toggle(
-                        "active",
-                        item.id === section
-                    );
-
-                }
-            );
-
-
-        document
-            .querySelectorAll(
-                ".nav-btn[data-section]"
-            )
-            .forEach(
-                item => {
-
-                    item.classList.toggle(
-                        "active",
-                        item.dataset.section === section
-                    );
-
-                }
-            );
-
-
-        document
-            .querySelectorAll(
-                ".bottom-btn[data-section]"
-            )
-            .forEach(
-                item => {
-
-                    item.classList.toggle(
-                        "active",
-                        item.dataset.section === section
-                    );
-
-                }
-            );
-
-
-        const titles = {
-
-            dashboard:
-                [
-                    "Dashboard",
-                    "Welcome to the K@si Web command centre."
-                ],
-
-            bookings:
-                [
-                    "Bookings",
-                    "Monitor appointments across K@si Web."
-                ],
-
-            salons:
-                [
-                    "Salons",
-                    "Manage the K@si Web salon marketplace."
-                ],
-
-            users:
-                [
-                    "Users",
-                    "View platform accounts and assigned roles."
-                ]
-
-        };
-
-
-        const title =
-            titles[section] ||
-            titles.dashboard;
-
-
-        document.getElementById(
-            "pageTitle"
-        ).textContent =
-            title[0];
-
-
-        document.getElementById(
-            "pageSubtitle"
-        ).textContent =
-            title[1];
-
-
-        closeSidebar();
-
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-
-
-    /* =====================================================
-       SIDEBAR
-    ====================================================== */
-
-    function toggleSidebar() {
-
-        document
-            .getElementById(
-                "sidebar"
-            )
-            .classList.toggle("open");
-    }
-
-
-    function closeSidebar() {
-
-        document
-            .getElementById(
-                "sidebar"
-            )
-            .classList.remove("open");
-    }
-
-
-    /* =====================================================
-       WEBSITE NAVIGATION
-    ====================================================== */
-
-    function goHome() {
-
-        window.location.href =
-            "home.html";
-    }
-
-
-    function goOwners() {
-
-        window.location.href =
-            "owners.html";
-    }
-
-
-    function goSalons() {
-
-        window.location.href =
-            "salons.html";
-    }
-
-
-    /* =====================================================
-       REFRESH
-    ====================================================== */
-
-    async function refreshData() {
-
-        try {
-
-            showToast(
-                "Refreshing dashboard...",
-                "info"
-            );
-
-
-            const [
-                bookingsSnap,
-                salonsSnap,
-                usersSnap
-            ] =
-                await Promise.all([
-
-                    db
-                        .collection("bookings")
-                        .get(),
-
-                    db
-                        .collection("salons")
-                        .get(),
-
-                    db
-                        .collection("users")
-                        .get()
-
-                ]);
-
-
-            bookings =
-                bookingsSnap.docs.map(
-                    doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                );
-
-
-            salons =
-                salonsSnap.docs.map(
-                    doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                );
-
-
-            users =
-                usersSnap.docs.map(
-                    doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                );
-
-
-            updateStats();
-
-            renderBookings();
-
-            renderSalons();
-
-            renderUsers();
-
-            renderActivity();
-
-
-            showToast(
-                "Dashboard refreshed.",
-                "success"
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            showToast(
-                "Refresh failed: " +
-                error.message,
-                "error"
-            );
-        }
-    }
-
-
-    /* =====================================================
-       LOGOUT
-    ====================================================== */
-
-    async function logout() {
-
-        try {
-
-            if (unsubscribeBookings)
-                unsubscribeBookings();
-
-            if (unsubscribeSalons)
-                unsubscribeSalons();
-
-            if (unsubscribeUsers)
-                unsubscribeUsers();
-
-
-            await auth.signOut();
-
-
-            window.location.href =
-                "home.html";
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            showToast(
-                "Could not sign out.",
-                "error"
-            );
-        }
-    }
-
-
-    /* =====================================================
-       HELPERS
-    ====================================================== */
-
-    function normalizeStatus(value) {
-
-        return String(
-            value ||
-            "pending"
-        )
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, "_");
-    }
-
-
-    function normalizeRole(value) {
-
-        return String(
-            value ||
+    const data =
+        snap.data() || {};
+
+    const role =
+        String(
+            data.role ??
+            data.Role ??
             ""
         )
         .trim()
         .toLowerCase();
-    }
 
-
-    function statusBadge(status) {
-
-        status =
-            normalizeStatus(status);
-
-
-        const map = {
-
-            pending:
-                [
-                    "badge-orange",
-                    "Pending"
-                ],
-
-            confirmed:
-                [
-                    "badge-blue",
-                    "Confirmed"
-                ],
-
-            completed:
-                [
-                    "badge-green",
-                    "Completed"
-                ],
-
-            cancelled:
-                [
-                    "badge-red",
-                    "Cancelled"
-                ],
-
-            canceled:
-                [
-                    "badge-red",
-                    "Cancelled"
-                ]
-
-        };
-
-
-        const item =
-            map[status] ||
-            [
-                "badge-purple",
-                status
-            ];
-
-
-        return `
-            <span class="badge ${item[0]}">
-                ${escapeHtml(item[1])}
-            </span>
-        `;
-    }
-
-
-    function roleBadge(role) {
-
-        role =
-            normalizeRole(role);
-
-
-        let cls =
-            "badge-blue";
-
-
-        let text =
-            role ||
-            "client";
-
-
-        if (role === "admin") {
-
-            cls =
-                "badge-purple";
-
-            text =
-                "Admin";
-        }
-
-
-        if (
-            role ===
-            "salon_owner"
-        ) {
-
-            cls =
-                "badge-orange";
-
-            text =
-                "Salon Owner";
-        }
-
-
-        if (
-            role ===
-            "client"
-        ) {
-
-            cls =
-                "badge-blue";
-
-            text =
-                "Client";
-        }
-
-
-        return `
-            <span class="badge ${cls}">
-                ${escapeHtml(text)}
-            </span>
-        `;
-    }
-
-
-    function timestampValue(value) {
-
-        if (!value)
-            return 0;
-
-
-        if (
-            typeof value.toMillis ===
-            "function"
-        )
-            return value.toMillis();
-
-
-        if (
-            value.seconds != null
-        )
-            return (
-                value.seconds * 1000
-            );
-
-
-        const date =
-            new Date(value);
-
-
-        const time =
-            date.getTime();
-
-
-        return isNaN(time)
-            ? 0
-            : time;
-    }
-
-
-    function formatDate(value) {
-
-        const time =
-            timestampValue(value);
-
-
-        if (!time)
-            return "—";
-
-
-        return new Date(time)
-            .toLocaleDateString(
-                "en-ZA",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            );
-    }
-
-
-    function timeAgo(value) {
-
-        const time =
-            timestampValue(value);
-
-
-        if (!time)
-            return "recent";
-
-
-        const diff =
-            Date.now() -
-            time;
-
-
-        const minutes =
-            Math.floor(
-                diff /
-                60000
-            );
-
-
-        if (
-            minutes <
-            1
-        )
-            return "just now";
-
-
-        if (
-            minutes <
-            60
-        )
-            return (
-                minutes +
-                "m ago"
-            );
-
-
-        const hours =
-            Math.floor(
-                minutes /
-                60
-            );
-
-
-        if (
-            hours <
-            24
-        )
-            return (
-                hours +
-                "h ago"
-            );
-
-
-        const days =
-            Math.floor(
-                hours /
-                24
-            );
-
-
-        return (
-            days +
-            "d ago"
-        );
-    }
-
-
-    function escapeHtml(value) {
-
-        return String(
-            value ??
-            ""
-        )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-    }
-
-
-    /* =====================================================
-       TOAST
-    ====================================================== */
-
-    function showToast(
-        message,
-        type = "info"
-    ) {
-
-        const container =
-            document.getElementById(
-                "toastContainer"
-            );
-
-
-        const toast =
-            document.createElement(
-                "div"
-            );
-
-
-        let icon =
-            "bx-info-circle";
-
-
-        if (
-            type ===
-            "success"
-        )
-            icon =
-                "bx-check-circle";
-
-
-        if (
-            type ===
-            "error"
-        )
-            icon =
-                "bx-error-circle";
-
-
-        toast.className =
-            `toast ${type}`;
-
-
-        toast.innerHTML =
-
-            `
-            <i class="bx ${icon}"></i>
-
-            <span>
-                ${escapeHtml(message)}
-            </span>
-            `;
-
-
-        container.appendChild(
-            toast
-        );
-
-
-        setTimeout(
-            () => {
-
-                toast.remove();
-
-            },
-            3500
-        );
-    }
-
-
-    /* =====================================================
-       ESC KEY
-    ====================================================== */
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeModal();
-
-                closeSidebar();
-            }
-
+    console.log(
+        "K@si Admin Verification:",
+        {
+            authUID:user.uid,
+            authEmail:user.email,
+            firestoreUID:snap.id,
+            role:role
         }
     );
 
+    if(role !== "admin"){
+
+        showAccessDenied(
+            "Your Firestore role is not set to admin."
+        );
+
+        return;
+    }
+
+    currentAdminData = data;
+
+    loadingScreen.style.display = "none";
+    accessDenied.style.display = "none";
+    app.style.display = "block";
+
+    setupAdminIdentity(user,data);
+
+    if(!listenersStarted){
+
+        listenersStarted = true;
+
+        startRealtimeListeners();
+    }
+
+    showToast(
+        "Administrator access verified.",
+        "success"
+    );
+}
+
+
+/* =========================================================
+   ADMIN IDENTITY
+========================================================= */
+
+function setupAdminIdentity(user,data){
+
+    const email =
+        user.email ||
+        data.email ||
+        "Administrator";
+
+    document.getElementById(
+        "adminEmail"
+    ).textContent = email;
+
+    document.getElementById(
+        "adminAvatar"
+    ).textContent =
+        email.charAt(0).toUpperCase();
+}
+
+
+/* =========================================================
+   ACCESS DENIED
+========================================================= */
+
+function showAccessDenied(message){
+
+    loadingScreen.style.display = "none";
+    app.style.display = "none";
+    accessDenied.style.display = "flex";
+
+    const uid =
+        currentUser?.uid ||
+        "Not signed in";
+
+    const email =
+        currentUser?.email ||
+        "Unknown";
+
+    document.getElementById(
+        "deniedDebug"
+    ).innerHTML = `
+
+        <strong>Account</strong><br>
+        ${escapeHtml(email)}
+
+        <br><br>
+
+        <strong>Firebase UID</strong><br>
+        ${escapeHtml(uid)}
+
+        <br><br>
+
+        <span>
+            ${escapeHtml(message)}
+        </span>
+
+        <br><br>
+
+        Check Firestore:
+        users / ${escapeHtml(uid)}
+    `;
+}
+
+
+/* =========================================================
+   REALTIME LISTENERS
+========================================================= */
+
+function startRealtimeListeners(){
+
+    stopRealtimeListeners();
+
+    /*
+        Keep listeners lightweight.
+        The dashboard only renders the first recent
+        activity records instead of repeatedly rebuilding
+        large amounts of DOM.
+    */
+
+    unsubscribeBookings =
+        db.collection("bookings")
+        .onSnapshot(
+            snapshot => {
+
+                bookings =
+                    snapshot.docs.map(doc => ({
+                        id:doc.id,
+                        ...doc.data()
+                    }));
+
+                updateStats();
+                renderBookings();
+                renderActivity();
+
+            },
+            error => {
+
+                console.error(
+                    "Bookings listener:",
+                    error
+                );
+
+                showToast(
+                    "Could not load bookings.",
+                    "error"
+                );
+            }
+        );
+
+
+    unsubscribeSalons =
+        db.collection("salons")
+        .onSnapshot(
+            snapshot => {
+
+                salons =
+                    snapshot.docs.map(doc => ({
+                        id:doc.id,
+                        ...doc.data()
+                    }));
+
+                updateStats();
+                renderSalons();
+                renderActivity();
+
+            },
+            error => {
+
+                console.error(
+                    "Salons listener:",
+                    error
+                );
+
+                showToast(
+                    "Could not load salons.",
+                    "error"
+                );
+            }
+        );
+
+
+    unsubscribeUsers =
+        db.collection("users")
+        .onSnapshot(
+            snapshot => {
+
+                users =
+                    snapshot.docs.map(doc => ({
+                        id:doc.id,
+                        ...doc.data()
+                    }));
+
+                updateStats();
+                renderUsers();
+                renderActivity();
+
+            },
+            error => {
+
+                console.error(
+                    "Users listener:",
+                    error
+                );
+
+                showToast(
+                    "Could not load users.",
+                    "error"
+                );
+            }
+        );
+}
+
+
+function stopRealtimeListeners(){
+
+    if(unsubscribeBookings)
+        unsubscribeBookings();
+
+    if(unsubscribeSalons)
+        unsubscribeSalons();
+
+    if(unsubscribeUsers)
+        unsubscribeUsers();
+
+    unsubscribeBookings = null;
+    unsubscribeSalons = null;
+    unsubscribeUsers = null;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+    document.getElementById(
+        "statBookings"
+    ).textContent =
+        bookings.length;
+
+    document.getElementById(
+        "statSalons"
+    ).textContent =
+        salons.length;
+
+    document.getElementById(
+        "statUsers"
+    ).textContent =
+        users.length;
+
+    const pending =
+        bookings.filter(
+            booking =>
+                normalizeStatus(
+                    booking.status
+                ) === "pending"
+        ).length;
+
+    document.getElementById(
+        "statPending"
+    ).textContent =
+        pending;
+}
+
+
+/* =========================================================
+   BOOKINGS
+========================================================= */
+
+function renderBookings(){
+
+    const body =
+        document.getElementById(
+            "bookingsBody"
+        );
+
+    if(!body)
+        return;
+
+    const search =
+        (
+            document.getElementById(
+                "bookingSearch"
+            )?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    const filter =
+        document.getElementById(
+            "bookingFilter"
+        )?.value ||
+        "all";
+
+    let data =
+        bookings.filter(booking => {
+
+            const text =
+                [
+                    booking.custName,
+                    booking.customerName,
+                    booking.name,
+                    booking.service,
+                    booking.serviceType,
+                    booking.ownerId,
+                    booking.salonId,
+                    booking.status
+                ]
+                .join(" ")
+                .toLowerCase();
+
+            const matchesSearch =
+                !search ||
+                text.includes(search);
+
+            const status =
+                normalizeStatus(
+                    booking.status
+                );
+
+            const matchesFilter =
+                filter === "all" ||
+                status === filter;
+
+            return (
+                matchesSearch &&
+                matchesFilter
+            );
+        });
+
+    data.sort(
+        (a,b) =>
+            timestampValue(b.createdAt) -
+            timestampValue(a.createdAt)
+    );
+
+    if(!data.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="empty">
+                        <i class="bx bx-calendar-x"></i>
+                        <strong>No bookings found</strong>
+                        <span>
+                            No bookings match your search or filter.
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    body.innerHTML =
+        data.map(booking => {
+
+            const customer =
+                booking.custName ||
+                booking.customerName ||
+                booking.name ||
+                "Customer";
+
+            const service =
+                booking.service ||
+                booking.serviceType ||
+                "Service";
+
+            const date =
+                booking.custDate ||
+                booking.date ||
+                "—";
+
+            const time =
+                booking.custTime ||
+                booking.time ||
+                "—";
+
+            const status =
+                normalizeStatus(
+                    booking.status
+                ) || "pending";
+
+            return `
+
+                <tr>
+
+                    <td>
+                        <div class="primary-cell">
+
+                            <strong>
+                                ${escapeHtml(customer)}
+                            </strong>
+
+                            <span>
+                                ${escapeHtml(
+                                    booking.custPhone ||
+                                    booking.phone ||
+                                    booking.userId ||
+                                    ""
+                                )}
+                            </span>
+
+                        </div>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(service)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(String(date))}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(String(time))}
+                    </td>
+
+                    <td>
+                        ${statusBadge(status)}
+                    </td>
+
+                    <td>
+
+                        <div class="table-actions">
+
+                            <button
+                                class="small-btn"
+                                title="View booking"
+                                onclick="viewBooking('${escapeAttr(booking.id)}')"
+                            >
+                                <i class="bx bx-show"></i>
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   SALONS
+========================================================= */
+
+function renderSalons(){
+
+    const body =
+        document.getElementById(
+            "salonsBody"
+        );
+
+    if(!body)
+        return;
+
+    const search =
+        (
+            document.getElementById(
+                "salonSearch"
+            )?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    let data =
+        salons.filter(salon => {
+
+            const text =
+                [
+                    salon.name,
+                    salon.salonName,
+                    salon.location,
+                    salon.address,
+                    salon.ownerId,
+                    salon.email
+                ]
+                .join(" ")
+                .toLowerCase();
+
+            return (
+                !search ||
+                text.includes(search)
+            );
+        });
+
+    data.sort(
+        (a,b) =>
+            String(
+                a.name ||
+                a.salonName ||
+                ""
+            )
+            .localeCompare(
+                String(
+                    b.name ||
+                    b.salonName ||
+                    ""
+                )
+            )
+    );
+
+    if(!data.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="6">
+
+                    <div class="empty">
+
+                        <i class="bx bx-store-alt"></i>
+
+                        <strong>
+                            No salons found
+                        </strong>
+
+                        <span>
+                            Registered salons will appear here.
+                        </span>
+
+                    </div>
+
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    body.innerHTML =
+        data.map(salon => {
+
+            const name =
+                salon.name ||
+                salon.salonName ||
+                "Unnamed Salon";
+
+            const location =
+                salon.location ||
+                salon.address ||
+                "Location not provided";
+
+            const owner =
+                salon.ownerId ||
+                salon.email ||
+                "No owner ID";
+
+            const rating =
+                salon.rating ??
+                "—";
+
+            const hours =
+                formatHours(
+                    salon.hours ||
+                    salon.openingHours ||
+                    salon.time
+                );
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <div class="primary-cell">
+
+                            <strong>
+                                ${escapeHtml(name)}
+                            </strong>
+
+                            <span>
+                                ID:
+                                ${escapeHtml(salon.id)}
+                            </span>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+                        ${escapeHtml(String(location))}
+                    </td>
+
+                    <td>
+
+                        <div class="primary-cell">
+
+                            <strong>
+                                ${escapeHtml(String(owner))}
+                            </strong>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge badge-orange">
+
+                            <i class="bx bxs-star"></i>
+
+                            ${escapeHtml(
+                                String(rating)
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${escapeHtml(hours)}
+                    </td>
+
+                    <td>
+
+                        <div class="table-actions">
+
+                            <button
+                                class="small-btn"
+                                title="View salon"
+                                onclick="viewSalon('${escapeAttr(salon.id)}')"
+                            >
+                                <i class="bx bx-show"></i>
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   USERS
+========================================================= */
+
+function renderUsers(){
+
+    const body =
+        document.getElementById(
+            "usersBody"
+        );
+
+    if(!body)
+        return;
+
+    const search =
+        (
+            document.getElementById(
+                "userSearch"
+            )?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    const filter =
+        document.getElementById(
+            "userFilter"
+        )?.value ||
+        "all";
+
+    let data =
+        users.filter(user => {
+
+            const role =
+                normalizeRole(
+                    user.role ??
+                    user.Role
+                );
+
+            const text =
+                [
+                    user.email,
+                    user.name,
+                    user.displayName,
+                    role,
+                    user.salonId,
+                    user.id
+                ]
+                .join(" ")
+                .toLowerCase();
+
+            return (
+                (!search ||
+                    text.includes(search))
+                &&
+                (
+                    filter === "all" ||
+                    role === filter
+                )
+            );
+        });
+
+    data.sort(
+        (a,b) =>
+            String(
+                a.email ||
+                ""
+            )
+            .localeCompare(
+                String(
+                    b.email ||
+                    ""
+                )
+            )
+    );
+
+    if(!data.length){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="6">
+
+                    <div class="empty">
+
+                        <i class="bx bx-user-x"></i>
+
+                        <strong>
+                            No users found
+                        </strong>
+
+                        <span>
+                            No accounts match your search.
+                        </span>
+
+                    </div>
+
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    body.innerHTML =
+        data.map(user => {
+
+            const role =
+                normalizeRole(
+                    user.role ??
+                    user.Role
+                ) ||
+                "client";
+
+            const email =
+                user.email ||
+                "No email";
+
+            const name =
+                user.name ||
+                user.displayName ||
+                "User";
+
+            const salonId =
+                user.salonId ||
+                "—";
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <div class="primary-cell">
+
+                            <strong>
+                                ${escapeHtml(name)}
+                            </strong>
+
+                            <span>
+                                UID:
+                                ${escapeHtml(user.id)}
+                            </span>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+                        ${escapeHtml(email)}
+                    </td>
+
+                    <td>
+                        ${roleBadge(role)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(String(salonId))}
+                    </td>
+
+                    <td>
+                        ${formatDate(user.createdAt)}
+                    </td>
+
+                    <td>
+
+                        <div class="table-actions">
+
+                            <button
+                                class="small-btn"
+                                title="View user"
+                                onclick="viewUser('${escapeAttr(user.id)}')"
+                            >
+                                <i class="bx bx-show"></i>
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+function renderActivity(){
+
+    const list =
+        document.getElementById(
+            "activityList"
+        );
+
+    if(!list)
+        return;
+
+    const events = [];
+
+    /*
+        Only create a small recent activity feed.
+        This prevents unnecessary DOM work.
+    */
+
+    bookings.forEach(booking => {
+
+        events.push({
+
+            type:"booking",
+
+            title:"Booking activity",
+
+            text:
+                booking.custName ||
+                booking.customerName ||
+                booking.service ||
+                "Booking",
+
+            time:booking.createdAt
+
+        });
+
+    });
+
+    salons.forEach(salon => {
+
+        events.push({
+
+            type:"salon",
+
+            title:"Salon registered",
+
+            text:
+                salon.name ||
+                salon.salonName ||
+                "Salon",
+
+            time:salon.createdAt
+
+        });
+
+    });
+
+    users.forEach(user => {
+
+        events.push({
+
+            type:"user",
+
+            title:"User account",
+
+            text:
+                user.email ||
+                user.name ||
+                "User",
+
+            time:user.createdAt
+
+        });
+
+    });
+
+    events.sort(
+        (a,b) =>
+            timestampValue(b.time) -
+            timestampValue(a.time)
+    );
+
+    const recent =
+        events.slice(0,10);
+
+    if(!recent.length){
+
+        list.innerHTML = `
+            <div class="empty">
+
+                <i class="bx bx-pulse"></i>
+
+                <strong>
+                    No activity yet
+                </strong>
+
+                <span>
+                    New platform activity will appear here.
+                </span>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    list.innerHTML =
+        recent.map(event => {
+
+            let icon = "bx-pulse";
+
+            if(event.type === "booking")
+                icon = "bx-calendar-check";
+
+            if(event.type === "salon")
+                icon = "bx-store";
+
+            if(event.type === "user")
+                icon = "bx-user";
+
+            return `
+
+                <div class="activity-item">
+
+                    <div class="activity-icon">
+
+                        <i class="bx ${icon}"></i>
+
+                    </div>
+
+                    <div class="activity-text">
+
+                        <strong>
+                            ${escapeHtml(event.title)}
+                        </strong>
+
+                        <span>
+                            ${escapeHtml(
+                                String(event.text)
+                            )}
+                        </span>
+
+                    </div>
+
+                    <div class="activity-time">
+                        ${timeAgo(event.time)}
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   BOOKING MODAL
+========================================================= */
+
+function viewBooking(id){
+
+    const booking =
+        bookings.find(
+            item =>
+                item.id === id
+        );
+
+    if(!booking)
+        return;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Booking Details";
+
+    document.getElementById(
+        "modalContent"
+    ).innerHTML =
+        detailHTML({
+
+            "Booking ID":
+                booking.id,
+
+            "Customer":
+                booking.custName ||
+                booking.customerName ||
+                booking.name ||
+                "—",
+
+            "Phone":
+                booking.custPhone ||
+                booking.phone ||
+                "—",
+
+            "Service":
+                booking.service ||
+                booking.serviceType ||
+                "—",
+
+            "Price":
+                booking.price != null
+                    ? "R " + booking.price
+                    : "—",
+
+            "Date":
+                booking.custDate ||
+                booking.date ||
+                "—",
+
+            "Time":
+                booking.custTime ||
+                booking.time ||
+                "—",
+
+            "Status":
+                booking.status ||
+                "pending",
+
+            "Salon ID":
+                booking.salonId ||
+                "—",
+
+            "Owner ID":
+                booking.ownerId ||
+                "—",
+
+            "User ID":
+                booking.userId ||
+                "—"
+
+        });
+
+    openModal();
+}
+
+
+/* =========================================================
+   SALON MODAL
+========================================================= */
+
+function viewSalon(id){
+
+    const salon =
+        salons.find(
+            item =>
+                item.id === id
+        );
+
+    if(!salon)
+        return;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Salon Details";
+
+    document.getElementById(
+        "modalContent"
+    ).innerHTML =
+        detailHTML({
+
+            "Document ID":
+                salon.id,
+
+            "Name":
+                salon.name ||
+                salon.salonName ||
+                "—",
+
+            "Location":
+                salon.location ||
+                salon.address ||
+                "—",
+
+            "Owner ID":
+                salon.ownerId ||
+                "—",
+
+            "Email":
+                salon.email ||
+                "—",
+
+            "Rating":
+                salon.rating ??
+                "—",
+
+            "Hours":
+                formatHours(
+                    salon.hours ||
+                    salon.openingHours ||
+                    salon.time
+                ),
+
+            "Phone":
+                salon.phone ||
+                "—"
+
+        });
+
+    openModal();
+}
+
+
+/* =========================================================
+   USER MODAL
+========================================================= */
+
+function viewUser(id){
+
+    const user =
+        users.find(
+            item =>
+                item.id === id
+        );
+
+    if(!user)
+        return;
+
+    const role =
+        normalizeRole(
+            user.role ??
+            user.Role
+        );
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "User Details";
+
+    document.getElementById(
+        "modalContent"
+    ).innerHTML =
+        detailHTML({
+
+            "Firebase UID":
+                user.id,
+
+            "Name":
+                user.name ||
+                user.displayName ||
+                "—",
+
+            "Email":
+                user.email ||
+                "—",
+
+            "Role":
+                role ||
+                "—",
+
+            "Salon ID":
+                user.salonId ||
+                "—",
+
+            "Created":
+                formatDate(
+                    user.createdAt
+                ),
+
+            "Updated":
+                formatDate(
+                    user.updatedAt
+                )
+
+        });
+
+    openModal();
+}
+
+
+/* =========================================================
+   DETAIL HTML
+========================================================= */
+
+function detailHTML(data){
+
+    return Object.entries(data)
+        .map(([key,value]) => `
+
+            <div class="detail-row">
+
+                <label>
+                    ${escapeHtml(key)}
+                </label>
+
+                <span>
+                    ${escapeHtml(
+                        String(
+                            value ??
+                            "—"
+                        )
+                    )}
+                </span>
+
+            </div>
+
+        `)
+        .join("");
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(){
+
+    document
+        .getElementById("detailModal")
+        .classList.add("show");
+}
+
+function closeModal(){
+
+    document
+        .getElementById("detailModal")
+        .classList.remove("show");
+}
+
+function closeModalOutside(event){
+
+    if(
+        event.target.id ===
+        "detailModal"
+    ){
+        closeModal();
+    }
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".nav-btn[data-section], .bottom-btn[data-section]"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                showSection(
+                    button.dataset.section
+                );
+
+            }
+        );
+
+    });
+
+
+function showSection(section){
+
+    document
+        .querySelectorAll(".section")
+        .forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                item.id === section
+            );
+
+        });
+
+    document
+        .querySelectorAll(
+            ".nav-btn[data-section]"
+        )
+        .forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                item.dataset.section === section
+            );
+
+        });
+
+    document
+        .querySelectorAll(
+            ".bottom-btn[data-section]"
+        )
+        .forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                item.dataset.section === section
+            );
+
+        });
+
+    const titles = {
+
+        dashboard:[
+            "Dashboard",
+            "Welcome to the K@si Web command centre."
+        ],
+
+        bookings:[
+            "Bookings",
+            "Monitor appointments across K@si Web."
+        ],
+
+        salons:[
+            "Salons",
+            "Manage the K@si Web salon marketplace."
+        ],
+
+        users:[
+            "Users",
+            "View platform accounts and assigned roles."
+        ]
+
+    };
+
+    const title =
+        titles[section] ||
+        titles.dashboard;
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        title[0];
+
+    document.getElementById(
+        "pageSubtitle"
+    ).textContent =
+        title[1];
+
+    closeSidebar();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+}
+
+function closeSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.remove("open");
+}
+
+
+/* =========================================================
+   WEBSITE NAVIGATION
+========================================================= */
+
+function goHome(){
+
+    window.location.href =
+        "home.html";
+}
+
+function goOwners(){
+
+    window.location.href =
+        "owners.html";
+}
+
+function goSalons(){
+
+    window.location.href =
+        "salons.html";
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+async function refreshData(){
+
+    try{
+
+        showToast(
+            "Refreshing dashboard...",
+            "info"
+        );
+
+        const [
+            bookingsSnap,
+            salonsSnap,
+            usersSnap
+        ] =
+            await Promise.all([
+
+                db
+                    .collection("bookings")
+                    .get(),
+
+                db
+                    .collection("salons")
+                    .get(),
+
+                db
+                    .collection("users")
+                    .get()
+
+            ]);
+
+        bookings =
+            bookingsSnap.docs.map(
+                doc => ({
+                    id:doc.id,
+                    ...doc.data()
+                })
+            );
+
+        salons =
+            salonsSnap.docs.map(
+                doc => ({
+                    id:doc.id,
+                    ...doc.data()
+                })
+            );
+
+        users =
+            usersSnap.docs.map(
+                doc => ({
+                    id:doc.id,
+                    ...doc.data()
+                })
+            );
+
+        updateStats();
+        renderBookings();
+        renderSalons();
+        renderUsers();
+        renderActivity();
+
+        showToast(
+            "Dashboard refreshed.",
+            "success"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Refresh failed: " +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+    try{
+
+        stopRealtimeListeners();
+
+        await auth.signOut();
+
+        window.location.href =
+            "home.html";
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            "Could not sign out.",
+            "error"
+        );
+    }
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function normalizeStatus(value){
+
+    return String(
+        value ||
+        "pending"
+    )
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g,"_");
+}
+
+
+function normalizeRole(value){
+
+    return String(
+        value ||
+        ""
+    )
+    .trim()
+    .toLowerCase();
+}
+
+
+function statusBadge(status){
+
+    status =
+        normalizeStatus(status);
+
+    const map = {
+
+        pending:[
+            "badge-orange",
+            "Pending"
+        ],
+
+        confirmed:[
+            "badge-blue",
+            "Confirmed"
+        ],
+
+        completed:[
+            "badge-green",
+            "Completed"
+        ],
+
+        cancelled:[
+            "badge-red",
+            "Cancelled"
+        ],
+
+        canceled:[
+            "badge-red",
+            "Cancelled"
+        ]
+
+    };
+
+    const item =
+        map[status] ||
+        [
+            "badge-purple",
+            status
+        ];
+
+    return `
+        <span class="badge ${item[0]}">
+            ${escapeHtml(item[1])}
+        </span>
+    `;
+}
+
+
+function roleBadge(role){
+
+    role =
+        normalizeRole(role);
+
+    let cls =
+        "badge-blue";
+
+    let text =
+        role ||
+        "client";
+
+    if(role === "admin"){
+
+        cls = "badge-purple";
+        text = "Admin";
+    }
+
+    if(role === "salon_owner"){
+
+        cls = "badge-orange";
+        text = "Salon Owner";
+    }
+
+    if(role === "client"){
+
+        cls = "badge-blue";
+        text = "Client";
+    }
+
+    return `
+        <span class="badge ${cls}">
+            ${escapeHtml(text)}
+        </span>
+    `;
+}
+
+
+function timestampValue(value){
+
+    if(!value)
+        return 0;
+
+    if(
+        typeof value.toMillis ===
+        "function"
+    ){
+        return value.toMillis();
+    }
+
+    if(
+        value.seconds != null
+    ){
+        return value.seconds * 1000;
+    }
+
+    if(
+        value._seconds != null
+    ){
+        return value._seconds * 1000;
+    }
+
+    const date =
+        new Date(value);
+
+    const time =
+        date.getTime();
+
+    return isNaN(time)
+        ? 0
+        : time;
+}
+
+
+function formatDate(value){
+
+    const time =
+        timestampValue(value);
+
+    if(!time)
+        return "—";
+
+    return new Date(time)
+        .toLocaleDateString(
+            "en-ZA",
+            {
+                day:"2-digit",
+                month:"short",
+                year:"numeric"
+            }
+        );
+}
+
+
+function timeAgo(value){
+
+    const time =
+        timestampValue(value);
+
+    if(!time)
+        return "recent";
+
+    const diff =
+        Math.max(
+            0,
+            Date.now() - time
+        );
+
+    const minutes =
+        Math.floor(
+            diff / 60000
+        );
+
+    if(minutes < 1)
+        return "just now";
+
+    if(minutes < 60)
+        return minutes + "m ago";
+
+    const hours =
+        Math.floor(
+            minutes / 60
+        );
+
+    if(hours < 24)
+        return hours + "h ago";
+
+    const days =
+        Math.floor(
+            hours / 24
+        );
+
+    return days + "d ago";
+}
+
+
+function formatHours(value){
+
+    if(!value)
+        return "—";
+
+    if(typeof value === "string")
+        return value;
+
+    if(typeof value === "object"){
+
+        if(
+            value.open &&
+            value.close
+        ){
+            return (
+                value.open +
+                " - " +
+                value.close
+            );
+        }
+
+        if(
+            value.opening &&
+            value.closing
+        ){
+            return (
+                value.opening +
+                " - " +
+                value.closing
+            );
+        }
+
+        try{
+            return JSON.stringify(value);
+        }catch{
+            return "—";
+        }
+    }
+
+    return String(value);
+}
+
+
+/*
+    Used for values placed inside onclick
+    attributes.
+*/
+
+function escapeAttr(value){
+
+    return String(
+        value ??
+        ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    );
+}
+
+
+function escapeHtml(value){
+
+    return String(
+        value ??
+        ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    message,
+    type = "info"
+){
+
+    const container =
+        document.getElementById(
+            "toastContainer"
+        );
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+    let icon =
+        "bx-info-circle";
+
+    if(type === "success")
+        icon = "bx-check-circle";
+
+    if(type === "error")
+        icon = "bx-error-circle";
+
+    toast.className =
+        `toast ${type}`;
+
+    toast.innerHTML = `
+
+        <i class="bx ${icon}"></i>
+
+        <span>
+            ${escapeHtml(message)}
+        </span>
+
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(
+        () => toast.remove(),
+        3500
+    );
+}
+
+
+/* =========================================================
+   SEARCH EVENTS
+========================================================= */
+
+document
+    .getElementById("bookingSearch")
+    .addEventListener(
+        "input",
+        renderBookings
+    );
+
+document
+    .getElementById("bookingFilter")
+    .addEventListener(
+        "change",
+        renderBookings
+    );
+
+document
+    .getElementById("salonSearch")
+    .addEventListener(
+        "input",
+        renderSalons
+    );
+
+document
+    .getElementById("userSearch")
+    .addEventListener(
+        "input",
+        renderUsers
+    );
+
+document
+    .getElementById("userFilter")
+    .addEventListener(
+        "change",
+        renderUsers
+    );
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+
+            closeModal();
+            closeSidebar();
+
+        }
+
+    }
+);
+
 </script>
 
-</body></html>
+</body>
+    </html>
