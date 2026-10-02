@@ -1,3778 +1,604 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K@si Web - Premier Local Beauty & Salon Booking Platform</title>
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
-
-    <meta
-        name="theme-color"
-        content="#070711"
-    >
-
-    <meta
-        name="description"
-        content="K@si Web — Elite Admin Control Centre"
-    >
-
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent"
-    >
-
-    <title>K@si Web | Admin Control Centre</title>
-
-    <link
-        rel="manifest"
-        href="manifest.json"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-        rel="stylesheet"
-    >
-
-    <style>
-
-        /* =========================================================
-           K@SI WEB
-           ELITE ADMIN CONTROL CENTRE
-           Version 3.0
-           Mobile First • PWA • Firebase • Responsive
-           ========================================================= */
-
-        :root {
-
-            --bg-primary: #070711;
-            --bg-secondary: #0d0b18;
-            --bg-card: rgba(20, 18, 35, .78);
-            --bg-card-strong: rgba(25, 22, 44, .94);
-
-            --primary: #7b68ee;
-            --primary-2: #8b5cf6;
-            --blue: #008cff;
-            --cyan: #00b8ff;
-
-            --success: #25d366;
-            --warning: #f5b942;
-            --danger: #ff4d67;
-
-            --text: #ffffff;
-            --text-soft: #b8b5c7;
-            --text-muted: #77748a;
-
-            --border: rgba(255,255,255,.08);
-            --border-strong: rgba(139,92,246,.28);
-
-            --shadow:
-                0 20px 60px rgba(0,0,0,.42);
-
-            --glow:
-                0 0 40px rgba(123,104,238,.13);
-
-            --radius-lg: 24px;
-            --radius-md: 18px;
-            --radius-sm: 14px;
-
-            --sidebar-width: 255px;
-
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-
-            min-height: 100vh;
-
-            background:
-                radial-gradient(
-                    circle at 85% 5%,
-                    rgba(123,104,238,.15),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 5% 40%,
-                    rgba(0,140,255,.08),
-                    transparent 25%
-                ),
-                var(--bg-primary);
-
-            color: var(--text);
-
-            font-family: "Inter", sans-serif;
-
-            overflow-x: hidden;
-        }
-
-        button,
-        input,
-        select {
-            font: inherit;
-        }
-
-        button {
-            border: 0;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        ::selection {
-            background: var(--primary);
-            color: white;
-        }
-
-        /* =========================================================
-           LOADING
-           ========================================================= */
-
-        #loadingScreen {
-
-            position: fixed;
-            inset: 0;
-
-            z-index: 9999;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #070711;
-        }
-
-        .loading-box {
-            text-align: center;
-        }
-
-        .loading-logo {
-
-            width: 72px;
-            height: 72px;
-
-            margin: auto auto 18px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--blue)
-                );
-
-            font-size: 25px;
-            font-weight: 800;
-
-            box-shadow:
-                0 0 45px rgba(123,104,238,.35);
-        }
-
-        .loading-box h2 {
-            font-family: "Playfair Display", serif;
-            margin-bottom: 6px;
-        }
-
-        .loading-box p {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .loader {
-
-            width: 30px;
-            height: 30px;
-
-            margin: 22px auto 0;
-
-            border-radius: 50%;
-
-            border: 3px solid rgba(255,255,255,.1);
-            border-top-color: var(--primary);
-
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              200: '#fbcfe8',
+              300: '#f472b6',
+              400: '#e879f9',
+              500: '#ec4899',
+              600: '#db2777',
+              700: '#be185d',
+              800: '#9d174d',
+              900: '#831843',
+              950: '#500724',
+            },
+            accent: {
+              50: '#faf5ff',
+              100: '#f3e8ff',
+              200: '#e9d5ff',
+              300: '#d8b4fe',
+              400: '#c084fc',
+              500: '#a855f7',
+              600: '#9333ea',
+              700: '#7e22ce',
+              800: '#6b21a8',
+              900: '#581c87',
             }
-        }
-
-        /* =========================================================
-           ACCESS DENIED
-           ========================================================= */
-
-        #accessDenied {
-
-            display: none;
-
-            min-height: 100vh;
-
-            padding: 30px;
-
-            align-items: center;
-            justify-content: center;
-
-            text-align: center;
-        }
-
-        .denied-card {
-
-            width: min(430px, 100%);
-
-            padding: 35px 25px;
-
-            border: 1px solid var(--border);
-
-            border-radius: 28px;
-
-            background: var(--bg-card);
-
-            backdrop-filter: blur(25px);
-
-            box-shadow: var(--shadow);
-        }
-
-        .denied-icon {
-
-            width: 70px;
-            height: 70px;
-
-            margin: 0 auto 20px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 22px;
-
-            background: rgba(255,77,103,.1);
-
-            color: var(--danger);
-
-            font-size: 32px;
-        }
-
-        .denied-card h2 {
-            margin-bottom: 10px;
-        }
-
-        .denied-card p {
-            color: var(--text-soft);
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        /* =========================================================
-           APP
-           ========================================================= */
-
-        #app {
-            display: none;
-        }
-
-        .app-shell {
-            min-height: 100vh;
-        }
-
-        /* =========================================================
-           SIDEBAR
-           ========================================================= */
-
-        .sidebar {
-
-            position: fixed;
-
-            top: 0;
-            left: 0;
-            bottom: 0;
-
-            width: var(--sidebar-width);
-
-            padding: 25px 17px;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    rgba(18,16,32,.98),
-                    rgba(8,8,16,.98)
-                );
-
-            border-right: 1px solid var(--border);
-
-            z-index: 100;
-
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            padding: 4px 9px 28px;
-        }
-
-        .brand-mark {
-
-            width: 43px;
-            height: 43px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 14px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--blue)
-                );
-
-            font-weight: 800;
-            font-size: 16px;
-
-            box-shadow:
-                0 0 25px rgba(123,104,238,.25);
-        }
-
-        .brand-name {
-
-            font-size: 16px;
-            font-weight: 800;
-            letter-spacing: -.3px;
-        }
-
-        .brand-sub {
-            color: var(--text-muted);
-            font-size: 10px;
-            margin-top: 2px;
-        }
-
-        .nav-title {
-
-            padding: 12px 12px 8px;
-
-            color: var(--text-muted);
-
-            text-transform: uppercase;
-
-            letter-spacing: 1.3px;
-
-            font-size: 9px;
-            font-weight: 700;
-        }
-
-        .nav {
-
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .nav-item {
-
-            position: relative;
-
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            width: 100%;
-
-            padding: 12px 13px;
-
-            color: var(--text-soft);
-
-            border-radius: 13px;
-
-            cursor: pointer;
-
-            transition: .2s ease;
-
-            font-size: 13px;
-            font-weight: 600;
-
-            background: transparent;
-        }
-
-        .nav-item i {
-            font-size: 20px;
-        }
-
-        .nav-item:hover {
-            color: white;
-            background: rgba(255,255,255,.05);
-        }
-
-        .nav-item.active {
-
-            color: white;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(123,104,238,.2),
-                    rgba(0,140,255,.08)
-                );
-
-            border: 1px solid rgba(123,104,238,.14);
-        }
-
-        .nav-item.active::before {
-
-            content: "";
-
-            position: absolute;
-
-            left: -17px;
-
-            width: 3px;
-            height: 23px;
-
-            border-radius: 0 4px 4px 0;
-
-            background:
-                linear-gradient(
-                    var(--primary),
-                    var(--blue)
-                );
-        }
-
-        .sidebar-bottom {
-            margin-top: auto;
-        }
-
-        .admin-mini {
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            padding: 13px;
-
-            margin-bottom: 10px;
-
-            border: 1px solid var(--border);
-
-            border-radius: 15px;
-
-            background: rgba(255,255,255,.025);
-        }
-
-        .admin-avatar {
-
-            width: 37px;
-            height: 37px;
-
-            display: grid;
-            place-items: center;
-
-            flex-shrink: 0;
-
-            border-radius: 12px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--blue)
-                );
-
-            font-weight: 800;
-        }
-
-        .admin-info {
-            min-width: 0;
-        }
-
-        .admin-info strong {
-
-            display: block;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-            white-space: nowrap;
-
-            font-size: 12px;
-        }
-
-        .admin-info span {
-
-            display: block;
-
-            margin-top: 2px;
-
-            color: var(--success);
-
-            font-size: 9px;
-        }
-
-        /* =========================================================
-           MAIN
-           ========================================================= */
-
-        .main {
-
-            min-height: 100vh;
-
-            margin-left: var(--sidebar-width);
-
-            padding: 26px 30px 45px;
-        }
-
-        .topbar {
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            margin-bottom: 26px;
-        }
-
-        .page-heading h1 {
-
-            font-family: "Playfair Display", serif;
-
-            font-size: clamp(25px, 4vw, 35px);
-
-            line-height: 1.1;
-        }
-
-        .page-heading p {
-
-            margin-top: 7px;
-
-            color: var(--text-muted);
-
-            font-size: 12px;
-        }
-
-        .top-actions {
-
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .icon-btn {
-
-            width: 42px;
-            height: 42px;
-
-            display: grid;
-            place-items: center;
-
-            border: 1px solid var(--border);
-
-            border-radius: 13px;
-
-            background: rgba(255,255,255,.035);
-
-            color: var(--text-soft);
-
-            cursor: pointer;
-
-            transition: .2s;
-        }
-
-        .icon-btn:hover {
-
-            color: white;
-
-            border-color: var(--border-strong);
-
-            background: rgba(123,104,238,.1);
-        }
-
-        .menu-btn {
-            display: none;
-        }
-
-        /* =========================================================
-           HERO
-           ========================================================= */
-
-        .hero {
-
-            position: relative;
-
-            overflow: hidden;
-
-            padding: 28px;
-
-            margin-bottom: 20px;
-
-            border: 1px solid rgba(139,92,246,.18);
-
-            border-radius: var(--radius-lg);
-
-            background:
-                radial-gradient(
-                    circle at 90% 20%,
-                    rgba(0,140,255,.18),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 50% 100%,
-                    rgba(139,92,246,.15),
-                    transparent 40%
-                ),
-                rgba(17,15,30,.75);
-
-            box-shadow: var(--shadow);
-        }
-
-        .hero::after {
-
-            content: "";
-
-            position: absolute;
-
-            width: 180px;
-            height: 180px;
-
-            right: -70px;
-            top: -70px;
-
-            border-radius: 50%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(123,104,238,.18),
-                    transparent
-                );
-
-            filter: blur(10px);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 680px;
-        }
-
-        .eyebrow {
-
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-
-            margin-bottom: 12px;
-
-            padding: 6px 10px;
-
-            border-radius: 100px;
-
-            background: rgba(123,104,238,.1);
-
-            color: #c7bfff;
-
-            font-size: 9px;
-            font-weight: 800;
-
-            letter-spacing: 1.2px;
-
-            text-transform: uppercase;
-        }
-
-        .eyebrow i {
-            color: var(--success);
-            font-size: 12px;
-        }
-
-        .hero h2 {
-
-            font-family: "Playfair Display", serif;
-
-            font-size: clamp(25px, 5vw, 38px);
-
-            line-height: 1.15;
-
-            margin-bottom: 9px;
-        }
-
-        .hero h2 span {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #a99cff,
-                    #55bfff
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-        }
-
-        .hero p {
-
-            color: var(--text-soft);
-
-            max-width: 610px;
-
-            font-size: 13px;
-
-            line-height: 1.65;
-        }
-
-        /* =========================================================
-           STATS
-           ========================================================= */
-
-        .stats-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-
-            gap: 15px;
-
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-
-            position: relative;
-
-            overflow: hidden;
-
-            padding: 19px;
-
-            min-height: 140px;
-
-            border: 1px solid var(--border);
-
-            border-radius: var(--radius-md);
-
-            background: var(--bg-card);
-
-            backdrop-filter: blur(18px);
-
-            box-shadow: var(--glow);
-
-            transition: transform .2s, border-color .2s;
-        }
-
-        .stat-card:hover {
-
-            transform: translateY(-2px);
-
-            border-color: var(--border-strong);
-        }
-
-        .stat-top {
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .stat-icon {
-
-            width: 39px;
-            height: 39px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 12px;
-
-            background: rgba(123,104,238,.1);
-
-            color: #a99cff;
-
-            font-size: 20px;
-        }
-
-        .stat-change {
-
-            padding: 5px 7px;
-
-            border-radius: 8px;
-
-            background: rgba(37,211,102,.08);
-
-            color: var(--success);
-
-            font-size: 9px;
-            font-weight: 700;
-        }
-
-        .stat-number {
-
-            margin-top: 18px;
-
-            font-size: 27px;
-
-            font-weight: 800;
-
-            letter-spacing: -.8px;
-        }
-
-        .stat-label {
-
-            margin-top: 3px;
-
-            color: var(--text-muted);
-
-            font-size: 10px;
-        }
-
-        /* =========================================================
-           CONTENT GRID
-           ========================================================= */
-
-        .content-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                minmax(0, 1.45fr)
-                minmax(280px, .75fr);
-
-            gap: 20px;
-        }
-
-        .panel {
-
-            border: 1px solid var(--border);
-
-            border-radius: var(--radius-lg);
-
-            background: var(--bg-card);
-
-            backdrop-filter: blur(18px);
-
-            overflow: hidden;
-        }
-
-        .panel-head {
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 20px 21px;
-
-            border-bottom: 1px solid var(--border);
-        }
-
-        .panel-title {
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .panel-title h3 {
-
-            font-size: 14px;
-            font-weight: 750;
-        }
-
-        .panel-title i {
-
-            color: #a99cff;
-
-            font-size: 19px;
-        }
-
-        .view-btn {
-
-            color: #a99cff;
-
-            font-size: 10px;
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-        /* =========================================================
-           BOOKINGS
-           ========================================================= */
-
-        .booking-list {
-            padding: 5px 20px 10px;
-        }
-
-        .booking {
-
-            display: grid;
-
-            grid-template-columns:
-                42px
-                minmax(0, 1fr)
-                auto;
-
-            gap: 12px;
-
-            align-items: center;
-
-            padding: 15px 0;
-
-            border-bottom: 1px solid rgba(255,255,255,.045);
-        }
-
-        .booking:last-child {
-            border-bottom: 0;
-        }
-
-        .booking-avatar {
-
-            width: 42px;
-            height: 42px;
-
-            display: grid;
-            place-items: center;
-
-            border-radius: 13px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(123,104,238,.22),
-                    rgba(0,140,255,.12)
-                );
-
-            color: #c9c1ff;
-
-            font-size: 17px;
-        }
-
-        .booking-main {
-            min-width: 0;
-        }
-
-        .booking-main strong {
-
-            display: block;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-            white-space: nowrap;
-
-            font-size: 12px;
-        }
-
-        .booking-main span {
-
-            display: block;
-
-            margin-top: 4px;
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-            white-space: nowrap;
-
-            color: var(--text-muted);
-
-            font-size: 10px;
-        }
-
-        .booking-side {
-            text-align: right;
-        }
-
-        .status {
-
-            display: inline-block;
-
-            padding: 5px 8px;
-
-            border-radius: 8px;
-
-            font-size: 8px;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .5px;
-        }
-
-        .status.pending {
-
-            color: var(--warning);
-
-            background: rgba(245,185,66,.09);
-        }
-
-        .status.confirmed {
-
-            color: var(--success);
-
-            background: rgba(37,211,102,.09);
-        }
-
-        .status.cancelled {
-
-            color: var(--danger);
-
-            background: rgba(255,77,103,.09);
-        }
-
-        .status.completed {
-
-            color: #7fc9ff;
-
-            background: rgba(0,140,255,.09);
-        }
-
-        .booking-time {
-
-            display: block;
-
-            margin-top: 5px;
-
-            color: var(--text-muted);
-
-            font-size: 9px;
-        }
-
-        /* =========================================================
-           RIGHT COLUMN
-           ========================================================= */
-
-        .side-stack {
-
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* =========================================================
-           QUICK ACTIONS
-           ========================================================= */
-
-        .quick-actions {
-            padding: 15px;
-        }
-
-        .quick-btn {
-
-            display: flex;
-            align-items: center;
-            gap: 11px;
-
-            width: 100%;
-
-            padding: 13px;
-
-            margin-bottom: 7px;
-
-            border: 1px solid transparent;
-
-            border-radius: 13px;
-
-            background: rgba(255,255,255,.025);
-
-            color: var(--text-soft);
-
-            cursor: pointer;
-
-            text-align: left;
-
-            transition: .2s;
-        }
-
-        .quick-btn:last-child {
-            margin-bottom: 0;
-        }
-
-        .quick-btn:hover {
-
-            color: white;
-
-            border-color: var(--border-strong);
-
-            background: rgba(123,104,238,.08);
-        }
-
-        .quick-icon {
-
-            width: 35px;
-            height: 35px;
-
-            display: grid;
-            place-items: center;
-
-            flex-shrink: 0;
-
-            border-radius: 10px;
-
-            background: rgba(123,104,238,.1);
-
-            color: #a99cff;
-
-            font-size: 18px;
-        }
-
-        .quick-text strong {
-
-            display: block;
-
-            font-size: 11px;
-        }
-
-        .quick-text span {
-
-            display: block;
-
-            margin-top: 2px;
-
-            color: var(--text-muted);
-
-            font-size: 9px;
-        }
-
-        /* =========================================================
-           PLATFORM HEALTH
-           ========================================================= */
-
-        .health {
-            padding: 18px 20px 21px;
-        }
-
-        .health-row {
-            margin-bottom: 16px;
-        }
-
-        .health-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .health-head {
-
-            display: flex;
-            justify-content: space-between;
-
-            margin-bottom: 7px;
-
-            font-size: 10px;
-        }
-
-        .health-head span:first-child {
-            color: var(--text-soft);
-        }
-
-        .health-head span:last-child {
-            color: var(--text-muted);
-        }
-
-        .progress {
-
-            height: 5px;
-
-            overflow: hidden;
-
-            border-radius: 10px;
-
-            background: rgba(255,255,255,.06);
-        }
-
-        .progress span {
-
-            display: block;
-
-            height: 100%;
-
-            border-radius: inherit;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--primary),
-                    var(--blue)
-                );
-        }
-
-        /* =========================================================
-           SALONS
-           ========================================================= */
-
-        .salon-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
-
-            gap: 15px;
-
-            margin-top: 20px;
-        }
-
-        .salon-card {
-
-            overflow: hidden;
-
-            border: 1px solid var(--border);
-
-            border-radius: var(--radius-md);
-
-            background: var(--bg-card);
-        }
-
-        .salon-image {
-
-            height: 120px;
-
-            position: relative;
-
-            overflow: hidden;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #161329,
-                    #0e1828
-                );
-        }
-
-        .salon-image img {
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-
-            opacity: .82;
-        }
-
-        .salon-image .rating {
-
-            position: absolute;
-
-            top: 9px;
-            right: 9px;
-
-            padding: 5px 7px;
-
-            border-radius: 8px;
-
-            background: rgba(0,0,0,.65);
-
-            backdrop-filter: blur(8px);
-
-            color: #ffd166;
-
-            font-size: 9px;
-            font-weight: 700;
-        }
-
-        .salon-info {
-            padding: 13px;
-        }
-
-        .salon-info h4 {
-
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-
-            white-space: nowrap;
-
-            font-size: 12px;
-        }
-
-        .salon-info p {
-
-            margin-top: 5px;
-
-            color: var(--text-muted);
-
-            font-size: 9px;
-        }
-
-        .salon-meta {
-
-            display: flex;
-            justify-content: space-between;
-
-            margin-top: 11px;
-
-            color: var(--text-soft);
-
-            font-size: 9px;
-        }
-
-        /* =========================================================
-           EMPTY STATE
-           ========================================================= */
-
-        .empty {
-
-            padding: 35px 20px;
-
-            text-align: center;
-
-            color: var(--text-muted);
-        }
-
-        .empty i {
-
-            display: block;
-
-            margin-bottom: 9px;
-
-            font-size: 30px;
-        }
-
-        .empty p {
-            font-size: 11px;
-        }
-
-        /* =========================================================
-           TOAST
-           ========================================================= */
-
-        #toast {
-
-            position: fixed;
-
-            left: 50%;
-            bottom: 25px;
-
-            z-index: 99999;
-
-            transform:
-                translate(-50%, 100px);
-
-            min-width: 250px;
-            max-width: calc(100% - 30px);
-
-            padding: 13px 16px;
-
-            border: 1px solid var(--border);
-
-            border-radius: 14px;
-
-            background: rgba(20,18,35,.96);
-
-            backdrop-filter: blur(18px);
-
-            box-shadow: var(--shadow);
-
-            text-align: center;
-
-            color: white;
-
-            font-size: 11px;
-
-            opacity: 0;
-
-            transition: .3s;
-        }
-
-        #toast.show {
-
-            transform:
-                translate(-50%, 0);
-
-            opacity: 1;
-        }
-
-        #toast.success {
-            border-color: rgba(37,211,102,.25);
-        }
-
-        #toast.error {
-            border-color: rgba(255,77,103,.25);
-        }
-
-        /* =========================================================
-           MOBILE BOTTOM NAV
-           ========================================================= */
-
-        .mobile-nav {
-            display: none;
-        }
-
-        /* =========================================================
-           RESPONSIVE
-           ========================================================= */
-
-        @media (max-width: 1100px) {
-
-            .stats-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .side-stack {
-                display: grid;
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-            .salon-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-        }
-
-        @media (max-width: 800px) {
-
-            .sidebar {
-
-                transform: translateX(-100%);
-
-                transition: transform .25s ease;
-
-                box-shadow: 20px 0 50px rgba(0,0,0,.5);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main {
-
-                margin-left: 0;
-
-                padding:
-                    20px
-                    20px
-                    90px;
-            }
-
-            .menu-btn {
-                display: grid;
-            }
-
-            .mobile-nav {
-
-                position: fixed;
-
-                display: grid;
-
-                grid-template-columns:
-                    repeat(4, 1fr);
-
-                left: 12px;
-                right: 12px;
-                bottom: 12px;
-
-                z-index: 500;
-
-                padding: 7px;
-
-                border: 1px solid rgba(255,255,255,.1);
-
-                border-radius: 19px;
-
-                background:
-                    rgba(13,11,24,.91);
-
-                backdrop-filter: blur(22px);
-
-                box-shadow:
-                    0 15px 45px rgba(0,0,0,.45);
-            }
-
-            .mobile-nav button {
-
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-
-                gap: 3px;
-
-                min-height: 50px;
-
-                border-radius: 13px;
-
-                background: transparent;
-
-                color: var(--text-muted);
-
-                cursor: pointer;
-
-                font-size: 8px;
-            }
-
-            .mobile-nav button i {
-                font-size: 19px;
-            }
-
-            .mobile-nav button.active {
-
-                color: white;
-
-                background:
-                    rgba(123,104,238,.12);
-            }
-
-            .side-stack {
-                grid-template-columns: 1fr;
-            }
-
-        }
-
-        @media (max-width: 580px) {
-
-            .main {
-                padding: 15px 14px 88px;
-            }
-
-            .topbar {
-                margin-bottom: 18px;
-            }
-
-            .page-heading h1 {
-                font-size: 26px;
-            }
-
-            .page-heading p {
-                font-size: 10px;
-            }
-
-            .top-actions .desktop-refresh {
-                display: none;
-            }
-
-            .hero {
-                padding: 22px 19px;
-                border-radius: 20px;
-            }
-
-            .hero h2 {
-                font-size: 26px;
-            }
-
-            .hero p {
-                font-size: 11px;
-            }
-
-            .stats-grid {
-
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-
-                gap: 9px;
-            }
-
-            .stat-card {
-
-                min-height: 120px;
-
-                padding: 14px;
-            }
-
-            .stat-number {
-                font-size: 23px;
-                margin-top: 13px;
-            }
-
-            .stat-label {
-                font-size: 9px;
-            }
-
-            .stat-icon {
-
-                width: 34px;
-                height: 34px;
-
-                font-size: 17px;
-            }
-
-            .stat-change {
-                display: none;
-            }
-
-            .panel {
-                border-radius: 19px;
-            }
-
-            .panel-head {
-                padding: 16px;
-            }
-
-            .booking-list {
-                padding: 3px 16px 7px;
-            }
-
-            .booking {
-                grid-template-columns:
-                    36px
-                    minmax(0, 1fr)
-                    auto;
-
-                gap: 9px;
-            }
-
-            .booking-avatar {
-
-                width: 36px;
-                height: 36px;
-
-                border-radius: 10px;
-
-                font-size: 15px;
-            }
-
-            .booking-main strong {
-                font-size: 10px;
-            }
-
-            .booking-main span {
-                font-size: 8px;
-            }
-
-            .booking-side .status {
-                font-size: 7px;
-            }
-
-            .booking-time {
-                font-size: 8px;
-            }
-
-            .salon-grid {
-                grid-template-columns: 1fr;
-            }
-
-        }
-
-        /* =========================================================
-           SIDEBAR OVERLAY
-           ========================================================= */
-
-        .sidebar-overlay {
-
-            display: none;
-
-            position: fixed;
-
-            inset: 0;
-
-            z-index: 90;
-
-            background: rgba(0,0,0,.6);
-
-            backdrop-filter: blur(3px);
-        }
-
-        .sidebar-overlay.show {
-            display: block;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<!-- =========================================================
-     LOADING SCREEN
-     ========================================================= -->
-
-<div id="loadingScreen">
-
-    <div class="loading-box">
-
-        <div class="loading-logo">
-            K@
-        </div>
-
-        <h2>K@si Web</h2>
-
-        <p>Loading Admin Control Centre...</p>
-
-        <div class="loader"></div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     ACCESS DENIED
-     ========================================================= -->
-
-<section id="accessDenied">
-
-    <div class="denied-card">
-
-        <div class="denied-icon">
-            <i class="bx bx-lock-alt"></i>
-        </div>
-
-        <h2>Admin Access Required</h2>
-
-        <p>
-            This area is restricted to verified K@si Web
-            administrators.
-        </p>
-
-        <button
-            id="deniedHome"
-            class="quick-btn"
-            style="margin-top:22px; justify-content:center;"
-        >
-            <i class="bx bx-home"></i>
-            Return Home
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     APP
-     ========================================================= -->
-
-<div id="app">
-
-    <div class="app-shell">
-
-
-        <!-- =====================================================
-             SIDEBAR
-             ===================================================== -->
-
-        <aside
-            class="sidebar"
-            id="sidebar"
-        >
-
-            <div class="brand">
-
-                <div class="brand-mark">
-                    K@
-                </div>
-
-                <div>
-
-                    <div class="brand-name">
-                        K@si Web
-                    </div>
-
-                    <div class="brand-sub">
-                        Admin Control Centre
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="nav-title">
-                Management
-            </div>
-
-
-            <nav class="nav">
-
-                <button
-                    class="nav-item active"
-                    data-section="dashboard"
-                >
-                    <i class="bx bx-grid-alt"></i>
-                    Dashboard
-                </button>
-
-                <button
-                    class="nav-item"
-                    data-section="bookings"
-                >
-                    <i class="bx bx-calendar-check"></i>
-                    Bookings
-                </button>
-
-                <button
-                    class="nav-item"
-                    data-section="salons"
-                >
-                    <i class="bx bx-store"></i>
-                    Salons
-                </button>
-
-                <button
-                    class="nav-item"
-                    data-section="users"
-                >
-                    <i class="bx bx-group"></i>
-                    Users
-                </button>
-
-            </nav>
-
-
-            <div class="nav-title">
-                Platform
-            </div>
-
-
-            <nav class="nav">
-
-                <button
-                    class="nav-item"
-                    id="homeBtn"
-                >
-                    <i class="bx bx-home"></i>
-                    K@si Home
-                </button>
-
-                <button
-                    class="nav-item"
-                    id="refreshBtn"
-                >
-                    <i class="bx bx-refresh"></i>
-                    Refresh Data
-                </button>
-
-            </nav>
-
-
-            <div class="sidebar-bottom">
-
-                <div class="admin-mini">
-
-                    <div class="admin-avatar">
-                        A
-                    </div>
-
-                    <div class="admin-info">
-
-                        <strong id="adminEmail">
-                            Administrator
-                        </strong>
-
-                        <span>
-                            ● Online
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    class="nav-item"
-                    id="logoutBtn"
-                >
-
-                    <i class="bx bx-log-out"></i>
-
-                    Sign Out
-
-                </button>
-
-            </div>
-
-        </aside>
-
-
-        <div
-            class="sidebar-overlay"
-            id="sidebarOverlay"
-        ></div>
-
-
-        <!-- =====================================================
-             MAIN
-             ===================================================== -->
-
-        <main class="main">
-
-
-            <!-- TOPBAR -->
-
-            <header class="topbar">
-
-                <div class="page-heading">
-
-                    <h1>
-                        Admin Dashboard
-                    </h1>
-
-                    <p id="dateText">
-                        K@si Web platform overview
-                    </p>
-
-                </div>
-
-
-                <div class="top-actions">
-
-                    <button
-                        class="icon-btn menu-btn"
-                        id="menuBtn"
-                        aria-label="Menu"
-                    >
-                        <i class="bx bx-menu"></i>
-                    </button>
-
-                    <button
-                        class="icon-btn desktop-refresh"
-                        id="refreshTop"
-                        aria-label="Refresh"
-                    >
-                        <i class="bx bx-refresh"></i>
-                    </button>
-
-                </div>
-
-            </header>
-
-
-            <!-- =================================================
-                 HERO
-                 ================================================= -->
-
-            <section class="hero">
-
-                <div class="hero-content">
-
-                    <div class="eyebrow">
-
-                        <i class="bx bx-check-circle"></i>
-
-                        ADMIN SYSTEM ONLINE
-
-                    </div>
-
-                    <h2>
-                        Welcome to the
-                        <span>
-                            K@si Control Centre.
-                        </span>
-                    </h2>
-
-                    <p>
-                        Manage salons, customers and bookings
-                        from one streamlined command centre.
-                        Your platform data updates automatically
-                        from Firebase.
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 STATS
-                 ================================================= -->
-
-            <section class="stats-grid">
-
-
-                <article class="stat-card">
-
-                    <div class="stat-top">
-
-                        <div class="stat-icon">
-                            <i class="bx bx-group"></i>
-                        </div>
-
-                        <span
-                            class="stat-change"
-                            id="userChange"
-                        >
-                            LIVE
-                        </span>
-
-                    </div>
-
-                    <div
-                        class="stat-number"
-                        id="userCount"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-label">
-                        Registered Users
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-top">
-
-                        <div class="stat-icon">
-                            <i class="bx bx-store"></i>
-                        </div>
-
-                        <span
-                            class="stat-change"
-                            id="salonChange"
-                        >
-                            LIVE
-                        </span>
-
-                    </div>
-
-                    <div
-                        class="stat-number"
-                        id="salonCount"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-label">
-                        Active Salons
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-top">
-
-                        <div class="stat-icon">
-                            <i class="bx bx-calendar-check"></i>
-                        </div>
-
-                        <span
-                            class="stat-change"
-                            id="bookingChange"
-                        >
-                            LIVE
-                        </span>
-
-                    </div>
-
-                    <div
-                        class="stat-number"
-                        id="bookingCount"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-label">
-                        Total Bookings
-                    </div>
-
-                </article>
-
-
-                <article class="stat-card">
-
-                    <div class="stat-top">
-
-                        <div class="stat-icon">
-                            <i class="bx bx-time-five"></i>
-                        </div>
-
-                        <span
-                            class="stat-change"
-                            id="pendingChange"
-                        >
-                            ACTION
-                        </span>
-
-                    </div>
-
-                    <div
-                        class="stat-number"
-                        id="pendingCount"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-label">
-                        Pending Bookings
-                    </div>
-
-                </article>
-
-
-            </section>
-
-
-            <!-- =================================================
-                 CONTENT
-                 ================================================= -->
-
-            <section class="content-grid">
-
-
-                <!-- BOOKINGS -->
-
-                <div class="panel">
-
-                    <div class="panel-head">
-
-                        <div class="panel-title">
-
-                            <i class="bx bx-calendar-check"></i>
-
-                            <h3>
-                                Recent Bookings
-                            </h3>
-
-                        </div>
-
-                        <button
-                            class="view-btn"
-                            id="viewBookings"
-                        >
-                            View all
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        class="booking-list"
-                        id="bookingList"
-                    >
-
-                        <div class="empty">
-
-                            <i class="bx bx-loader-alt bx-spin"></i>
-
-                            <p>
-                                Loading bookings...
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- RIGHT SIDE -->
-
-                <div class="side-stack">
-
-
-                    <!-- QUICK ACTIONS -->
-
-                    <div class="panel">
-
-                        <div class="panel-head">
-
-                            <div class="panel-title">
-
-                                <i class="bx bx-bolt-circle"></i>
-
-                                <h3>
-                                    Quick Actions
-                                </h3>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="quick-actions">
-
-
-                            <button
-                                class="quick-btn"
-                                id="quickSalons"
-                            >
-
-                                <div class="quick-icon">
-                                    <i class="bx bx-store"></i>
-                                </div>
-
-                                <div class="quick-text">
-
-                                    <strong>
-                                        Manage Salons
-                                    </strong>
-
-                                    <span>
-                                        Review registered salons
-                                    </span>
-
-                                </div>
-
-                            </button>
-
-
-                            <button
-                                class="quick-btn"
-                                id="quickUsers"
-                            >
-
-                                <div class="quick-icon">
-                                    <i class="bx bx-group"></i>
-                                </div>
-
-                                <div class="quick-text">
-
-                                    <strong>
-                                        Manage Users
-                                    </strong>
-
-                                    <span>
-                                        View platform accounts
-                                    </span>
-
-                                </div>
-
-                            </button>
-
-
-                            <button
-                                class="quick-btn"
-                                id="quickBookings"
-                            >
-
-                                <div class="quick-icon">
-                                    <i class="bx bx-calendar"></i>
-                                </div>
-
-                                <div class="quick-text">
-
-                                    <strong>
-                                        Review Bookings
-                                    </strong>
-
-                                    <span>
-                                        Monitor appointments
-                                    </span>
-
-                                </div>
-
-                            </button>
-
-
-                            <button
-                                class="quick-btn"
-                                id="quickHome"
-                            >
-
-                                <div class="quick-icon">
-                                    <i class="bx bx-home"></i>
-                                </div>
-
-                                <div class="quick-text">
-
-                                    <strong>
-                                        Open K@si Home
-                                    </strong>
-
-                                    <span>
-                                        Return to customer platform
-                                    </span>
-
-                                </div>
-
-                            </button>
-
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- PLATFORM HEALTH -->
-
-                    <div class="panel">
-
-                        <div class="panel-head">
-
-                            <div class="panel-title">
-
-                                <i class="bx bx-pulse"></i>
-
-                                <h3>
-                                    Platform Health
-                                </h3>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="health">
-
-
-                            <div class="health-row">
-
-                                <div class="health-head">
-
-                                    <span>
-                                        Authentication
-                                    </span>
-
-                                    <span id="authHealth">
-                                        Checking
-                                    </span>
-
-                                </div>
-
-                                <div class="progress">
-                                    <span
-                                        id="authProgress"
-                                        style="width:100%"
-                                    ></span>
-                                </div>
-
-                            </div>
-
-
-                            <div class="health-row">
-
-                                <div class="health-head">
-
-                                    <span>
-                                        Firestore
-                                    </span>
-
-                                    <span id="firestoreHealth">
-                                        Checking
-                                    </span>
-
-                                </div>
-
-                                <div class="progress">
-                                    <span
-                                        id="firestoreProgress"
-                                        style="width:100%"
-                                    ></span>
-                                </div>
-
-                            </div>
-
-
-                            <div class="health-row">
-
-                                <div class="health-head">
-
-                                    <span>
-                                        Live Data
-                                    </span>
-
-                                    <span id="liveHealth">
-                                        Active
-                                    </span>
-
-                                </div>
-
-                                <div class="progress">
-                                    <span
-                                        id="liveProgress"
-                                        style="width:100%"
-                                    ></span>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 SALONS
-                 ================================================= -->
-
-            <section
-                class="panel"
-                style="margin-top:20px;"
-            >
-
-                <div class="panel-head">
-
-                    <div class="panel-title">
-
-                        <i class="bx bx-store"></i>
-
-                        <h3>
-                            Salon Network
-                        </h3>
-
-                    </div>
-
-                    <button
-                        class="view-btn"
-                        id="viewSalons"
-                    >
-                        View all
-                    </button>
-
-                </div>
-
-
-                <div
-                    class="salon-grid"
-                    id="salonGrid"
-                >
-
-                    <div class="empty">
-                        <i class="bx bx-loader-alt bx-spin"></i>
-                        <p>Loading salons...</p>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-        </main>
-
-    </div>
-
-
-    <!-- =========================================================
-         MOBILE NAV
-         ========================================================= -->
-
-    <nav class="mobile-nav">
-
-        <button
-            class="active"
-            data-mobile="dashboard"
-        >
-
-            <i class="bx bx-grid-alt"></i>
-
-            Dashboard
-
-        </button>
-
-        <button
-            data-mobile="bookings"
-        >
-
-            <i class="bx bx-calendar-check"></i>
-
-            Bookings
-
-        </button>
-
-        <button
-            data-mobile="salons"
-        >
-
-            <i class="bx bx-store"></i>
-
-            Salons
-
-        </button>
-
-        <button
-            data-mobile="users"
-        >
-
-            <i class="bx bx-group"></i>
-
-            Users
-
-        </button>
-
-    </nav>
-
-</div>
-
-
-<!-- TOAST -->
-
-<div id="toast"></div>
-
-
-<!-- =========================================================
-     FIREBASE COMPAT
-     ========================================================= -->
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-
-<script>
-
-    /* =========================================================
-       FIREBASE
-       ========================================================= */
-
-    const firebaseConfig = {
-
-        apiKey:
-            "REPLACE_WITH_YOUR_FIREBASE_API_KEY",
-
-        authDomain:
-            "kasi-web-d073f.firebaseapp.com",
-
-        projectId:
-            "kasi-web-d073f",
-
-        storageBucket:
-            "kasi-web-d073f.appspot.com",
-
-        messagingSenderId:
-            "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
-
-        appId:
-            "REPLACE_WITH_YOUR_FIREBASE_APP_ID"
-
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
     };
+  </script>
 
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    let firebaseReady = false;
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    try {
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        window.firebaseAuth =
-            firebase.auth();
-
-        window.firebaseDB =
-            firebase.firestore();
-
-        firebaseReady = true;
-
-    } catch (error) {
-
-        console.error(
-            "Firebase initialization error:",
-            error
-        );
-
+  <style>
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-
-
-    /* =========================================================
-       ELEMENTS
-       ========================================================= */
-
-    const loadingScreen =
-        document.getElementById("loadingScreen");
-
-    const accessDenied =
-        document.getElementById("accessDenied");
-
-    const app =
-        document.getElementById("app");
-
-    const toast =
-        document.getElementById("toast");
-
-
-    let currentUser = null;
-
-    let usersData = [];
-
-    let salonsData = [];
-
-    let bookingsData = [];
-
-
-    /* =========================================================
-       TOAST
-       ========================================================= */
-
-    function showToast(
-        message,
-        type = "success"
-    ) {
-
-        toast.textContent = message;
-
-        toast.className =
-            "show " + type;
-
-        clearTimeout(
-            window.toastTimer
-        );
-
-        window.toastTimer =
-            setTimeout(() => {
-
-                toast.className = "";
-
-            }, 3000);
-
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-
-
-    /* =========================================================
-       NORMALIZE ROLE
-       ========================================================= */
-
-    function normalizeRole(role) {
-
-        return String(
-            role || ""
-        )
-        .trim()
-        .toLowerCase();
-
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
     }
-
-
-    /* =========================================================
-       DATE
-       ========================================================= */
-
-    function updateDate() {
-
-        const date =
-            new Date();
-
-        document.getElementById(
-            "dateText"
-        ).textContent =
-            date.toLocaleDateString(
-                undefined,
-                {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                }
-            );
-
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(219, 39, 119, 0.4);
+      border-radius: 9999px;
     }
-
-
-    /* =========================================================
-       AUTHENTICATION
-       ========================================================= */
-
-    if (firebaseReady) {
-
-        firebaseAuth.onAuthStateChanged(
-            async user => {
-
-                if (!user) {
-
-                    window.location.href =
-                        "home.html";
-
-                    return;
-                }
-
-                currentUser = user;
-
-                try {
-
-                    const userRef =
-                        firebaseDB
-                            .collection("users")
-                            .doc(user.uid);
-
-                    const userSnap =
-                        await userRef.get();
-
-                    if (!userSnap.exists) {
-
-                        denyAccess();
-
-                        return;
-                    }
-
-                    const userData =
-                        userSnap.data();
-
-                    const role =
-                        normalizeRole(
-                            userData.role ||
-                            userData.Role
-                        );
-
-                    console.log(
-                        "Admin role:",
-                        role
-                    );
-
-                    if (role !== "admin") {
-
-                        denyAccess();
-
-                        return;
-                    }
-
-                    document.getElementById(
-                        "adminEmail"
-                    ).textContent =
-                        user.email ||
-                        userData.email ||
-                        "Administrator";
-
-                    grantAccess();
-
-                } catch (error) {
-
-                    console.error(
-                        "Admin verification error:",
-                        error
-                    );
-
-                    denyAccess();
-
-                }
-
-            }
-        );
-
-    } else {
-
-        setTimeout(() => {
-
-            denyAccess();
-
-        }, 1000);
-
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(219, 39, 119, 0.7);
     }
-
-
-    /* =========================================================
-       ACCESS
-       ========================================================= */
-
-    function grantAccess() {
-
-        loadingScreen.style.display =
-            "none";
-
-        accessDenied.style.display =
-            "none";
-
-        app.style.display =
-            "block";
-
-        updateDate();
-
-        loadDashboard();
-
-    }
-
-
-    function denyAccess() {
-
-        loadingScreen.style.display =
-            "none";
-
-        app.style.display =
-            "none";
-
-        accessDenied.style.display =
-            "flex";
-
-    }
-
-
-    /* =========================================================
-       LOAD DASHBOARD
-       ========================================================= */
-
-    async function loadDashboard() {
-
-        setHealth(
-            "authHealth",
-            "Online",
-            "authProgress",
-            100
-        );
-
-        setHealth(
-            "firestoreHealth",
-            "Loading",
-            "firestoreProgress",
-            70
-        );
-
-        try {
-
-            await Promise.all([
-                loadUsers(),
-                loadSalons(),
-                loadBookings()
-            ]);
-
-            setHealth(
-                "firestoreHealth",
-                "Online",
-                "firestoreProgress",
-                100
-            );
-
-            setHealth(
-                "liveHealth",
-                "Active",
-                "liveProgress",
-                100
-            );
-
-            showToast(
-                "Dashboard updated"
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Dashboard loading error:",
-                error
-            );
-
-            setHealth(
-                "firestoreHealth",
-                "Error",
-                "firestoreProgress",
-                30
-            );
-
-            showToast(
-                "Some dashboard data could not be loaded",
-                "error"
-            );
-
-        }
-
-    }
-
-
-    /* =========================================================
-       USERS
-       ========================================================= */
-
-    async function loadUsers() {
-
-        const snapshot =
-            await firebaseDB
-                .collection("users")
-                .get();
-
-        usersData =
-            snapshot.docs.map(
-                doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })
-            );
-
-        document.getElementById(
-            "userCount"
-        ).textContent =
-            usersData.length;
-
-    }
-
-
-    /* =========================================================
-       SALONS
-       ========================================================= */
-
-    async function loadSalons() {
-
-        const snapshot =
-            await firebaseDB
-                .collection("salons")
-                .get();
-
-        salonsData =
-            snapshot.docs.map(
-                doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })
-            );
-
-        document.getElementById(
-            "salonCount"
-        ).textContent =
-            salonsData.length;
-
-        renderSalons();
-
-    }
-
-
-    /* =========================================================
-       BOOKINGS
-       ========================================================= */
-
-    async function loadBookings() {
-
-        const snapshot =
-            await firebaseDB
-                .collection("bookings")
-                .get();
-
-        bookingsData =
-            snapshot.docs.map(
-                doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })
-            );
-
-        bookingsData.sort(
-            (a, b) => {
-
-                const aDate =
-                    getBookingDate(a);
-
-                const bDate =
-                    getBookingDate(b);
-
-                return bDate - aDate;
-
-            }
-        );
-
-        document.getElementById(
-            "bookingCount"
-        ).textContent =
-            bookingsData.length;
-
-        const pending =
-            bookingsData.filter(
-                booking =>
-                    normalizeStatus(
-                        booking.status
-                    ) === "pending"
-            ).length;
-
-        document.getElementById(
-            "pendingCount"
-        ).textContent =
-            pending;
-
-        renderBookings();
-
-    }
-
-
-    /* =========================================================
-       BOOKING DATE
-       ========================================================= */
-
-    function getBookingDate(
-        booking
-    ) {
-
-        const value =
-            booking.createdAt ||
-            booking.date ||
-            booking.bookingDate;
-
-        if (
-            value &&
-            typeof value.toDate === "function"
-        ) {
-
-            return value.toDate();
-
-        }
-
-        if (value instanceof Date) {
-            return value;
-        }
-
-        if (typeof value === "string") {
-
-            const date =
-                new Date(value);
-
-            if (!isNaN(date)) {
-                return date;
-            }
-
-        }
-
-        return new Date(0);
-
-    }
-
-
-    /* =========================================================
-       STATUS
-       ========================================================= */
-
-    function normalizeStatus(
-        status
-    ) {
-
-        return String(
-            status || "pending"
-        )
-        .trim()
-        .toLowerCase();
-
-    }
-
-
-    /* =========================================================
-       RENDER BOOKINGS
-       ========================================================= */
-
-    function renderBookings() {
-
-        const container =
-            document.getElementById(
-                "bookingList"
-            );
-
-        if (!bookingsData.length) {
-
-            container.innerHTML = `
-                <div class="empty">
-                    <i class="bx bx-calendar-x"></i>
-                    <p>No bookings found yet.</p>
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans bg-slate-950 text-slate-100 antialiased selection:bg-brand-500 selection:text-white custom-scrollbar">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- LOGO BRAND -->
+        <div class="flex items-center space-x-3">
+          <a href="home.html" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-xl p-1 transition-all">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-accent-500 flex items-center justify-center shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform duration-300">
+              <i class="fa-solid font-bold text-white text-xl fa-scissors"></i>
+            </div>
+            <div>
+              <span class="text-2xl font-black tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                K@si<span class="text-brand-500">Web</span>
+              </span>
+              <span class="block text-[10px] font-semibold text-brand-400 tracking-widest uppercase -mt-1">
+                Beauty Marketplace
+              </span>
+            </div>
+          </a>
+        </div>
+
+        <!-- DESKTOP NAVIGATION BUTTONS -->
+        <nav class="hidden md:flex items-center space-x-2">
+          <!-- Home Link -->
+          <a href="home.html" class="px-5 py-2.5 rounded-xl font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all flex items-center gap-2 text-sm border border-transparent hover:border-slate-700/50">
+            <i class="fa-solid fa-house text-brand-400"></i>
+            <span>Home</span>
+          </a>
+
+          <!-- Salons Link -->
+          <a href="salons.html" class="px-5 py-2.5 rounded-xl font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all flex items-center gap-2 text-sm border border-transparent hover:border-slate-700/50">
+            <i class="fa-solid fa-store text-accent-400"></i>
+            <span>Salons</span>
+          </a>
+
+          <!-- Owner Button / Dashboard Link -->
+          <a href="Owner.html" class="ml-2 px-5 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-brand-600 via-brand-500 to-accent-600 hover:from-brand-500 hover:to-accent-500 shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all flex items-center gap-2 text-sm border border-brand-400/30">
+            <i class="fa-solid fa-user-tie"></i>
+            <span>Owner Portal</span>
+          </a>
+        </nav>
+
+        <!-- USER ACTION CONTROLS & MOBILE TOGGLE -->
+        <div class="flex items-center space-x-3">
+          <!-- Notifications Dropdown Trigger -->
+          <div class="relative">
+            <button id="notificationBtn" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all relative focus:outline-none">
+              <i class="fa-regular fa-bell text-lg"></i>
+              <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-brand-500 rounded-full ring-4 ring-slate-950 animate-pulse"></span>
+            </button>
+          </div>
+
+          <!-- Quick Auth Button -->
+          <button id="userAuthBtn" onclick="toggleAuthModal()" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-sm font-medium transition-all">
+            <i class="fa-regular fa-circle-user text-brand-400 text-base"></i>
+            <span id="userStatusText">Sign In</span>
+          </button>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-all focus:outline-none">
+            <i class="fa-solid fa-bars-staggered text-lg"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MOBILE NAVIGATION MENU DROPDOWN -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2">
+      <a href="home.html" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-200 hover:bg-slate-900 hover:text-white transition-all">
+        <i class="fa-solid fa-house w-6 text-brand-400 text-center"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="salons.html" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-200 hover:bg-slate-900 hover:text-white transition-all">
+        <i class="fa-solid fa-store w-6 text-accent-400 text-center"></i>
+        <span>Explore Salons</span>
+      </a>
+
+      <a href="Owner.html" class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-brand-600 to-accent-600 shadow-md">
+        <i class="fa-solid fa-user-tie w-6 text-center"></i>
+        <span>Owner Portal</span>
+      </a>
+
+      <div class="pt-2 border-t border-slate-800/60 mt-2">
+        <button onclick="toggleAuthModal()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 font-medium">
+          <i class="fa-regular fa-circle-user text-brand-400"></i>
+          <span>Account Login</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-grow">
+    
+    <!-- HERO SECTION -->
+    <section class="relative py-20 lg:py-28 overflow-hidden">
+      <!-- Ambient Gradient Background Lights -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-600/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div class="absolute top-1/3 right-10 w-[400px] h-[400px] bg-accent-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-3xl mx-auto space-y-6">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+            Book Top Local Stylists & Salons
+          </div>
+          
+          <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
+            Your Premium Beauty & <br />
+            <span class="bg-gradient-to-r from-brand-400 via-brand-300 to-accent-400 bg-clip-text text-transparent">Grooming Marketplace</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
+            Discover verified hair salons, barbers, spa specialists, and nail technicians around your neighborhood. Seamless online bookings, real customer reviews, and fast management.
+          </p>
+
+          <!-- QUICK SEARCH BAR CONTAINER -->
+          <div class="pt-4 max-w-2xl mx-auto">
+            <div class="glass-card p-2 sm:p-3 rounded-2xl shadow-2xl border border-slate-800 flex flex-col sm:flex-row gap-2">
+              <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                <input type="text" id="salonSearchInput" placeholder="Search hair, nails, braids, barber..." class="w-full bg-slate-900/80 text-white placeholder-slate-500 pl-11 pr-4 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500 text-sm transition-all" />
+              </div>
+              <div class="relative sm:w-48">
+                <i class="fa-solid fa-location-dot absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                <select id="locationSelect" class="w-full bg-slate-900/80 text-white pl-11 pr-8 py-3 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500 text-sm transition-all appearance-none cursor-pointer">
+                  <option value="">All Locations</option>
+                  <option value="Soweto">Soweto</option>
+                  <option value="Pretoria">Pretoria</option>
+                  <option value="Johannesburg">Johannesburg</option>
+                  <option value="Durban">Durban</option>
+                  <option value="Cape Town">Cape Town</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500 pointer-events-none"></i>
+              </div>
+              <button onclick="handleSearch()" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30">
+                <span>Explore</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- NAVIGATION LINKS SUMMARY PILLS -->
+          <div class="pt-6 flex flex-wrap justify-center gap-3 text-xs font-medium text-slate-400">
+            <span>Quick Links:</span>
+            <a href="home.html" class="text-brand-400 hover:underline">Home Page</a>
+            <span>•</span>
+            <a href="salons.html" class="text-accent-400 hover:underline">Salon Directory</a>
+            <span>•</span>
+            <a href="Owner.html" class="text-slate-200 hover:underline">Business Owner Access</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN DASHBOARD CONTENT SECTION -->
+    <section class="py-12 bg-slate-900/40 border-t border-slate-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        <!-- NAVIGATION ACCESS CARDS SECTION -->
+        <div>
+          <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <i class="fa-solid fa-compass text-brand-500"></i>
+            <span>Platform Portals & Navigation</span>
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- HOME PAGE CARD -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-brand-500/40 transition-all group flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/20 text-brand-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-house"></i>
                 </div>
-            `;
+                <h3 class="text-lg font-bold text-white mb-2">Main Landing Page</h3>
+                <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                  Return to the main overview page, browse featured trending deals, user announcements, and core system services.
+                </p>
+              </div>
+              <a href="home.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-brand-600 text-slate-200 hover:text-white text-sm font-medium border border-slate-800 transition-all">
+                <span>Go to home.html</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </a>
+            </div>
 
-            return;
-        }
+            <!-- SALONS PAGE CARD -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-accent-500/40 transition-all group flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-xl bg-accent-500/10 border border-accent-500/20 text-accent-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-store"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Salons Directory</h3>
+                <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                  Browse the comprehensive catalog of verified local beauty hubs, barbershops, hair braiders, and nail studios.
+                </p>
+              </div>
+              <a href="salons.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-accent-600 text-slate-200 hover:text-white text-sm font-medium border border-slate-800 transition-all">
+                <span>Go to salons.html</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+              </a>
+            </div>
 
-        const recent =
-            bookingsData.slice(0, 7);
+            <!-- OWNER PAGE CARD -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-amber-500/40 transition-all group flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Salon Owner Portal</h3>
+                <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                  Manage your salon listing, view client appointment schedules, configure services offered, and update opening hours.
+                </p>
+              </div>
+              <a href="Owner.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-brand-600 hover:from-amber-500 hover:to-brand-500 text-white text-sm font-semibold transition-all shadow-md">
+                <span>Launch Owner.html</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </a>
+            </div>
 
-        container.innerHTML =
-            recent.map(
-                booking => {
+          </div>
+        </div>
 
-                    const status =
-                        normalizeStatus(
-                            booking.status
-                        );
+        <!-- FEATURED SALONS DIRECTORY SECTION -->
+        <div>
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Popular Local Salons</h2>
+              <p class="text-xs sm:text-sm text-slate-400">Top-rated beauty hubs available for online booking today</p>
+            </div>
+            <a href="salons.html" class="text-sm font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1 transition-colors">
+              <span>View All</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+          </div>
 
-                    const customer =
-                        booking.customerName ||
-                        booking.custName ||
-                        booking.name ||
-                        "Customer";
+          <!-- SALON CARDS GRID -->
+          <div id="salonsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic Content loaded via JS or standard template fallback -->
+          </div>
+        </div>
 
-                    const service =
-                        booking.service ||
-                        booking.serviceType ||
-                        "Service";
+        <!-- LIVE REVIEWS & RECENT BOOKINGS TABBED SECTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- Recent Platform Activity -->
+          <div class="lg:col-span-2 glass-card rounded-2xl p-6 border border-slate-800">
+            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-clock-rotate-left text-brand-400"></i>
+              <span>Recent Activity & Appointments</span>
+            </h3>
 
-                    const salon =
-                        booking.salonName ||
-                        booking.salon ||
-                        "K@si Salon";
+            <div class="space-y-4">
+              <div class="flex items-center justify-between p-4 rounded-xl bg-slate-900/80 border border-slate-800/80">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">
+                    AB
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-white">Amanda Bhayi</p>
+                    <p class="text-xs text-slate-400">Booked Knotless Braids @ Queen Hair Studio</p>
+                  </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Confirmed</span>
+              </div>
 
-                    const time =
-                        booking.time ||
-                        booking.bookingTime ||
-                        "";
+              <div class="flex items-center justify-between p-4 rounded-xl bg-slate-900/80 border border-slate-800/80">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-accent-500/20 text-accent-400 flex items-center justify-center font-bold">
+                    TM
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-white">Thabo Mokoena</p>
+                    <p class="text-xs text-slate-400">Booked Fade Cut & Beard Trim @ Kasi Cuts</p>
+                  </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Pending</span>
+              </div>
 
-                    const date =
-                        booking.date ||
-                        booking.bookingDate ||
-                        "";
+              <div class="flex items-center justify-between p-4 rounded-xl bg-slate-900/80 border border-slate-800/80">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+                    LN
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-white">Lerato Ndlovu</p>
+                    <p class="text-xs text-slate-400">Booked Gel Acrylic Nails @ Glamour Glow</p>
+                  </div>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Confirmed</span>
+              </div>
+            </div>
+          </div>
 
-                    const initial =
-                        customer
-                            .charAt(0)
-                            .toUpperCase();
+          <!-- Quick Owner Actions Box -->
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold mb-3">
+                <i class="fa-solid fa-crown text-xs"></i> Business Owners
+              </div>
+              <h3 class="text-lg font-bold text-white mb-2">Own a Salon or Barbershop?</h3>
+              <p class="text-sm text-slate-400 leading-relaxed mb-6">
+                List your services on K@si Web to accept instant bookings, manage calendar availability, and increase your monthly local reach.
+              </p>
+            </div>
 
-                    return `
+            <div class="space-y-3">
+              <a href="Owner.html" class="block w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-center text-sm transition-all shadow-lg shadow-brand-600/30">
+                Manage My Business (Owner.html)
+              </a>
+              <a href="salons.html" class="block w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-center text-sm transition-all border border-slate-800">
+                Explore Marketplace Salons
+              </a>
+            </div>
+          </div>
 
-                        <div class="booking">
+        </div>
 
-                            <div class="booking-avatar">
-                                ${escapeHtml(initial)}
-                            </div>
+      </div>
+    </section>
 
-                            <div class="booking-main">
+  </main>
 
-                                <strong>
-                                    ${escapeHtml(customer)}
-                                </strong>
+  <!-- AUTH MODAL SYSTEM -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-950/80 backdrop-blur-sm p-4">
+    <div class="glass-card w-full max-w-md rounded-2xl p-6 border border-slate-800 shadow-2xl relative">
+      <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
 
-                                <span>
-                                    ${escapeHtml(service)}
-                                    ·
-                                    ${escapeHtml(salon)}
-                                </span>
+      <h3 class="text-xl font-bold text-white mb-1">Account Sign In</h3>
+      <p class="text-xs text-slate-400 mb-6">Sign in to manage appointments or access salon portal</p>
 
-                            </div>
+      <form id="loginForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
+          <input type="email" required placeholder="user@kasiweb.co.za" class="w-full bg-slate-900 text-white px-4 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500 text-sm" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Password</label>
+          <input type="password" required placeholder="••••••••" class="w-full bg-slate-900 text-white px-4 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:border-brand-500 text-sm" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition-all shadow-lg shadow-brand-600/30">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
 
-                            <div class="booking-side">
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 border-t border-slate-900 py-12 text-slate-400 text-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center text-white text-sm font-bold">
+              <i class="fa-solid fa-scissors"></i>
+            </div>
+            <span class="text-lg font-black text-white">K@siWeb</span>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Connecting local communities with top-rated township beauty professionals and stylists.
+          </p>
+        </div>
 
-                                <span class="status ${escapeHtml(status)}">
-                                    ${escapeHtml(status)}
-                                </span>
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Quick Navigation</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="home.html" class="hover:text-brand-400 transition-colors">Home (home.html)</a></li>
+            <li><a href="salons.html" class="hover:text-brand-400 transition-colors">Explore Salons (salons.html)</a></li>
+            <li><a href="Owner.html" class="hover:text-brand-400 transition-colors">Owner Portal (Owner.html)</a></li>
+          </ul>
+        </div>
 
-                                <span class="booking-time">
-                                    ${escapeHtml(
-                                        date
-                                            ? date + (
-                                                time
-                                                    ? " · " + time
-                                                    : ""
-                                            )
-                                            : time || "Recent"
-                                    )}
-                                </span>
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Top Services</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#" class="hover:text-brand-400 transition-colors">Hair Braiding & Weaves</a></li>
+            <li><a href="#" class="hover:text-brand-400 transition-colors">Fresh Fades & Barbering</a></li>
+            <li><a href="#" class="hover:text-brand-400 transition-colors">Nail Art & Manicure</a></li>
+          </ul>
+        </div>
 
-                            </div>
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Support</h4>
+          <p class="text-xs text-slate-500 mb-2">Need assistance with a booking?</p>
+          <a href="mailto:support@kasiweb.co.za" class="text-xs text-brand-400 font-medium hover:underline">support@kasiweb.co.za</a>
+        </div>
 
-                        </div>
+      </div>
 
-                    `;
+      <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-600 gap-4">
+        <p>© 2026 K@si Web Application Platform. All rights reserved.</p>
+        <div class="flex space-x-4">
+          <a href="home.html" class="hover:text-slate-400">Home</a>
+          <a href="salons.html" class="hover:text-slate-400">Salons</a>
+          <a href="Owner.html" class="hover:text-slate-400">Owner</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-                }
-            ).join("");
+  <!-- PLATFORM INTERACTIVE SCRIPTS -->
+  <script>
+    // Sample Initial Salon Data Structure
+    const sampleSalons = [
+      {
+        id: "salon_1",
+        name: "Queen Hair & Braid Studio",
+        category: "Hair Salon",
+        location: "Soweto",
+        rating: 4.9,
+        reviewsCount: 128,
+        image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
+        services: ["Knotless Braids", "Cornrows", "Wig Installation"]
+      },
+      {
+        id: "salon_2",
+        name: "Kasi Executive Barber Shop",
+        category: "Barbershop",
+        location: "Pretoria",
+        rating: 4.8,
+        reviewsCount: 94,
+        image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=80",
+        services: ["Fade Cut", "Beard Sculpting", "Kids Cuts"]
+      },
+      {
+        id: "salon_3",
+        name: "Glamour & Glow Nail Bar",
+        category: "Nail Studio",
+        location: "Johannesburg",
+        rating: 4.7,
+        reviewsCount: 62,
+        image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80",
+        services: ["Acrylic Full Set", "Gel Overlay", "Pedicure"]
+      }
+    ];
 
+    // Mobile Menu Toggle logic
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
     }
 
+    // Modal Display Logic
+    function toggleAuthModal() {
+      const modal = document.getElementById('authModal');
+      if (modal) {
+        modal.classList.toggle('hidden');
+      }
+    }
 
-    /* =========================================================
-       RENDER SALONS
-       ========================================================= */
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      alert('Authentication simulation successful! Redirecting to dashboard...');
+      toggleAuthModal();
+      document.getElementById('userStatusText').textContent = 'Account';
+    }
 
+    // Search Trigger Logic
+    function handleSearch() {
+      const query = document.getElementById('salonSearchInput').value;
+      const location = document.getElementById('locationSelect').value;
+      window.location.href = `salons.html?query=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}`;
+    }
+
+    // Render Salons to DOM
     function renderSalons() {
+      const grid = document.getElementById('salonsGrid');
+      if (!grid) return;
 
-        const container =
-            document.getElementById(
-                "salonGrid"
-            );
+      grid.innerHTML = sampleSalons.map(salon => `
+        <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between group">
+          <div>
+            <div class="relative h-48 overflow-hidden">
+              <img src="${salon.image}" alt="${salon.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-amber-400 text-xs font-bold border border-slate-800 flex items-center gap-1">
+                <i class="fa-solid fa-star"></i>
+                <span>${salon.rating}</span>
+                <span class="text-slate-400 font-normal">(${salon.reviewsCount})</span>
+              </div>
+              <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-brand-600/90 backdrop-blur-md text-white text-xs font-semibold">
+                ${salon.category}
+              </div>
+            </div>
 
-        if (!salonsData.length) {
+            <div class="p-5">
+              <div class="flex items-center gap-1.5 text-xs text-slate-400 mb-1">
+                <i class="fa-solid fa-location-dot text-brand-400"></i>
+                <span>${salon.location}</span>
+              </div>
+              <h3 class="text-base font-bold text-white mb-3 group-hover:text-brand-300 transition-colors">${salon.name}</h3>
 
-            container.innerHTML = `
-                <div class="empty">
-                    <i class="bx bx-store-alt"></i>
-                    <p>No salons registered yet.</p>
-                </div>
-            `;
+              <div class="flex flex-wrap gap-1.5 mb-4">
+                ${salon.services.map(s => `<span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[11px] text-slate-300">${s}</span>`).join('')}
+              </div>
+            </div>
+          </div>
 
-            return;
-        }
-
-        const salons =
-            salonsData.slice(0, 6);
-
-        container.innerHTML =
-            salons.map(
-                salon => {
-
-                    const name =
-                        salon.name ||
-                        salon.salonName ||
-                        "K@si Salon";
-
-                    const location =
-                        salon.location ||
-                        salon.address ||
-                        "Local Area";
-
-                    const rating =
-                        salon.rating ||
-                        "New";
-
-                    const image =
-                        salon.image ||
-                        salon.imageUrl ||
-                        "";
-
-                    const services =
-                        Array.isArray(
-                            salon.services
-                        )
-                            ? salon.services.length
-                            : 0;
-
-                    return `
-
-                        <article class="salon-card">
-
-                            <div class="salon-image">
-
-                                ${
-                                    image
-                                    ?
-                                    `<img
-                                        src="${escapeAttribute(image)}"
-                                        alt="${escapeAttribute(name)}"
-                                        loading="lazy"
-                                        onerror="this.style.display='none'"
-                                    >`
-                                    :
-                                    ""
-                                }
-
-                                <span class="rating">
-                                    ★ ${escapeHtml(
-                                        String(rating)
-                                    )}
-                                </span>
-
-                            </div>
-
-                            <div class="salon-info">
-
-                                <h4>
-                                    ${escapeHtml(name)}
-                                </h4>
-
-                                <p>
-                                    <i class="bx bx-map"></i>
-                                    ${escapeHtml(location)}
-                                </p>
-
-                                <div class="salon-meta">
-
-                                    <span>
-                                        ${services}
-                                        service${services === 1 ? "" : "s"}
-                                    </span>
-
-                                    <span>
-                                        ${
-                                            salon.time ||
-                                            salon.hours ||
-                                            "09:00–18:00"
-                                        }
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </article>
-
-                    `;
-
-                }
-            ).join("");
-
+          <div class="px-5 pb-5 pt-0">
+            <a href="salons.html?id=${salon.id}" class="block w-full py-2.5 rounded-xl bg-slate-900 hover:bg-brand-600 text-slate-200 hover:text-white text-center text-xs font-semibold border border-slate-800 transition-all">
+              Book Appointment
+            </a>
+          </div>
+        </div>
+      `).join('');
     }
 
-
-    /* =========================================================
-       HEALTH
-       ========================================================= */
-
-    function setHealth(
-        labelId,
-        label,
-        progressId,
-        percentage
-    ) {
-
-        const label =
-            document.getElementById(
-                labelId
-            );
-
-        const progress =
-            document.getElementById(
-                progressId
-            );
-
-        if (label) {
-            label.textContent = label;
-        }
-
-        if (progress) {
-            progress.style.width =
-                percentage + "%";
-        }
-
-    }
-
-
-    /* =========================================================
-       ESCAPE HTML
-       ========================================================= */
-
-    function escapeHtml(
-        value
-    ) {
-
-        return String(value ?? "")
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
-    function escapeAttribute(
-        value
-    ) {
-
-        return escapeHtml(value);
-
-    }
-
-
-    /* =========================================================
-       NAVIGATION
-       ========================================================= */
-
-    function setActiveSection(
-        section
-    ) {
-
-        document.querySelectorAll(
-            ".nav-item[data-section]"
-        ).forEach(item => {
-
-            item.classList.toggle(
-                "active",
-                item.dataset.section === section
-            );
-
-        });
-
-        document.querySelectorAll(
-            ".mobile-nav button[data-mobile]"
-        ).forEach(item => {
-
-            item.classList.toggle(
-                "active",
-                item.dataset.mobile === section
-            );
-
-        });
-
-        if (section === "bookings") {
-
-            document
-                .getElementById("bookingList")
-                .scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-
-        }
-
-        if (section === "salons") {
-
-            document
-                .getElementById("salonGrid")
-                .scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-
-        }
-
-        if (section === "users") {
-
-            showToast(
-                `${usersData.length} registered users`
-            );
-
-        }
-
-        if (section === "dashboard") {
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-
-    }
-
-
-    document.querySelectorAll(
-        ".nav-item[data-section]"
-    ).forEach(item => {
-
-        item.addEventListener(
-            "click",
-            () => {
-
-                setActiveSection(
-                    item.dataset.section
-                );
-
-                closeSidebar();
-
-            }
-        );
-
+    // Initialize Page Controls
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSalons();
     });
-
-
-    document.querySelectorAll(
-        ".mobile-nav button[data-mobile]"
-    ).forEach(item => {
-
-        item.addEventListener(
-            "click",
-            () => {
-
-                setActiveSection(
-                    item.dataset.mobile
-                );
-
-            }
-        );
-
-    });
-
-
-    /* =========================================================
-       SIDEBAR
-       ========================================================= */
-
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
-
-    const sidebarOverlay =
-        document.getElementById(
-            "sidebarOverlay"
-        );
-
-    function openSidebar() {
-
-        sidebar.classList.add(
-            "open"
-        );
-
-        sidebarOverlay.classList.add(
-            "show"
-        );
-
-    }
-
-    function closeSidebar() {
-
-        sidebar.classList.remove(
-            "open"
-        );
-
-        sidebarOverlay.classList.remove(
-            "show"
-        );
-
-    }
-
-
-    document.getElementById(
-        "menuBtn"
-    ).addEventListener(
-        "click",
-        openSidebar
-    );
-
-    sidebarOverlay.addEventListener(
-        "click",
-        closeSidebar
-    );
-
-
-    /* =========================================================
-       REFRESH
-       ========================================================= */
-
-    async function refreshDashboard() {
-
-        showToast(
-            "Refreshing dashboard..."
-        );
-
-        try {
-
-            await loadDashboard();
-
-        } catch (error) {
-
-            console.error(error);
-
-        }
-
-    }
-
-
-    document.getElementById(
-        "refreshBtn"
-    ).addEventListener(
-        "click",
-        refreshDashboard
-    );
-
-    document.getElementById(
-        "refreshTop"
-    ).addEventListener(
-        "click",
-        refreshDashboard
-    );
-
-
-    /* =========================================================
-       QUICK ACTIONS
-       ========================================================= */
-
-    document.getElementById(
-        "quickSalons"
-    ).addEventListener(
-        "click",
-        () => {
-
-            setActiveSection(
-                "salons"
-            );
-
-            document
-                .getElementById("salonGrid")
-                .scrollIntoView({
-                    behavior: "smooth"
-                });
-
-        }
-    );
-
-
-    document.getElementById(
-        "quickUsers"
-    ).addEventListener(
-        "click",
-        () => {
-
-            setActiveSection(
-                "users"
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "quickBookings"
-    ).addEventListener(
-        "click",
-        () => {
-
-            setActiveSection(
-                "bookings"
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "quickHome"
-    ).addEventListener(
-        "click",
-        () => {
-
-            window.location.href =
-                "home.html";
-
-        }
-    );
-
-
-    document.getElementById(
-        "viewBookings"
-    ).addEventListener(
-        "click",
-        () => {
-
-            setActiveSection(
-                "bookings"
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "viewSalons"
-    ).addEventListener(
-        "click",
-        () => {
-
-            setActiveSection(
-                "salons"
-            );
-
-        }
-    );
-
-
-    document.getElementById(
-        "homeBtn"
-    ).addEventListener(
-        "click",
-        () => {
-
-            window.location.href =
-                "home.html";
-
-        }
-    );
-
-
-    document.getElementById(
-        "deniedHome"
-    ).addEventListener(
-        "click",
-        () => {
-
-            window.location.href =
-                "home.html";
-
-        }
-    );
-
-
-    /* =========================================================
-       LOGOUT
-       ========================================================= */
-
-    document.getElementById(
-        "logoutBtn"
-    ).addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                await firebaseAuth.signOut();
-
-                sessionStorage.clear();
-
-                window.location.href =
-                    "home.html";
-
-            } catch (error) {
-
-                console.error(error);
-
-                showToast(
-                    "Unable to sign out",
-                    "error"
-                );
-
-            }
-
-        }
-    );
-
-
-    /* =========================================================
-       INITIALIZATION
-       ========================================================= */
-
-    updateDate();
-
-
-    /* =========================================================
-       SERVICE WORKER
-       ========================================================= */
-
-    if (
-        "serviceWorker" in navigator
-    ) {
-
-        window.addEventListener(
-            "load",
-            () => {
-
-                navigator.serviceWorker
-                    .register(
-                        "service-worker.js"
-                    )
-                    .catch(
-                        error =>
-                            console.log(
-                                "Service worker:",
-                                error
-                            )
-                    );
-
-            }
-        );
-
-    }
-
-</script>
-
+  </script>
 </body>
-    </html>
+</html>
