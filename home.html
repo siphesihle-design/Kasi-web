@@ -4751,6 +4751,27 @@
 
 
         /* =====================================================
+           HELPERS
+        ===================================================== */
+
+        function escapeHTML(str) {
+
+            return String(str || "")
+
+                .replace(/&/g, "&amp;")
+
+                .replace(/</g, "&lt;")
+
+                .replace(/>/g, "&gt;")
+
+                .replace(/"/g, "&quot;")
+
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =====================================================
            LOADING
         ===================================================== */
 
@@ -5952,27 +5973,15 @@
 
                     if (
                         error.code ===
-                        "auth/user-not-found"
-                    ) {
-
-                        message =
-                            "No account was found with that email.";
-
-                    } else if (
+                        "auth/user-not-found" ||
                         error.code ===
-                        "auth/wrong-password"
-                    ) {
-
-                        message =
-                            "Incorrect password.";
-
-                    } else if (
+                        "auth/wrong-password" ||
                         error.code ===
                         "auth/invalid-credential"
                     ) {
 
                         message =
-                            "Incorrect email or password.";
+                            "Invalid email or password.";
 
                     } else if (
                         error.code ===
@@ -5988,7 +5997,7 @@
                     ) {
 
                         message =
-                            "Too many attempts. Please wait and try again.";
+                            "Too many failed attempts. Try again later.";
 
                     }
 
@@ -6048,7 +6057,7 @@
                         )
                         ?.value;
 
-                const confirmPassword =
+                const confirm =
                     document
                         .getElementById(
                             "signupConfirm"
@@ -6059,12 +6068,11 @@
                 if (
                     !name ||
                     !email ||
-                    !password ||
-                    !confirmPassword
+                    !password
                 ) {
 
                     showAuthMessage(
-                        "Please complete all fields."
+                        "Please fill in all required fields."
                     );
 
                     return;
@@ -6074,7 +6082,7 @@
 
                 if (
                     password !==
-                    confirmPassword
+                    confirm
                 ) {
 
                     showAuthMessage(
@@ -6087,26 +6095,11 @@
 
 
                 if (
-                    password.length <
-                    6
+                    password.length < 6
                 ) {
 
                     showAuthMessage(
-                        "Password must contain at least 6 characters."
-                    );
-
-                    return;
-
-                }
-
-
-                if (
-                    !auth ||
-                    !db
-                ) {
-
-                    showAuthMessage(
-                        "Firebase is not available. Please check your setup."
+                        "Password must be at least 6 characters."
                     );
 
                     return;
@@ -6115,7 +6108,7 @@
 
 
                 showLoading(
-                    "Creating your K@si account..."
+                    "Creating your account..."
                 );
 
 
@@ -6130,15 +6123,45 @@
                 try {
 
                     const result =
-                        await auth
-                            .createUserWithEmailAndPassword(
-                                email,
-                                password
-                            );
+                        await auth.createUserWithEmailAndPassword(
+                            email,
+                            password
+                        );
 
 
                     const user =
                         result.user;
+
+
+                    await user.updateProfile({
+
+                        displayName:
+                            name
+
+                    });
+
+
+                    const userData = {
+
+                        uid:
+                            user.uid,
+
+                        displayName:
+                            name,
+
+                        fullName:
+                            name,
+
+                        email:
+                            email,
+
+                        role:
+                            "customer",
+
+                        createdAt:
+                            firebase.firestore.FieldValue.serverTimestamp()
+
+                    };
 
 
                     await db
@@ -6149,54 +6172,35 @@
                             user.uid
                         )
                         .set(
-                            {
-                                name:
-                                    name,
+                            userData,
 
-                                displayName:
-                                    name,
-
-                                email:
-                                    email,
-
-                                role:
-                                    "customer",
-
-                                createdAt:
-                                    firebase.firestore
-                                        .FieldValue
-                                        .serverTimestamp(),
-
-                                updatedAt:
-                                    firebase.firestore
-                                        .FieldValue
-                                        .serverTimestamp()
-                            },
-                            {
-                                merge:
-                                    true
-                            }
+                            { merge: true }
                         );
 
 
-                    sessionStorage.setItem(
-                        "userRole",
-                        "customer"
-                    );
+                    currentUser =
+                        user;
 
-                    sessionStorage.setItem(
-                        "justLoggedIn",
-                        "true"
-                    );
+                    currentProfile =
+                        userData;
 
+                    currentRole =
+                        "customer";
+
+
+                    hideLoading();
 
                     showToast(
-                        "Account created successfully."
+                        "Account created successfully!"
                     );
 
+                    renderApp(
+                        user,
 
-                    window.location.href =
-                        "salons.html";
+                        userData,
+
+                        "customer"
+                    );
 
 
                 } catch (error) {
@@ -6211,7 +6215,7 @@
 
 
                     let message =
-                        "Unable to create your account.";
+                        "Failed to create account.";
 
 
                     if (
@@ -6220,7 +6224,7 @@
                     ) {
 
                         message =
-                            "An account already exists with this email.";
+                            "An account with this email already exists.";
 
                     } else if (
                         error.code ===
@@ -6236,7 +6240,7 @@
                     ) {
 
                         message =
-                            "Please choose a stronger password.";
+                            "Password should be at least 6 characters.";
 
                     }
 
@@ -6259,1589 +6263,301 @@
             }
         );
 
-    /* =========================================================
-   LOAD USER
-========================================================= */
 
-async function loadUser(user) {
+        /* =====================================================
+           BOOKINGS LOAD
+        ===================================================== */
 
-    if (!user) {
-        return;
-    }
-
-    currentUser = user;
-
-    currentProfile =
-        await getUserProfile(user);
-
-    currentRole =
-        await getVerifiedRole(user);
-
-    const name =
-        getProfileName(
-            currentProfile,
+        async function loadUserBookings(
             user
-        );
-
-    const firstName =
-        getFirstName(
-            currentProfile,
-            user
-        );
-
-
-    /* -------------------------
-       WELCOME
-    ------------------------- */
-
-    if (welcomeName) {
-
-        welcomeName.textContent =
-            firstName;
-
-    }
-
-
-    if (profileName) {
-
-        profileName.textContent =
-            name;
-
-    }
-
-
-    if (profileEmail) {
-
-        profileEmail.textContent =
-            user.email ||
-            currentProfile?.email ||
-            "No email";
-
-    }
-
-
-    /* -------------------------
-       PROFILE AVATAR
-    ------------------------- */
-
-    const photo =
-        user.photoURL ||
-        currentProfile?.photoURL ||
-        currentProfile?.photoUrl ||
-        currentProfile?.image;
-
-
-    if (
-        photo &&
-        profileAvatar
-    ) {
-
-        profileAvatar.innerHTML = `
-
-            <img
-                src="${escapeHTML(photo)}"
-                alt="Profile"
-                onerror="
-                    this.style.display='none';
-                    this.parentElement.textContent='${escapeHTML(
-                        getInitials(name)
-                    )}';
-                "
-            >
-
-        `;
-
-    } else if (profileAvatar) {
-
-        profileAvatar.textContent =
-            getInitials(name);
-
-    }
-
-
-    setAccountUI(
-        currentRole
-    );
-
-
-    await loadBookings(
-        user
-    );
-
-}
-
-
-/* =========================================================
-   INITIALS
-========================================================= */
-
-function getInitials(
-    name
-) {
-
-    const value =
-        String(
-            name || "K@"
-        ).trim();
-
-
-    if (!value) {
-
-        return "K@";
-
-    }
-
-
-    const parts =
-        value.split(
-            /\s+/
-        );
-
-
-    if (parts.length === 1) {
-
-        return parts[0]
-            .slice(0,2)
-            .toUpperCase();
-
-    }
-
-
-    return (
-        parts[0][0] +
-        parts[parts.length - 1][0]
-    ).toUpperCase();
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   BOOKING DATE
-========================================================= */
-
-function parseBookingDate(
-    booking
-) {
-
-    if (!booking) {
-
-        return null;
-
-    }
-
-
-    const value =
-        booking.date ||
-        booking.bookingDate ||
-        booking.booking_date;
-
-
-    if (
-        value &&
-        typeof value.toDate ===
-        "function"
-    ) {
-
-        return value.toDate();
-
-    }
-
-
-    if (
-        value &&
-        value.seconds
-    ) {
-
-        return new Date(
-            value.seconds * 1000
-        );
-
-    }
-
-
-    if (value) {
-
-        const date =
-            new Date(value);
-
-        if (
-            !Number.isNaN(
-                date.getTime()
-            )
         ) {
 
-            return date;
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   BOOKING DATE/TIME
-========================================================= */
-
-function bookingDateTime(
-    booking
-) {
-
-    const date =
-        parseBookingDate(
-            booking
-        );
-
-
-    if (!date) {
-
-        return 0;
-
-    }
-
-
-    const time =
-        String(
-            booking.time ||
-            ""
-        ).trim();
-
-
-    if (!time) {
-
-        return date.getTime();
-
-    }
-
-
-    const match =
-        time.match(
-            /^(\d{1,2}):(\d{2})/
-        );
-
-
-    if (
-        !match
-    ) {
-
-        return date.getTime();
-
-    }
-
-
-    const result =
-        new Date(date);
-
-
-    result.setHours(
-        Number(match[1]),
-        Number(match[2]),
-        0,
-        0
-    );
-
-
-    return result.getTime();
-
-}
-
-
-/* =========================================================
-   FORMAT BOOKING DATE
-========================================================= */
-
-function formatBookingDate(
-    booking
-) {
-
-    const date =
-        parseBookingDate(
-            booking
-        );
-
-
-    if (!date) {
-
-        return "Date not set";
-
-    }
-
-
-    return new Intl.DateTimeFormat(
-        "en-ZA",
-        {
-            day:
-                "numeric",
-
-            month:
-                "short",
-
-            year:
-                "numeric"
-        }
-    ).format(
-        date
-    );
-
-}
-
-
-/* =========================================================
-   BOOKING STATUS
-========================================================= */
-
-function bookingStatusClass(
-    status
-) {
-
-    const value =
-        String(
-            status || "pending"
-        )
-        .trim()
-        .toLowerCase();
-
-
-    if (
-        value ===
-        "confirmed"
-    ) {
-
-        return "status-confirmed";
-
-    }
-
-
-    if (
-        value ===
-        "completed"
-    ) {
-
-        return "status-completed";
-
-    }
-
-
-    if (
-        value ===
-        "cancelled" ||
-        value ===
-        "canceled"
-    ) {
-
-        return "status-cancelled";
-
-    }
-
-
-    return "status-pending";
-
-}
-
-
-/* =========================================================
-   BOOKING STATUS TEXT
-========================================================= */
-
-function bookingStatusText(
-    status
-) {
-
-    const value =
-        String(
-            status || "pending"
-        )
-        .trim()
-        .toLowerCase();
-
-
-    if (
-        value ===
-        "confirmed"
-    ) {
-
-        return "Confirmed";
-
-    }
-
-
-    if (
-        value ===
-        "completed"
-    ) {
-
-        return "Completed";
-
-    }
-
-
-    if (
-        value ===
-        "cancelled" ||
-        value ===
-        "canceled"
-    ) {
-
-        return "Cancelled";
-
-    }
-
-
-    return "Pending";
-
-}
-
-
-/* =========================================================
-   LOAD BOOKINGS
-========================================================= */
-
-async function loadBookings(
-    user
-) {
-
-    if (!bookingList) {
-
-        return;
-
-    }
-
-
-    if (
-        !db ||
-        !user
-    ) {
-
-        bookingList.innerHTML = `
-
-            <div class="empty-state">
-
-                <i class="bx bx-lock-alt"></i>
-
-                <p>
-                    Sign in to view your bookings.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    bookingList.innerHTML = `
-
-        <div class="empty-state">
-
-            <i class="bx bx-loader-alt bx-spin"></i>
-
-            <p>
-                Loading your bookings...
-            </p>
-
-        </div>
-
-    `;
-
-
-    try {
-
-        const snapshot =
-            await db
-                .collection(
-                    "bookings"
-                )
-                .where(
-                    "userId",
-                    "==",
-                    user.uid
-                )
-                .get();
-
-
-        const bookings =
-            snapshot.docs.map(
-                function(doc) {
-
-                    return {
-
-                        id:
-                            doc.id,
-
-                        ...doc.data()
-
-                    };
-
-                }
-            );
-
-
-        bookings.sort(
-            function(a,b) {
-
-                return (
-                    bookingDateTime(a) -
-                    bookingDateTime(b)
-                );
+            if (
+                !bookingList
+            ) {
+
+                return;
 
             }
-        );
 
 
-        const now =
-            Date.now();
+            if (
+                !db ||
+                !user
+            ) {
+
+                bookingList.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <i class="bx bx-calendar-heart"></i>
+
+                        <p>Sign in to view your bookings.</p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
 
 
-        const upcoming =
-            bookings.filter(
-                function(booking) {
+            try {
 
-                    const status =
-                        String(
-                            booking.status ||
-                            "pending"
+                const snapshot =
+                    await db
+                        .collection(
+                            "bookings"
                         )
-                        .trim()
-                        .toLowerCase();
+                        .where(
+                            "userId",
+
+                            "==",
+
+                            user.uid
+                        )
+                        .limit(5)
+                        .get();
 
 
-                    if (
-                        status ===
-                        "cancelled" ||
-                        status ===
-                        "canceled"
-                    ) {
+                if (
+                    snapshot.empty
+                ) {
 
-                        return false;
+                    bookingList.innerHTML = `
 
-                    }
+                        <div class="empty-state">
 
+                            <i class="bx bx-calendar-plus"></i>
 
-                    const dateTime =
-                        bookingDateTime(
-                            booking
-                        );
+                            <p>No upcoming bookings found. Ready for a fresh cut?</p>
 
+                        </div>
 
-                    if (
-                        !dateTime
-                    ) {
+                    `;
 
-                        return true;
-
-                    }
-
-
-                    return (
-                        dateTime >=
-                        now -
-                        86400000
-                    );
+                    return;
 
                 }
-            );
 
 
-        if (
-            upcoming.length === 0
-        ) {
-
-            bookingList.innerHTML = `
-
-                <div class="empty-state">
-
-                    <i class="bx bx-calendar-plus"></i>
-
-                    <p>
-                        No upcoming bookings yet.
-                        Find a salon and book your next
-                        fresh look.
-                    </p>
-
-                    <br>
-
-                    <a
-                        href="salons.html"
-                        class="small-btn"
-                    >
-
-                        <i class="bx bx-store"></i>
-
-                        Explore Salons
-
-                    </a>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
+                let html = "";
 
 
-        bookingList.innerHTML =
-            upcoming
-                .slice(0,6)
-                .map(
-                    function(booking) {
+                snapshot.forEach(
+                    doc => {
 
-                        const service =
-                            booking.service ||
-                            booking.serviceName ||
-                            "Salon service";
-
-
-                        const salon =
-                            booking.salonName ||
-                            booking.salon ||
-                            booking.salon_name ||
-                            "K@si Salon";
-
-
-                        const date =
-                            formatBookingDate(
-                                booking
-                            );
-
-
-                        const time =
-                            booking.time ||
-                            "Time pending";
-
-
-                        const price =
-                            booking.price !==
-                            undefined &&
-                            booking.price !==
-                            null &&
-                            booking.price !==
-                            ""
-                                ? `R${booking.price}`
-                                : "Price pending";
-
+                        const data =
+                            doc.data() || {};
 
                         const status =
-                            bookingStatusText(
-                                booking.status
-                            );
+                            String(
+                                data.status || "pending"
+                            ).toLowerCase();
 
 
-                        const statusClass =
-                            bookingStatusClass(
-                                booking.status
-                            );
-
-
-                        return `
+                        html += `
 
                             <div class="booking">
 
                                 <div class="booking-icon">
 
-                                    <i class="bx bx-calendar-check"></i>
+                                    <i class="bx bx-scissors"></i>
 
                                 </div>
-
 
                                 <div class="booking-main">
 
-                                    <strong>
-                                        ${escapeHTML(service)}
-                                    </strong>
+                                    <strong>${escapeHTML(data.serviceName || data.service || "Grooming Service")}</strong>
 
-                                    <small>
-                                        ${escapeHTML(salon)}
-                                        •
-                                        ${escapeHTML(date)}
-                                        •
-                                        ${escapeHTML(time)}
-                                    </small>
+                                    <small>${escapeHTML(data.salonName || "Local Salon")} • ${escapeHTML(data.date || "Upcoming")}</small>
 
                                 </div>
 
+                                <span class="booking-status status-${status}">
 
-                                <div>
+                                    ${escapeHTML(status)}
 
-                                    <div
-                                        class="booking-status ${statusClass}"
-                                    >
-                                        ${escapeHTML(status)}
-                                    </div>
-
-                                    <div
-                                        style="
-                                            margin-top:5px;
-                                            text-align:right;
-                                            color:#aaa9b7;
-                                            font-size:9px;
-                                        "
-                                    >
-                                        ${escapeHTML(price)}
-                                    </div>
-
-                                </div>
+                                </span>
 
                             </div>
 
                         `;
 
                     }
-                )
-                .join("");
-
-
-    } catch (error) {
-
-        console.error(
-            "Booking loading error:",
-            error
-        );
-
-
-        bookingList.innerHTML = `
-
-            <div class="empty-state">
-
-                <i class="bx bx-error-circle"></i>
-
-                <p>
-                    We couldn't load your bookings.
-                    Please refresh and try again.
-                </p>
-
-                <br>
-
-                <button
-                    type="button"
-                    class="small-btn"
-                    onclick="loadBookings(currentUser)"
-                >
-
-                    <i class="bx bx-refresh"></i>
-
-                    Retry
-
-                </button>
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   SWIPE CAROUSEL
-========================================================= */
-
-function getSwipeCards() {
-
-    if (!swipeTrack) {
-
-        return [];
-
-    }
-
-
-    return Array.from(
-        swipeTrack.querySelectorAll(
-            ".swipe-card"
-        )
-    );
-
-}
-
-
-/* =========================================================
-   UPDATE DOTS
-========================================================= */
-
-function updateSwipeDots(
-    index
-) {
-
-    swipeDots.forEach(
-        function(dot,i) {
-
-            dot.classList.toggle(
-                "active",
-                i === index
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CLOSEST CARD
-========================================================= */
-
-function getClosestSwipeIndex() {
-
-    const cards =
-        getSwipeCards();
-
-
-    if (
-        !cards.length
-    ) {
-
-        return 0;
-
-    }
-
-
-    const trackRect =
-        swipeTrack.getBoundingClientRect();
-
-
-    let closest =
-        0;
-
-    let distance =
-        Infinity;
-
-
-    cards.forEach(
-        function(card,index) {
-
-            const rect =
-                card.getBoundingClientRect();
-
-
-            const value =
-                Math.abs(
-                    rect.left -
-                    trackRect.left
                 );
 
 
-            if (
-                value <
-                distance
-            ) {
+                bookingList.innerHTML =
+                    html;
 
-                distance =
-                    value;
 
-                closest =
-                    index;
+            } catch (error) {
+
+                console.error(
+                    "Error loading bookings:",
+                    error
+                );
+
+
+                bookingList.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <i class="bx bx-error-circle"></i>
+
+                        <p>Unable to load bookings right now.</p>
+
+                    </div>
+
+                `;
 
             }
 
         }
-    );
 
 
-    return closest;
+        /* =====================================================
+           RENDER APP UI
+        ===================================================== */
 
-}
+        function renderApp(
+            user,
 
+            profile,
 
-/* =========================================================
-   SCROLL TO CARD
-========================================================= */
-
-function scrollToSwipeCard(
-    index
-) {
-
-    const cards =
-        getSwipeCards();
-
-
-    if (
-        !cards.length ||
-        !swipeTrack
-    ) {
-
-        return;
-
-    }
-
-
-    const safeIndex =
-        Math.max(
-            0,
-            Math.min(
-                index,
-                cards.length - 1
-            )
-        );
-
-
-    const card =
-        cards[safeIndex];
-
-
-    swipeTrack.scrollTo(
-        {
-            left:
-                card.offsetLeft,
-
-            behavior:
-                "smooth"
-        }
-    );
-
-
-    updateSwipeDots(
-        safeIndex
-    );
-
-}
-
-
-/* =========================================================
-   AUTOPLAY
-========================================================= */
-
-function stopSwipeAutoPlay() {
-
-    if (swipeTimer) {
-
-        clearInterval(
-            swipeTimer
-        );
-
-        swipeTimer =
-            null;
-
-    }
-
-}
-
-
-function startSwipeAutoPlay() {
-
-    stopSwipeAutoPlay();
-
-
-    swipeTimer =
-        setInterval(
-            function() {
-
-                if (
-                    userIsTouchingSwipe
-                ) {
-
-                    return;
-
-                }
-
-
-                const cards =
-                    getSwipeCards();
-
-
-                if (
-                    cards.length <= 1
-                ) {
-
-                    return;
-
-                }
-
-
-                const current =
-                    getClosestSwipeIndex();
-
-
-                const next =
-                    current >=
-                    cards.length - 1
-                        ? 0
-                        : current + 1;
-
-
-                scrollToSwipeCard(
-                    next
-                );
-
-            },
-            5000
-        );
-
-}
-
-
-if (swipeTrack) {
-
-    swipeTrack.addEventListener(
-        "scroll",
-        function() {
-
-            window.requestAnimationFrame(
-                function() {
-
-                    updateSwipeDots(
-                        getClosestSwipeIndex()
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "touchstart",
-        function() {
-
-            userIsTouchingSwipe =
-                true;
-
-            stopSwipeAutoPlay();
-
-        },
-        {
-            passive:
-                true
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "touchend",
-        function() {
-
-            userIsTouchingSwipe =
-                false;
-
-            startSwipeAutoPlay();
-
-        },
-        {
-            passive:
-                true
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "mouseenter",
-        function() {
-
-            stopSwipeAutoPlay();
-
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "mouseleave",
-        function() {
-
-            startSwipeAutoPlay();
-
-        }
-    );
-
-}
-
-
-swipeDots.forEach(
-    function(dot) {
-
-        dot.addEventListener(
-            "click",
-            function() {
-
-                scrollToSwipeCard(
-                    Number(
-                        dot.dataset.index
-                    )
-                );
-
-            }
-        );
-
-    }
-);
-
-
-startSwipeAutoPlay();
-
-
-/* =========================================================
-   QUICK BOOKING SCROLL
-========================================================= */
-
-function scrollToBookings() {
-
-    const section =
-        document.getElementById(
-            "bookings"
-        );
-
-
-    if (!section) {
-
-        return;
-
-    }
-
-
-    section.scrollIntoView(
-        {
-            behavior:
-                "smooth",
-
-            block:
-                "start"
-        }
-    );
-
-}
-
-
-bookingQuickBtn?.addEventListener(
-    "click",
-    scrollToBookings
-);
-
-
-bookingQuickCard?.addEventListener(
-    "click",
-    scrollToBookings
-);
-
-
-/* =========================================================
-   ACCOUNT BUTTONS
-========================================================= */
-
-accountAction?.addEventListener(
-    "click",
-    function() {
-
-        openRoleAccount();
-
-    }
-);
-
-
-accountNavButton?.addEventListener(
-    "click",
-    function() {
-
-        openRoleAccount();
-
-    }
-);
-
-
-accountNavButtonBottom?.addEventListener(
-    "click",
-    function() {
-
-        openRoleAccount();
-
-    }
-);
-
-
-/* =========================================================
-   HOME BUTTON
-========================================================= */
-
-document
-    .getElementById(
-        "homeNavButton"
-    )
-    ?.addEventListener(
-        "click",
-        function() {
-
-            window.location.href =
-                "home.html";
-
-        }
-    );
-
-
-/* =========================================================
-   SALONS BUTTON
-========================================================= */
-
-document
-    .getElementById(
-        "salonsNavButton"
-    )
-    ?.addEventListener(
-        "click",
-        function() {
-
-            window.location.href =
-                "salons.html";
-
-        }
-    );/* =========================================================
-   REFRESH
-========================================================= */
-
-refreshBtn?.addEventListener(
-    "click",
-    async function() {
-
-        if (
-            !currentUser
+            role
         ) {
 
-            window.location.reload();
-
-            return;
-
-        }
-
-
-        const icon =
-            refreshBtn.querySelector(
-                "i"
+            document.body.classList.remove(
+                "auth-mode"
             );
 
 
-        try {
+            if (authScreen) {
 
-            refreshBtn.disabled =
-                true;
+                authScreen.style.display =
+                    "none";
 
-
-            icon?.classList.add(
-                "bx-spin"
-            );
+            }
 
 
-            showToast(
-                "Refreshing your K@si space..."
-            );
+            if (appShell) {
+
+                appShell.classList.add(
+                    "visible"
+                );
+
+            }
 
 
-            currentProfile =
-                await getUserProfile(
-                    currentUser
+            const name =
+                getProfileName(
+                    profile,
+
+                    user
                 );
 
 
-            currentRole =
-                await getVerifiedRole(
-                    currentUser
+            const firstName =
+                getFirstName(
+                    profile,
+
+                    user
                 );
+
+
+            if (welcomeName) {
+
+                welcomeName.textContent =
+                    firstName;
+
+            }
+
+
+            if (profileName) {
+
+                profileName.textContent =
+                    name;
+
+            }
+
+
+            if (profileEmail) {
+
+                profileEmail.textContent =
+                    user?.email || "—";
+
+            }
+
+
+            if (profileAvatar) {
+
+                const initials =
+                    name
+                        .split(" ")
+                        .map(n => n[0])
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase() || "K@";
+
+
+                if (
+                    profile?.photoURL ||
+                    user?.photoURL
+                ) {
+
+                    profileAvatar.innerHTML = `
+
+                        <img src="${escapeHTML(profile?.photoURL || user?.photoURL)}" alt="${escapeHTML(name)}">
+
+                    `;
+
+                } else {
+
+                    profileAvatar.textContent =
+                        initials;
+
+                }
+
+            }
 
 
             setAccountUI(
-                currentRole
+                role
             );
 
 
-            await loadUser(
-                currentUser
-            );
-
-
-            showToast(
-                "K@si Web refreshed."
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Refresh error:",
-                error
-            );
-
-
-            showToast(
-                "Refresh failed. Please try again."
-            );
-
-
-        } finally {
-
-            refreshBtn.disabled =
-                false;
-
-
-            icon?.classList.remove(
-                "bx-spin"
+            loadUserBookings(
+                user
             );
 
         }
 
-    }
-);
 
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
 
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logoutUser() {
-
-    showLoading(
-        "Signing out..."
-    );
-
-
-    try {
-
-        sessionStorage.clear();
-
-
-        if (auth) {
-
-            await auth.signOut();
-
-        }
-
-
-        currentUser =
-            null;
-
-        currentProfile =
-            null;
-
-        currentRole =
-            "customer";
-
-
-        hideLoading();
-
-
-        showLogin();
-
-
-        document.body.classList.add(
-            "auth-mode"
-        );
-
-
-        authScreen?.classList.remove(
-            "hidden"
-        );
-
-
-        appShell?.classList.remove(
-            "visible"
-        );
-
-
-        setAccountUI(
-            "customer"
-        );
-
-
-        showToast(
-            "Signed out successfully."
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Logout error:",
-            error
-        );
-
-
-        hideLoading();
-
-
-        showToast(
-            "Unable to sign out. Please try again."
-        );
-
-    }
-
-}
-
-
-logoutBtn?.addEventListener(
-    "click",
-    logoutUser
-);
-
-
-logoutProfileBtn?.addEventListener(
-    "click",
-    logoutUser
-);
-
-
-/* =========================================================
-   SECURITY CLICK GUARD
-========================================================= */
-
-document.addEventListener(
-    "click",
-    function(event) {
-
-        const target =
-            event.target.closest(
-                "#accountAction, #accountNavButton, #accountNavButtonBottom"
-            );
-
-
-        if (!target) {
-
-            return;
-
-        }
-
-
-        if (
-            currentRole ===
-            "customer"
-        ) {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            showToast(
-                "Customer accounts do not have access to this portal."
-            );
-
-        }
-
-    },
-    true
-);
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-if (auth) {
-
-    auth.onAuthStateChanged(
-        async function(user) {
+        async function handleLogout() {
 
             showLoading(
-                user
-                    ? "Loading your K@si space..."
-                    : "Loading K@si Web..."
+                "Signing out..."
             );
 
 
-            if (user) {
+            try {
 
-                try {
+                if (auth) {
 
-                    document.body.classList.remove(
-                        "auth-mode"
-                    );
-
-
-                    authScreen?.classList.add(
-                        "hidden"
-                    );
-
-
-                    appShell?.classList.add(
-                        "visible"
-                    );
-
-
-                    await loadUser(
-                        user
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Auth state load error:",
-                        error
-                    );
-
-
-                    currentUser =
-                        null;
-
-                    currentProfile =
-                        null;
-
-                    currentRole =
-                        "customer";
-
-
-                    document.body.classList.add(
-                        "auth-mode"
-                    );
-
-
-                    authScreen?.classList.remove(
-                        "hidden"
-                    );
-
-
-                    appShell?.classList.remove(
-                        "visible"
-                    );
-
-
-                    setAccountUI(
-                        "customer"
-                    );
-
-
-                    showAuthMessage(
-                        "Your account could not be loaded. Please sign in again."
-                    );
+                    await auth.signOut();
 
                 }
 
 
-            } else {
+                sessionStorage.clear();
+
 
                 currentUser =
                     null;
@@ -7853,240 +6569,374 @@ if (auth) {
                     "customer";
 
 
+                if (appShell) {
+
+                    appShell.classList.remove(
+                        "visible"
+                    );
+
+                }
+
+
+                if (authScreen) {
+
+                    authScreen.style.display =
+                        "flex";
+
+                }
+
+
                 document.body.classList.add(
                     "auth-mode"
                 );
 
 
-                authScreen?.classList.remove(
-                    "hidden"
+                showLogin();
+
+                showToast(
+                    "Signed out safely."
                 );
 
 
-                appShell?.classList.remove(
-                    "visible"
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
                 );
 
-
-                setAccountUI(
-                    "customer"
+                showToast(
+                    "Error signing out."
                 );
+
+            } finally {
+
+                hideLoading();
 
             }
 
+        }
+
+
+        logoutBtn?.addEventListener(
+            "click",
+
+            handleLogout
+        );
+
+
+        logoutProfileBtn?.addEventListener(
+            "click",
+
+            handleLogout
+        );
+
+
+        /* =====================================================
+           REFRESH
+        ===================================================== */
+
+        refreshBtn?.addEventListener(
+            "click",
+
+            async function() {
+
+                if (
+                    !currentUser
+                ) {
+
+                    return;
+
+                }
+
+
+                showLoading(
+                    "Refreshing data..."
+                );
+
+
+                currentProfile =
+                    await getUserProfile(
+                        currentUser
+                    );
+
+
+                currentRole =
+                    await getVerifiedRole(
+                        currentUser
+                    );
+
+
+                renderApp(
+                    currentUser,
+
+                    currentProfile,
+
+                    currentRole
+                );
+
+
+                hideLoading();
+
+                showToast(
+                    "Refreshed."
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           ACTION BINDINGS
+        ===================================================== */
+
+        accountAction?.addEventListener(
+            "click",
+
+            openRoleAccount
+        );
+
+
+        accountNavButton?.addEventListener(
+            "click",
+
+            openRoleAccount
+        );
+
+
+        accountNavButtonBottom?.addEventListener(
+            "click",
+
+            openRoleAccount
+        );
+
+
+        bookingQuickBtn?.addEventListener(
+            "click",
+
+            function() {
+
+                document
+                    .getElementById("bookings")
+
+                    ?.scrollIntoView({ behavior: "smooth" });
+
+            }
+        );
+
+
+        bookingQuickCard?.addEventListener(
+            "click",
+
+            function() {
+
+                document
+                    .getElementById("bookings")
+
+                    ?.scrollIntoView({ behavior: "smooth" });
+
+            }
+        );
+
+
+        /* =====================================================
+           FEATURED SWIPE TRACK
+        ===================================================== */
+
+        function updateSwipeDots() {
+
+            if (
+                !swipeTrack
+            ) {
+
+                return;
+
+            }
+
+
+            const scrollPosition =
+                swipeTrack.scrollLeft;
+
+
+            const cardWidth =
+                swipeTrack.querySelector(".swipe-card")
+
+                    ?.offsetWidth || 300;
+
+
+            const activeIndex =
+                Math.round(
+                    scrollPosition / cardWidth
+                );
+
+
+            swipeDots.forEach(
+                (dot, index) => {
+
+                    if (
+                        index ===
+                        activeIndex
+                    ) {
+
+                        dot.classList.add(
+                            "active"
+                        );
+
+                    } else {
+
+                        dot.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        swipeTrack?.addEventListener(
+            "scroll",
+
+            updateSwipeDots
+        );
+
+
+        swipeDots.forEach(
+            dot => {
+
+                dot.addEventListener(
+                    "click",
+
+                    function() {
+
+                        const index =
+                            parseInt(
+                                this.dataset.index || "0",
+
+                                10
+                            );
+
+
+                        const card =
+                            swipeTrack?.querySelectorAll(
+                                ".swipe-card"
+                            )[index];
+
+
+                        if (
+                            card &&
+                            swipeTrack
+                        ) {
+
+                            swipeTrack.scrollTo({
+
+                                left:
+                                    card.offsetLeft - 10,
+
+                                behavior:
+                                    "smooth"
+
+                            });
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           AUTH STATE LISTENER
+        ===================================================== */
+
+        if (auth) {
+
+            auth.onAuthStateChanged(
+                async function(user) {
+
+                    if (user) {
+
+                        currentUser =
+                            user;
+
+
+                        currentProfile =
+                            await getUserProfile(
+                                user
+                            );
+
+
+                        currentRole =
+                            await getVerifiedRole(
+                                user
+                            );
+
+
+                        renderApp(
+                            user,
+
+                            currentProfile,
+
+                            currentRole
+                        );
+
+
+                        hideLoading();
+
+
+                    } else {
+
+                        currentUser =
+                            null;
+
+                        currentProfile =
+                            null;
+
+                        currentRole =
+                            "customer";
+
+
+                        if (appShell) {
+
+                            appShell.classList.remove(
+                                "visible"
+                            );
+
+                        }
+
+
+                        if (authScreen) {
+
+                            authScreen.style.display =
+                                "flex";
+
+                        }
+
+
+                        document.body.classList.add(
+                            "auth-mode"
+                        );
+
+
+                        hideLoading();
+
+                    }
+
+                }
+            );
+
+        } else {
 
             hideLoading();
 
         }
-    );
 
-
-} else {
-
-    hideLoading();
-
-
-    showAuthMessage(
-        "Firebase could not initialize. Check your Firebase configuration."
-    );
-
-}
-
-
-/* =========================================================
-   INITIAL UI
-========================================================= */
-
-setAccountUI(
-    "customer"
-);
-
-
-/* =========================================================
-   PREVENT DOUBLE FORM SUBMISSION
-========================================================= */
-
-let formSubmitting =
-    false;
-
-
-document.addEventListener(
-    "submit",
-    function(event) {
-
-        if (
-            event.target !==
-            loginForm &&
-            event.target !==
-            signupForm
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            formSubmitting
-        ) {
-
-            event.preventDefault();
-
-            return;
-
-        }
-
-
-        formSubmitting =
-            true;
-
-
-        setTimeout(
-            function() {
-
-                formSubmitting =
-                    false;
-
-            },
-            1500
-        );
-
-    },
-    true
-);
-
-
-/* =========================================================
-   ONLINE / OFFLINE STATUS
-========================================================= */
-
-window.addEventListener(
-    "offline",
-    function() {
-
-        showToast(
-            "You are offline. Some K@si features may be unavailable."
-        );
-
-    }
-);
-
-
-window.addEventListener(
-    "online",
-    function() {
-
-        showToast(
-            "Connection restored."
-        );
-
-    }
-);
-
-
-/* =========================================================
-   ESCAPE KEY
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-
-            if (
-                roleRedirectOverlay
-            ) {
-
-                roleRedirectOverlay.classList.remove(
-                    "show"
-                );
-
-            }
-
-        }
-
-    }
-);/* =========================================================
-   FINAL K@SI WEB STARTUP
-========================================================= */
-
-(function initializeKasiHome() {
-
-    try {
-
-        /* Make sure customer controls start locked
-           until Firebase verifies the real role. */
-
-        currentRole =
-            "customer";
-
-
-        setAccountUI(
-            "customer"
-        );
-
-
-        /* Make sure the home button always
-           points to home.html. */
-
-        const homeButton =
-            document.getElementById(
-                "homeNavButton"
-            );
-
-
-        if (homeButton) {
-
-            homeButton.setAttribute(
-                "type",
-                "button"
-            );
-
-        }
-
-
-        /* Start the featured carousel. */
-
-        if (
-            swipeTrack
-        ) {
-
-            updateSwipeDots(
-                0
-            );
-
-            startSwipeAutoPlay();
-
-        }
-
-
-        /* Firebase is handled by
-           onAuthStateChanged above. */
-
-        if (!auth) {
-
-            console.warn(
-                "K@si Web started without Firebase Auth."
-            );
-
-        }
-
-
-    } catch (error) {
-
-        console.error(
-            "K@si Web startup error:",
-            error
-        );
-
-    }
-
-})();
     </script>
 
 </body>
+
 </html>
