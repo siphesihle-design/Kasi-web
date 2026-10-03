@@ -4528,6 +4528,24 @@ let userIsTouchingSwipe =
 
 
 /* =========================================================
+   UTILITIES
+========================================================= */
+
+function escapeHTML(str) {
+
+    if (!str) return "";
+
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
    LOADING
 ========================================================= */
 
@@ -5069,7 +5087,7 @@ function setAccountUI(
         if (accountNavButton) {
 
             accountNavButton.innerHTML =
-                '<i class="bx bx-shield-quarter"></i>Admin';
+                '<i class="bx bx-shield-quarter"></i>Account';
 
         }
 
@@ -5116,7 +5134,7 @@ function setAccountUI(
         if (accountNavButton) {
 
             accountNavButton.innerHTML =
-                '<i class="bx bx-store-alt"></i>Owner';
+                '<i class="bx bx-store-alt"></i>Account';
 
         }
 
@@ -5818,8 +5836,99 @@ if (signupForm) {
 
 
 /* =========================================================
-   USER LOAD
+   USER LOAD & BOOKINGS
 ========================================================= */
+
+async function loadUserBookings(user) {
+
+    if (!bookingList || !db || !user) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const snapshot = await db
+            .collection("bookings")
+            .where("userId", "==", user.uid)
+            .get();
+
+
+        if (snapshot.empty) {
+
+            bookingList.innerHTML = `
+                <div class="empty-state">
+                    <i class="bx bx-calendar-x"></i>
+                    <p>No upcoming appointments found.<br>Explore salons to book your fresh look!</p>
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        let html = "";
+
+        snapshot.forEach(doc => {
+
+            const b = doc.data();
+
+            const statusClass = `status-${String(b.status || "pending").toLowerCase()}`;
+
+            const salonName = escapeHTML(b.salonName || b.salon || "Local Salon");
+
+            const serviceName = escapeHTML(b.serviceName || b.service || "Grooming Service");
+
+            const bookingDate = escapeHTML(b.date || "Date Pending");
+
+            const bookingTime = escapeHTML(b.time || "Time Pending");
+
+            const statusText = escapeHTML(b.status || "Pending");
+
+
+            html += `
+                <div class="booking">
+
+                    <div class="booking-icon">
+                        <i class="bx bx-scissors"></i>
+                    </div>
+
+                    <div class="booking-main">
+                        <strong>${salonName} — ${serviceName}</strong>
+                        <small><i class="bx bx-time"></i> ${bookingDate} at ${bookingTime}</small>
+                    </div>
+
+                    <span class="booking-status ${statusClass}">
+                        ${statusText}
+                    </span>
+
+                </div>
+            `;
+
+        });
+
+
+        bookingList.innerHTML = html;
+
+
+    } catch (error) {
+
+        console.error("Error loading user bookings:", error);
+
+        bookingList.innerHTML = `
+            <div class="empty-state">
+                <i class="bx bx-error-circle"></i>
+                <p>Unable to load your appointments right now.</p>
+            </div>
+        `;
+
+    }
+
+}
+
 
 async function loadUser(
     user
@@ -5890,1241 +5999,230 @@ async function loadUser(
 
         } else {
 
-            const initials =
-                name
-                    .split(/\s+/)
-                    .filter(Boolean)
-                    .slice(0, 2)
-                    .map(
-                        part =>
-                            part.charAt(0)
-                                .toUpperCase()
-                    )
-                    .join("");
+            const parts = name.split(/\s+/).filter(Boolean);
 
+            let initials = "K@";
 
-            profileAvatar.textContent =
-                initials || "K@";
+            if (parts.length >= 2) {
 
-        }
+                initials = (parts[0][0] + parts[1][0]).toUpperCase();
 
-    }
+            } else if (parts.length === 1 && parts[0].length >= 2) {
 
-
-    setAccountUI(
-        currentRole
-    );
-
-
-    await loadBookings(
-        user
-    );
-
-}
-
-
-/* =========================================================
-   DATE HELPERS
-========================================================= */
-
-function parseBookingDate(
-    dateValue
-) {
-
-    if (
-        !dateValue
-    ) {
-
-        return null;
-
-    }
-
-
-    if (
-        dateValue.toDate
-    ) {
-
-        return dateValue.toDate();
-
-    }
-
-
-    const parsed =
-        new Date(
-            dateValue
-        );
-
-
-    return Number.isNaN(
-        parsed.getTime()
-    )
-        ? null
-        : parsed;
-
-}
-
-
-function formatBookingDate(
-    dateValue
-) {
-
-    const date =
-        parseBookingDate(
-            dateValue
-        );
-
-
-    if (!date) {
-
-        return "Date unavailable";
-
-    }
-
-
-    return date.toLocaleDateString(
-        "en-ZA",
-        {
-            day:
-                "numeric",
-
-            month:
-                "short",
-
-            year:
-                "numeric"
-        }
-    );
-
-}
-
-
-function bookingDateTime(
-    booking
-) {
-
-    const date =
-        parseBookingDate(
-            booking.date
-        );
-
-
-    if (!date) {
-
-        return 0;
-
-    }
-
-
-    const time =
-        String(
-            booking.time || "00:00"
-        );
-
-
-    const parts =
-        time.split(":");
-
-
-    if (
-        parts.length >= 2
-    ) {
-
-        date.setHours(
-            Number(parts[0]) || 0,
-            Number(parts[1]) || 0,
-            0,
-            0
-        );
-
-    }
-
-
-    return date.getTime();
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   BOOKING STATUS
-========================================================= */
-
-function bookingStatusClass(
-    status
-) {
-
-    const value =
-        String(
-            status || "pending"
-        )
-        .trim()
-        .toLowerCase();
-
-
-    if (
-        value === "confirmed"
-    ) {
-
-        return "status-confirmed";
-
-    }
-
-
-    if (
-        value === "completed"
-    ) {
-
-        return "status-completed";
-
-    }
-
-
-    if (
-        value === "cancelled" ||
-        value === "canceled"
-    ) {
-
-        return "status-cancelled";
-
-    }
-
-
-    return "status-pending";
-
-}
-
-
-/* =========================================================
-   LOAD BOOKINGS
-========================================================= */
-
-async function loadBookings(
-    user
-) {
-
-    if (
-        !bookingList
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !db ||
-        !user
-    ) {
-
-        bookingList.innerHTML =
-            `
-                <div class="empty-state">
-                    <i class="bx bx-calendar-x"></i>
-                    <p>
-                        Sign in to view your bookings.
-                    </p>
-                </div>
-            `;
-
-        return;
-
-    }
-
-
-    try {
-
-        const snapshot =
-            await db
-                .collection("bookings")
-                .where(
-                    "userId",
-                    "==",
-                    user.uid
-                )
-                .get();
-
-
-        const bookings =
-            snapshot.docs
-                .map(
-                    doc =>
-                        ({
-                            id:
-                                doc.id,
-
-                            ...doc.data()
-                        })
-                )
-                .sort(
-                    function(a, b) {
-
-                        return (
-                            bookingDateTime(a) -
-                            bookingDateTime(b)
-                        );
-
-                    }
-                );
-
-
-        const now =
-            Date.now();
-
-
-        const upcoming =
-            bookings.filter(
-                function(booking) {
-
-                    const status =
-                        String(
-                            booking.status || ""
-                        )
-                        .trim()
-                        .toLowerCase();
-
-
-                    if (
-                        status ===
-                        "cancelled" ||
-                        status ===
-                        "canceled"
-                    ) {
-
-                        return false;
-
-                    }
-
-
-                    const time =
-                        bookingDateTime(
-                            booking
-                        );
-
-
-                    return (
-                        !time ||
-                        time >= now - 86400000
-                    );
-
-                }
-            );
-
-
-        if (
-            !upcoming.length
-        ) {
-
-            bookingList.innerHTML =
-                `
-                    <div class="empty-state">
-
-                        <i class="bx bx-calendar-heart"></i>
-
-                        <p>
-                            No upcoming bookings yet.
-                            Explore salons and book your next look.
-                        </p>
-
-                        <a
-                            href="salons.html"
-                            class="small-btn"
-                            style="margin:14px auto 0;"
-                        >
-                            Explore Salons
-                            <i class="bx bx-right-arrow-alt"></i>
-                        </a>
-
-                    </div>
-                `;
-
-            return;
-
-        }
-
-
-        bookingList.innerHTML =
-            upcoming
-                .slice(0, 6)
-                .map(
-                    function(booking) {
-
-                        const status =
-                            String(
-                                booking.status ||
-                                "pending"
-                            )
-                            .trim()
-                            .toLowerCase();
-
-
-                        const service =
-                            booking.service ||
-                            "Salon appointment";
-
-
-                        const salon =
-                            booking.salonName ||
-                            booking.salon ||
-                            "K@si Salon";
-
-
-                        const date =
-                            formatBookingDate(
-                                booking.date
-                            );
-
-
-                        const time =
-                            booking.time ||
-                            "Time pending";
-
-
-                        const price =
-                            booking.price !==
-                            undefined &&
-                            booking.price !==
-                            null &&
-                            booking.price !==
-                            ""
-                                ? `R${booking.price}`
-                                : "";
-
-
-                        return `
-                            <div class="booking">
-
-                                <div class="booking-icon">
-                                    <i class="bx bx-cut"></i>
-                                </div>
-
-                                <div class="booking-main">
-
-                                    <strong>
-                                        ${escapeHTML(service)}
-                                    </strong>
-
-                                    <small>
-                                        ${escapeHTML(salon)}
-                                        •
-                                        ${escapeHTML(date)}
-                                        •
-                                        ${escapeHTML(time)}
-                                        ${price ? ` • ${escapeHTML(price)}` : ""}
-                                    </small>
-
-                                </div>
-
-                                <span
-                                    class="booking-status ${bookingStatusClass(status)}"
-                                >
-                                    ${escapeHTML(status)}
-                                </span>
-
-                            </div>
-                        `;
-
-                    }
-                )
-                .join("");
-
-
-    } catch (error) {
-
-        console.error(
-            "Booking load error:",
-            error
-        );
-
-
-        bookingList.innerHTML =
-            `
-                <div class="empty-state">
-
-                    <i class="bx bx-error-circle"></i>
-
-                    <p>
-                        We couldn't load your bookings.
-                        Please refresh and try again.
-                    </p>
-
-                </div>
-            `;
-
-    }
-
-}
-
-
-/* =========================================================
-   SWIPE CAROUSEL CONTROLS
-========================================================= */
-
-function getSwipeCards() {
-
-    if (
-        !swipeTrack
-    ) {
-
-        return [];
-
-    }
-
-
-    return Array.from(
-        swipeTrack.querySelectorAll(
-            ".swipe-card"
-        )
-    );
-
-}
-
-
-function updateSwipeDots(
-    index
-) {
-
-    swipeDots.forEach(
-        function(dot, dotIndex) {
-
-            dot.classList.toggle(
-                "active",
-                dotIndex === index
-            );
-
-        }
-    );
-
-}
-
-
-function getClosestSwipeIndex() {
-
-    const cards =
-        getSwipeCards();
-
-
-    if (
-        !cards.length
-    ) {
-
-        return 0;
-
-    }
-
-
-    const trackRect =
-        swipeTrack.getBoundingClientRect();
-
-
-    const trackLeft =
-        trackRect.left;
-
-
-    let closestIndex =
-        0;
-
-
-    let closestDistance =
-        Infinity;
-
-
-    cards.forEach(
-        function(card, index) {
-
-            const rect =
-                card.getBoundingClientRect();
-
-
-            const distance =
-                Math.abs(
-                    rect.left -
-                    trackLeft
-                );
-
-
-            if (
-                distance <
-                closestDistance
-            ) {
-
-                closestDistance =
-                    distance;
-
-                closestIndex =
-                    index;
+                initials = parts[0].substring(0, 2).toUpperCase();
 
             }
 
+            profileAvatar.textContent = initials;
+
         }
-    );
-
-
-    return closestIndex;
-
-}
-
-
-function scrollToSwipeCard(
-    index
-) {
-
-    const cards =
-        getSwipeCards();
-
-
-    if (
-        !cards.length
-    ) {
-
-        return;
 
     }
 
 
-    if (
-        index < 0
-    ) {
+    setAccountUI(currentRole);
 
-        index =
-            cards.length - 1;
-
-    }
-
-
-    if (
-        index >= cards.length
-    ) {
-
-        index = 0;
-
-    }
-
-
-    cards[index].scrollIntoView(
-        {
-            behavior:
-                "smooth",
-
-            block:
-                "nearest",
-
-            inline:
-                "start"
-        }
-    );
-
-
-    updateSwipeDots(
-        index
-    );
-
-}
-
-
-function startSwipeAutoPlay() {
-
-    stopSwipeAutoPlay();
-
-
-    swipeTimer =
-        setInterval(
-            function() {
-
-                if (
-                    userIsTouchingSwipe
-                ) {
-
-                    return;
-
-                }
-
-
-                const current =
-                    getClosestSwipeIndex();
-
-
-                const next =
-                    current + 1;
-
-
-                scrollToSwipeCard(
-                    next >=
-                    getSwipeCards().length
-                        ? 0
-                        : next
-                );
-
-            },
-            5000
-        );
-
-}
-
-
-function stopSwipeAutoPlay() {
-
-    if (
-        swipeTimer
-    ) {
-
-        clearInterval(
-            swipeTimer
-        );
-
-        swipeTimer =
-            null;
-
-    }
-
-}
-
-
-if (swipeTrack) {
-
-    swipeTrack.addEventListener(
-        "scroll",
-        function() {
-
-            updateSwipeDots(
-                getClosestSwipeIndex()
-            );
-
-        },
-        {
-            passive:
-                true
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "touchstart",
-        function() {
-
-            userIsTouchingSwipe =
-                true;
-
-            stopSwipeAutoPlay();
-
-        },
-        {
-            passive:
-                true
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "touchend",
-        function() {
-
-            userIsTouchingSwipe =
-                false;
-
-            setTimeout(
-                function() {
-
-                    startSwipeAutoPlay();
-
-                },
-                2500
-            );
-
-        },
-        {
-            passive:
-                true
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "mouseenter",
-        function() {
-
-            stopSwipeAutoPlay();
-
-        }
-    );
-
-
-    swipeTrack.addEventListener(
-        "mouseleave",
-        function() {
-
-            startSwipeAutoPlay();
-
-        }
-    );
-
-}
-
-
-swipeDots.forEach(
-    function(dot) {
-
-        dot.addEventListener(
-            "click",
-            function() {
-
-                const index =
-                    Number(
-                        dot.dataset.index
-                    );
-
-
-                scrollToSwipeCard(
-                    index
-                );
-
-
-                stopSwipeAutoPlay();
-
-
-                setTimeout(
-                    function() {
-
-                        startSwipeAutoPlay();
-
-                    },
-                    2500
-                );
-
-            }
-        );
-
-    }
-);
-
-
-startSwipeAutoPlay();
-
-
-/* =========================================================
-   BOOKINGS QUICK ACCESS
-========================================================= */
-
-if (bookingQuickBtn) {
-
-    bookingQuickBtn.addEventListener(
-        "click",
-        function() {
-
-            const section =
-                document.getElementById(
-                    "bookings"
-                );
-
-
-            if (section) {
-
-                section.scrollIntoView(
-                    {
-                        behavior:
-                            "smooth",
-
-                        block:
-                            "start"
-                    }
-                );
-
-            }
-
-        }
-    );
+    await loadUserBookings(user);
 
 }
 
 
 /* =========================================================
-   ACCOUNT ROUTING
+   CAROUSEL & SWIPE INTERACTION
 ========================================================= */
 
-if (accountAction) {
+function setupSwipeGallery() {
 
-    accountAction.addEventListener(
-        "click",
-        function() {
-
-            openRoleAccount();
-
-        }
-    );
-
-}
+    if (!swipeTrack || !swipeDots.length) return;
 
 
-if (accountNavButton) {
-
-    accountNavButton.addEventListener(
-        "click",
-        function() {
-
-            openRoleAccount();
-
-        }
-    );
-
-}
+    const cards = swipeTrack.querySelectorAll(".swipe-card");
 
 
-/* =========================================================
-   REFRESH
-========================================================= */
+    function updateDots() {
 
-if (refreshBtn) {
+        const scrollLeft = swipeTrack.scrollLeft;
 
-    refreshBtn.addEventListener(
-        "click",
-        async function() {
+        const cardWidth = cards[0]?.offsetWidth || 300;
 
-            if (
-                currentUser
-            ) {
-
-                showToast(
-                    "Refreshing your K@si space..."
-                );
+        const index = Math.round(scrollLeft / cardWidth);
 
 
-                refreshBtn
-                    .querySelector("i")
-                    ?.classList.add(
-                        "bx-spin"
-                    );
+        swipeDots.forEach((dot, idx) => {
 
+            if (idx === index) {
 
-                const role =
-                    await getVerifiedRole(
-                        currentUser
-                    );
-
-
-                currentRole =
-                    role;
-
-
-                setAccountUI(
-                    role
-                );
-
-
-                await loadBookings(
-                    currentUser
-                );
-
-
-                setTimeout(
-                    function() {
-
-                        refreshBtn
-                            .querySelector("i")
-                            ?.classList.remove(
-                                "bx-spin"
-                            );
-
-                    },
-                    500
-                );
-
-
-                showToast(
-                    "K@si space refreshed."
-                );
+                dot.classList.add("active");
 
             } else {
 
-                window.location.reload();
+                dot.classList.remove("active");
 
             }
 
-        }
-    );
+        });
+
+    }
+
+
+    swipeTrack.addEventListener("scroll", updateDots, { passive: true });
+
+
+    swipeDots.forEach((dot, idx) => {
+
+        dot.addEventListener("click", () => {
+
+            const cardWidth = cards[0]?.offsetWidth || 300;
+
+            swipeTrack.scrollTo({
+
+                left: cardWidth * idx,
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    });
 
 }
 
 
 /* =========================================================
-   LOGOUT
+   EVENT LISTENERS & LOGOUT
 ========================================================= */
 
-if (logoutBtn) {
+function setupEventListeners() {
 
-    logoutBtn.addEventListener(
-        "click",
-        async function() {
+    if (refreshBtn) {
 
-            showLoading(
-                "Signing out..."
-            );
+        refreshBtn.addEventListener("click", () => {
 
+            if (currentUser) {
+
+                showToast("Refreshing your space...");
+
+                loadUser(currentUser);
+
+            }
+
+        });
+
+    }
+
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener("click", async () => {
+
+            showLoading("Signing you out...");
 
             try {
 
+                await auth.signOut();
+
                 sessionStorage.clear();
 
+                window.location.reload();
 
-                if (auth) {
+            } catch (err) {
 
-                    await auth.signOut();
-
-                }
-
-
-                currentUser =
-                    null;
-
-                currentProfile =
-                    null;
-
-                currentRole =
-                    "customer";
-
+                console.error("Sign out error:", err);
 
                 hideLoading();
 
-
-                showLogin();
-
-
-                document.body.classList.add(
-                    "auth-mode"
-                );
-
-                authScreen.classList.remove(
-                    "hidden"
-                );
-
-                appShell.classList.remove(
-                    "visible"
-                );
-
-
-                setAccountUI(
-                    "customer"
-                );
-
-
-                showToast(
-                    "Signed out successfully."
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Logout error:",
-                    error
-                );
-
-
-                hideLoading();
-
-
-                showToast(
-                    "Failed to sign out. Please try again."
-                );
+                showToast("Unable to sign out.");
 
             }
 
-        }
-    );
+        });
+
+    }
+
+
+    if (bookingQuickBtn) {
+
+        bookingQuickBtn.addEventListener("click", () => {
+
+            const target = document.getElementById("bookings");
+
+            if (target) {
+
+                target.scrollIntoView({ behavior: "smooth" });
+
+            }
+
+        });
+
+    }
+
+
+    if (accountAction) {
+
+        accountAction.addEventListener("click", openRoleAccount);
+
+    }
+
+
+    if (accountNavButton) {
+
+        accountNavButton.addEventListener("click", openRoleAccount);
+
+    }
 
 }
 
 
 /* =========================================================
-   AUTH STATE OBSERVER
+   AUTH STATE MONITOR
 ========================================================= */
 
 if (auth) {
 
-    auth.onAuthStateChanged(
-        async function(user) {
+    auth.onAuthStateChanged(async (user) => {
 
-            if (user) {
+        if (user) {
 
-                document.body.classList.remove(
-                    "auth-mode"
-                );
+            document.body.classList.remove("auth-mode");
 
-                authScreen.classList.add(
-                    "hidden"
-                );
+            if (authScreen) authScreen.style.display = "none";
 
-                appShell.classList.add(
-                    "visible"
-                );
+            if (appShell) appShell.classList.add("visible");
 
 
-                try {
+            await loadUser(user);
 
-                    await loadUser(
-                        user
-                    );
+            hideLoading();
 
-                } catch (error) {
+        } else {
 
-                    console.error(
-                        "Dashboard load error:",
-                        error
-                    );
+            document.body.classList.add("auth-mode");
 
-                }
+            if (appShell) appShell.classList.remove("visible");
 
+            if (authScreen) authScreen.style.display = "flex";
 
-                hideLoading();
-
-
-            } else {
-
-                currentUser =
-                    null;
-
-                currentProfile =
-                    null;
-
-                currentRole =
-                    "customer";
-
-
-                document.body.classList.add(
-                    "auth-mode"
-                );
-
-                authScreen.classList.remove(
-                    "hidden"
-                );
-
-                appShell.classList.remove(
-                    "visible"
-                );
-
-
-                if (accountAction) {
-
-                    accountAction.classList.add(
-                        "client-locked"
-                    );
-
-                    accountAction.disabled =
-                        true;
-
-                }
-
-
-                if (accountNavButton) {
-
-                    accountNavButton.classList.add(
-                        "client-locked"
-                    );
-
-                    accountNavButton.disabled =
-                        true;
-
-                }
-
-
-                hideLoading();
-
-            }
+            hideLoading();
 
         }
-    );
+
+    });
 
 } else {
 
     hideLoading();
 
-    showAuthMessage(
-        "Firebase features are offline. Check your setup."
-    );
-
 }
 
 
-/* =========================================================
-   PREVENT CUSTOMER ACCOUNT NAVIGATION SAFETY
-========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener(
-    "click",
-    function(event) {
+    setupSwipeGallery();
 
-        const target =
-            event.target.closest(
-                "#accountAction, #accountNavButton"
-            );
+    setupEventListeners();
 
-
-        if (!target) {
-
-            return;
-
-        }
-
-
-        if (
-            currentRole === "customer" ||
-            target.disabled
-        ) {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            showToast(
-                "Customer accounts do not have access to this portal."
-            );
-
-        }
-
-    },
-    true
-);
-
-
-/* =========================================================
-   INITIAL UI
-========================================================= */
-
-setAccountUI(
-    "customer"
-);
+});
 
 </script>
 
