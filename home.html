@@ -1,558 +1,6176 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K@si Web - Local Grooming & Salon Bookings</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Boxicons -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#07070d"
+    >
+
+    <meta
+        name="description"
+        content="K@si Web — Your personal grooming space. Discover salons, manage bookings and find your next fresh cut."
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+    <title>K@si Web | Home</title>
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+        rel="stylesheet"
+    >
+
     <style>
+
+        /* =========================================================
+           ROOT & RESET
+        ========================================================= */
+
+        :root {
+
+            --bg:
+                #07070d;
+
+            --surface:
+                rgba(18, 18, 29, .82);
+
+            --surface-2:
+                rgba(25, 25, 39, .88);
+
+            --border:
+                rgba(255, 255, 255, .09);
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #a5a5b7;
+
+            --muted-2:
+                #777789;
+
+            --primary:
+                #7b68ee;
+
+            --primary-2:
+                #8b5cf6;
+
+            --blue:
+                #3b82f6;
+
+            --green:
+                #25d366;
+
+            --shadow:
+                0 25px 80px rgba(0,0,0,.38);
+
+            --radius:
+                24px;
+
+            --max:
+                1180px;
+
+        }
+
+
+        * {
+
+            box-sizing:
+                border-box;
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+        }
+
+
+        html {
+
+            scroll-behavior:
+                smooth;
+
+            background:
+                var(--bg);
+
+        }
+
+
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-        }
-        .auth-mode #appShell {
-            display: none !important;
-        }
-        .auth-mode #authScreen {
-            display: flex !important;
-        }
-        .status-pending {
-            background-color: #fef3c7;
-            color: #d97706;
-        }
-        .status-confirmed {
-            background-color: #d1fae5;
-            color: #059669;
-        }
-        .status-completed {
-            background-color: #e0e7ff;
-            color: #4f46e5;
-        }
-        .status-cancelled {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen pb-20 md:pb-0">
 
-    <!-- ==========================================
-         AUTHENTICATION SCREEN (UNAUTHENTICATED)
-    ========================================== -->
-    <div id="authScreen" class="hidden fixed inset-0 z-50 bg-slate-900 flex-col items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl p-8 shadow-2xl text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 text-white rounded-2xl mb-4 shadow-lg shadow-indigo-200">
-                <i class="bx bx-cut text-3xl"></i>
-            </div>
-            <h1 class="text-2xl font-bold text-slate-900 mb-2">Welcome to K@si Web</h1>
-            <p class="text-slate-500 text-sm mb-6">Book top barbers and hair stylists in your township or local area effortlessly.</p>
-            
-            <div class="space-y-3">
-                <button id="googleLoginBtn" class="w-full flex items-center justify-center gap-3 bg-white border border-slate-300 text-slate-700 font-semibold py-3 px-4 rounded-xl hover:bg-slate-50 transition shadow-sm">
-                    <i class="bx bxl-google text-xl text-red-500"></i> Continue with Google
-                </button>
-            </div>
-        </div>
-    </div>
+            min-height:
+                100vh;
 
-    <!-- ==========================================
-         APPLICATION SHELL (AUTHENTICATED)
-    ========================================== -->
-    <div id="appShell" class="min-h-screen flex flex-col">
-        
-        <!-- TOP NAVIGATION -->
-        <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-100">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-indigo-100">
-                        K@
-                    </div>
-                    <span class="font-bold text-lg text-slate-900 tracking-tight hidden sm:inline">K@si Web</span>
-                </div>
+            background:
+                radial-gradient(
+                    circle at 85% 5%,
+                    rgba(124, 58, 237, .16),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 5% 35%,
+                    rgba(59, 130, 246, .09),
+                    transparent 30%
+                ),
+                var(--bg);
 
-                <!-- Action Bar -->
-                <div class="flex items-center gap-3">
-                    <button id="refreshBtn" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-xl transition" title="Refresh">
-                        <i class="bx bx-refresh text-2xl"></i>
-                    </button>
-                    
-                    <button id="accountNavButton" class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition">
-                        <div id="profileAvatar" class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm border border-indigo-200 overflow-hidden">
-                            K@
-                        </div>
-                        <span id="userName" class="text-sm font-semibold text-slate-700 hidden md:inline">Account</span>
-                    </button>
+            color:
+                var(--text);
 
-                    <button id="logoutBtn" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition" title="Sign Out">
-                        <i class="bx bx-log-out text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
+            font-family:
+                "Inter",
+                sans-serif;
 
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-            
-            <!-- HERO / SEARCH BANNER -->
-            <section class="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-indigo-100 relative overflow-hidden">
-                <div class="relative z-10 max-w-2xl">
-                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">Find & Book Local Grooming Pros</h2>
-                    <p class="text-indigo-100 text-sm sm:text-base mb-6">Discover trusted barbers, hair stylists, and beauty specialists right around your neighborhood.</p>
-                    
-                    <!-- Search Input -->
-                    <div class="flex items-center bg-white rounded-2xl p-2 shadow-lg text-slate-800">
-                        <i class="bx bx-search text-2xl text-slate-400 ml-3 mr-2"></i>
-                        <input id="searchInput" type="text" placeholder="Search by service or salon name..." class="w-full bg-transparent border-none outline-none text-sm sm:text-base text-slate-800 placeholder-slate-400">
-                        <button id="searchBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl transition ml-2">
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </section>
+            overflow-x:
+                hidden;
 
-            <!-- BOOKINGS QUICK VIEW -->
-            <section id="bookings" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <i class="bx bx-calendar text-indigo-600 text-xl"></i> Your Recent Bookings
-                    </h3>
-                    <button id="bookingQuickBtn" class="text-xs font-semibold text-indigo-600 hover:text-indigo-700">View All</button>
-                </div>
+            padding-bottom:
+                105px;
 
-                <div id="bookingList" class="space-y-3">
-                    <div class="text-center py-8 text-slate-400 text-sm">
-                        <i class="bx bx-loader-alt animate-spin text-2xl mb-2"></i>
-                        <p>Loading your appointments...</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FEATURED SALONS & SERVICES -->
-            <section>
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-slate-900">Popular Nearby Places</h3>
-                </div>
-
-                <div id="salonGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Demo Salon Card 1 -->
-                    <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition">
-                        <div class="h-40 bg-slate-200 relative">
-                            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=600&q=80" alt="Salon" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-slate-700 flex items-center gap-1">
-                                <i class="bx bxs-star text-amber-400"></i> 4.8
-                            </span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-slate-900 text-lg">Kasi Fresh Barbershop</h4>
-                            <p class="text-xs text-slate-500 mb-4 flex items-center gap-1">
-                                <i class="bx bx-map"></i> Section B, Main Street
-                            </p>
-                            <div class="flex items-center justify-between border-t border-slate-50 pt-4">
-                                <div>
-                                    <span class="text-xs text-slate-400 block">Starting from</span>
-                                    <span class="font-bold text-indigo-600 text-sm">R80.00</span>
-                                </div>
-                                <button onclick="openBookingModal('Kasi Fresh Barbershop', 'Fresh Fade & Lineup')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold px-4 py-2 rounded-xl text-xs transition">
-                                    Book Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Demo Salon Card 2 -->
-                    <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition">
-                        <div class="h-40 bg-slate-200 relative">
-                            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80" alt="Salon" class="w-full h-full object-cover">
-                            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-slate-700 flex items-center gap-1">
-                                <i class="bx bxs-star text-amber-400"></i> 4.9
-                            </span>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-slate-900 text-lg">Glow Hair & Beauty Studio</h4>
-                            <p class="text-xs text-slate-500 mb-4 flex items-center gap-1">
-                                <i class="bx bx-map"></i> Zone 4, Corner Plaza
-                            </p>
-                            <div class="flex items-center justify-between border-t border-slate-50 pt-4">
-                                <div>
-                                    <span class="text-xs text-slate-400 block">Starting from</span>
-                                    <span class="font-bold text-indigo-600 text-sm">R150.00</span>
-                                </div>
-                                <button onclick="openBookingModal('Glow Hair & Beauty Studio', 'Wash & Hair Styling')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold px-4 py-2 rounded-xl text-xs transition">
-                                    Book Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- BOTTOM MOBILE NAVIGATION -->
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-2 flex justify-between items-center z-40">
-            <a href="#" class="flex flex-col items-center text-indigo-600">
-                <i class="bx bx-home-alt text-2xl"></i>
-                <span class="text-[10px] font-medium">Home</span>
-            </a>
-            <a href="#bookings" class="flex flex-col items-center text-slate-400 hover:text-indigo-600">
-                <i class="bx bx-calendar text-2xl"></i>
-                <span class="text-[10px] font-medium">Bookings</span>
-            </a>
-            <button id="accountAction" class="flex flex-col items-center text-slate-400 hover:text-indigo-600">
-                <i class="bx bx-user text-2xl"></i>
-                <span class="text-[10px] font-medium">Profile</span>
-            </button>
-        </nav>
-    </div>
-
-    <!-- ==========================================
-         BOOKING MODAL
-    ========================================== -->
-    <div id="bookingModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">
-                <i class="bx bx-x"></i>
-            </button>
-            <h3 class="text-xl font-bold text-slate-900 mb-1" id="modalSalonName">Salon Name</h3>
-            <p class="text-sm text-slate-500 mb-6" id="modalServiceName">Service Name</p>
-
-            <form id="bookingForm" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Select Date</label>
-                    <input type="date" id="bookingDate" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-600">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Notes or Special Requests</label>
-                    <textarea id="bookingNotes" rows="3" placeholder="Optional notes for the barber..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-indigo-600"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition shadow-md shadow-indigo-100">
-                    Confirm Appointment
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- UI TOAST & LOADING OVERLAYS -->
-    <div id="loadingOverlay" class="hidden fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-xs flex items-center justify-center">
-        <div class="bg-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3">
-            <i class="bx bx-loader-alt animate-spin text-indigo-600 text-2xl"></i>
-            <span id="loadingText" class="text-sm font-semibold text-slate-700">Loading...</span>
-        </div>
-    </div>
-
-    <div id="toast" class="hidden fixed top-5 right-5 z-50 bg-slate-900 text-white text-sm px-5 py-3 rounded-xl shadow-lg transition">
-        Toast Message
-    </div>
-
-    <!-- ==========================================
-         FIREBASE SDKs & JAVASCRIPT LOGIC
-    ========================================== -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-    <script>
-        /* =========================================================
-           FIREBASE CONFIGURATION
-        ========================================================= */
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
         }
 
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+
+        body.auth-mode {
+
+            padding-bottom:
+                0;
+
+        }
+
+
+        button,
+        input,
+        select {
+
+            font:
+                inherit;
+
+        }
+
+
+        button {
+
+            border:
+                0;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        a {
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
+        }
+
+
+        img {
+
+            display:
+                block;
+
+            max-width:
+                100%;
+
+        }
+
+
+        .hidden {
+
+            display:
+                none !important;
+
+        }
+
+
+        .eyebrow {
+
+            color:
+                var(--primary-2);
+
+            font-size:
+                .68rem;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                .15em;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                9px;
+
+        }
+
 
         /* =========================================================
-           DOM REFERENCES
+           LOADING
         ========================================================= */
-        const authScreen = document.getElementById("authScreen");
-        const appShell = document.getElementById("appShell");
-        const profileAvatar = document.getElementById("profileAvatar");
-        const userName = document.getElementById("userName");
-        const bookingList = document.getElementById("bookingList");
-        const googleLoginBtn = document.getElementById("googleLoginBtn");
-        const logoutBtn = document.getElementById("logoutBtn");
-        const refreshBtn = document.getElementById("refreshBtn");
-        const accountAction = document.getElementById("accountAction");
-        const accountNavButton = document.getElementById("accountNavButton");
-        const bookingQuickBtn = document.getElementById("bookingQuickBtn");
-        const loadingOverlay = document.getElementById("loadingOverlay");
-        const loadingText = document.getElementById("loadingText");
-        const toast = document.getElementById("toast");
 
-        const bookingModal = document.getElementById("bookingModal");
-        const modalSalonName = document.getElementById("modalSalonName");
-        const modalServiceName = document.getElementById("modalServiceName");
-        const bookingForm = document.getElementById("bookingForm");
+        #loadingOverlay {
 
-        let currentUser = null;
-        let currentProfile = null;
-        let currentRole = "customer";
-        let activeSalon = "";
-        let activeService = "";
+            position:
+                fixed;
 
-        /* =========================================================
-           UI HELPERS
-        ========================================================= */
-        function showLoading(msg = "Loading...") {
-            if (loadingText) loadingText.textContent = msg;
-            if (loadingOverlay) loadingOverlay.classList.remove("hidden");
+            inset:
+                0;
+
+            z-index:
+                99999;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                rgba(5, 5, 10, .94);
+
+            backdrop-filter:
+                blur(20px);
+
+            transition:
+                opacity .3s ease,
+                visibility .3s ease;
+
         }
 
-        function hideLoading() {
-            if (loadingOverlay) loadingOverlay.classList.add("hidden");
+
+        #loadingOverlay.hidden {
+
+            opacity:
+                0;
+
+            visibility:
+                hidden;
+
+            pointer-events:
+                none;
+
         }
 
-        function showToast(msg) {
-            if (!toast) return;
-            toast.textContent = msg;
-            toast.classList.remove("hidden");
-            setTimeout(() => toast.classList.add("hidden"), 3000);
+
+        .loader-box {
+
+            width:
+                min(88vw, 340px);
+
+            padding:
+                30px;
+
+            text-align:
+                center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                28px;
+
+            background:
+                rgba(20, 20, 31, .9);
+
+            box-shadow:
+                var(--shadow);
+
         }
 
-        function escapeHTML(str) {
-            return String(str || '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+
+        .loader-logo {
+
+            width:
+                58px;
+
+            height:
+                58px;
+
+            margin:
+                0 auto 18px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-2)
+                );
+
+            font-size:
+                25px;
+
+            font-weight:
+                800;
+
+            box-shadow:
+                0 15px 40px rgba(123, 104, 238, .35);
+
         }
 
-        function setAccountUI(role) {
-            // Placeholder for role specific adjustments
+
+        .loader-spinner {
+
+            width:
+                28px;
+
+            height:
+                28px;
+
+            margin:
+                18px auto 0;
+
+            border:
+                2px solid rgba(255, 255, 255, .12);
+
+            border-top-color:
+                var(--primary-2);
+
+            border-right-color:
+                var(--blue);
+
+            border-radius:
+                50%;
+
+            animation:
+                spin .8s linear infinite;
+
         }
 
-        function openRoleAccount() {
-            showToast("Profile settings management coming soon.");
-        }
 
-        /* =========================================================
-           USER & PROFILE LOADER
-        ========================================================= */
-        async function loadUser(user) {
-            currentUser = user;
-            const name = user.displayName || "User";
-            if (userName) userName.textContent = name;
+        @keyframes spin {
 
-            if (profileAvatar) {
-                if (user.photoURL) {
-                    profileAvatar.innerHTML = `<img src="${escapeHTML(user.photoURL)}" alt="Profile" class="w-full h-full object-cover">`;
-                } else {
-                    const initials = name
-                        .split(/\s+/)
-                        .filter(Boolean)
-                        .slice(0, 2)
-                        .map(part => part[0].toUpperCase())
-                        .join("") || "K@";
-
-                    profileAvatar.textContent = initials;
-                }
+            to {
+                transform:
+                    rotate(360deg);
             }
 
-            setAccountUI(currentRole);
-            await loadBookings(user.uid);
         }
 
+
         /* =========================================================
-           FETCH & DISPLAY BOOKINGS
+           ROLE REDIRECT
         ========================================================= */
-        async function loadBookings(uid) {
-            if (!bookingList || !db) return;
+
+        #roleRedirectOverlay {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                9998;
+
+            display:
+                none;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                rgba(4, 4, 9, .92);
+
+            backdrop-filter:
+                blur(18px);
+
+        }
+
+
+        #roleRedirectOverlay.show {
+
+            display:
+                flex;
+
+        }
+
+
+        .redirect-box {
+
+            width:
+                min(88vw, 380px);
+
+            padding:
+                34px;
+
+            text-align:
+                center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                28px;
+
+            background:
+                var(--surface);
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .redirect-box i {
+
+            display:
+                block;
+
+            margin-bottom:
+                12px;
+
+            font-size:
+                42px;
+
+            color:
+                var(--primary-2);
+
+        }
+
+
+        /* =========================================================
+           AUTH SCREEN
+        ========================================================= */
+
+        .auth-screen {
+
+            min-height:
+                100vh;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                30px 18px;
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        body:not(.auth-mode) .auth-screen {
+
+            display:
+                none;
+
+        }
+
+
+        .auth-shell {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            width:
+                min(100%, 1040px);
+
+            min-height:
+                650px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.05fr .95fr;
+
+            gap:
+                20px;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, .065),
+                    rgba(255, 255, 255, .018)
+                );
+
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, .35);
+
+            backdrop-filter:
+                blur(25px);
+
+        }
+
+
+        .auth-brand {
+
+            position:
+                relative;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                space-between;
+
+            padding:
+                40px;
+
+            overflow:
+                hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(123, 104, 238, .2),
+                    rgba(0, 0, 0, .15)
+                );
+
+        }
+
+
+        .auth-brand::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            background:
+                radial-gradient(
+                    circle at 75% 20%,
+                    rgba(139, 92, 246, .23),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 20% 80%,
+                    rgba(59, 130, 246, .15),
+                    transparent 30%
+                );
+
+            pointer-events:
+                none;
+
+        }
+
+
+        .brand-logo {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            font-weight:
+                800;
+
+            font-size:
+                1.5rem;
+
+            letter-spacing:
+                -.05em;
+
+        }
+
+
+        .brand-mark {
+
+            width:
+                42px;
+
+            height:
+                42px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-2)
+                );
+
+            box-shadow:
+                0 12px 35px rgba(123, 104, 238, .35);
+
+        }
+
+
+        .brand-copy {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+        }
+
+
+        .brand-copy h1 {
+
+            max-width:
+                430px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(42px, 5vw, 66px);
+
+            line-height:
+                .98;
+
+            letter-spacing:
+                -2px;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .brand-copy h1 span {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #60a5fa,
+                    #8b5cf6
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color:
+                transparent;
+
+        }
+
+
+        .brand-copy p {
+
+            max-width:
+                430px;
+
+            color:
+                var(--muted);
+
+            line-height:
+                1.8;
+
+        }
+
+
+        .brand-features {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            display:
+                grid;
+
+            gap:
+                12px;
+
+        }
+
+
+        .brand-feature {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            color:
+                #d6d6df;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .brand-feature i {
+
+            color:
+                var(--green);
+
+            font-size:
+                19px;
+
+        }
+
+
+        .auth-panel {
+
+            padding:
+                38px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                center;
+
+        }
+
+
+        .auth-panel-header {
+
+            margin-bottom:
+                24px;
+
+        }
+
+
+        .auth-panel-header h2 {
+
+            font-size:
+                28px;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .auth-panel-header p {
+
+            color:
+                var(--muted);
+
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .auth-tabs {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            padding:
+                5px;
+
+            margin-bottom:
+                22px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255, 255, 255, .035);
+
+        }
+
+
+        .auth-tab {
+
+            padding:
+                12px;
+
+            color:
+                var(--muted);
+
+            background:
+                transparent;
+
+            border-radius:
+                11px;
+
+            font-weight:
+                700;
+
+            transition:
+                .25s ease;
+
+        }
+
+
+        .auth-tab.active {
+
+            color:
+                #fff;
+
+            background:
+                rgba(123, 104, 238, .18);
+
+            box-shadow:
+                inset 0 0 0 1px rgba(139, 92, 246, .18);
+
+        }
+
+
+        .auth-message {
+
+            min-height:
+                0;
+
+            margin-bottom:
+                14px;
+
+            padding:
+                0;
+
+            color:
+                #ffb3bd;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .auth-message:not(:empty) {
+
+            padding:
+                11px 13px;
+
+            border:
+                1px solid rgba(255, 93, 115, .2);
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255, 93, 115, .07);
+
+        }
+
+
+        .auth-form {
+
+            display:
+                none;
+
+        }
+
+
+        .auth-form.active {
+
+            display:
+                block;
+
+        }
+
+
+        .field {
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        .field label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            color:
+                #d9d9e1;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .input-wrap {
+
+            position:
+                relative;
+
+        }
+
+
+        .input-wrap > i {
+
+            position:
+                absolute;
+
+            left:
+                15px;
+
+            top:
+                50%;
+
+            transform:
+                translateY(-50%);
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                19px;
+
+        }
+
+
+        .input-wrap input,
+        .input-wrap select {
+
+            width:
+                100%;
+
+            min-height:
+                50px;
+
+            padding:
+                0 44px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                14px;
+
+            outline:
+                none;
+
+            color:
+                #fff;
+
+            background:
+                rgba(255, 255, 255, .045);
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .input-wrap select {
+
+            appearance:
+                none;
+
+            padding-right:
+                16px;
+
+        }
+
+
+        .input-wrap input:focus,
+        .input-wrap select:focus {
+
+            border-color:
+                rgba(139, 92, 246, .7);
+
+            background:
+                rgba(139, 92, 246, .06);
+
+            box-shadow:
+                0 0 0 4px rgba(139, 92, 246, .08);
+
+        }
+
+
+        .password-toggle {
+
+            position:
+                absolute;
+
+            right:
+                10px;
+
+            top:
+                50%;
+
+            transform:
+                translateY(-50%);
+
+            width:
+                34px;
+
+            height:
+                34px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                var(--muted);
+
+            background:
+                transparent;
+
+        }
+
+
+        .role-note {
+
+            margin:
+                -3px 0 16px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                11px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        .primary-btn {
+
+            width:
+                100%;
+
+            min-height:
+                52px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                9px;
+
+            border-radius:
+                15px;
+
+            color:
+                #fff;
+
+            font-weight:
+                800;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-2)
+                );
+
+            box-shadow:
+                0 15px 35px rgba(123, 104, 238, .22);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+
+        }
+
+
+        .primary-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 18px 40px rgba(123, 104, 238, .32);
+
+        }
+
+
+        .owner-link {
+
+            margin-top:
+                18px;
+
+            text-align:
+                center;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+        }
+
+
+        .owner-link a {
+
+            color:
+                #b7adff;
+
+            font-weight:
+                700;
+
+        }
+
+
+        /* =========================================================
+           APP SHELL
+        ========================================================= */
+
+        .app-shell {
+
+            display:
+                none;
+
+            min-height:
+                100vh;
+
+        }
+
+
+        .app-shell.visible {
+
+            display:
+                block;
+
+        }
+
+
+        .container {
+
+            width:
+                min(calc(100% - 32px), var(--max));
+
+            margin:
+                0 auto;
+
+        }
+
+
+        /* =========================================================
+           TOPBAR
+        ========================================================= */
+
+        .topbar {
+
+            position:
+                sticky;
+
+            top:
+                0;
+
+            z-index:
+                100;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, .055);
+
+            background:
+                rgba(7, 7, 13, .78);
+
+            backdrop-filter:
+                blur(22px);
+
+        }
+
+
+        .topbar-inner {
+
+            min-height:
+                72px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                16px;
+
+        }
+
+
+        .app-logo {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .app-logo-mark {
+
+            width:
+                38px;
+
+            height:
+                38px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                12px;
+
+            font-size:
+                17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-2)
+                );
+
+        }
+
+
+        .refresh-btn {
+
+            width:
+                40px;
+
+            height:
+                40px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                13px;
+
+            color:
+                #ddd;
+
+            background:
+                rgba(255, 255, 255, .04);
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .refresh-btn:hover {
+
+            color:
+                #fff;
+
+            border-color:
+                rgba(139, 92, 246, .45);
+
+            transform:
+                rotate(15deg);
+
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+
+            padding:
+                48px 0 28px;
+
+        }
+
+
+        .hero-kicker {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            margin-bottom:
+                14px;
+
+            padding:
+                7px 11px;
+
+            border:
+                1px solid rgba(139, 92, 246, .2);
+
+            border-radius:
+                999px;
+
+            color:
+                #bcb4ff;
+
+            background:
+                rgba(123, 104, 238, .08);
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.5px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .hero-kicker i {
+
+            font-size:
+                14px;
+
+        }
+
+
+        .hero h2 {
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(38px, 8vw, 62px);
+
+            line-height:
+                1;
+
+            letter-spacing:
+                -1.8px;
+
+            margin-bottom:
+                13px;
+
+        }
+
+
+        .hero h2 span {
+
+            color:
+                #b6aaff;
+
+        }
+
+
+        .hero p {
+
+            max-width:
+                620px;
+
+            color:
+                var(--muted);
+
+            line-height:
+                1.7;
+
+            font-size:
+                14px;
+
+        }
+
+
+        /* =========================================================
+           SWIPE FEATURE
+        ========================================================= */
+
+        .section-head {
+
+            display:
+                flex;
+
+            align-items:
+                flex-end;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            margin:
+                18px 0 14px;
+
+        }
+
+
+        .section-title {
+
+            font-size:
+                18px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .section-subtitle {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                11px;
+
+        }
+
+
+        .swipe-dots {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                5px;
+
+        }
+
+
+        .swipe-dot {
+
+            width:
+                6px;
+
+            height:
+                6px;
+
+            border-radius:
+                99px;
+
+            background:
+                #414151;
+
+            transition:
+                .25s ease;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .swipe-dot.active {
+
+            width:
+                19px;
+
+            background:
+                var(--primary-2);
+
+        }
+
+
+        .swipe-track {
+
+            display:
+                flex;
+
+            gap:
+                14px;
+
+            overflow-x:
+                auto;
+
+            scroll-snap-type:
+                x mandatory;
+
+            scrollbar-width:
+                none;
+
+            padding:
+                3px 2px 12px;
+
+            overscroll-behavior-x:
+                contain;
+
+        }
+
+
+        .swipe-track::-webkit-scrollbar {
+
+            display:
+                none;
+
+        }
+
+
+        .swipe-card {
+
+            position:
+                relative;
+
+            flex:
+                0 0 min(84vw, 360px);
+
+            min-height:
+                330px;
+
+            overflow:
+                hidden;
+
+            scroll-snap-align:
+                start;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                25px;
+
+            background:
+                #15151f;
+
+            box-shadow:
+                0 20px 55px rgba(0,0,0,.25);
+
+        }
+
+
+        .swipe-card img {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
+
+            opacity:
+                .88;
+
+            transition:
+                transform .5s ease;
+
+        }
+
+
+        .swipe-card:hover img {
+
+            transform:
+                scale(1.04);
+
+        }
+
+
+        .swipe-card::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(5, 5, 10, .96) 0%,
+                    rgba(5, 5, 10, .45) 47%,
+                    rgba(5, 5, 10, .05) 100%
+                );
+
+        }
+
+
+        .swipe-content {
+
+            position:
+                absolute;
+
+            left:
+                20px;
+
+            right:
+                20px;
+
+            bottom:
+                19px;
+
+            z-index:
+                2;
+
+        }
+
+
+        .swipe-tag {
+
+            display:
+                inline-flex;
+
+            margin-bottom:
+                9px;
+
+            padding:
+                6px 9px;
+
+            border:
+                1px solid rgba(255, 255, 255, .12);
+
+            border-radius:
+                999px;
+
+            color:
+                #e9e6ff;
+
+            background:
+                rgba(10, 10, 16, .5);
+
+            backdrop-filter:
+                blur(10px);
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .swipe-content h3 {
+
+            font-size:
+                22px;
+
+            margin-bottom:
+                5px;
+
+        }
+
+
+        .swipe-content p {
+
+            color:
+                #c0c0ca;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .swipe-price {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            margin-top:
+                13px;
+
+        }
+
+
+        .swipe-price strong {
+
+            font-size:
+                17px;
+
+        }
+
+
+        .rating {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                5px;
+
+            color:
+                #f5d68c;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        /* =========================================================
+           QUICK ACCESS
+        ========================================================= */
+
+        .quick-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                12px;
+
+            margin:
+                24px 0;
+
+        }
+
+
+        .quick-card {
+
+            min-height:
+                110px;
+
+            padding:
+                17px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                space-between;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                19px;
+
+            background:
+                var(--surface);
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .quick-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            border-color:
+                rgba(139, 92, 246, .3);
+
+        }
+
+
+        .quick-icon {
+
+            width:
+                37px;
+
+            height:
+                37px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                12px;
+
+            color:
+                #c5bdff;
+
+            background:
+                rgba(123, 104, 238, .11);
+
+            font-size:
+                19px;
+
+        }
+
+
+        .quick-card strong {
+
+            margin-top:
+                10px;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .quick-card small {
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+        }
+
+
+        .client-locked {
+
+            cursor:
+                not-allowed !important;
+
+            filter:
+                grayscale(.7);
+
+            opacity:
+                .42;
+
+        }
+
+
+        /* =========================================================
+           CONTENT CARDS
+        ========================================================= */
+
+        .content-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.25fr .75fr;
+
+            gap:
+                18px;
+
+            margin:
+                25px 0;
+
+        }
+
+
+        .panel {
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            background:
+                var(--surface);
+
+            box-shadow:
+                0 15px 45px rgba(0,0,0,.16);
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .panel-header {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+            padding:
+                19px 20px;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, .055);
+
+        }
+
+
+        .panel-header h3 {
+
+            font-size:
+                15px;
+
+        }
+
+
+        .panel-header span {
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                10px;
+
+        }
+
+
+        /* =========================================================
+           BOOKINGS
+        ========================================================= */
+
+        #bookingList {
+
+            padding:
+                8px 14px 14px;
+
+        }
+
+
+        .booking {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                48px 1fr auto;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            padding:
+                13px 7px;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, .05);
+
+        }
+
+
+        .booking:last-child {
+
+            border-bottom:
+                0;
+
+        }
+
+
+        .booking-icon {
+
+            width:
+                48px;
+
+            height:
+                48px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                15px;
+
+            color:
+                #bdb5ff;
+
+            background:
+                rgba(123, 104, 238, .1);
+
+            font-size:
+                21px;
+
+        }
+
+
+        .booking-main strong {
+
+            display:
+                block;
+
+            margin-bottom:
+                4px;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .booking-main small {
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+        }
+
+
+        .booking-status {
+
+            padding:
+                6px 8px;
+
+            border-radius:
+                999px;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .4px;
+
+        }
+
+
+        .status-pending {
+
+            color:
+                #f2d68c;
+
+            background:
+                rgba(242, 214, 140, .09);
+
+        }
+
+
+        .status-confirmed {
+
+            color:
+                #75e7a4;
+
+            background:
+                rgba(37, 211, 102, .09);
+
+        }
+
+
+        .status-completed {
+
+            color:
+                #9fc6ff;
+
+            background:
+                rgba(0, 140, 255, .09);
+
+        }
+
+
+        .status-cancelled {
+
+            color:
+                #ff9aaa;
+
+            background:
+                rgba(255, 93, 115, .09);
+
+        }
+
+
+        .empty-state {
+
+            padding:
+                34px 20px;
+
+            text-align:
+                center;
+
+            color:
+                var(--muted);
+
+        }
+
+
+        .empty-state i {
+
+            display:
+                block;
+
+            margin-bottom:
+                10px;
+
+            color:
+                #66667a;
+
+            font-size:
+                34px;
+
+        }
+
+
+        .empty-state p {
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* =========================================================
+           DISCOVER
+        ========================================================= */
+
+        .discover-card {
+
+            position:
+                relative;
+
+            min-height:
+                230px;
+
+            padding:
+                24px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                flex-end;
+
+            overflow:
+                hidden;
+
+            background:
+                #171721;
+
+        }
+
+
+        .discover-card img {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
+
+            opacity:
+                .7;
+
+        }
+
+
+        .discover-card::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            background:
+                linear-gradient(
+                    to top,
+                    rgba(5, 5, 10, .96),
+                    rgba(5, 5, 10, .1)
+                );
+
+        }
+
+
+        .discover-content {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+        }
+
+
+        .discover-content span {
+
+            color:
+                #b8afff;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1.5px;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .discover-content h3 {
+
+            margin:
+                5px 0 7px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                25px;
+
+        }
+
+
+        .discover-content p {
+
+            margin-bottom:
+                15px;
+
+            color:
+                #c3c3ce;
+
+            font-size:
+                11px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        .small-btn {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                6px;
+
+            width:
+                fit-content;
+
+            padding:
+                10px 13px;
+
+            border-radius:
+                12px;
+
+            color:
+                #fff;
+
+            background:
+                rgba(255, 255, 255, .1);
+
+            border:
+                1px solid rgba(255, 255, 255, .1);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        /* =========================================================
+           PROFILE
+        ========================================================= */
+
+        .profile-panel {
+
+            padding:
+                20px;
+
+        }
+
+
+        .profile-head {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                14px;
+
+            margin-bottom:
+                19px;
+
+        }
+
+
+        .avatar {
+
+            width:
+                56px;
+
+            height:
+                56px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            overflow:
+                hidden;
+
+            border-radius:
+                18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-2)
+                );
+
+            font-size:
+                19px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .avatar img {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
+
+        }
+
+
+        .profile-name {
+
+            font-size:
+                15px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .profile-email {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+        }
+
+
+        .profile-status {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                5px;
+
+            margin-top:
+                8px;
+
+            color:
+                #83e7a9;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .profile-status i {
+
+            font-size:
+                7px;
+
+        }
+
+
+        .logout-btn {
+
+            width:
+                100%;
+
+            min-height:
+                45px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                8px;
+
+            border:
+                1px solid rgba(255, 93, 115, .16);
+
+            border-radius:
+                13px;
+
+            color:
+                #ff9aaa;
+
+            background:
+                rgba(255, 93, 115, .06);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        /* =========================================================
+           ELITE
+        ========================================================= */
+
+        .elite-section {
+
+            position:
+                relative;
+
+            margin:
+                26px 0 110px;
+
+            min-height:
+                270px;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid rgba(217, 181, 109, .18);
+
+            border-radius:
+                28px;
+
+            background:
+                #12121b;
+
+        }
+
+
+        .elite-section img {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
+
+            opacity:
+                .45;
+
+        }
+
+
+        .elite-section::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(8, 8, 13, .96),
+                    rgba(8, 8, 13, .52),
+                    rgba(8, 8, 13, .25)
+                );
+
+        }
+
+
+        .elite-content {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            max-width:
+                560px;
+
+            padding:
+                35px;
+
+        }
+
+
+        .elite-label {
+
+            color:
+                #d9b56d;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                3px;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .elite-content h2 {
+
+            margin:
+                9px 0 10px;
+
+            font-family:
+                "Playfair Display",
+                serif;
+
+            font-size:
+                clamp(29px, 5vw, 45px);
+
+            line-height:
+                1;
+
+        }
+
+
+        .elite-content p {
+
+            color:
+                #c2c0c8;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =========================================================
+           BOTTOM NAV
+        ========================================================= */
+
+        .bottom-nav {
+
+            position:
+                fixed;
+
+            left:
+                50%;
+
+            bottom:
+                max(12px, env(safe-area-inset-bottom));
+
+            z-index:
+                200;
+
+            width:
+                min(calc(100% - 24px), 500px);
+
+            transform:
+                translateX(-50%);
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            padding:
+                7px;
+
+            border:
+                1px solid rgba(255, 255, 255, .1);
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(16, 16, 25, .9);
+
+            backdrop-filter:
+                blur(25px);
+
+            box-shadow:
+                0 20px 55px rgba(0, 0, 0, .42);
+
+        }
+
+
+        .bottom-btn {
+
+            min-height:
+                49px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                3px;
+
+            border-radius:
+                14px;
+
+            color:
+                #777788;
+
+            background:
+                transparent;
+
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .bottom-btn i {
+
+            font-size:
+                19px;
+
+        }
+
+
+        .bottom-btn.active {
+
+            color:
+                #fff;
+
+            background:
+                rgba(123, 104, 238, .14);
+
+        }
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        #toast {
+
+            position:
+                fixed;
+
+            left:
+                50%;
+
+            bottom:
+                92px;
+
+            z-index:
+                500;
+
+            max-width:
+                calc(100% - 40px);
+
+            transform:
+                translate(-50%, 20px);
+
+            padding:
+                12px 16px;
+
+            border:
+                1px solid rgba(255, 255, 255, .1);
+
+            border-radius:
+                13px;
+
+            color:
+                #fff;
+
+            background:
+                rgba(22, 22, 32, .94);
+
+            backdrop-filter:
+                blur(16px);
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, .35);
+
+            font-size:
+                11px;
+
+            opacity:
+                0;
+
+            pointer-events:
+                none;
+
+            transition:
+                .3s ease;
+
+        }
+
+
+        #toast.show {
+
+            opacity:
+                1;
+
+            transform:
+                translate(-50%, 0);
+
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 820px) {
+
+            .auth-shell {
+
+                grid-template-columns:
+                    1fr;
+
+                min-height:
+                    auto;
+
+            }
+
+
+            .auth-brand {
+
+                min-height:
+                    300px;
+
+                padding:
+                    30px;
+
+            }
+
+
+            .brand-copy h1 {
+
+                font-size:
+                    43px;
+
+            }
+
+
+            .brand-features {
+
+                display:
+                    none;
+
+            }
+
+
+            .auth-panel {
+
+                padding:
+                    28px;
+
+            }
+
+
+            .content-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+
+                width:
+                    min(calc(100% - 24px), var(--max));
+
+            }
+
+
+            .hero {
+
+                padding-top:
+                    34px;
+
+            }
+
+
+            .hero h2 {
+
+                font-size:
+                    40px;
+
+            }
+
+
+            .quick-grid {
+
+                gap:
+                    8px;
+
+            }
+
+
+            .quick-card {
+
+                min-height:
+                    102px;
+
+                padding:
+                    13px;
+
+            }
+
+
+            .quick-card strong {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .swipe-card {
+
+                flex-basis:
+                    84vw;
+
+                min-height:
+                    315px;
+
+            }
+
+
+            .elite-content {
+
+                padding:
+                    27px;
+
+            }
+
+
+            .auth-screen {
+
+                padding:
+                    12px;
+
+            }
+
+
+            .auth-shell {
+
+                border-radius:
+                    25px;
+
+            }
+
+
+            .auth-brand {
+
+                min-height:
+                    255px;
+
+            }
+
+        }
+
+
+        @media (max-width: 380px) {
+
+            .quick-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .quick-card {
+
+                min-height:
+                    70px;
+
+                flex-direction:
+                    row;
+
+                align-items:
+                    center;
+
+                gap:
+                    12px;
+
+            }
+
+
+            .quick-card strong {
+
+                margin:
+                    0;
+
+            }
+
+
+            .quick-card small {
+
+                display:
+                    none;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="auth-mode">
+
+
+<!-- =========================================================
+     LOADING OVERLAY
+========================================================= -->
+
+<div id="loadingOverlay">
+
+    <div class="loader-box">
+
+        <div class="loader-logo">
+            K@
+        </div>
+
+        <strong>
+            K@si Web
+        </strong>
+
+        <p
+            id="loadingText"
+            style="
+                margin-top:8px;
+                color:#9999aa;
+                font-size:12px;
+            "
+        >
+            Preparing your K@si space...
+        </p>
+
+        <div class="loader-spinner"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ROLE REDIRECT OVERLAY
+========================================================= -->
+
+<div id="roleRedirectOverlay">
+
+    <div class="redirect-box">
+
+        <i class="bx bx-shield-quarter"></i>
+
+        <h3>
+            Access confirmed
+        </h3>
+
+        <p
+            id="redirectText"
+            style="
+                margin-top:8px;
+                color:#9999aa;
+                font-size:12px;
+                line-height:1.6;
+            "
+        >
+            Taking you to your portal...
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     AUTH SCREEN
+========================================================= -->
+
+<section
+    class="auth-screen"
+    id="authScreen"
+>
+
+    <div class="auth-shell">
+
+        <div class="auth-brand">
+
+            <div class="brand-logo">
+
+                <div class="brand-mark">
+                    K@
+                </div>
+
+                <span>
+                    K@si Web
+                </span>
+
+            </div>
+
+
+            <div class="brand-copy">
+
+                <div class="eyebrow">
+                    Your cut. Your time.
+                </div>
+
+                <h1>
+                    Fresh looks.
+                    <span>
+                        No lines.
+                    </span>
+                </h1>
+
+                <p>
+                    Discover local salons and barbers,
+                    compare services, and book your next
+                    look from one premium K@si space.
+                </p>
+
+            </div>
+
+
+            <div class="brand-features">
+
+                <div class="brand-feature">
+                    <i class="bx bx-check-circle"></i>
+                    Local salons and barbers
+                </div>
+
+                <div class="brand-feature">
+                    <i class="bx bx-check-circle"></i>
+                    Easy appointment booking
+                </div>
+
+                <div class="brand-feature">
+                    <i class="bx bx-check-circle"></i>
+                    Built for the Kasi community
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="auth-panel">
+
+            <div class="auth-panel-header">
+
+                <h2>
+                    Welcome to K@si
+                </h2>
+
+                <p>
+                    Sign in to continue or create your
+                    customer account.
+                </p>
+
+            </div>
+
+
+            <div class="auth-tabs">
+
+                <button
+                    class="auth-tab active"
+                    id="signInTab"
+                    type="button"
+                >
+                    Sign In
+                </button>
+
+                <button
+                    class="auth-tab"
+                    id="signUpTab"
+                    type="button"
+                >
+                    Create Account
+                </button>
+
+            </div>
+
+
+            <div
+                class="auth-message"
+                id="authMessage"
+            ></div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form
+                class="auth-form active"
+                id="loginForm"
+            >
+
+                <div class="field">
+
+                    <label for="loginEmail">
+                        Email address
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="bx bx-envelope"></i>
+
+                        <input
+                            id="loginEmail"
+                            type="email"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="bx bx-lock-alt"></i>
+
+                        <input
+                            id="loginPassword"
+                            type="password"
+                            autocomplete="current-password"
+                            placeholder="Your password"
+                            required
+                        >
+
+                        <button
+                            class="password-toggle"
+                            type="button"
+                            data-target="loginPassword"
+                        >
+                            <i class="bx bx-hide"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="loginRole">
+                        Account type
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <select id="loginRole">
+
+                            <option value="customer">
+                                Customer
+                            </option>
+
+                            <option value="salon_owner">
+                                Salon Owner
+                            </option>
+
+                            <option value="admin">
+                                Admin
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <p class="role-note">
+                    Your verified Firestore account role
+                    controls portal access. The selection
+                    above does not grant permissions.
+                </p>
+
+
+                <button
+                    class="primary-btn"
+                    type="submit"
+                >
+
+                    <i class="bx bx-log-in"></i>
+
+                    Sign In
+
+                </button>
+
+            </form>
+
+
+            <!-- SIGN UP FORM -->
+
+            <form
+                class="auth-form"
+                id="signupForm"
+            >
+
+                <div class="field">
+
+                    <label for="signupName">
+                        Full name
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="bx bx-user"></i>
+
+                        <input
+                            id="signupName"
+                            type="text"
+                            autocomplete="name"
+                            placeholder="Your full name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="signupEmail">
+                        Email address
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="bx bx-envelope"></i>
+
+                        <input
+                            id="signupEmail"
+                            type="email"
+                            autocomplete="email"
+                            placeholder="you@example.com"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="signupPassword">
+                        Password
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="bx bx-lock-alt"></i>
+
+                        <input
+                            id="signupPassword"
+                            type="password"
+                            autocomplete="new-password"
+                            placeholder="Create a password"
+                            required
+                        >
+
+                        <button
+                            class="password-toggle"
+                            type="button"
+                            data-target="signupPassword"
+                        >
+                            <i class="bx bx-hide"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="signupConfirm">
+                        Confirm password
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="bx bx-lock"></i>
+
+                        <input
+                            id="signupConfirm"
+                            type="password"
+                            autocomplete="new-password"
+                            placeholder="Confirm your password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <p class="role-note">
+                    New accounts are created as Customer
+                    accounts. Salon Owner and Admin access
+                    must be assigned through Firestore.
+                </p>
+
+
+                <button
+                    class="primary-btn"
+                    type="submit"
+                >
+
+                    <i class="bx bx-user-plus"></i>
+
+                    Create Customer Account
+
+                </button>
+
+            </form>
+
+
+            <div class="owner-link">
+
+                Salon owner?
+
+                <a href="owners.html">
+                    Open Owner Portal
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CUSTOMER APP SHELL
+========================================================= -->
+
+<main
+    class="app-shell"
+    id="appShell"
+>
+
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <div class="container topbar-inner">
+
+            <a
+                href="home.html"
+                class="app-logo"
+            >
+
+                <div class="app-logo-mark">
+                    K@
+                </div>
+
+                <span>
+                    K@si Web
+                </span>
+
+            </a>
+
+
+            <button
+                class="refresh-btn"
+                id="refreshBtn"
+                type="button"
+                aria-label="Refresh"
+            >
+
+                <i class="bx bx-refresh"></i>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <div class="container">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-kicker">
+
+                <i class="bx bxs-sparkles"></i>
+
+                Your local beauty marketplace
+
+            </div>
+
+
+            <h2>
+                Welcome back,
+                <span id="welcomeName">
+                    there
+                </span>.
+            </h2>
+
+
+            <p>
+                Find your next fresh look, explore local
+                salons and keep your appointments organised
+                in one place.
+            </p>
+
+        </section>
+
+
+        <!-- FEATURED SWIPE -->
+
+        <section>
+
+            <div class="section-head">
+
+                <div>
+
+                    <div class="section-title">
+                        Featured looks
+                    </div>
+
+                    <div class="section-subtitle">
+                        Swipe through fresh K@si inspiration
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="swipe-dots"
+                    id="swipeDots"
+                >
+
+                    <span
+                        class="swipe-dot active"
+                        data-index="0"
+                    ></span>
+
+                    <span
+                        class="swipe-dot"
+                        data-index="1"
+                    ></span>
+
+                    <span
+                        class="swipe-dot"
+                        data-index="2"
+                    ></span>
+
+                    <span
+                        class="swipe-dot"
+                        data-index="3"
+                    ></span>
+
+                    <span
+                        class="swipe-dot"
+                        data-index="4"
+                    ></span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="swipe-track"
+                id="swipeTrack"
+            >
+
+                <article class="swipe-card">
+
+                    <img
+                        src="7847041D.jpg"
+                        alt="Burst Fade and Beard"
+                        loading="lazy"
+                    >
+
+                    <div class="swipe-content">
+
+                        <span class="swipe-tag">
+                            Trending
+                        </span>
+
+                        <h3>
+                            Burst Fade & Beard
+                        </h3>
+
+                        <p>
+                            Sharp finish with a clean beard line.
+                        </p>
+
+                        <div class="swipe-price">
+
+                            <strong>
+                                R150
+                            </strong>
+
+                            <span class="rating">
+                                <i class="bx bxs-star"></i>
+                                4.9
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <article class="swipe-card">
+
+                    <img
+                        src="37BA0E35.jpg"
+                        alt="Kasi Taper Fade"
+                        loading="lazy"
+                    >
+
+                    <div class="swipe-content">
+
+                        <span class="swipe-tag">
+                            Kasi Favourite
+                        </span>
+
+                        <h3>
+                            Kasi Taper Fade
+                        </h3>
+
+                        <p>
+                            Clean, fresh and made to stand out.
+                        </p>
+
+                        <div class="swipe-price">
+
+                            <strong>
+                                R120
+                            </strong>
+
+                            <span class="rating">
+                                <i class="bx bxs-star"></i>
+                                4.8
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <article class="swipe-card">
+
+                    <img
+                        src="8627A569.jpg"
+                        alt="Premium Style"
+                        loading="lazy"
+                    >
+
+                    <div class="swipe-content">
+
+                        <span class="swipe-tag">
+                            Fresh Pick
+                        </span>
+
+                        <h3>
+                            Premium Style
+                        </h3>
+
+                        <p>
+                            A polished look for your next occasion.
+                        </p>
+
+                        <div class="swipe-price">
+
+                            <strong>
+                                R130
+                            </strong>
+
+                            <span class="rating">
+                                <i class="bx bxs-star"></i>
+                                4.8
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <article class="swipe-card">
+
+                    <img
+                        src="A3886FFD.jpg"
+                        alt="Classic Clean Cut"
+                        loading="lazy"
+                    >
+
+                    <div class="swipe-content">
+
+                        <span class="swipe-tag">
+                            Classic
+                        </span>
+
+                        <h3>
+                            Classic Clean Cut
+                        </h3>
+
+                        <p>
+                            Simple, sharp and timeless.
+                        </p>
+
+                        <div class="swipe-price">
+
+                            <strong>
+                                R80
+                            </strong>
+
+                            <span class="rating">
+                                <i class="bx bxs-star"></i>
+                                4.7
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <article class="swipe-card">
+
+                    <img
+                        src="B307F46B.jpg"
+                        alt="Line Design Cut"
+                        loading="lazy"
+                    >
+
+                    <div class="swipe-content">
+
+                        <span class="swipe-tag">
+                            Signature
+                        </span>
+
+                        <h3>
+                            Line Design Cut
+                        </h3>
+
+                        <p>
+                            Add detail and personality to your cut.
+                        </p>
+
+                        <div class="swipe-price">
+
+                            <strong>
+                                R180
+                            </strong>
+
+                            <span class="rating">
+                                <i class="bx bxs-star"></i>
+                                5.0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACCESS -->
+
+        <section>
+
+            <div class="section-head">
+
+                <div>
+
+                    <div class="section-title">
+                        Quick access
+                    </div>
+
+                    <div class="section-subtitle">
+                        Everything you need, right here
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-grid">
+
+
+                <a
+                    class="quick-card"
+                    href="salons.html"
+                >
+
+                    <div class="quick-icon">
+                        <i class="bx bx-store-alt"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Explore Salons
+                        </strong>
+
+                        <small>
+                            Find your next look
+                        </small>
+
+                    </div>
+
+                </a>
+
+
+                <button
+                    class="quick-card"
+                    id="bookingQuickBtn"
+                    type="button"
+                >
+
+                    <div class="quick-icon">
+                        <i class="bx bx-calendar-check"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            My Bookings
+                        </strong>
+
+                        <small>
+                            View appointments
+                        </small>
+
+                    </div>
+
+                </button>
+
+
+                <button
+                    class="quick-card client-locked"
+                    id="accountAction"
+                    type="button"
+                    disabled
+                >
+
+                    <div class="quick-icon">
+                        <i class="bx bx-user"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            My Account
+                        </strong>
+
+                        <small>
+                            Customer portal
+                        </small>
+
+                    </div>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTENT SECTION -->
+
+        <section
+            class="content-grid"
+            id="bookings"
+        >
+
+
+            <!-- BOOKINGS -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            My bookings
+                        </h3>
+
+                        <span>
+                            Your upcoming appointments
+                        </span>
+
+                    </div>
+
+                    <i
+                        class="bx bx-calendar"
+                        style="
+                            color:#8b5cf6;
+                            font-size:20px;
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div id="bookingList">
+
+                    <div class="empty-state">
+
+                        <i class="bx bx-loader-alt"></i>
+
+                        <p>
+                            Loading your bookings...
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DISCOVER -->
+
+            <div class="panel">
+
+                <div class="discover-card">
+
+                    <img
+                        src="C00719B.jpg"
+                        alt="K@si Elite"
+                        loading="lazy"
+                    >
+
+                    <div class="discover-content">
+
+                        <span>
+                            Discover
+                        </span>
+
+                        <h3>
+                            Your next fresh look.
+                        </h3>
+
+                        <p>
+                            Compare salons, services and prices
+                            before choosing where to book.
+                        </p>
+
+                        <a
+                            href="salons.html"
+                            class="small-btn"
+                        >
+
+                            Explore Salons
+
+                            <i class="bx bx-right-arrow-alt"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROFILE -->
+
+        <section class="panel profile-panel">
+
+            <div class="profile-head">
+
+                <div
+                    class="avatar"
+                    id="profileAvatar"
+                >
+                    K@
+                </div>
+
+
+                <div>
+
+                    <div
+                        class="profile-name"
+                        id="profileName"
+                    >
+                        K@si Customer
+                    </div>
+
+                    <div
+                        class="profile-email"
+                        id="profileEmail"
+                    >
+                        —
+                    </div>
+
+                    <div class="profile-status">
+
+                        <i class="bx bxs-circle"></i>
+
+                        Customer account active
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-btn"
+                id="logoutBtn"
+                type="button"
+            >
+
+                <i class="bx bx-log-out"></i>
+
+                Sign Out
+
+            </button>
+
+        </section>
+
+
+        <!-- ELITE -->
+
+        <section class="elite-section">
+
+            <img
+                src="C00719B.jpg"
+                alt="K@si Elite"
+                loading="lazy"
+            >
+
+            <div class="elite-content">
+
+                <div class="elite-label">
+                    K@si Elite
+                </div>
+
+                <h2>
+                    More than a haircut.
+                </h2>
+
+                <p>
+                    K@si brings local beauty and grooming
+                    closer to you — making it easier to discover
+                    trusted places, compare services and book
+                    without the usual hassle.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+    <!-- BOTTOM NAV -->
+
+    <nav class="bottom-nav">
+
+        <a
+            href="home.html"
+            class="bottom-btn active"
+        >
+
+            <i class="bx bx-home-alt"></i>
+
+            Home
+
+        </a>
+
+
+        <a
+            href="salons.html"
+            class="bottom-btn"
+        >
+
+            <i class="bx bx-store"></i>
+
+            Salons
+
+        </a>
+
+
+        <button
+            class="bottom-btn client-locked"
+            id="accountNavButton"
+            type="button"
+            disabled
+        >
+
+            <i class="bx bx-user"></i>
+
+            Account
+
+        </button>
+
+    </nav>
+
+</main>
+
+
+<div id="toast"></div>
+
+
+<!-- =========================================================
+     FIREBASE COMPAT SDK
+========================================================= -->
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+
+<!-- =========================================================
+     APPLICATION LOGIC
+========================================================= -->
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+
+    authDomain:
+        "kasi-web-d073f.firebaseapp.com",
+
+    databaseURL:
+        "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+
+    projectId:
+        "kasi-web-d073f",
+
+    storageBucket:
+        "kasi-web-d073f.firebasestorage.app",
+
+    messagingSenderId:
+        "105918157571",
+
+    appId:
+        "1:105918157571:web:8d646"
+
+};
+
+
+let app = null;
+let auth = null;
+let db = null;
+
+
+try {
+
+    if (!firebase.apps.length) {
+
+        app =
+            firebase.initializeApp(
+                firebaseConfig
+            );
+
+    } else {
+
+        app =
+            firebase.app();
+
+    }
+
+
+    auth =
+        firebase.auth();
+
+    db =
+        firebase.firestore();
+
+} catch (error) {
+
+    console.error(
+        "Firebase initialization error:",
+        error
+    );
+
+}
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loadingOverlay =
+    document.getElementById(
+        "loadingOverlay"
+    );
+
+const loadingText =
+    document.getElementById(
+        "loadingText"
+    );
+
+const roleRedirectOverlay =
+    document.getElementById(
+        "roleRedirectOverlay"
+    );
+
+const redirectText =
+    document.getElementById(
+        "redirectText"
+    );
+
+const authScreen =
+    document.getElementById(
+        "authScreen"
+    );
+
+const appShell =
+    document.getElementById(
+        "appShell"
+    );
+
+const authMessage =
+    document.getElementById(
+        "authMessage"
+    );
+
+const signInTab =
+    document.getElementById(
+        "signInTab"
+    );
+
+const signUpTab =
+    document.getElementById(
+        "signUpTab"
+    );
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+const signupForm =
+    document.getElementById(
+        "signupForm"
+    );
+
+const welcomeName =
+    document.getElementById(
+        "welcomeName"
+    );
+
+const profileName =
+    document.getElementById(
+        "profileName"
+    );
+
+const profileEmail =
+    document.getElementById(
+        "profileEmail"
+    );
+
+const profileAvatar =
+    document.getElementById(
+        "profileAvatar"
+    );
+
+const bookingList =
+    document.getElementById(
+        "bookingList"
+    );
+
+const accountAction =
+    document.getElementById(
+        "accountAction"
+    );
+
+const accountNavButton =
+    document.getElementById(
+        "accountNavButton"
+    );
+
+const refreshBtn =
+    document.getElementById(
+        "refreshBtn"
+    );
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+const bookingQuickBtn =
+    document.getElementById(
+        "bookingQuickBtn"
+    );
+
+const swipeTrack =
+    document.getElementById(
+        "swipeTrack"
+    );
+
+const swipeDots =
+    Array.from(
+        document.querySelectorAll(
+            ".swipe-dot"
+        )
+    );
+
+let currentUser =
+    null;
+
+let currentProfile =
+    null;
+
+let currentRole =
+    "customer";
+
+let swipeTimer =
+    null;
+
+let userIsTouchingSwipe =
+    false;
+
+
+/* =========================================================
+   HELPERS & UTILS
+========================================================= */
+
+function escapeHTML(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function showLoading(
+    message = "Preparing your K@si space..."
+) {
+
+    if (loadingText) {
+
+        loadingText.textContent =
+            message;
+
+    }
+
+    if (loadingOverlay) {
+
+        loadingOverlay.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+function hideLoading() {
+
+    if (loadingOverlay) {
+
+        loadingOverlay.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    message
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    if (!toast) {
+
+        return;
+
+    }
+
+
+    toast.textContent =
+        message;
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            function() {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2800
+        );
+
+}
+
+
+/* =========================================================
+   AUTH MESSAGE
+========================================================= */
+
+function showAuthMessage(
+    message
+) {
+
+    if (authMessage) {
+
+        authMessage.textContent =
+            message || "";
+
+    }
+
+}
+
+
+function clearAuthMessage() {
+
+    showAuthMessage("");
+
+}
+
+
+/* =========================================================
+   ROLE NORMALIZATION
+========================================================= */
+
+function normalizeRole(
+    role
+) {
+
+    const value =
+        String(
+            role || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if (
+        value === "admin" ||
+        value === "administrator" ||
+        value === "superadmin"
+    ) {
+
+        return "admin";
+
+    }
+
+
+    if (
+        value === "salon_owner" ||
+        value === "salon owner" ||
+        value === "owner" ||
+        value === "salonowner" ||
+        value === "barber_owner" ||
+        value === "barber owner"
+    ) {
+
+        return "salon_owner";
+
+    }
+
+
+    if (
+        value === "customer" ||
+        value === "client" ||
+        value === "user"
+    ) {
+
+        return "customer";
+
+    }
+
+
+    return "customer";
+
+}
+
+
+/* =========================================================
+   FRIENDLY ROLE
+========================================================= */
+
+function friendlyRole(
+    role
+) {
+
+    role =
+        normalizeRole(
+            role
+        );
+
+
+    if (role === "admin") {
+
+        return "Admin";
+
+    }
+
+
+    if (role === "salon_owner") {
+
+        return "Salon Owner";
+
+    }
+
+
+    return "Customer";
+
+}
+
+
+/* =========================================================
+   ROLE DESTINATION
+========================================================= */
+
+function getRoleDestination(
+    role
+) {
+
+    role =
+        normalizeRole(
+            role
+        );
+
+
+    if (role === "admin") {
+
+        return "admin.html";
+
+    }
+
+
+    if (role === "salon_owner") {
+
+        return "owners.html";
+
+    }
+
+
+    return "salons.html";
+
+}
+
+
+/* =========================================================
+   NAME HELPERS
+========================================================= */
+
+function getFirstName(
+    profile,
+    user
+) {
+
+    const name =
+        profile?.name ||
+        profile?.displayName ||
+        user?.displayName ||
+        "";
+
+
+    return String(
+        name
+    )
+    .trim()
+    .split(/\s+/)[0] || "there";
+
+}
+
+
+function getProfileName(
+    profile,
+    user
+) {
+
+    return (
+        profile?.name ||
+        profile?.displayName ||
+        user?.displayName ||
+        "K@si Customer"
+    );
+
+}
+
+
+/* =========================================================
+   FIRESTORE PROFILE
+========================================================= */
+
+async function getUserProfile(
+    user
+) {
+
+    if (
+        !db ||
+        !user
+    ) {
+
+        return null;
+
+    }
+
+
+    try {
+
+        const snap =
+            await db
+                .collection("users")
+                .doc(user.uid)
+                .get();
+
+
+        if (
+            snap.exists
+        ) {
+
+            return snap.data();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Profile lookup error:",
+            error
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   VERIFIED ROLE
+========================================================= */
+
+async function getVerifiedRole(
+    user
+) {
+
+    if (
+        !user ||
+        !db
+    ) {
+
+        return "customer";
+
+    }
+
+
+    try {
+
+        const snap =
+            await db
+                .collection("users")
+                .doc(user.uid)
+                .get();
+
+
+        if (
+            !snap.exists
+        ) {
+
+            return "customer";
+
+        }
+
+
+        const data =
+            snap.data() || {};
+
+
+        const possibleRoles = [
+
+            data.role,
+            data.Role,
+            data.userRole,
+            data.user_type,
+            data.accountType
+
+        ];
+
+
+        for (
+            const role
+            of possibleRoles
+        ) {
+
+            if (
+                role !== undefined &&
+                role !== null &&
+                String(role).trim() !== ""
+            ) {
+
+                return normalizeRole(
+                    role
+                );
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Role verification error:",
+            error
+        );
+
+    }
+
+
+    return "customer";
+
+}
+
+
+/* =========================================================
+   ACCOUNT UI
+========================================================= */
+
+function setAccountUI(
+    role
+) {
+
+    role =
+        normalizeRole(
+            role
+        );
+
+
+    currentRole =
+        role;
+
+
+    if (
+        accountAction
+    ) {
+
+        accountAction.classList.remove(
+            "client-locked"
+        );
+
+        accountAction.disabled =
+            false;
+
+    }
+
+
+    if (
+        accountNavButton
+    ) {
+
+        accountNavButton.classList.remove(
+            "client-locked"
+        );
+
+        accountNavButton.disabled =
+            false;
+
+    }
+
+
+    if (
+        role === "customer"
+    ) {
+
+        if (accountAction) {
+
+            accountAction.classList.add(
+                "client-locked"
+            );
+
+            accountAction.disabled =
+                true;
+
+            const small =
+                accountAction.querySelector(
+                    "small"
+                );
+
+            if (small) {
+
+                small.textContent =
+                    "Portal unavailable";
+
+            }
+
+        }
+
+
+        if (accountNavButton) {
+
+            accountNavButton.classList.add(
+                "client-locked"
+            );
+
+            accountNavButton.disabled =
+                true;
+
+        }
+
+        return;
+
+    }
+
+
+    if (
+        role === "admin"
+    ) {
+
+        if (accountAction) {
+
+            const strong =
+                accountAction.querySelector(
+                    "strong"
+                );
+
+            const small =
+                accountAction.querySelector(
+                    "small"
+                );
+
+
+            if (strong) {
+
+                strong.textContent =
+                    "Admin Account";
+
+            }
+
+
+            if (small) {
+
+                small.textContent =
+                    "Open admin portal";
+
+            }
+
+        }
+
+
+        if (accountNavButton) {
+
+            accountNavButton.innerHTML =
+                '<i class="bx bx-shield-quarter"></i>Admin';
+
+        }
+
+        return;
+
+    }
+
+
+    if (
+        role === "salon_owner"
+    ) {
+
+        if (accountAction) {
+
+            const strong =
+                accountAction.querySelector(
+                    "strong"
+                );
+
+            const small =
+                accountAction.querySelector(
+                    "small"
+                );
+
+
+            if (strong) {
+
+                strong.textContent =
+                    "Owner Account";
+
+            }
+
+
+            if (small) {
+
+                small.textContent =
+                    "Open owner portal";
+
+            }
+
+        }
+
+
+        if (accountNavButton) {
+
+            accountNavButton.innerHTML =
+                '<i class="bx bx-store-alt"></i>Owner';
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   ROLE ACCOUNT
+========================================================= */
+
+async function openRoleAccount() {
+
+    if (
+        !currentUser
+    ) {
+
+        showToast(
+            "Please sign in first."
+        );
+
+        return;
+
+    }
+
+
+    showLoading(
+        "Verifying your K@si account..."
+    );
+
+
+    try {
+
+        const role =
+            await getVerifiedRole(
+                currentUser
+            );
+
+
+        currentRole =
+            role;
+
+
+        if (
+            role === "customer"
+        ) {
+
+            hideLoading();
+
+            showToast(
+                "Customer accounts do not have access to this portal."
+            );
+
+            return;
+
+        }
+
+
+        sessionStorage.setItem(
+            "userRole",
+            role
+        );
+
+        sessionStorage.setItem(
+            "justLoggedIn",
+            "true"
+        );
+
+
+        if (
+            role === "salon_owner"
+        ) {
+
+            sessionStorage.setItem(
+                "ownerUid",
+                currentUser.uid
+            );
+
+        }
+
+
+        if (
+            role === "admin"
+        ) {
+
+            sessionStorage.setItem(
+                "adminUid",
+                currentUser.uid
+            );
+
+        }
+
+
+        if (
+            roleRedirectOverlay
+        ) {
+
+            redirectText.textContent =
+                `Opening your ${friendlyRole(role)} portal...`;
+
+            roleRedirectOverlay.classList.add(
+                "show"
+            );
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                window.location.href =
+                    getRoleDestination(
+                        role
+                    );
+
+            },
+            450
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Account routing error:",
+            error
+        );
+
+        hideLoading();
+
+        showToast(
+            "Unable to verify your account."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   AUTH TABS
+========================================================= */
+
+function showLogin() {
+
+    signInTab.classList.add(
+        "active"
+    );
+
+    signUpTab.classList.remove(
+        "active"
+    );
+
+    loginForm.classList.add(
+        "active"
+    );
+
+    signupForm.classList.remove(
+        "active"
+    );
+
+    clearAuthMessage();
+
+}
+
+
+function showSignup() {
+
+    signUpTab.classList.add(
+        "active"
+    );
+
+    signInTab.classList.remove(
+        "active"
+    );
+
+    signupForm.classList.add(
+        "active"
+    );
+
+    loginForm.classList.remove(
+        "active"
+    );
+
+    clearAuthMessage();
+
+}
+
+
+if (signInTab) {
+
+    signInTab.addEventListener(
+        "click",
+        showLogin
+    );
+
+}
+
+
+if (signUpTab) {
+
+    signUpTab.addEventListener(
+        "click",
+        showSignup
+    );
+
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLES
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".password-toggle"
+    )
+    .forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const target =
+                        document.getElementById(
+                            button.dataset.target
+                        );
+
+
+                    if (!target) {
+
+                        return;
+
+                    }
+
+
+                    const icon =
+                        button.querySelector(
+                            "i"
+                        );
+
+
+                    if (
+                        target.type ===
+                        "password"
+                    ) {
+
+                        target.type =
+                            "text";
+
+                        icon.className =
+                            "bx bx-show";
+
+                    } else {
+
+                        target.type =
+                            "password";
+
+                        icon.className =
+                            "bx bx-hide";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            clearAuthMessage();
+
+
+            const email =
+                document
+                    .getElementById(
+                        "loginEmail"
+                    )
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById(
+                        "loginPassword"
+                    )
+                    .value;
+
+
+            if (
+                !email ||
+                !password
+            ) {
+
+                showAuthMessage(
+                    "Please enter your email and password."
+                );
+
+                return;
+
+            }
+
+
+            showLoading(
+                "Signing you in..."
+            );
+
 
             try {
-                const snap = await db.collection("bookings")
-                    .where("userId", "==", uid)
-                    .orderBy("createdAt", "desc")
-                    .limit(5)
-                    .get();
 
-                if (snap.empty) {
-                    bookingList.innerHTML = `
-                        <div class="text-center py-6 text-slate-400">
-                            <i class="bx bx-calendar-x text-3xl mb-1"></i>
-                            <p class="text-xs">No appointments found.<br>Explore local salons to book your next cut!</p>
-                        </div>
-                    `;
-                    return;
+                const credential =
+                    await auth.signInWithEmailAndPassword(
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    credential.user;
+
+
+                const profile =
+                    await getUserProfile(
+                        user
+                    );
+
+
+                const role =
+                    await getVerifiedRole(
+                        user
+                    );
+
+
+                currentUser =
+                    user;
+
+                currentProfile =
+                    profile;
+
+                currentRole =
+                    role;
+
+
+                sessionStorage.setItem(
+                    "userRole",
+                    role
+                );
+
+                sessionStorage.setItem(
+                    "justLoggedIn",
+                    "true"
+                );
+
+
+                if (
+                    role ===
+                    "salon_owner"
+                ) {
+
+                    sessionStorage.setItem(
+                        "ownerUid",
+                        user.uid
+                    );
+
                 }
 
-                let html = "";
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    const service = escapeHTML(data.serviceName || "Grooming Service");
-                    const salon = escapeHTML(data.salonName || "Local Salon");
-                    const status = escapeHTML(data.status || "pending").toLowerCase();
-                    const date = data.date || "TBD";
 
-                    html += `
-                        <div class="flex items-center justify-between p-3.5 bg-slate-50 border border-slate-100 rounded-xl">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
-                                    <i class="bx bx-cut"></i>
-                                </div>
-                                <div>
-                                    <strong class="block text-sm text-slate-900">${service}</strong>
-                                    <span class="text-xs text-slate-500">${salon} • ${date}</span>
-                                </div>
-                            </div>
-                            <span class="text-xs px-2.5 py-1 rounded-full font-semibold status-${status}">${status}</span>
-                        </div>
-                    `;
-                });
+                if (
+                    role ===
+                    "admin"
+                ) {
 
-                bookingList.innerHTML = html;
+                    sessionStorage.setItem(
+                        "adminUid",
+                        user.uid
+                    );
+
+                }
+
+
+                if (
+                    roleRedirectOverlay
+                ) {
+
+                    redirectText.textContent =
+                        `Opening your ${friendlyRole(role)} portal...`;
+
+                    roleRedirectOverlay.classList.add(
+                        "show"
+                    );
+
+                }
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            getRoleDestination(
+                                role
+                            );
+
+                    },
+                    450
+                );
+
 
             } catch (error) {
-                console.error("Error loading bookings:", error);
-                bookingList.innerHTML = `
-                    <div class="text-center py-6 text-slate-400">
-                        <i class="bx bx-error-circle text-3xl mb-1 text-red-400"></i>
-                        <p class="text-xs">Unable to load bookings right now.</p>
-                    </div>
-                `;
-            }
-        }
 
-        /* =========================================================
-           BOOKING MODAL HANDLERS
-        ========================================================= */
-        function openBookingModal(salon, service) {
-            activeSalon = salon;
-            activeService = service;
-            modalSalonName.textContent = salon;
-            modalServiceName.textContent = service;
-            bookingModal.classList.remove("hidden");
-        }
+                console.error(
+                    "Login error:",
+                    error
+                );
 
-        function closeBookingModal() {
-            bookingModal.classList.add("hidden");
-            bookingForm.reset();
-        }
-
-        if (bookingForm) {
-            bookingForm.addEventListener("submit", async (e) => {
-                e.preventDefault();
-                if (!currentUser) return showToast("Please sign in first.");
-
-                const dateVal = document.getElementById("bookingDate").value;
-                const notesVal = document.getElementById("bookingNotes").value;
-
-                showLoading("Creating appointment...");
-                try {
-                    await db.collection("bookings").add({
-                        userId: currentUser.uid,
-                        salonName: activeSalon,
-                        serviceName: activeService,
-                        date: dateVal,
-                        notes: notesVal,
-                        status: "pending",
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    closeBookingModal();
-                    showToast("Appointment booked successfully!");
-                    await loadBookings(currentUser.uid);
-                } catch (err) {
-                    console.error("Booking error:", err);
-                    showToast("Failed to create booking.");
-                } finally {
-                    hideLoading();
-                }
-            });
-        }
-
-        /* =========================================================
-           AUTHENTICATION STATE OBSERVER & ACTIONS
-        ========================================================= */
-        if (googleLoginBtn) {
-            googleLoginBtn.addEventListener("click", async () => {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                try {
-                    await auth.signInWithPopup(provider);
-                } catch (error) {
-                    console.error("Login failed:", error);
-                    showToast("Google Sign-In failed.");
-                }
-            });
-        }
-
-        if (auth) {
-            auth.onAuthStateChanged(async (user) => {
-                showLoading("Loading your profile...");
-
-                if (user) {
-                    await loadUser(user);
-                    document.body.classList.remove("auth-mode");
-                    if (authScreen) authScreen.classList.add("hidden");
-                    if (appShell) appShell.classList.remove("hidden");
-                } else {
-                    currentUser = null;
-                    currentProfile = null;
-                    currentRole = "customer";
-                    document.body.classList.add("auth-mode");
-                    if (authScreen) authScreen.classList.remove("hidden");
-                    if (appShell) appShell.classList.add("hidden");
-                }
 
                 hideLoading();
-            });
-        }
 
-        /* =========================================================
-           EVENT HANDLERS & NAVIGATION
-        ========================================================= */
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", async () => {
-                showLoading("Signing out...");
-                try {
-                    await auth.signOut();
-                    sessionStorage.clear();
-                    showToast("Signed out successfully.");
-                } catch (error) {
-                    console.error("Sign-out error:", error);
-                    showToast("Failed to sign out.");
-                } finally {
-                    hideLoading();
+
+                let message =
+                    "Unable to sign in. Please check your details.";
+
+
+                if (
+                    error.code ===
+                    "auth/user-not-found"
+                ) {
+
+                    message =
+                        "No account was found with this email.";
+
+                } else if (
+                    error.code ===
+                    "auth/wrong-password"
+                ) {
+
+                    message =
+                        "The password is incorrect.";
+
+                } else if (
+                    error.code ===
+                    "auth/invalid-credential"
+                ) {
+
+                    message =
+                        "The email or password is incorrect.";
+
+                } else if (
+                    error.code ===
+                    "auth/invalid-email"
+                ) {
+
+                    message =
+                        "Please enter a valid email address.";
+
                 }
-            });
-        }
 
-        if (refreshBtn) {
-            refreshBtn.addEventListener("click", () => {
-                if (currentUser) {
-                    showLoading("Refreshing...");
-                    loadUser(currentUser).then(() => hideLoading());
-                } else {
-                    window.location.reload();
+
+                showAuthMessage(
+                    message
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SIGNUP
+========================================================= */
+
+if (signupForm) {
+
+    signupForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            clearAuthMessage();
+
+
+            const name =
+                document
+                    .getElementById(
+                        "signupName"
+                    )
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById(
+                        "signupEmail"
+                    )
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById(
+                        "signupPassword"
+                    )
+                    .value;
+
+
+            const confirm =
+                document
+                    .getElementById(
+                        "signupConfirm"
+                    )
+                    .value;
+
+
+            if (
+                name.length < 2
+            ) {
+
+                showAuthMessage(
+                    "Please enter your full name."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                password.length < 6
+            ) {
+
+                showAuthMessage(
+                    "Password must contain at least 6 characters."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                password !== confirm
+            ) {
+
+                showAuthMessage(
+                    "Passwords do not match."
+                );
+
+                return;
+
+            }
+
+
+            showLoading(
+                "Creating your K@si account..."
+            );
+
+
+            try {
+
+                const credential =
+                    await auth.createUserWithEmailAndPassword(
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    credential.user;
+
+
+                await user.updateProfile(
+                    {
+                        displayName:
+                            name
+                    }
+                );
+
+
+                await db
+                    .collection("users")
+                    .doc(user.uid)
+                    .set(
+                        {
+                            name:
+                                name,
+
+                            displayName:
+                                name,
+
+                            email:
+                                email,
+
+                            role:
+                                "customer",
+
+                            createdAt:
+                                firebase.firestore.FieldValue.serverTimestamp(),
+
+                            updatedAt:
+                                firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        {
+                            merge:
+                                true
+                        }
+                    );
+
+
+                sessionStorage.setItem(
+                    "userRole",
+                    "customer"
+                );
+
+                sessionStorage.setItem(
+                    "justLoggedIn",
+                    "true"
+                );
+
+
+                showToast(
+                    "Account created successfully."
+                );
+
+
+                window.location.href =
+                    "salons.html";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Signup error:",
+                    error
+                );
+
+
+                hideLoading();
+
+
+                let message =
+                    "Unable to create your account.";
+
+
+                if (
+                    error.code ===
+                    "auth/email-already-in-use"
+                ) {
+
+                    message =
+                        "An account already exists with this email.";
+
+                } else if (
+                    error.code ===
+                    "auth/invalid-email"
+                ) {
+
+                    message =
+                        "Please enter a valid email address.";
+
+                } else if (
+                    error.code ===
+                    "auth/weak-password"
+                ) {
+
+                    message =
+                        "Please choose a stronger password.";
+
                 }
-            });
+
+
+                showAuthMessage(
+                    message
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   USER LOAD & BOOKINGS
+========================================================= */
+
+async function fetchUserBookings(userId) {
+
+    if (!bookingList || !db) return;
+
+    try {
+
+        const snapshot = await db.collection("bookings")
+            .where("userId", "==", userId)
+            .get();
+
+        if (snapshot.empty) {
+
+            bookingList.innerHTML = `
+                <div class="empty-state">
+                    <i class="bx bx-calendar-x"></i>
+                    <p>No upcoming bookings found.<br>Explore salons to make a reservation!</p>
+                </div>
+            `;
+
+            return;
+
         }
 
-        if (accountAction) accountAction.addEventListener("click", openRoleAccount);
-        if (accountNavButton) accountNavButton.addEventListener("click", openRoleAccount);
+        let html = "";
 
-        if (bookingQuickBtn) {
-            bookingQuickBtn.addEventListener("click", () => {
-                const section = document.getElementById("bookings");
-                if (section) section.scrollIntoView({ behavior: "smooth" });
-            });
+        snapshot.forEach(doc => {
+
+            const data = doc.data();
+
+            const statusClass = `status-${(data.status || 'pending').toLowerCase()}`;
+
+            html += `
+                <div class="booking">
+                    <div class="booking-icon">
+                        <i class="bx bx-cut"></i>
+                    </div>
+                    <div class="booking-main">
+                        <strong>${escapeHTML(data.serviceName || 'Haircut Service')}</strong>
+                        <small>${escapeHTML(data.salonName || 'Local Salon')} • ${escapeHTML(data.date || 'Upcoming')}</small>
+                    </div>
+                    <span class="booking-status ${statusClass}">
+                        ${escapeHTML(data.status || 'Pending')}
+                    </span>
+                </div>
+            `;
+
+        });
+
+        bookingList.innerHTML = html;
+
+    } catch (error) {
+
+        console.error("Error fetching bookings:", error);
+
+        bookingList.innerHTML = `
+            <div class="empty-state">
+                <i class="bx bx-error-circle"></i>
+                <p>Could not load bookings. Try refreshing.</p>
+            </div>
+        `;
+
+    }
+
+}
+
+
+async function loadUser(
+    user
+) {
+
+    currentUser =
+        user;
+
+
+    currentProfile =
+        await getUserProfile(
+            user
+        );
+
+
+    currentRole =
+        await getVerifiedRole(
+            user
+        );
+
+
+    const name =
+        getProfileName(
+            currentProfile,
+            user
+        );
+
+
+    const firstName =
+        getFirstName(
+            currentProfile,
+            user
+        );
+
+
+    if (welcomeName) {
+
+        welcomeName.textContent =
+            firstName;
+
+    }
+
+
+    if (profileName) {
+
+        profileName.textContent =
+            name;
+
+    }
+
+
+    if (profileEmail) {
+
+        profileEmail.textContent =
+            user.email || "—";
+
+    }
+
+
+    if (profileAvatar) {
+
+        if (
+            user.photoURL
+        ) {
+
+            profileAvatar.innerHTML =
+                `<img src="${escapeHTML(user.photoURL)}" alt="Profile">`;
+
+        } else {
+
+            const initials =
+                name
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .map(part => part[0])
+                    .join("")
+                    .toUpperCase() || "K@";
+
+            profileAvatar.textContent = initials;
+
         }
-    </script>
+
+    }
+
+    setAccountUI(currentRole);
+
+    fetchUserBookings(user.uid);
+
+}
+
+
+/* =========================================================
+   CAROUSEL / SWIPE LOGIC
+========================================================= */
+
+function initSwipeCarousel() {
+
+    if (!swipeTrack || !swipeDots.length) return;
+
+    function updateActiveDot() {
+
+        const cardWidth = swipeTrack.firstElementChild?.offsetWidth || 300;
+
+        const index = Math.round(swipeTrack.scrollLeft / cardWidth);
+
+        swipeDots.forEach((dot, idx) => {
+
+            dot.classList.toggle('active', idx === index);
+
+        });
+
+    }
+
+    swipeTrack.addEventListener('scroll', updateActiveDot, { passive: true });
+
+    swipeDots.forEach(dot => {
+
+        dot.addEventListener('click', () => {
+
+            const index = parseInt(dot.dataset.index, 10);
+
+            const cardWidth = swipeTrack.firstElementChild?.offsetWidth || 300;
+
+            swipeTrack.scrollTo({
+
+                left: index * cardWidth,
+
+                behavior: 'smooth'
+
+            });
+
+        });
+
+    });
+
+}
+
+
+/* =========================================================
+   EVENTS & INITIALIZATION
+========================================================= */
+
+if (accountAction) {
+
+    accountAction.addEventListener('click', openRoleAccount);
+
+}
+
+
+if (accountNavButton) {
+
+    accountNavButton.addEventListener('click', openRoleAccount);
+
+}
+
+
+if (bookingQuickBtn) {
+
+    bookingQuickBtn.addEventListener('click', () => {
+
+        const section = document.getElementById('bookings');
+
+        if (section) {
+
+            section.scrollIntoView({ behavior: 'smooth' });
+
+        }
+
+    });
+
+}
+
+
+if (refreshBtn) {
+
+    refreshBtn.addEventListener('click', () => {
+
+        if (currentUser) {
+
+            loadUser(currentUser);
+
+            showToast("Refreshed space");
+
+        } else {
+
+            window.location.reload();
+
+        }
+
+    });
+
+}
+
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener('click', async () => {
+
+        showLoading("Signing you out...");
+
+        try {
+
+            await auth.signOut();
+
+            sessionStorage.clear();
+
+            hideLoading();
+
+            showToast("Signed out successfully");
+
+            document.body.classList.add('auth-mode');
+
+            if (appShell) appShell.classList.remove('visible');
+
+        } catch (err) {
+
+            console.error("Sign out error:", err);
+
+            hideLoading();
+
+            showToast("Error signing out");
+
+        }
+
+    });
+
+}
+
+
+if (auth) {
+
+    auth.onAuthStateChanged(async user => {
+
+        if (user) {
+
+            document.body.classList.remove('auth-mode');
+
+            if (appShell) appShell.classList.add('visible');
+
+            await loadUser(user);
+
+            hideLoading();
+
+        } else {
+
+            document.body.classList.add('auth-mode');
+
+            if (appShell) appShell.classList.remove('visible');
+
+            hideLoading();
+
+        }
+
+    });
+
+} else {
+
+    hideLoading();
+
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    initSwipeCarousel();
+
+});
+
+</script>
+
 </body>
+
 </html>
