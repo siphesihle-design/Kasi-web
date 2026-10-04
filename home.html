@@ -17,7 +17,7 @@
 
     <meta
         name="description"
-        content="K@si Web — Your personal grooming space. Discover salons, manage bookings and find your next fresh cut."
+        content="K@si Web — Find elite local salons, compare services and book your next fresh look."
     >
 
     <meta
@@ -31,11 +31,6 @@
     >
 
     <title>K@si Web | Home</title>
-
-    <link
-        rel="manifest"
-        href="manifest.json"
-    >
 
     <link
         rel="preconnect"
@@ -61,7 +56,7 @@
     <style>
 
         /* =========================================================
-           ROOT & RESET
+           ROOT
         ========================================================= */
 
         :root {
@@ -69,14 +64,23 @@
             --bg:
                 #07070d;
 
+            --bg-2:
+                #0b0b13;
+
             --surface:
                 rgba(18, 18, 29, .82);
 
             --surface-2:
                 rgba(25, 25, 39, .88);
 
+            --surface-3:
+                rgba(255,255,255,.045);
+
             --border:
-                rgba(255, 255, 255, .09);
+                rgba(255,255,255,.09);
+
+            --border-strong:
+                rgba(255,255,255,.15);
 
             --text:
                 #ffffff;
@@ -94,16 +98,25 @@
                 #8b5cf6;
 
             --blue:
-                #3b82f6;
+                #008cff;
 
             --green:
                 #25d366;
+
+            --danger:
+                #ff5d73;
+
+            --gold:
+                #d9b56d;
 
             --shadow:
                 0 25px 80px rgba(0,0,0,.38);
 
             --radius:
                 24px;
+
+            --radius-sm:
+                16px;
 
             --max:
                 1180px;
@@ -143,14 +156,14 @@
 
             background:
                 radial-gradient(
-                    circle at 85% 5%,
-                    rgba(124, 58, 237, .16),
+                    circle at 15% 5%,
+                    rgba(123,104,238,.14),
                     transparent 30%
                 ),
                 radial-gradient(
-                    circle at 5% 35%,
-                    rgba(59, 130, 246, .09),
-                    transparent 30%
+                    circle at 90% 20%,
+                    rgba(0,140,255,.08),
+                    transparent 28%
                 ),
                 var(--bg);
 
@@ -165,15 +178,38 @@
                 hidden;
 
             padding-bottom:
-                105px;
+                env(safe-area-inset-bottom);
 
         }
 
 
-        body.auth-mode {
+        body::before {
 
-            padding-bottom:
+            content:
+                "";
+
+            position:
+                fixed;
+
+            inset:
                 0;
+
+            pointer-events:
+                none;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    transparent 0%,
+                    rgba(255,255,255,.018) 50%,
+                    transparent 100%
+                );
+
+            opacity:
+                .5;
+
+            z-index:
+                -1;
 
         }
 
@@ -229,29 +265,6 @@
         }
 
 
-        .eyebrow {
-
-            color:
-                var(--primary-2);
-
-            font-size:
-                .68rem;
-
-            font-weight:
-                800;
-
-            letter-spacing:
-                .15em;
-
-            text-transform:
-                uppercase;
-
-            margin-bottom:
-                9px;
-
-        }
-
-
         /* =========================================================
            LOADING
         ========================================================= */
@@ -265,7 +278,7 @@
                 0;
 
             z-index:
-                99999;
+                9999;
 
             display:
                 flex;
@@ -277,7 +290,7 @@
                 center;
 
             background:
-                rgba(5, 5, 10, .94);
+                rgba(5,5,10,.94);
 
             backdrop-filter:
                 blur(20px);
@@ -321,7 +334,7 @@
                 28px;
 
             background:
-                rgba(20, 20, 31, .9);
+                rgba(20,20,31,.9);
 
             box-shadow:
                 var(--shadow);
@@ -363,7 +376,7 @@
                 800;
 
             box-shadow:
-                0 15px 40px rgba(123, 104, 238, .35);
+                0 15px 40px rgba(123,104,238,.35);
 
         }
 
@@ -380,13 +393,10 @@
                 18px auto 0;
 
             border:
-                2px solid rgba(255, 255, 255, .12);
+                2px solid rgba(255,255,255,.12);
 
             border-top-color:
                 var(--primary-2);
-
-            border-right-color:
-                var(--blue);
 
             border-radius:
                 50%;
@@ -432,7 +442,7 @@
                 center;
 
             background:
-                rgba(4, 4, 9, .92);
+                rgba(4,4,9,.92);
 
             backdrop-filter:
                 blur(18px);
@@ -492,7 +502,7 @@
 
 
         /* =========================================================
-           AUTH SCREEN
+           AUTH
         ========================================================= */
 
         .auth-screen {
@@ -510,13 +520,7 @@
                 center;
 
             padding:
-                30px 18px;
-
-            position:
-                relative;
-
-            overflow:
-                hidden;
+                24px;
 
         }
 
@@ -531,14 +535,8 @@
 
         .auth-shell {
 
-            position:
-                relative;
-
-            z-index:
-                2;
-
             width:
-                min(100%, 1040px);
+                min(100%, 1080px);
 
             min-height:
                 650px;
@@ -547,10 +545,7 @@
                 grid;
 
             grid-template-columns:
-                1.05fr .95fr;
-
-            gap:
-                20px;
+                .95fr 1.05fr;
 
             overflow:
                 hidden;
@@ -559,17 +554,13 @@
                 1px solid var(--border);
 
             border-radius:
-                30px;
+                32px;
 
             background:
-                linear-gradient(
-                    145deg,
-                    rgba(255, 255, 255, .065),
-                    rgba(255, 255, 255, .018)
-                );
+                rgba(15,15,24,.82);
 
             box-shadow:
-                0 30px 100px rgba(0, 0, 0, .35);
+                0 35px 100px rgba(0,0,0,.5);
 
             backdrop-filter:
                 blur(25px);
@@ -592,7 +583,7 @@
                 space-between;
 
             padding:
-                40px;
+                48px;
 
             overflow:
                 hidden;
@@ -600,8 +591,8 @@
             background:
                 linear-gradient(
                     145deg,
-                    rgba(123, 104, 238, .2),
-                    rgba(0, 0, 0, .15)
+                    rgba(123,104,238,.2),
+                    rgba(0,0,0,.15)
                 );
 
         }
@@ -615,23 +606,26 @@
             position:
                 absolute;
 
-            inset:
-                0;
+            width:
+                340px;
+
+            height:
+                340px;
+
+            right:
+                -150px;
+
+            top:
+                -100px;
+
+            border-radius:
+                50%;
 
             background:
-                radial-gradient(
-                    circle at 75% 20%,
-                    rgba(139, 92, 246, .23),
-                    transparent 28%
-                ),
-                radial-gradient(
-                    circle at 20% 80%,
-                    rgba(59, 130, 246, .15),
-                    transparent 30%
-                );
+                rgba(139,92,246,.2);
 
-            pointer-events:
-                none;
+            filter:
+                blur(10px);
 
         }
 
@@ -640,9 +634,6 @@
 
             position:
                 relative;
-
-            z-index:
-                2;
 
             display:
                 flex;
@@ -657,10 +648,7 @@
                 800;
 
             font-size:
-                1.5rem;
-
-            letter-spacing:
-                -.05em;
+                22px;
 
         }
 
@@ -690,7 +678,7 @@
                 );
 
             box-shadow:
-                0 12px 35px rgba(123, 104, 238, .35);
+                0 12px 35px rgba(123,104,238,.35);
 
         }
 
@@ -700,8 +688,28 @@
             position:
                 relative;
 
-            z-index:
-                2;
+        }
+
+
+        .brand-copy .eyebrow {
+
+            color:
+                #bdb8ff;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                3px;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            margin-bottom:
+                14px;
 
         }
 
@@ -716,7 +724,7 @@
                 serif;
 
             font-size:
-                clamp(42px, 5vw, 66px);
+                clamp(42px,5vw,66px);
 
             line-height:
                 .98;
@@ -732,21 +740,8 @@
 
         .brand-copy h1 span {
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #60a5fa,
-                    #8b5cf6
-                );
-
-            -webkit-background-clip:
-                text;
-
-            background-clip:
-                text;
-
             color:
-                transparent;
+                #b8adff;
 
         }
 
@@ -769,9 +764,6 @@
 
             position:
                 relative;
-
-            z-index:
-                2;
 
             display:
                 grid;
@@ -884,7 +876,7 @@
                 15px;
 
             background:
-                rgba(255, 255, 255, .035);
+                rgba(255,255,255,.035);
 
         }
 
@@ -918,10 +910,10 @@
                 #fff;
 
             background:
-                rgba(123, 104, 238, .18);
+                rgba(123,104,238,.18);
 
             box-shadow:
-                inset 0 0 0 1px rgba(139, 92, 246, .18);
+                inset 0 0 0 1px rgba(139,92,246,.18);
 
         }
 
@@ -952,13 +944,13 @@
                 11px 13px;
 
             border:
-                1px solid rgba(255, 93, 115, .2);
+                1px solid rgba(255,93,115,.2);
 
             border-radius:
                 12px;
 
             background:
-                rgba(255, 93, 115, .07);
+                rgba(255,93,115,.07);
 
         }
 
@@ -1063,7 +1055,7 @@
                 #fff;
 
             background:
-                rgba(255, 255, 255, .045);
+                rgba(255,255,255,.045);
 
             transition:
                 .2s ease;
@@ -1086,13 +1078,13 @@
         .input-wrap select:focus {
 
             border-color:
-                rgba(139, 92, 246, .7);
+                rgba(139,92,246,.7);
 
             background:
-                rgba(139, 92, 246, .06);
+                rgba(139,92,246,.06);
 
             box-shadow:
-                0 0 0 4px rgba(139, 92, 246, .08);
+                0 0 0 4px rgba(139,92,246,.08);
 
         }
 
@@ -1186,7 +1178,7 @@
                 );
 
             box-shadow:
-                0 15px 35px rgba(123, 104, 238, .22);
+                0 15px 35px rgba(123,104,238,.22);
 
             transition:
                 transform .2s ease,
@@ -1201,7 +1193,7 @@
                 translateY(-2px);
 
             box-shadow:
-                0 18px 40px rgba(123, 104, 238, .32);
+                0 18px 40px rgba(123,104,238,.32);
 
         }
 
@@ -1235,7 +1227,7 @@
 
 
         /* =========================================================
-           APP SHELL
+           APP
         ========================================================= */
 
         .app-shell {
@@ -1284,10 +1276,10 @@
                 100;
 
             border-bottom:
-                1px solid rgba(255, 255, 255, .055);
+                1px solid rgba(255,255,255,.055);
 
             background:
-                rgba(7, 7, 13, .78);
+                rgba(7,7,13,.78);
 
             backdrop-filter:
                 blur(22px);
@@ -1386,7 +1378,7 @@
                 #ddd;
 
             background:
-                rgba(255, 255, 255, .04);
+                rgba(255,255,255,.04);
 
             transition:
                 .2s ease;
@@ -1400,7 +1392,7 @@
                 #fff;
 
             border-color:
-                rgba(139, 92, 246, .45);
+                rgba(139,92,246,.45);
 
             transform:
                 rotate(15deg);
@@ -1438,7 +1430,7 @@
                 7px 11px;
 
             border:
-                1px solid rgba(139, 92, 246, .2);
+                1px solid rgba(139,92,246,.2);
 
             border-radius:
                 999px;
@@ -1447,7 +1439,7 @@
                 #bcb4ff;
 
             background:
-                rgba(123, 104, 238, .08);
+                rgba(123,104,238,.08);
 
             text-transform:
                 uppercase;
@@ -1479,7 +1471,7 @@
                 serif;
 
             font-size:
-                clamp(38px, 8vw, 62px);
+                clamp(38px,8vw,62px);
 
             line-height:
                 1;
@@ -1597,9 +1589,6 @@
 
             transition:
                 .25s ease;
-
-            cursor:
-                pointer;
 
         }
 
@@ -1729,9 +1718,9 @@
             background:
                 linear-gradient(
                     to top,
-                    rgba(5, 5, 10, .96) 0%,
-                    rgba(5, 5, 10, .45) 47%,
-                    rgba(5, 5, 10, .05) 100%
+                    rgba(5,5,10,.96) 0%,
+                    rgba(5,5,10,.45) 47%,
+                    rgba(5,5,10,.05) 100%
                 );
 
         }
@@ -1769,7 +1758,7 @@
                 6px 9px;
 
             border:
-                1px solid rgba(255, 255, 255, .12);
+                1px solid rgba(255,255,255,.12);
 
             border-radius:
                 999px;
@@ -1778,7 +1767,7 @@
                 #e9e6ff;
 
             background:
-                rgba(10, 10, 16, .5);
+                rgba(10,10,16,.5);
 
             backdrop-filter:
                 blur(10px);
@@ -1872,7 +1861,7 @@
                 grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(3,1fr);
 
             gap:
                 12px;
@@ -1921,7 +1910,7 @@
                 translateY(-3px);
 
             border-color:
-                rgba(139, 92, 246, .3);
+                rgba(139,92,246,.3);
 
         }
 
@@ -1947,7 +1936,7 @@
                 #c5bdff;
 
             background:
-                rgba(123, 104, 238, .11);
+                rgba(123,104,238,.11);
 
             font-size:
                 19px;
@@ -2050,7 +2039,7 @@
                 19px 20px;
 
             border-bottom:
-                1px solid rgba(255, 255, 255, .055);
+                1px solid rgba(255,255,255,.055);
 
         }
 
@@ -2104,7 +2093,7 @@
                 13px 7px;
 
             border-bottom:
-                1px solid rgba(255, 255, 255, .05);
+                1px solid rgba(255,255,255,.05);
 
         }
 
@@ -2138,7 +2127,7 @@
                 #bdb5ff;
 
             background:
-                rgba(123, 104, 238, .1);
+                rgba(123,104,238,.1);
 
             font-size:
                 21px;
@@ -2200,7 +2189,7 @@
                 #f2d68c;
 
             background:
-                rgba(242, 214, 140, .09);
+                rgba(242,214,140,.09);
 
         }
 
@@ -2211,7 +2200,7 @@
                 #75e7a4;
 
             background:
-                rgba(37, 211, 102, .09);
+                rgba(37,211,102,.09);
 
         }
 
@@ -2222,7 +2211,7 @@
                 #9fc6ff;
 
             background:
-                rgba(0, 140, 255, .09);
+                rgba(0,140,255,.09);
 
         }
 
@@ -2233,7 +2222,7 @@
                 #ff9aaa;
 
             background:
-                rgba(255, 93, 115, .09);
+                rgba(255,93,115,.09);
 
         }
 
@@ -2350,8 +2339,8 @@
             background:
                 linear-gradient(
                     to top,
-                    rgba(5, 5, 10, .96),
-                    rgba(5, 5, 10, .1)
+                    rgba(5,5,10,.96),
+                    rgba(5,5,10,.1)
                 );
 
         }
@@ -2447,10 +2436,10 @@
                 #fff;
 
             background:
-                rgba(255, 255, 255, .1);
+                rgba(255,255,255,.1);
 
             border:
-                1px solid rgba(255, 255, 255, .1);
+                1px solid rgba(255,255,255,.1);
 
             font-size:
                 11px;
@@ -2620,7 +2609,7 @@
                 8px;
 
             border:
-                1px solid rgba(255, 93, 115, .16);
+                1px solid rgba(255,93,115,.16);
 
             border-radius:
                 13px;
@@ -2629,7 +2618,7 @@
                 #ff9aaa;
 
             background:
-                rgba(255, 93, 115, .06);
+                rgba(255,93,115,.06);
 
             font-size:
                 11px;
@@ -2659,7 +2648,7 @@
                 hidden;
 
             border:
-                1px solid rgba(217, 181, 109, .18);
+                1px solid rgba(217,181,109,.18);
 
             border-radius:
                 28px;
@@ -2707,9 +2696,9 @@
             background:
                 linear-gradient(
                     90deg,
-                    rgba(8, 8, 13, .96),
-                    rgba(8, 8, 13, .52),
-                    rgba(8, 8, 13, .25)
+                    rgba(8,8,13,.96),
+                    rgba(8,8,13,.52),
+                    rgba(8,8,13,.25)
                 );
 
         }
@@ -2735,7 +2724,7 @@
         .elite-label {
 
             color:
-                #d9b56d;
+                var(--gold);
 
             text-transform:
                 uppercase;
@@ -2762,7 +2751,7 @@
                 serif;
 
             font-size:
-                clamp(29px, 5vw, 45px);
+                clamp(29px,5vw,45px);
 
             line-height:
                 1;
@@ -2812,25 +2801,25 @@
                 grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(3,1fr);
 
             padding:
                 7px;
 
             border:
-                1px solid rgba(255, 255, 255, .1);
+                1px solid rgba(255,255,255,.1);
 
             border-radius:
                 20px;
 
             background:
-                rgba(16, 16, 25, .9);
+                rgba(16,16,25,.9);
 
             backdrop-filter:
                 blur(25px);
 
             box-shadow:
-                0 20px 55px rgba(0, 0, 0, .42);
+                0 20px 55px rgba(0,0,0,.42);
 
         }
 
@@ -2890,7 +2879,7 @@
                 #fff;
 
             background:
-                rgba(123, 104, 238, .14);
+                rgba(123,104,238,.14);
 
         }
 
@@ -2923,7 +2912,7 @@
                 12px 16px;
 
             border:
-                1px solid rgba(255, 255, 255, .1);
+                1px solid rgba(255,255,255,.1);
 
             border-radius:
                 13px;
@@ -2932,13 +2921,13 @@
                 #fff;
 
             background:
-                rgba(22, 22, 32, .94);
+                rgba(22,22,32,.94);
 
             backdrop-filter:
                 blur(16px);
 
             box-shadow:
-                0 15px 40px rgba(0, 0, 0, .35);
+                0 15px 40px rgba(0,0,0,.35);
 
             font-size:
                 11px;
@@ -3179,7 +3168,7 @@
 
 
 <!-- =========================================================
-     LOADING OVERLAY
+     LOADING
 ========================================================= -->
 
 <div id="loadingOverlay">
@@ -3213,7 +3202,7 @@
 
 
 <!-- =========================================================
-     ROLE REDIRECT OVERLAY
+     ROLE REDIRECT
 ========================================================= -->
 
 <div id="roleRedirectOverlay">
@@ -3356,7 +3345,7 @@
             ></div>
 
 
-            <!-- LOGIN FORM -->
+            <!-- LOGIN -->
 
             <form
                 class="auth-form active"
@@ -3467,7 +3456,7 @@
             </form>
 
 
-            <!-- SIGN UP FORM -->
+            <!-- SIGN UP -->
 
             <form
                 class="auth-form"
@@ -3613,7 +3602,7 @@
 
 
 <!-- =========================================================
-     CUSTOMER APP SHELL
+     CUSTOMER APP
 ========================================================= -->
 
 <main
@@ -3693,7 +3682,7 @@
         </section>
 
 
-        <!-- FEATURED SWIPE -->
+        <!-- FEATURED -->
 
         <section>
 
@@ -4059,7 +4048,7 @@
         </section>
 
 
-        <!-- CONTENT SECTION -->
+        <!-- CONTENT -->
 
         <section
             class="content-grid"
@@ -4303,7 +4292,7 @@
 
 
 <!-- =========================================================
-     FIREBASE COMPAT SDK
+     FIREBASE
 ========================================================= -->
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -4312,10 +4301,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-
-<!-- =========================================================
-     APPLICATION LOGIC
-========================================================= -->
 
 <script>
 
@@ -5894,7 +5879,7 @@ async function loadUser(
                 name
                     .split(/\s+/)
                     .filter(Boolean)
-                    .slice(0, 2)
+                    .slice(0,2)
                     .map(
                         part =>
                             part.charAt(0)
@@ -6190,7 +6175,7 @@ async function loadBookings(
                         })
                 )
                 .sort(
-                    function(a, b) {
+                    function(a,b) {
 
                         return (
                             bookingDateTime(a) -
@@ -6278,7 +6263,7 @@ async function loadBookings(
 
         bookingList.innerHTML =
             upcoming
-                .slice(0, 6)
+                .slice(0,6)
                 .map(
                     function(booking) {
 
@@ -6390,7 +6375,7 @@ async function loadBookings(
 
 
 /* =========================================================
-   SWIPE CAROUSEL CONTROLS
+   SWIPE
 ========================================================= */
 
 function getSwipeCards() {
@@ -6418,7 +6403,7 @@ function updateSwipeDots(
 ) {
 
     swipeDots.forEach(
-        function(dot, dotIndex) {
+        function(dot,dotIndex) {
 
             dot.classList.toggle(
                 "active",
@@ -6463,7 +6448,7 @@ function getClosestSwipeIndex() {
 
 
     cards.forEach(
-        function(card, index) {
+        function(card,index) {
 
             const rect =
                 card.getBoundingClientRect();
@@ -6771,7 +6756,7 @@ if (bookingQuickBtn) {
 
 
 /* =========================================================
-   ACCOUNT ROUTING
+   ACCOUNT
 ========================================================= */
 
 if (accountAction) {
@@ -6968,7 +6953,7 @@ if (logoutBtn) {
 
 
 /* =========================================================
-   AUTH STATE OBSERVER
+   AUTH STATE
 ========================================================= */
 
 if (auth) {
@@ -7078,7 +7063,8 @@ if (auth) {
 
 
 /* =========================================================
-   PREVENT CUSTOMER ACCOUNT NAVIGATION SAFETY
+   SAFETY:
+   PREVENT CUSTOMER ACCOUNT NAVIGATION
 ========================================================= */
 
 document.addEventListener(
@@ -7125,343 +7111,13 @@ document.addEventListener(
 setAccountUI(
     "customer"
 );
-                    .map(n => n[0])
-                    .join("")
-                    .toUpperCase() || "K@";
-
-            profileAvatar.textContent = initials;
-
-        }
-
-    }
-
-
-    setAccountUI(currentRole);
-    await loadBookings(user.uid);
-
-}
 
 
 /* =========================================================
-   LOAD BOOKINGS
+   END
 ========================================================= */
-
-async function loadBookings(uid) {
-
-    if (!bookingList) return;
-
-    if (!db) {
-
-        bookingList.innerHTML = `
-            <div class="empty-state">
-                <i class="bx bx-error-circle"></i>
-                <p>Database unavailable.</p>
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    try {
-
-        const snapshot = await db
-            .collection("bookings")
-            .where("userId", "==", uid)
-            .get();
-
-
-        if (snapshot.empty) {
-
-            bookingList.innerHTML = `
-                <div class="empty-state">
-                    <i class="bx bx-calendar-x"></i>
-                    <p>No upcoming bookings found.<br>Explore local salons to book your next look!</p>
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        let html = "";
-
-        const docs = [];
-
-        snapshot.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
-
-
-        // Sort by date descending in memory if timestamp is present
-        docs.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-
-
-        docs.forEach(booking => {
-
-            const status = (booking.status || "pending").toLowerCase();
-
-            const statusClass = `status-${status}`;
-
-            const serviceName = escapeHTML(booking.serviceName || booking.service || "Grooming Service");
-
-            const salonName = escapeHTML(booking.salonName || "Local Salon");
-
-            const dateStr = booking.date || "Date TBA";
-
-            const timeStr = booking.time || "";
-
-
-            html += `
-                <div class="booking">
-
-                    <div class="booking-icon">
-                        <i class="bx bx-cut"></i>
-                    </div>
-
-                    <div class="booking-main">
-                        <strong>${serviceName}</strong>
-                        <small>${salonName} • ${dateStr} ${timeStr}</small>
-                    </div>
-
-                    <span class="booking-status ${statusClass}">
-                        ${status}
-                    </span>
-
-                </div>
-            `;
-
-        });
-
-
-        bookingList.innerHTML = html;
-
-
-    } catch (error) {
-
-        console.error("Error loading bookings:", error);
-
-        bookingList.innerHTML = `
-            <div class="empty-state">
-                <i class="bx bx-error-circle"></i>
-                <p>Failed to load bookings. Tap refresh to try again.</p>
-            </div>
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   UTILITIES
-========================================================= */
-
-function escapeHTML(str) {
-
-    if (!str) return "";
-
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================================================
-   EVENT LISTENERS & NAVIGATION
-========================================================= */
-
-if (logoutBtn) {
-
-    logoutBtn.addEventListener("click", async function() {
-
-        showLoading("Signing out...");
-
-        try {
-
-            await auth.signOut();
-
-            sessionStorage.clear();
-
-            window.location.reload();
-
-        } catch (error) {
-
-            console.error("Logout error:", error);
-
-            hideLoading();
-
-            showToast("Failed to sign out.");
-
-        }
-
-    });
-
-}
-
-
-if (refreshBtn) {
-
-    refreshBtn.addEventListener("click", function() {
-
-        if (currentUser) {
-
-            showToast("Refreshing data...");
-
-            loadUser(currentUser);
-
-        } else {
-
-            window.location.reload();
-
-        }
-
-    });
-
-}
-
-
-if (accountAction) {
-
-    accountAction.addEventListener("click", openRoleAccount);
-
-}
-
-
-if (accountNavButton) {
-
-    accountNavButton.addEventListener("click", openRoleAccount);
-
-}
-
-
-if (bookingQuickBtn) {
-
-    bookingQuickBtn.addEventListener("click", function() {
-
-        const bookingsEl = document.getElementById("bookings");
-
-        if (bookingsEl) {
-
-            bookingsEl.scrollIntoView({ behavior: "smooth" });
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   SWIPE TRACK DOTS & TOUCH
-========================================================= */
-
-if (swipeTrack && swipeDots.length) {
-
-    swipeTrack.addEventListener("scroll", function() {
-
-        const width = swipeTrack.offsetWidth;
-
-        if (!width) return;
-
-
-        const index = Math.round(swipeTrack.scrollLeft / width);
-
-
-        swipeDots.forEach((dot, idx) => {
-
-            if (idx === index) {
-
-                dot.classList.add("active");
-
-            } else {
-
-                dot.classList.remove("active");
-
-            }
-
-        });
-
-    });
-
-
-    swipeDots.forEach((dot) => {
-
-        dot.addEventListener("click", function() {
-
-            const index = parseInt(this.dataset.index, 10);
-
-            const cards = swipeTrack.querySelectorAll(".swipe-card");
-
-
-            if (cards[index]) {
-
-                cards[index].scrollIntoView({
-                    behavior: "smooth",
-                    inline: "start",
-                    block: "nearest"
-                });
-
-            }
-
-        });
-
-    });
-
-}
-
-
-/* =========================================================
-   INITIALIZATION & AUTH STATE
-========================================================= */
-
-if (auth) {
-
-    auth.onAuthStateChanged(async function(user) {
-
-        if (user) {
-
-            document.body.classList.remove("auth-mode");
-
-            if (authScreen) authScreen.classList.add("hidden");
-
-            if (appShell) appShell.classList.add("visible");
-
-
-            await loadUser(user);
-
-            hideLoading();
-
-        } else {
-
-            document.body.classList.add("auth-mode");
-
-            if (authScreen) authScreen.classList.remove("hidden");
-
-            if (appShell) appShell.classList.remove("visible");
-
-
-            hideLoading();
-
-        }
-
-    });
-
-} else {
-
-    hideLoading();
-
-    showToast("Firebase services unavailable.");
-
-}
 
 </script>
 
 </body>
-
-</html>
-
+    </html>
