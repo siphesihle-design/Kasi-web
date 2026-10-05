@@ -5574,25 +5574,86 @@
                                 <button
                                     type="button"
                                     class="password-toggle"
-                                    aria-label="Toggle password visibility"
+                                    data-target="loginPassword"
+                                    aria-label="Show password"
                                 >
-                                    <i class="bx bx-hide"></i>
+                                    <i class="bx bx-show"></i>
                                 </button>
 
                             </div>
 
                         </div>
 
+
+                        <div class="field">
+
+                            <label for="loginRole">
+                                Account Type
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i
+                                    class="bx bx-user-pin input-icon"
+                                    aria-hidden="true"
+                                ></i>
+
+                                <select
+                                    id="loginRole"
+                                    name="accountType"
+                                    aria-describedby="roleNote"
+                                >
+                                    <option value="customer">
+                                        Customer
+                                    </option>
+
+                                    <option value="salon_owner">
+                                        Salon Owner
+                                    </option>
+
+                                    <option value="admin">
+                                        Admin
+                                    </option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="role-note"
+                            id="roleNote"
+                        >
+
+                            <strong>Important:</strong>
+                            your Firestore user role is verified after sign-in.
+                            Choosing an option here does not give your account
+                            additional permissions.
+
+                        </div>
+
+
                         <button
                             type="submit"
                             class="primary-btn"
-                            id="loginSubmitBtn"
+                            id="loginBtn"
                         >
+                            <i class="bx bx-log-in-circle"></i>
                             Sign In
                         </button>
 
+
                         <div class="auth-links">
-                            <a href="#" id="forgotPasswordBtn">Forgot Password?</a>
+
+                            <a href="#" id="switchSignup">
+                                Create a customer account
+                            </a>
+
+                            <a href="owners.html">
+                                Salon Owner Portal
+                            </a>
+
                         </div>
 
                     </form>
@@ -5614,6 +5675,7 @@
                             role="alert"
                         ></div>
 
+
                         <div class="field">
 
                             <label for="signupName">
@@ -5631,14 +5693,16 @@
                                     type="text"
                                     id="signupName"
                                     name="name"
-                                    placeholder="John Doe"
+                                    placeholder="Your full name"
                                     autocomplete="name"
+                                    maxlength="80"
                                     required
                                 >
 
                             </div>
 
                         </div>
+
 
                         <div class="field">
 
@@ -5666,6 +5730,7 @@
 
                         </div>
 
+
                         <div class="field">
 
                             <label for="signupPassword">
@@ -5683,35 +5748,103 @@
                                     type="password"
                                     id="signupPassword"
                                     name="password"
-                                    placeholder="Create a password"
+                                    placeholder="At least 6 characters"
                                     autocomplete="new-password"
+                                    minlength="6"
                                     required
                                 >
 
                                 <button
                                     type="button"
                                     class="password-toggle"
-                                    aria-label="Toggle password visibility"
+                                    data-target="signupPassword"
+                                    aria-label="Show password"
                                 >
-                                    <i class="bx bx-hide"></i>
+                                    <i class="bx bx-show"></i>
                                 </button>
 
                             </div>
 
                         </div>
 
+
+                        <div class="field">
+
+                            <label for="signupConfirm">
+                                Confirm Password
+                            </label>
+
+                            <div class="input-wrap">
+
+                                <i
+                                    class="bx bx-check-shield input-icon"
+                                    aria-hidden="true"
+                                ></i>
+
+                                <input
+                                    type="password"
+                                    id="signupConfirm"
+                                    name="confirmPassword"
+                                    placeholder="Repeat your password"
+                                    autocomplete="new-password"
+                                    minlength="6"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="signupConfirm"
+                                    aria-label="Show password"
+                                >
+                                    <i class="bx bx-show"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="role-note">
+
+                            New accounts created here are registered as
+                            <strong>Customer</strong>.
+                            Salon owner and admin roles are controlled through
+                            your verified Firebase/Firestore account.
+
+                        </div>
+
+
                         <button
                             type="submit"
                             class="primary-btn"
-                            id="signupSubmitBtn"
+                            id="signupBtn"
                         >
-                            Create Account
+                            <i class="bx bx-user-plus"></i>
+                            Create Customer Account
                         </button>
+
+
+                        <div class="auth-links">
+
+                            <a href="#" id="switchLogin">
+                                Already have an account?
+                            </a>
+
+                            <a href="owners.html">
+                                Salon Owner Portal
+                            </a>
+
+                        </div>
 
                     </form>
 
+
                     <div class="auth-footnote">
-                        By continuing, you agree to K@si Web Terms & Privacy Policy.
+
+                        K@si Web uses Firebase Authentication and Firestore to
+                        protect account access and verify account roles.
+
                     </div>
 
                 </div>
@@ -5724,10 +5857,10 @@
 
 
     <!-- =========================================================
-         APPLICATION SHELL
+         APP SHELL
     ========================================================== -->
 
-    <main
+    <div
         class="app-shell"
         id="appShell"
     >
@@ -5736,16 +5869,28 @@
 
             <div class="topbar-left">
 
-                <div class="mini-logo">
+                <a
+                    href="home.html"
+                    class="mini-logo"
+                    aria-label="Go to K@si Home"
+                >
                     K@
-                </div>
+                </a>
 
                 <div class="topbar-brand">
-                    <strong>K@si Web</strong>
-                    <span>Personal Grooming Space</span>
+
+                    <strong>
+                        K@si Web
+                    </strong>
+
+                    <span>
+                        Your cut. Your time.
+                    </span>
+
                 </div>
 
             </div>
+
 
             <div class="topbar-actions">
 
@@ -5753,7 +5898,8 @@
                     type="button"
                     class="icon-btn"
                     id="refreshBtn"
-                    aria-label="Refresh data"
+                    aria-label="Refresh your K@si home"
+                    title="Refresh"
                 >
                     <i class="bx bx-refresh"></i>
                 </button>
@@ -5763,46 +5909,86 @@
         </header>
 
 
-        <div class="page">
+        <main class="page">
 
-            <!-- HERO SECTION -->
+            <!-- =====================================================
+                 HERO
+            ====================================================== -->
 
             <section class="hero">
 
                 <div class="hero-content">
 
                     <div class="hero-badge">
-                        <i class="bx bxs-check-shield"></i>
-                        Verified Salons
+                        <i class="bx bxs-sparkles"></i>
+                        PERSONAL GROOMING SPACE
                     </div>
 
                     <h1>
-                        Book your next <span>fresh cut</span> in seconds.
+                        Welcome back,
+                        <span id="welcomeName">
+                            there
+                        </span>.
                     </h1>
 
-                    <p class="hero-copy">
-                        Skip the waiting lines. Connect with top local barbers and stylists around you.
+                    <p
+                        class="hero-copy"
+                        id="welcomeCopy"
+                    >
+                        Discover fresh styles, manage your bookings and find
+                        your next local grooming experience.
                     </p>
+
+
+                    <div class="hero-actions">
+
+                        <a
+                            href="salons.html"
+                            class="hero-btn primary"
+                        >
+                            <i class="bx bx-search-alt-2"></i>
+                            Explore Salons
+                        </a>
+
+                        <button
+                            type="button"
+                            class="hero-btn secondary"
+                            id="heroBookingsBtn"
+                        >
+                            <i class="bx bx-calendar-check"></i>
+                            My Bookings
+                        </button>
+
+                    </div>
+
 
                     <div class="hero-user-meta">
 
                         <div
                             class="hero-avatar"
-                            id="userAvatar"
+                            id="heroAvatar"
+                            aria-hidden="true"
                         >
-                            U
+                            K
                         </div>
 
                         <div>
-                            <strong id="userName">User</strong>
-                            <span id="userEmail">user@example.com</span>
+
+                            <strong id="heroEmailLabel">
+                                Connected account
+                            </strong>
+
+                            <span id="heroRoleLabel">
+                                Customer
+                            </span>
+
                         </div>
 
                         <div
                             class="role-pill"
-                            id="userRolePill"
+                            id="heroRolePill"
                         >
-                            Customer
+                            CUSTOMER
                         </div>
 
                     </div>
@@ -5812,79 +5998,549 @@
             </section>
 
 
-            <!-- QUICK ACCESS -->
+            <!-- =====================================================
+                 FEATURED
+            ====================================================== -->
 
             <section class="section">
 
                 <div class="section-header">
 
                     <div>
-                        <span class="section-kicker">Quick Actions</span>
-                        <h2>Get Things Done</h2>
+
+                        <span class="section-kicker">
+                            Featured
+                        </span>
+
+                        <h2>
+                            Fresh looks.
+                        </h2>
+
                     </div>
+
+                    <p>
+                        Swipe through featured K@si styles and find the look
+                        that feels right for your next appointment.
+                    </p>
 
                 </div>
 
-                <div class="quick-grid">
 
-                    <div class="quick-card">
+                <div class="carousel-wrap">
 
-                        <div>
-                            <div class="quick-icon">
-                                <i class="bx bx-search"></i>
+                    <button
+                        type="button"
+                        class="carousel-control prev"
+                        id="carouselPrev"
+                        aria-label="Previous featured look"
+                    >
+                        <i class="bx bx-chevron-left"></i>
+                    </button>
+
+
+                    <div
+                        class="carousel"
+                        id="featuredCarousel"
+                        role="region"
+                        aria-label="Featured K@si styles"
+                        tabindex="0"
+                    >
+
+                        <!-- CARD 1 -->
+
+                        <article
+                            class="feature-card"
+                            data-index="0"
+                        >
+
+                            <img
+                                class="feature-image"
+                                src="7847041D.jpg"
+                                alt="Burst Fade and Beard"
+                                loading="eager"
+                                decoding="async"
+                                draggable="false"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <div class="feature-top">
+
+                                <div class="feature-badge">
+                                    FEATURED
+                                </div>
+
+                                <div class="rating-badge">
+                                    <i class="bx bxs-star"></i>
+                                    4.9
+                                </div>
+
                             </div>
 
-                            <h3>Explore Salons</h3>
 
-                            <p>Find nearby top-rated grooming spots.</p>
-                        </div>
+                            <div class="feature-bottom">
 
-                        <i class="bx bx-right-arrow-alt quick-arrow"></i>
+                                <h3>
+                                    Burst Fade &amp; Beard
+                                </h3>
+
+                                <p>
+                                    Sharp fade. Clean beard. Bold finish.
+                                </p>
+
+                                <div class="price-row">
+
+                                    <span class="price">
+                                        R150
+                                    </span>
+
+                                    <a
+                                        class="view-cut-btn"
+                                        href="salons.html"
+                                    >
+                                        Explore
+                                        <i class="bx bx-right-arrow-alt"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- CARD 2 -->
+
+                        <article
+                            class="feature-card"
+                            data-index="1"
+                        >
+
+                            <img
+                                class="feature-image"
+                                src="37BA0E35.jpg"
+                                alt="Kasi Taper Fade"
+                                loading="lazy"
+                                decoding="async"
+                                draggable="false"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <div class="feature-top">
+
+                                <div class="feature-badge">
+                                    K@SI PICK
+                                </div>
+
+                                <div class="rating-badge">
+                                    <i class="bx bxs-star"></i>
+                                    4.8
+                                </div>
+
+                            </div>
+
+
+                            <div class="feature-bottom">
+
+                                <h3>
+                                    Kasi Taper Fade
+                                </h3>
+
+                                <p>
+                                    Clean edges with an everyday finish.
+                                </p>
+
+                                <div class="price-row">
+
+                                    <span class="price">
+                                        R120
+                                    </span>
+
+                                    <a
+                                        class="view-cut-btn"
+                                        href="salons.html"
+                                    >
+                                        Explore
+                                        <i class="bx bx-right-arrow-alt"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- CARD 3 -->
+
+                        <article
+                            class="feature-card"
+                            data-index="2"
+                        >
+
+                            <img
+                                class="feature-image"
+                                src="8627A569.jpg"
+                                alt="Premium Style Cut"
+                                loading="lazy"
+                                decoding="async"
+                                draggable="false"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <div class="feature-top">
+
+                                <div class="feature-badge">
+                                    PREMIUM
+                                </div>
+
+                                <div class="rating-badge">
+                                    <i class="bx bxs-star"></i>
+                                    4.8
+                                </div>
+
+                            </div>
+
+
+                            <div class="feature-bottom">
+
+                                <h3>
+                                    Premium Style
+                                </h3>
+
+                                <p>
+                                    A polished look made for standout moments.
+                                </p>
+
+                                <div class="price-row">
+
+                                    <span class="price">
+                                        R130
+                                    </span>
+
+                                    <a
+                                        class="view-cut-btn"
+                                        href="salons.html"
+                                    >
+                                        Explore
+                                        <i class="bx bx-right-arrow-alt"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- CARD 4 -->
+
+                        <article
+                            class="feature-card"
+                            data-index="3"
+                        >
+
+                            <img
+                                class="feature-image"
+                                src="A3886FFD.jpg"
+                                alt="Classic Clean Cut"
+                                loading="lazy"
+                                decoding="async"
+                                draggable="false"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <div class="feature-top">
+
+                                <div class="feature-badge">
+                                    CLASSIC
+                                </div>
+
+                                <div class="rating-badge">
+                                    <i class="bx bxs-star"></i>
+                                    4.7
+                                </div>
+
+                            </div>
+
+
+                            <div class="feature-bottom">
+
+                                <h3>
+                                    Classic Clean Cut
+                                </h3>
+
+                                <p>
+                                    Simple, timeless and ready for anything.
+                                </p>
+
+                                <div class="price-row">
+
+                                    <span class="price">
+                                        R80
+                                    </span>
+
+                                    <a
+                                        class="view-cut-btn"
+                                        href="salons.html"
+                                    >
+                                        Explore
+                                        <i class="bx bx-right-arrow-alt"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <!-- CARD 5 -->
+
+                        <article
+                            class="feature-card"
+                            data-index="4"
+                        >
+
+                            <img
+                                class="feature-image"
+                                src="B307F46B.jpg"
+                                alt="Line Design Cut"
+                                loading="lazy"
+                                decoding="async"
+                                draggable="false"
+                                onerror="this.style.display='none'"
+                            >
+
+                            <div class="feature-top">
+
+                                <div class="feature-badge">
+                                    ELITE LOOK
+                                </div>
+
+                                <div class="rating-badge">
+                                    <i class="bx bxs-star"></i>
+                                    5.0
+                                </div>
+
+                            </div>
+
+
+                            <div class="feature-bottom">
+
+                                <h3>
+                                    Line Design Cut
+                                </h3>
+
+                                <p>
+                                    Detailed lines for a stronger statement.
+                                </p>
+
+                                <div class="price-row">
+
+                                    <span class="price">
+                                        R180
+                                    </span>
+
+                                    <a
+                                        class="view-cut-btn"
+                                        href="salons.html"
+                                    >
+                                        Explore
+                                        <i class="bx bx-right-arrow-alt"></i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
 
                     </div>
 
-                    <div class="quick-card blue">
 
-                        <div>
-                            <div class="quick-icon">
-                                <i class="bx bx-calendar"></i>
-                            </div>
+                    <button
+                        type="button"
+                        class="carousel-control next"
+                        id="carouselNext"
+                        aria-label="Next featured look"
+                    >
+                        <i class="bx bx-chevron-right"></i>
+                    </button>
 
-                            <h3>My Bookings</h3>
+                </div>
 
-                            <p>View upcoming and past appointments.</p>
-                        </div>
 
-                        <i class="bx bx-right-arrow-alt quick-arrow"></i>
+                <div
+                    class="carousel-dots"
+                    id="carouselDots"
+                    aria-label="Featured look navigation"
+                ></div>
 
-                    </div>
 
-                    <div class="quick-card green">
+                <div
+                    class="carousel-progress"
+                    aria-hidden="true"
+                >
 
-                        <div>
-                            <div class="quick-icon">
-                                <i class="bx bx-user"></i>
-                            </div>
-
-                            <h3>Profile</h3>
-
-                            <p>Manage your account settings.</p>
-                        </div>
-
-                        <i class="bx bx-right-arrow-alt quick-arrow"></i>
-
-                    </div>
+                    <div
+                        class="carousel-progress-bar"
+                        id="carouselProgress"
+                    ></div>
 
                 </div>
 
             </section>
 
 
-            <!-- MAIN CONTENT GRID -->
+            <!-- =====================================================
+                 QUICK ACCESS
+            ====================================================== -->
 
             <section class="section">
 
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            Quick Access
+                        </span>
+
+                        <h2>
+                            Everything closer.
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-grid">
+
+                    <a
+                        href="salons.html"
+                        class="quick-card"
+                    >
+
+                        <div class="quick-icon">
+                            <i class="bx bx-store-alt"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Explore Salons
+                            </h3>
+
+                            <p>
+                                Find local grooming spaces.
+                            </p>
+
+                        </div>
+
+                        <i class="bx bx-right-arrow-alt quick-arrow"></i>
+
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="quick-card blue"
+                        id="quickBookingsBtn"
+                    >
+
+                        <div class="quick-icon">
+                            <i class="bx bx-calendar-check"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                My Bookings
+                            </h3>
+
+                            <p>
+                                View your upcoming appointments.
+                            </p>
+
+                        </div>
+
+                        <i class="bx bx-down-arrow-alt quick-arrow"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="quick-card locked"
+                        id="quickAccountBtn"
+                        data-account-action
+                    >
+
+                        <div
+                            class="quick-icon"
+                            id="quickAccountIcon"
+                        >
+                            <i class="bx bx-lock-alt"></i>
+                        </div>
+
+                        <div>
+
+                            <h3 id="quickAccountTitle">
+                                My Account
+                            </h3>
+
+                            <p id="quickAccountText">
+                                Portal access is role based.
+                            </p>
+
+                        </div>
+
+                        <i
+                            class="bx bx-right-arrow-alt quick-arrow"
+                            id="quickAccountArrow"
+                        ></i>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 BOOKINGS + DISCOVER
+            ====================================================== -->
+
+            <section
+                class="section"
+                id="bookings"
+            >
+
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            Your Space
+                        </span>
+
+                        <h2>
+                            Your bookings.
+                        </h2>
+
+                    </div>
+
+                    <p>
+                        Your latest booking activity stays connected to the
+                        signed-in Firebase account.
+                    </p>
+
+                </div>
+
+
                 <div class="content-grid">
+
 
                     <!-- BOOKINGS PANEL -->
 
@@ -5893,26 +6549,38 @@
                         <div class="panel-head">
 
                             <div>
-                                <h3>Active Bookings</h3>
-                                <p>Your schedule for upcoming sessions</p>
+
+                                <h3>
+                                    My Bookings
+                                </h3>
+
+                                <p id="bookingSubtitle">
+                                    Loading your booking activity...
+                                </p>
+
                             </div>
 
-                            <span
+                            <div
                                 class="panel-count"
                                 id="bookingCount"
-                            >0</span>
+                            >
+                                0
+                            </div>
 
                         </div>
+
 
                         <div
                             class="booking-list"
                             id="bookingList"
                         >
 
-                            <div class="empty-state">
-                                <i class="bx bx-calendar-x"></i>
-                                <strong>No bookings yet</strong>
-                                <p>Discover local spots to schedule your next cut.</p>
+                            <div class="booking-loading">
+
+                                <i class="bx bx-loader-alt bx-spin"></i>
+
+                                Loading your bookings...
+
                             </div>
 
                         </div>
@@ -5920,41 +6588,41 @@
                     </div>
 
 
-                    <!-- PROFILE PANEL -->
+                    <!-- DISCOVER -->
 
-                    <div class="panel profile-panel">
+                    <div class="discover-card">
 
-                        <div class="profile-header">
+                        <img
+                            src="C00719B.jpg"
+                            alt="K@si premium grooming showcase"
+                            loading="lazy"
+                            decoding="async"
+                            onerror="this.style.display='none'"
+                        >
 
-                            <div
-                                class="profile-avatar"
-                                id="profileAvatar"
+                        <div class="discover-content">
+
+                            <div class="discover-kicker">
+                                Your next move
+                            </div>
+
+                            <h3>
+                                Find your space.
+                            </h3>
+
+                            <p>
+                                Browse salons, compare available services and
+                                choose the grooming experience that fits your
+                                style and budget.
+                            </p>
+
+                            <a
+                                href="salons.html"
+                                class="discover-btn"
                             >
-                                U
-                            </div>
-
-                            <div class="profile-copy">
-                                <h3 id="profileName">User Name</h3>
-                                <p id="profileEmail">user@example.com</p>
-                                <span class="profile-role">Customer Account</span>
-                            </div>
-
-                        </div>
-
-                        <div class="profile-actions">
-
-                            <div class="account-info">
-                                Connected to K@si Network
-                            </div>
-
-                            <button
-                                type="button"
-                                class="signout-btn"
-                                id="signOutBtn"
-                            >
-                                <i class="bx bx-log-out"></i>
-                                Sign Out
-                            </button>
+                                Explore Salons
+                                <i class="bx bx-right-arrow-alt"></i>
+                            </a>
 
                         </div>
 
@@ -5964,52 +6632,5495 @@
 
             </section>
 
-        </div>
+
+            <!-- =====================================================
+                 PROFILE
+            ====================================================== -->
+
+            <section class="section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            Profile
+                        </span>
+
+                        <h2>
+                            Your account.
+                        </h2>
+
+                    </div>
+
+                </div>
 
 
-        <!-- BOTTOM NAVIGATION -->
+                <div class="panel profile-panel">
+
+                    <div class="profile-header">
+
+                        <div
+                            class="profile-avatar"
+                            id="profileAvatar"
+                            aria-hidden="true"
+                        >
+                            K
+                        </div>
+
+                        <div class="profile-copy">
+
+                            <h3 id="profileName">
+                                Loading...
+                            </h3>
+
+                            <p id="profileEmail">
+                                Loading...
+                            </p>
+
+                            <div
+                                class="profile-role"
+                                id="profileRole"
+                            >
+                                <i class="bx bx-user"></i>
+                                Customer
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-actions">
+
+                        <div
+                            class="account-info"
+                            id="accountInfo"
+                        >
+                            Your account is connected and protected by Firebase
+                            Authentication.
+                        </div>
+
+                        <button
+                            type="button"
+                            class="signout-btn"
+                            id="logoutBtn"
+                        >
+                            <i class="bx bx-log-out"></i>
+                            Sign Out
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================================
+                 K@SI ELITE
+            ====================================================== -->
+
+            <section class="elite-section">
+
+                <img
+                    class="elite-image"
+                    src="C00719B.jpg"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    aria-hidden="true"
+                    onerror="this.style.display='none'"
+                >
+
+                <div class="elite-overlay"></div>
+
+
+                <div class="elite-content">
+
+                    <div class="elite-badge">
+                        <i class="bx bxs-crown"></i>
+                        K@SI ELITE
+                    </div>
+
+
+                    <h2>
+                        More than
+                        <span>a haircut.</span>
+                    </h2>
+
+
+                    <p class="elite-copy">
+                        K@si is built around the whole grooming journey:
+                        discovering your next look, finding the right local
+                        space, booking without the unnecessary back-and-forth,
+                        and keeping your appointments close at hand.
+                    </p>
+
+
+                    <div class="elite-feature-grid">
+
+                        <div class="elite-feature">
+
+                            <div class="elite-feature-icon">
+                                <i class="bx bx-map-pin"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Local first
+                                </h3>
+
+                                <p>
+                                    Browse grooming spaces designed around
+                                    local communities and real customer needs.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="elite-feature">
+
+                            <div class="elite-feature-icon">
+                                <i class="bx bx-wallet"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Clear pricing
+                                </h3>
+
+                                <p>
+                                    See available services and prices before
+                                    deciding what fits your visit.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="elite-feature">
+
+                            <div class="elite-feature-icon">
+                                <i class="bx bx-calendar-check"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Easier bookings
+                                </h3>
+
+                                <p>
+                                    Keep appointment details connected to your
+                                    signed-in K@si account.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="elite-stats">
+
+                        <div class="elite-stat">
+
+                            <strong id="eliteStyleCount">
+                                05
+                            </strong>
+
+                            <span>
+                                Featured looks
+                            </span>
+
+                        </div>
+
+
+                        <div class="elite-stat">
+
+                            <strong>
+                                03
+                            </strong>
+
+                            <span>
+                                Quick actions
+                            </span>
+
+                        </div>
+
+
+                        <div class="elite-stat">
+
+                            <strong>
+                                01
+                            </strong>
+
+                            <span>
+                                Connected space
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="elite-actions">
+
+                        <a
+                            href="salons.html"
+                            class="elite-btn primary"
+                        >
+                            <i class="bx bx-store"></i>
+                            Explore Salons
+                        </a>
+
+                        <button
+                            type="button"
+                            class="elite-btn secondary"
+                            id="eliteBookingBtn"
+                        >
+                            <i class="bx bx-calendar"></i>
+                            View Bookings
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+        <!-- =========================================================
+             BOTTOM NAV
+        ========================================================== -->
 
         <div class="bottom-nav-wrap">
 
-            <nav class="bottom-nav">
+            <nav
+                class="bottom-nav"
+                aria-label="Main navigation"
+            >
 
-                <button
-                    type="button"
+                <a
+                    href="home.html"
                     class="nav-btn active"
+                    aria-current="page"
                 >
                     <i class="bx bx-home-alt-2"></i>
                     <span>Home</span>
-                </button>
+                </a>
+
+
+                <a
+                    href="salons.html"
+                    class="nav-btn"
+                >
+                    <i class="bx bx-store-alt"></i>
+                    <span>Salons</span>
+                </a>
+
 
                 <button
                     type="button"
-                    class="nav-btn"
+                    class="nav-btn locked"
+                    id="bottomAccountBtn"
+                    data-account-action
                 >
-                    <i class="bx bx-calendar"></i>
-                    <span>Bookings</span>
-                </button>
 
-                <button
-                    type="button"
-                    class="nav-btn"
-                >
-                    <i class="bx bx-user"></i>
-                    <span>Profile</span>
+                    <i
+                        class="bx bx-lock-alt"
+                        id="bottomAccountIcon"
+                    ></i>
+
+                    <span id="bottomAccountText">
+                        Account
+                    </span>
+
                 </button>
 
             </nav>
 
         </div>
 
-    </main>
+    </div>
 
 
-    <!-- TOAST CONTAINER -->
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
 
     <div
         class="toast-container"
         id="toastContainer"
+        aria-live="polite"
+        aria-atomic="true"
     ></div>
 
+
+    <!-- =========================================================
+         FIREBASE
+    ========================================================== -->
+
+    <script
+        src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"
+    ></script>
+
+    <script
+        src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"
+    ></script>
+
+    <script
+        src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"
+    ></script>
+
+
+    <script>
+
+        "use strict";
+
+
+        /* =========================================================
+           FIREBASE CONFIG
+        ========================================================== */
+
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyCjmaSIPBngbF3SbhP1AH4Frfn4Mz1QXHk",
+
+            authDomain:
+                "kasi-web-d073f.firebaseapp.com",
+
+            databaseURL:
+                "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+
+            projectId:
+                "kasi-web-d073f",
+
+            storageBucket:
+                "kasi-web-d073f.firebasestorage.app",
+
+            messagingSenderId:
+                "105918157571",
+
+            appId:
+                "1:105918157571:web:8d646"
+
+        };
+
+
+        /* =========================================================
+           FIREBASE INITIALIZATION
+        ========================================================== */
+
+
+        let app = null;
+        let auth = null;
+        let db = null;
+
+
+        try {
+
+            if (!firebase.apps.length) {
+                app = firebase.initializeApp(firebaseConfig);
+            } else {
+                app = firebase.app();
+            }
+
+            auth = firebase.auth();
+            db = firebase.firestore();
+
+        } catch (error) {
+
+            console.error(
+                "Firebase initialization failed:",
+                error
+            );
+
+        }
+
+
+        /* =========================================================
+           DOM REFERENCES
+        ========================================================== */
+
+
+        const loadingScreen =
+            document.getElementById("loadingScreen");
+
+        const authScreen =
+            document.getElementById("authScreen");
+
+        const appShell =
+            document.getElementById("appShell");
+
+        const redirectOverlay =
+            document.getElementById("redirectOverlay");
+
+        const redirectTitle =
+            document.getElementById("redirectTitle");
+
+        const redirectText =
+            document.getElementById("redirectText");
+
+
+        const loginTab =
+            document.getElementById("loginTab");
+
+        const signupTab =
+            document.getElementById("signupTab");
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const signupForm =
+            document.getElementById("signupForm");
+
+
+        const loginEmail =
+            document.getElementById("loginEmail");
+
+        const loginPassword =
+            document.getElementById("loginPassword");
+
+        const loginRole =
+            document.getElementById("loginRole");
+
+
+        const signupName =
+            document.getElementById("signupName");
+
+        const signupEmail =
+            document.getElementById("signupEmail");
+
+        const signupPassword =
+            document.getElementById("signupPassword");
+
+        const signupConfirm =
+            document.getElementById("signupConfirm");
+
+
+        const loginBtn =
+            document.getElementById("loginBtn");
+
+        const signupBtn =
+            document.getElementById("signupBtn");
+
+
+        const loginMessage =
+            document.getElementById("loginMessage");
+
+        const signupMessage =
+            document.getElementById("signupMessage");
+
+
+        const switchSignup =
+            document.getElementById("switchSignup");
+
+        const switchLogin =
+            document.getElementById("switchLogin");
+
+
+        const welcomeName =
+            document.getElementById("welcomeName");
+
+        const welcomeCopy =
+            document.getElementById("welcomeCopy");
+
+        const heroAvatar =
+            document.getElementById("heroAvatar");
+
+        const heroEmailLabel =
+            document.getElementById("heroEmailLabel");
+
+        const heroRoleLabel =
+            document.getElementById("heroRoleLabel");
+
+        const heroRolePill =
+            document.getElementById("heroRolePill");
+
+
+        const profileAvatar =
+            document.getElementById("profileAvatar");
+
+        const profileName =
+            document.getElementById("profileName");
+
+        const profileEmail =
+            document.getElementById("profileEmail");
+
+        const profileRole =
+            document.getElementById("profileRole");
+
+        const accountInfo =
+            document.getElementById("accountInfo");
+
+
+        const bookingList =
+            document.getElementById("bookingList");
+
+        const bookingCount =
+            document.getElementById("bookingCount");
+
+        const bookingSubtitle =
+            document.getElementById("bookingSubtitle");
+
+
+        const refreshBtn =
+            document.getElementById("refreshBtn");
+
+        const logoutBtn =
+            document.getElementById("logoutBtn");
+
+
+        const featuredCarousel =
+            document.getElementById("featuredCarousel");
+
+        const carouselPrev =
+            document.getElementById("carouselPrev");
+
+        const carouselNext =
+            document.getElementById("carouselNext");
+
+        const carouselDots =
+            document.getElementById("carouselDots");
+
+        const carouselProgress =
+            document.getElementById("carouselProgress");
+
+
+        const quickAccountBtn =
+            document.getElementById("quickAccountBtn");
+
+        const quickAccountIcon =
+            document.getElementById("quickAccountIcon");
+
+        const quickAccountTitle =
+            document.getElementById("quickAccountTitle");
+
+        const quickAccountText =
+            document.getElementById("quickAccountText");
+
+        const quickAccountArrow =
+            document.getElementById("quickAccountArrow");
+
+
+        const bottomAccountBtn =
+            document.getElementById("bottomAccountBtn");
+
+        const bottomAccountIcon =
+            document.getElementById("bottomAccountIcon");
+
+        const bottomAccountText =
+            document.getElementById("bottomAccountText");
+
+
+        const heroBookingsBtn =
+            document.getElementById("heroBookingsBtn");
+
+        const quickBookingsBtn =
+            document.getElementById("quickBookingsBtn");
+
+        const eliteBookingBtn =
+            document.getElementById("eliteBookingBtn");
+
+
+        const eliteStyleCount =
+            document.getElementById("eliteStyleCount");
+
+
+        const toastContainer =
+            document.getElementById("toastContainer");
+
+
+        /* =========================================================
+           APPLICATION STATE
+        ========================================================== */
+
+
+        let currentUser =
+            null;
+
+        let currentProfile =
+            null;
+
+        let currentRole =
+            "customer";
+
+        let bookingsCache =
+            [];
+
+        let carouselIndex =
+            0;
+
+        let carouselTimer =
+            null;
+
+        let carouselResumeTimer =
+            null;
+
+        let carouselDragging =
+            false;
+
+        let carouselPointerId =
+            null;
+
+        let carouselStartX =
+            0;
+
+        let carouselStartScrollLeft =
+            0;
+
+        let carouselDragMoved =
+            false;
+
+        let carouselRAF =
+            null;
+
+        let carouselInteractionPause =
+            false;
+
+        let appInitialized =
+            false;
+
+
+        /* =========================================================
+           SESSION STORAGE HELPERS
+        ========================================================== */
+
+
+        function setSessionValue(
+            key,
+            value
+        ) {
+
+            try {
+
+                sessionStorage.setItem(
+                    key,
+                    value
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "Session storage unavailable:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        function removeSessionValue(
+            key
+        ) {
+
+            try {
+
+                sessionStorage.removeItem(
+                    key
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "Could not remove session value:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        function clearKasiSession() {
+
+            removeSessionValue(
+                "userRole"
+            );
+
+            removeSessionValue(
+                "justLoggedIn"
+            );
+
+            removeSessionValue(
+                "ownerUid"
+            );
+
+            removeSessionValue(
+                "ownerSalonId"
+            );
+
+            removeSessionValue(
+                "adminUid"
+            );
+
+        }
+
+
+        /* =========================================================
+           UI LOADING
+        ========================================================== */
+
+
+        function showLoading() {
+
+            if (!loadingScreen) {
+                return;
+            }
+
+            loadingScreen.classList.remove(
+                "hidden"
+            );
+
+        }
+
+
+        function hideLoading() {
+
+            if (!loadingScreen) {
+                return;
+            }
+
+            loadingScreen.classList.add(
+                "hidden"
+            );
+
+        }
+
+
+        function showRedirect(
+            title,
+            message
+        ) {
+
+            if (!redirectOverlay) {
+                return;
+            }
+
+            redirectTitle.textContent =
+                title || "Opening your space";
+
+            redirectText.textContent =
+                message ||
+                "Redirecting you to the right K@si portal...";
+
+            redirectOverlay.classList.add(
+                "show"
+            );
+
+        }
+
+
+        function hideRedirect() {
+
+            if (!redirectOverlay) {
+                return;
+            }
+
+            redirectOverlay.classList.remove(
+                "show"
+            );
+
+        }
+
+
+        /* =========================================================
+           SAFE HTML
+        ========================================================== */
+
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replaceAll(
+                    "&",
+                    "&amp;"
+                )
+                .replaceAll(
+                    "<",
+                    "&lt;"
+                )
+                .replaceAll(
+                    ">",
+                    "&gt;"
+                )
+                .replaceAll(
+                    '"',
+                    "&quot;"
+                )
+                .replaceAll(
+                    "'",
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================================================
+           TOASTS
+        ========================================================== */
+
+
+        function showToast(
+            message,
+            type = "info",
+            duration = 3200
+        ) {
+
+            if (!toastContainer) {
+                return;
+            }
+
+            const toast =
+                document.createElement(
+                    "div"
+                );
+
+            toast.className =
+                `toast ${type}`;
+
+            let icon =
+                "bx-info-circle";
+
+            if (type === "success") {
+                icon =
+                    "bx-check-circle";
+            }
+
+            if (type === "error") {
+                icon =
+                    "bx-error-circle";
+            }
+
+            toast.innerHTML = `
+
+                <i class="bx ${icon}"></i>
+
+                <span>
+                    ${escapeHTML(message)}
+                </span>
+
+            `;
+
+            toastContainer.appendChild(
+                toast
+            );
+
+
+            window.setTimeout(
+                function () {
+
+                    toast.style.animation =
+                        "toastOut .2s ease both";
+
+                    window.setTimeout(
+                        function () {
+
+                            toast.remove();
+
+                        },
+                        200
+                    );
+
+                },
+                duration
+            );
+
+        }
+
+
+        /* =========================================================
+           AUTH MESSAGES
+        ========================================================== */
+
+
+        function setFormMessage(
+            element,
+            message
+        ) {
+
+            if (!element) {
+                return;
+            }
+
+            if (!message) {
+
+                element.textContent =
+                    "";
+
+                element.classList.remove(
+                    "show"
+                );
+
+                return;
+
+            }
+
+            element.textContent =
+                message;
+
+            element.classList.add(
+                "show"
+            );
+
+        }
+
+
+        function clearAuthMessages() {
+
+            setFormMessage(
+                loginMessage,
+                ""
+            );
+
+            setFormMessage(
+                signupMessage,
+                ""
+            );
+
+        }
+
+
+        function firebaseErrorMessage(
+            error
+        ) {
+
+            if (!error) {
+                return "Something went wrong. Please try again.";
+            }
+
+            const code =
+                error.code || "";
+
+
+            switch (code) {
+
+                case "auth/invalid-email":
+
+                    return "Please enter a valid email address.";
+
+                case "auth/user-not-found":
+
+                    return "No K@si account was found with that email.";
+
+                case "auth/wrong-password":
+
+                    return "The password is incorrect.";
+
+                case "auth/invalid-credential":
+
+                    return "The email or password is incorrect.";
+
+                case "auth/email-already-in-use":
+
+                    return "That email is already linked to an account.";
+
+                case "auth/weak-password":
+
+                    return "Please use a stronger password with at least 6 characters.";
+
+                case "auth/network-request-failed":
+
+                    return "Network error. Please check your internet connection.";
+
+                case "auth/too-many-requests":
+
+                    return "Too many attempts. Please try again later.";
+
+                case "permission-denied":
+
+                    return "Firebase denied access to this data.";
+
+                default:
+
+                    if (
+                        String(error.message || "")
+                            .toLowerCase()
+                            .includes("permission")
+                    ) {
+
+                        return "Firebase denied access to this data.";
+
+                    }
+
+                    return (
+                        error.message ||
+                        "Something went wrong. Please try again."
+                    );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           AUTH TABS
+        ========================================================== */
+
+
+        function showLogin() {
+
+            loginTab.classList.add(
+                "active"
+            );
+
+            signupTab.classList.remove(
+                "active"
+            );
+
+            loginTab.setAttribute(
+                "aria-selected",
+                "true"
+            );
+
+            signupTab.setAttribute(
+                "aria-selected",
+                "false"
+            );
+
+            loginForm.classList.add(
+                "active"
+            );
+
+            signupForm.classList.remove(
+                "active"
+            );
+
+            clearAuthMessages();
+
+            const heading =
+                document.querySelector(
+                    ".auth-heading h2"
+                );
+
+            const subtitle =
+                document.getElementById(
+                    "authSubtitle"
+                );
+
+            if (heading) {
+                heading.textContent =
+                    "Welcome back.";
+            }
+
+            if (subtitle) {
+                subtitle.textContent =
+                    "Sign in to continue to your personal grooming space.";
+            }
+
+        }
+
+
+        function showSignup() {
+
+            signupTab.classList.add(
+                "active"
+            );
+
+            loginTab.classList.remove(
+                "active"
+            );
+
+            signupTab.setAttribute(
+                "aria-selected",
+                "true"
+            );
+
+            loginTab.setAttribute(
+                "aria-selected",
+                "false"
+            );
+
+            signupForm.classList.add(
+                "active"
+            );
+
+            loginForm.classList.remove(
+                "active"
+            );
+
+            clearAuthMessages();
+
+            const heading =
+                document.querySelector(
+                    ".auth-heading h2"
+                );
+
+            const subtitle =
+                document.getElementById(
+                    "authSubtitle"
+                );
+
+            if (heading) {
+                heading.textContent =
+                    "Create your space.";
+            }
+
+            if (subtitle) {
+                subtitle.textContent =
+                    "Create a customer account and start exploring K@si.";
+            }
+
+        }
+
+
+        /* =========================================================
+           PASSWORD VISIBILITY
+        ========================================================== */
+
+
+        function initializePasswordToggles() {
+
+            const toggles =
+                document.querySelectorAll(
+                    ".password-toggle"
+                );
+
+
+            toggles.forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            const targetId =
+                                button.getAttribute(
+                                    "data-target"
+                                );
+
+                            const input =
+                                document.getElementById(
+                                    targetId
+                                );
+
+                            if (!input) {
+                                return;
+                            }
+
+                            const icon =
+                                button.querySelector(
+                                    "i"
+                                );
+
+                            if (
+                                input.type ===
+                                "password"
+                            ) {
+
+                                input.type =
+                                    "text";
+
+                                button.setAttribute(
+                                    "aria-label",
+                                    "Hide password"
+                                );
+
+                                if (icon) {
+
+                                    icon.className =
+                                        "bx bx-hide";
+
+                                }
+
+                            } else {
+
+                                input.type =
+                                    "password";
+
+                                button.setAttribute(
+                                    "aria-label",
+                                    "Show password"
+                                );
+
+                                if (icon) {
+
+                                    icon.className =
+                                        "bx bx-show";
+
+                                }
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           ROLE NORMALIZATION
+        ========================================================== */
+
+
+        function normalizeRole(
+            value
+        ) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return "customer";
+
+            }
+
+
+            const role =
+                String(value)
+                    .trim()
+                    .toLowerCase()
+                    .replaceAll(
+                        "-",
+                        "_"
+                    )
+                    .replaceAll(
+                        " ",
+                        "_"
+                    );
+
+
+            if (
+                role === "admin" ||
+                role === "administrator"
+            ) {
+
+                return "admin";
+
+            }
+
+
+            if (
+                role === "salon_owner" ||
+                role === "salonowner" ||
+                role === "owner" ||
+                role === "salon__owner"
+            ) {
+
+                return "salon_owner";
+
+            }
+
+
+            if (
+                role === "client" ||
+                role === "customer" ||
+                role === "user"
+            ) {
+
+                return "customer";
+
+            }
+
+
+            return "customer";
+
+        }
+
+
+        function friendlyRole(
+            role
+        ) {
+
+            const normalized =
+                normalizeRole(
+                    role
+                );
+
+
+            if (
+                normalized === "admin"
+            ) {
+
+                return "Admin";
+
+            }
+
+
+            if (
+                normalized === "salon_owner"
+            ) {
+
+                return "Salon Owner";
+
+            }
+
+
+            return "Customer";
+
+        }
+
+
+        function getRoleDestination(
+            role
+        ) {
+
+            const normalized =
+                normalizeRole(
+                    role
+                );
+
+
+            if (
+                normalized === "admin"
+            ) {
+
+                return "admin.html";
+
+            }
+
+
+            if (
+                normalized === "salon_owner"
+            ) {
+
+                return "owners.html";
+
+            }
+
+
+            return "salons.html";
+
+        }
+
+
+        /* =========================================================
+           NAME HELPERS
+        ========================================================== */
+
+
+        function getFirstName(
+            name
+        ) {
+
+            const safeName =
+                String(
+                    name || ""
+                )
+                    .trim();
+
+
+            if (!safeName) {
+                return "there";
+            }
+
+
+            return safeName
+                .split(/\s+/)[0];
+
+        }
+
+
+        function getProfileName(
+            user,
+            profile
+        ) {
+
+            const possibleNames = [
+
+                profile?.name,
+
+                profile?.fullName,
+
+                profile?.displayName,
+
+                user?.displayName
+
+            ];
+
+
+            for (
+                const value
+                of possibleNames
+            ) {
+
+                if (
+                    value &&
+                    String(value).trim()
+                ) {
+
+                    return String(value).trim();
+
+                }
+
+            }
+
+
+            if (user?.email) {
+
+                return user.email
+                    .split("@")[0];
+
+            }
+
+
+            return "K@si User";
+
+        }
+
+
+        /* =========================================================
+           USER PROFILE
+        ========================================================== */
+
+
+        async function getUserProfile(
+            user
+        ) {
+
+            if (
+                !user ||
+                !db
+            ) {
+
+                return null;
+
+            }
+
+
+            try {
+
+                const snapshot =
+                    await db
+                        .collection("users")
+                        .doc(user.uid)
+                        .get();
+
+
+                if (!snapshot.exists) {
+
+                    return null;
+
+                }
+
+
+                return snapshot.data() || null;
+
+            } catch (error) {
+
+                console.error(
+                    "Could not load user profile:",
+                    error
+                );
+
+                return null;
+
+            }
+
+        }
+
+
+        function getVerifiedRoleFromProfile(
+            profile
+        ) {
+
+            if (!profile) {
+                return "customer";
+            }
+
+
+            const roleKeys = [
+
+                "role",
+                "Role",
+                "userRole",
+                "user_type",
+                "accountType"
+
+            ];
+
+
+            for (
+                const key
+                of roleKeys
+            ) {
+
+                if (
+                    profile[key] !==
+                    undefined &&
+                    profile[key] !==
+                    null
+                ) {
+
+                    const normalized =
+                        normalizeRole(
+                            profile[key]
+                        );
+
+
+                    if (
+                        normalized !==
+                        "customer" ||
+                        String(
+                            profile[key]
+                        ).trim().toLowerCase() ===
+                        "customer"
+                    ) {
+
+                        return normalized;
+
+                    }
+
+                }
+
+            }
+
+
+            return "customer";
+
+        }
+
+
+        async function getVerifiedRole(
+            user
+        ) {
+
+            const profile =
+                await getUserProfile(
+                    user
+                );
+
+            return getVerifiedRoleFromProfile(
+                profile
+            );
+
+        }
+
+
+        /* =========================================================
+           ACCOUNT UI
+        ========================================================== */
+
+
+        function setAccountUI(
+            role
+        ) {
+
+            const normalized =
+                normalizeRole(
+                    role
+                );
+
+
+            currentRole =
+                normalized;
+
+
+            if (
+                normalized ===
+                "customer"
+            ) {
+
+                quickAccountBtn.classList.add(
+                    "locked"
+                );
+
+                quickAccountBtn.disabled =
+                    true;
+
+                quickAccountIcon.innerHTML =
+                    `<i class="bx bx-lock-alt"></i>`;
+
+                quickAccountTitle.textContent =
+                    "My Account";
+
+                quickAccountText.textContent =
+                    "Customer account portal is locked.";
+
+                quickAccountArrow.className =
+                    "bx bx-lock-alt quick-arrow";
+
+
+                bottomAccountBtn.classList.add(
+                    "locked"
+                );
+
+                bottomAccountBtn.disabled =
+                    true;
+
+                bottomAccountIcon.className =
+                    "bx bx-lock-alt";
+
+                bottomAccountText.textContent =
+                    "Account";
+
+
+                profileRole.innerHTML =
+                    `
+                        <i class="bx bx-user"></i>
+                        Customer
+                    `;
+
+
+                accountInfo.textContent =
+                    "Customer account controls are currently kept locked from the portal button.";
+
+                return;
+
+            }
+
+
+            if (
+                normalized ===
+                "salon_owner"
+            ) {
+
+                quickAccountBtn.classList.remove(
+                    "locked"
+                );
+
+                quickAccountBtn.disabled =
+                    false;
+
+                quickAccountIcon.innerHTML =
+                    `<i class="bx bx-store"></i>`;
+
+                quickAccountTitle.textContent =
+                    "Owner Account";
+
+                quickAccountText.textContent =
+                    "Open your salon owner portal.";
+
+                quickAccountArrow.className =
+                    "bx bx-right-arrow-alt quick-arrow";
+
+
+                bottomAccountBtn.classList.remove(
+                    "locked"
+                );
+
+                bottomAccountBtn.disabled =
+                    false;
+
+                bottomAccountIcon.className =
+                    "bx bx-store";
+
+                bottomAccountText.textContent =
+                    "Owner";
+
+
+                profileRole.innerHTML =
+                    `
+                        <i class="bx bx-store"></i>
+                        Salon Owner
+                    `;
+
+
+                accountInfo.textContent =
+                    "Your verified salon-owner account can open the owner portal.";
+
+                return;
+
+            }
+
+
+            if (
+                normalized ===
+                "admin"
+            ) {
+
+                quickAccountBtn.classList.remove(
+                    "locked"
+                );
+
+                quickAccountBtn.disabled =
+                    false;
+
+                quickAccountIcon.innerHTML =
+                    `<i class="bx bx-shield-quarter"></i>`;
+
+                quickAccountTitle.textContent =
+                    "Admin Account";
+
+                quickAccountText.textContent =
+                    "Open the K@si admin control centre.";
+
+                quickAccountArrow.className =
+                    "bx bx-right-arrow-alt quick-arrow";
+
+
+                bottomAccountBtn.classList.remove(
+                    "locked"
+                );
+
+                bottomAccountBtn.disabled =
+                    false;
+
+                bottomAccountIcon.className =
+                    "bx bx-shield-quarter";
+
+                bottomAccountText.textContent =
+                    "Admin";
+
+
+                profileRole.innerHTML =
+                    `
+                        <i class="bx bx-shield-quarter"></i>
+                        Admin
+                    `;
+
+
+                accountInfo.textContent =
+                    "Your verified admin account can open the K@si admin control centre.";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           ACCOUNT REDIRECT
+        ========================================================== */
+
+
+        async function openRoleAccount() {
+
+            if (!currentUser) {
+
+                showToast(
+                    "Please sign in first.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            showLoading();
+
+
+            try {
+
+                const profile =
+                    await getUserProfile(
+                        currentUser
+                    );
+
+
+                const verifiedRole =
+                    getVerifiedRoleFromProfile(
+                        profile
+                    );
+
+
+                currentProfile =
+                    profile;
+
+                currentRole =
+                    verifiedRole;
+
+
+                setSessionValue(
+                    "userRole",
+                    verifiedRole
+                );
+
+                setSessionValue(
+                    "justLoggedIn",
+                    "true"
+                );
+
+
+                if (
+                    verifiedRole ===
+                    "admin"
+                ) {
+
+                    setSessionValue(
+                        "adminUid",
+                        currentUser.uid
+                    );
+
+                    removeSessionValue(
+                        "ownerUid"
+                    );
+
+                    removeSessionValue(
+                        "ownerSalonId"
+                    );
+
+                }
+
+
+                if (
+                    verifiedRole ===
+                    "salon_owner"
+                ) {
+
+                    setSessionValue(
+                        "ownerUid",
+                        currentUser.uid
+                    );
+
+
+                    if (
+                        profile &&
+                        profile.salonId
+                    ) {
+
+                        setSessionValue(
+                            "ownerSalonId",
+                            String(
+                                profile.salonId
+                            )
+                        );
+
+                    }
+
+
+                    removeSessionValue(
+                        "adminUid"
+                    );
+
+                }
+
+
+                if (
+                    verifiedRole ===
+                    "customer"
+                ) {
+
+                    hideLoading();
+
+                    showToast(
+                        "Customer account controls are currently unavailable.",
+                        "info"
+                    );
+
+                    return;
+
+                }
+
+
+                const destination =
+                    getRoleDestination(
+                        verifiedRole
+                    );
+
+
+                showRedirect(
+                    `Opening ${friendlyRole(
+                        verifiedRole
+                    )}`,
+                    "Your verified account role is being sent to the correct K@si portal..."
+                );
+
+
+                window.setTimeout(
+                    function () {
+
+                        window.location.href =
+                            destination;
+
+                    },
+                    450
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Account redirect failed:",
+                    error
+                );
+
+                hideLoading();
+
+                showToast(
+                    "Could not verify your account role.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           ROLE-AWARE HOME COPY
+        ========================================================== */
+
+
+        function updateRoleAwareHome(
+            role
+        ) {
+
+            const normalized =
+                normalizeRole(
+                    role
+                );
+
+
+            if (
+                normalized ===
+                "admin"
+            ) {
+
+                welcomeCopy.textContent =
+                    "Your K@si admin account is connected. Use the Account portal whenever you need the admin control centre.";
+
+                heroRoleLabel.textContent =
+                    "Verified admin account";
+
+                heroRolePill.textContent =
+                    "ADMIN";
+
+                return;
+
+            }
+
+
+            if (
+                normalized ===
+                "salon_owner"
+            ) {
+
+                welcomeCopy.textContent =
+                    "Your salon owner account is connected. Explore the marketplace from here, or open your owner portal from Account.";
+
+                heroRoleLabel.textContent =
+                    "Verified salon owner";
+
+                heroRolePill.textContent =
+                    "OWNER";
+
+                return;
+
+            }
+
+
+            welcomeCopy.textContent =
+                "Discover fresh styles, manage your bookings and find your next local grooming experience.";
+
+            heroRoleLabel.textContent =
+                "Verified customer";
+
+            heroRolePill.textContent =
+                "CUSTOMER";
+
+        }
+
+
+        /* =========================================================
+           AVATAR
+        ========================================================== */
+
+
+        function initials(
+            name
+        ) {
+
+            const parts =
+                String(
+                    name || "K"
+                )
+                    .trim()
+                    .split(/\s+/)
+                    .filter(Boolean);
+
+
+            if (!parts.length) {
+                return "K";
+            }
+
+
+            if (
+                parts.length ===
+                1
+            ) {
+
+                return parts[0]
+                    .slice(0, 1)
+                    .toUpperCase();
+
+            }
+
+
+            return (
+                parts[0].slice(0, 1) +
+                parts[parts.length - 1]
+                    .slice(0, 1)
+            )
+                .toUpperCase();
+
+        }
+
+
+        function renderAvatar(
+            element,
+            user,
+            name
+        ) {
+
+            if (!element) {
+                return;
+            }
+
+
+            const photoURL =
+                user?.photoURL;
+
+
+            if (photoURL) {
+
+                element.innerHTML =
+                    `
+                        <img
+                            src="${escapeHTML(photoURL)}"
+                            alt=""
+                            loading="lazy"
+                            onerror="this.remove()"
+                        >
+                    `;
+
+            } else {
+
+                element.textContent =
+                    initials(
+                        name
+                    );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           DATE HELPERS
+        ========================================================== */
+
+
+        function toDate(
+            value
+        ) {
+
+            if (!value) {
+                return null;
+            }
+
+
+            if (
+                value instanceof Date
+            ) {
+
+                return isNaN(
+                    value.getTime()
+                )
+                    ? null
+                    : value;
+
+            }
+
+
+            if (
+                value &&
+                typeof value.toDate ===
+                "function"
+            ) {
+
+                const result =
+                    value.toDate();
+
+                return isNaN(
+                    result.getTime()
+                )
+                    ? null
+                    : result;
+
+            }
+
+
+            if (
+                typeof value ===
+                "number"
+            ) {
+
+                const result =
+                    new Date(
+                        value
+                    );
+
+                return isNaN(
+                    result.getTime()
+                )
+                    ? null
+                    : result;
+
+            }
+
+
+            if (
+                value &&
+                typeof value ===
+                "object" &&
+                typeof value.seconds ===
+                "number"
+            ) {
+
+                const result =
+                    new Date(
+                        value.seconds * 1000
+                    );
+
+                return isNaN(
+                    result.getTime()
+                )
+                    ? null
+                    : result;
+
+            }
+
+
+            const stringValue =
+                String(
+                    value
+                ).trim();
+
+
+            if (!stringValue) {
+                return null;
+            }
+
+
+            const direct =
+                new Date(
+                    stringValue
+                );
+
+
+            if (
+                !isNaN(
+                    direct.getTime()
+                )
+            ) {
+
+                return direct;
+
+            }
+
+
+            return null;
+
+        }
+
+
+        function formatBookingDate(
+            value
+        ) {
+
+            const date =
+                toDate(
+                    value
+                );
+
+
+            if (!date) {
+
+                if (
+                    typeof value ===
+                    "string" &&
+                    value.trim()
+                ) {
+
+                    return value.trim();
+
+                }
+
+                return "Not set";
+
+            }
+
+
+            return new Intl.DateTimeFormat(
+                "en-ZA",
+                {
+                    day:
+                        "2-digit",
+                    month:
+                        "short",
+                    year:
+                        "numeric"
+                }
+            )
+                .format(
+                    date
+                );
+
+        }
+
+
+        function formatBookingTime(
+            value
+        ) {
+
+            if (!value) {
+                return "Not set";
+            }
+
+
+            const stringValue =
+                String(value).trim();
+
+
+            if (
+                /^\d{1,2}:\d{2}/.test(
+                    stringValue
+                )
+            ) {
+
+                return stringValue;
+
+            }
+
+
+            const date =
+                toDate(
+                    value
+                );
+
+
+            if (!date) {
+                return stringValue || "Not set";
+            }
+
+
+            return new Intl.DateTimeFormat(
+                "en-ZA",
+                {
+                    hour:
+                        "2-digit",
+                    minute:
+                        "2-digit"
+                }
+            )
+                .format(
+                    date
+                );
+
+        }
+
+
+        function bookingSortTimestamp(
+            booking
+        ) {
+
+            const dateValue =
+                booking.date ??
+                booking.bookingDate ??
+                booking.appointmentDate ??
+                null;
+
+
+            const date =
+                toDate(
+                    dateValue
+                );
+
+
+            let timestamp =
+                date
+                    ? date.getTime()
+                    : Number.MAX_SAFE_INTEGER;
+
+
+            const timeValue =
+                booking.time ??
+                booking.bookingTime ??
+                booking.appointmentTime ??
+                "";
+
+
+            if (
+                date &&
+                /^\d{1,2}:\d{2}$/.test(
+                    String(timeValue)
+                        .trim()
+                )
+            ) {
+
+                const parts =
+                    String(
+                        timeValue
+                    )
+                        .trim()
+                        .split(":");
+
+
+                const hours =
+                    Number(
+                        parts[0]
+                    );
+
+
+                const minutes =
+                    Number(
+                        parts[1]
+                    );
+
+
+                if (
+                    Number.isFinite(
+                        hours
+                    ) &&
+                    Number.isFinite(
+                        minutes
+                    )
+                ) {
+
+                    const copy =
+                        new Date(
+                            date.getTime()
+                        );
+
+                    copy.setHours(
+                        hours,
+                        minutes,
+                        0,
+                        0
+                    );
+
+                    timestamp =
+                        copy.getTime();
+
+                }
+
+            }
+
+
+            return timestamp;
+
+        }
+
+
+        /* =========================================================
+           PRICE HELPER
+        ========================================================== */
+
+
+        function formatPrice(
+            value
+        ) {
+
+            if (
+                value ===
+                undefined ||
+                value ===
+                null ||
+                value ===
+                ""
+            ) {
+
+                return "Not set";
+
+            }
+
+
+            if (
+                typeof value ===
+                "number" &&
+                Number.isFinite(value)
+            ) {
+
+                return `R${value.toLocaleString(
+                    "en-ZA"
+                )}`;
+
+            }
+
+
+            const numeric =
+                Number(
+                    String(value)
+                        .replace(
+                            /[^\d.-]/g,
+                            ""
+                        )
+                );
+
+
+            if (
+                Number.isFinite(
+                    numeric
+                ) &&
+                String(value).trim() !== ""
+            ) {
+
+                return `R${numeric.toLocaleString(
+                    "en-ZA"
+                )}`;
+
+            }
+
+
+            const cleaned =
+                String(value)
+                    .trim();
+
+
+            return cleaned
+                ? (
+                    cleaned
+                        .startsWith("R")
+                        ? cleaned
+                        : `R${cleaned}`
+                )
+                : "Not set";
+
+        }
+
+
+        /* =========================================================
+           BOOKING STATUS
+        ========================================================== */
+
+
+        function normalizeBookingStatus(
+            status
+        ) {
+
+            const value =
+                String(
+                    status || "pending"
+                )
+                    .trim()
+                    .toLowerCase();
+
+
+            if (
+                [
+                    "pending",
+                    "confirmed",
+                    "completed",
+                    "cancelled",
+                    "canceled"
+                ].includes(
+                    value
+                )
+            ) {
+
+                return value;
+
+            }
+
+
+            return "default";
+
+        }
+
+
+        function friendlyBookingStatus(
+            status
+        ) {
+
+            const value =
+                normalizeBookingStatus(
+                    status
+                );
+
+
+            if (
+                value ===
+                "canceled"
+            ) {
+
+                return "Cancelled";
+
+            }
+
+
+            if (
+                value ===
+                "cancelled"
+            ) {
+
+                return "Cancelled";
+
+            }
+
+
+            return value
+                .charAt(0)
+                .toUpperCase() +
+                value.slice(1);
+
+        }
+
+
+        /* =========================================================
+           BOOKING VALUES
+        ========================================================== */
+
+
+        function getBookingService(
+            booking
+        ) {
+
+            const value =
+                booking.serviceName ??
+                booking.service ??
+                booking.serviceType ??
+                "Grooming Service";
+
+
+            if (
+                typeof value ===
+                "object" &&
+                value !== null
+            ) {
+
+                return (
+                    value.name ??
+                    value.title ??
+                    "Grooming Service"
+                );
+
+            }
+
+
+            return String(
+                value
+            );
+
+        }
+
+
+        function getBookingSalon(
+            booking
+        ) {
+
+            const value =
+                booking.salonName ??
+                booking.salon ??
+                booking.salonTitle ??
+                "K@si Salon";
+
+
+            if (
+                typeof value ===
+                "object" &&
+                value !== null
+            ) {
+
+                return (
+                    value.name ??
+                    "K@si Salon"
+                );
+
+            }
+
+
+            return String(
+                value
+            );
+
+        }
+
+
+        function getBookingPrice(
+            booking
+        ) {
+
+            const value =
+                booking.price ??
+                booking.servicePrice ??
+                booking.amount ??
+                booking.total ??
+                null;
+
+
+            if (
+                typeof value ===
+                "object" &&
+                value !== null
+            ) {
+
+                return (
+                    value.amount ??
+                    value.price ??
+                    null
+                );
+
+            }
+
+
+            return value;
+
+        }
+
+
+        /* =========================================================
+           RENDER BOOKINGS
+        ========================================================== */
+
+
+        function renderBookings(
+            bookings
+        ) {
+
+            bookingsCache =
+                Array.isArray(
+                    bookings
+                )
+                    ? bookings
+                    : [];
+
+
+            const sorted =
+                [...bookingsCache]
+                    .sort(
+                        function (a, b) {
+
+                            return (
+                                bookingSortTimestamp(
+                                    a
+                                ) -
+                                bookingSortTimestamp(
+                                    b
+                                )
+                            );
+
+                        }
+                    );
+
+
+            bookingCount.textContent =
+                String(
+                    sorted.length
+                );
+
+
+            if (
+                sorted.length ===
+                0
+            ) {
+
+                bookingSubtitle.textContent =
+                    "No bookings yet.";
+
+                bookingList.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <i class="bx bx-calendar-x"></i>
+
+                        <strong>
+                            No bookings yet
+                        </strong>
+
+                        <span>
+                            Your upcoming and past appointments will appear here.
+                        </span>
+
+                        <a
+                            href="salons.html"
+                            class="empty-cta"
+                        >
+                            <i class="bx bx-store-alt"></i>
+                            Explore Salons
+                        </a>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const upcoming =
+                sorted.filter(
+                    function (booking) {
+
+                        const status =
+                            normalizeBookingStatus(
+                                booking.status
+                            );
+
+                        return (
+                            status !==
+                                "cancelled" &&
+                            status !==
+                                "canceled" &&
+                            status !==
+                                "completed"
+                        );
+
+                    }
+                );
+
+
+            bookingSubtitle.textContent =
+                upcoming.length
+                    ? `${upcoming.length} active booking${
+                        upcoming.length === 1
+                            ? ""
+                            : "s"
+                    }`
+                    : `${sorted.length} booking${
+                        sorted.length === 1
+                            ? ""
+                            : "s"
+                    }`;
+
+
+            bookingList.innerHTML =
+                sorted
+                    .map(
+                        function (
+                            booking,
+                            index
+                        ) {
+
+                            const service =
+                                getBookingService(
+                                    booking
+                                );
+
+
+                            const salon =
+                                getBookingSalon(
+                                    booking
+                                );
+
+
+                            const date =
+                                booking.date ??
+                                booking.bookingDate ??
+                                booking.appointmentDate ??
+                                null;
+
+
+                            const time =
+                                booking.time ??
+                                booking.bookingTime ??
+                                booking.appointmentTime ??
+                                null;
+
+
+                            const price =
+                                getBookingPrice(
+                                    booking
+                                );
+
+
+                            const status =
+                                normalizeBookingStatus(
+                                    booking.status
+                                );
+
+
+                            const statusClass =
+                                status ===
+                                    "default"
+                                    ? "status-default"
+                                    : `status-${status}`;
+
+
+                            return `
+
+                                <article
+                                    class="booking-card"
+                                    data-booking-index="${index}"
+                                >
+
+                                    <div class="booking-main">
+
+                                        <div class="booking-service">
+
+                                            <h4>
+                                                ${escapeHTML(
+                                                    service
+                                                )}
+                                            </h4>
+
+                                            <p>
+                                                ${escapeHTML(
+                                                    salon
+                                                )}
+                                            </p>
+
+                                        </div>
+
+                                        <div
+                                            class="status-pill ${statusClass}"
+                                        >
+                                            ${escapeHTML(
+                                                friendlyBookingStatus(
+                                                    status
+                                                )
+                                            )}
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="booking-meta">
+
+                                        <div class="booking-meta-item">
+
+                                            <span>
+                                                Date
+                                            </span>
+
+                                            <strong>
+                                                ${escapeHTML(
+                                                    formatBookingDate(
+                                                        date
+                                                    )
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="booking-meta-item">
+
+                                            <span>
+                                                Time
+                                            </span>
+
+                                            <strong>
+                                                ${escapeHTML(
+                                                    formatBookingTime(
+                                                        time
+                                                    )
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="booking-meta-item">
+
+                                            <span>
+                                                Price
+                                            </span>
+
+                                            <strong class="booking-price">
+                                                ${escapeHTML(
+                                                    formatPrice(
+                                                        price
+                                                    )
+                                                )}
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            `;
+
+                        }
+                    )
+                    .join("");
+
+        }
+
+
+        /* =========================================================
+           FETCH USER BOOKINGS
+        ========================================================== */
+
+
+        async function fetchUserBookings(
+            userId
+        ) {
+
+            if (
+                !db ||
+                !userId
+            ) {
+
+                renderBookings(
+                    []
+                );
+
+                return;
+
+            }
+
+
+            bookingSubtitle.textContent =
+                "Loading your booking activity...";
+
+
+            try {
+
+                const snapshot =
+                    await db
+                        .collection("bookings")
+                        .where(
+                            "userId",
+                            "==",
+                            userId
+                        )
+                        .get();
+
+
+                const bookings =
+                    snapshot.docs.map(
+                        function (doc) {
+
+                            return {
+
+                                id:
+                                    doc.id,
+
+                                ...(
+                                    doc.data() || {}
+                                )
+
+                            };
+
+                        }
+                    );
+
+
+                renderBookings(
+                    bookings
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Booking query failed:",
+                    error
+                );
+
+
+                bookingCount.textContent =
+                    "0";
+
+                bookingSubtitle.textContent =
+                    "Could not load bookings.";
+
+
+                bookingList.innerHTML = `
+
+                    <div class="booking-error">
+
+                        <i class="bx bx-error-circle"></i>
+
+                        <strong>
+                            Bookings could not be loaded
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(
+                                firebaseErrorMessage(
+                                    error
+                                )
+                            )}
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           LOAD USER
+        ========================================================== */
+
+
+        async function loadUser(
+            user
+        ) {
+
+            if (!user) {
+                return;
+            }
+
+
+            currentUser =
+                user;
+
+
+            const profile =
+                await getUserProfile(
+                    user
+                );
+
+
+            currentProfile =
+                profile;
+
+
+            const verifiedRole =
+                getVerifiedRoleFromProfile(
+                    profile
+                );
+
+
+            currentRole =
+                verifiedRole;
+
+
+            const profileNameValue =
+                getProfileName(
+                    user,
+                    profile
+                );
+
+
+            const firstName =
+                getFirstName(
+                    profileNameValue
+                );
+
+
+            welcomeName.textContent =
+                firstName;
+
+
+            profileName.textContent =
+                profileNameValue;
+
+
+            profileEmail.textContent =
+                user.email ||
+                profile?.email ||
+                "Email unavailable";
+
+
+            heroEmailLabel.textContent =
+                user.email ||
+                profile?.email ||
+                "Connected account";
+
+
+            updateRoleAwareHome(
+                verifiedRole
+            );
+
+
+            renderAvatar(
+                heroAvatar,
+                user,
+                profileNameValue
+            );
+
+
+            renderAvatar(
+                profileAvatar,
+                user,
+                profileNameValue
+            );
+
+
+            setAccountUI(
+                verifiedRole
+            );
+
+
+            if (
+                profile?.salonId &&
+                verifiedRole ===
+                "salon_owner"
+            ) {
+
+                setSessionValue(
+                    "ownerSalonId",
+                    String(
+                        profile.salonId
+                    )
+                );
+
+            }
+
+
+            if (
+                verifiedRole ===
+                "salon_owner"
+            ) {
+
+                setSessionValue(
+                    "ownerUid",
+                    user.uid
+                );
+
+            }
+
+
+            if (
+                verifiedRole ===
+                "admin"
+            ) {
+
+                setSessionValue(
+                    "adminUid",
+                    user.uid
+                );
+
+            }
+
+
+            await fetchUserBookings(
+                user.uid
+            );
+
+
+            updateEliteStyleCount();
+
+        }
+
+
+        /* =========================================================
+           LOGIN
+        ========================================================== */
+
+
+        async function handleLogin(
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            clearAuthMessages();
+
+
+            if (!auth) {
+
+                setFormMessage(
+                    loginMessage,
+                    "Firebase is not available right now."
+                );
+
+                return;
+
+            }
+
+
+            const email =
+                String(
+                    loginEmail.value
+                )
+                    .trim()
+                    .toLowerCase();
+
+
+            const password =
+                String(
+                    loginPassword.value
+                );
+
+
+            const selectedRole =
+                normalizeRole(
+                    loginRole.value
+                );
+
+
+            if (!email) {
+
+                setFormMessage(
+                    loginMessage,
+                    "Please enter your email address."
+                );
+
+                loginEmail.focus();
+
+                return;
+
+            }
+
+
+            if (!password) {
+
+                setFormMessage(
+                    loginMessage,
+                    "Please enter your password."
+                );
+
+                loginPassword.focus();
+
+                return;
+
+            }
+
+
+            loginBtn.disabled =
+                true;
+
+
+            loginBtn.innerHTML = `
+
+                <i class="bx bx-loader-alt bx-spin"></i>
+                Signing In...
+
+            `;
+
+
+            try {
+
+                const credential =
+                    await auth.signInWithEmailAndPassword(
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    credential.user;
+
+
+                const profile =
+                    await getUserProfile(
+                        user
+                    );
+
+
+                const verifiedRole =
+                    getVerifiedRoleFromProfile(
+                        profile
+                    );
+
+
+                currentProfile =
+                    profile;
+
+
+                currentRole =
+                    verifiedRole;
+
+
+                setSessionValue(
+                    "userRole",
+                    verifiedRole
+                );
+
+                setSessionValue(
+                    "justLoggedIn",
+                    "true"
+                );
+
+
+                if (
+                    verifiedRole ===
+                    "admin"
+                ) {
+
+                    setSessionValue(
+                        "adminUid",
+                        user.uid
+                    );
+
+                }
+
+
+                if (
+                    verifiedRole ===
+                    "salon_owner"
+                ) {
+
+                    setSessionValue(
+                        "ownerUid",
+                        user.uid
+                    );
+
+
+                    if (
+                        profile?.salonId
+                    ) {
+
+                        setSessionValue(
+                            "ownerSalonId",
+                            String(
+                                profile.salonId
+                            )
+                        );
+
+                    }
+
+                }
+
+
+                if (
+                    selectedRole !==
+                    verifiedRole
+                ) {
+
+                    showToast(
+                        `Your verified account role is ${friendlyRole(
+                            verifiedRole
+                        )}. Opening that portal.`,
+                        "info",
+                        3800
+                    );
+
+                } else {
+
+                    showToast(
+                        "Signed in successfully.",
+                        "success"
+                    );
+
+                }
+
+
+                const destination =
+                    getRoleDestination(
+                        verifiedRole
+                    );
+
+
+                window.setTimeout(
+                    function () {
+
+                        window.location.href =
+                            destination;
+
+                    },
+                    500
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login failed:",
+                    error
+                );
+
+
+                setFormMessage(
+                    loginMessage,
+                    firebaseErrorMessage(
+                        error
+                    )
+                );
+
+            } finally {
+
+                loginBtn.disabled =
+                    false;
+
+                loginBtn.innerHTML = `
+
+                    <i class="bx bx-log-in-circle"></i>
+                    Sign In
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           SIGNUP
+        ========================================================== */
+
+
+        async function handleSignup(
+            event
+        ) {
+
+            event.preventDefault();
+
+
+            clearAuthMessages();
+
+
+            if (!auth || !db) {
+
+                setFormMessage(
+                    signupMessage,
+                    "Firebase is not available right now."
+                );
+
+                return;
+
+            }
+
+
+            const name =
+                String(
+                    signupName.value
+                )
+                    .trim()
+                    .replace(
+                        /\s+/g,
+                        " "
+                    );
+
+
+            const email =
+                String(
+                    signupEmail.value
+                )
+                    .trim()
+                    .toLowerCase();
+
+
+            const password =
+                String(
+                    signupPassword.value
+                );
+
+
+            const confirmPassword =
+                String(
+                    signupConfirm.value
+                );
+
+
+            if (
+                name.length <
+                2
+            ) {
+
+                setFormMessage(
+                    signupMessage,
+                    "Please enter your full name."
+                );
+
+                signupName.focus();
+
+                return;
+
+            }
+
+
+            if (!email) {
+
+                setFormMessage(
+                    signupMessage,
+                    "Please enter your email address."
+                );
+
+                signupEmail.focus();
+
+                return;
+
+            }
+
+
+            if (
+                password.length <
+                6
+            ) {
+
+                setFormMessage(
+                    signupMessage,
+                    "Password must contain at least 6 characters."
+                );
+
+                signupPassword.focus();
+
+                return;
+
+            }
+
+
+            if (
+                password !==
+                confirmPassword
+            ) {
+
+                setFormMessage(
+                    signupMessage,
+                    "Your passwords do not match."
+                );
+
+                signupConfirm.focus();
+
+                return;
+
+            }
+
+
+            signupBtn.disabled =
+                true;
+
+
+            signupBtn.innerHTML = `
+
+                <i class="bx bx-loader-alt bx-spin"></i>
+                Creating Account...
+
+            `;
+
+
+            try {
+
+                const credential =
+                    await auth.createUserWithEmailAndPassword(
+                        email,
+                        password
+                    );
+
+
+                const user =
+                    credential.user;
+
+
+                if (
+                    user &&
+                    typeof user.updateProfile ===
+                    "function"
+                ) {
+
+                    await user.updateProfile({
+
+                        displayName:
+                            name
+
+                    });
+
+                }
+
+
+                await db
+                    .collection("users")
+                    .doc(
+                        user.uid
+                    )
+                    .set(
+
+                        {
+
+                            name:
+                                name,
+
+                            displayName:
+                                name,
+
+                            fullName:
+                                name,
+
+                            email:
+                                email,
+
+                            role:
+                                "customer",
+
+                            createdAt:
+                                firebase.firestore.FieldValue
+                                    .serverTimestamp(),
+
+                            updatedAt:
+                                firebase.firestore.FieldValue
+                                    .serverTimestamp()
+
+                        },
+
+                        {
+                            merge:
+                                true
+                        }
+
+                    );
+
+
+                currentUser =
+                    user;
+
+
+                currentProfile = {
+
+                    name:
+                        name,
+
+                    displayName:
+                        name,
+
+                    fullName:
+                        name,
+
+                    email:
+                        email,
+
+                    role:
+                        "customer"
+
+                };
+
+
+                currentRole =
+                    "customer";
+
+
+                setSessionValue(
+                    "userRole",
+                    "customer"
+                );
+
+                setSessionValue(
+                    "justLoggedIn",
+                    "true"
+                );
+
+
+                showToast(
+                    "Account created successfully.",
+                    "success",
+                    3500
+                );
+
+
+                window.setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "salons.html";
+
+                    },
+                    550
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Signup failed:",
+                    error
+                );
+
+
+                setFormMessage(
+                    signupMessage,
+                    firebaseErrorMessage(
+                        error
+                    )
+                );
+
+            } finally {
+
+                signupBtn.disabled =
+                    false;
+
+                signupBtn.innerHTML = `
+
+                    <i class="bx bx-user-plus"></i>
+                    Create Customer Account
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================== */
+
+
+        async function handleLogout() {
+
+            if (!auth) {
+                return;
+            }
+
+
+            logoutBtn.disabled =
+                true;
+
+
+            logoutBtn.innerHTML = `
+
+                <i class="bx bx-loader-alt bx-spin"></i>
+                Signing Out...
+
+            `;
+
+
+            try {
+
+                await auth.signOut();
+
+
+                currentUser =
+                    null;
+
+                currentProfile =
+                    null;
+
+                currentRole =
+                    "customer";
+
+                bookingsCache =
+                    [];
+
+
+                clearKasiSession();
+
+
+                setAccountUI(
+                    "customer"
+                );
+
+
+                bookingCount.textContent =
+                    "0";
+
+                bookingSubtitle.textContent =
+                    "Sign in to load your bookings.";
+
+                bookingList.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <i class="bx bx-calendar-x"></i>
+
+                        <strong>
+                            Signed out
+                        </strong>
+
+                        <span>
+                            Sign in again to view your booking activity.
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                appShell.classList.remove(
+                    "visible"
+                );
+
+                authScreen.classList.remove(
+                    "hidden"
+                );
+
+                document.body.classList.remove(
+                    "app-mode"
+                );
+
+                document.body.classList.add(
+                    "auth-mode"
+                );
+
+
+                loginEmail.value =
+                    "";
+
+                loginPassword.value =
+                    "";
+
+
+                hideRedirect();
+
+                hideLoading();
+
+
+                showLogin();
+
+
+                showToast(
+                    "Signed out successfully.",
+                    "success"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Logout failed:",
+                    error
+                );
+
+
+                showToast(
+                    firebaseErrorMessage(
+                        error
+                    ),
+                    "error"
+                );
+
+            } finally {
+
+                logoutBtn.disabled =
+                    false;
+
+                logoutBtn.innerHTML = `
+
+                    <i class="bx bx-log-out"></i>
+                    Sign Out
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           BOOKINGS SCROLL
+        ========================================================== */
+
+
+        function scrollToBookings() {
+
+            const section =
+                document.getElementById(
+                    "bookings"
+                );
+
+
+            if (!section) {
+                return;
+            }
+
+
+            section.scrollIntoView({
+                behavior:
+                    "smooth",
+                block:
+                    "start"
+            });
+
+
+            window.setTimeout(
+                function () {
+
+                    if (
+                        currentRole ===
+                        "customer" &&
+                        bookingsCache.length ===
+                        0
+                    ) {
+
+                        showToast(
+                            "No bookings found for this account yet.",
+                            "info"
+                        );
+
+                    }
+
+                },
+                550
+            );
+
+        }
+
+
+        /* =========================================================
+           REFRESH
+        ========================================================== */
+
+
+        async function refreshHome() {
+
+            if (!currentUser) {
+
+                window.location.reload();
+
+                return;
+
+            }
+
+
+            refreshBtn.classList.add(
+                "spinning"
+            );
+
+            refreshBtn.disabled =
+                true;
+
+
+            try {
+
+                await loadUser(
+                    currentUser
+                );
+
+
+                showToast(
+                    "Home refreshed.",
+                    "success"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Refresh failed:",
+                    error
+                );
+
+
+                showToast(
+                    "Could not refresh everything.",
+                    "error"
+                );
+
+            } finally {
+
+                window.setTimeout(
+                    function () {
+
+                        refreshBtn.classList.remove(
+                            "spinning"
+                        );
+
+                        refreshBtn.disabled =
+                            false;
+
+                    },
+                    450
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           CAROUSEL
+        ========================================================== */
+
+
+        function getCarouselCards() {
+
+            if (!featuredCarousel) {
+                return [];
+            }
+
+
+            return Array.from(
+                featuredCarousel.querySelectorAll(
+                    ".feature-card"
+                )
+            );
+
+        }
+
+
+        function getCarouselGap() {
+
+            if (!featuredCarousel) {
+                return 0;
+            }
+
+
+            const styles =
+                window.getComputedStyle(
+                    featuredCarousel
+                );
+
+
+            const gap =
+                parseFloat(
+                    styles.columnGap ||
+                    styles.gap ||
+                    "0"
+                );
+
+
+            return Number.isFinite(
+                gap
+            )
+                ? gap
+                : 0;
+
+        }
+
+
+        function getCarouselIndexFromScroll() {
+
+            const cards =
+                getCarouselCards();
+
+
+            if (!cards.length) {
+                return 0;
+            }
+
+
+            const scrollLeft =
+                featuredCarousel.scrollLeft;
+
+
+            let closestIndex =
+                0;
+
+            let closestDistance =
+                Infinity;
+
+
+            cards.forEach(
+                function (
+                    card,
+                    index
+                ) {
+
+                    const distance =
+                        Math.abs(
+                            card.offsetLeft -
+                            scrollLeft
+                        );
+
+
+                    if (
+                        distance <
+                        closestDistance
+                    ) {
+
+                        closestDistance =
+                            distance;
+
+                        closestIndex =
+                            index;
+
+                    }
+
+                }
+            );
+
+
+            return Math.max(
+                0,
+                Math.min(
+                    closestIndex,
+                    cards.length - 1
+                )
+            );
+
+        }
+
+
+        function updateCarouselUI(
+            index
+        ) {
+
+            const cards =
+                getCarouselCards();
+
+
+            if (!cards.length) {
+                return;
+            }
+
+
+            carouselIndex =
+                Math.max(
+                    0,
+                    Math.min(
+                        index,
+                        cards.length - 1
+                    )
+                );
+
+
+            const dots =
+                carouselDots.querySelectorAll(
+                    ".carousel-dot"
+                );
+
+
+            dots.forEach(
+                function (
+                    dot,
+                    dotIndex
+                ) {
+
+                    const active =
+                        dotIndex ===
+                        carouselIndex;
+
+
+                    dot.classList.toggle(
+                        "active",
+                        active
+                    );
+
+                    dot.setAttribute(
+                        "aria-current",
+                        active
+                            ? "true"
+                            : "false"
+                    );
+
+                }
+            );
+
+
+            const percentage =
+                (
+                    (
+                        carouselIndex + 1
+                    ) /
+                    cards.length
+                ) *
+                100;
+
+
+            carouselProgress.style.width =
+                `${percentage}%`;
+
+
+            if (
+                carouselPrev
+            ) {
+
+                carouselPrev.disabled =
+                    carouselIndex <= 0;
+
+            }
+
+
+            if (
+                carouselNext
+            ) {
+
+                carouselNext.disabled =
+                    carouselIndex >=
+                    cards.length - 1;
+
+            }
+
+        }
+
+
+        function createCarouselDots() {
+
+            if (!carouselDots) {
+                return;
+            }
+
+
+            carouselDots.innerHTML =
+                "";
+
+
+            const cards =
+                getCarouselCards();
+
+
+            cards.forEach(
+                function (
+                    card,
+                    index
+                ) {
+
+                    const dot =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    dot.type =
+                        "button";
+
+
+                    dot.className =
+                        "carousel-dot";
+
+
+                    dot.setAttribute(
+                        "aria-label",
+                        `Go to featured look ${index + 1}`
+                    );
+
+
+                    dot.setAttribute(
+                        "aria-current",
+                        "false"
+                    );
+
+
+                    dot.addEventListener(
+                        "click",
+                        function () {
+
+                            scrollCarouselTo(
+                                index,
+                                true
+                            );
+
+                            pauseCarousel(
+                                true
+                            );
+
+                        }
+                    );
+
+
+                    carouselDots.appendChild(
+                        dot
+                    );
+
+                }
+            );
+
+
+            updateCarouselUI(
+                carouselIndex
+            );
+
+        }
+
+
+        function scrollCarouselTo(
+            index,
+            smooth = true
+        ) {
+
+            const cards =
+                getCarouselCards();
+
+
+            if (!cards.length) {
+                return;
+            }
+
+
+            const targetIndex =
+                Math.max(
+                    0,
+                    Math.min(
+                        index,
+                        cards.length - 1
+                    )
+                );
+
+
+            const card =
+                cards[
+                    targetIndex
+                ];
+
+
+            if (!card) {
+                return;
+            }
+
+
+            featuredCarousel.scrollTo({
+
+                left:
+                    card.offsetLeft,
+
+                behavior:
+                    smooth
+                        ? "smooth"
+                        : "auto"
+
+            });
+
+
+            updateCarouselUI(
+                targetIndex
+            );
+
+        }
+
+
+        function scrollCarouselNext() {
+
+            const cards =
+                getCarouselCards();
+
+
+            if (!cards.length) {
+                return;
+            }
+
+
+            const next =
+                carouselIndex >=
+                cards.length - 1
+                    ? 0
+                    : carouselIndex + 1;
+
+
+            scrollCarouselTo(
+                next,
+                true
+            );
+
+        }
+
+
+        function scrollCarouselPrevious() {
+
+            const cards =
+                getCarouselCards();
+
+
+            if (!cards.length) {
+                return;
+            }
+
+
+            const previous =
+                carouselIndex <= 0
+                    ? cards.length - 1
+                    : carouselIndex - 1;
+
+
+            scrollCarouselTo(
+                previous,
+                true
+            );
+
+        }
+
+
+        function stopCarouselTimer() {
+
+            if (carouselTimer) {
+
+                window.clearInterval(
+                    carouselTimer
+                );
+
+                carouselTimer =
+                    null;
+
+            }
+
+        }
+
+
+        function startCarouselTimer() {
+
+            stopCarouselTimer();
+
+
+            if (
+                window.matchMedia(
+                    "(prefers-reduced-motion: reduce)"
+                ).matches
+            ) {
+
+                return;
+
+            }
+
+
+            carouselTimer =
+                window.setInterval(
+                    function () {
+
+                        if (
+                            carouselInteractionPause
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            document.hidden
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        scrollCarouselNext();
+
+                    },
+                    4500
+                );
+
+        }
+
+
+        function pauseCarousel(
+            resumeAfter = false
+        ) {
+
+            carouselInteractionPause =
+                true;
+
+
+            stopCarouselTimer();
+
+
+            if (
+                carouselResumeTimer
+            ) {
+
+                window.clearTimeout(
+                    carouselResumeTimer
+                );
+
+                carouselResumeTimer =
+                    null;
+
+            }
+
+
+            if (resumeAfter) {
+
+                carouselResumeTimer =
+                    window.setTimeout(
+                        function () {
+
+                            carouselInteractionPause =
+                                false;
+
+                            startCarouselTimer();
+
+                        },
+                        3500
+                    );
+
+            }
+
+        }
+
+
+        function resumeCarousel() {
+
+            if (
+                carouselResumeTimer
+            ) {
+
+                window.clearTimeout(
+                    carouselResumeTimer
+                );
+
+                carouselResumeTimer =
+                    null;
+
+            }
+
+
+            carouselInteractionPause =
+                false;
+
+
+            startCarouselTimer();
+
+        }
+
+
+        function handleCarouselScroll() {
+
+            if (carouselRAF) {
+                return;
+            }
+
+
+            carouselRAF =
+                window.requestAnimationFrame(
+                    function () {
+
+                        carouselRAF =
+                            null;
+
+
+                        if (
+                            carouselDragging
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const index =
+                            getCarouselIndexFromScroll();
+
+
+                        updateCarouselUI(
+                            index
+                        );
+
+                    }
+                );
+
+        }
+
+
+        function initializeCarouselDrag() {
+
+            if (!featuredCarousel) {
+                return;
+            }
+
+
+            featuredCarousel.addEventListener(
+                "pointerdown",
+                function (
+                    event
+                ) {
+
+                    if (
+                        event.pointerType ===
+                        "mouse" &&
+                        event.button !==
+                        0
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    carouselDragging =
+                        true;
+
+                    carouselPointerId =
+                        event.pointerId;
+
+                    carouselStartX =
+                        event.clientX;
+
+                    carouselStartScrollLeft =
+                        featuredCarousel.scrollLeft;
+
+                    carouselDragMoved =
+                        false;
+
+
+                    featuredCarousel.classList.add(
+                        "dragging"
+                    );
+
+
+                    pauseCarousel(
+                        false
+                    );
+
+
+                    try {
+
+                        featuredCarousel.setPointerCapture(
+                            event.pointerId
+                        );
+
+                    } catch (error) {
+
+                        // Pointer capture is optional.
+
+                    }
+
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "pointermove",
+                function (
+                    event
+                ) {
+
+                    if (
+                        !carouselDragging ||
+                        event.pointerId !==
+                        carouselPointerId
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const deltaX =
+                        event.clientX -
+                        carouselStartX;
+
+
+                    if (
+                        Math.abs(deltaX) >
+                        6
+                    ) {
+
+                        carouselDragMoved =
+                            true;
+
+                    }
+
+
+                    if (
+                        carouselDragMoved
+                    ) {
+
+                        featuredCarousel.scrollLeft =
+                            carouselStartScrollLeft -
+                            deltaX;
+
+                    }
+
+                }
+            );
+
+
+            const finishDrag =
+                function (
+                    event
+                ) {
+
+                    if (
+                        !carouselDragging
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        event &&
+                        event.pointerId !==
+                        carouselPointerId
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    carouselDragging =
+                        false;
+
+
+                    featuredCarousel.classList.remove(
+                        "dragging"
+                    );
+
+
+                    try {
+
+                        if (
+                            event &&
+                            featuredCarousel.hasPointerCapture(
+                                event.pointerId
+                            )
+                        ) {
+
+                            featuredCarousel.releasePointerCapture(
+                                event.pointerId
+                            );
+
+                        }
+
+                    } catch (error) {
+
+                        // Ignore pointer-release errors.
+
+                    }
+
+
+                    const current =
+                        getCarouselIndexFromScroll();
+
+
+                    scrollCarouselTo(
+                        current,
+                        true
+                    );
+
+
+                    updateCarouselUI(
+                        current
+                    );
+
+
+                    pauseCarousel(
+                        true
+                    );
+
+                };
+
+
+            featuredCarousel.addEventListener(
+                "pointerup",
+                finishDrag
+            );
+
+
+            featuredCarousel.addEventListener(
+                "pointercancel",
+                finishDrag
+            );
+
+
+            featuredCarousel.addEventListener(
+                "lostpointercapture",
+                function () {
+
+                    if (
+                        carouselDragging
+                    ) {
+
+                        carouselDragging =
+                            false;
+
+                        featuredCarousel.classList.remove(
+                            "dragging"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "click",
+                function (
+                    event
+                ) {
+
+                    if (
+                        carouselDragMoved
+                    ) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+                        carouselDragMoved =
+                            false;
+
+                    }
+
+                },
+                true
+            );
+
+        }
+
+
+        function initializeCarousel() {
+
+            if (!featuredCarousel) {
+                return;
+            }
+
+
+            createCarouselDots();
+
+            initializeCarouselDrag();
+
+
+            featuredCarousel.addEventListener(
+                "scroll",
+                handleCarouselScroll,
+                {
+                    passive:
+                        true
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "mouseenter",
+                function () {
+
+                    pauseCarousel(
+                        false
+                    );
+
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "mouseleave",
+                function () {
+
+                    resumeCarousel();
+
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "focusin",
+                function () {
+
+                    pauseCarousel(
+                        false
+                    );
+
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "focusout",
+                function () {
+
+                    resumeCarousel();
+
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "wheel",
+                function () {
+
+                    pauseCarousel(
+                        true
+                    );
+
+                },
+                {
+                    passive:
+                        true
+                }
+            );
+
+
+            featuredCarousel.addEventListener(
+                "keydown",
+                function (
+                    event
+                ) {
+
+                    if (
+                        event.key ===
+                        "ArrowRight"
+                    ) {
+
+                        event.preventDefault();
+
+                        scrollCarouselNext();
+
+                        pauseCarousel(
+                            true
+                        );
+
+                    }
+
+
+                    if (
+                        event.key ===
+                        "ArrowLeft"
+                    ) {
+
+                        event.preventDefault();
+
+                        scrollCarouselPrevious();
+
+                        pauseCarousel(
+                            true
+                        );
+
+                    }
+
+                }
+            );
+
+
+            carouselPrev.addEventListener(
+                "click",
+                function () {
+
+                    scrollCarouselPrevious();
+
+                    pauseCarousel(
+                        true
+                    );
+
+                }
+            );
+
+
+            carouselNext.addEventListener(
+                "click",
+                function () {
+
+                    scrollCarouselNext();
+
+                    pauseCarousel(
+                        true
+                    );
+
+                }
+            );
+
+
+            document.addEventListener(
+                "visibilitychange",
+                function () {
+
+                    if (
+                        document.hidden
+                    ) {
+
+                        stopCarouselTimer();
+
+                    } else {
+
+                        startCarouselTimer();
+
+                    }
+
+                }
+            );
+
+
+            window.addEventListener(
+                "resize",
+                function () {
+
+                    const index =
+                        getCarouselIndexFromScroll();
+
+
+                    window.requestAnimationFrame(
+                        function () {
+
+                            scrollCarouselTo(
+                                index,
+                                false
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+            updateCarouselUI(
+                0
+            );
+
+
+            startCarouselTimer();
+
+        }
+
+
+        /* =========================================================
+           ELITE
+        ========================================================== */
+
+
+        function updateEliteStyleCount() {
+
+            const cards =
+                getCarouselCards();
+
+
+            if (
+                eliteStyleCount &&
+                cards.length
+            ) {
+
+                eliteStyleCount.textContent =
+                    String(
+                        cards.length
+                    ).padStart(
+                        2,
+                        "0"
+                    );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           ROLE BUTTON EVENTS
+        ========================================================== */
+
+
+        function initializeAccountButtons() {
+
+            document
+                .querySelectorAll(
+                    "[data-account-action]"
+                )
+                .forEach(
+                    function (
+                        button
+                    ) {
+
+                        button.addEventListener(
+                            "click",
+                            function () {
+
+                                if (
+                                    button.disabled
+                                ) {
+
+                                    showToast(
+                                        currentRole ===
+                                            "customer"
+                                            ? "Customer account controls are currently locked."
+                                            : "This account portal is unavailable.",
+                                        "info"
+                                    );
+
+                                    return;
+
+                                }
+
+
+                                openRoleAccount();
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================================
+           APP STATE
+        ========================================================== */
+
+
+        function showApp() {
+
+            authScreen.classList.add(
+                "hidden"
+            );
+
+            appShell.classList.add(
+                "visible"
+            );
+
+            document.body.classList.remove(
+                "auth-mode"
+            );
+
+            document.body.classList.add(
+                "app-mode"
+            );
+
+        }
+
+
+        function showAuth() {
+
+            appShell.classList.remove(
+                "visible"
+            );
+
+            authScreen.classList.remove(
+                "hidden"
+            );
+
+            document.body.classList.remove(
+                "app-mode"
+            );
+
+            document.body.classList.add(
+                "auth-mode"
+            );
+
+            showLogin();
+
+        }
+
+
+        /* =========================================================
+           AUTH STATE
+        ========================================================== */
+
+
+        function initializeAuthState() {
+
+            if (!auth) {
+
+                hideLoading();
+
+                showAuth();
+
+
+                setFormMessage(
+                    loginMessage,
+                    "Firebase could not be initialized. Please check your Firebase configuration."
+                );
+
+
+                return;
+
+            }
+
+
+            auth.onAuthStateChanged(
+                async function (
+                    user
+                ) {
+
+                    try {
+
+                        if (!user) {
+
+                            currentUser =
+                                null;
+
+                            currentProfile =
+                                null;
+
+                            currentRole =
+                                "customer";
+
+                            bookingsCache =
+                                [];
+
+
+                            clearKasiSession();
+
+
+                            showAuth();
+
+
+                            hideLoading();
+
+                            return;
+
+                        }
+
+
+                        currentUser =
+                            user;
+
+
+                        showApp();
+
+
+                        await loadUser(
+                            user
+                        );
+
+
+                        hideLoading();
+
+
+                        if (
+                            !appInitialized
+                        ) {
+
+                            appInitialized =
+                                true;
+
+                        }
+
+                    } catch (error) {
+
+                        console.error(
+                            "Auth state processing failed:",
+                            error
+                        );
+
+
+                        hideLoading();
+
+
+                        showApp();
+
+
+                        showToast(
+                            "Your account is signed in, but some home data could not be loaded.",
+                            "error",
+                            4500
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           EVENT LISTENERS
+        ========================================================== */
+
+
+        function initializeEvents() {
+
+            loginTab.addEventListener(
+                "click",
+                showLogin
+            );
+
+
+            signupTab.addEventListener(
+                "click",
+                showSignup
+            );
+
+
+            switchSignup.addEventListener(
+                "click",
+                function (
+                    event
+                ) {
+
+                    event.preventDefault();
+
+                    showSignup();
+
+                }
+            );
+
+
+            switchLogin.addEventListener(
+                "click",
+                function (
+                    event
+                ) {
+
+                    event.preventDefault();
+
+                    showLogin();
+
+                }
+            );
+
+
+            loginForm.addEventListener(
+                "submit",
+                handleLogin
+            );
+
+
+            signupForm.addEventListener(
+                "submit",
+                handleSignup
+            );
+
+
+            logoutBtn.addEventListener(
+                "click",
+                handleLogout
+            );
+
+
+            refreshBtn.addEventListener(
+                "click",
+                refreshHome
+            );
+
+
+            heroBookingsBtn.addEventListener(
+                "click",
+                scrollToBookings
+            );
+
+
+            quickBookingsBtn.addEventListener(
+                "click",
+                scrollToBookings
+            );
+
+
+            eliteBookingBtn.addEventListener(
+                "click",
+                scrollToBookings
+            );
+
+
+            initializePasswordToggles();
+
+            initializeAccountButtons();
+
+        }
+
+
+        /* =========================================================
+           INPUT VALIDATION HELPERS
+        ========================================================== */
+
+
+        function initializeInputBehavior() {
+
+            const inputs =
+                document.querySelectorAll(
+                    "input"
+                );
+
+
+            inputs.forEach(
+                function (
+                    input
+                ) {
+
+                    input.addEventListener(
+                        "input",
+                        function () {
+
+                            const form =
+                                input.closest(
+                                    "form"
+                                );
+
+
+                            if (!form) {
+                                return;
+                            }
+
+
+                            const message =
+                                form.id ===
+                                    "loginForm"
+                                    ? loginMessage
+                                    : signupMessage;
+
+
+                            if (
+                                message.classList.contains(
+                                    "show"
+                                )
+                            ) {
+
+                                setFormMessage(
+                                    message,
+                                    ""
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           KEYBOARD UX
+        ========================================================== */
+
+
+        function initializeKeyboardNavigation() {
+
+            document.addEventListener(
+                "keydown",
+                function (
+                    event
+                ) {
+
+                    if (
+                        event.key !==
+                        "Escape"
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        redirectOverlay.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        hideRedirect();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           INITIALIZE
+        ========================================================== */
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                initializeEvents();
+
+                initializeInputBehavior();
+
+                initializeKeyboardNavigation();
+
+                initializeCarousel();
+
+                updateEliteStyleCount();
+
+                initializeAuthState();
+
+            }
+        );
+
+
+        /* =========================================================
+           SERVICE WORKER
+        ========================================================== */
+
+
+        if (
+            "serviceWorker" in
+            navigator
+        ) {
+
+            window.addEventListener(
+                "load",
+                function () {
+
+                    navigator.serviceWorker
+                        .register(
+                            "service-worker.js"
+                        )
+                        .then(
+                            function () {
+
+                                console.log(
+                                    "K@si service worker registered."
+                                );
+
+                            }
+                        )
+                        .catch(
+                            function (
+                                error
+                            ) {
+
+                                console.log(
+                                    "Service worker not registered:",
+                                    error
+                                );
+
+                            }
+                        );
+
+                }
+            );
+
+        }
+
+    </script>
+
 </body>
-</html>
+    </html>
