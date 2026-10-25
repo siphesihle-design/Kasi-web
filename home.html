@@ -15,523 +15,644 @@
 
 <style>
 :root{
-    --bg:#07070d;
-    --panel:#11111b;
-    --panel2:#171725;
-    --line:rgba(255,255,255,.09);
-    --text:#f7f7fb;
-    --muted:#9696aa;
-    --blue:#008cff;
-    --purple:#8b5cf6;
-    --green:#25d366;
-    --gold:#d9b56d;
-    --red:#ff5b69;
-    --radius:20px;
-    --shadow:0 18px 55px rgba(0,0,0,.35);
+ --bg:#07070d;
+ --panel:#101019;
+ --panel2:#151521;
+ --line:rgba(255,255,255,.09);
+ --text:#f7f7fb;
+ --muted:#9a9aaa;
+ --purple:#8b5cf6;
+ --blue:#008cff;
+ --green:#25d366;
+ --gold:#d9b56d;
+ --danger:#ff647c;
+ --radius:22px;
+ --shadow:0 18px 55px rgba(0,0,0,.28);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{
-    margin:0;
-    min-height:100vh;
-    color:var(--text);
-    background:
-        radial-gradient(circle at 8% 0%,rgba(123,104,238,.15),transparent 28%),
-        radial-gradient(circle at 95% 15%,rgba(0,140,255,.10),transparent 26%),
-        var(--bg);
-    font-family:Inter,Arial,sans-serif;
+ margin:0;min-height:100vh;color:var(--text);
+ background:
+ radial-gradient(ellipse at 10% 0%,#7b68ee20,transparent 38%),
+ radial-gradient(ellipse at 95% 20%,#008cff12,transparent 32%),
+ var(--bg);
+ font-family:Inter,system-ui,sans-serif;
 }
 button,input,select{font:inherit}
-button{cursor:pointer}
+button,a{-webkit-tap-highlight-color:transparent}
+button{color:inherit;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
 a{color:inherit;text-decoration:none}
-.hidden{display:none!important}
-.container{width:min(1220px,calc(100% - 32px));margin:auto}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
+ outline:2px solid var(--purple);outline-offset:3px
+}
+.container{width:min(1200px,calc(100% - 32px));margin:auto}
 
-/* Header */
+/* TOP NAVIGATION */
 .topbar{
-    position:sticky;top:0;z-index:50;
-    background:rgba(7,7,13,.84);
-    backdrop-filter:blur(22px);
-    border-bottom:1px solid var(--line);
+ position:sticky;top:0;z-index:50;
+ background:#07070de8;
+ border-bottom:1px solid var(--line);
+ backdrop-filter:blur(20px);
 }
-.nav{
-    min-height:72px;display:flex;align-items:center;
-    justify-content:space-between;gap:18px;
+.topbar-inner{
+ min-height:76px;display:flex;align-items:center;
+ justify-content:space-between;gap:14px;
 }
-.brand{
-    display:flex;align-items:center;gap:10px;
-    font-weight:800;font-size:21px;letter-spacing:-.8px;
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand-icon{
+ width:43px;height:43px;border-radius:15px;
+ display:grid;place-items:center;
+ background:linear-gradient(135deg,var(--purple),var(--blue));
+ font-size:24px;
 }
-.brand-mark{
-    width:38px;height:38px;border-radius:13px;
-    display:grid;place-items:center;
-    background:linear-gradient(135deg,var(--purple),var(--blue));
-    box-shadow:0 8px 24px rgba(0,140,255,.2);
-    font-size:19px;
+.brand-name{font-size:19px;font-weight:800;letter-spacing:-.7px}
+.brand-name span{color:var(--purple)}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:3px}
+.top-actions{display:flex;align-items:center;gap:9px}
+.btn{
+ display:inline-flex;align-items:center;justify-content:center;gap:8px;
+ border:1px solid var(--line);border-radius:13px;
+ padding:11px 15px;background:#ffffff08;
+ font-weight:700;font-size:12px;transition:.2s;
 }
-.brand span span{color:#9d8aff}
-.nav-actions{display:flex;align-items:center;gap:10px}
-.nav-link,.nav-button{
-    border:1px solid var(--line);border-radius:12px;
-    padding:10px 15px;background:rgba(255,255,255,.04);
-    color:var(--text);font-size:13px;font-weight:700;
+.btn:hover:not(:disabled){
+ transform:translateY(-1px);border-color:#8b5cf688
 }
-.nav-link:hover,.nav-button:hover{border-color:rgba(139,92,246,.65)}
-.nav-button.primary{
-    border:0;background:linear-gradient(120deg,var(--purple),var(--blue));
-}
+.btn.primary{background:linear-gradient(135deg,var(--purple),#6351d8);border:0}
+.btn.blue{background:linear-gradient(135deg,#008cff,#2864dc);border:0}
+.btn.ghost{background:transparent}
+.btn i{font-size:17px}
 
-/* Hero */
-.hero{padding:58px 0 30px}
-.hero-grid{
-    display:grid;grid-template-columns:1.25fr .75fr;
-    align-items:center;gap:30px;
+/* HERO */
+.hero{padding:35px 0 23px}
+.hero-panel{
+ position:relative;overflow:hidden;
+ padding:clamp(24px,5vw,54px);
+ border:1px solid var(--line);border-radius:30px;
+ background:
+ radial-gradient(circle at 85% 10%,#8b5cf640,transparent 32%),
+ linear-gradient(125deg,#141321,#0d0d17 65%,#101a2a);
+ box-shadow:var(--shadow);
 }
 .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    color:#b9aaff;background:rgba(139,92,246,.12);
-    border:1px solid rgba(139,92,246,.25);
-    padding:8px 12px;border-radius:50px;
-    font-size:11px;font-weight:800;letter-spacing:1px;
-    text-transform:uppercase;
+ display:inline-flex;align-items:center;gap:8px;
+ color:#c5b6ff;background:#8b5cf61c;
+ border:1px solid #8b5cf638;
+ padding:8px 12px;border-radius:100px;
+ font-size:10px;font-weight:800;
+ text-transform:uppercase;letter-spacing:1.4px;
 }
-.eyebrow i{font-size:15px}
-.hero h1{
-    font-family:"Playfair Display",serif;
-    font-size:clamp(38px,6vw,68px);
-    line-height:1.04;letter-spacing:-1.5px;
-    margin:20px 0 14px;max-width:700px;
+h1,h2,h3,p{margin-top:0}
+h1{
+ font:800 clamp(36px,7vw,65px)/1.06 "Playfair Display",serif;
+ letter-spacing:-1.6px;margin:22px 0 15px;max-width:720px;
 }
-.hero h1 span{
-    background:linear-gradient(100deg,#b6a4ff,#5dbdff);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
+h1 span{
+ background:linear-gradient(100deg,#c4b5fd,#60a5fa);
+ -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.hero-copy{max-width:590px;color:var(--muted);font-size:15px;line-height:1.8}
-.hero-stats{display:flex;gap:25px;margin-top:27px;flex-wrap:wrap}
-.stat strong{display:block;font-size:22px}
-.stat small{color:var(--muted);font-size:11px}
-.hero-visual{
-    min-height:245px;border:1px solid var(--line);
-    border-radius:26px;padding:24px;overflow:hidden;
-    background:
-      radial-gradient(circle at 80% 10%,rgba(0,140,255,.22),transparent 40%),
-      radial-gradient(circle at 10% 90%,rgba(139,92,246,.25),transparent 50%),
-      linear-gradient(145deg,#171727,#0d0d17);
-    box-shadow:var(--shadow);position:relative;
-}
-.hero-visual:after{
-    content:"";position:absolute;width:180px;height:180px;
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:50%;right:-35px;bottom:-75px;
-    box-shadow:0 0 0 25px rgba(255,255,255,.025),0 0 0 50px rgba(255,255,255,.02);
-}
-.visual-icon{
-    width:55px;height:55px;border-radius:18px;
-    display:grid;place-items:center;font-size:27px;
-    background:linear-gradient(135deg,var(--purple),var(--blue));
-}
-.hero-visual h3{font-size:22px;margin:24px 0 8px}
-.hero-visual p{font-size:13px;line-height:1.7;color:var(--muted);max-width:280px}
-.live-pill{
-    display:inline-flex;align-items:center;gap:7px;
-    font-size:11px;color:#8df0b3;font-weight:700;
-}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+.hero p{color:#b0afc1;max-width:600px;line-height:1.8;font-size:14px;margin-bottom:25px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.hero-stats{display:flex;flex-wrap:wrap;gap:26px;margin-top:30px}
+.stat{display:flex;flex-direction:column;gap:5px}
+.stat strong{font-size:19px}
+.stat span{font-size:10px;color:var(--muted)}
 
-/* Notice */
-.auth-notice{
-    display:flex;align-items:center;gap:12px;
-    border:1px solid rgba(0,140,255,.2);
-    background:rgba(0,140,255,.07);
-    border-radius:15px;padding:14px 16px;margin:18px 0 25px;
-    color:#c6dfff;font-size:12px;line-height:1.6;
+/* SECTIONS */
+.section{padding:18px 0 25px}
+.section-head{
+ display:flex;align-items:flex-end;justify-content:space-between;
+ gap:16px;margin-bottom:18px;
 }
-.auth-notice i{font-size:22px;color:#64baff;flex-shrink:0}
-.auth-notice a{color:white;text-decoration:underline;font-weight:700}
+.section-head h2{font-size:22px;letter-spacing:-.6px;margin-bottom:6px}
+.section-head p{font-size:12px;color:var(--muted);margin-bottom:0;line-height:1.6}
+.live-status{display:flex;align-items:center;gap:7px;color:#9de8bd;font-size:10px;white-space:nowrap}
+.live-dot{
+ width:7px;height:7px;border-radius:50%;
+ background:var(--green);box-shadow:0 0 10px #25d36688;
+}
 
-/* Marketplace */
-.marketplace{padding:10px 0 80px}
-.section-heading{
-    display:flex;align-items:end;justify-content:space-between;
-    gap:15px;margin-bottom:18px;
-}
-.section-heading h2{font-size:24px;margin:0 0 6px;letter-spacing:-.7px}
-.section-heading p{margin:0;color:var(--muted);font-size:12px}
-.live-status{font-size:11px;color:var(--green);display:flex;gap:7px;align-items:center}
+/* FILTERS */
 .toolbar{
-    display:grid;grid-template-columns:1.5fr repeat(3,1fr);
-    gap:10px;margin-bottom:12px;
+ padding:15px;border:1px solid var(--line);
+ border-radius:20px;background:#101019d9;margin-bottom:16px;
 }
-.search-wrap{position:relative}
-.search-wrap i{
-    position:absolute;left:14px;top:50%;transform:translateY(-50%);
-    color:var(--muted);font-size:19px;
+.search-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+.searchbox{position:relative}
+.searchbox i{
+ position:absolute;left:14px;top:50%;
+ transform:translateY(-50%);color:var(--muted);
+ font-size:19px;pointer-events:none;
+}
+.searchbox input{
+ width:100%;height:47px;border:1px solid var(--line);
+ border-radius:13px;background:#090910;color:var(--text);
+ padding:0 14px 0 42px;
+}
+.filter-grid{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;margin-top:11px;
 }
 .control{
-    width:100%;height:48px;border:1px solid var(--line);
-    border-radius:13px;background:rgba(255,255,255,.045);
-    color:var(--text);outline:none;padding:0 13px;font-size:12px;
+ width:100%;min-width:0;height:43px;padding:0 11px;
+ background:#0a0a12;color:var(--text);
+ border:1px solid var(--line);border-radius:12px;font-size:11px;
 }
-.search-wrap .control{padding-left:42px}
-.control:focus{border-color:rgba(139,92,246,.8);box-shadow:0 0 0 3px rgba(139,92,246,.1)}
-.control option{background:#171725;color:white}
-.filter-row{
-    display:flex;justify-content:space-between;align-items:center;
-    gap:12px;flex-wrap:wrap;margin:13px 0 20px;
+.control option,.form-field select option{background:#101019;color:white}
+.filter-bottom{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:12px;margin-top:12px;flex-wrap:wrap;
 }
-.filter-left,.filter-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.result-count{font-size:11px;color:var(--muted)}
+.filter-buttons{display:flex;gap:8px;flex-wrap:wrap}
 .chip{
-    border:1px solid var(--line);background:rgba(255,255,255,.035);
-    color:#b8b8c8;padding:9px 12px;border-radius:50px;
-    font-size:11px;font-weight:700;
+ display:inline-flex;align-items:center;gap:6px;
+ padding:9px 12px;background:#ffffff07;
+ border:1px solid var(--line);border-radius:100px;
+ font-size:10px;font-weight:700;
 }
-.chip.active{background:rgba(139,92,246,.17);border-color:rgba(139,92,246,.55);color:#d8ceff}
-.chip i{font-size:14px;vertical-align:middle;margin-right:4px}
-.text-button{
-    border:0;background:none;color:#9bafff;font-size:11px;font-weight:700;padding:8px;
-}
-.results-line{
-    display:flex;align-items:center;justify-content:space-between;
-    margin:20px 0 14px;gap:10px;
-}
-.results-line strong{font-size:13px}
-.results-line span{font-size:11px;color:var(--muted)}
+.chip.active{background:#8b5cf622;border-color:#8b5cf677;color:#d8ccff}
+.chip i{font-size:14px}
+
+/* SALON CARDS */
 .salon-grid{
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;
 }
 .salon-card{
-    border:1px solid var(--line);border-radius:19px;
-    background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.018));
-    overflow:hidden;min-width:0;transition:.25s;
+ min-width:0;overflow:hidden;border-radius:22px;
+ background:linear-gradient(150deg,#151520,#0d0d15);
+ border:1px solid var(--line);
+ box-shadow:0 12px 35px #00000016;
+ transition:transform .22s,border-color .22s;
 }
-.salon-card:hover{transform:translateY(-4px);border-color:rgba(139,92,246,.42);box-shadow:var(--shadow)}
+.salon-card:hover{transform:translateY(-3px);border-color:#8b5cf655}
 .salon-image{
-    height:190px;position:relative;background:#171725;overflow:hidden;
+ height:205px;position:relative;background:#171722;overflow:hidden;
 }
-.salon-image img{width:100%;height:100%;object-fit:cover;display:block}
-.image-placeholder{
-    width:100%;height:100%;display:grid;place-items:center;
-    background:radial-gradient(circle at 20% 20%,rgba(139,92,246,.25),transparent 40%),#171725;
-    color:#b9aaff;font-size:46px;
+.salon-image img{
+ width:100%;height:100%;object-fit:cover;display:block;
+ transition:transform .35s;
 }
-.image-tag{
-    position:absolute;left:12px;top:12px;
-    background:rgba(7,7,13,.8);backdrop-filter:blur(10px);
-    padding:7px 10px;border-radius:30px;font-size:10px;font-weight:700;
+.salon-card:hover .salon-image img{transform:scale(1.035)}
+.image-shade{
+ position:absolute;inset:35% 0 0;
+ background:linear-gradient(transparent,#0009);pointer-events:none;
 }
-.favourite-btn{
-    position:absolute;right:12px;top:12px;width:35px;height:35px;
-    border:1px solid rgba(255,255,255,.2);border-radius:50%;
-    background:rgba(7,7,13,.75);color:white;font-size:18px;
-    display:grid;place-items:center;
+.image-badge{
+ position:absolute;top:12px;left:12px;
+ padding:7px 9px;border-radius:100px;
+ background:#090910e8;border:1px solid #ffffff20;
+ font-size:9px;font-weight:800;
 }
-.favourite-btn.active{color:#ff6684}
-.card-body{padding:16px}
-.card-title-row{display:flex;justify-content:space-between;gap:10px;align-items:start}
-.card-title-row h3{font-size:16px;margin:0 0 7px;line-height:1.3}
-.rating{white-space:nowrap;font-size:11px;color:var(--gold);font-weight:800}
-.location-line{color:var(--muted);font-size:11px;display:flex;align-items:center;gap:5px}
-.location-line i{color:#9d8aff;font-size:15px}
-.card-description{color:var(--muted);font-size:11px;line-height:1.6;margin:12px 0}
-.service-heading{
-    display:flex;justify-content:space-between;align-items:center;
-    color:#d9d9e6;font-size:10px;font-weight:800;
-    text-transform:uppercase;letter-spacing:.7px;margin:15px 0 9px;
+.favorite-btn{
+ position:absolute;top:10px;right:10px;
+ width:40px;height:40px;border-radius:13px;
+ display:grid;place-items:center;
+ background:#090910e8;border:1px solid #ffffff20;
 }
-.service-list{display:grid;gap:7px}
+.favorite-btn i{font-size:20px}
+.favorite-btn.saved{color:#ff7195}
+.image-rating{
+ position:absolute;right:12px;bottom:12px;
+ background:#090910e8;border:1px solid #ffffff20;
+ padding:7px 9px;border-radius:10px;font-size:11px;font-weight:800;
+}
+.image-rating i{color:var(--gold)}
+.salon-body{padding:17px}
+.salon-title-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.salon-title-row h3{font-size:17px;line-height:1.35;margin-bottom:7px;overflow-wrap:anywhere}
+.location{
+ display:flex;align-items:center;gap:5px;color:var(--muted);
+ font-size:11px;line-height:1.5;
+}
+.location i{color:#a99aff;font-size:15px}
+.opening{
+ margin-top:13px;display:flex;align-items:center;
+ gap:7px;font-size:10px;color:#c1c0d0;flex-wrap:wrap;
+}
+.opening i{color:var(--green);font-size:15px}
+.card-divider{height:1px;background:var(--line);margin:15px 0}
+.services-head{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:8px;margin-bottom:10px;
+}
+.services-head strong{font-size:11px}
+.services-head span{font-size:10px;color:var(--muted)}
+.service-list{display:flex;flex-direction:column;gap:8px}
 .service-row{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.045);
-    border-radius:10px;padding:9px 10px;font-size:11px;
+ display:flex;align-items:center;justify-content:space-between;
+ gap:8px;padding:10px;background:#ffffff04;
+ border:1px solid #ffffff08;border-radius:11px;
 }
-.service-row span:first-child{color:#d8d8e4}
-.service-price{color:#8bdcff;font-weight:800;white-space:nowrap}
-.no-services{font-size:11px;color:var(--muted);padding:9px 0}
-.card-footer{
-    border-top:1px solid var(--line);margin-top:14px;padding-top:13px;
-    display:flex;align-items:center;justify-content:space-between;gap:8px;
+.service-name{font-size:11px;overflow-wrap:anywhere}
+.service-price{font-size:11px;font-weight:800;color:#c5b6ff;white-space:nowrap}
+.more-services{font-size:10px;color:var(--muted);padding:3px 2px;line-height:1.7}
+.card-bottom{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:10px;margin-top:16px;
 }
-.starting-price{font-size:10px;color:var(--muted)}
-.starting-price strong{display:block;color:white;font-size:16px;margin-top:3px}
-.book-btn{
-    border:0;border-radius:11px;padding:11px 15px;
-    background:linear-gradient(120deg,var(--purple),var(--blue));
-    color:white;font-size:11px;font-weight:800;
+.price-note{font-size:9px;color:var(--muted)}
+.from-price{font-size:18px;font-weight:800;letter-spacing:-.5px;margin-top:3px}
+.from-price small{font-size:10px;color:var(--muted);font-weight:500}
+.book-btn{flex-shrink:0}
+.empty-state{
+ padding:45px 20px;text-align:center;
+ border:1px dashed #ffffff1c;border-radius:20px;
+ background:#ffffff03;grid-column:1/-1;
 }
-.book-btn:disabled{opacity:.45;cursor:not-allowed}
-.empty-state,.loading-state{
-    grid-column:1/-1;text-align:center;padding:55px 20px;
-    border:1px dashed var(--line);border-radius:18px;color:var(--muted);
+.empty-state i{font-size:35px;color:#a99aff}
+.empty-state h3{margin:12px 0 7px;font-size:16px}
+.empty-state p{color:var(--muted);font-size:12px;line-height:1.7;margin-bottom:15px}
+.notice{
+ display:flex;align-items:flex-start;gap:10px;padding:14px;
+ border:1px solid #8b5cf633;background:#8b5cf610;
+ border-radius:15px;margin-bottom:15px;
+ color:#c9c2e6;font-size:11px;line-height:1.7;
 }
-.empty-state i,.loading-state i{font-size:35px;color:#9b8aff}
-.empty-state h3{color:white;font-size:17px}
-.empty-state p{font-size:12px}
+.notice i{font-size:18px;color:#b4a3ff;flex-shrink:0}
+.notice a{color:white;text-decoration:underline}
 
-/* Modal */
+/* NAVIGATION */
+.bottom-nav{
+ display:none;position:fixed;bottom:0;left:0;right:0;z-index:60;
+ padding:9px 12px calc(9px + env(safe-area-inset-bottom));
+ background:#090910f2;border-top:1px solid var(--line);
+ backdrop-filter:blur(20px);grid-template-columns:repeat(3,1fr);
+}
+.bottom-nav a{
+ display:flex;align-items:center;justify-content:center;
+ gap:6px;flex-direction:column;padding:6px;
+ font-size:9px;color:var(--muted);
+}
+.bottom-nav a i{font-size:21px}
+.bottom-nav a.active{color:#c4b5fd}
+.footer{padding:25px 0 100px;text-align:center;color:#777789;font-size:10px;line-height:1.8}
+.footer strong{color:#c5b6ff}
+
+/* BOOKING MODAL */
 .modal{
-    position:fixed;inset:0;z-index:100;
-    display:none;align-items:center;justify-content:center;
-    padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(9px);
+ position:fixed;inset:0;z-index:100;display:none;
+ align-items:center;justify-content:center;padding:16px;
+ background:#000b;backdrop-filter:blur(10px);overflow-y:auto;
 }
 .modal.show{display:flex}
-.modal-panel{
-    width:min(520px,100%);max-height:90vh;overflow:auto;
-    border:1px solid var(--line);border-radius:22px;
-    background:#11111c;box-shadow:0 25px 90px rgba(0,0,0,.6);
-    padding:22px;
+.modal-card{
+ width:min(530px,100%);max-height:92vh;overflow-y:auto;
+ background:#11111b;border:1px solid #ffffff19;
+ border-radius:25px;box-shadow:0 30px 100px #0009;padding:23px;
 }
-.modal-header{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:18px}
-.modal-header h2{font-size:20px;margin:0 0 6px}
-.modal-header p{font-size:11px;color:var(--muted);margin:0}
-.close-modal{
-    border:1px solid var(--line);border-radius:10px;
-    background:rgba(255,255,255,.05);color:white;
-    width:35px;height:35px;font-size:20px;
+.modal-head{
+ display:flex;justify-content:space-between;gap:12px;
+ align-items:flex-start;margin-bottom:19px;
 }
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-field{display:grid;gap:7px;margin-bottom:13px}
+.modal-head h2{font:700 25px "Playfair Display",serif;margin-bottom:6px}
+.modal-head p{color:var(--muted);font-size:11px;line-height:1.6;margin-bottom:0}
+.close-btn{
+ width:38px;height:38px;display:grid;place-items:center;
+ flex-shrink:0;background:#ffffff08;
+ border:1px solid var(--line);border-radius:12px;
+}
+.close-btn i{font-size:21px}
+.selected-salon{
+ padding:12px;border:1px solid var(--line);
+ border-radius:14px;display:flex;gap:12px;
+ align-items:center;margin-bottom:18px;background:#ffffff04;
+}
+.selected-salon img{
+ width:62px;height:62px;object-fit:cover;
+ border-radius:12px;background:#222;
+}
+.selected-salon strong{display:block;font-size:13px;margin-bottom:5px}
+.selected-salon span{font-size:10px;color:var(--muted);line-height:1.5}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.form-field{display:flex;flex-direction:column;gap:7px;min-width:0}
 .form-field.full{grid-column:1/-1}
-.form-field label{font-size:11px;color:#c9c9d6;font-weight:700}
+.form-field label{font-size:10px;font-weight:700;color:#c9c8d7}
 .form-field input,.form-field select{
-    width:100%;height:45px;border:1px solid var(--line);
-    border-radius:11px;background:#191927;color:white;
-    padding:0 12px;outline:none;font-size:12px;
+ width:100%;min-width:0;height:45px;padding:0 12px;
+ border:1px solid var(--line);border-radius:12px;
+ background:#090910;color:white;outline:none;font-size:12px;
 }
-.form-field select option{background:#191927}
-.form-field input:focus,.form-field select:focus{border-color:var(--purple)}
-.booking-summary{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:13px;background:rgba(139,92,246,.1);
-    border:1px solid rgba(139,92,246,.2);border-radius:12px;
-    margin:4px 0 15px;font-size:11px;color:#d6d0ff;
+.booking-total{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:14px 0;margin-top:16px;
+ border-top:1px solid var(--line);font-size:12px;
 }
-.booking-summary strong{font-size:17px;color:white}
-.submit-booking{
-    width:100%;height:48px;border:0;border-radius:12px;
-    background:linear-gradient(120deg,var(--purple),var(--blue));
-    color:white;font-size:12px;font-weight:800;
+.booking-total strong{font-size:21px;color:#c5b6ff}
+.form-error{color:#ff8fa2;font-size:11px;line-height:1.6;margin-top:12px}
+.form-hint{font-size:10px;color:var(--muted);line-height:1.6;margin-top:10px}
+.submit-btn{width:100%;height:47px;margin-top:12px}
+#toast{
+ position:fixed;bottom:25px;left:50%;
+ transform:translate(-50%,20px);opacity:0;pointer-events:none;
+ z-index:200;background:#191923;
+ border:1px solid #ffffff1a;border-radius:14px;
+ padding:13px 17px;box-shadow:var(--shadow);
+ font-size:12px;max-width:calc(100% - 30px);transition:.25s;
 }
-.submit-booking:disabled{opacity:.5;cursor:not-allowed}
-.modal-message{font-size:11px;line-height:1.5;margin:10px 0 0;color:var(--muted)}
-.toast{
-    position:fixed;z-index:150;left:50%;bottom:25px;
-    transform:translate(-50%,20px);opacity:0;pointer-events:none;
-    background:#202031;border:1px solid var(--line);
-    padding:12px 17px;border-radius:12px;box-shadow:var(--shadow);
-    color:white;font-size:12px;transition:.25s;max-width:calc(100% - 30px);
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.bottom-nav{display:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.error{border-color:#ff647c66}
+.loading-spinner{animation:spin 1s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+[hidden]{display:none!important}
 
-/* Responsive */
-@media(max-width:900px){
-    .salon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .toolbar{grid-template-columns:1fr 1fr}
-    .hero-grid{grid-template-columns:1fr .7fr}
+@media(max-width:950px){
+ .salon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:650px){
-    .container{width:calc(100% - 24px)}
-    .nav{min-height:62px}
-    .brand{font-size:18px}
-    .brand-mark{width:34px;height:34px}
-    .nav-link,.nav-button{padding:9px 11px;font-size:11px}
-    .hero{padding:38px 0 18px}
-    .hero-grid{grid-template-columns:1fr}
-    .hero h1{font-size:43px}
-    .hero-copy{font-size:13px}
-    .hero-visual{min-height:190px}
-    .hero-stats{gap:18px}
-    .stat strong{font-size:19px}
-    .salon-grid{grid-template-columns:1fr}
-    .salon-image{height:210px}
-    .toolbar{grid-template-columns:1fr 1fr}
-    .toolbar .search-wrap{grid-column:1/-1}
-    .filter-row{align-items:flex-start}
-    .section-heading h2{font-size:21px}
-    .bottom-nav{
-        display:flex;position:fixed;bottom:0;left:0;right:0;z-index:60;
-        justify-content:space-around;align-items:center;
-        padding:10px 8px calc(10px + env(safe-area-inset-bottom));
-        background:rgba(10,10,18,.94);backdrop-filter:blur(20px);
-        border-top:1px solid var(--line);
-    }
-    .bottom-nav a{display:grid;justify-items:center;gap:4px;color:var(--muted);font-size:9px}
-    .bottom-nav a i{font-size:20px}
-    .bottom-nav a.active{color:#b9aaff}
-    .marketplace{padding-bottom:100px}
-    .form-grid{grid-template-columns:1fr}
-    .form-field.full{grid-column:auto}
+@media(max-width:600px){
+ .container{width:calc(100% - 22px)}
+ .topbar-inner{min-height:65px}
+ .brand-icon{width:39px;height:39px}
+ .brand-name{font-size:17px}
+ .brand-sub{font-size:9px}
+ .top-actions .desktop-link{display:none}
+ .top-actions .btn{padding:10px 11px}
+ .hero{padding-top:18px}
+ .hero-panel{padding:25px 20px;border-radius:23px}
+ h1{font-size:42px}
+ .hero p{font-size:12px}
+ .hero-stats{gap:20px}
+ .stat strong{font-size:17px}
+ .section-head h2{font-size:20px}
+ .section-head p{font-size:11px}
+ .live-status{font-size:9px}
+ .toolbar{padding:11px;border-radius:17px}
+ .search-row{grid-template-columns:1fr}
+ .search-row>.btn{width:100%}
+ .filter-grid{gap:8px}
+ .control{font-size:10px;padding:0 8px}
+ .salon-grid{grid-template-columns:1fr;gap:14px}
+ .salon-image{height:220px}
+ .salon-body{padding:15px}
+ .bottom-nav{display:grid}
+ .footer{padding-bottom:100px}
+ .modal{padding:0;align-items:flex-end}
+ .modal-card{
+  border-radius:24px 24px 0 0;width:100%;
+  max-height:93vh;padding:21px 17px calc(20px + env(safe-area-inset-bottom));
+ }
+ .form-field input,.form-field select{font-size:16px}
+ .submit-btn{height:50px}
+ #toast{bottom:85px}
 }
-@media(max-width:380px){
-    .toolbar{grid-template-columns:1fr}
-    .toolbar .search-wrap{grid-column:auto}
-    .nav-actions{gap:5px}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{
+  scroll-behavior:auto!important;animation:none!important;transition:none!important;
+ }
 }
 </style>
 </head>
 
 <body>
+
 <header class="topbar">
-    <div class="container nav">
-        <a class="brand" href="home.html" aria-label="K@si Web home">
-            <span class="brand-mark"><i class="bx bx-cut"></i></span>
-            <span>K@si <span>Web</span></span>
-        </a>
-        <div class="nav-actions">
-            <a class="nav-link" href="home.html"><i class="bx bx-home-alt"></i> Home</a>
-            <a class="nav-button primary" href="home.html" id="accountLink">Sign in</a>
-        </div>
-    </div>
+ <div class="container topbar-inner">
+  <a href="home.html" class="brand" aria-label="K@si Web Home">
+   <div class="brand-icon"><i class="bx bx-cut"></i></div>
+   <div>
+    <div class="brand-name">K<span>@</span>si Web</div>
+    <div class="brand-sub">YOUR STYLE. YOUR COMMUNITY.</div>
+   </div>
+  </a>
+
+  <div class="top-actions">
+   <a class="btn ghost desktop-link" href="home.html">
+    <i class="bx bx-home-alt-2"></i> Home
+   </a>
+   <button class="btn primary" id="topAccountBtn" type="button">
+    <i class="bx bx-user-circle"></i>
+    <span id="topAccountLabel">Sign in</span>
+   </button>
+  </div>
+ </div>
 </header>
 
 <main class="container">
-    <section class="hero">
-        <div class="hero-grid">
-            <div>
-                <span class="eyebrow"><i class="bx bx-sparkles"></i> Local grooming. Elevated.</span>
-                <h1>Find your next <span>fresh look.</span></h1>
-                <p class="hero-copy">
-                    Discover barbers and salons around you. Compare real services and prices,
-                    find your next favourite spot, and book your appointment with K@si Web.
-                </p>
-                <div class="hero-stats">
-                    <div class="stat"><strong id="salonCount">—</strong><small>Listed salons</small></div>
-                    <div class="stat"><strong id="serviceCount">—</strong><small>Available services</small></div>
-                    <div class="stat"><strong>Live</strong><small>Firestore listings</small></div>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="visual-icon"><i class="bx bx-cut"></i></div>
-                <h3>Your cut. Your time.</h3>
-                <p>Browse local grooming professionals, check their services and book your next appointment.</p>
-                <span class="live-pill"><span class="live-dot"></span> Marketplace is live</span>
-            </div>
-        </div>
-    </section>
 
-    <div class="auth-notice" id="authNotice">
-        <i class="bx bx-info-circle"></i>
-        <div id="authNoticeText">
-            You can browse salons without signing in. To book an appointment, sign in with your customer account.
-            <a href="home.html">Sign in here</a>.
-        </div>
+ <section class="hero">
+  <div class="hero-panel">
+   <span class="eyebrow"><i class="bx bxs-crown"></i> The K@si marketplace</span>
+   <h1>Find your next <span>fresh look.</span></h1>
+   <p>
+    Discover local barbers and salons, compare service prices,
+    and request your next appointment in a few simple steps.
+   </p>
+
+   <div class="hero-actions">
+    <a href="#marketplace" class="btn primary">
+     <i class="bx bx-search"></i> Explore salons
+    </a>
+    <button class="btn" id="favoritesShortcut" type="button">
+     <i class="bx bx-heart"></i> My favourites
+    </button>
+   </div>
+
+   <div class="hero-stats">
+    <div class="stat">
+     <strong id="salonCount">—</strong>
+     <span>Listed salons</span>
+    </div>
+    <div class="stat">
+     <strong id="serviceCount">—</strong>
+     <span>Available services</span>
+    </div>
+    <div class="stat">
+     <strong>24/7</strong>
+     <span>Browse anytime</span>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <section id="marketplace" class="section">
+
+  <div class="section-head">
+   <div>
+    <h2>Explore salons</h2>
+    <p>Find a salon that fits your style, location and budget.</p>
+   </div>
+   <div class="live-status">
+    <span class="live-dot"></span> Live listings
+   </div>
+  </div>
+
+  <div id="authNotice" class="notice" hidden>
+   <i class="bx bx-info-circle"></i>
+   <div>
+    You can browse salons without signing in.
+    To request a booking, please
+    <a href="home.html">sign in to your customer account</a>.
+   </div>
+  </div>
+
+  <div class="toolbar">
+   <div class="search-row">
+    <div class="searchbox">
+     <i class="bx bx-search"></i>
+     <input id="searchInput" type="search"
+      placeholder="Search salon, service or location..."
+      autocomplete="off" aria-label="Search salons">
     </div>
 
-    <section class="marketplace">
-        <div class="section-heading">
-            <div>
-                <h2>Explore salons</h2>
-                <p>Find the right service at the right price.</p>
-            </div>
-            <span class="live-status"><span class="live-dot"></span> Live listings</span>
-        </div>
+    <button id="clearFilters" class="btn" type="button">
+     <i class="bx bx-refresh"></i> Reset filters
+    </button>
+   </div>
 
-        <div class="toolbar">
-            <div class="search-wrap">
-                <i class="bx bx-search"></i>
-                <input class="control" id="searchInput" type="search" placeholder="Search salon, service or location...">
-            </div>
-            <select class="control" id="locationFilter" aria-label="Filter by location">
-                <option value="">All locations</option>
-            </select>
-            <select class="control" id="serviceFilter" aria-label="Filter by service">
-                <option value="">All services</option>
-            </select>
-            <select class="control" id="sortFilter" aria-label="Sort salons">
-                <option value="recommended">Recommended</option>
-                <option value="rating">Highest rated</option>
-                <option value="price-low">Lowest starting price</option>
-                <option value="price-high">Highest starting price</option>
-                <option value="name">Name A–Z</option>
-            </select>
-        </div>
+   <div class="filter-grid">
+    <select id="locationFilter" class="control" aria-label="Filter by location">
+     <option value="">All locations</option>
+    </select>
 
-        <div class="filter-row">
-            <div class="filter-left">
-                <button class="chip active" id="allChip" type="button"><i class="bx bx-grid-alt"></i> All salons</button>
-                <button class="chip" id="favouritesChip" type="button"><i class="bx bx-heart"></i> Favourites</button>
-                <button class="chip" id="ratedChip" type="button"><i class="bx bx-star"></i> Rated 4.5+</button>
-            </div>
-            <div class="filter-right">
-                <input class="control" id="maxPriceFilter" type="number" min="0" placeholder="Max price (R)" style="width:135px;height:37px">
-                <button class="text-button" id="clearFilters" type="button">Clear filters</button>
-            </div>
-        </div>
+    <select id="serviceFilter" class="control" aria-label="Filter by service">
+     <option value="">All services</option>
+    </select>
 
-        <div class="results-line">
-            <strong id="resultsLabel">Loading salons...</strong>
-            <span id="resultsHint">Updated live</span>
-        </div>
+    <select id="sortFilter" class="control" aria-label="Sort salons">
+     <option value="recommended">Recommended</option>
+     <option value="rating">Highest rated</option>
+     <option value="price-low">Price: low to high</option>
+     <option value="price-high">Price: high to low</option>
+     <option value="name">Name: A–Z</option>
+    </select>
 
-        <div class="salon-grid" id="salonGrid">
-            <div class="loading-state">
-                <i class="bx bx-loader-alt bx-spin"></i>
-                <p>Loading salons from K@si Web...</p>
-            </div>
-        </div>
-    </section>
+    <select id="priceFilter" class="control" aria-label="Maximum service price">
+     <option value="">Any service price</option>
+     <option value="100">Up to R100</option>
+     <option value="150">Up to R150</option>
+     <option value="250">Up to R250</option>
+     <option value="500">Up to R500</option>
+    </select>
+   </div>
+
+   <div class="filter-bottom">
+    <div id="resultCount" class="result-count" aria-live="polite">
+     Loading salon listings...
+    </div>
+
+    <div class="filter-buttons">
+     <button class="chip" id="favoritesFilter" type="button">
+      <i class="bx bx-heart"></i> Favourites only
+     </button>
+     <button class="chip" id="ratedFilter" type="button">
+      <i class="bx bxs-star"></i> Rated salons
+     </button>
+    </div>
+   </div>
+  </div>
+
+  <div id="salonGrid" class="salon-grid" aria-live="polite">
+   <div class="empty-state">
+    <i class="bx bx-loader-alt loading-spinner"></i>
+    <h3>Finding local salons...</h3>
+    <p>Connecting to the K@si marketplace.</p>
+   </div>
+  </div>
+ </section>
+
+ <footer class="footer">
+  <strong>K@si Web</strong> — Your cut. Your time.<br>
+  Compare services, discover local talent and request appointments with confidence.
+ </footer>
 </main>
 
-<nav class="bottom-nav">
-    <a href="home.html"><i class="bx bx-home-alt"></i><span>Home</span></a>
-    <a href="salons.html" class="active"><i class="bx bx-cut"></i><span>Salons</span></a>
-    <a href="home.html"><i class="bx bx-calendar"></i><span>Bookings</span></a>
-    <a href="home.html"><i class="bx bx-user"></i><span>Account</span></a>
+<nav class="bottom-nav" aria-label="Main navigation">
+ <a href="home.html">
+  <i class="bx bx-home-alt-2"></i><span>Home</span>
+ </a>
+ <a href="#marketplace" class="active">
+  <i class="bx bx-store"></i><span>Salons</span>
+ </a>
+ <a href="home.html" id="bottomAccountLink">
+  <i class="bx bx-user"></i><span>Account</span>
+ </a>
 </nav>
 
-<!-- Booking modal -->
-<div class="modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
-    <div class="modal-panel">
-        <div class="modal-header">
-            <div>
-                <h2 id="bookingTitle">Book an appointment</h2>
-                <p id="bookingSalonName">Choose your service and appointment time.</p>
-            </div>
-            <button class="close-modal" id="closeBooking" type="button" aria-label="Close">&times;</button>
-        </div>
+<!-- BOOKING MODAL -->
+<div class="modal" id="bookingModal" role="dialog"
+ aria-modal="true" aria-labelledby="bookingTitle">
 
-        <form id="bookingForm">
-            <div class="form-grid">
-                <div class="form-field full">
-                    <label for="bookingService">Service</label>
-                    <select id="bookingService" required>
-                        <option value="">Choose a service</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <label for="customerName">Your name</label>
-                    <input id="customerName" type="text" autocomplete="name" required>
-                </div>
-                <div class="form-field">
-                    <label for="customerPhone">Phone number</label>
-                    <input id="customerPhone" type="tel" autocomplete="tel" required>
-                </div>
-                <div class="form-field">
-                    <label for="bookingDate">Appointment date</label>
-                    <input id="bookingDate" type="date" required>
-                </div>
-                <div class="form-field">
-                    <label for="bookingTime">Appointment time</label>
-                    <input id="bookingTime" type="time" required>
-                </div>
-            </div>
+ <div class="modal-card">
+  <div class="modal-head">
+   <div>
+    <h2 id="bookingTitle">Request a booking</h2>
+    <p>Choose a service and a preferred appointment time.</p>
+   </div>
+   <button type="button" class="close-btn" id="closeModal"
+    aria-label="Close booking form">
+    <i class="bx bx-x"></i>
+   </button>
+  </div>
 
-            <div class="booking-summary">
-                <span>Selected service price</span>
-                <strong id="bookingPrice">R0</strong>
-            </div>
+  <div class="selected-salon">
+   <img id="modalSalonImage" src="" alt="">
+   <div>
+    <strong id="modalSalonName">Salon</strong>
+    <span id="modalSalonLocation">Location</span><br>
+    <span id="modalSalonHours">Opening hours not provided</span>
+   </div>
+  </div>
 
-            <button class="submit-booking" id="submitBooking" type="submit">Confirm booking request</button>
-            <p class="modal-message" id="bookingMessage">
-                Your booking request will be sent to the salon owner for confirmation.
-            </p>
-        </form>
+  <form id="bookingForm">
+   <div class="form-grid">
+
+    <div class="form-field full">
+     <label for="custName">Your full name</label>
+     <input id="custName" name="custName" type="text"
+      maxlength="100" autocomplete="name" required
+      placeholder="Enter your name">
     </div>
+
+    <div class="form-field">
+     <label for="custPhone">Phone number</label>
+     <input id="custPhone" name="custPhone" type="tel"
+      maxlength="25" autocomplete="tel" required
+      placeholder="e.g. 071 234 5678">
+    </div>
+
+    <div class="form-field">
+     <label for="serviceType">Choose service</label>
+     <select id="serviceType" name="serviceType" required>
+      <option value="">Select a service</option>
+     </select>
+    </div>
+
+    <div class="form-field">
+     <label for="custDate">Preferred date</label>
+     <input id="custDate" name="custDate" type="date" required>
+    </div>
+
+    <div class="form-field">
+     <label for="custTime">Preferred time</label>
+     <input id="custTime" name="custTime" type="time" required>
+    </div>
+   </div>
+
+   <div class="booking-total">
+    <span>Selected service price</span>
+    <strong id="bookingPrice">Select service</strong>
+   </div>
+
+   <div class="form-hint">
+    This is a booking request. The salon must confirm your appointment.
+    Your preferred time is not guaranteed until confirmed.
+   </div>
+
+   <div id="bookingError" class="form-error" role="alert" hidden></div>
+
+   <button type="submit" id="submitBooking"
+    class="btn primary submit-btn">
+    <i class="bx bx-calendar-check"></i> Send booking request
+   </button>
+  </form>
+ </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
-<!-- Firebase compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -539,902 +660,1617 @@ a{color:inherit;text-decoration:none}
 <script>
 "use strict";
 
-/* =========================================================
-   FIREBASE CONFIGURATION
-========================================================= */
+/* ==========================================
+   1. FIREBASE CONFIGURATION
+========================================== */
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCjmaSIPBngF3SbhP1AH4Frfn4Mz1QXHk",
-    authDomain: "kasi-web-d073f.firebaseapp.com",
-    databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "kasi-web-d073f",
-    storageBucket: "kasi-web-d073f.firebasestorage.app",
-    messagingSenderId: "105918157571",
-    appId: "1:105918157571:web:8d646"
+ apiKey:"AIzaSyCjmaSIPBngF3SbhP1AH4Frfn4Mz1QXHk",
+ authDomain:"kasi-web-d073f.firebaseapp.com",
+ databaseURL:"https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId:"kasi-web-d073f",
+ storageBucket:"kasi-web-d073f.firebasestorage.app",
+ messagingSenderId:"105918157571",
+ appId:"1:105918157571:web:8d646"
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+if(!firebase.apps.length){
+ firebase.initializeApp(firebaseConfig);
 }
 
-const auth = firebase.auth();
-const db = firebase.firestore();
-const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
+const auth=firebase.auth();
+const db=firebase.firestore();
 
-/* =========================================================
-   STATE
-========================================================= */
-let salons = [];
-let currentUser = null;
-let currentUserProfile = null;
-let currentRole = "guest";
-let selectedSalon = null;
-let salonsUnsubscribe = null;
-let authUnsubscribe = null;
-let activeQuickFilter = "all";
-let favourites = new Set();
+const $=id=>document.getElementById(id);
 
-try {
-    favourites = new Set(JSON.parse(localStorage.getItem("kasiSalonFavourites") || "[]"));
-} catch (error) {
-    favourites = new Set();
+/* ==========================================
+   2. APPLICATION STATE
+========================================== */
+
+let currentUser=null;
+let currentProfile={};
+let currentRole="";
+
+let allSalons=[];
+let selectedSalon=null;
+let bookingBusy=false;
+
+let favoritesOnly=false;
+let ratedOnly=false;
+
+let toastTimer=null;
+let salonListener=null;
+let authGeneration=0;
+
+let favorites=new Set();
+
+const FAVORITES_KEY="kasi_salon_favorites_v1";
+
+try{
+ const saved=JSON.parse(localStorage.getItem(FAVORITES_KEY)||"[]");
+ if(Array.isArray(saved)){
+  favorites=new Set(saved.filter(x=>typeof x==="string"));
+ }
+}catch(error){
+ favorites=new Set();
 }
 
-const $ = id => document.getElementById(id);
+/* ==========================================
+   3. GENERAL HELPERS
+========================================== */
 
-/* =========================================================
-   HELPERS
-========================================================= */
-function cleanText(value, fallback = "") {
-    if (value === null || value === undefined) return fallback;
-    return String(value).trim();
+function showToast(message,isError=false){
+ const toast=$("toast");
+
+ toast.textContent=message;
+ toast.classList.toggle("error",isError);
+ toast.classList.add("show");
+
+ clearTimeout(toastTimer);
+
+ toastTimer=setTimeout(()=>{
+  toast.classList.remove("show");
+ },3500);
 }
 
-function firstValue(object, keys, fallback = "") {
-    for (const key of keys) {
-        if (object && object[key] !== undefined && object[key] !== null && object[key] !== "") {
-            return object[key];
-        }
+function safeText(value,fallback=""){
+ if(typeof value==="string"){
+  return value.trim()||fallback;
+ }
+
+ if(typeof value==="number"&&Number.isFinite(value)){
+  return String(value);
+ }
+
+ return fallback;
+}
+
+function firstValue(object,keys){
+ if(!object||typeof object!=="object")return null;
+
+ for(const key of keys){
+  const value=object[key];
+
+  if(value!==undefined&&value!==null&&value!==""){
+   return value;
+  }
+ }
+
+ return null;
+}
+
+function money(value){
+ const amount=Number(value);
+
+ if(!Number.isFinite(amount)||amount<0){
+  return "Price on request";
+ }
+
+ return "R"+amount.toLocaleString("en-ZA",{
+  minimumFractionDigits:Number.isInteger(amount)?0:2,
+  maximumFractionDigits:2
+ });
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,ch=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ })[ch]);
+}
+
+/* ==========================================
+   4. PRICE NORMALIZATION
+========================================== */
+
+function normalizePrice(value){
+
+ if(typeof value==="number"){
+  return Number.isFinite(value)&&value>=0?value:null;
+ }
+
+ if(typeof value==="string"){
+  const text=value.trim().replace(/[\s,]/g,"");
+
+  if(!text)return null;
+
+  const match=text.match(/(?:R)?(\d+(?:\.\d{1,2})?)/i);
+
+  if(!match)return null;
+
+  const number=Number(match[1]);
+
+  return Number.isFinite(number)&&number>=0?number:null;
+ }
+
+ if(value&&typeof value==="object"){
+  const nested=firstValue(value,[
+   "price","amount","cost","value","rate"
+  ]);
+
+  return normalizePrice(nested);
+ }
+
+ return null;
+}
+
+/* ==========================================
+   5. ROBUST FIRESTORE SERVICE READER
+
+   Supports your exact Firestore structure:
+
+   services (array)
+      0 (map)
+        name: "Fade"
+        price: 150
+
+      1 (map)
+        name: "Cut"
+        price: 100
+
+      2 (map)
+        name: "Beard Trim"
+        price: 50
+
+========================================== */
+
+function normalizeFieldKey(key){
+ return String(key)
+  .trim()
+  .toLowerCase()
+  .replace(/[^a-z0-9]/g,"");
+}
+
+function readServiceField(object,aliases){
+ if(!object||typeof object!=="object")return null;
+
+ const accepted=new Set(aliases.map(normalizeFieldKey));
+
+ for(const [key,value] of Object.entries(object)){
+  if(
+   accepted.has(normalizeFieldKey(key))&&
+   value!==undefined&&
+   value!==null&&
+   value!==""
+  ){
+   return value;
+  }
+ }
+
+ return null;
+}
+
+function normalizeServices(raw,extraData={}){
+
+ const nameKeys=[
+  "name",
+  "title",
+  "service",
+  "serviceName",
+  "service_name",
+  "label",
+  "type",
+  "serviceTitle"
+ ];
+
+ const priceKeys=[
+  "price",
+  "amount",
+  "cost",
+  "servicePrice",
+  "service_price",
+  "rate",
+  "serviceCost",
+  "service_cost",
+  "value"
+ ];
+
+ let source=raw;
+
+ // Support older field names if services is unavailable.
+ if(
+  source===undefined||
+  source===null||
+  source===""||
+  (Array.isArray(source)&&source.length===0)
+ ){
+  source=readServiceField(extraData,[
+   "serviceList",
+   "service_list",
+   "serviceNames",
+   "service_names",
+   "availableServices",
+   "available_services"
+  ]);
+ }
+
+ // Support JSON text.
+ if(typeof source==="string"){
+  const text=source.trim();
+
+  if(!text)return [];
+
+  try{
+   source=JSON.parse(text);
+  }catch(error){
+   source=text.split(/[,;\n]+/)
+    .map(x=>x.trim())
+    .filter(Boolean);
+  }
+ }
+
+ let entries=[];
+
+ if(Array.isArray(source)){
+  entries=source;
+
+ }else if(source&&typeof source==="object"){
+
+  const hasName=readServiceField(source,nameKeys)!==null;
+  const hasPrice=readServiceField(source,priceKeys)!==null;
+
+  if(hasName||hasPrice){
+   entries=[source];
+  }else{
+   entries=Object.entries(source).map(([key,value])=>{
+
+    if(value&&typeof value==="object"&&!Array.isArray(value)){
+     return {
+      ...value,
+      name:readServiceField(value,nameKeys)||key
+     };
     }
-    return fallback;
-}
-
-function normalizePrice(value) {
-    if (typeof value === "number") {
-        return Number.isFinite(value) && value >= 0 ? value : null;
-    }
-
-    if (value === null || value === undefined || value === "") return null;
-
-    const cleaned = String(value)
-        .replace(/,/g, "")
-        .replace(/[^\d.-]/g, "");
-
-    const number = Number(cleaned);
-    return Number.isFinite(number) && number >= 0 ? number : null;
-}
-
-function money(value) {
-    const price = normalizePrice(value);
-    if (price === null) return "Price on request";
-
-    return "R" + price.toLocaleString("en-ZA", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
-}
-
-function normalizeKey(value) {
-    return cleanText(value).toLowerCase().replace(/\s+/g, " ");
-}
-
-function normalizeServices(raw, extraData = {}) {
-    /*
-      Supports Firestore structures such as:
-      services: [
-        { name: "Fade", price: 150 },
-        { name: "Cut", price: 100 },
-        { name: "beard Trim", price: 50 }
-      ]
-
-      Also supports legacy strings and object-based service maps.
-    */
-    let source = raw;
-
-    if (source === undefined || source === null || source === "") {
-        source = firstValue(extraData, [
-            "serviceList", "availableServices", "service"
-        ], []);
-    }
-
-    const output = [];
-
-    function addService(nameValue, priceValue) {
-        const name = cleanText(nameValue);
-        if (!name) return;
-
-        const price = normalizePrice(priceValue);
-        const key = normalizeKey(name);
-
-        const existing = output.find(item => item.key === key);
-
-        if (existing) {
-            if (existing.price === null && price !== null) {
-                existing.price = price;
-            }
-            return;
-        }
-
-        output.push({
-            name,
-            price,
-            key
-        });
-    }
-
-    if (Array.isArray(source)) {
-        source.forEach(item => {
-            if (typeof item === "string" || typeof item === "number") {
-                addService(item, null);
-                return;
-            }
-
-            if (item && typeof item === "object") {
-                const name = firstValue(item, [
-                    "name", "service", "title", "serviceName", "label"
-                ]);
-
-                const price = firstValue(item, [
-                    "price", "amount", "cost", "servicePrice"
-                ], null);
-
-                addService(name, price);
-            }
-        });
-    } else if (source && typeof source === "object") {
-        Object.entries(source).forEach(([name, value]) => {
-            if (value && typeof value === "object") {
-                addService(
-                    firstValue(value, ["name", "service", "title"], name),
-                    firstValue(value, ["price", "amount", "cost"], null)
-                );
-            } else {
-                addService(name, value);
-            }
-        });
-    } else if (typeof source === "string") {
-        source.split(/[,;\n]/).forEach(part => {
-            const match = part.trim().match(/^(.+?)\s*[-:]\s*R?\s*(\d+(?:\.\d{1,2})?)$/i);
-
-            if (match) {
-                addService(match[1], match[2]);
-            } else {
-                addService(part, null);
-            }
-        });
-    }
-
-    return output;
-}
-
-function normalizeSalon(doc) {
-    const data = doc.data() || {};
-
-    const rawServices = firstValue(data, [
-        "services", "serviceList", "availableServices", "service"
-    ], []);
-
-    const services = normalizeServices(rawServices, data);
-
-    const ratingValue = Number(firstValue(data, [
-        "rating", "averageRating", "stars"
-    ], 0));
 
     return {
-        id: doc.id,
-        name: cleanText(firstValue(data, [
-            "name", "salonName", "businessName", "title"
-        ], "Unnamed salon")),
-        location: cleanText(firstValue(data, [
-            "location", "address", "area", "town"
-        ], "Location not provided")),
-        email: cleanText(firstValue(data, ["email", "contactEmail"])),
-        phone: cleanText(firstValue(data, ["phone", "phoneNumber", "contactNumber"])),
-        image: cleanText(firstValue(data, [
-            "image", "imageUrl", "photo", "photoURL", "salonImage"
-        ])),
-        ownerId: cleanText(firstValue(data, [
-            "ownerId", "ownerID", "uid", "userId"
-        ])),
-        rating: Number.isFinite(ratingValue) ? ratingValue : 0,
-        hours: cleanText(firstValue(data, [
-            "time", "hours", "openingHours", "businessHours"
-        ], "Hours not provided")),
-        description: cleanText(firstValue(data, [
-            "description", "about", "bio"
-        ])),
-        services,
-        raw: data
+     name:key,
+     price:value
     };
+   });
+  }
+
+ }else{
+  return [];
+ }
+
+ const result=[];
+
+ entries.forEach((item,index)=>{
+
+  if(typeof item==="string"){
+   const text=item.trim();
+
+   if(!text)return;
+
+   const match=text.match(
+    /^(.+?)\s*[-–:]\s*R?\s*(\d+(?:\.\d{1,2})?)$/i
+   );
+
+   result.push({
+    name:match?match[1].trim():text,
+    price:match?normalizePrice(match[2]):null
+   });
+
+   return;
+  }
+
+  if(!item||typeof item!=="object"||Array.isArray(item)){
+   return;
+  }
+
+  // Read the exact Firestore map fields.
+  const rawName=readServiceField(item,nameKeys);
+  const rawPrice=readServiceField(item,priceKeys);
+
+  const name=safeText(rawName);
+  const price=normalizePrice(rawPrice);
+
+  if(!name&&price===null){
+   console.warn("Ignoring empty service map:",index,item);
+   return;
+  }
+
+  result.push({
+   name:name||`Service ${index+1}`,
+   price:price
+  });
+ });
+
+ // Merge duplicate service names.
+ const unique=new Map();
+
+ result.forEach(service=>{
+  const key=service.name.trim().toLowerCase();
+
+  if(!key)return;
+
+  if(!unique.has(key)){
+   unique.set(key,{...service});
+  }else{
+   const existing=unique.get(key);
+
+   if(existing.price===null&&service.price!==null){
+    existing.price=service.price;
+   }
+  }
+ });
+
+ const services=[...unique.values()];
+
+ console.log("K@si normalized services:",services);
+
+ return services;
 }
 
-function startingPrice(salon) {
-    const prices = (salon.services || [])
-        .map(service => normalizePrice(service.price))
-        .filter(price => price !== null);
+/* ==========================================
+   6. SALON NORMALIZATION
+========================================== */
 
-    return prices.length ? Math.min(...prices) : null;
+function normalizeRole(profile={}){
+
+ const raw=String(
+  profile.role||
+  profile.Role||
+  profile.userRole||
+  "customer"
+ ).trim().toLowerCase().replace(/[\s-]+/g,"_");
+
+ if(["admin","administrator"].includes(raw))return "admin";
+
+ if([
+  "salon_owner","owner","salonowner","business_owner"
+ ].includes(raw))return "salon_owner";
+
+ if(["customer","client","user"].includes(raw))return "customer";
+
+ return raw;
 }
 
-function showToast(message) {
-    const toast = $("toast");
-    toast.textContent = message;
-    toast.classList.add("show");
+function normalizeSalon(doc){
 
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => toast.classList.remove("show"), 3000);
+ const data=doc.data()||{};
+
+ const rawRating=firstValue(data,[
+  "rating","averageRating","average_rating"
+ ]);
+
+ const ratingNumber=rawRating===null?NaN:Number(rawRating);
+
+ const rating=
+  Number.isFinite(ratingNumber)&&
+  ratingNumber>=0&&
+  ratingNumber<=5
+   ?ratingNumber:null;
+
+ const rawReviews=firstValue(data,[
+  "reviews","reviewCount","review_count"
+ ]);
+
+ const reviewsNumber=rawReviews===null?0:Number(rawReviews);
+
+ /*
+  * IMPORTANT:
+  * Read the Firestore services array directly.
+  * Do not convert it to strings or discard its map fields.
+  */
+ const rawServices=data.services;
+
+ console.log("RAW SALON DOCUMENT:",doc.id,data);
+ console.log("RAW SERVICES ARRAY:",doc.id,rawServices);
+
+ const services=normalizeServices(rawServices,data);
+
+ return {
+  id:doc.id,
+  name:safeText(firstValue(data,[
+   "name","salonName","salon_name","title"
+  ]),"Unnamed salon"),
+
+  location:safeText(firstValue(data,[
+   "location","address","area","suburb","town"
+  ]),"Location not provided"),
+
+  image:safeText(firstValue(data,[
+   "image","imageUrl","imageURL","photoURL","photoUrl","photo_url"
+  ])),
+
+  ownerId:safeText(firstValue(data,[
+   "ownerId","ownerUID","ownerUid","owner_id","uid"
+  ])),
+
+  email:safeText(firstValue(data,[
+   "email","ownerEmail","owner_email"
+  ])),
+
+  hours:safeText(firstValue(data,[
+   "time","hours","openingHours","opening_hours"
+  ]),"Hours not provided"),
+
+  rating,
+  reviews:Number.isFinite(reviewsNumber)?Math.max(0,reviewsNumber):0,
+
+  verified:data.verified===true,
+
+  services,
+
+  active:
+   data.active!==false&&
+   data.isActive!==false&&
+   data.is_active!==false,
+
+  raw:data
+ };
 }
 
-function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, character => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-    })[character]);
+function lowestPrice(salon){
+ const prices=salon.services
+  .map(service=>service.price)
+  .filter(price=>price!==null);
+
+ return prices.length?Math.min(...prices):null;
 }
 
-function saveFavourites() {
-    localStorage.setItem("kasiSalonFavourites", JSON.stringify([...favourites]));
+/* ==========================================
+   7. SALON IMAGE HANDLING
+========================================== */
+
+function imageFallback(){
+ return "data:image/svg+xml;charset=UTF-8,"+
+ encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">'+
+  '<defs><linearGradient id="g"><stop stop-color="#242139"/>'+
+  '<stop offset="1" stop-color="#101a2a"/></linearGradient></defs>'+
+  '<rect width="900" height="600" fill="url(#g)"/>'+
+  '<text x="450" y="290" text-anchor="middle" fill="#c4b5fd" font-family="Arial" font-size="42" font-weight="700">K@si Web</text>'+
+  '<text x="450" y="345" text-anchor="middle" fill="#a5a4b8" font-family="Arial" font-size="22">Local style. Elite service.</text>'+
+  '</svg>'
+ );
 }
 
-/* =========================================================
-   AUTHENTICATION AND ROLE HANDLING
-========================================================= */
-function normalizeRole(value) {
-    const role = cleanText(value).toLowerCase().replace(/[\s-]+/g, "_");
+function validImageUrl(url){
+ if(!url)return false;
 
-    if (["admin", "administrator"].includes(role)) return "admin";
-    if (["salon_owner", "owner", "salonowner", "business_owner"].includes(role)) {
-        return "salon_owner";
-    }
-    if (["customer", "client", "user"].includes(role)) return "customer";
+ try{
+  const parsed=new URL(url,window.location.href);
 
-    return role || "customer";
+  return parsed.protocol==="https:"||parsed.protocol==="http:";
+ }catch(error){
+  return false;
+ }
 }
 
-async function readUserProfile(user) {
-    try {
-        const snapshot = await db.collection("users").doc(user.uid).get();
-        return snapshot.exists ? snapshot.data() : {};
-    } catch (error) {
-        console.error("Could not read user profile:", error);
-        return {};
-    }
+function imageHTML(salon){
+
+ const src=validImageUrl(salon.image)
+  ?salon.image
+  :imageFallback();
+
+ return `
+  <img
+   src="${escapeHTML(src)}"
+   alt="${escapeHTML(salon.name)}"
+   loading="lazy"
+   onerror="this.onerror=null;this.src='${imageFallback()}'"
+  >
+ `;
 }
 
-async function handleAuthState(user) {
-    currentUser = user || null;
-    currentUserProfile = null;
-    currentRole = "guest";
+/* ==========================================
+   8. MARKETPLACE STATISTICS
+========================================== */
 
-    if (!user) {
-        $("accountLink").textContent = "Sign in";
-        $("accountLink").href = "home.html";
-        $("authNoticeText").innerHTML =
-            'You can browse salons without signing in. To book an appointment, sign in with your customer account. <a href="home.html">Sign in here</a>.';
-        return;
-    }
+function refreshStats(){
 
-    currentUserProfile = await readUserProfile(user);
+ const active=allSalons.filter(salon=>salon.active);
 
-    const profileRole = firstValue(currentUserProfile, [
-        "role", "Role", "userRole", "accountType"
-    ], "customer");
+ const totalServices=active.reduce(
+  (total,salon)=>total+salon.services.length,
+  0
+ );
 
-    currentRole = normalizeRole(profileRole);
-
-    const displayName = cleanText(firstValue(currentUserProfile, [
-        "name", "fullName", "displayName"
-    ], user.displayName || user.email || "Account"));
-
-    $("accountLink").textContent = displayName.split(" ")[0];
-    $("accountLink").href = "home.html";
-
-    if (currentRole === "customer") {
-        $("authNoticeText").textContent =
-            "You are signed in. Choose a salon and send your booking request.";
-    } else if (currentRole === "salon_owner") {
-        $("authNoticeText").innerHTML =
-            'You are signed in as a salon owner. <a href="owners.html">Open your owner dashboard</a>. You can still browse salons.';
-    } else if (currentRole === "admin") {
-        $("authNoticeText").innerHTML =
-            'You are signed in as an administrator. <a href="admin.html">Open admin dashboard</a>.';
-    } else {
-        $("authNoticeText").textContent =
-            "You are signed in. Please check your account role before making a booking.";
-    }
+ $("salonCount").textContent=active.length;
+ $("serviceCount").textContent=totalServices;
 }
 
-/* =========================================================
-   FIRESTORE LIVE SALON LISTINGS
-========================================================= */
-function loadSalons() {
-    if (salonsUnsubscribe) {
-        salonsUnsubscribe();
-        salonsUnsubscribe = null;
-    }
+function populateFilters(){
 
-    $("salonGrid").innerHTML = `
-        <div class="loading-state">
-            <i class="bx bx-loader-alt bx-spin"></i>
-            <p>Loading live salon listings...</p>
-        </div>`;
+ const locationSelect=$("locationFilter");
+ const serviceSelect=$("serviceFilter");
 
-    salonsUnsubscribe = db.collection("salons").onSnapshot(snapshot => {
-        salons = snapshot.docs
-            .map(normalizeSalon)
-            .filter(salon => salon.name && salon.name !== "Unnamed salon");
+ const oldLocation=locationSelect.value;
+ const oldService=serviceSelect.value;
 
-        populateFilterOptions();
-        updateStats();
-        renderSalons();
+ const active=allSalons.filter(salon=>salon.active);
 
-        console.log("K@si Web: salons loaded:", salons.length);
-        console.table(salons.map(salon => ({
-            id: salon.id,
-            name: salon.name,
-            ownerId: salon.ownerId,
-            services: salon.services.map(service =>
-                `${service.name}: ${money(service.price)}`
-            ).join(" | ")
-        })));
+ const locations=[
+  ...new Set(active.map(salon=>salon.location).filter(Boolean))
+ ].sort((a,b)=>a.localeCompare(b));
 
-        $("resultsHint").textContent = "Live Firestore data";
-    }, error => {
-        console.error("Firestore salons listener failed:", error);
+ const services=[
+  ...new Set(
+   active.flatMap(salon=>salon.services.map(service=>service.name))
+    .filter(Boolean)
+  )
+ ].sort((a,b)=>a.localeCompare(b));
 
-        $("salonGrid").innerHTML = `
-            <div class="empty-state">
-                <i class="bx bx-cloud-off"></i>
-                <h3>Unable to load salons</h3>
-                <p>${escapeHTML(error.message || "Please check your connection and Firestore rules.")}</p>
-                <button class="book-btn" type="button" onclick="loadSalons()">Try again</button>
-            </div>`;
+ locationSelect.innerHTML=
+  '<option value="">All locations</option>'+
+  locations.map(value=>
+   `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`
+  ).join("");
 
-        $("resultsLabel").textContent = "Salon listings unavailable";
-        showToast("Could not load salon listings.");
-    });
+ serviceSelect.innerHTML=
+  '<option value="">All services</option>'+
+  services.map(value=>
+   `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`
+  ).join("");
+
+ if(locations.includes(oldLocation)){
+  locationSelect.value=oldLocation;
+ }
+
+ if(services.includes(oldService)){
+  serviceSelect.value=oldService;
+ }
 }
 
-/* =========================================================
-   FILTER OPTIONS AND STATS
-========================================================= */
-function populateFilterOptions() {
-    const locationSelect = $("locationFilter");
-    const serviceSelect = $("serviceFilter");
+/* ==========================================
+   9. SEARCH AND FILTERING
+========================================== */
 
-    const previousLocation = locationSelect.value;
-    const previousService = serviceSelect.value;
+function getFilteredSalons(){
 
-    const locations = [...new Set(
-        salons.map(salon => salon.location).filter(Boolean)
-    )].sort((a, b) => a.localeCompare(b));
+ const query=$("searchInput").value.trim().toLowerCase();
+ const location=$("locationFilter").value;
+ const service=$("serviceFilter").value;
+ const sort=$("sortFilter").value;
 
-    const services = [...new Set(
-        salons.flatMap(salon => salon.services.map(service => service.name))
-    )].sort((a, b) => a.localeCompare(b));
+ const maxPrice=$("priceFilter").value
+  ?Number($("priceFilter").value)
+  :null;
 
-    locationSelect.innerHTML =
-        '<option value="">All locations</option>' +
-        locations.map(location =>
-            `<option value="${escapeHTML(location)}">${escapeHTML(location)}</option>`
-        ).join("");
+ let list=allSalons.filter(salon=>{
 
-    serviceSelect.innerHTML =
-        '<option value="">All services</option>' +
-        services.map(service =>
-            `<option value="${escapeHTML(service)}">${escapeHTML(service)}</option>`
-        ).join("");
+  if(!salon.active)return false;
 
-    if (locations.includes(previousLocation)) locationSelect.value = previousLocation;
-    if (services.includes(previousService)) serviceSelect.value = previousService;
+  const searchText=[
+   salon.name,
+   salon.location,
+   salon.hours,
+   ...salon.services.map(service=>service.name)
+  ].join(" ").toLowerCase();
+
+  if(query&&!searchText.includes(query))return false;
+
+  if(location&&salon.location!==location)return false;
+
+  if(service&&!salon.services.some(s=>s.name===service)){
+   return false;
+  }
+
+  if(maxPrice!==null){
+
+   const relevant=service
+    ?salon.services.filter(s=>s.name===service)
+    :salon.services;
+
+   if(!relevant.some(
+    s=>s.price!==null&&s.price<=maxPrice
+   )){
+    return false;
+   }
+  }
+
+  if(favoritesOnly&&!favorites.has(salon.id))return false;
+
+  if(ratedOnly&&salon.rating===null)return false;
+
+  return true;
+ });
+
+ list.sort((a,b)=>{
+
+  const ap=lowestPrice(a);
+  const bp=lowestPrice(b);
+
+  switch(sort){
+
+   case "rating":
+    return (b.rating??-1)-(a.rating??-1);
+
+   case "price-low":
+    return (ap??Infinity)-(bp??Infinity);
+
+   case "price-high":
+    return (bp??-1)-(ap??-1);
+
+   case "name":
+    return a.name.localeCompare(b.name);
+
+   default:
+    return Number(favorites.has(b.id))-Number(favorites.has(a.id))||
+     (b.rating??-1)-(a.rating??-1)||
+     a.name.localeCompare(b.name);
+  }
+ });
+
+ return list;
 }
 
-function updateStats() {
-    $("salonCount").textContent = salons.length;
+/* ==========================================
+   10. SALON CARD
+========================================== */
 
-    const count = salons.reduce((total, salon) => {
-        return total + salon.services.length;
-    }, 0);
+function renderSalonCard(salon){
 
-    $("serviceCount").textContent = count;
+ const isFavorite=favorites.has(salon.id);
+ const price=lowestPrice(salon);
+
+ const ratingHTML=salon.rating!==null
+  ?`<i class="bx bxs-star"></i> ${salon.rating.toFixed(1)}`
+  :'<i class="bx bx-star"></i> New listing';
+
+ const badge=salon.verified
+  ?'<span class="image-badge"><i class="bx bxs-check-circle"></i> Verified</span>'
+  :'<span class="image-badge"><i class="bx bx-store"></i> Local salon</span>';
+
+ const services=salon.services.slice(0,3);
+
+ const servicesHTML=services.length
+  ?services.map(service=>`
+    <div class="service-row">
+     <span class="service-name">${escapeHTML(service.name)}</span>
+     <span class="service-price">
+      ${service.price!==null
+       ?escapeHTML(money(service.price))
+       :"Ask salon"}
+     </span>
+    </div>
+   `).join("")
+  :`
+   <div class="more-services">
+    No services are available yet. The salon owner needs to add services and prices.
+   </div>
+  `;
+
+ const moreHTML=salon.services.length>3
+  ?`<div class="more-services">+ ${salon.services.length-3} more services available</div>`
+  :"";
+
+ const noOwner=!salon.ownerId;
+ const noServices=!salon.services.length;
+
+ return `
+ <article class="salon-card" data-salon-id="${escapeHTML(salon.id)}">
+
+  <div class="salon-image">
+   ${imageHTML(salon)}
+   <div class="image-shade"></div>
+   ${badge}
+
+   <button class="favorite-btn ${isFavorite?"saved":""}"
+    type="button"
+    data-action="favorite"
+    data-id="${escapeHTML(salon.id)}"
+    aria-label="${isFavorite?"Remove from favourites":"Add to favourites"}">
+    <i class="bx ${isFavorite?"bxs-heart":"bx-heart"}"></i>
+   </button>
+
+   <div class="image-rating">${ratingHTML}</div>
+  </div>
+
+  <div class="salon-body">
+
+   <div class="salon-title-row">
+    <div>
+     <h3>${escapeHTML(salon.name)}</h3>
+     <div class="location">
+      <i class="bx bx-map"></i>
+      ${escapeHTML(salon.location)}
+     </div>
+    </div>
+   </div>
+
+   <div class="opening">
+    <i class="bx bx-time-five"></i>
+    ${escapeHTML(salon.hours)}
+   </div>
+
+   <div class="card-divider"></div>
+
+   <div class="services-head">
+    <strong>Popular services</strong>
+    <span>${salon.services.length} listed</span>
+   </div>
+
+   <div class="service-list">
+    ${servicesHTML}
+    ${moreHTML}
+   </div>
+
+   <div class="card-bottom">
+    <div>
+     <div class="price-note">Starting price</div>
+     <div class="from-price">
+      ${price!==null?escapeHTML(money(price)):"—"}
+      <small>${price!==null?"onwards":""}</small>
+     </div>
+    </div>
+
+    <button type="button"
+     class="btn primary book-btn"
+     data-action="book"
+     data-id="${escapeHTML(salon.id)}"
+     ${noOwner||noServices?"disabled":""}>
+     <i class="bx bx-calendar-check"></i>
+     ${noOwner?"Unavailable":noServices?"No services":"Book now"}
+    </button>
+   </div>
+
+   ${noOwner
+    ?'<div class="form-hint">Booking is unavailable until this salon has a valid owner account linked.</div>'
+    :""}
+
+  </div>
+ </article>
+ `;
 }
 
-/* =========================================================
-   FILTERING AND SORTING
-========================================================= */
-function getFilteredSalons() {
-    const search = normalizeKey($("searchInput").value);
-    const location = $("locationFilter").value;
-    const service = $("serviceFilter").value;
-    const maxPrice = normalizePrice($("maxPriceFilter").value);
+function renderSalons(){
 
-    let result = [...salons];
+ const list=getFilteredSalons();
 
-    if (search) {
-        result = result.filter(salon => {
-            const serviceText = salon.services.map(item => item.name).join(" ");
-            const searchable = normalizeKey([
-                salon.name,
-                salon.location,
-                salon.description,
-                serviceText
-            ].join(" "));
+ $("resultCount").textContent=
+  `${list.length} salon${list.length===1?"":"s"} found`;
 
-            return searchable.includes(search);
-        });
-    }
+ if(!list.length){
 
-    if (location) {
-        result = result.filter(salon => salon.location === location);
-    }
+  $("salonGrid").innerHTML=`
+   <div class="empty-state">
+    <i class="bx bx-search-alt"></i>
+    <h3>No salons found</h3>
+    <p>
+     Try a different search, location or price filter.
+     New listings appear here automatically.
+    </p>
+    <button class="btn primary" type="button" data-action="reset">
+     <i class="bx bx-refresh"></i> Reset filters
+    </button>
+   </div>
+  `;
 
-    if (service) {
-        result = result.filter(salon =>
-            salon.services.some(item =>
-                normalizeKey(item.name) === normalizeKey(service)
-            )
-        );
-    }
+  return;
+ }
 
-    if (maxPrice !== null) {
-        result = result.filter(salon => {
-            const price = startingPrice(salon);
-            return price !== null && price <= maxPrice;
-        });
-    }
-
-    if (activeQuickFilter === "favourites") {
-        result = result.filter(salon => favourites.has(salon.id));
-    }
-
-    if (activeQuickFilter === "rated") {
-        result = result.filter(salon => salon.rating >= 4.5);
-    }
-
-    const sort = $("sortFilter").value;
-
-    if (sort === "rating") {
-        result.sort((a, b) => b.rating - a.rating);
-    } else if (sort === "price-low") {
-        result.sort((a, b) =>
-            (startingPrice(a) ?? Infinity) - (startingPrice(b) ?? Infinity)
-        );
-    } else if (sort === "price-high") {
-        result.sort((a, b) =>
-            (startingPrice(b) ?? -1) - (startingPrice(a) ?? -1)
-        );
-    } else if (sort === "name") {
-        result.sort((a, b) => a.name.localeCompare(b.name));
-    } else {
-        result.sort((a, b) => b.rating - a.rating);
-    }
-
-    return result;
+ $("salonGrid").innerHTML=list.map(renderSalonCard).join("");
 }
 
-function renderSalons() {
-    const result = getFilteredSalons();
-    const grid = $("salonGrid");
+/* ==========================================
+   11. LIVE FIRESTORE SALON LISTENER
+========================================== */
 
-    $("resultsLabel").textContent =
-        `${result.length} ${result.length === 1 ? "salon" : "salons"} found`;
+function loadSalons(){
 
-    if (!result.length) {
-        grid.innerHTML = `
-            <div class="empty-state">
-                <i class="bx bx-search-alt"></i>
-                <h3>No salons found</h3>
-                <p>Try changing your search or clearing your filters.</p>
-                <button class="book-btn" type="button" onclick="clearFilters()">Clear filters</button>
-            </div>`;
-        return;
-    }
+ if(salonListener){
+  salonListener();
+  salonListener=null;
+ }
 
-    grid.innerHTML = result.map(renderSalonCard).join("");
+ $("resultCount").textContent="Connecting to live listings...";
+
+ salonListener=db.collection("salons").onSnapshot(snapshot=>{
+
+  console.log("Firestore salon documents:",snapshot.size);
+
+  allSalons=snapshot.docs.map(normalizeSalon);
+
+  // Detailed service diagnostic.
+  console.table(allSalons.map(salon=>({
+   id:salon.id,
+   name:salon.name,
+   ownerId:salon.ownerId,
+   services:salon.services.length,
+   serviceDetails:salon.services.map(s=>
+    `${s.name}: ${s.price===null?"Price on request":money(s.price)}`
+   ).join(" | ")
+  })));
+
+  populateFilters();
+  refreshStats();
+  renderSalons();
+
+ },error=>{
+
+  console.error("Salon listener failed:",error);
+
+  $("resultCount").textContent="Unable to load live listings";
+
+  $("salonGrid").innerHTML=`
+   <div class="empty-state">
+    <i class="bx bx-cloud-off"></i>
+    <h3>We couldn't load the salons</h3>
+    <p>Check your connection and Firestore permissions, then try again.</p>
+    <button class="btn primary" type="button" data-action="retry">
+     <i class="bx bx-refresh"></i> Try again
+    </button>
+   </div>
+  `;
+
+  showToast("Could not load salon listings. Check Firestore permissions.",true);
+ });
 }
 
-function renderSalonCard(salon) {
-    const price = startingPrice(salon);
-    const isFavourite = favourites.has(salon.id);
+/* ==========================================
+   12. AUTHENTICATION AND ROLE ROUTING
+========================================== */
 
-    const servicesHTML = salon.services.length
-        ? salon.services.slice(0, 4).map(service => `
-            <div class="service-row">
-                <span>${escapeHTML(service.name)}</span>
-                <span class="service-price">${money(service.price)}</span>
-            </div>
-        `).join("")
-        : '<div class="no-services">Services and prices not yet added.</div>';
+function updateAuthUI(){
 
-    const imageHTML = salon.image
-        ? `<img src="${escapeHTML(salon.image)}" alt="${escapeHTML(salon.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-           <div class="image-placeholder" style="display:none"><i class="bx bx-cut"></i></div>`
-        : `<div class="image-placeholder"><i class="bx bx-cut"></i></div>`;
+ $("authNotice").hidden=
+  !!currentUser&&currentRole==="customer";
 
-    const ratingHTML = salon.rating > 0
-        ? `<span class="rating"><i class="bx bxs-star"></i> ${salon.rating.toFixed(1)}</span>`
-        : `<span class="rating">New listing</span>`;
-
-    return `
-        <article class="salon-card">
-            <div class="salon-image">
-                ${imageHTML}
-                <span class="image-tag"><i class="bx bx-check-circle"></i> K@si listing</span>
-                <button class="favourite-btn ${isFavourite ? "active" : ""}"
-                    type="button"
-                    aria-label="Toggle favourite"
-                    onclick="toggleFavourite('${salon.id}')">
-                    <i class="bx ${isFavourite ? "bxs-heart" : "bx-heart"}"></i>
-                </button>
-            </div>
-
-            <div class="card-body">
-                <div class="card-title-row">
-                    <div>
-                        <h3>${escapeHTML(salon.name)}</h3>
-                        <div class="location-line">
-                            <i class="bx bx-map"></i>
-                            ${escapeHTML(salon.location)}
-                        </div>
-                    </div>
-                    ${ratingHTML}
-                </div>
-
-                ${salon.description ? `
-                    <p class="card-description">${escapeHTML(salon.description)}</p>
-                ` : ""}
-
-                <div class="service-heading">
-                    <span>Services & prices</span>
-                    <span>${salon.services.length} available</span>
-                </div>
-
-                <div class="service-list">${servicesHTML}</div>
-
-                ${salon.services.length > 4 ? `
-                    <div class="no-services">+ ${salon.services.length - 4} more services available when booking</div>
-                ` : ""}
-
-                <div class="card-footer">
-                    <div class="starting-price">
-                        Starting from
-                        <strong>${price === null ? "Ask salon" : money(price)}</strong>
-                    </div>
-                    <button class="book-btn"
-                        type="button"
-                        onclick="openBooking('${salon.id}')"
-                        ${!salon.services.length || !salon.ownerId ? "disabled" : ""}>
-                        ${!salon.ownerId ? "Unavailable" : "Book now"} <i class="bx bx-right-arrow-alt"></i>
-                    </button>
-                </div>
-            </div>
-        </article>`;
+ $("topAccountLabel").textContent=currentUser
+  ?currentRole==="salon_owner"
+   ?"Owner portal"
+   :currentRole==="admin"
+    ?"Admin portal"
+    :"My account"
+  :"Sign in";
 }
 
-/* =========================================================
-   FAVOURITES AND FILTER CONTROLS
-========================================================= */
-function toggleFavourite(id) {
-    if (favourites.has(id)) {
-        favourites.delete(id);
-        showToast("Removed from favourites.");
-    } else {
-        favourites.add(id);
-        showToast("Added to favourites.");
-    }
+function routeForRole(role){
 
-    saveFavourites();
-    renderSalons();
+ if(role==="admin")return "admin.html";
+
+ if(role==="salon_owner")return "owners.html";
+
+ return "home.html";
 }
 
-function setQuickFilter(filter) {
-    activeQuickFilter = filter;
+$("topAccountBtn").addEventListener("click",()=>{
 
-    $("allChip").classList.toggle("active", filter === "all");
-    $("favouritesChip").classList.toggle("active", filter === "favourites");
-    $("ratedChip").classList.toggle("active", filter === "rated");
+ window.location.href=currentUser
+  ?routeForRole(currentRole)
+  :"home.html";
+});
 
-    renderSalons();
-}
+auth.onAuthStateChanged(async user=>{
 
-function clearFilters() {
-    $("searchInput").value = "";
-    $("locationFilter").value = "";
-    $("serviceFilter").value = "";
-    $("sortFilter").value = "recommended";
-    $("maxPriceFilter").value = "";
+ const generation=++authGeneration;
 
-    setQuickFilter("all");
-}
+ currentUser=user||null;
+ currentProfile={};
+ currentRole="";
 
-/* =========================================================
-   BOOKING FLOW
-========================================================= */
-function openBooking(salonId) {
-    const salon = salons.find(item => item.id === salonId);
+ if(!user){
+  updateAuthUI();
+  return;
+ }
 
-    if (!salon) {
-        showToast("This salon could not be found. Please refresh.");
-        return;
-    }
+ try{
 
-    if (!currentUser) {
-        showToast("Please sign in before booking.");
-        window.location.href = "home.html";
-        return;
-    }
+  const snapshot=await db.collection("users").doc(user.uid).get();
 
-    if (currentRole === "salon_owner") {
-        showToast("Salon owner accounts cannot book as customers.");
-        return;
-    }
+  if(generation!==authGeneration)return;
 
-    if (currentRole === "admin") {
-        showToast("Administrator accounts cannot make customer bookings.");
-        return;
-    }
+  if(!snapshot.exists){
+   updateAuthUI();
 
-    if (!salon.ownerId) {
-        showToast("This salon has not completed its owner setup.");
-        return;
-    }
+   showToast(
+    "Your account profile is missing. Please sign in again or contact support.",
+    true
+   );
 
-    if (!salon.services.length) {
-        showToast("This salon has not added services yet.");
-        return;
-    }
+   return;
+  }
 
-    selectedSalon = salon;
+  currentProfile=snapshot.data()||{};
+  currentRole=normalizeRole(currentProfile);
 
-    $("bookingSalonName").textContent =
-        `${salon.name} · ${salon.location}`;
+  updateAuthUI();
 
-    const serviceSelect = $("bookingService");
-    serviceSelect.innerHTML =
-        '<option value="">Choose a service</option>' +
-        salon.services.map((service, index) => `
-            <option value="${index}">
-                ${escapeHTML(service.name)} — ${money(service.price)}
-            </option>
-        `).join("");
+  if(!["customer","salon_owner","admin"].includes(currentRole)){
+   showToast("Your account role is not recognized.",true);
+  }
 
-    $("bookingPrice").textContent = "Choose a service";
+ }catch(error){
 
-    const profileName = firstValue(currentUserProfile || {}, [
-        "name", "fullName", "displayName"
-    ], currentUser.displayName || "");
+  if(generation!==authGeneration)return;
 
-    $("customerName").value = profileName;
-    $("customerPhone").value = firstValue(currentUserProfile || {}, [
-        "phone", "phoneNumber", "contactNumber"
-    ], "");
+  console.error("Role verification failed:",error);
 
-    $("bookingDate").min = new Date().toISOString().split("T")[0];
+  updateAuthUI();
 
-    const futureDate = new Date();
-    futureDate.setDate(futureDate.getDate() + 30);
-    $("bookingDate").max = futureDate.toISOString().split("T")[0];
+  showToast("Could not verify your account role. Refresh or sign in again.",true);
+ }
+});
 
-    $("bookingDate").value = "";
-    $("bookingTime").value = "";
-    $("bookingMessage").textContent =
-        "Your booking request will be sent to the salon owner for confirmation.";
+/* ==========================================
+   13. SEARCH, FILTERS AND FAVOURITES
+========================================== */
 
-    $("submitBooking").disabled = false;
-    $("submitBooking").textContent = "Confirm booking request";
-
-    $("bookingModal").classList.add("show");
-}
-
-function closeBooking() {
-    $("bookingModal").classList.remove("show");
-    selectedSalon = null;
-}
-
-function updateBookingPrice() {
-    if (!selectedSalon) return;
-
-    const index = Number($("bookingService").value);
-
-    if (!Number.isInteger(index) || !selectedSalon.services[index]) {
-        $("bookingPrice").textContent = "Choose a service";
-        return;
-    }
-
-    const service = selectedSalon.services[index];
-    $("bookingPrice").textContent = money(service.price);
-}
-
-async function submitBooking(event) {
-    event.preventDefault();
-
-    if (!currentUser || currentRole !== "customer") {
-        showToast("Please sign in with a customer account.");
-        window.location.href = "home.html";
-        return;
-    }
-
-    if (!selectedSalon) {
-        showToast("Please select a salon again.");
-        return;
-    }
-
-    const salon = salons.find(item => item.id === selectedSalon.id);
-
-    if (!salon || !salon.ownerId) {
-        showToast("Salon information is no longer available.");
-        return;
-    }
-
-    const serviceIndex = Number($("bookingService").value);
-    const service = salon.services[serviceIndex];
-
-    if (!Number.isInteger(serviceIndex) || !service) {
-        showToast("Please choose a valid service.");
-        return;
-    }
-
-    if (normalizePrice(service.price) === null) {
-        showToast("This service does not have a valid price. Contact the salon.");
-        return;
-    }
-
-    const customerName = cleanText($("customerName").value);
-    const customerPhone = cleanText($("customerPhone").value);
-    const date = $("bookingDate").value;
-    const time = $("bookingTime").value;
-
-    if (!customerName || !customerPhone || !date || !time) {
-        showToast("Please complete all booking details.");
-        return;
-    }
-
-    const selectedDate = new Date(date + "T00:00:00");
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) {
-        showToast("Please choose today or a future date.");
-        return;
-    }
-
-    const button = $("submitBooking");
-    button.disabled = true;
-    button.textContent = "Sending booking...";
-
-    try {
-        /*
-          Re-read the salon before writing the booking.
-          This prevents relying only on an old card's displayed data.
-        */
-        const freshDoc = await db.collection("salons").doc(salon.id).get();
-
-        if (!freshDoc.exists) {
-            throw new Error("This salon is no longer available.");
-        }
-
-        const freshSalon = normalizeSalon(freshDoc);
-
-        if (freshSalon.ownerId !== salon.ownerId) {
-            throw new Error("Salon ownership details changed. Please refresh.");
-        }
-
-        const freshService = freshSalon.services.find(item =>
-            item.key === service.key
-        );
-
-        if (!freshService || normalizePrice(freshService.price) !== normalizePrice(service.price)) {
-            throw new Error("This service or price has changed. Please refresh and try again.");
-        }
-
-        const bookingData = {
-            salonId: freshSalon.id,
-            salonName: freshSalon.name,
-            salonLocation: freshSalon.location,
-
-            ownerId: freshSalon.ownerId,
-            userId: currentUser.uid,
-
-            customerName,
-            customerPhone,
-            customerEmail: currentUser.email || "",
-
-            service: freshService.name,
-            price: normalizePrice(freshService.price),
-
-            date,
-            time,
-
-            status: "pending",
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
-        };
-
-        await db.collection("bookings").add(bookingData);
-
-        $("bookingMessage").textContent =
-            "Your booking request was sent successfully. The salon owner can now review it.";
-
-        showToast("Booking request sent successfully!");
-        closeBooking();
-
-    } catch (error) {
-        console.error("Booking submission failed:", error);
-
-        $("bookingMessage").textContent =
-            error.message || "Your booking could not be sent. Please try again.";
-
-        showToast(error.message || "Booking failed. Please try again.");
-
-    } finally {
-        button.disabled = false;
-        button.textContent = "Confirm booking request";
-    }
-}
-
-/* =========================================================
-   EVENT LISTENERS
-========================================================= */
 [
-    "searchInput",
-    "locationFilter",
-    "serviceFilter",
-    "sortFilter",
-    "maxPriceFilter"
-].forEach(id => {
-    $(id).addEventListener(id === "searchInput" ? "input" : "change", renderSalons);
+ "searchInput",
+ "locationFilter",
+ "serviceFilter",
+ "sortFilter",
+ "priceFilter"
+].forEach(id=>{
+
+ $(id).addEventListener(
+  id==="searchInput"?"input":"change",
+  renderSalons
+ );
 });
 
-$("allChip").addEventListener("click", () => setQuickFilter("all"));
-$("favouritesChip").addEventListener("click", () => setQuickFilter("favourites"));
-$("ratedChip").addEventListener("click", () => setQuickFilter("rated"));
-$("clearFilters").addEventListener("click", clearFilters);
+function updateFilterButtons(){
 
-$("closeBooking").addEventListener("click", closeBooking);
-$("bookingModal").addEventListener("click", event => {
-    if (event.target === $("bookingModal")) closeBooking();
+ $("favoritesFilter").classList.toggle("active",favoritesOnly);
+ $("ratedFilter").classList.toggle("active",ratedOnly);
+}
+
+$("favoritesFilter").addEventListener("click",()=>{
+
+ favoritesOnly=!favoritesOnly;
+
+ updateFilterButtons();
+ renderSalons();
 });
 
-$("bookingService").addEventListener("change", updateBookingPrice);
-$("bookingForm").addEventListener("submit", submitBooking);
+$("ratedFilter").addEventListener("click",()=>{
 
-document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeBooking();
+ ratedOnly=!ratedOnly;
+
+ updateFilterButtons();
+ renderSalons();
 });
 
-/* =========================================================
-   START APPLICATION
-========================================================= */
-authUnsubscribe = auth.onAuthStateChanged(user => {
-    handleAuthState(user).catch(error => {
-        console.error("Authentication state error:", error);
-    });
+$("favoritesShortcut").addEventListener("click",()=>{
+
+ favoritesOnly=!favoritesOnly;
+
+ updateFilterButtons();
+ renderSalons();
+
+ $("marketplace").scrollIntoView({behavior:"smooth"});
+
+ if(favoritesOnly){
+  showToast("Showing your saved salons.");
+ }
+});
+
+function resetFilters(){
+
+ $("searchInput").value="";
+ $("locationFilter").value="";
+ $("serviceFilter").value="";
+ $("sortFilter").value="recommended";
+ $("priceFilter").value="";
+
+ favoritesOnly=false;
+ ratedOnly=false;
+
+ updateFilterButtons();
+ renderSalons();
+}
+
+$("clearFilters").addEventListener("click",resetFilters);
+
+function saveFavorites(){
+
+ try{
+  localStorage.setItem(
+   FAVORITES_KEY,
+   JSON.stringify([...favorites])
+  );
+ }catch(error){
+  showToast("Your browser could not save favourites.",true);
+ }
+}
+
+/* ==========================================
+   14. BOOKING DATE HELPERS
+========================================== */
+
+function formatDate(date){
+
+ return `${date.getFullYear()}-${
+  String(date.getMonth()+1).padStart(2,"0")
+ }-${
+  String(date.getDate()).padStart(2,"0")
+ }`;
+}
+
+function setDateLimits(){
+
+ const today=new Date();
+ const max=new Date(today);
+
+ max.setDate(max.getDate()+30);
+
+ $("custDate").min=formatDate(today);
+ $("custDate").max=formatDate(max);
+}
+
+setDateLimits();
+
+function showBookingError(message){
+
+ $("bookingError").textContent=message;
+ $("bookingError").hidden=false;
+}
+
+function clearBookingError(){
+
+ $("bookingError").textContent="";
+ $("bookingError").hidden=true;
+}
+
+/* ==========================================
+   15. OPEN BOOKING MODAL
+========================================== */
+
+function openBooking(salonId){
+
+ const salon=allSalons.find(item=>item.id===salonId);
+
+ if(!salon){
+  showToast("This salon is no longer available. Refresh the list.",true);
+  return;
+ }
+
+ if(!salon.ownerId){
+  showToast("This salon has not been linked to an owner yet.",true);
+  return;
+ }
+
+ if(!salon.services.length){
+  showToast("This salon has no services available for booking yet.",true);
+  return;
+ }
+
+ if(!currentUser){
+  showToast("Please sign in before booking.");
+  window.location.href="home.html";
+  return;
+ }
+
+ if(currentRole==="salon_owner"){
+  showToast("Manage appointments in the owner portal.");
+  window.location.href="owners.html";
+  return;
+ }
+
+ if(currentRole==="admin"){
+  showToast("Admin accounts cannot book through the customer marketplace.");
+  window.location.href="admin.html";
+  return;
+ }
+
+ if(currentRole!=="customer"){
+  showToast("Your customer role could not be verified.",true);
+  return;
+ }
+
+ selectedSalon=salon;
+
+ clearBookingError();
+
+ $("modalSalonName").textContent=salon.name;
+ $("modalSalonLocation").textContent=salon.location;
+ $("modalSalonHours").textContent=salon.hours;
+
+ $("modalSalonImage").src=
+  validImageUrl(salon.image)?salon.image:imageFallback();
+
+ $("modalSalonImage").alt=salon.name;
+
+ $("modalSalonImage").onerror=()=>{
+  $("modalSalonImage").onerror=null;
+  $("modalSalonImage").src=imageFallback();
+ };
+
+ $("serviceType").innerHTML=
+  '<option value="">Select a service</option>'+
+  salon.services.map((service,index)=>`
+   <option value="${index}">
+    ${escapeHTML(service.name)} —
+    ${service.price!==null
+     ?escapeHTML(money(service.price))
+     :"Price on request"}
+   </option>
+  `).join("");
+
+ $("custName").value=safeText(
+  currentProfile.name||
+  currentProfile.fullName||
+  currentProfile.displayName||
+  currentUser.displayName
+ );
+
+ $("custPhone").value=safeText(
+  currentProfile.phone||currentProfile.phoneNumber
+ );
+
+ $("bookingPrice").textContent="Select service";
+
+ $("bookingModal").classList.add("show");
+
+ document.body.style.overflow="hidden";
+
+ setDateLimits();
+
+ setTimeout(()=>{
+  $("serviceType").focus();
+ },80);
+}
+
+function closeBooking(){
+
+ if(bookingBusy)return;
+
+ $("bookingModal").classList.remove("show");
+
+ document.body.style.overflow="";
+
+ selectedSalon=null;
+
+ clearBookingError();
+}
+
+$("closeModal").addEventListener("click",closeBooking);
+
+$("bookingModal").addEventListener("click",event=>{
+
+ if(event.target===$("bookingModal")){
+  closeBooking();
+ }
+});
+
+document.addEventListener("keydown",event=>{
+
+ if(
+  event.key==="Escape"&&
+  $("bookingModal").classList.contains("show")
+ ){
+  closeBooking();
+ }
+});
+
+/* ==========================================
+   16. SERVICE PRICE IN BOOKING FORM
+========================================== */
+
+$("serviceType").addEventListener("change",()=>{
+
+ if(!selectedSalon)return;
+
+ const index=Number($("serviceType").value);
+
+ const service=selectedSalon.services[index];
+
+ $("bookingPrice").textContent=service
+  ?service.price!==null
+   ?money(service.price)
+   :"Price on request"
+  :"Select service";
+
+ clearBookingError();
+});
+
+/* ==========================================
+   17. APPOINTMENT VALIDATION
+========================================== */
+
+function validAppointmentDate(dateValue,timeValue){
+
+ if(!dateValue||!timeValue)return false;
+
+ const [year,month,day]=dateValue.split("-").map(Number);
+ const [hour,minute]=timeValue.split(":").map(Number);
+
+ if(
+  !Number.isInteger(year)||
+  !Number.isInteger(month)||
+  !Number.isInteger(day)||
+  !Number.isInteger(hour)||
+  !Number.isInteger(minute)
+ ){
+  return false;
+ }
+
+ const appointment=new Date(
+  year,month-1,day,hour,minute,0,0
+ );
+
+ const now=new Date();
+
+ if(
+  appointment.getFullYear()!==year||
+  appointment.getMonth()!==month-1||
+  appointment.getDate()!==day
+ ){
+  return false;
+ }
+
+ if(appointment.getTime()<=now.getTime()){
+  return false;
+ }
+
+ const today=new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate()
+ );
+
+ const limit=new Date(today);
+
+ limit.setDate(limit.getDate()+30);
+
+ const requestedDay=new Date(year,month-1,day);
+
+ return requestedDay>=today&&requestedDay<=limit;
+}
+
+/* ==========================================
+   18. SECURE BOOKING REQUEST WORKFLOW
+
+   Rechecks the salon, owner, customer and
+   current service price before creating
+   a booking.
+
+   Firestore security rules must independently
+   enforce these relationships.
+========================================== */
+
+$("bookingForm").addEventListener("submit",async event=>{
+
+ event.preventDefault();
+
+ if(bookingBusy)return;
+
+ clearBookingError();
+
+ const user=auth.currentUser;
+
+ if(!user){
+  showBookingError("Your session has expired. Please sign in again.");
+  return;
+ }
+
+ if(!selectedSalon){
+  showBookingError("Please choose a salon again.");
+  return;
+ }
+
+ if(currentRole!=="customer"){
+  showBookingError("Only verified customer accounts can request bookings.");
+  return;
+ }
+
+ const salon=selectedSalon;
+
+ const name=$("custName").value.trim();
+ const phone=$("custPhone").value.trim();
+
+ const serviceIndex=$("serviceType").value===""
+  ?NaN
+  :Number($("serviceType").value);
+
+ const selectedService=salon.services[serviceIndex];
+
+ const date=$("custDate").value;
+ const time=$("custTime").value;
+
+ if(name.length<2||name.length>100){
+  showBookingError("Please enter your full name.");
+  return;
+ }
+
+ if(phone.length<7||phone.length>25){
+  showBookingError("Please enter a valid phone number.");
+  return;
+ }
+
+ if(!Number.isInteger(serviceIndex)||!selectedService){
+  showBookingError("Please select a valid service.");
+  return;
+ }
+
+ if(!validAppointmentDate(date,time)){
+  showBookingError("Choose a future date within the next 30 days.");
+  return;
+ }
+
+ bookingBusy=true;
+
+ $("submitBooking").disabled=true;
+
+ $("submitBooking").innerHTML=
+  '<i class="bx bx-loader-alt loading-spinner"></i> Sending request...';
+
+ try{
+
+  const [freshSalonSnapshot,freshUserSnapshot]=await Promise.all([
+
+   db.collection("salons").doc(salon.id).get(),
+
+   db.collection("users").doc(user.uid).get()
+
+  ]);
+
+  if(
+   !auth.currentUser||
+   auth.currentUser.uid!==user.uid
+  ){
+   throw new Error("Your sign-in session changed. Please try again.");
+  }
+
+  if(!freshSalonSnapshot.exists){
+   throw new Error("This salon no longer exists.");
+  }
+
+  if(!freshUserSnapshot.exists){
+   throw new Error("Your user profile could not be verified.");
+  }
+
+  const freshSalon=freshSalonSnapshot.data()||{};
+  const freshProfile=freshUserSnapshot.data()||{};
+
+  if(normalizeRole(freshProfile)!=="customer"){
+   throw new Error("Your account is not authorized to make customer bookings.");
+  }
+
+  const ownerId=safeText(firstValue(freshSalon,[
+   "ownerId","ownerUID","ownerUid","owner_id","uid"
+  ]));
+
+  if(!ownerId||ownerId!==salon.ownerId){
+   throw new Error("The salon owner link has changed. Refresh the marketplace.");
+  }
+
+  if(
+   freshSalon.active===false||
+   freshSalon.isActive===false||
+   freshSalon.is_active===false
+  ){
+   throw new Error("This salon is currently unavailable for booking.");
+  }
+
+  // Read the latest services directly from Firestore.
+  const freshServices=normalizeServices(
+   freshSalon.services,
+   freshSalon
+  );
+
+  const freshService=freshServices.find(item=>
+   item.name.trim().toLowerCase()===
+   selectedService.name.trim().toLowerCase()
+  );
+
+  if(!freshService){
+   throw new Error(
+    "This service is no longer offered. Refresh and try again."
+   );
+  }
+
+  if(freshService.price!==selectedService.price){
+   throw new Error(
+    `The price for ${freshService.name} has changed to ${
+     freshService.price!==null
+      ?money(freshService.price)
+      :"price on request"
+    }. Please refresh and select again.`
+   );
+  }
+
+  const bookingData={
+
+   salonId:freshSalonSnapshot.id,
+
+   salonName:safeText(
+    freshSalon.name||freshSalon.salonName,
+    salon.name
+   ),
+
+   salonLocation:safeText(
+    freshSalon.location||freshSalon.address,
+    salon.location
+   ),
+
+   ownerId:ownerId,
+
+   userId:user.uid,
+
+   customerName:name,
+
+   customerPhone:phone,
+
+   customerEmail:user.email||"",
+
+   service:freshService.name,
+
+   price:freshService.price,
+
+   date:date,
+
+   time:time,
+
+   status:"pending",
+
+   createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+
+   updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  /*
+   * SECURITY NOTE:
+   * Client-side validation is not a replacement
+   * for Firestore security rules.
+   */
+
+  await db.collection("bookings").add(bookingData);
+
+  $("bookingForm").reset();
+
+  closeBooking();
+
+  showToast("Booking request sent! Wait for the salon to confirm.");
+
+ }catch(error){
+
+  console.error("Booking request failed:",error);
+
+  let message=error.message||
+   "Unable to send your booking request.";
+
+  if(error.code==="permission-denied"){
+
+   message=
+    "Firestore denied this booking. Check your bookings security rules and customer, salon and owner links.";
+
+  }else if(error.code==="unavailable"){
+
+   message=
+    "The service is temporarily unavailable. Check your connection and try again.";
+  }
+
+  showBookingError(message);
+
+ }finally{
+
+  bookingBusy=false;
+
+  $("submitBooking").disabled=false;
+
+  $("submitBooking").innerHTML=
+   '<i class="bx bx-calendar-check"></i> Send booking request';
+ }
+});
+
+/* ==========================================
+   19. SALON CARD INTERACTIONS
+========================================== */
+
+$("salonGrid").addEventListener("click",event=>{
+
+ const button=event.target.closest("[data-action]");
+
+ if(!button)return;
+
+ const action=button.dataset.action;
+ const id=button.dataset.id;
+
+ if(action==="favorite"){
+
+  if(favorites.has(id)){
+
+   favorites.delete(id);
+
+   showToast("Removed from favourites.");
+
+  }else{
+
+   favorites.add(id);
+
+   showToast("Salon saved to favourites.");
+  }
+
+  saveFavorites();
+
+  renderSalons();
+
+ }else if(action==="book"){
+
+  openBooking(id);
+
+ }else if(action==="reset"){
+
+  resetFilters();
+
+ }else if(action==="retry"){
+
+  loadSalons();
+ }
+});
+
+/* ==========================================
+   20. ACCOUNT NAVIGATION
+========================================== */
+
+$("bottomAccountLink").addEventListener("click",event=>{
+
+ event.preventDefault();
+
+ window.location.href=currentUser
+  ?routeForRole(currentRole)
+  :"home.html";
+});
+
+/* ==========================================
+   21. CROSS-TAB FAVOURITE SYNC
+========================================== */
+
+window.addEventListener("storage",event=>{
+
+ if(event.key!==FAVORITES_KEY)return;
+
+ try{
+
+  const data=JSON.parse(event.newValue||"[]");
+
+  favorites=new Set(
+   Array.isArray(data)
+    ?data.filter(x=>typeof x==="string")
+    :[]
+  );
+
+ }catch(error){
+
+  favorites=new Set();
+ }
+
+ renderSalons();
+});
+
+/* ==========================================
+   22. CLEANUP AND STARTUP
+========================================== */
+
+window.addEventListener("pagehide",()=>{
+
+ if(salonListener){
+  salonListener();
+  salonListener=null;
+ }
 });
 
 loadSalons();
 
-window.addEventListener("beforeunload", () => {
-    if (salonsUnsubscribe) salonsUnsubscribe();
-    if (authUnsubscribe) authUnsubscribe();
-});
-
-/* Expose functions used by inline card buttons. */
-window.toggleFavourite = toggleFavourite;
-window.openBooking = openBooking;
-window.clearFilters = clearFilters;
-window.loadSalons = loadSalons;
+console.log("K@si Web Elite Marketplace initialized.");
 </script>
+
 </body>
 </html>
