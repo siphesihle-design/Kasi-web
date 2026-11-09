@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,1912 +6,1385 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#07070d">
 <meta name="description" content="K@si Web — Your personal grooming space. Discover salons, manage bookings and find your next fresh cut.">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<title>K@si Web | Home</title>
+<title>K@si Web | Premium Grooming Experience</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
 <style>
 :root {
     --bg:#07070d;
-    --surface:rgba(18,18,29,.88);
-    --surface2:rgba(25,25,39,.94);
-    --border:rgba(255,255,255,.09);
-    --line:rgba(255,255,255,.09);
-    --text:#fff;
-    --muted:#a5a5b7;
-    --muted2:#777789;
-    --gold:#d9b56d;
-    --gold-soft:#f2d9a2;
-    --blue:#168cff;
+    --surface:#11111c;
+    --surface2:#181827;
+    --primary:#8b5cf6;
+    --blue:#008cff;
     --green:#25d366;
-    --danger:#ff5d73;
-    --shadow:0 28px 90px rgba(0,0,0,.52);
-    --radius:24px;
-    --max:1240px;
+    --gold:#d9b56d;
+    --text:#f8f8ff;
+    --muted:#9292a8;
+    --border:rgba(255,255,255,.09);
+    --radius:22px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:95px}
-body{
-    min-height:100vh;
-    background:
-      radial-gradient(ellipse at 12% -8%,rgba(22,140,255,.17),transparent 34%),
-      radial-gradient(ellipse at 88% 2%,rgba(121,87,213,.15),transparent 31%),
-      radial-gradient(ellipse at 50% 100%,rgba(217,181,109,.045),transparent 42%),
-      var(--bg);
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html { scroll-behavior:smooth; }
+
+body {
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
     color:var(--text);
-    font-family:Inter,sans-serif;
-    letter-spacing:-.012em;
-    overflow-x:hidden;
+    min-height:100vh;
 }
-body.auth-mode{overflow-y:auto}
-a{color:inherit;text-decoration:none}
-button,input,select{font:inherit}
-button{border:0;cursor:pointer}
-img{display:block;max-width:100%}
-.hidden{display:none!important}
-::selection{background:rgba(217,181,109,.35);color:#fff}
 
-/* LOADING */
-.loading-screen{
-    position:fixed;inset:0;z-index:9999;
-    display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(circle at 50% 20%,rgba(217,181,109,.16),transparent 34%),#07070d;
-    transition:opacity .35s ease,visibility .35s ease;
-}
-.loading-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.loading-content{text-align:center;padding:24px}
-.loading-logo,.brand-mark,.mini-logo{
-    display:grid;place-items:center;
-    background:linear-gradient(145deg,var(--gold),#8b6a37 55%,var(--blue));
-    color:#09090e;font-family:"Playfair Display",serif;font-weight:800;
-}
-.loading-logo{width:78px;height:78px;margin:0 auto 20px;border-radius:24px;font-size:30px;box-shadow:0 18px 55px rgba(217,181,109,.2)}
-.loading-content h1{font:800 28px "Playfair Display",serif;margin-bottom:8px}
-.loading-content p{color:var(--muted);font-size:14px}
-.spinner{width:28px;height:28px;margin:20px auto 0;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--gold);animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+button,input { font:inherit; }
+button { cursor:pointer; }
 
-/* GLOBAL BUTTONS */
-.btn,.hero-btn{
-    min-height:46px;padding:0 18px;display:inline-flex;
-    align-items:center;justify-content:center;gap:8px;
-    border-radius:14px;font-size:13px;font-weight:800;
-    transition:transform .2s,filter .2s,border-color .2s;
+a {
+    text-decoration:none;
+    color:inherit;
 }
-.btn:hover,.hero-btn:hover{transform:translateY(-2px)}
-.btn.primary,.hero-btn.primary{
-    color:#100e0a;background:linear-gradient(115deg,var(--gold),#b88b45 50%,#8c6a3c);
-    box-shadow:0 12px 34px rgba(217,181,109,.18);
-}
-.btn.secondary,.hero-btn.secondary{
-    color:#fff;background:rgba(255,255,255,.055);
-    border:1px solid rgba(255,255,255,.15);
-}
-.btn.danger{color:#fff;background:rgba(255,93,115,.13);border:1px solid rgba(255,93,115,.28)}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-/* AUTHENTICATION */
-.auth-screen{
-    min-height:100vh;min-height:100svh;
-    display:flex;align-items:stretch;justify-content:center;padding:22px;
-}
-.auth-shell{
-    width:min(1240px,100%);min-height:calc(100vh - 44px);
-    display:grid;grid-template-columns:minmax(0,1.1fr) minmax(420px,.9fr);
-    overflow:hidden;border:1px solid rgba(217,181,109,.2);
-    border-radius:32px;background:rgba(12,12,20,.8);
-    box-shadow:var(--shadow);backdrop-filter:blur(24px);
-}
-.auth-visual{
-    position:relative;min-height:700px;overflow:hidden;
-    background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(7,7,13,.85)),url("C00719B.jpg") center/cover;
-    border-right:1px solid rgba(255,255,255,.07);
-}
-.auth-visual-content{position:absolute;left:46px;right:46px;bottom:44px;z-index:2}
-.auth-eyebrow,.eyebrow,.look-kicker{
-    display:inline-flex;align-items:center;gap:8px;padding:8px 13px;
-    border:1px solid rgba(217,181,109,.25);border-radius:999px;
-    background:rgba(217,181,109,.08);color:var(--gold-soft);
-    font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
-}
-.auth-eyebrow{margin-bottom:18px}
-.auth-visual-content h1{
-    max-width:650px;font:800 clamp(42px,5vw,72px)/.98 "Playfair Display",serif;
-    letter-spacing:-.04em;margin-bottom:18px;
-}
-.auth-visual-content h1 span,.welcome h1 span{
-    background:linear-gradient(90deg,#fff,#e6c987,#9dbfff);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.auth-visual-content p{max-width:560px;color:rgba(255,255,255,.8);line-height:1.7;font-size:15px}
-.auth-points{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.auth-point{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.05);font-size:12px}
-.auth-point i{color:var(--gold-soft)}
-.auth-panel{padding:clamp(26px,4vw,48px);display:flex;align-items:center;background:rgba(13,13,21,.94)}
-.auth-inner{width:100%;max-width:440px;margin:auto}
-.brand{display:inline-flex;align-items:center;gap:12px;margin-bottom:24px}
-.brand-mark{width:48px;height:48px;border-radius:16px;font-size:20px;box-shadow:0 12px 35px rgba(217,181,109,.25)}
-.brand-text strong{display:block;font-size:18px}
-.brand-text strong span,.top-brand span{color:var(--gold)}
-.brand-text>span{display:block;margin-top:2px;color:var(--muted);font-size:11px}
-.auth-heading{margin-bottom:24px}
-.auth-heading h2{font:700 36px/1 "Playfair Display",serif;margin-bottom:8px}
-.auth-heading p{color:var(--muted);font-size:14px;line-height:1.6}
-.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;margin-bottom:20px;border:1px solid var(--border);border-radius:14px;background:rgba(8,8,14,.7)}
-.auth-tab{min-height:42px;border-radius:10px;background:transparent;color:var(--muted);font-size:13px;font-weight:700}
-.auth-tab.active{color:var(--gold-soft);background:linear-gradient(120deg,rgba(217,181,109,.2),rgba(22,140,255,.12));box-shadow:inset 0 0 0 1px rgba(217,181,109,.2)}
-.auth-form{display:none}
-.auth-form.active{display:block}
-.form-field{margin-bottom:15px}
-.form-field>label{display:block;margin-bottom:8px;color:rgba(255,255,255,.85);font-size:12px;font-weight:600}
-.input-wrap{position:relative}
-.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted2);font-size:18px;pointer-events:none}
-.control{
-    width:100%;min-height:50px;padding:0 44px;
-    border:1px solid var(--border);border-radius:15px;
-    outline:none;color:#fff;background:rgba(255,255,255,.04);
-    transition:border-color .2s,box-shadow .2s;
-}
-.control::placeholder{color:#666677}
-.control:focus{border-color:rgba(217,181,109,.7);box-shadow:0 0 0 4px rgba(217,181,109,.08)}
-select.control{padding-right:14px;color:#fff}
-select.control option{background:#171722;color:#fff}
-.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:transparent;color:var(--muted)}
-.password-toggle i{font-size:19px}
-.note{margin-top:8px;color:var(--muted);font-size:11px;line-height:1.5}
-.role-note{margin:-4px 0 16px;padding:11px 13px;border:1px solid rgba(217,181,109,.2);border-radius:13px;color:var(--muted);background:rgba(217,181,109,.05);font-size:11px;line-height:1.55}
-.form-message,.error{
-    display:none;margin:0 0 14px;padding:12px 14px;
-    border:1px solid rgba(239,68,68,.25);border-radius:13px;
-    color:#fecaca;background:rgba(239,68,68,.1);font-size:12px;line-height:1.5;
-}
-.form-message.show,.error.show{display:block}
-.primary-btn{width:100%;min-height:52px}
-.auth-links{margin-top:17px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.auth-links button{background:none;color:var(--gold-soft);font-size:12px;font-weight:600}
-.check{display:flex;align-items:flex-start;gap:10px;margin:15px 0;color:var(--muted);font-size:11px;line-height:1.55}
-.check input{margin-top:3px;accent-color:var(--gold)}
-.debug{display:none;margin-top:13px;padding:12px;border-radius:12px;background:rgba(0,0,0,.3);color:#fca5a5;font-size:11px;line-height:1.6;overflow-wrap:anywhere}
-.debug.show{display:block}
-.auth-footnote{margin-top:24px;color:var(--muted2);text-align:center;font-size:11px;line-height:1.6}
+.hidden { display:none!important; }
 
-/* APPLICATION SHELL */
-.app-shell{display:none}
-.app-shell.visible{display:block}
-.page,.container{width:min(100% - 40px,var(--max));margin:0 auto;padding-bottom:110px}
-.topbar{
-    position:sticky;top:0;z-index:100;height:76px;padding:0 max(22px,calc((100vw - var(--max))/2));
-    display:flex;align-items:center;justify-content:space-between;gap:12px;
-    border-bottom:1px solid rgba(217,181,109,.13);
-    background:rgba(7,7,13,.86);backdrop-filter:blur(20px);
+.auth-screen {
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+    background:
+    radial-gradient(circle at 15% 15%,rgba(139,92,246,.19),transparent 35%),
+    radial-gradient(circle at 85% 85%,rgba(0,140,255,.13),transparent 35%),
+    var(--bg);
 }
-.topbar-left{display:flex;align-items:center;gap:12px}
-.top-brand{font-size:25px;font-weight:800;letter-spacing:-.06em}
-.topbar-actions{display:flex;align-items:center;gap:10px}
-.icon{
-    width:42px;height:42px;display:grid;place-items:center;
-    border:1px solid var(--border);border-radius:13px;
-    color:var(--muted);background:rgba(255,255,255,.035);transition:.2s;
-}
-.icon:hover{color:#fff;border-color:rgba(217,181,109,.5);background:rgba(217,181,109,.09)}
-.icon i{font-size:20px}
-.avatar,.profile-avatar{
-    display:grid;place-items:center;
-    background:linear-gradient(145deg,#e4c47f,#9b7138 55%,#574078);
-    color:#100e0a;font-weight:800;border:2px solid rgba(255,255,255,.24);
-}
-.avatar{width:42px;height:42px;border-radius:50%}
 
-/* HERO */
-.hero{padding:42px 0 25px;display:grid;grid-template-columns:1.35fr .65fr;gap:18px}
-.welcome{
-    position:relative;isolation:isolate;overflow:hidden;min-height:350px;
-    padding:clamp(28px,4vw,48px);border:1px solid rgba(217,181,109,.2);
-    border-radius:32px;
-    background:linear-gradient(112deg,rgba(7,7,13,.97),rgba(7,7,13,.84) 48%,rgba(7,7,13,.35)),url("C00719B.jpg") center/cover;
-    box-shadow:0 26px 90px rgba(0,0,0,.35);
+.auth-card {
+    width:100%;
+    max-width:460px;
+    background:rgba(17,17,28,.91);
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:35px;
+    backdrop-filter:blur(25px);
+    box-shadow:0 25px 90px rgba(0,0,0,.45);
 }
-.welcome:after{content:"K@";position:absolute;z-index:-1;right:25px;bottom:-70px;font:800 clamp(150px,23vw,290px)/1 Inter;color:rgba(217,181,109,.055);pointer-events:none}
-.welcome .eyebrow{margin-bottom:18px}
-.welcome h1{font:800 clamp(40px,6vw,72px)/1.02 "Playfair Display",serif;letter-spacing:-.055em}
-.welcome p{max-width:560px;color:#c4c2cc;line-height:1.75;font-size:14px;margin-top:14px}
-.welcome .actions{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap}
-.status{border:1px solid rgba(217,181,109,.15);border-radius:28px;padding:28px;background:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.018));display:flex;flex-direction:column;justify-content:space-between}
-.status h3{font:700 20px "Playfair Display",serif;margin-bottom:18px}
-.status-list{display:grid;gap:12px}
-.status-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;border-radius:15px;border:1px solid rgba(255,255,255,.045);background:rgba(0,0,0,.18)}
-.status-item span{color:var(--muted);font-size:13px}
-.status-item strong{font-size:13px;text-align:right;overflow-wrap:anywhere;max-width:65%}
-.online{color:#86efac}
-.portal{display:none;margin-top:18px;border:1px solid rgba(217,181,109,.25);border-radius:18px;padding:16px;background:rgba(217,181,109,.07);align-items:center;justify-content:space-between;gap:15px}
-.portal.show{display:flex}
-.portal p{color:#c8c8d3;font-size:12px;line-height:1.5;margin:0}
 
-/* SECTIONS */
-.section{padding:23px 0}
-.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:19px}
-.head h2{font:700 clamp(22px,3vw,29px) "Playfair Display",serif;letter-spacing:-.025em}
-.head p{font-size:12px;color:#a5a3b0;margin-top:5px}
-.link{background:none;color:var(--gold-soft);font-weight:700;font-size:13px}
-.link:hover{color:#fff}
-
-/* IMAGE CAROUSEL */
-.look-carousel{position:relative;isolation:isolate;margin-top:4px}
-.look-viewport{
-    position:relative;min-height:450px;height:clamp(390px,48vw,540px);
-    overflow:hidden;border:1px solid rgba(217,181,109,.23);
-    border-radius:28px;background:#101018;box-shadow:0 30px 95px rgba(0,0,0,.46);
-    touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none;
+.logo {
+    font-size:29px;
+    font-weight:900;
+    letter-spacing:-1.5px;
 }
-.look-slide{
-    position:absolute;inset:0;opacity:0;visibility:hidden;
-    transform:translateX(24px) scale(1.025);
-    transition:opacity .48s ease,transform .65s cubic-bezier(.2,.7,.2,1),visibility .48s;
-    pointer-events:none;overflow:hidden;
-}
-.look-slide.active{z-index:1;opacity:1;visibility:visible;transform:translateX(0) scale(1);pointer-events:auto}
-.look-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.02);transition:transform 6s ease;pointer-events:none;-webkit-user-drag:none}
-.look-slide.active img{transform:scale(1.075)}
-.look-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,12,.96),rgba(5,5,12,.82) 34%,rgba(5,5,12,.28) 72%,rgba(5,5,12,.12)),linear-gradient(0deg,rgba(5,5,12,.74),transparent 54%)}
-.look-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;min-height:100%;width:min(680px,78%);padding:clamp(26px,5vw,54px);padding-bottom:76px}
-.look-kicker{margin-bottom:16px;background:rgba(20,18,18,.45);backdrop-filter:blur(12px)}
-.look-title{font:700 clamp(34px,5.2vw,64px)/1.02 "Playfair Display",serif;letter-spacing:-.025em;text-shadow:0 3px 24px rgba(0,0,0,.38);max-width:650px}
-.look-description{max-width:490px;color:rgba(255,255,255,.78);font-size:14px;line-height:1.75;margin-top:13px}
-.look-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 22px}
-.look-price{font-weight:800;font-size:15px}
-.look-rating{display:inline-flex;gap:7px;align-items:center;font-size:13px;color:var(--gold)}
-.look-rating span{color:rgba(255,255,255,.72)}
-.look-cta{background:linear-gradient(115deg,#e1c17b,#a77d43);color:#100e0a;box-shadow:0 13px 35px rgba(217,181,109,.27)}
-.look-arrow{
-    position:absolute;z-index:5;top:50%;transform:translateY(-50%);
-    width:46px;height:46px;border:1px solid rgba(255,255,255,.22);
-    border-radius:50%;display:grid;place-items:center;color:#fff;font-size:25px;
-    background:rgba(10,10,18,.52);backdrop-filter:blur(14px);transition:.2s;
-}
-.look-arrow:hover{background:rgba(217,181,109,.8);transform:translateY(-50%) scale(1.06)}
-.look-prev{left:17px}.look-next{right:17px}
-.look-footer{position:absolute;z-index:4;left:clamp(26px,5vw,54px);right:clamp(26px,5vw,54px);bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;pointer-events:none}
-.look-counter{color:rgba(255,255,255,.78);font-size:11px;font-weight:700;letter-spacing:.12em}
-.look-dots{display:flex;align-items:center;gap:7px;pointer-events:auto}
-.look-dot{width:8px;height:8px;padding:0;border-radius:999px;background:rgba(255,255,255,.38);transition:width .25s,background .25s}
-.look-dot[aria-current="true"]{width:26px;background:#fff}
-.look-hint{display:flex;align-items:center;gap:7px;color:#aaa7b3;font-size:11px;margin-top:12px}
-.look-hint i{font-size:16px;color:var(--gold)}
 
-/* QUICK ACTIONS */
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.quick-card{
-    position:relative;overflow:hidden;min-height:142px;
-    border:1px solid rgba(255,255,255,.085);border-radius:22px;
-    background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
-    padding:20px;color:#fff;text-align:left;transition:.25s;
+.logo span { color:var(--primary); }
+
+.auth-subtitle {
+    color:var(--muted);
+    font-size:13px;
+    margin-top:8px;
+    line-height:1.7;
 }
-.quick-card:after{content:"";position:absolute;width:110px;height:110px;right:-48px;bottom:-58px;border-radius:50%;background:rgba(217,181,109,.07)}
-.quick-card:hover{transform:translateY(-4px);border-color:rgba(217,181,109,.3);background:linear-gradient(145deg,rgba(217,181,109,.09),rgba(255,255,255,.02))}
-.quick-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:21px;margin-bottom:13px;background:linear-gradient(145deg,rgba(217,181,109,.2),rgba(22,140,255,.12));color:var(--gold-soft)}
-.quick-card h3{font-size:14px}
-.quick-card p{color:var(--muted);font-size:12px;margin-top:5px;line-height:1.5}
 
-/* BOOKINGS */
-.booking-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:15px}
-.booking-insight{display:flex;align-items:center;gap:13px;min-width:0;padding:16px;border:1px solid rgba(217,181,109,.14);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));transition:.22s}
-.booking-insight:hover{transform:translateY(-3px);border-color:rgba(217,181,109,.3)}
-.insight-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:14px;color:var(--gold-soft);background:rgba(217,181,109,.12);font-size:21px}
-.insight-icon.pending{color:#93c5fd;background:rgba(59,130,246,.13)}
-.insight-icon.confirmed{color:#86efac;background:rgba(34,197,94,.12)}
-.booking-insight strong{display:block;font-size:23px;line-height:1.1;font-variant-numeric:tabular-nums}
-.booking-insight span:last-child{display:block;margin-top:5px;color:var(--muted);font-size:11px}
-.bookings{display:grid;gap:12px}
-.booking{border:1px solid var(--border);border-radius:20px;padding:18px;background:linear-gradient(120deg,rgba(255,255,255,.045),rgba(255,255,255,.015));display:flex;align-items:center;justify-content:space-between;gap:18px}
-.booking h3{font-size:15px}
-.booking p{font-size:12px;color:var(--muted);margin-top:5px}
-.booking-meta{text-align:right}
-.booking-date{font-size:13px;font-weight:700}
-.booking-status{display:inline-flex;margin-top:7px;padding:5px 9px;border-radius:999px;font-size:10px;text-transform:capitalize;background:rgba(217,181,109,.11);color:var(--gold-soft);border:1px solid rgba(217,181,109,.15)}
-.empty{padding:30px;text-align:center;border:1px dashed var(--line);border-radius:20px;color:var(--muted);line-height:1.6}
-.empty i{font-size:35px;display:block;margin-bottom:10px}
-
-/* DISCOVER / ELITE */
-.discover{border:1px solid rgba(217,181,109,.22);border-radius:28px;padding:clamp(24px,4vw,38px);display:grid;grid-template-columns:1fr auto;gap:25px;align-items:center;background:radial-gradient(circle at 100% 0%,rgba(217,181,109,.12),transparent 38%),linear-gradient(110deg,rgba(22,140,255,.1),rgba(121,87,213,.08))}
-.discover h2{font:700 clamp(26px,4vw,36px) "Playfair Display",serif}
-.discover p{color:var(--muted);line-height:1.7;margin-top:8px;max-width:620px;font-size:13px}
-.elite{margin-top:22px;border:1px solid rgba(217,181,109,.26);border-radius:30px;overflow:hidden;position:relative;min-height:360px;box-shadow:0 25px 75px rgba(0,0,0,.24)}
-.elite img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.48;filter:saturate(.78)}
-.elite-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,13,.97),rgba(7,7,13,.63) 58%,rgba(7,7,13,.12))}
-.elite-content{position:relative;z-index:1;padding:38px;max-width:680px}
-.elite-label{color:var(--gold-soft);font-size:11px;text-transform:uppercase;letter-spacing:.24em;font-weight:800}
-.elite h2{font:700 clamp(34px,5vw,60px) "Playfair Display",serif;margin-top:10px}
-.elite p{color:#c5c5ce;line-height:1.7;margin:10px 0 22px;max-width:530px}
-
-/* PROFILE */
-.profile{border:1px solid rgba(217,181,109,.16);border-radius:26px;padding:25px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));box-shadow:0 20px 65px rgba(0,0,0,.16)}
-.profile-head{display:flex;align-items:center;gap:15px;margin-bottom:20px}
-.profile-avatar{width:62px;height:62px;border-radius:20px;font-size:22px;box-shadow:0 8px 28px rgba(217,181,109,.18)}
-.profile-head h2{font:700 22px "Playfair Display",serif}
-.profile-head p{font-size:12px;color:var(--muted);margin-top:4px}
-.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.profile-item{border:1px solid var(--border);border-radius:15px;padding:14px;background:rgba(0,0,0,.17);min-width:0}
-.profile-item label{display:block;color:#b6a47e;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
-.profile-item div{font-size:13px;overflow-wrap:anywhere}
-.profile-edit{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
-.profile-edit h3{font:700 18px "Playfair Display",serif;margin-bottom:6px}
-.profile-edit p{color:var(--muted);font-size:12px;line-height:1.6;margin-bottom:14px}
-.profile-edit .group{max-width:520px;margin-bottom:14px}
-.profile-edit .group label{display:block;color:#d7d7df;font-size:13px;margin-bottom:8px}
-.profile-edit .control{background:rgba(0,0,0,.25);padding:0 14px}
-
-/* BOTTOM NAV / TOAST */
-.bottom{
-    position:fixed;left:50%;transform:translateX(-50%);bottom:12px;z-index:100;
-    width:min(540px,calc(100% - 22px));border:1px solid rgba(217,181,109,.2);
-    border-radius:22px;padding:7px;display:grid;grid-template-columns:repeat(3,1fr);
-    background:rgba(12,12,19,.94);backdrop-filter:blur(22px);box-shadow:0 20px 65px rgba(0,0,0,.6)
+.auth-tabs {
+    display:flex;
+    background:#080811;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:5px;
+    margin:28px 0;
 }
-.nav{background:transparent;color:var(--muted);padding:9px 7px;border-radius:15px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px}
-.nav i{font-size:21px}
-.nav.active,.nav.portal-role{color:var(--gold-soft);background:rgba(217,181,109,.09)}
-#toast{position:fixed;z-index:10000;left:50%;bottom:95px;transform:translate(-50%,20px);opacity:0;pointer-events:none;width:min(460px,calc(100% - 30px));padding:13px 16px;border:1px solid var(--border);border-radius:14px;background:rgba(20,20,30,.96);box-shadow:var(--shadow);transition:.25s;font-size:13px}
-#toast.show{opacity:1;transform:translate(-50%,0)}
-#toast.error{border-color:rgba(239,68,68,.28)}
-#toast.success{border-color:rgba(34,197,94,.28)}
-#toast.info{border-color:rgba(217,181,109,.28)}
 
-/* RESPONSIVE */
-@media(max-width:960px){
-    .auth-shell{grid-template-columns:1fr}
-    .auth-visual{display:none}
-    .hero{grid-template-columns:1fr}
-    .welcome{min-height:330px}
-    .quick{grid-template-columns:repeat(2,1fr)}
+.auth-tabs button {
+    flex:1;
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    padding:13px;
+    border-radius:10px;
+    font-weight:700;
 }
-@media(max-width:600px){
-    .auth-screen{padding:10px}
-    .auth-shell{min-height:calc(100svh - 20px);border-radius:23px}
-    .auth-panel{padding:25px 20px}
-    .topbar{height:68px;padding-inline:15px}
-    .page,.container{width:calc(100% - 22px)}
-    .hero{padding-top:22px}
-    .welcome{min-height:340px;padding:25px 22px;border-radius:25px}
-    .welcome h1{font-size:clamp(38px,11vw,56px)}
-    .status{padding:20px}
-    .quick{gap:10px}
-    .quick-card{min-height:125px;padding:16px}
-    .look-viewport{min-height:430px;height:490px;border-radius:22px}
-    .look-copy{width:88%;padding:23px;padding-bottom:75px}
-    .look-title{font-size:clamp(33px,9vw,48px)}
-    .look-description{font-size:12px}
-    .look-arrow{width:38px;height:38px;font-size:21px}
-    .look-prev{left:9px}.look-next{right:9px}
-    .look-footer{left:22px;right:22px;bottom:19px}
-    .booking-insights{gap:7px}
-    .booking-insight{padding:11px 8px;gap:7px;display:block}
-    .insight-icon{width:32px;height:32px;font-size:17px;margin-bottom:8px}
-    .booking-insight strong{font-size:19px}
-    .booking-insight span:last-child{font-size:10px}
-    .booking{padding:14px;gap:10px}
-    .booking h3{font-size:13px}
-    .booking p{font-size:11px}
-    .discover{grid-template-columns:1fr;padding:24px}
-    .elite{min-height:350px}
-    .elite-content{padding:27px 23px}
-    .profile-grid{grid-template-columns:1fr}
-    .portal.show{align-items:flex-start;flex-direction:column}
-    .head{align-items:flex-start}
+
+.auth-tabs button.active {
+    color:white;
+    background:linear-gradient(120deg,var(--primary),#5636c9);
 }
-@media(prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+
+.field { margin-bottom:17px; }
+
+.field label {
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    color:#c6c6d7;
+    margin-bottom:9px;
+}
+
+.field input,.field select {
+    width:100%;
+    padding:15px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    background:#090912;
+    color:white;
+    outline:none;
+}
+
+.field input:focus,.field select:focus {
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(139,92,246,.12);
+}
+
+.primary-btn {
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:13px;
+    background:linear-gradient(120deg,var(--primary),#5636c9);
+    color:white;
+    font-weight:800;
+    margin-top:10px;
+    transition:.25s;
+}
+
+.primary-btn:hover {
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(139,92,246,.25);
+}
+
+.auth-message {
+    margin-top:15px;
+    font-size:12px;
+    text-align:center;
+    color:var(--muted);
+    line-height:1.6;
+}
+
+.error { color:#ff7777; }
+.success { color:var(--green); }
+
+.app-shell { display:none; }
+.app-shell.visible { display:block; }
+
+.topbar {
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 6%;
+    background:rgba(7,7,13,.88);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.topbar .logo { font-size:25px; }
+
+.nav-links {
+    display:flex;
+    align-items:center;
+    gap:28px;
+}
+
+.nav-links a,.nav-links button {
+    color:#c3c3d1;
+    font-size:13px;
+    font-weight:700;
+    background:none;
+    border:0;
+}
+
+.nav-links a:hover,.nav-links button:hover {
+    color:white;
+}
+
+.profile-btn {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:10px 15px;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    border-radius:30px;
+}
+
+.hero {
+    padding:65px 6% 45px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:45px;
+    max-width:1500px;
+    margin:auto;
+}
+
+.eyebrow {
+    color:var(--gold);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+.hero h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(43px,6vw,76px);
+    line-height:1.08;
+    margin:20px 0;
+}
+
+.hero h1 span { color:var(--primary); }
+
+.hero p {
+    color:var(--muted);
+    line-height:1.9;
+    max-width:470px;
+    font-size:14px;
+}
+
+.hero-actions {
+    display:flex;
+    gap:13px;
+    flex-wrap:wrap;
+    margin-top:28px;
+}
+
+.hero-actions button {
+    padding:15px 22px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    font-weight:800;
+}
+
+.explore-btn {
+    background:var(--primary);
+    color:white;
+    border-color:var(--primary)!important;
+}
+
+.secondary-btn {
+    background:var(--surface);
+    color:white;
+}
+
+.hero-gallery {
+    position:relative;
+    height:440px;
+    overflow:hidden;
+    border-radius:26px;
+    border:1px solid var(--border);
+    background:#171321;
+}
+
+.hero-gallery img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:opacity .3s;
+}
+
+.gallery-overlay {
+    position:absolute;
+    inset:0;
+    background:linear-gradient(0deg,rgba(0,0,0,.8),transparent 55%);
+    pointer-events:none;
+}
+
+.gallery-caption {
+    position:absolute;
+    bottom:25px;
+    left:25px;
+    right:25px;
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+}
+
+.gallery-caption h3 {
+    font-family:'Playfair Display',serif;
+    font-size:25px;
+}
+
+.gallery-caption p {
+    font-size:11px;
+    color:#ddd;
+    margin-top:5px;
+}
+
+.gallery-controls {
+    display:flex;
+    gap:8px;
+}
+
+.gallery-controls button {
+    width:39px;
+    height:39px;
+    border-radius:50%;
+    border:1px solid #ffffff55;
+    background:#ffffff22;
+    color:white;
+    font-size:20px;
+}
+
+.section {
+    max-width:1500px;
+    margin:auto;
+    padding:45px 6%;
+}
+
+.section-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-bottom:25px;
+    gap:15px;
+}
+
+.section-heading h2 {
+    font-family:'Playfair Display',serif;
+    font-size:32px;
+}
+
+.section-heading p {
+    color:var(--muted);
+    font-size:12px;
+    margin-top:8px;
+}
+
+.text-link {
+    color:var(--gold);
+    font-size:12px;
+    font-weight:800;
+}
+
+.feature-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+
+.feature-card {
+    background:linear-gradient(145deg,#171725,#10101a);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:25px;
+    transition:.25s;
+}
+
+.feature-card:hover {
+    transform:translateY(-5px);
+    border-color:#8b5cf655;
+}
+
+.feature-icon {
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    background:#8b5cf622;
+    color:#b79bff;
+    border-radius:14px;
+    font-size:25px;
+    margin-bottom:20px;
+}
+
+.feature-card h3 { font-size:16px; margin-bottom:9px; }
+
+.feature-card p {
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+}
+
+.showcase-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+}
+
+.showcase-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.showcase-card img {
+    width:100%;
+    height:210px;
+    object-fit:cover;
+    display:block;
+}
+
+.showcase-info { padding:17px; }
+
+.showcase-info h3 { font-size:14px; }
+
+.showcase-info p {
+    font-size:11px;
+    color:var(--muted);
+    margin-top:9px;
+}
+
+.price-rating {
+    display:flex;
+    justify-content:space-between;
+    margin-top:14px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.price { color:var(--gold); }
+.rating { color:#f5c76c; }
+
+.promo {
+    margin:25px 6% 65px;
+    padding:45px;
+    border:1px solid rgba(139,92,246,.3);
+    border-radius:24px;
+    background:linear-gradient(110deg,#251746,#10172b);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.promo h2 {
+    font-family:'Playfair Display',serif;
+    font-size:32px;
+}
+
+.promo p {
+    color:#c1bfd0;
+    font-size:13px;
+    margin-top:10px;
+}
+
+.promo button {
+    padding:15px 22px;
+    background:white;
+    color:#171321;
+    border:0;
+    border-radius:12px;
+    font-weight:800;
+}
+
+.profile-section {
+    max-width:1000px;
+    margin:30px auto 70px;
+    padding:0 6%;
+}
+
+.profile-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:27px;
+}
+
+.profile-header {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:25px;
+}
+
+.avatar {
+    width:60px;
+    height:60px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:linear-gradient(130deg,var(--primary),var(--blue));
+    font-size:24px;
+    font-weight:900;
+}
+
+.profile-header p {
+    color:var(--muted);
+    font-size:12px;
+    margin-top:6px;
+}
+
+.profile-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.profile-card .primary-btn {
+    max-width:220px;
+}
+
+.footer {
+    border-top:1px solid var(--border);
+    padding:35px 6%;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    line-height:2;
+}
+
+.toast {
+    position:fixed;
+    bottom:25px;
+    left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:#202033;
+    border:1px solid var(--border);
+    padding:14px 22px;
+    border-radius:12px;
+    z-index:500;
+    font-size:13px;
+    transition:.3s;
+    max-width:90%;
+}
+
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+.mobile-nav { display:none; }
+
+@media(max-width:900px) {
+    .hero { grid-template-columns:1fr; padding-top:40px; }
+    .hero-gallery { height:350px; }
+    .showcase-grid { grid-template-columns:repeat(2,1fr); }
+    .feature-grid { grid-template-columns:1fr 1fr; }
+}
+
+@media(max-width:600px) {
+    .auth-card { padding:25px 20px; }
+    .topbar { padding:0 5%; height:68px; }
+    .nav-links { gap:13px; }
+    .nav-links a { display:none; }
+    .profile-btn { padding:9px 12px; font-size:11px; }
+    .hero { padding:38px 5% 25px; gap:25px; }
+    .hero h1 { font-size:48px; }
+    .hero-gallery { height:310px; }
+    .section { padding:35px 5%; }
+    .section-heading h2 { font-size:26px; }
+    .feature-grid { grid-template-columns:1fr; }
+    .showcase-grid { gap:11px; }
+    .showcase-card img { height:150px; }
+    .showcase-info { padding:12px; }
+    .showcase-info h3 { font-size:12px; }
+    .promo { margin:20px 5% 50px; padding:25px; flex-direction:column; align-items:flex-start; }
+    .promo h2 { font-size:26px; }
+    .profile-grid { grid-template-columns:1fr; }
+    .profile-section { padding:0 5%; }
+    .mobile-nav {
+        display:flex;
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        background:rgba(12,12,21,.96);
+        border-top:1px solid var(--border);
+        backdrop-filter:blur(20px);
+        padding:11px 8px calc(11px + env(safe-area-inset-bottom));
+        justify-content:space-around;
+        z-index:200;
+    }
+    .mobile-nav button {
+        background:none;
+        border:0;
+        color:var(--muted);
+        font-size:10px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:4px;
+    }
+    .mobile-nav i { font-size:21px; }
+    .mobile-nav button.active { color:var(--primary); }
+    body.app-mode { padding-bottom:75px; }
 }
 </style>
 </head>
 
-<body class="auth-mode">
+<body>
 
-<!-- LOADING SCREEN -->
-<div id="loading" class="loading-screen">
-    <div class="loading-content">
-        <div class="loading-logo">K@</div>
-        <h1>K@si Web</h1>
-        <p>Preparing your grooming experience...</p>
-        <div class="spinner"></div>
-    </div>
-</div>
+<!-- AUTHENTICATION -->
+<section class="auth-screen" id="authScreen">
+    <div class="auth-card">
+        <div class="logo">K<span>@</span>si Web.</div>
+        <p class="auth-subtitle">Your cut. Your time. Your personal grooming destination.</p>
 
-<!-- AUTHENTICATION SCREEN -->
-<section id="authScreen" class="auth-screen hidden">
-    <div class="auth-shell">
-
-        <div class="auth-visual">
-            <div class="auth-visual-content">
-                <div class="auth-eyebrow"><i class="bx bxs-bolt-circle"></i> YOUR CUT. YOUR TIME.</div>
-                <h1>Fresh cuts.<br><span>No lines.</span></h1>
-                <p>Discover local barbers and salons, compare services, manage your bookings and keep your grooming journey in one place.</p>
-                <div class="auth-points">
-                    <div class="auth-point"><i class="bx bx-store"></i> Local salons</div>
-                    <div class="auth-point"><i class="bx bx-calendar-check"></i> Easy booking</div>
-                    <div class="auth-point"><i class="bx bxs-crown"></i> Elite experiences</div>
-                </div>
-            </div>
+        <div class="auth-tabs">
+            <button class="active" id="loginTab" onclick="switchAuth('login')">Login</button>
+            <button id="signupTab" onclick="switchAuth('signup')">Create account</button>
         </div>
 
-        <div class="auth-panel">
-            <div class="auth-inner">
-                <div class="brand">
-                    <div class="brand-mark">K@</div>
-                    <div class="brand-text">
-                        <strong>K@si<span>Web</span></strong>
-                        <span>Your cut. Your time.</span>
-                    </div>
-                </div>
+        <form id="loginForm">
+            <div class="field">
+                <label>Email address</label>
+                <input type="email" id="loginEmail" required autocomplete="email" placeholder="you@example.com">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="Enter password">
+            </div>
+            <button class="primary-btn" type="submit" id="loginButton">Sign in</button>
+            <button type="button" onclick="resetPassword()" style="background:none;border:0;color:var(--gold);margin-top:18px;font-size:12px;width:100%">Forgot password?</button>
+        </form>
 
-                <div class="auth-heading">
-                    <h2 id="authTitle">Welcome back</h2>
-                    <p id="authSubtitle">Sign in to continue to your K@si Web account.</p>
-                </div>
+        <form id="signupForm" class="hidden">
+            <div class="field">
+                <label>Full name</label>
+                <input type="text" id="signupName" required autocomplete="name" placeholder="Your full name">
+            </div>
+            <div class="field">
+                <label>Email address</label>
+                <input type="email" id="signupEmail" required autocomplete="email" placeholder="you@example.com">
+            </div>
+            <div class="field">
+                <label>Phone number</label>
+                <input type="tel" id="signupPhone" placeholder="e.g. 0712345678">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="signupPassword" minlength="6" required autocomplete="new-password" placeholder="Minimum 6 characters">
+            </div>
+            <div class="field">
+                <label>Account type</label>
+                <select id="signupRole">
+                    <option value="customer">Customer</option>
+                    <option value="salon_owner">Salon owner</option>
+                </select>
+            </div>
+            <button class="primary-btn" type="submit" id="signupButton">Create my account</button>
+        </form>
 
-                <div class="auth-tabs" role="tablist">
-                    <button class="auth-tab active" id="signInTab" type="button" role="tab" aria-selected="true">Sign In</button>
-                    <button class="auth-tab" id="signUpTab" type="button" role="tab" aria-selected="false">Create Account</button>
-                </div>
+        <div class="auth-message" id="authMessage">Welcome to K@si Web.</div>
+    </div>
+</section>
 
-                <div id="authError" class="error hidden" role="alert"></div>
+<!-- MAIN APP -->
+<div class="app-shell" id="appShell">
 
-                <form id="loginForm" class="auth-form active">
-                    <div class="form-field">
-                        <label for="loginEmail">Email address</label>
-                        <div class="input-wrap">
-                            <i class="bx bx-envelope input-icon"></i>
-                            <input class="control" id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
-                        </div>
-                    </div>
+<header class="topbar">
+    <a href="home.html" class="logo">K<span>@</span>si Web.</a>
 
-                    <div class="form-field">
-                        <label for="loginPassword">Password</label>
-                        <div class="input-wrap">
-                            <i class="bx bx-lock-alt input-icon"></i>
-                            <input class="control" id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password" required>
-                            <button class="password-toggle" type="button" data-target="loginPassword" aria-label="Show password"><i class="bx bx-show"></i></button>
-                        </div>
-                    </div>
+    <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="salons.html">Explore salons</a>
+        <a href="#features">Experience</a>
+        <a href="#profile">My profile</a>
+        <button class="profile-btn" onclick="goToProfile()">
+            <i class='bx bx-user-circle'></i>
+            <span id="navUserName">My account</span>
+        </button>
+    </nav>
+</header>
 
-                    <div class="form-field">
-                        <label for="loginRole">Account type</label>
-                        <select class="control" id="loginRole">
-                            <option value="customer">Client / Customer</option>
-                            <option value="salon_owner">Salon Owner</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        <div class="note">Your verified Firestore profile determines your permissions. This selection does not grant access.</div>
-                    </div>
+<main id="home">
 
-                    <button class="btn primary primary-btn" id="loginBtn" type="submit">
-                        <i class="bx bx-log-in"></i> Sign In
-                    </button>
-                    <div class="auth-links">
-                        <button id="forgotPasswordBtn" type="button">Forgot password?</button>
-                    </div>
-                </form>
+<section class="hero">
+    <div>
+        <div class="eyebrow">The Kasi grooming experience</div>
+        <h1>Fresh cuts.<br><span>No lines.</span></h1>
+        <p>
+            Discover exceptional local barbers and salons.
+            Explore services, compare prices and book your next
+            fresh look — all in one place.
+        </p>
 
-                <form id="signupForm" class="auth-form">
-                    <div class="form-field">
-                        <label for="signupName">Full name</label>
-                        <div class="input-wrap">
-                            <i class="bx bx-user input-icon"></i>
-                            <input class="control" id="signupName" type="text" autocomplete="name" placeholder="Your full name" maxlength="80" required>
-                        </div>
-                    </div>
+        <div class="hero-actions">
+            <button class="explore-btn" onclick="goToSalons()">Explore salons <i class='bx bx-right-arrow-alt'></i></button>
+            <button class="secondary-btn" onclick="goToProfile()">My profile</button>
+        </div>
+    </div>
 
-                    <div class="form-field">
-                        <label for="signupEmail">Email address</label>
-                        <div class="input-wrap">
-                            <i class="bx bx-envelope input-icon"></i>
-                            <input class="control" id="signupEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
-                        </div>
-                    </div>
+    <div class="hero-gallery" id="heroGallery">
+        <img id="heroImage"
+        src="683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg"
+        alt="Premium grooming experience"
+        onerror="this.src='https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200'">
 
-                    <div class="form-field">
-                        <label for="signupPassword">Password</label>
-                        <div class="input-wrap">
-                            <i class="bx bx-lock-alt input-icon"></i>
-                            <input class="control" id="signupPassword" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required>
-                            <button class="password-toggle" type="button" data-target="signupPassword" aria-label="Show password"><i class="bx bx-show"></i></button>
-                        </div>
-                    </div>
+        <div class="gallery-overlay"></div>
 
-                    <div class="form-field">
-                        <label for="signupConfirm">Confirm password</label>
-                        <div class="input-wrap">
-                            <i class="bx bx-check-shield input-icon"></i>
-                            <input class="control" id="signupConfirm" type="password" autocomplete="new-password" minlength="6" placeholder="Repeat your password" required>
-                        </div>
-                    </div>
-
-                    <label class="check">
-                        <input id="signupTerms" type="checkbox" required>
-                        <span>I understand that accounts created here are customer accounts. Salon-owner and admin access comes from a verified Firestore role.</span>
-                    </label>
-
-                    <button class="btn primary primary-btn" id="signupBtn" type="submit">
-                        <i class="bx bx-user-plus"></i> Create Customer Account
-                    </button>
-                </form>
-
-                <div id="debugPanel" class="debug"></div>
-                <p class="auth-footnote">By continuing, you agree to use K@si Web responsibly and keep your account details secure.</p>
+        <div class="gallery-caption">
+            <div>
+                <h3 id="galleryTitle">Your next fresh look</h3>
+                <p id="gallerySubtitle">Discover your style with K@si Web</p>
+            </div>
+            <div class="gallery-controls">
+                <button onclick="changeSlide(-1)" aria-label="Previous image"><i class='bx bx-chevron-left'></i></button>
+                <button onclick="changeSlide(1)" aria-label="Next image"><i class='bx bx-chevron-right'></i></button>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CUSTOMER APPLICATION -->
-<main id="appShell" class="app-shell hidden" aria-label="K@si Web customer dashboard">
-
-    <header class="topbar">
-        <div class="topbar-left">
-            <a href="home.html" class="top-brand">K@si<span>Web</span></a>
+<section class="section" id="features">
+    <div class="section-heading">
+        <div>
+            <div class="eyebrow">Designed around you</div>
+            <h2>More than a haircut.</h2>
+            <p>Everything you need for a better grooming experience.</p>
         </div>
-        <div class="topbar-actions">
-            <button class="icon" id="refreshBtn" type="button" title="Refresh" aria-label="Refresh"><i class="bx bx-refresh"></i></button>
-            <button class="icon" id="topAccountBtn" type="button" title="Account" aria-label="Account"><i class="bx bx-user"></i></button>
-            <div class="avatar" id="topAvatar">K</div>
-        </div>
-    </header>
-
-    <div class="page">
-
-        <section class="hero">
-            <div class="welcome">
-                <div class="eyebrow"><i class="bx bxs-star"></i> K@SI WEB MEMBER</div>
-                <h1>Your look.<br><span>Your time.</span></h1>
-                <p id="welcomeText">Discover your next fresh look from local grooming professionals.</p>
-                <div class="actions">
-                    <a class="btn primary" href="salons.html"><i class="bx bx-search"></i> Discover Salons</a>
-                    <button class="btn secondary" id="welcomeAccountBtn" type="button"><i class="bx bx-user"></i> My Account</button>
-                </div>
-                <div id="portalBanner" class="portal">
-                    <p id="portalBannerText">Your account has verified privileges. Open your dedicated portal.</p>
-                    <button class="btn secondary" id="portalBtn" type="button">Open Portal</button>
-                </div>
-            </div>
-
-            <div class="status">
-                <h3>Account overview</h3>
-                <div class="status-list">
-                    <div class="status-item"><span>Signed in as</span><strong id="statusName">—</strong></div>
-                    <div class="status-item"><span>Email</span><strong id="statusEmail">—</strong></div>
-                    <div class="status-item"><span>Role</span><strong id="statusRole">Customer</strong></div>
-                    <div class="status-item"><span>Account status</span><strong class="online">● Active</strong></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FEATURED IMAGE SWIPER -->
-        <section class="section" id="featuredLooks">
-            <div class="head">
-                <div>
-                    <h2>Find your next signature look</h2>
-                    <p>Swipe through the styles. Choose your look, then discover a local professional.</p>
-                </div>
-                <a class="link" href="salons.html">View salons <i class="bx bx-right-arrow-alt"></i></a>
-            </div>
-
-            <div class="look-carousel" id="lookCarousel">
-                <div class="look-viewport" id="lookViewport" tabindex="0" aria-roledescription="carousel" aria-label="Featured styles. Use left and right arrow keys to browse.">
-
-                    <article class="look-slide active" data-look-slide aria-label="1 of 5">
-                        <img src="7847041D.jpg" alt="Burst fade haircut with a sharply shaped beard" fetchpriority="high" draggable="false">
-                        <div class="look-scrim"></div>
-                        <div class="look-copy">
-                            <div class="look-kicker"><i class="bx bxs-crown"></i> The signature edit</div>
-                            <h3 class="look-title">Burst Fade<br>&amp; Beard</h3>
-                            <p class="look-description">Clean blends, detailed beard work and a finish that makes the whole look.</p>
-                            <div class="look-meta"><span class="look-price">From R150</span><span class="look-rating">★★★★★ <span>4.9 · Fan favourite</span></span></div>
-                            <a class="btn look-cta" href="salons.html">Find this look <i class="bx bx-right-arrow-alt"></i></a>
-                        </div>
-                    </article>
-
-                    <article class="look-slide" data-look-slide aria-label="2 of 5">
-                        <img src="37BA0E35.jpg" alt="Fresh Kasi taper fade hairstyle" loading="lazy" draggable="false">
-                        <div class="look-scrim"></div>
-                        <div class="look-copy">
-                            <div class="look-kicker"><i class="bx bxs-bolt-circle"></i> Kasi classic</div>
-                            <h3 class="look-title">The Fresh<br>Taper Fade</h3>
-                            <p class="look-description">A sharp, versatile taper for everyday confidence, from the first line to the final brush.</p>
-                            <div class="look-meta"><span class="look-price">From R120</span><span class="look-rating">★★★★★ <span>4.8 · Loved locally</span></span></div>
-                            <a class="btn look-cta" href="salons.html">Find this look <i class="bx bx-right-arrow-alt"></i></a>
-                        </div>
-                    </article>
-
-                    <article class="look-slide" data-look-slide aria-label="3 of 5">
-                        <img src="A3886FFD.jpg" alt="Classic clean cut with a polished finish" loading="lazy" draggable="false">
-                        <div class="look-scrim"></div>
-                        <div class="look-copy">
-                            <div class="look-kicker"><i class="bx bx-check-shield"></i> Clean and timeless</div>
-                            <h3 class="look-title">Classic<br>Clean Cut</h3>
-                            <p class="look-description">Neat, precise and effortlessly polished. A timeless choice for any occasion.</p>
-                            <div class="look-meta"><span class="look-price">From R80</span><span class="look-rating">★★★★★ <span>4.7 · Everyday essential</span></span></div>
-                            <a class="btn look-cta" href="salons.html">Find this look <i class="bx bx-right-arrow-alt"></i></a>
-                        </div>
-                    </article>
-
-                    <article class="look-slide" data-look-slide aria-label="4 of 5">
-                        <img src="B307F46B.jpg" alt="Bold haircut with detailed line design" loading="lazy" draggable="false">
-                        <div class="look-scrim"></div>
-                        <div class="look-copy">
-                            <div class="look-kicker"><i class="bx bxs-magic-wand"></i> Make a statement</div>
-                            <h3 class="look-title">Line Design.<br>Your Rules.</h3>
-                            <p class="look-description">Custom detail work for a distinctive style that stands out from every angle.</p>
-                            <div class="look-meta"><span class="look-price">From R180</span><span class="look-rating">★★★★★ <span>5.0 · Standout detail</span></span></div>
-                            <a class="btn look-cta" href="salons.html">Find this look <i class="bx bx-right-arrow-alt"></i></a>
-                        </div>
-                    </article>
-
-                    <article class="look-slide" data-look-slide aria-label="5 of 5">
-                        <img src="8627A569.jpg" alt="Modern signature grooming style" loading="lazy" draggable="false">
-                        <div class="look-scrim"></div>
-                        <div class="look-copy">
-                            <div class="look-kicker"><i class="bx bxs-star"></i> Your next refresh</div>
-                            <h3 class="look-title">Fresh Looks.<br>Real Local Talent.</h3>
-                            <p class="look-description">Explore the styles, compare local services and find a professional who gets your look.</p>
-                            <div class="look-meta"><span class="look-price">Your style, your choice</span><span class="look-rating">✦ <span>Discover something new</span></span></div>
-                            <a class="btn look-cta" href="salons.html">Explore salons <i class="bx bx-right-arrow-alt"></i></a>
-                        </div>
-                    </article>
-
-                    <button class="look-arrow look-prev" id="lookPrev" type="button" aria-label="Previous look"><i class="bx bx-chevron-left"></i></button>
-                    <button class="look-arrow look-next" id="lookNext" type="button" aria-label="Next look"><i class="bx bx-chevron-right"></i></button>
-
-                    <div class="look-footer">
-                        <span class="look-counter" id="lookCounter">01 / 05</span>
-                        <div class="look-dots" id="lookDots">
-                            <button class="look-dot" type="button" data-look-dot="0" aria-label="Show look 1" aria-current="true"></button>
-                            <button class="look-dot" type="button" data-look-dot="1" aria-label="Show look 2" aria-current="false"></button>
-                            <button class="look-dot" type="button" data-look-dot="2" aria-label="Show look 3" aria-current="false"></button>
-                            <button class="look-dot" type="button" data-look-dot="3" aria-label="Show look 4" aria-current="false"></button>
-                            <button class="look-dot" type="button" data-look-dot="4" aria-label="Show look 5" aria-current="false"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="look-hint"><i class="bx bx-move-horizontal"></i> Swipe left or right to explore · Tap a dot to jump to a look</p>
-        </section>
-
-        <!-- QUICK ACTIONS -->
-        <section class="section">
-            <div class="head"><div><h2>Quick actions</h2><p>Everything you need in a few taps.</p></div></div>
-            <div class="quick">
-                <a class="quick-card" href="salons.html">
-                    <div class="quick-icon"><i class="bx bx-store"></i></div>
-                    <h3>Find a Salon</h3>
-                    <p>Browse local salons and available services.</p>
-                </a>
-                <button class="quick-card" id="bookingsQuickBtn" type="button">
-                    <div class="quick-icon"><i class="bx bx-calendar-check"></i></div>
-                    <h3>My Bookings</h3>
-                    <p>Check your appointments.</p>
-                </button>
-                <button class="quick-card" id="accountQuickBtn" type="button">
-                    <div class="quick-icon"><i class="bx bx-user-circle"></i></div>
-                    <h3 id="accountQuickTitle">My Account</h3>
-                    <p id="accountQuickText">View your profile and account details.</p>
-                </button>
-                <a class="quick-card" href="#elite">
-                    <div class="quick-icon"><i class="bx bxs-crown"></i></div>
-                    <h3>Elite K@si</h3>
-                    <p>Explore the premium side of K@si.</p>
-                </a>
-            </div>
-        </section>
-
-        <!-- BOOKINGS -->
-        <section class="section" id="bookings">
-            <div class="head">
-                <div><h2>My bookings</h2><p>Your latest appointments from K@si Web.</p></div>
-                <button class="link" id="bookingRefreshLink" type="button">Refresh</button>
-            </div>
-
-            <div class="booking-insights" aria-label="Booking summary">
-                <article class="booking-insight">
-                    <span class="insight-icon"><i class="bx bx-calendar-check"></i></span>
-                    <div><strong id="bookingTotal">—</strong><span>Total appointments</span></div>
-                </article>
-                <article class="booking-insight">
-                    <span class="insight-icon pending"><i class="bx bx-time-five"></i></span>
-                    <div><strong id="bookingPending">—</strong><span>Pending</span></div>
-                </article>
-                <article class="booking-insight">
-                    <span class="insight-icon confirmed"><i class="bx bx-check-circle"></i></span>
-                    <div><strong id="bookingConfirmed">—</strong><span>Confirmed</span></div>
-                </article>
-            </div>
-
-            <div id="bookingList" class="bookings">
-                <div class="empty"><i class="bx bx-loader-alt bx-spin"></i>Loading bookings...</div>
-            </div>
-        </section>
-
-        <!-- DISCOVER -->
-        <section class="section">
-            <div class="discover">
-                <div>
-                    <h2>Ready for a fresh look?</h2>
-                    <p>Search local salons, compare services and book your next appointment.</p>
-                </div>
-                <a class="btn primary" href="salons.html">Explore Salons <i class="bx bx-right-arrow-alt"></i></a>
-            </div>
-        </section>
-
-        <!-- ELITE SHOWCASE -->
-        <section class="section" id="elite">
-            <div class="elite">
-                <img src="C00719B.jpg" alt="K@si Elite grooming" loading="lazy">
-                <div class="elite-overlay"></div>
-                <div class="elite-content">
-                    <div class="elite-label">K@si Elite</div>
-                    <h2>Where local style meets premium detail.</h2>
-                    <p>A refined space for standout grooming, trusted professionals and experiences that feel different.</p>
-                    <a class="btn primary" href="salons.html">Discover the Marketplace <i class="bx bx-right-arrow-alt"></i></a>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROFILE -->
-        <section class="section" id="profile">
-            <div class="head"><div><h2>Profile</h2><p>Your K@si Web account information.</p></div></div>
-            <div class="profile">
-                <div class="profile-head">
-                    <div class="profile-avatar" id="profileAvatar">K</div>
-                    <div>
-                        <h2 id="profileName">Loading...</h2>
-                        <p id="profileRole">Customer</p>
-                    </div>
-                </div>
-
-                <div class="profile-grid">
-                    <div class="profile-item"><label>Full name</label><div id="profileNameField">—</div></div>
-                    <div class="profile-item"><label>Email</label><div id="profileEmailField">—</div></div>
-                    <div class="profile-item"><label>Role</label><div id="profileRoleField">—</div></div>
-                    <div class="profile-item"><label>User ID</label><div id="profileUidField">—</div></div>
-                </div>
-
-                <form id="profileEditForm" class="profile-edit">
-                    <h3>Edit your profile</h3>
-                    <p>Update the name shown on your K@si Web account. Your sign-in email and account role are protected.</p>
-                    <div class="group">
-                        <label for="profileEditName">Full name</label>
-                        <input class="control" id="profileEditName" type="text" maxlength="80" autocomplete="name" required placeholder="Enter your full name">
-                    </div>
-                    <button class="btn primary" id="saveProfileBtn" type="submit"><i class="bx bx-save"></i> Save profile</button>
-                </form>
-
-                <div style="margin-top:18px">
-                    <button class="btn danger" id="logoutBtn" type="button"><i class="bx bx-log-out"></i> Sign Out</button>
-                </div>
-            </div>
-        </section>
     </div>
 
-    <nav class="bottom" aria-label="Main navigation">
-        <a class="nav active" href="home.html"><i class="bx bx-home-alt-2"></i><span>Home</span></a>
-        <a class="nav" href="salons.html"><i class="bx bx-store"></i><span>Salons</span></a>
-        <button class="nav" id="accountNav" type="button"><i class="bx bx-user"></i><span id="accountNavLabel">Account</span></button>
-    </nav>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon"><i class='bx bx-search-alt'></i></div>
+            <h3>Discover local talent</h3>
+            <p>Find nearby barbers and salons, explore their services and discover your next favourite grooming destination.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class='bx bx-calendar-check'></i></div>
+            <h3>Easy appointments</h3>
+            <p>Request appointments and keep your grooming bookings organised in one convenient place.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class='bx bx-wallet'></i></div>
+            <h3>Transparent pricing</h3>
+            <p>Explore services and compare prices before choosing the right salon for your budget.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <div class="eyebrow">Style inspiration</div>
+            <h2>Find your signature look.</h2>
+            <p>Explore popular grooming styles and fresh-cut inspiration.</p>
+        </div>
+        <a href="salons.html" class="text-link">Explore salons →</a>
+    </div>
+
+    <div class="showcase-grid">
+        <article class="showcase-card">
+            <img src="37BA0E35.jpg" alt="Kasi taper fade"
+            onerror="this.src='https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600'">
+            <div class="showcase-info">
+                <h3>Kasi Taper Fade</h3>
+                <p>Clean. Sharp. Classic.</p>
+                <div class="price-rating"><span class="price">R120</span><span class="rating">★ 4.8</span></div>
+            </div>
+        </article>
+
+        <article class="showcase-card">
+            <img src="7847041D.jpg" alt="Burst fade and beard"
+            onerror="this.src='https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600'">
+            <div class="showcase-info">
+                <h3>Burst Fade & Beard</h3>
+                <p>Defined. Refined. Fresh.</p>
+                <div class="price-rating"><span class="price">R150</span><span class="rating">★ 4.9</span></div>
+            </div>
+        </article>
+
+        <article class="showcase-card">
+            <img src="A3886FFD.jpg" alt="Classic clean cut"
+            onerror="this.src='https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600'">
+            <div class="showcase-info">
+                <h3>Classic Clean Cut</h3>
+                <p>Simple. Timeless. Elite.</p>
+                <div class="price-rating"><span class="price">R80</span><span class="rating">★ 4.7</span></div>
+            </div>
+        </article>
+
+        <article class="showcase-card">
+            <img src="B307F46B.jpg" alt="Line design cut"
+            onerror="this.src='https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600'">
+            <div class="showcase-info">
+                <h3>Line Design Cut</h3>
+                <p>Bold. Creative. Individual.</p>
+                <div class="price-rating"><span class="price">R180</span><span class="rating">★ 5.0</span></div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<div class="promo">
+    <div>
+        <div class="eyebrow">Your next appointment starts here</div>
+        <h2>Ready for a fresh look?</h2>
+        <p>Discover salons around you and find a style worth showing off.</p>
+    </div>
+    <button onclick="goToSalons()">Find a salon <i class='bx bx-right-arrow-alt'></i></button>
+</div>
+
+<section class="profile-section" id="profile">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar" id="profileAvatar">K</div>
+            <div>
+                <h2 id="profileHeading">My profile</h2>
+                <p>Manage your personal information.</p>
+            </div>
+        </div>
+
+        <form id="profileForm">
+            <div class="profile-grid">
+                <div class="field">
+                    <label>Full name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="field">
+                    <label>Email address</label>
+                    <input type="email" id="profileEmail" disabled>
+                </div>
+                <div class="field">
+                    <label>Phone number</label>
+                    <input type="tel" id="profilePhone">
+                </div>
+            </div>
+
+            <button class="primary-btn" type="submit">Save profile changes</button>
+        </form>
+    </div>
+</section>
+
 </main>
 
-<div id="toast" role="alert" aria-live="polite"></div>
+<footer class="footer">
+    <div class="logo">K<span>@</span>si Web.</div>
+    <p>Your cut. Your time. Your Kasi.</p>
+    <p>© <span id="year"></span> K@si Web. All rights reserved.</p>
+    <button onclick="logout()" style="background:none;border:0;color:#aaa;margin-top:12px">Sign out</button>
+</footer>
 
-<!-- LOADING FAILSAFE: executes before Firebase SDK downloads -->
-<script>
-window.kasiLoadingWatchdog = setTimeout(function () {
-    const loading = document.getElementById("loading");
-    const auth = document.getElementById("authScreen");
-    const error = document.getElementById("authError");
+<nav class="mobile-nav">
+    <button class="active" onclick="scrollToSection('home')"><i class='bx bx-home-alt'></i>Home</button>
+    <button onclick="goToSalons()"><i class='bx bx-search'></i>Salons</button>
+    <button onclick="scrollToSection('features')"><i class='bx bx-star'></i>Experience</button>
+    <button onclick="goToProfile()"><i class='bx bx-user'></i>Profile</button>
+</nav>
 
-    if (loading && !loading.classList.contains("hidden")) {
-        loading.classList.add("hidden");
-        if (auth) auth.classList.remove("hidden");
+</div>
 
-        if (error) {
-            error.textContent = "K@si Web is taking too long to connect. Check your internet connection and refresh the page.";
-            error.classList.remove("hidden");
-            error.classList.add("show");
-        }
-
-        document.body.classList.add("auth-mode");
-    }
-}, 12000);
-</script>
+<div class="toast" id="toast"></div>
 
 <!-- FIREBASE COMPAT SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
 
 <script>
 "use strict";
 
-/* FIREBASE CONFIGURATION
-   Verify the appId against Firebase Console > Project settings > Your apps.
-*/
+/* ==========================================
+   FIREBASE INITIALIZATION
+========================================== */
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCjmaSIPBngf3SbhP1AH4Frfn4Mz1QXHk",
+    apiKey: "AIzaSyCjmaSIPbngbF3SbhP1AH4Frfn4Mz1QXHk",
     authDomain: "kasi-web-d073f.firebaseapp.com",
     databaseURL: "https://kasi-web-d073f-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "kasi-web-d073f",
     storageBucket: "kasi-web-d073f.firebasestorage.app",
-    messagingSenderId: "105918157571",
-    appId: "1:105918157571:web:8d646"
+    messagingSenderId: "471544855566",
+    appId: "1:471544855566:web:aa669a968b8af0ceb6905f",
+    measurementId: "G-Q8QVN2T54S"
 };
 
-let auth, db;
+let auth;
+let db;
+let realtimeDB;
+let storage;
 let currentUser = null;
-let currentUserRole = "customer";
-let currentProfile = null;
-let bookingsUnsubscribe = null;
-let toastTimer = null;
-let redirectInProgress = false;
+let currentProfile = {};
+let authReady = false;
 
-const $ = id => document.getElementById(id);
-
-function showLoading(value) {
-    $("loading")?.classList.toggle("hidden", !value);
-}
-
-function showAuth(value) {
-    $("authScreen")?.classList.toggle("hidden", !value);
-    document.body.classList.toggle("auth-mode", value);
-}
-
-function showApp(value) {
-    const app = $("appShell");
-    if (!app) return;
-    app.classList.toggle("hidden", !value);
-    app.classList.toggle("visible", value);
-    document.body.classList.toggle("app-mode", value);
-}
-
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-function showError(message, technical = "") {
-    const element = $("authError");
-    if (element) {
-        element.textContent = message;
-        element.classList.remove("hidden");
-        element.classList.add("show");
-    }
-
-    if (technical) {
-        const debug = $("debugPanel");
-        if (debug) {
-            debug.textContent = "Technical details: " + technical;
-            debug.classList.add("show");
-        }
-    }
-}
-
-function clearError() {
-    const element = $("authError");
-    if (element) {
-        element.textContent = "";
-        element.classList.add("hidden");
-        element.classList.remove("show");
-    }
-    $("debugPanel")?.classList.remove("show");
-}
-
-function toast(message, type = "success") {
-    const element = $("toast");
-    if (!element) return;
-
-    clearTimeout(toastTimer);
-    element.textContent = message;
-    element.className = "show " + type;
-
-    toastTimer = setTimeout(() => {
-        element.className = "";
-    }, 3400);
-}
-
-function normalizeRole(role) {
-    const value = String(role || "")
-        .trim()
-        .toLowerCase()
-        .replace(/-/g, "_")
-        .replace(/\s+/g, "_");
-
-    if (["admin", "administrator", "superadmin", "super_admin"].includes(value)) {
-        return "admin";
-    }
-
-    if (["salon_owner", "salonowner", "owner"].includes(value)) {
-        return "salon_owner";
-    }
-
-    return "customer";
-}
-
-function roleLabel(role) {
-    const value = normalizeRole(role);
-    if (value === "admin") return "Admin";
-    if (value === "salon_owner") return "Salon Owner";
-    return "Customer";
-}
-
-function destinationForRole(role) {
-    const value = normalizeRole(role);
-    if (value === "admin") return "admin.html";
-    if (value === "salon_owner") return "owners.html";
-    return "salons.html";
-}
-
-function friendlyAuthError(error) {
-    switch (error?.code) {
-        case "auth/invalid-email":
-            return "The email address is invalid.";
-        case "auth/user-not-found":
-            return "No Firebase Authentication account exists for this email.";
-        case "auth/wrong-password":
-        case "auth/invalid-credential":
-            return "Incorrect email or password.";
-        case "auth/user-disabled":
-            return "This Firebase account has been disabled.";
-        case "auth/too-many-requests":
-            return "Too many failed attempts. Please wait and try again.";
-        case "auth/network-request-failed":
-            return "Firebase could not connect. Check your internet connection.";
-        case "auth/operation-not-allowed":
-            return "Email/password sign-in is not enabled in Firebase Authentication.";
-        case "auth/unauthorized-domain":
-            return "This website domain is not authorized in Firebase Authentication.";
-        case "auth/email-already-in-use":
-            return "An account already exists with this email address.";
-        case "auth/weak-password":
-            return "Please choose a stronger password.";
-        default:
-            return "Firebase error: " + (error?.code || error?.message || "Unknown authentication error.");
-    }
-}
-
-/* FIRESTORE PROFILE
-   Do not silently turn Firestore permission/network errors into customer roles.
-*/
-async function getUserProfile(user) {
-    if (!user) return null;
-
-    const snapshot = await db.collection("users").doc(user.uid).get();
-
-    if (!snapshot.exists) {
-        return null;
-    }
-
-    return snapshot.data() || {};
-}
-
-async function getVerifiedRole(user) {
-    const profile = await getUserProfile(user);
-
-    return {
-        role: profile ? normalizeRole(profile.role ?? profile.Role) : "customer",
-        profile
-    };
-}
-
-function setSessionRole(role, user) {
-    sessionStorage.setItem("userRole", normalizeRole(role));
-    if (user) sessionStorage.setItem("authUid", user.uid);
-}
-
-async function routeAfterAuthentication(user, source = "login") {
-    if (!user || redirectInProgress) return;
-
-    redirectInProgress = true;
-
-    try {
-        const verified = await getVerifiedRole(user);
-        const role = verified.role;
-        const profile = verified.profile || {};
-
-        setSessionRole(role, user);
-        sessionStorage.setItem("justLoggedIn", "true");
-
-        if (role === "salon_owner") {
-            sessionStorage.setItem("ownerUid", user.uid);
-
-            if (profile.salonId) {
-                sessionStorage.setItem("ownerSalonId", String(profile.salonId));
-            } else {
-                sessionStorage.removeItem("ownerSalonId");
-            }
-        } else {
-            sessionStorage.removeItem("ownerUid");
-            sessionStorage.removeItem("ownerSalonId");
-        }
-
-        toast(source === "signup" ? "Account created. Redirecting..." : "Signed in. Redirecting...");
-
-        window.location.replace(destinationForRole(role));
-    } catch (error) {
-        redirectInProgress = false;
-        console.error("Role routing error:", error);
-
-        showError(
-            "Your password was accepted, but K@si Web could not verify your Firestore profile.",
-            (error.code || "Unknown error") + " — " + error.message
-        );
-    }
-}
-
-/* AUTH FORM TABS */
-function switchAuthMode(mode) {
-    clearError();
-
-    const login = mode === "login";
-
-    $("signInTab")?.classList.toggle("active", login);
-    $("signUpTab")?.classList.toggle("active", !login);
-
-    $("signInTab")?.setAttribute("aria-selected", String(login));
-    $("signUpTab")?.setAttribute("aria-selected", String(!login));
-
-    $("loginForm")?.classList.toggle("active", login);
-    $("signupForm")?.classList.toggle("active", !login);
-
-    if ($("authTitle")) {
-        $("authTitle").textContent = login ? "Welcome back" : "Create your account";
-    }
-
-    if ($("authSubtitle")) {
-        $("authSubtitle").textContent = login
-            ? "Sign in to continue to your K@si Web account."
-            : "Create a customer account and discover local grooming.";
-    }
-}
-
-/* PROFILE HELPERS */
-function initials(name) {
-    const parts = String(name || "K").trim().split(/\s+/).filter(Boolean);
-
-    return parts.length > 1
-        ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-        : (parts[0] || "K").slice(0, 2).toUpperCase();
-}
-
-function formatDate(value) {
-    if (!value) return "Date not provided";
-
-    let date;
-
-    if (typeof value === "object" && typeof value.toDate === "function") {
-        date = value.toDate();
-    } else {
-        date = new Date(value);
-    }
-
-    if (Number.isNaN(date.getTime())) return String(value);
-
-    return new Intl.DateTimeFormat("en-ZA", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-    }).format(date);
-}
-
-/* BOOKINGS */
-function bookingSort(booking) {
-    if (booking.date) {
-        const date = new Date(`${booking.date}T${booking.time || "00:00"}`);
-        if (!Number.isNaN(date.getTime())) return date.getTime();
-    }
-
-    if (booking.createdAt && typeof booking.createdAt.toDate === "function") {
-        return booking.createdAt.toDate().getTime();
-    }
-
-    return 0;
-}
-
-function isUpcoming(booking) {
-    if (!booking.date) return true;
-
-    const date = new Date(`${booking.date}T${booking.time || "23:59"}`);
-
-    return Number.isNaN(date.getTime()) || date.getTime() >= Date.now() - 3600000;
-}
-
-function renderBooking(booking) {
-    const salon = booking.salonName || booking.salon || "K@si Salon";
-
-    const service = typeof booking.service === "object"
-        ? (booking.service?.name || booking.service?.title || "Service")
-        : (booking.service || "Grooming service");
-
-    return `
-        <article class="booking">
-            <div>
-                <h3>${escapeHtml(salon)}</h3>
-                <p>${escapeHtml(service)}</p>
-            </div>
-            <div class="booking-meta">
-                <div class="booking-date">${escapeHtml(formatDate(booking.date))}</div>
-                <div style="font-size:11px;color:#999;margin-top:4px">
-                    ${escapeHtml(booking.time || "Time not set")}
-                </div>
-                <span class="booking-status">${escapeHtml(booking.status || "pending")}</span>
-            </div>
-        </article>
-    `;
-}
-
-function updateBookingInsights(bookings) {
-    const total = $("bookingTotal");
-    const pending = $("bookingPending");
-    const confirmed = $("bookingConfirmed");
-
-    if (!total || !pending || !confirmed) return;
-
-    total.textContent = String(bookings.length);
-
-    pending.textContent = String(
-        bookings.filter(booking =>
-            String(booking.status || "pending").trim().toLowerCase() === "pending"
-        ).length
-    );
-
-    confirmed.textContent = String(
-        bookings.filter(booking =>
-            String(booking.status || "").trim().toLowerCase() === "confirmed"
-        ).length
-    );
-}
-
-function resetBookingInsights() {
-    ["bookingTotal", "bookingPending", "bookingConfirmed"].forEach(id => {
-        if ($(id)) $(id).textContent = "—";
-    });
-}
-
-async function loadBookings(user) {
-    const container = $("bookingList");
-    if (!container) return;
-
-    if (bookingsUnsubscribe) {
-        bookingsUnsubscribe();
-        bookingsUnsubscribe = null;
-    }
-
-    if (!user) {
-        resetBookingInsights();
-        container.innerHTML = '<div class="empty"><i class="bx bx-lock-alt"></i>Sign in to view your bookings.</div>';
-        return;
-    }
-
-    container.innerHTML = '<div class="empty"><i class="bx bx-loader-alt bx-spin"></i>Loading your bookings...</div>';
-
-    bookingsUnsubscribe = db.collection("bookings")
-        .where("userId", "==", user.uid)
-        .onSnapshot(snapshot => {
-            const bookings = [];
-
-            snapshot.forEach(document => {
-                bookings.push({
-                    id: document.id,
-                    ...document.data()
-                });
-            });
-
-            bookings.sort((a, b) => bookingSort(a) - bookingSort(b));
-
-            updateBookingInsights(bookings);
-
-            const upcomingBookings = bookings.filter(isUpcoming);
-            const visibleBookings = upcomingBookings.length
-                ? upcomingBookings.slice(0, 5)
-                : bookings.slice(-5).reverse();
-
-            if (visibleBookings.length) {
-                container.innerHTML = visibleBookings.map(renderBooking).join("");
-            } else {
-                container.innerHTML = `
-                    <div class="empty">
-                        <i class="bx bx-calendar-x"></i>
-                        <div>No bookings yet.</div>
-                        <div style="font-size:12px;margin-top:6px">Explore salons and book your first appointment.</div>
-                        <a class="btn primary" href="salons.html" style="margin-top:15px">Find a Salon</a>
-                    </div>
-                `;
-            }
-        }, error => {
-            console.error("Bookings error:", error);
-            resetBookingInsights();
-
-            container.innerHTML = `
-                <div class="empty">
-                    <i class="bx bx-error-circle"></i>
-                    Bookings could not be loaded.
-                    <br><small>${escapeHtml(error.code || "Unknown error")}</small>
-                </div>
-            `;
-        });
-}
-
-/* ROLE-BASED ACCOUNT UI */
-function updateAccountUI() {
-    const role = normalizeRole(currentUserRole);
-    const isPortalRole = role !== "customer";
-
-    if ($("accountNavLabel")) {
-        $("accountNavLabel").textContent =
-            role === "admin" ? "Admin" :
-            role === "salon_owner" ? "Owner" : "Account";
-    }
-
-    $("accountNav")?.classList.toggle("portal-role", isPortalRole);
-
-    const accountButton = $("topAccountBtn");
-    if (accountButton) {
-        accountButton.title = role === "admin"
-            ? "Open Admin"
-            : role === "salon_owner" ? "Open Owner Portal" : "Account";
-    }
-
-    const welcomeButton = $("welcomeAccountBtn");
-
-    if (welcomeButton) {
-        welcomeButton.innerHTML = role === "admin"
-            ? '<i class="bx bx-shield"></i> Admin Portal'
-            : role === "salon_owner"
-                ? '<i class="bx bx-store"></i> Owner Portal'
-                : '<i class="bx bx-user"></i> My Account';
-    }
-
-    if ($("accountQuickTitle")) {
-        $("accountQuickTitle").textContent = role === "admin"
-            ? "Admin Portal"
-            : role === "salon_owner" ? "Owner Portal" : "My Account";
-    }
-
-    if ($("accountQuickText")) {
-        $("accountQuickText").textContent = role === "admin"
-            ? "Open your verified admin control centre."
-            : role === "salon_owner"
-                ? "Open your verified salon-owner portal."
-                : "View your customer profile and account details.";
-    }
-
-    if ($("portalBannerText")) {
-        $("portalBannerText").textContent = role === "admin"
-            ? "Your account has the verified admin role. Open the admin control centre."
-            : "Your account has the verified salon-owner role. Open the salon owner portal.";
-    }
-
-    const portalButton = $("portalBtn");
-
-    if (portalButton) {
-        portalButton.textContent = role === "admin" ? "Open Admin" : "Open Owner Portal";
-        portalButton.onclick = () => {
-            window.location.href = destinationForRole(role);
-        };
-    }
-
-    $("portalBanner")?.classList.toggle("show", isPortalRole);
-}
-
-/* LOAD SIGNED-IN USER */
-async function loadUser(user) {
-    currentUser = user;
-
-    const verified = await getVerifiedRole(user);
-
-    currentUserRole = verified.role;
-    currentProfile = verified.profile || {};
-
-    const name =
-        currentProfile.name ||
-        currentProfile.fullName ||
-        currentProfile.displayName ||
-        user.displayName ||
-        "K@si Member";
-
-    const email = currentProfile.email || user.email || "";
-    const role = roleLabel(currentUserRole);
-    const avatarText = initials(name);
-
-    if ($("welcomeText")) {
-        $("welcomeText").textContent = currentUserRole === "customer"
-            ? `Welcome ${name}. Discover your next fresh look from local grooming professionals.`
-            : `Welcome ${name}. Your ${role.toLowerCase()} account is active.`;
-    }
-
-    if ($("statusName")) $("statusName").textContent = name;
-    if ($("statusEmail")) $("statusEmail").textContent = email;
-    if ($("statusRole")) $("statusRole").textContent = role;
-
-    if ($("topAvatar")) $("topAvatar").textContent = avatarText;
-    if ($("profileAvatar")) $("profileAvatar").textContent = avatarText;
-    if ($("profileName")) $("profileName").textContent = name;
-    if ($("profileRole")) $("profileRole").textContent = role;
-    if ($("profileNameField")) $("profileNameField").textContent = name;
-    if ($("profileEmailField")) $("profileEmailField").textContent = email;
-    if ($("profileRoleField")) $("profileRoleField").textContent = role;
-    if ($("profileUidField")) $("profileUidField").textContent = user.uid;
-    if ($("profileEditName")) $("profileEditName").value = name;
-
-    $("profileEditForm")?.classList.toggle("hidden", currentUserRole !== "customer");
-
-    updateAccountUI();
-
-    await loadBookings(user);
-}
-
-/* NAVIGATION */
-function goToAccount() {
-    if (!currentUser) {
-        switchAuthMode("login");
-        showAuth(true);
-        showApp(false);
-        return;
-    }
-
-    if (currentUserRole === "admin") {
-        window.location.href = "admin.html";
-        return;
-    }
-
-    if (currentUserRole === "salon_owner") {
-        window.location.href = "owners.html";
-        return;
-    }
-
-    $("profile")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-}
-
-function goToBookings() {
-    $("bookings")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-}
-
-/* LOGIN */
-async function handleLogin(event) {
-    event.preventDefault();
-    clearError();
-
-    const email = $("loginEmail")?.value.trim();
-    const password = $("loginPassword")?.value;
-
-    if (!email || !password) {
-        showError("Please enter your email and password.");
-        return;
-    }
-
-    const button = $("loginBtn");
-
-    if (button) {
-        button.disabled = true;
-        button.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Signing in...';
-    }
-
-    try {
-        const credential = await auth.signInWithEmailAndPassword(email, password);
-        await routeAfterAuthentication(credential.user, "login");
-    } catch (error) {
-        console.error("Login error:", error);
-        showError(friendlyAuthError(error), (error.code || "Unknown error") + " — " + error.message);
-
-        if (button) {
-            button.disabled = false;
-            button.innerHTML = '<i class="bx bx-log-in"></i> Sign In';
-        }
-    }
-}
-
-/* CUSTOMER SIGNUP */
-async function handleSignup(event) {
-    event.preventDefault();
-    clearError();
-
-    const name = $("signupName")?.value.trim();
-    const email = $("signupEmail")?.value.trim();
-    const password = $("signupPassword")?.value;
-    const confirmPassword = $("signupConfirm")?.value;
-
-    if (!name || !email || !password || !confirmPassword) {
-        showError("Please complete all required fields.");
-        return;
-    }
-
-    if (name.length < 2) {
-        showError("Please enter your full name.");
-        return;
-    }
-
-    if (password.length < 6) {
-        showError("Password must be at least 6 characters.");
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        showError("Passwords do not match.");
-        return;
-    }
-
-    const button = $("signupBtn");
-
-    if (button) {
-        button.disabled = true;
-        button.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Creating account...';
-    }
-
-    try {
-        const credential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = credential.user;
-
-        await user.updateProfile({
-            displayName: name
-        });
-
-        await db.collection("users").doc(user.uid).set({
-            name: name,
-            fullName: name,
-            email: email,
-            role: "customer",
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-
-        setSessionRole("customer", user);
-        sessionStorage.setItem("justLoggedIn", "true");
-
-        toast("Customer account created. Redirecting...");
-        window.location.replace("salons.html");
-
-    } catch (error) {
-        console.error("Signup error:", error);
-        showError(friendlyAuthError(error), (error.code || "Unknown error") + " — " + error.message);
-
-        if (button) {
-            button.disabled = false;
-            button.innerHTML = '<i class="bx bx-user-plus"></i> Create Customer Account';
-        }
-    }
-}
-
-/* PASSWORD RESET */
-async function resetPassword() {
-    clearError();
-
-    const email = $("loginEmail")?.value.trim();
-
-    if (!email) {
-        showError("Enter your email address first, then select Forgot password.");
-        $("loginEmail")?.focus();
-        return;
-    }
-
-    try {
-        await auth.sendPasswordResetEmail(email);
-        toast("Password reset email sent. Check your inbox.", "success");
-    } catch (error) {
-        console.error("Password reset error:", error);
-        showError(friendlyAuthError(error), (error.code || "Unknown error") + " — " + error.message);
-    }
-}
-
-/* UPDATE CUSTOMER PROFILE */
-async function saveCustomerProfile(event) {
-    event.preventDefault();
-
-    if (!currentUser || currentUserRole !== "customer") {
-        toast("Only customer profile details can be edited here.", "error");
-        return;
-    }
-
-    const name = $("profileEditName")?.value.trim();
-
-    if (!name || name.length < 2) {
-        toast("Please enter a name with at least 2 characters.", "error");
-        return;
-    }
-
-    const button = $("saveProfileBtn");
-
-    if (button) {
-        button.disabled = true;
-        button.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
-    }
-
-    try {
-        await currentUser.updateProfile({
-            displayName: name
-        });
-
-        await db.collection("users").doc(currentUser.uid).set({
-            name: name,
-            fullName: name,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-
-        currentProfile = {
-            ...(currentProfile || {}),
-            name: name,
-            fullName: name
-        };
-
-        if ($("profileName")) $("profileName").textContent = name;
-        if ($("profileNameField")) $("profileNameField").textContent = name;
-        if ($("profileAvatar")) $("profileAvatar").textContent = initials(name);
-        if ($("topAvatar")) $("topAvatar").textContent = initials(name);
-        if ($("statusName")) $("statusName").textContent = name;
-
-        if ($("welcomeText")) {
-            $("welcomeText").textContent = `Welcome ${name}. Discover your next fresh look from local grooming professionals.`;
-        }
-
-        toast("Your profile has been updated.");
-
-    } catch (error) {
-        console.error("Profile update error:", error);
-
-        toast(
-            error.code === "permission-denied"
-                ? "Firestore rules did not allow this profile update."
-                : "Could not save your profile. Please try again.",
-            "error"
-        );
-    } finally {
-        if (button) {
-            button.disabled = false;
-            button.innerHTML = '<i class="bx bx-save"></i> Save profile';
-        }
-    }
-}
-
-/* LOGOUT */
-async function logout() {
-    try {
-        if (bookingsUnsubscribe) {
-            bookingsUnsubscribe();
-            bookingsUnsubscribe = null;
-        }
-
-        sessionStorage.clear();
-        await auth.signOut();
-
-        toast("Signed out successfully.", "success");
-
-    } catch (error) {
-        console.error("Logout error:", error);
-        toast("Unable to sign out.", "error");
-    }
-}
-
-/* IMAGE SWIPE CAROUSEL */
-function setupLookCarousel() {
-    const viewport = $("lookViewport");
-    const slides = Array.from(document.querySelectorAll("[data-look-slide]"));
-    const dots = Array.from(document.querySelectorAll("[data-look-dot]"));
-    const previous = $("lookPrev");
-    const next = $("lookNext");
-    const counter = $("lookCounter");
-    const wrapper = $("lookCarousel");
-
-    if (!viewport || !slides.length || !dots.length || !previous || !next || !counter || !wrapper) {
-        return;
-    }
-
-    let active = 0;
-    let startX = 0;
-    let startY = 0;
-    let pointerDown = false;
-    let autoTimer = null;
-    let paused = false;
-
-    const reducedMotion = window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    function show(index) {
-        active = (index + slides.length) % slides.length;
-
-        slides.forEach((slide, i) => {
-            const isActive = i === active;
-
-            slide.classList.toggle("active", isActive);
-            slide.setAttribute("aria-hidden", String(!isActive));
-            slide.setAttribute("aria-label", `${i + 1} of ${slides.length}`);
-        });
-
-        dots.forEach((dot, i) => {
-            dot.setAttribute("aria-current", String(i === active));
-        });
-
-        counter.textContent =
-            `${String(active + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
-    }
-
-    function stopAuto() {
-        if (autoTimer) {
-            clearInterval(autoTimer);
-            autoTimer = null;
-        }
-    }
-
-    function startAuto() {
-        stopAuto();
-
-        if (reducedMotion || paused || document.hidden) return;
-
-        autoTimer = setInterval(() => {
-            show(active + 1);
-        }, 6500);
-    }
-
-    function pause() {
-        paused = true;
-        stopAuto();
-    }
-
-    function resume() {
-        paused = false;
-        startAuto();
-    }
-
-    previous.addEventListener("click", () => {
-        show(active - 1);
-        startAuto();
-    });
-
-    next.addEventListener("click", () => {
-        show(active + 1);
-        startAuto();
-    });
-
-    dots.forEach((dot, index) => {
-        dot.addEventListener("click", () => {
-            show(index);
-            startAuto();
-        });
-    });
-
-    viewport.addEventListener("keydown", event => {
-        if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            show(active - 1);
-            startAuto();
-        } else if (event.key === "ArrowRight") {
-            event.preventDefault();
-            show(active + 1);
-            startAuto();
-        }
-    });
-
-    viewport.addEventListener("pointerdown", event => {
-        if (event.pointerType === "mouse" && event.button !== 0) return;
-
-        pointerDown = true;
-        startX = event.clientX;
-        startY = event.clientY;
-    });
-
-    viewport.addEventListener("pointerup", event => {
-        if (!pointerDown) return;
-
-        pointerDown = false;
-
-        const deltaX = event.clientX - startX;
-        const deltaY = event.clientY - startY;
-
-        if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.18) {
-            show(deltaX < 0 ? active + 1 : active - 1);
-            startAuto();
-        }
-    });
-
-    viewport.addEventListener("pointercancel", () => {
-        pointerDown = false;
-    });
-
-    wrapper.addEventListener("mouseenter", pause);
-    wrapper.addEventListener("mouseleave", resume);
-    wrapper.addEventListener("focusin", pause);
-
-    wrapper.addEventListener("focusout", event => {
-        if (!wrapper.contains(event.relatedTarget)) {
-            resume();
-        }
-    });
-
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) stopAuto();
-        else startAuto();
-    });
-
-    show(0);
-    startAuto();
-}
-
-/* PASSWORD VISIBILITY */
-function setupToggles() {
-    document.querySelectorAll(".password-toggle").forEach(button => {
-        button.addEventListener("click", () => {
-            const input = $(button.dataset.target);
-            if (!input) return;
-
-            const show = input.type === "password";
-            input.type = show ? "text" : "password";
-
-            button.innerHTML = show
-                ? '<i class="bx bx-hide"></i>'
-                : '<i class="bx bx-show"></i>';
-
-            button.setAttribute("aria-label", show ? "Hide password" : "Show password");
-        });
-    });
-}
-
-/* EVENT LISTENERS */
-$("signInTab")?.addEventListener("click", () => switchAuthMode("login"));
-$("signUpTab")?.addEventListener("click", () => switchAuthMode("signup"));
-
-$("loginForm")?.addEventListener("submit", handleLogin);
-$("signupForm")?.addEventListener("submit", handleSignup);
-$("forgotPasswordBtn")?.addEventListener("click", resetPassword);
-
-$("accountNav")?.addEventListener("click", goToAccount);
-$("topAccountBtn")?.addEventListener("click", goToAccount);
-$("welcomeAccountBtn")?.addEventListener("click", goToAccount);
-$("accountQuickBtn")?.addEventListener("click", goToAccount);
-
-$("bookingsQuickBtn")?.addEventListener("click", goToBookings);
-
-$("bookingRefreshLink")?.addEventListener("click", () => {
-    if (currentUser) loadBookings(currentUser);
-});
-
-$("refreshBtn")?.addEventListener("click", async () => {
-    if (!currentUser) return;
-
-    const button = $("refreshBtn");
-    button?.classList.add("spinning");
-
-    try {
-        await loadUser(currentUser);
-        toast("Your account has been refreshed.");
-    } catch (error) {
-        console.error("Refresh error:", error);
-        toast("Could not refresh your account.", "error");
-    } finally {
-        button?.classList.remove("spinning");
-    }
-});
-
-$("logoutBtn")?.addEventListener("click", logout);
-$("profileEditForm")?.addEventListener("submit", saveCustomerProfile);
-
-setupToggles();
-setupLookCarousel();
-
-/* FIREBASE INITIALIZATION AND AUTH STATE */
 try {
-    if (typeof firebase === "undefined") {
-        throw new Error("Firebase SDK scripts did not load. Check your internet connection or script access.");
-    }
-
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
 
     auth = firebase.auth();
     db = firebase.firestore();
+    realtimeDB = firebase.database();
+    storage = firebase.storage();
 
-    auth.onAuthStateChanged(async user => {
-        clearTimeout(window.kasiLoadingWatchdog);
-        showLoading(false);
-
-        if (user) {
-            currentUser = user;
-
-            showAuth(false);
-            showApp(true);
-
-            try {
-                await loadUser(user);
-
-                // Restore verified admin/owner routing after page refresh.
-                if (currentUserRole !== "customer" && !redirectInProgress) {
-                    redirectInProgress = true;
-                    window.location.replace(destinationForRole(currentUserRole));
-                    return;
-                }
-
-            } catch (error) {
-                console.error("K@si profile loading error:", error);
-
-                showApp(false);
-                showAuth(true);
-
-                showError(
-                    "You are signed in, but your K@si Web profile could not load. Check your Firestore connection and permissions.",
-                    (error.code || "Unknown error") + " — " + error.message
-                );
-            }
-
-        } else {
-            currentUser = null;
-            currentProfile = null;
-            currentUserRole = "customer";
-
-            if (bookingsUnsubscribe) {
-                bookingsUnsubscribe();
-                bookingsUnsubscribe = null;
-            }
-
-            resetBookingInsights();
-
-            showApp(false);
-            showAuth(true);
-            switchAuthMode("login");
-        }
-
-    }, error => {
-        clearTimeout(window.kasiLoadingWatchdog);
-
-        console.error("Firebase authentication observer error:", error);
-
-        showLoading(false);
-        showApp(false);
-        showAuth(true);
-
-        showError(
-            "K@si Web could not connect to Firebase Authentication.",
-            (error.code || "Unknown error") + " — " + error.message
-        );
-    });
-
-} catch (error) {
-    clearTimeout(window.kasiLoadingWatchdog);
-
-    console.error("Firebase startup error:", error);
-
-    showLoading(false);
-    showApp(false);
-    showAuth(true);
-
-    showError(
-        "K@si Web could not start its Firebase connection. Please refresh the page and check your connection.",
-        error.message
-    );
+    console.log("K@si Web Firebase initialized.");
+} catch(error) {
+    console.error("Firebase initialization failed:",error);
+    showAuthMessage("Firebase could not initialize. Check your configuration and internet connection.","error");
 }
 
-/* PAGE RESTORE */
-window.addEventListener("pageshow", () => {
-    if (auth) {
-        // The Firebase auth observer controls the final screen.
+/* ==========================================
+   HELPERS
+========================================== */
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => toast.classList.remove("show"),3500);
+}
+
+function showAuthMessage(message,type="normal") {
+    const el = document.getElementById("authMessage");
+    if (!el) return;
+
+    el.textContent = message;
+    el.className = "auth-message " + type;
+}
+
+function friendlyError(error) {
+    const messages = {
+        "auth/invalid-email":"Please enter a valid email address.",
+        "auth/user-not-found":"No account was found with that email.",
+        "auth/wrong-password":"Incorrect password.",
+        "auth/invalid-credential":"Incorrect email or password.",
+        "auth/email-already-in-use":"This email already has an account.",
+        "auth/weak-password":"Please choose a stronger password.",
+        "auth/too-many-requests":"Too many attempts. Please try again later.",
+        "auth/network-request-failed":"Network problem. Check your internet connection.",
+        "permission-denied":"Database access denied. Check your Firestore security rules."
+    };
+
+    return messages[error.code] || error.message || "Something went wrong.";
+}
+
+function normalizeRole(role) {
+    const value = String(role || "customer").trim().toLowerCase();
+
+    if (value === "admin" || value === "administrator") return "admin";
+
+    if (
+        value === "salon_owner" ||
+        value === "salon owner" ||
+        value === "owner"
+    ) return "salon_owner";
+
+    return "customer";
+}
+
+function getUserRole(data) {
+    return normalizeRole(data.role || data.Role || data.userRole);
+}
+
+function routeByRole(role) {
+    if (role === "admin") {
+        window.location.replace("admin.html");
         return;
     }
 
-    showLoading(false);
-    showAuth(true);
+    if (role === "salon_owner") {
+        window.location.replace("owners.html");
+        return;
+    }
+
+    // Customers remain on home.html.
+}
+
+/* ==========================================
+   AUTH TABS
+========================================== */
+
+function switchAuth(mode) {
+    const login = mode === "login";
+
+    document.getElementById("loginForm").classList.toggle("hidden",!login);
+    document.getElementById("signupForm").classList.toggle("hidden",login);
+
+    document.getElementById("loginTab").classList.toggle("active",login);
+    document.getElementById("signupTab").classList.toggle("active",!login);
+
+    showAuthMessage(login ? "Welcome back to K@si Web." : "Create your K@si Web account.");
+}
+
+/* ==========================================
+   LOGIN
+========================================== */
+
+document.getElementById("loginForm").addEventListener("submit",async function(e) {
+    e.preventDefault();
+
+    if (!auth || !db) {
+        showAuthMessage("Firebase is unavailable. Please refresh the page.","error");
+        return;
+    }
+
+    const button = document.getElementById("loginButton");
+    button.disabled = true;
+    button.textContent = "Signing in...";
+
+    try {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        const credential = await auth.signInWithEmailAndPassword(email,password);
+
+        await verifyAndRouteUser(credential.user);
+
+    } catch(error) {
+        console.error("Login error:",error);
+        showAuthMessage(friendlyError(error),"error");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Sign in";
+    }
 });
+
+/* ==========================================
+   SIGNUP
+========================================== */
+
+document.getElementById("signupForm").addEventListener("submit",async function(e) {
+    e.preventDefault();
+
+    if (!auth || !db) {
+        showAuthMessage("Firebase is unavailable.","error");
+        return;
+    }
+
+    const button = document.getElementById("signupButton");
+    button.disabled = true;
+    button.textContent = "Creating account...";
+
+    let createdUser = null;
+
+    try {
+        const name = document.getElementById("signupName").value.trim();
+        const email = document.getElementById("signupEmail").value.trim();
+        const phone = document.getElementById("signupPhone").value.trim();
+        const password = document.getElementById("signupPassword").value;
+        const role = document.getElementById("signupRole").value;
+
+        const credential = await auth.createUserWithEmailAndPassword(email,password);
+        createdUser = credential.user;
+
+        await createdUser.updateProfile({displayName:name});
+
+        await db.collection("users").doc(createdUser.uid).set({
+            uid:createdUser.uid,
+            name:name,
+            fullName:name,
+            email:email,
+            phone:phone,
+            role:role,
+            createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        showAuthMessage("Account created successfully.","success");
+
+        await verifyAndRouteUser(createdUser);
+
+    } catch(error) {
+        console.error("Signup error:",error);
+
+        if (createdUser) {
+            showAuthMessage(
+                "Your authentication account was created, but your profile could not be saved. Please contact the administrator before trying to register again. " + friendlyError(error),
+                "error"
+            );
+        } else {
+            showAuthMessage(friendlyError(error),"error");
+        }
+    } finally {
+        button.disabled = false;
+        button.textContent = "Create my account";
+    }
+});
+
+/* ==========================================
+   VERIFY FIRESTORE ROLE
+========================================== */
+
+async function verifyAndRouteUser(user) {
+    if (!user) return;
+
+    try {
+        const doc = await db.collection("users").doc(user.uid).get();
+
+        if (!doc.exists) {
+            // Do not silently grant an elevated role.
+            await auth.signOut();
+            showAuthMessage("Your user profile was not found in Firestore. Please contact support.","error");
+            return;
+        }
+
+        const data = doc.data() || {};
+        const role = getUserRole(data);
+
+        currentUser = user;
+        currentProfile = data;
+
+        // Redirect portal accounts only after checking Firestore.
+        routeByRole(role);
+
+        if (role === "customer") {
+            loadUser(user,data);
+        }
+
+    } catch(error) {
+        console.error("Role verification failed:",error);
+        await auth.signOut();
+        showAuthMessage("Could not verify your account permissions. Check Firestore rules and try again.","error");
+    }
+}
+
+/* ==========================================
+   AUTH STATE
+========================================== */
+
+if (auth) {
+    auth.onAuthStateChanged(async function(user) {
+        if (!user) {
+            currentUser = null;
+            currentProfile = {};
+            authReady = true;
+
+            document.getElementById("authScreen").style.display = "flex";
+            document.getElementById("appShell").classList.remove("visible");
+            document.body.classList.remove("app-mode");
+
+            return;
+        }
+
+        if (!db) return;
+
+        // Wait until the Firestore role is verified.
+        await verifyAndRouteUser(user);
+        authReady = true;
+    });
+}
+
+/* ==========================================
+   LOAD CUSTOMER
+========================================== */
+
+function loadUser(user,data) {
+    currentUser = user;
+    currentProfile = data || {};
+
+    document.getElementById("authScreen").style.display = "none";
+    document.getElementById("appShell").classList.add("visible");
+    document.body.classList.add("app-mode");
+
+    const name = data.name || data.fullName || user.displayName || "Customer";
+
+    document.getElementById("navUserName").textContent = name.split(" ")[0];
+    document.getElementById("profileHeading").textContent = name;
+
+    document.getElementById("profileName").value = name;
+    document.getElementById("profileEmail").value = user.email || "";
+    document.getElementById("profilePhone").value = data.phone || "";
+
+    document.getElementById("profileAvatar").textContent =
+        name.trim().charAt(0).toUpperCase() || "K";
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+}
+
+/* ==========================================
+   PROFILE UPDATE
+========================================== */
+
+document.getElementById("profileForm").addEventListener("submit",async function(e) {
+    e.preventDefault();
+
+    if (!currentUser || !db) {
+        showToast("Please sign in first.");
+        return;
+    }
+
+    const name = document.getElementById("profileName").value.trim();
+    const phone = document.getElementById("profilePhone").value.trim();
+
+    if (!name) {
+        showToast("Please enter your name.");
+        return;
+    }
+
+    const button = this.querySelector("button");
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+        await db.collection("users").doc(currentUser.uid).set({
+            name:name,
+            fullName:name,
+            phone:phone,
+            updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+        },{merge:true});
+
+        await currentUser.updateProfile({displayName:name});
+
+        currentProfile.name = name;
+        currentProfile.fullName = name;
+        currentProfile.phone = phone;
+
+        document.getElementById("navUserName").textContent = name.split(" ")[0];
+        document.getElementById("profileHeading").textContent = name;
+        document.getElementById("profileAvatar").textContent = name.charAt(0).toUpperCase();
+
+        showToast("Your profile has been updated.");
+
+    } catch(error) {
+        console.error("Profile update error:",error);
+        showToast(friendlyError(error));
+    } finally {
+        button.disabled = false;
+        button.textContent = "Save profile changes";
+    }
+});
+
+/* ==========================================
+   PASSWORD RESET
+========================================== */
+
+async function resetPassword() {
+    if (!auth) return;
+
+    const email = document.getElementById("loginEmail").value.trim();
+
+    if (!email) {
+        showAuthMessage("Enter your email address first.","error");
+        return;
+    }
+
+    try {
+        await auth.sendPasswordResetEmail(email);
+        showAuthMessage("Password reset instructions have been sent to your email.","success");
+    } catch(error) {
+        showAuthMessage(friendlyError(error),"error");
+    }
+}
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+async function logout() {
+    if (!auth) return;
+
+    try {
+        await auth.signOut();
+
+        document.getElementById("loginForm").reset();
+        document.getElementById("signupForm").reset();
+
+        switchAuth("login");
+        showToast("Signed out successfully.");
+
+    } catch(error) {
+        console.error("Logout error:",error);
+        showToast(friendlyError(error));
+    }
+}
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+function goToSalons() {
+    window.location.href = "salons.html";
+}
+
+function goToProfile() {
+    document.getElementById("profile").scrollIntoView({behavior:"smooth"});
+}
+
+function scrollToSection(id) {
+    const section = document.getElementById(id);
+    if (section) section.scrollIntoView({behavior:"smooth"});
+}
+
+/* ==========================================
+   HERO IMAGE SWIPER
+========================================== */
+
+const gallerySlides = [
+    {
+        image:"683B4C35-1E45-4922-9A56-56BDD423D1F2.jpeg",
+        title:"Your next fresh look",
+        subtitle:"Discover your style with K@si Web"
+    },
+    {
+        image:"37BA0E35.jpg",
+        title:"Clean. Sharp. Confident.",
+        subtitle:"Find your signature cut"
+    },
+    {
+        image:"7847041D.jpg",
+        title:"The details matter",
+        subtitle:"Experience grooming differently"
+    },
+    {
+        image:"C00719B.jpg",
+        title:"Elevate your style",
+        subtitle:"Your Kasi. Your style."
+    }
+];
+
+let slideIndex = 0;
+let slideTimer;
+
+function displaySlide() {
+    const image = document.getElementById("heroImage");
+    const slide = gallerySlides[slideIndex];
+
+    image.style.opacity = "0";
+
+    setTimeout(() => {
+        image.src = slide.image;
+        image.onerror = function() {
+            this.onerror = null;
+            this.src = "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200";
+        };
+
+        document.getElementById("galleryTitle").textContent = slide.title;
+        document.getElementById("gallerySubtitle").textContent = slide.subtitle;
+        image.style.opacity = "1";
+    },180);
+}
+
+function changeSlide(direction) {
+    slideIndex = (slideIndex + direction + gallerySlides.length) % gallerySlides.length;
+    displaySlide();
+    restartSlideTimer();
+}
+
+function restartSlideTimer() {
+    clearInterval(slideTimer);
+    slideTimer = setInterval(() => changeSlide(1),5500);
+}
+
+const gallery = document.getElementById("heroGallery");
+
+gallery.addEventListener("touchstart",function(e) {
+    this.dataset.touchX = e.changedTouches[0].screenX;
+},{passive:true});
+
+gallery.addEventListener("touchend",function(e) {
+    const start = Number(this.dataset.touchX || 0);
+    const end = e.changedTouches[0].screenX;
+    const difference = end - start;
+
+    if (Math.abs(difference) > 45) {
+        changeSlide(difference < 0 ? 1 : -1);
+    }
+},{passive:true});
+
+restartSlideTimer();
+
+/* ==========================================
+   FIREBASE DIAGNOSTICS
+========================================== */
+
+window.addEventListener("online",() => showToast("Internet connection restored."));
+window.addEventListener("offline",() => showToast("You are currently offline."));
+
+console.log("K@si Web application loaded.");
 </script>
 
 </body>
-                               </html>
+</html>
