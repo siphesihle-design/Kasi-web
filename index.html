@@ -1,2237 +1,1000 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#090910">
-<meta name="description" content="K@si Web helps you discover local barbers and salons, compare services and prices, and request your next fresh look. Fresh cuts. No lines.">
-<meta name="keywords" content="Kasi Web, township barbers, salons, haircuts, barber booking, South Africa">
+<meta name="theme-color" content="#08080e">
+<meta name="description" content="K@si Web connects you with local barbers and salons. Explore styles, compare prices and book your next fresh look.">
+<meta name="keywords" content="Kasi Web, township barber, salon, haircut, South African barber booking">
 <meta name="author" content="K@si Web">
 
-<meta property="og:title" content="K@si Web | Your Cut. Your Time.">
-<meta property="og:description" content="Find your next fresh look. Discover local barbers, compare services and explore salons around you.">
+<meta property="og:title" content="K@si Web — Fresh Cuts. No Lines.">
+<meta property="og:description" content="Find your local barber. Compare prices. Book your fresh look.">
 <meta property="og:type" content="website">
 
-<title>K@si Web | Your Cut. Your Time.</title>
+<title>K@si Web | Fresh Cuts. No Lines.</title>
 
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
 <style>
-:root {
-    --bg: #090910;
-    --bg-soft: #10101a;
-    --surface: #151522;
-    --surface-light: #1c1b2b;
-    --purple: #8b70ff;
-    --purple-light: #ac9aff;
-    --blue: #388bff;
-    --gold: #e1bd78;
-    --white: #ffffff;
-    --text: #f7f5ff;
-    --muted: #aaa7bc;
-    --green: #31c987;
-    --border: rgba(255,255,255,.09);
-    --radius: 22px;
-    --shadow: 0 25px 80px rgba(0,0,0,.3);
+:root{
+    --bg:#08080e;
+    --bg2:#10101a;
+    --card:#12121d;
+    --purple:#8657f5;
+    --purple2:#a68bff;
+    --blue:#4b8fff;
+    --gold:#e8bd72;
+    --green:#36d69a;
+    --white:#fff;
+    --text:#f5f3ff;
+    --muted:#aaa8bb;
+    --border:rgba(255,255,255,.09);
+    --glass:rgba(255,255,255,.045);
+    --gradient:linear-gradient(135deg,#477eff,#8552ed);
+    --radius:24px;
+    --shadow:0 24px 80px rgba(0,0,0,.42);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 100px;
-}
-
-body {
-    min-height: 100vh;
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+    min-height:100vh;
     background:
-        radial-gradient(circle at 85% 5%, rgba(91,64,190,.13), transparent 27rem),
-        radial-gradient(circle at 5% 35%, rgba(47,112,211,.09), transparent 25rem),
-        var(--bg);
-    color: var(--text);
-    font-family: "DM Sans", sans-serif;
-    overflow-x: hidden;
+      radial-gradient(ellipse at 80% 0%,rgba(110,65,220,.14),transparent 36%),
+      radial-gradient(ellipse at 0% 38%,rgba(44,105,220,.08),transparent 35%),
+      var(--bg);
+    color:var(--text);
+    font-family:Inter,sans-serif;
+    overflow-x:hidden;
+}
+body.menu-open{overflow:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+button,a{-webkit-tap-highlight-color:transparent}
+::selection{background:var(--purple);color:#fff}
+
+.container{width:min(1180px,calc(100% - 40px));margin:auto}
+.section{padding:94px 0}
+.muted{color:var(--muted)}
+.gold{color:var(--gold)}
+.gradient-text{
+    background:linear-gradient(100deg,#fff 10%,#a8c8ff 52%,#b69aff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent
 }
 
-button,
-a {
-    font: inherit;
+.skip-link{
+    position:fixed;left:-9999px;top:10px;background:white;color:black;
+    padding:12px;border-radius:10px;z-index:5000
 }
+.skip-link:focus{left:12px}
 
-a {
-    color: inherit;
-    text-decoration: none;
+.eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:11px;letter-spacing:1.7px;text-transform:uppercase;
+    font-weight:900;color:var(--gold)
 }
+.eyebrow:before{
+    content:"";width:20px;height:2px;background:var(--gold);border-radius:10px
+}
+.section-heading{text-align:center;max-width:700px;margin:0 auto 46px}
+.section-heading h2{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(32px,4.6vw,52px);
+    line-height:1.1;letter-spacing:-1.4px;margin-top:14px
+}
+.section-heading p{color:var(--muted);font-size:14px;line-height:1.8;margin-top:15px}
 
-button {
-    cursor: pointer;
+/* BUTTONS */
+.btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    min-height:48px;padding:0 20px;border-radius:14px;
+    border:1px solid transparent;font-size:13px;font-weight:800;
+    transition:.22s ease;white-space:nowrap
 }
-
-img,
-svg {
-    max-width: 100%;
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.98)}
+.btn-primary{
+    background:var(--gradient);color:white;
+    box-shadow:0 12px 30px rgba(92,75,210,.24)
 }
-
-.container {
-    width: min(1160px, calc(100% - 44px));
-    margin-inline: auto;
-}
-
-.section {
-    padding: 100px 0;
-}
-
-.section-heading {
-    max-width: 680px;
-    margin: 0 auto 48px;
-    text-align: center;
-}
-
-.eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    color: var(--gold);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-.eyebrow::before {
-    content: "";
-    width: 22px;
-    height: 2px;
-    border-radius: 5px;
-    background: var(--gold);
-}
-
-.section-heading h2 {
-    margin-top: 15px;
-    font-family: "Playfair Display", serif;
-    font-size: clamp(32px, 5vw, 48px);
-    line-height: 1.14;
-    letter-spacing: -.7px;
-}
-
-.section-heading p {
-    margin-top: 15px;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.8;
-}
+.btn-primary:hover{box-shadow:0 15px 38px rgba(92,75,210,.4)}
+.btn-outline{background:var(--glass);border-color:var(--border);color:white}
+.btn-outline:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}
+.btn-white{background:#fff;color:#12111c}
+.btn i{font-size:18px}
 
 /* NAVIGATION */
-
-.site-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(9,9,16,.86);
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+.header{
+    position:sticky;top:0;z-index:1000;
+    background:rgba(8,8,14,.84);border-bottom:1px solid var(--border);
+    backdrop-filter:blur(20px);transition:.25s
 }
-
-.navbar {
-    min-height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
+.header.scrolled{background:rgba(8,8,14,.97);box-shadow:0 10px 35px #0005}
+.navbar{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.brand-mark{
+    width:43px;height:43px;display:grid;place-items:center;border-radius:14px;
+    background:var(--gradient);font-weight:900;font-size:17px;
+    box-shadow:0 8px 24px #754de44d
 }
-
-.brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 11px;
-    flex-shrink: 0;
-}
-
-.brand-mark {
-    width: 43px;
-    height: 43px;
-    display: grid;
-    place-items: center;
-    border-radius: 14px;
-    background: linear-gradient(140deg, var(--purple), #5140bb);
-    color: white;
-    font-weight: 800;
-    font-size: 19px;
-    box-shadow: 0 9px 25px rgba(139,112,255,.22);
-}
-
-.brand-name {
-    font-size: 21px;
-    font-weight: 800;
-    letter-spacing: -.8px;
-}
-
-.brand-name span {
-    color: var(--purple-light);
-}
-
-.brand-caption {
-    display: block;
-    color: var(--muted);
-    font-size: 9px;
-    letter-spacing: 2px;
-    margin-top: 2px;
-    text-transform: uppercase;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 31px;
-}
-
-.nav-links a {
-    color: #c9c6d7;
-    font-size: 13px;
-    font-weight: 600;
-    transition: color .2s ease;
-}
-
-.nav-links a:hover {
-    color: var(--white);
-}
-
-.nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.btn {
-    min-height: 47px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 0 21px;
-    border: 1px solid transparent;
-    border-radius: 13px;
-    font-size: 13px;
-    font-weight: 800;
-    transition: transform .2s ease, background .2s ease, border-color .2s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn-primary {
-    color: #fff;
-    background: linear-gradient(115deg, #8b70ff, #6552d5);
-    box-shadow: 0 10px 25px rgba(114,88,230,.22);
-}
-
-.btn-primary:hover {
-    background: linear-gradient(115deg, #9b84ff, #7663e9);
-}
-
-.btn-outline {
-    background: rgba(255,255,255,.035);
-    border-color: var(--border);
-    color: var(--white);
-}
-
-.btn-outline:hover {
-    background: rgba(255,255,255,.08);
-    border-color: rgba(255,255,255,.2);
-}
-
-.btn-light {
-    background: #fff;
-    color: #181526;
-}
-
-.btn-arrow {
-    font-size: 17px;
-    line-height: 1;
-}
-
-.menu-toggle {
-    display: none;
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    background: var(--surface);
-    color: white;
-    font-size: 23px;
+.brand-name{font-weight:900;font-size:19px;letter-spacing:-.8px}
+.brand-name span{color:var(--purple2)}
+.brand-sub{font-size:9px;letter-spacing:1.7px;color:#77778c;text-transform:uppercase;margin-top:3px}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{font-size:12px;font-weight:700;color:var(--muted);transition:.2s}
+.nav-links a:hover{color:white}
+.nav-actions{display:flex;gap:9px;align-items:center}
+.menu-btn{
+    display:none;width:43px;height:43px;border-radius:13px;
+    background:var(--glass);border:1px solid var(--border);color:white;font-size:23px
 }
 
 /* HERO */
-
-.hero {
-    position: relative;
-    padding: 83px 0 75px;
-    overflow: hidden;
+.hero{position:relative;padding:70px 0 72px}
+.hero-grid{
+    display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center
 }
-
-.hero::before {
-    content: "";
-    position: absolute;
-    width: 480px;
-    height: 480px;
-    right: -190px;
-    top: -100px;
-    border-radius: 50%;
-    background: rgba(116,90,230,.12);
-    filter: blur(80px);
-    pointer-events: none;
+.hero-tag{
+    display:inline-flex;align-items:center;gap:9px;padding:9px 13px;
+    background:rgba(232,189,114,.07);border:1px solid rgba(232,189,114,.2);
+    border-radius:100px;color:#efd29b;font-size:10px;font-weight:800;
+    letter-spacing:1px;text-transform:uppercase
 }
-
-.hero-grid {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1.02fr .98fr;
-    align-items: center;
-    gap: 55px;
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green)}
+.hero h1{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(48px,6.5vw,78px);line-height:.99;
+    letter-spacing:-2.8px;margin-top:23px
 }
-
-.hero-copy {
-    position: relative;
-    z-index: 2;
+.hero h1 span{display:block;margin-top:8px}
+.hero-typing{margin-top:20px;color:var(--muted);font-size:17px;min-height:27px}
+.hero-typing b{color:white}
+.hero-copy{
+    max-width:510px;margin-top:17px;color:var(--muted);
+    font-size:14px;line-height:1.9
 }
-
-.hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 9px 13px;
-    border: 1px solid rgba(225,189,120,.22);
-    border-radius: 50px;
-    background: rgba(225,189,120,.07);
-    color: #e8ca91;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.hero-buttons{display:flex;flex-wrap:wrap;gap:12px;margin-top:29px}
+.hero-trust{display:flex;align-items:center;gap:9px;margin-top:22px;color:#88889d;font-size:11px}
+.hero-trust i{font-size:17px;color:var(--green)}
+.hero-visual{position:relative;min-width:0}
+.hero-main-image{
+    position:relative;overflow:hidden;border-radius:30px;border:1px solid var(--border);
+    min-height:430px;background:#161421;box-shadow:var(--shadow)
 }
-
-.hero-tag span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 12px var(--green);
+.hero-main-image img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:brightness(.78);transition:transform .7s
 }
-
-.hero h1 {
-    max-width: 650px;
-    margin-top: 23px;
-    font-family: "Playfair Display", serif;
-    font-size: clamp(44px, 6vw, 72px);
-    line-height: 1.04;
-    letter-spacing: -1.8px;
+.hero-main-image:hover img{transform:scale(1.04)}
+.hero-main-image:after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 35%,rgba(5,5,10,.15) 50%,rgba(5,5,10,.95))
 }
-
-.hero h1 .highlight {
-    display: block;
-    color: var(--purple-light);
+.hero-overlay{
+    position:absolute;z-index:2;left:0;right:0;bottom:0;padding:25px;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:15px
 }
-
-.hero-description {
-    max-width: 500px;
-    margin-top: 22px;
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.85;
+.hero-overlay h3{font-size:17px}
+.hero-overlay p{color:#c4c0d1;font-size:11px;margin-top:6px}
+.open-pill{
+    padding:7px 10px;border-radius:30px;background:#132c23;
+    border:1px solid #34d39944;color:#82efb7;font-size:10px;font-weight:800
 }
-
-.hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 30px;
+.floating-card{
+    position:absolute;z-index:3;left:-24px;bottom:30px;
+    display:flex;align-items:center;gap:12px;padding:14px 16px;
+    background:rgba(16,16,27,.94);border:1px solid var(--border);
+    border-radius:17px;box-shadow:0 18px 50px #0007;backdrop-filter:blur(18px)
 }
-
-.hero-note {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 25px;
-    color: #aaa7bc;
-    font-size: 12px;
+.float-icon{
+    width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+    background:#8a5cf529;color:var(--purple2);font-size:21px
 }
-
-.hero-note svg {
-    width: 17px;
-    height: 17px;
-    color: var(--green);
-    flex-shrink: 0;
-}
-
-.hero-art {
-    position: relative;
-    min-width: 0;
-}
-
-.hero-art-frame {
-    position: relative;
-    padding: 13px;
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 33px;
-    background: linear-gradient(145deg, rgba(255,255,255,.1), rgba(255,255,255,.025));
-    box-shadow: var(--shadow);
-    transform: rotate(1deg);
-}
-
-.hero-illustration {
-    display: block;
-    width: 100%;
-    border-radius: 25px;
-    background: linear-gradient(145deg, #29234a, #161626 75%);
-}
-
-.floating-card {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 13px 15px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 17px;
-    background: rgba(22,21,35,.93);
-    box-shadow: 0 15px 45px rgba(0,0,0,.35);
-    backdrop-filter: blur(15px);
-}
-
-.floating-card.top {
-    top: 30px;
-    right: -30px;
-}
-
-.floating-card.bottom {
-    bottom: 35px;
-    left: -35px;
-}
-
-.float-icon {
-    width: 37px;
-    height: 37px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: rgba(139,112,255,.16);
-    color: var(--purple-light);
-    font-size: 19px;
-}
-
-.float-text strong {
-    display: block;
-    color: white;
-    font-size: 12px;
-}
-
-.float-text small {
-    display: block;
-    margin-top: 3px;
-    color: var(--muted);
-    font-size: 10px;
-}
+.floating-card strong{display:block;font-size:12px}
+.floating-card small{display:block;margin-top:4px;color:var(--muted);font-size:10px}
 
 /* QUICK BENEFITS */
-
-.benefit-strip {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: rgba(255,255,255,.018);
+.benefits{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#ffffff04}
+.benefit-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.benefit{
+    min-height:100px;display:flex;align-items:center;justify-content:center;gap:14px;
+    padding:18px;border-right:1px solid var(--border)
 }
-
-.benefit-grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
+.benefit:last-child{border-right:0}
+.benefit-icon{
+    width:43px;height:43px;display:grid;place-items:center;border-radius:14px;
+    background:#8a5cf520;color:var(--purple2);font-size:21px;flex-shrink:0
 }
+.benefit strong{font-size:12px}
+.benefit small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
 
-.benefit {
-    min-height: 105px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 13px;
-    padding: 20px;
-    border-right: 1px solid var(--border);
+/* FEATURED SALON */
+.featured{background:#ffffff02;border-bottom:1px solid var(--border)}
+.feature-card{
+    display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+    background:linear-gradient(145deg,#161522,#0e0e16);
+    border:1px solid var(--border);border-radius:28px;box-shadow:var(--shadow)
 }
-
-.benefit:last-child {
-    border-right: 0;
+.feature-image{position:relative;min-height:370px;background:#171624}
+.feature-image img{width:100%;height:100%;object-fit:cover}
+.image-label{
+    position:absolute;top:18px;left:18px;padding:9px 12px;
+    border-radius:100px;background:#090910c9;border:1px solid var(--border);
+    font-size:10px;font-weight:800
 }
+.feature-content{padding:36px;display:flex;flex-direction:column;justify-content:center}
+.verified{font-size:10px;color:var(--blue-light);text-transform:uppercase;letter-spacing:1px;font-weight:900}
+.feature-content h3{font-family:"Playfair Display",serif;font-size:37px;line-height:1.08;margin-top:12px}
+.feature-meta{display:flex;flex-wrap:wrap;gap:13px;color:var(--muted);font-size:11px;margin-top:13px}
+.feature-content p{color:var(--muted);font-size:13px;line-height:1.8;margin-top:17px}
+.rating{display:flex;align-items:center;gap:8px;margin-top:19px;font-size:12px}
+.stars{color:var(--gold);letter-spacing:2px}
+.feature-content .btn{align-self:flex-start;margin-top:23px}
 
-.benefit-icon {
-    width: 43px;
-    height: 43px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    border-radius: 14px;
-    background: rgba(139,112,255,.12);
-    color: var(--purple-light);
+/* STYLES */
+.styles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:19px}
+.style-card{
+    border:1px solid var(--border);border-radius:22px;overflow:hidden;
+    background:linear-gradient(145deg,#171625,#0d0d16);transition:.25s
 }
-
-.benefit-icon svg {
-    width: 21px;
-    height: 21px;
+.style-card:hover{transform:translateY(-5px);border-color:#8a5cf566}
+.style-img{position:relative;height:235px;overflow:hidden;background:#1d1a2d}
+.style-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.style-card:hover .style-img img{transform:scale(1.06)}
+.style-index{
+    position:absolute;top:13px;left:13px;padding:7px 10px;border-radius:10px;
+    background:#090910b9;border:1px solid var(--border);font-size:10px;font-weight:900
 }
+.style-body{padding:20px}
+.style-body h3{font-size:16px}
+.style-body p{font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px}
+.text-link{display:inline-flex;align-items:center;gap:6px;color:var(--purple2);font-size:11px;font-weight:800;margin-top:15px}
+.text-link:hover{color:white}
 
-.benefit strong {
-    display: block;
-    font-size: 13px;
+/* STEPS */
+.steps-section{
+    background:radial-gradient(ellipse at center,rgba(106,70,209,.12),transparent 65%),#ffffff02;
+    border-top:1px solid var(--border);border-bottom:1px solid var(--border)
 }
-
-.benefit small {
-    display: block;
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 11px;
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step{
+    position:relative;padding:27px;border-radius:22px;border:1px solid var(--border);background:var(--glass)
 }
-
-/* STYLE SHOWCASE */
-
-.styles-grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 21px;
+.step-num{
+    width:43px;height:43px;display:grid;place-items:center;border-radius:13px;
+    background:var(--gradient);font-size:12px;font-weight:900
 }
+.step-icon{position:absolute;right:24px;top:27px;font-size:21px;color:var(--purple2)}
+.step h3{font-size:16px;margin-top:20px}
+.step p{font-size:12px;color:var(--muted);line-height:1.8;margin-top:9px}
 
-.style-card {
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 23px;
-    background: linear-gradient(145deg, #191827, #11111b);
-    transition: transform .25s ease, border-color .25s ease;
+/* LOOKBOOK */
+.lookbook-grid{
+    display:grid;grid-template-columns:1.15fr .85fr .85fr;
+    grid-template-rows:220px 220px;gap:12px
 }
-
-.style-card:hover {
-    transform: translateY(-7px);
-    border-color: rgba(139,112,255,.42);
+.look{
+    position:relative;border-radius:19px;overflow:hidden;border:1px solid var(--border);background:#151421
 }
+.look:first-child{grid-row:1/3}
+.look img{width:100%;height:100%;object-fit:cover;filter:brightness(.82);transition:.5s}
+.look:hover img{transform:scale(1.05);filter:brightness(1)}
+.look:after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#000b)}
+.look-caption{position:absolute;z-index:1;bottom:0;left:0;right:0;padding:17px}
+.look-caption strong{font-size:12px}
+.look-caption small{display:block;margin-top:5px;color:#c2c0cc;font-size:10px}
 
-.style-art {
-    position: relative;
-    overflow: hidden;
-    min-height: 230px;
-    display: grid;
-    place-items: center;
-    background: #22203a;
+/* COMMUNITY */
+.community-grid{display:grid;grid-template-columns:.95fr 1.05fr;align-items:center;gap:48px}
+.community-art{
+    position:relative;border:1px solid var(--border);border-radius:26px;
+    overflow:hidden;min-height:390px;background:#161422
 }
-
-.style-art svg {
-    display: block;
-    width: 100%;
-    height: 230px;
+.community-art img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}
+.community-art:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#08080e55,transparent)}
+.community-copy h2{
+    font-family:"Playfair Display",serif;font-size:clamp(33px,4vw,48px);
+    line-height:1.1;letter-spacing:-1.2px;margin-top:14px
 }
-
-.style-number {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    display: grid;
-    place-items: center;
-    width: 33px;
-    height: 33px;
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 11px;
-    background: rgba(10,10,18,.45);
-    color: white;
-    font-size: 11px;
-    font-weight: 800;
+.community-copy>p{font-size:13px;line-height:1.85;color:var(--muted);margin-top:15px}
+.community-points{display:grid;gap:16px;margin-top:24px}
+.point{display:flex;align-items:flex-start;gap:12px}
+.check{
+    flex-shrink:0;width:27px;height:27px;display:grid;place-items:center;
+    background:#34d39920;color:var(--green);border-radius:9px;font-size:13px
 }
-
-.style-info {
-    padding: 21px;
-}
-
-.style-info h3 {
-    font-size: 17px;
-}
-
-.style-info p {
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.7;
-}
-
-.style-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 17px;
-    color: var(--purple-light);
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.style-link:hover {
-    color: white;
-}
-
-/* HOW IT WORKS */
-
-.how-section {
-    position: relative;
-    background:
-        radial-gradient(circle at 50% 50%, rgba(108,83,210,.12), transparent 34rem),
-        rgba(255,255,255,.018);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-}
-
-.steps-grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 22px;
-}
-
-.step-card {
-    position: relative;
-    padding: 30px 25px;
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    background: rgba(21,21,34,.8);
-}
-
-.step-number {
-    width: 43px;
-    height: 43px;
-    display: grid;
-    place-items: center;
-    border-radius: 14px;
-    background: linear-gradient(145deg, #8b70ff, #5741c1);
-    color: white;
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.step-card h3 {
-    margin-top: 22px;
-    font-size: 18px;
-}
-
-.step-card p {
-    margin-top: 11px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.8;
-}
-
-.step-arrow {
-    position: absolute;
-    top: 38px;
-    right: 25px;
-    color: var(--purple-light);
-    font-size: 23px;
-}
-
-/* WHY KASI */
-
-.why-grid {
-    display: grid;
-    grid-template-columns: .95fr 1.05fr;
-    align-items: center;
-    gap: 65px;
-}
-
-.why-art {
-    position: relative;
-    padding: 17px;
-    border: 1px solid var(--border);
-    border-radius: 29px;
-    background: linear-gradient(145deg, #24203d, #141420);
-}
-
-.why-art svg {
-    display: block;
-    width: 100%;
-    border-radius: 19px;
-}
-
-.why-copy h2 {
-    margin-top: 15px;
-    font-family: "Playfair Display", serif;
-    font-size: clamp(34px, 4vw, 49px);
-    line-height: 1.13;
-}
-
-.why-copy > p {
-    margin-top: 17px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.9;
-}
-
-.why-points {
-    display: grid;
-    gap: 17px;
-    margin-top: 27px;
-}
-
-.why-point {
-    display: flex;
-    align-items: flex-start;
-    gap: 13px;
-}
-
-.check-icon {
-    width: 27px;
-    height: 27px;
-    display: grid;
-    place-items: center;
-    flex-shrink: 0;
-    border-radius: 9px;
-    background: rgba(49,201,135,.12);
-    color: var(--green);
-    font-weight: 900;
-    font-size: 13px;
-}
-
-.why-point strong {
-    display: block;
-    font-size: 13px;
-}
-
-.why-point p {
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.65;
-}
+.point strong{font-size:12px}
+.point p{font-size:11px;color:var(--muted);line-height:1.65;margin-top:4px}
 
 /* CTA */
-
-.cta-section {
-    padding: 45px 0 100px;
+.cta{padding:22px 0 85px}
+.cta-box{
+    position:relative;overflow:hidden;padding:60px 28px;text-align:center;
+    border-radius:29px;border:1px solid rgba(255,255,255,.14);
+    background:radial-gradient(ellipse at 80% 10%,#8a5cf540,transparent 40%),
+      linear-gradient(120deg,#382a7c,#1b1945 55%,#10101c);box-shadow:var(--shadow)
 }
-
-.cta-box {
-    position: relative;
-    overflow: hidden;
-    padding: 60px 35px;
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 28px;
-    background:
-        radial-gradient(circle at 100% 0%, rgba(255,255,255,.19), transparent 22rem),
-        linear-gradient(115deg, #684fd0, #393080 65%, #242253);
-    text-align: center;
-}
-
-.cta-box::before,
-.cta-box::after {
-    content: "";
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 50%;
-}
-
-.cta-box::before {
-    top: -130px;
-    left: -75px;
-}
-
-.cta-box::after {
-    right: -100px;
-    bottom: -155px;
-}
-
-.cta-content {
-    position: relative;
-    z-index: 1;
-    max-width: 650px;
-    margin: auto;
-}
-
-.cta-content .eyebrow {
-    color: #f5dca8;
-}
-
-.cta-content .eyebrow::before {
-    background: #f5dca8;
-}
-
-.cta-content h2 {
-    margin-top: 17px;
-    font-family: "Playfair Display", serif;
-    font-size: clamp(32px,5vw,48px);
-    line-height: 1.13;
-}
-
-.cta-content p {
-    max-width: 520px;
-    margin: 15px auto 25px;
-    color: rgba(255,255,255,.78);
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-.cta-content .btn {
-    margin: 5px;
-}
+.cta-inner{position:relative;z-index:1;max-width:680px;margin:auto}
+.cta h2{font-family:"Playfair Display",serif;font-size:clamp(33px,5vw,49px);line-height:1.1;margin-top:14px}
+.cta p{font-size:13px;line-height:1.8;color:#d1cde1;max-width:530px;margin:15px auto 24px}
+.cta-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
 
 /* FAQ */
-
-.faq-list {
-    max-width: 780px;
-    display: grid;
-    gap: 12px;
-    margin: 0 auto;
+.faq-list{max-width:800px;margin:auto;display:grid;gap:11px}
+.faq-item{border:1px solid var(--border);border-radius:16px;background:var(--glass);overflow:hidden}
+.faq-question{
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:19px 20px;border:0;background:none;color:white;text-align:left;font-weight:800;font-size:13px
 }
-
-.faq-item {
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    background: rgba(255,255,255,.025);
-}
-
-.faq-question {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    border: 0;
-    background: transparent;
-    color: white;
-    text-align: left;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.faq-plus {
-    color: var(--purple-light);
-    font-size: 23px;
-    transition: transform .2s ease;
-}
-
-.faq-answer {
-    display: none;
-    padding: 0 20px 20px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.8;
-}
-
-.faq-item.open .faq-answer {
-    display: block;
-}
-
-.faq-item.open .faq-plus {
-    transform: rotate(45deg);
-}
+.faq-plus{font-size:22px;color:var(--purple2);transition:.2s}
+.faq-answer{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s}
+.faq-answer-inner{overflow:hidden;padding:0 20px;color:var(--muted);font-size:12px;line-height:1.8}
+.faq-item.open .faq-answer{grid-template-rows:1fr}
+.faq-item.open .faq-answer-inner{padding-bottom:19px}
+.faq-item.open .faq-plus{transform:rotate(45deg)}
 
 /* FOOTER */
-
-.site-footer {
-    padding: 55px 0 25px;
-    border-top: 1px solid var(--border);
-    background: #07070c;
+.footer{padding:50px 0 30px;border-top:1px solid var(--border);background:#050509}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:35px;padding-bottom:34px}
+.footer-about p{font-size:11px;color:var(--muted);line-height:1.8;margin-top:14px;max-width:310px}
+.footer-col h4{font-size:12px;margin-bottom:15px}
+.footer-col a{display:block;margin-top:11px;color:var(--muted);font-size:11px}
+.footer-col a:hover{color:var(--purple2)}
+.footer-bottom{
+    display:flex;justify-content:space-between;gap:15px;align-items:center;
+    padding-top:20px;border-top:1px solid var(--border);color:#77778a;font-size:10px
 }
+.footer-bottom strong{color:#ddd}
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 45px;
-    padding-bottom: 40px;
+/* SOUND */
+.sound-btn{
+    position:fixed;right:19px;bottom:19px;z-index:1800;width:45px;height:45px;
+    border:1px solid var(--border);border-radius:50%;display:grid;place-items:center;
+    background:#11111bd9;color:white;backdrop-filter:blur(15px);font-size:20px
 }
+.sound-btn:hover{border-color:#8a5cf566}
 
-.footer-about p {
-    max-width: 320px;
-    margin-top: 17px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.8;
-}
-
-.footer-column h4 {
-    margin-bottom: 17px;
-    color: white;
-    font-size: 13px;
-}
-
-.footer-column a {
-    display: block;
-    width: fit-content;
-    margin-top: 12px;
-    color: var(--muted);
-    font-size: 12px;
-    transition: color .2s ease;
-}
-
-.footer-column a:hover {
-    color: var(--purple-light);
-}
-
-.footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding-top: 22px;
-    border-top: 1px solid var(--border);
-    color: #777489;
-    font-size: 11px;
-}
-
-.footer-bottom strong {
-    color: #c9c4df;
-}
-
-/* REVEAL ANIMATION */
-
-.reveal {
-    opacity: 0;
-    transform: translateY(22px);
-    transition: opacity .65s ease, transform .65s ease;
-}
-
-.reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+/* ANIMATION */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.cursor{display:inline-block;width:2px;height:1em;background:var(--purple2);vertical-align:-2px;margin-left:2px;animation:blink .8s infinite}
+@keyframes blink{50%{opacity:0}}
+@keyframes float{50%{transform:translateY(-6px)}}
 
 /* RESPONSIVE */
-
-@media (max-width: 900px) {
-    .nav-links {
-        gap: 17px;
-    }
-
-    .hero-grid {
-        gap: 30px;
-    }
-
-    .floating-card.top {
-        right: -10px;
-    }
-
-    .floating-card.bottom {
-        left: -10px;
-    }
-
-    .why-grid {
-        gap: 35px;
-    }
+@media(max-width:950px){
+    .hero-grid{grid-template-columns:1fr 1fr;gap:28px}
+    .hero-main-image{min-height:370px}
+    .feature-card{grid-template-columns:1fr}
+    .feature-image{min-height:310px}
+    .community-grid{grid-template-columns:1fr;gap:30px}
+    .community-art{min-height:320px}
 }
-
-@media (max-width: 760px) {
-    .container {
-        width: min(100% - 34px, 560px);
+@media(max-width:760px){
+    body{padding-bottom:65px}
+    .container{width:min(100% - 32px,560px)}
+    .section{padding:70px 0}
+    .menu-btn{display:grid;place-items:center}
+    .nav-actions .btn-outline{display:none}
+    .nav-links{
+        position:fixed;top:78px;left:0;right:0;display:none;flex-direction:column;
+        align-items:stretch;gap:0;padding:10px 20px 22px;
+        background:#08080ef7;backdrop-filter:blur(20px);border-bottom:1px solid var(--border)
     }
-
-    .section {
-        padding: 75px 0;
-    }
-
-    .navbar {
-        min-height: 72px;
-    }
-
-    .menu-toggle {
-        display: grid;
-        place-items: center;
-    }
-
-    .nav-actions {
-        margin-left: auto;
-    }
-
-    .nav-actions .btn-outline {
-        display: none;
-    }
-
-    .nav-actions .btn-primary {
-        min-height: 42px;
-        padding-inline: 14px;
-        font-size: 11px;
-    }
-
-    .nav-links {
-        position: absolute;
-        top: calc(100% + 1px);
-        left: 0;
-        right: 0;
-        display: none;
-        align-items: stretch;
-        gap: 0;
-        padding: 12px 18px 18px;
-        border-bottom: 1px solid var(--border);
-        background: rgba(9,9,16,.98);
-    }
-
-    .nav-links.open {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .nav-links a {
-        padding: 14px 5px;
-        border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-
-    .hero {
-        padding: 60px 0 55px;
-    }
-
-    .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 42px;
-    }
-
-    .hero h1 {
-        max-width: 550px;
-        font-size: clamp(43px, 11vw, 62px);
-    }
-
-    .hero-description {
-        font-size: 14px;
-    }
-
-    .hero-art {
-        width: min(100%, 490px);
-        margin: auto;
-    }
-
-    .floating-card.top {
-        right: -5px;
-    }
-
-    .floating-card.bottom {
-        left: -5px;
-    }
-
-    .benefit {
-        min-height: 95px;
-        flex-direction: column;
-        gap: 8px;
-        padding: 13px 7px;
-        text-align: center;
-    }
-
-    .benefit-icon {
-        width: 37px;
-        height: 37px;
-    }
-
-    .benefit strong {
-        font-size: 11px;
-    }
-
-    .benefit small {
-        display: none;
-    }
-
-    .styles-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .style-card {
-        display: grid;
-        grid-template-columns: 42% 1fr;
-        min-height: 175px;
-    }
-
-    .style-art {
-        min-height: 175px;
-    }
-
-    .style-art svg {
-        height: 175px;
-    }
-
-    .style-info {
-        align-self: center;
-        padding: 16px;
-    }
-
-    .style-info h3 {
-        font-size: 15px;
-    }
-
-    .style-info p {
-        font-size: 11px;
-    }
-
-    .style-link {
-        margin-top: 11px;
-        font-size: 11px;
-    }
-
-    .steps-grid {
-        grid-template-columns: 1fr;
-        gap: 13px;
-    }
-
-    .step-card {
-        padding: 23px;
-    }
-
-    .step-card h3 {
-        margin-top: 16px;
-    }
-
-    .why-grid {
-        grid-template-columns: 1fr;
-        gap: 35px;
-    }
-
-    .why-art {
-        width: min(100%, 500px);
-        margin: auto;
-    }
-
-    .why-copy h2 {
-        font-size: 39px;
-    }
-
-    .cta-section {
-        padding: 25px 0 75px;
-    }
-
-    .cta-box {
-        padding: 48px 20px;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 32px 20px;
-    }
-
-    .footer-about {
-        grid-column: 1 / -1;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+    .nav-links.open{display:flex}
+    .nav-links a{padding:15px 3px;border-bottom:1px solid #ffffff0b}
+    .hero{padding:45px 0 55px}
+    .hero-grid{grid-template-columns:1fr;gap:35px}
+    .hero h1{font-size:clamp(48px,13vw,70px)}
+    .hero-main-image{min-height:340px}
+    .floating-card{left:10px;bottom:18px}
+    .benefit-grid{grid-template-columns:1fr}
+    .benefit{justify-content:flex-start;min-height:75px;border-right:0;border-bottom:1px solid var(--border)}
+    .benefit:last-child{border-bottom:0}
+    .styles-grid,.steps-grid{grid-template-columns:1fr}
+    .style-img{height:240px}
+    .lookbook-grid{grid-template-columns:1fr;grid-template-rows:repeat(5,210px)}
+    .look:first-child{grid-row:auto}
+    .feature-content{padding:25px 21px}
+    .feature-content h3{font-size:34px}
+    .cta-box{padding:43px 21px}
+    .footer-grid{grid-template-columns:1fr 1fr;gap:26px 18px}
+    .footer-about{grid-column:1/-1}
+    .footer-bottom{flex-direction:column;align-items:flex-start}
 }
-
-@media (max-width: 420px) {
-    .brand-name {
-        font-size: 18px;
-    }
-
-    .brand-mark {
-        width: 39px;
-        height: 39px;
-    }
-
-    .nav-actions .btn-primary {
-        padding-inline: 11px;
-    }
-
-    .hero-actions {
-        display: grid;
-        grid-template-columns: 1fr;
-    }
-
-    .hero-actions .btn {
-        width: 100%;
-    }
-
-    .floating-card {
-        padding: 9px 10px;
-    }
-
-    .float-icon {
-        width: 32px;
-        height: 32px;
-    }
-
-    .float-text strong {
-        font-size: 10px;
-    }
-
-    .float-text small {
-        font-size: 9px;
-    }
-
-    .style-card {
-        grid-template-columns: 39% 1fr;
-    }
-
-    .style-info {
-        padding: 13px;
-    }
-
-    .style-info p {
-        line-height: 1.5;
-    }
-
-    .footer-grid {
-        gap: 27px 15px;
-    }
+@media(max-width:460px){
+    .hero-buttons .btn,.cta-actions .btn{width:100%}
+    .hero-main-image{min-height:290px}
+    .hero-overlay{padding:17px}
+    .open-pill{font-size:9px}
+    .feature-image{min-height:250px}
 }
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-    }
-
-    .reveal {
-        opacity: 1;
-        transform: none;
-    }
+@media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
 }
 </style>
 </head>
-
 <body>
 
-<!-- =========================
-     NAVIGATION
-========================= -->
+<a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header">
+<header class="header" id="header">
     <div class="container navbar">
-
         <a href="index.html" class="brand" aria-label="K@si Web home">
             <div class="brand-mark">K@</div>
             <div>
                 <div class="brand-name">K<span>@</span>si Web</div>
-                <span class="brand-caption">Your cut. Your time.</span>
+                <div class="brand-sub">Your cut. Your time.</div>
             </div>
         </a>
 
         <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-            <a href="#styles">Explore styles</a>
-            <a href="#how-it-works">How it works</a>
-            <a href="#why-kasi">Why K@si</a>
+            <a href="#featured">Featured</a>
+            <a href="#styles">Styles</a>
+            <a href="#how">How it works</a>
+            <a href="#lookbook">Lookbook</a>
             <a href="#faq">Help</a>
         </nav>
 
         <div class="nav-actions">
             <a href="home.html" class="btn btn-outline">Sign in</a>
-            <a href="home.html" class="btn btn-primary">
-                Get started <span class="btn-arrow">↗</span>
-            </a>
+            <a href="home.html" class="btn btn-primary">Get started <i class="bx bx-right-arrow-alt"></i></a>
         </div>
 
-        <button class="menu-toggle" id="menuToggle"
-                type="button" aria-label="Open navigation"
-                aria-expanded="false" aria-controls="navLinks">
-            ☰
+        <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="navLinks">
+            <i class="bx bx-menu"></i>
         </button>
-
     </div>
 </header>
 
+<main id="main">
 
-<main>
-
-<!-- =========================
-     HERO
-========================= -->
-
+<!-- HERO -->
 <section class="hero">
     <div class="container hero-grid">
+        <div class="hero-copy-side reveal">
+            <div class="hero-tag"><span class="dot"></span> Your local grooming marketplace</div>
 
-        <div class="hero-copy">
-            <div class="hero-tag">
-                <span></span>
-                Your local grooming marketplace
-            </div>
+            <h1>Fresh cuts.<span class="gradient-text">No lines.</span></h1>
 
-            <h1>
-                Fresh cuts.
-                <span class="highlight">No lines.</span>
-            </h1>
+            <div class="hero-typing">Find <b id="typingText"></b><span class="cursor"></span></div>
 
-            <p class="hero-description">
-                Your next fresh look is closer than you think.
-                Discover local barbers and salons, check their services,
-                compare prices and request your next appointment with K@si Web.
+            <p class="hero-copy">
+                Your style. Your area. Your choice.
+                Find local barbers and salons, check their services and prices,
+                and plan your next fresh look without wasting your day in a queue.
             </p>
 
-            <div class="hero-actions">
+            <div class="hero-buttons">
                 <a href="salons.html" class="btn btn-primary">
-                    Find a barber <span class="btn-arrow">↗</span>
+                    Find a barber <i class="bx bx-right-arrow-alt"></i>
                 </a>
-
-                <a href="#how-it-works" class="btn btn-outline">
-                    See how it works <span class="btn-arrow">→</span>
+                <a href="#how" class="btn btn-outline">
+                    How it works <i class="bx bx-play-circle"></i>
                 </a>
             </div>
 
-            <div class="hero-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     aria-hidden="true">
-                    <path d="M20 7 10 17l-5-5"></path>
-                    <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"></path>
-                </svg>
-                Browse local grooming options and choose what suits you.
+            <div class="hero-trust">
+                <i class="bx bx-check-circle"></i>
+                Browse first. Sign in when you are ready to book.
             </div>
         </div>
 
-
-        <!-- Original cartoon barber illustration -->
-        <div class="hero-art reveal">
-
-            <div class="hero-art-frame">
-
-                <svg class="hero-illustration" viewBox="0 0 620 510"
-                     xmlns="http://www.w3.org/2000/svg"
-                     role="img" aria-label="Cartoon illustration of a barber giving a customer a fresh haircut">
-
-                    <defs>
-                        <linearGradient id="heroBg" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#38315f"/>
-                            <stop offset="100%" stop-color="#171728"/>
-                        </linearGradient>
-
-                        <linearGradient id="cape" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#8b70ff"/>
-                            <stop offset="100%" stop-color="#4c3caa"/>
-                        </linearGradient>
-
-                        <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#e2bd7b"/>
-                            <stop offset="100%" stop-color="#a87b41"/>
-                        </linearGradient>
-                    </defs>
-
-                    <rect width="620" height="510" rx="28" fill="url(#heroBg)"/>
-
-                    <circle cx="500" cy="85" r="95" fill="#8b70ff" opacity=".12"/>
-                    <circle cx="95" cy="420" r="115" fill="#3b8bff" opacity=".12"/>
-
-                    <path d="M0 380 Q150 325 290 375 T620 355 V510 H0Z"
-                          fill="#10101c" opacity=".8"/>
-
-                    <!-- Mirror -->
-                    <rect x="365" y="45" width="205" height="235" rx="25"
-                          fill="#aaa2dc" opacity=".12"
-                          stroke="#c6baff" stroke-opacity=".3" stroke-width="3"/>
-                    <rect x="380" y="60" width="175" height="205" rx="16"
-                          fill="#25233b"/>
-                    <path d="M395 235 525 80" stroke="#fff" stroke-opacity=".08"
-                          stroke-width="12" stroke-linecap="round"/>
-
-                    <!-- Customer body -->
-                    <path d="M105 500 Q125 330 250 330 Q385 330 400 500Z"
-                          fill="#202033"/>
-
-                    <!-- Customer neck -->
-                    <rect x="214" y="270" width="66" height="76" rx="25"
-                          fill="#9b5c3e"/>
-
-                    <!-- Customer ears -->
-                    <ellipse cx="184" cy="215" rx="19" ry="28" fill="#98583c"/>
-                    <ellipse cx="304" cy="215" rx="19" ry="28" fill="#98583c"/>
-
-                    <!-- Customer face -->
-                    <ellipse cx="244" cy="210" rx="70" ry="87" fill="#b87551"/>
-
-                    <!-- Hair -->
-                    <path d="M175 200 Q160 115 205 105 Q250 75 299 113
-                             Q330 139 314 200
-                             L298 181 Q291 158 279 151
-                             Q240 174 199 149
-                             Q188 170 190 200Z"
-                          fill="#17151b"/>
-
-                    <!-- Fade area -->
-                    <path d="M178 177 Q188 145 202 143 Q199 165 190 185Z"
-                          fill="#342a29"/>
-                    <path d="M298 148 Q318 163 310 188 L298 190Z"
-                          fill="#342a29"/>
-
-                    <!-- Face details -->
-                    <path d="M210 215 Q223 207 234 215"
-                          stroke="#34201c" stroke-width="5"
-                          stroke-linecap="round" fill="none"/>
-                    <path d="M259 215 Q271 207 283 215"
-                          stroke="#34201c" stroke-width="5"
-                          stroke-linecap="round" fill="none"/>
-                    <ellipse cx="224" cy="226" rx="4" ry="5" fill="#17151b"/>
-                    <ellipse cx="271" cy="226" rx="4" ry="5" fill="#17151b"/>
-                    <path d="M235 249 Q249 258 263 249"
-                          stroke="#612f2b" stroke-width="4"
-                          stroke-linecap="round" fill="none"/>
-
-                    <!-- Beard -->
-                    <path d="M190 257 Q205 292 243 298 Q283 294 299 256
-                             Q291 302 245 313 Q204 308 190 257Z"
-                          fill="#242027"/>
-                    <path d="M216 275 Q244 288 271 275"
-                          stroke="#48383a" stroke-width="5"
-                          fill="none" stroke-linecap="round"/>
-
-                    <!-- Barber body -->
-                    <path d="M365 500 Q365 285 455 270 Q560 275 610 500Z"
-                          fill="url(#shirt)"/>
-
-                    <!-- Barber neck -->
-                    <rect x="444" y="195" width="48" height="58" rx="18"
-                          fill="#8e5439"/>
-
-                    <!-- Barber head -->
-                    <ellipse cx="468" cy="160" rx="57" ry="70" fill="#a96b49"/>
-
-                    <!-- Barber hair -->
-                    <path d="M411 157 Q403 82 463 79 Q526 75 526 158
-                             Q502 127 478 123
-                             Q457 145 417 136Z"
-                          fill="#15141a"/>
-
-                    <!-- Barber face -->
-                    <path d="M440 164 Q451 157 459 163"
-                          stroke="#36231e" stroke-width="4"
-                          stroke-linecap="round" fill="none"/>
-                    <path d="M481 163 Q491 157 500 164"
-                          stroke="#36231e" stroke-width="4"
-                          stroke-linecap="round" fill="none"/>
-                    <circle cx="451" cy="173" r="3.5" fill="#15141a"/>
-                    <circle cx="490" cy="173" r="3.5" fill="#15141a"/>
-                    <path d="M459 194 Q472 204 486 192"
-                          stroke="#542d27" stroke-width="4"
-                          stroke-linecap="round" fill="none"/>
-
-                    <!-- Barber apron -->
-                    <path d="M395 285 Q470 260 533 290 L575 500 H380Z"
-                          fill="#242239"/>
-                    <path d="M440 284 466 315 493 285"
-                          fill="none" stroke="#d6b66f" stroke-width="5"/>
-
-                    <!-- Barber arm -->
-                    <path d="M392 322 Q340 294 317 247"
-                          stroke="#a96b49" stroke-width="27"
-                          stroke-linecap="round" fill="none"/>
-
-                    <!-- Clippers -->
-                    <g transform="translate(296 218) rotate(-25)">
-                        <rect width="43" height="65" rx="12" fill="#ddd9e8"/>
-                        <rect x="7" y="-8" width="29" height="16" rx="4" fill="#8b70ff"/>
-                        <rect x="11" y="23" width="21" height="28" rx="6" fill="#25233b"/>
-                        <path d="M10 -8 V-17 M17 -8 V-17 M24 -8 V-17 M31 -8 V-17"
-                              stroke="#ddd9e8" stroke-width="3"/>
-                    </g>
-
-                    <!-- Little barber shop details -->
-                    <circle cx="80" cy="80" r="27" fill="#e1bd78" opacity=".16"/>
-                    <path d="M65 80h30 M80 65v30" stroke="#e1bd78"
-                          stroke-width="3" opacity=".65" stroke-linecap="round"/>
-                    <rect x="34" y="340" width="58" height="8" rx="4"
-                          fill="#e1bd78" opacity=".5"/>
-
-                    <text x="42" y="455" fill="#fff" font-size="15"
-                          font-family="Arial" font-weight="700" opacity=".8">
-                        YOUR LOCAL BARBER
-                    </text>
-                </svg>
-
-            </div>
-
-            <div class="floating-card top">
-                <div class="float-icon">✂</div>
-                <div class="float-text">
-                    <strong>Find your style</strong>
-                    <small>Explore local grooming</small>
+        <div class="hero-visual reveal">
+            <div class="hero-main-image">
+                <img
+                    src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=85"
+                    alt="Modern barbershop with professional barber chairs"
+                    loading="eager"
+                    onerror="this.style.display='none'">
+                <div class="hero-overlay">
+                    <div>
+                        <h3>Local talent. Fresh energy.</h3>
+                        <p>Discover a barber around your neighbourhood.</p>
+                    </div>
+                    <span class="open-pill"><span class="dot"></span> Explore</span>
                 </div>
             </div>
 
-            <div class="floating-card bottom">
-                <div class="float-icon">✓</div>
-                <div class="float-text">
-                    <strong>Your choice, your time</strong>
-                    <small>Choose a service that suits you</small>
+            <div class="floating-card">
+                <div class="float-icon"><i class="bx bx-calendar-check"></i></div>
+                <div>
+                    <strong>Skip the uncertainty</strong>
+                    <small>See services before you visit</small>
                 </div>
             </div>
-
         </div>
-
     </div>
 </section>
 
-
-<!-- =========================
-     BENEFITS
-========================= -->
-
-<section class="benefit-strip" aria-label="K@si Web benefits">
+<!-- BENEFITS -->
+<section class="benefits">
     <div class="container benefit-grid">
-
         <div class="benefit">
-            <div class="benefit-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="m20 20-4-4"></path>
-                </svg>
-            </div>
-            <div>
-                <strong>Discover local spots</strong>
-                <small>Find barbers and salons</small>
-            </div>
+            <div class="benefit-icon"><i class="bx bx-map"></i></div>
+            <div><strong>Find nearby talent</strong><small>Discover barbers in your area</small></div>
         </div>
-
         <div class="benefit">
-            <div class="benefit-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 5h16v14H4z"></path>
-                    <path d="M8 9h8M8 13h5"></path>
-                    <path d="m15 17 2 2 4-5"></path>
-                </svg>
-            </div>
-            <div>
-                <strong>Compare services</strong>
-                <small>Check options and prices</small>
-            </div>
+            <div class="benefit-icon"><i class="bx bx-money"></i></div>
+            <div><strong>Know the price</strong><small>Compare services before choosing</small></div>
         </div>
-
         <div class="benefit">
-            <div class="benefit-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
-                    <path d="M16 3v4M8 3v4M3 10h18"></path>
-                    <path d="m9 15 2 2 4-4"></path>
-                </svg>
-            </div>
-            <div>
-                <strong>Request a booking</strong>
-                <small>Plan your next fresh look</small>
-            </div>
+            <div class="benefit-icon"><i class="bx bx-time-five"></i></div>
+            <div><strong>Plan your time</strong><small>Request an appointment with ease</small></div>
         </div>
-
     </div>
 </section>
 
+<!-- FEATURED -->
+<section class="section featured" id="featured">
+    <div class="container">
+        <div class="section-heading reveal">
+            <span class="eyebrow">The local spotlight</span>
+            <h2>Meet the people behind the fresh look.</h2>
+            <p>Real local businesses. Services you can explore. Your next cut could be closer than you think.</p>
+        </div>
 
-<!-- =========================
-     STYLE SHOWCASE
-========================= -->
+        <article class="feature-card reveal">
+            <div class="feature-image">
+                <img
+                    src="9C00E0.jpeg"
+                    alt="Vaal Fresh Barber shop"
+                    loading="lazy"
+                    onerror="this.style.display='none'">
+                <span class="image-label"><i class="bx bx-crown gold"></i> Community spotlight</span>
+            </div>
+            <div class="feature-content">
+                <span class="verified"><i class="bx bxs-badge-check"></i> Salon profile</span>
+                <h3>Vaal Fresh Barber</h3>
+                <div class="feature-meta">
+                    <span><i class="bx bx-map"></i> Vaal</span>
+                    <span>•</span>
+                    <span><i class="bx bx-time"></i> 06:00 – 18:00</span>
+                </div>
+                <p>
+                    Looking for a fresh fade, clean shave or everyday cut?
+                    Explore listed services, compare prices and send your booking request through K@si Web.
+                </p>
+                <div class="rating">
+                    <span class="stars">★★★★★</span>
+                    <strong>4.9</strong>
+                    <span class="muted">Salon rating</span>
+                </div>
+                <a href="salons.html" class="btn btn-primary">Explore salon <i class="bx bx-right-arrow-alt"></i></a>
+            </div>
+        </article>
+    </div>
+</section>
 
+<!-- HAIRCUT STYLES -->
 <section class="section" id="styles">
     <div class="container">
-
         <div class="section-heading reveal">
-            <span class="eyebrow">Find your look</span>
-            <h2>Fresh styles. Local talent.</h2>
-            <p>
-                Whether you want a clean everyday cut or a whole new look,
-                explore the grooming services available from local professionals.
-            </p>
+            <span class="eyebrow">Choose your look</span>
+            <h2>What are we doing today?</h2>
+            <p>From everyday clean cuts to a whole new look, discover styles and find someone who can make it happen.</p>
         </div>
 
-
         <div class="styles-grid">
-
-            <!-- Style 1 -->
             <article class="style-card reveal">
-                <div class="style-art">
-                    <span class="style-number">01</span>
-
-                    <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg"
-                         role="img" aria-label="Cartoon illustration of a taper fade haircut">
-
-                        <defs>
-                            <linearGradient id="fadeBg" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#6b56b7"/>
-                                <stop offset="100%" stop-color="#302852"/>
-                            </linearGradient>
-                        </defs>
-
-                        <rect width="400" height="260" fill="url(#fadeBg)"/>
-                        <circle cx="320" cy="40" r="75" fill="#fff" opacity=".06"/>
-
-                        <path d="M75 260 Q90 180 200 180 Q315 180 330 260Z"
-                              fill="#161522"/>
-
-                        <rect x="170" y="150" width="60" height="62" rx="20"
-                              fill="#9c6246"/>
-
-                        <ellipse cx="200" cy="112" rx="75" ry="89"
-                                 fill="#b97958"/>
-
-                        <ellipse cx="126" cy="115" rx="12" ry="20" fill="#9c6246"/>
-                        <ellipse cx="274" cy="115" rx="12" ry="20" fill="#9c6246"/>
-
-                        <path d="M127 113 Q115 23 181 22 Q259 5 275 78
-                                 Q282 105 269 130
-                                 Q255 75 231 71
-                                 Q194 100 150 72
-                                 Q137 90 127 113Z"
-                              fill="#17151b"/>
-
-                        <path d="M130 95 Q140 70 158 70 L149 132
-                                 Q132 134 130 95Z"
-                              fill="#50403c"/>
-                        <path d="M270 93 Q260 70 245 70 L253 132
-                                 Q269 132 270 93Z"
-                              fill="#50403c"/>
-
-                        <path d="M162 117 Q179 108 190 118"
-                              stroke="#34211e" stroke-width="5"
-                              fill="none" stroke-linecap="round"/>
-                        <path d="M210 118 Q224 108 240 117"
-                              stroke="#34211e" stroke-width="5"
-                              fill="none" stroke-linecap="round"/>
-
-                        <circle cx="178" cy="128" r="4" fill="#17151b"/>
-                        <circle cx="225" cy="128" r="4" fill="#17151b"/>
-
-                        <path d="M190 153 Q202 160 214 153"
-                              stroke="#6d3930" stroke-width="4"
-                              fill="none" stroke-linecap="round"/>
-
-                        <path d="M158 162 Q200 194 242 162
-                                 Q234 208 200 211 Q167 204 158 162Z"
-                              fill="#272128"/>
-
-                        <path d="M200 185 Q215 190 226 185"
-                              stroke="#493538" stroke-width="4"
-                              fill="none" stroke-linecap="round"/>
-                    </svg>
+                <div class="style-img">
+                    <img src="37BA0E35.jpg" alt="Taper fade haircut style" loading="lazy" onerror="this.style.display='none'">
+                    <span class="style-index">01 / THE CLASSIC</span>
                 </div>
-
-                <div class="style-info">
-                    <h3>Fresh Taper Fades</h3>
-                    <p>Sharp sides, a clean finish and a fresh look for any day.</p>
-                    <a href="salons.html" class="style-link">
-                        Explore barbers <span>→</span>
-                    </a>
+                <div class="style-body">
+                    <h3>Taper &amp; Fade</h3>
+                    <p>Clean sides, smooth fade and a sharp finish. A fresh look for any day.</p>
+                    <a href="salons.html" class="text-link">Find a barber <i class="bx bx-right-arrow-alt"></i></a>
                 </div>
             </article>
 
-
-            <!-- Style 2 -->
             <article class="style-card reveal">
-                <div class="style-art">
-                    <span class="style-number">02</span>
-
-                    <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg"
-                         role="img" aria-label="Cartoon illustration of a clean line-up haircut">
-
-                        <defs>
-                            <linearGradient id="lineBg" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#246b84"/>
-                                <stop offset="100%" stop-color="#202d59"/>
-                            </linearGradient>
-                        </defs>
-
-                        <rect width="400" height="260" fill="url(#lineBg)"/>
-                        <circle cx="320" cy="45" r="75" fill="#58d9ed" opacity=".1"/>
-
-                        <path d="M70 260 Q88 183 200 180 Q310 183 330 260Z"
-                              fill="#171925"/>
-
-                        <rect x="170" y="150" width="60" height="63" rx="18"
-                              fill="#9a6042"/>
-
-                        <ellipse cx="200" cy="112" rx="73" ry="86"
-                                 fill="#b97951"/>
-
-                        <ellipse cx="127" cy="116" rx="12" ry="18" fill="#9a6042"/>
-                        <ellipse cx="273" cy="116" rx="12" ry="18" fill="#9a6042"/>
-
-                        <path d="M127 94 Q128 26 199 26 Q274 25 274 94
-                                 L266 100 Q258 83 246 78
-                                 Q204 98 150 78 Q139 83 127 100Z"
-                              fill="#151419"/>
-
-                        <path d="M129 99 Q196 72 270 99"
-                              fill="none" stroke="#151419" stroke-width="9"
-                              stroke-linecap="round"/>
-
-                        <path d="M160 122 Q178 112 191 122"
-                              stroke="#34211e" stroke-width="5"
-                              fill="none" stroke-linecap="round"/>
-                        <path d="M210 122 Q224 112 240 122"
-                              stroke="#34211e" stroke-width="5"
-                              fill="none" stroke-linecap="round"/>
-
-                        <circle cx="177" cy="132" r="4" fill="#151419"/>
-                        <circle cx="225" cy="132" r="4" fill="#151419"/>
-
-                        <path d="M184 154 Q200 163 217 153"
-                              stroke="#6b362f" stroke-width="4"
-                              fill="none" stroke-linecap="round"/>
-
-                        <path d="M153 172 Q158 211 200 215 Q241 210 247 172
-                                 Q226 186 200 184 Q171 186 153 172Z"
-                              fill="#242027"/>
-
-                        <path d="M155 172 Q200 190 245 172"
-                              fill="none" stroke="#d9bd80" stroke-width="3"
-                              stroke-linecap="round"/>
-                    </svg>
+                <div class="style-img">
+                    <img src="7847041D.jpg" alt="Burst fade and beard haircut" loading="lazy" onerror="this.style.display='none'">
+                    <span class="style-index">02 / THE DETAIL</span>
                 </div>
-
-                <div class="style-info">
-                    <h3>Clean Line-ups</h3>
-                    <p>Neat edges and a crisp finish that completes your style.</p>
-                    <a href="salons.html" class="style-link">
-                        Explore barbers <span>→</span>
-                    </a>
+                <div class="style-body">
+                    <h3>Fade &amp; Beard</h3>
+                    <p>Bring it together with a fresh beard shape, crisp edges and clean detailing.</p>
+                    <a href="salons.html" class="text-link">Find a barber <i class="bx bx-right-arrow-alt"></i></a>
                 </div>
             </article>
 
-
-            <!-- Style 3 -->
             <article class="style-card reveal">
-                <div class="style-art">
-                    <span class="style-number">03</span>
-
-                    <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg"
-                         role="img" aria-label="Cartoon illustration of salon hair styling">
-
-                        <defs>
-                            <linearGradient id="salonBg" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#a15c83"/>
-                                <stop offset="100%" stop-color="#49315e"/>
-                            </linearGradient>
-                        </defs>
-
-                        <rect width="400" height="260" fill="url(#salonBg)"/>
-                        <circle cx="320" cy="45" r="80" fill="#ffc3da" opacity=".12"/>
-
-                        <path d="M75 260 Q90 180 200 177 Q315 180 330 260Z"
-                              fill="#272037"/>
-
-                        <rect x="174" y="151" width="54" height="63" rx="18"
-                              fill="#955c46"/>
-
-                        <ellipse cx="201" cy="112" rx="68" ry="79"
-                                 fill="#b87959"/>
-
-                        <path d="M128 130 Q91 54 155 24 Q205 -5 257 32
-                                 Q294 62 267 158
-                                 Q255 88 233 77
-                                 Q206 100 171 78
-                                 Q147 94 128 130Z"
-                              fill="#19161e"/>
-
-                        <path d="M130 97 Q111 108 115 163
-                                 Q119 206 153 216
-                                 Q136 174 142 121Z"
-                              fill="#211c23"/>
-
-                        <path d="M270 95 Q290 111 285 167
-                                 Q281 201 251 216
-                                 Q266 170 260 118Z"
-                              fill="#211c23"/>
-
-                        <path d="M164 120 Q177 112 189 121"
-                              stroke="#432a27" stroke-width="4"
-                              fill="none" stroke-linecap="round"/>
-                        <path d="M213 121 Q226 112 239 120"
-                              stroke="#432a27" stroke-width="4"
-                              fill="none" stroke-linecap="round"/>
-
-                        <circle cx="179" cy="130" r="3.5" fill="#17151b"/>
-                        <circle cx="226" cy="130" r="3.5" fill="#17151b"/>
-
-                        <path d="M188 151 Q202 163 216 151"
-                              stroke="#873c43" stroke-width="4"
-                              fill="none" stroke-linecap="round"/>
-
-                        <path d="M160 181 Q202 199 242 181"
-                              stroke="#e9bdcf" stroke-width="3"
-                              fill="none" stroke-linecap="round"/>
-
-                        <path d="M89 58 99 46 109 58 99 70Z"
-                              fill="#f4d393"/>
-                        <circle cx="312" cy="160" r="8" fill="#f4d393"/>
-                        <circle cx="89" cy="195" r="5" fill="#fff" opacity=".6"/>
-                    </svg>
+                <div class="style-img">
+                    <img src="A3886FFD.jpg" alt="Classic haircut style" loading="lazy" onerror="this.style.display='none'">
+                    <span class="style-index">03 / THE EVERYDAY</span>
                 </div>
-
-                <div class="style-info">
-                    <h3>Salon & Grooming</h3>
-                    <p>Discover beauty, grooming and styling services in your area.</p>
-                    <a href="salons.html" class="style-link">
-                        Explore salons <span>→</span>
-                    </a>
+                <div class="style-body">
+                    <h3>Classic Clean Cut</h3>
+                    <p>Simple, timeless and neat. Find a cut that fits your look and lifestyle.</p>
+                    <a href="salons.html" class="text-link">Find a barber <i class="bx bx-right-arrow-alt"></i></a>
                 </div>
             </article>
-
         </div>
     </div>
 </section>
 
-
-<!-- =========================
-     HOW IT WORKS
-========================= -->
-
-<section class="section how-section" id="how-it-works">
+<!-- HOW IT WORKS -->
+<section class="section steps-section" id="how">
     <div class="container">
-
         <div class="section-heading reveal">
-            <span class="eyebrow">Simple as 1, 2, 3</span>
-            <h2>Your fresh look, made easier.</h2>
-            <p>
-                No complicated steps. Use K@si Web to find a grooming service
-                and request a time that works for you.
-            </p>
+            <span class="eyebrow">Easy as 1, 2, 3</span>
+            <h2>Your next fresh look starts here.</h2>
+            <p>No complicated process. Just find your spot, pick your service and send a request.</p>
         </div>
 
         <div class="steps-grid">
-
-            <article class="step-card reveal">
-                <div class="step-number">01</div>
-                <span class="step-arrow">↗</span>
-                <h3>Find your barber or salon</h3>
-                <p>
-                    Explore local businesses and discover the services
-                    available around your area.
-                </p>
+            <article class="step reveal">
+                <div class="step-num">01</div>
+                <i class="bx bx-search step-icon"></i>
+                <h3>Find your place</h3>
+                <p>Explore barbers and salons in your area. Find a spot that suits your style and location.</p>
             </article>
 
-            <article class="step-card reveal">
-                <div class="step-number">02</div>
-                <span class="step-arrow">↗</span>
-                <h3>Choose what you want</h3>
-                <p>
-                    Check the services and prices listed by each business.
-                    Choose the look and service that suit you.
-                </p>
+            <article class="step reveal">
+                <div class="step-num">02</div>
+                <i class="bx bx-list-check step-icon"></i>
+                <h3>Choose your service</h3>
+                <p>Check the service list and prices so you know what you want before you go.</p>
             </article>
 
-            <article class="step-card reveal">
-                <div class="step-number">03</div>
-                <span class="step-arrow">✓</span>
+            <article class="step reveal">
+                <div class="step-num">03</div>
+                <i class="bx bx-calendar-check step-icon"></i>
                 <h3>Request your booking</h3>
-                <p>
-                    Sign in when you're ready and send a booking request.
-                    The salon or barber can respond to your request.
-                </p>
+                <p>Sign in, choose your preferred time and send your request to the salon or barber.</p>
             </article>
-
         </div>
     </div>
 </section>
 
-
-<!-- =========================
-     WHY KASI
-========================= -->
-
-<section class="section" id="why-kasi">
-    <div class="container why-grid">
-
-        <div class="why-art reveal">
-
-            <svg viewBox="0 0 540 440" xmlns="http://www.w3.org/2000/svg"
-                 role="img" aria-label="Illustration of a local barber shop and community">
-
-                <defs>
-                    <linearGradient id="shopBg" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#38305f"/>
-                        <stop offset="100%" stop-color="#18182a"/>
-                    </linearGradient>
-                </defs>
-
-                <rect width="540" height="440" rx="22" fill="url(#shopBg)"/>
-                <circle cx="450" cy="55" r="95" fill="#8b70ff" opacity=".1"/>
-
-                <!-- Shop wall -->
-                <rect x="55" y="65" width="430" height="300" rx="18"
-                      fill="#25233b" stroke="#8272c7" stroke-opacity=".4"
-                      stroke-width="2"/>
-
-                <!-- Sign -->
-                <rect x="150" y="85" width="240" height="55" rx="10"
-                      fill="#141421" stroke="#e1bd78" stroke-opacity=".6"/>
-                <text x="270" y="120" text-anchor="middle"
-                      font-family="Arial" font-size="20" font-weight="bold"
-                      fill="#e1bd78">KASI BARBER</text>
-
-                <!-- Window -->
-                <rect x="80" y="165" width="120" height="140" rx="9"
-                      fill="#384269" stroke="#9c9bd1" stroke-opacity=".5"
-                      stroke-width="3"/>
-                <path d="M140 165v140M80 235h120"
-                      stroke="#b9b4ea" stroke-opacity=".3" stroke-width="3"/>
-                <path d="M90 288 183 177" stroke="#fff"
-                      stroke-opacity=".12" stroke-width="9"/>
-
-                <!-- Barber chair -->
-                <path d="M250 280 Q255 210 325 210 Q380 210 387 280Z"
-                      fill="#151520"/>
-                <rect x="270" y="250" width="95" height="65" rx="18"
-                      fill="#6251bc"/>
-                <path d="M280 310h75l18 46h-110Z" fill="#262333"/>
-                <path d="M315 355v35M290 390h50"
-                      stroke="#b5a5f7" stroke-width="8"
-                      stroke-linecap="round"/>
-
-                <!-- Person seated -->
-                <ellipse cx="320" cy="195" rx="45" ry="55" fill="#ad714f"/>
-                <path d="M276 190 Q270 134 321 135 Q364 136 365 190
-                         Q342 166 321 165 Q296 181 276 190Z"
-                      fill="#17151b"/>
-                <path d="M285 205 Q320 220 351 205"
-                      stroke="#1e1821" stroke-width="8"
-                      stroke-linecap="round" fill="none"/>
-                <path d="M288 214 Q321 235 350 214"
-                      stroke="#31252b" stroke-width="7"
-                      stroke-linecap="round" fill="none"/>
-
-                <!-- Plant -->
-                <path d="M435 290h35l-5 62h-25Z" fill="#c08756"/>
-                <path d="M452 290 Q410 240 425 218 Q453 236 452 270
-                         Q454 224 480 215 Q490 247 457 278
-                         Q493 248 506 259 Q493 291 452 290Z"
-                      fill="#4eb68b"/>
-
-                <!-- Floor -->
-                <path d="M55 365h430" stroke="#e1bd78"
-                      stroke-opacity=".5" stroke-width="2"/>
-                <path d="M55 386h430" stroke="#fff"
-                      stroke-opacity=".05" stroke-width="20"/>
-            </svg>
-
+<!-- LOOKBOOK -->
+<section class="section" id="lookbook">
+    <div class="container">
+        <div class="section-heading reveal">
+            <span class="eyebrow">Style inspiration</span>
+            <h2>Look good. Feel good.</h2>
+            <p>Get inspired, then discover a local professional to bring your look to life.</p>
         </div>
 
+        <div class="lookbook-grid">
+            <div class="look reveal">
+                <img src="37BA0E35.jpg" alt="Fresh taper fade" loading="lazy" onerror="this.style.display='none'">
+                <div class="look-caption"><strong>Fresh Taper</strong><small>Sharp. Clean. Confident.</small></div>
+            </div>
+            <div class="look reveal">
+                <img src="7847041D.jpg" alt="Burst fade and beard style" loading="lazy" onerror="this.style.display='none'">
+                <div class="look-caption"><strong>Burst Fade</strong><small>Stand out from the crowd.</small></div>
+            </div>
+            <div class="look reveal">
+                <img src="A3886FFD.jpg" alt="Classic clean haircut" loading="lazy" onerror="this.style.display='none'">
+                <div class="look-caption"><strong>Classic Cut</strong><small>Always in style.</small></div>
+            </div>
+            <div class="look reveal">
+                <img src="B307F46B.jpg" alt="Haircut with line design" loading="lazy" onerror="this.style.display='none'">
+                <div class="look-caption"><strong>Custom Lines</strong><small>Details make the difference.</small></div>
+            </div>
+            <div class="look reveal">
+                <img src="C00719B.jpg" alt="K@si Web grooming showcase" loading="lazy" onerror="this.style.display='none'">
+                <div class="look-caption"><strong>Your Next Look</strong><small>Discover it on K@si Web.</small></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <div class="why-copy reveal">
-            <span class="eyebrow">Made for the community</span>
+<!-- COMMUNITY -->
+<section class="section" id="community">
+    <div class="container community-grid">
+        <div class="community-art reveal">
+            <img
+                src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1100&q=85"
+                alt="Barber working with a client in a grooming shop"
+                loading="lazy"
+                onerror="this.style.display='none'">
+        </div>
 
+        <div class="community-copy reveal">
+            <span class="eyebrow">Made for our community</span>
             <h2>Your neighbourhood. Your barber. Your style.</h2>
-
             <p>
-                Great grooming should be easy to discover.
-                K@si Web brings local barbers and salons closer to the
-                people looking for their services.
+                K@si Web brings the local grooming experience online.
+                We help customers discover their community's barbers and salons
+                while helping local businesses get noticed.
             </p>
 
-            <div class="why-points">
-
-                <div class="why-point">
-                    <div class="check-icon">✓</div>
-                    <div>
-                        <strong>Support local businesses</strong>
-                        <p>Discover grooming professionals in your community.</p>
-                    </div>
+            <div class="community-points">
+                <div class="point">
+                    <div class="check"><i class="bx bx-check"></i></div>
+                    <div><strong>Support local businesses</strong><p>Find and support grooming businesses in your community.</p></div>
                 </div>
-
-                <div class="why-point">
-                    <div class="check-icon">✓</div>
-                    <div>
-                        <strong>Know what is on offer</strong>
-                        <p>View listed services and prices before choosing.</p>
-                    </div>
+                <div class="point">
+                    <div class="check"><i class="bx bx-check"></i></div>
+                    <div><strong>Know before you go</strong><p>Explore listed services and prices before visiting.</p></div>
                 </div>
-
-                <div class="why-point">
-                    <div class="check-icon">✓</div>
-                    <div>
-                        <strong>Choose what works for you</strong>
-                        <p>Explore different options and request your preferred booking.</p>
-                    </div>
+                <div class="point">
+                    <div class="check"><i class="bx bx-check"></i></div>
+                    <div><strong>Make your time count</strong><p>Send a request and plan your appointment around your day.</p></div>
                 </div>
-
             </div>
 
-            <div style="margin-top:30px;">
-                <a href="salons.html" class="btn btn-primary">
-                    Explore local salons <span class="btn-arrow">↗</span>
-                </a>
-            </div>
+            <a href="salons.html" class="btn btn-primary" style="margin-top:25px">
+                Explore salons <i class="bx bx-right-arrow-alt"></i>
+            </a>
         </div>
-
     </div>
 </section>
 
-
-<!-- =========================
-     CALL TO ACTION
-========================= -->
-
-<section class="cta-section">
+<!-- CTA -->
+<section class="cta">
     <div class="container">
-
         <div class="cta-box reveal">
-            <div class="cta-content">
-
-                <span class="eyebrow">Your next look starts here</span>
-
-                <h2>Ready for that fresh-cut feeling?</h2>
-
-                <p>
-                    Find a barber or salon, explore available services
-                    and make your next grooming experience easier with K@si Web.
-                </p>
-
-                <a href="salons.html" class="btn btn-light">
-                    Find a barber <span class="btn-arrow">↗</span>
-                </a>
-
-                <a href="home.html" class="btn btn-outline">
-                    Create your account
-                </a>
-
+            <div class="cta-inner">
+                <span class="eyebrow">Ready when you are</span>
+                <h2>Your next cut is one click away.</h2>
+                <p>Find your barber. Check the price. Request your time. Get out there looking fresh.</p>
+                <div class="cta-actions">
+                    <a href="salons.html" class="btn btn-white">Find a barber <i class="bx bx-right-arrow-alt"></i></a>
+                    <a href="home.html" class="btn btn-outline">Join K@si Web</a>
+                </div>
             </div>
         </div>
-
     </div>
 </section>
 
-
-<!-- =========================
-     FAQ
-========================= -->
-
+<!-- FAQ -->
 <section class="section" id="faq">
     <div class="container">
-
         <div class="section-heading reveal">
-            <span class="eyebrow">Got questions?</span>
-            <h2>Let's make it clear.</h2>
-            <p>
-                A few quick answers to help you get started with K@si Web.
-            </p>
+            <span class="eyebrow">Need to know?</span>
+            <h2>Frequently asked questions.</h2>
+            <p>Everything you need to know before you start.</p>
         </div>
 
         <div class="faq-list reveal">
-
-            <div class="faq-item">
-                <button class="faq-question" type="button" aria-expanded="false">
+            <article class="faq-item">
+                <button class="faq-question" aria-expanded="false">
                     What is K@si Web?
-                    <span class="faq-plus">+</span>
+                    <span class="faq-plus"><i class="bx bx-plus"></i></span>
                 </button>
-                <div class="faq-answer">
-                    K@si Web is a local grooming marketplace where customers
-                    can discover barbers and salons, view listed services
-                    and prices, and request bookings.
-                </div>
-            </div>
+                <div class="faq-answer"><div class="faq-answer-inner">
+                    K@si Web is a marketplace that helps you discover local barbers and salons, explore services and prices, and request appointments.
+                </div></div></div>
+            </article>
 
-            <div class="faq-item">
-                <button class="faq-question" type="button" aria-expanded="false">
-                    Can I look at salons before signing in?
-                    <span class="faq-plus">+</span>
+            <article class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Can I browse without an account?
+                    <span class="faq-plus"><i class="bx bx-plus"></i></span>
                 </button>
-                <div class="faq-answer">
-                    Yes. You can explore salon listings and look at available
-                    information before signing in. You will need to sign in
-                    when you are ready to request a booking.
-                </div>
-            </div>
+                <div class="faq-answer"><div class="faq-answer-inner">
+                    Yes. You can explore salon profiles and services before signing in. An account is needed when you want to submit a booking request.
+                </div></div></div>
+            </article>
 
-            <div class="faq-item">
-                <button class="faq-question" type="button" aria-expanded="false">
-                    How do I request an appointment?
-                    <span class="faq-plus">+</span>
+            <article class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    How do I book a haircut?
+                    <span class="faq-plus"><i class="bx bx-plus"></i></span>
                 </button>
-                <div class="faq-answer">
-                    Find a salon or barber, select an available service,
-                    sign in to your account and submit your booking request.
-                    The business can then respond to your request.
-                </div>
-            </div>
+                <div class="faq-answer"><div class="faq-answer-inner">
+                    Browse the salons, select a business and service, sign in, choose your preferred date and time, and submit your booking request. The salon can then respond to your request.
+                </div></div></div>
+            </article>
 
-            <div class="faq-item">
-                <button class="faq-question" type="button" aria-expanded="false">
-                    Do I need to pay on K@si Web?
-                    <span class="faq-plus">+</span>
+            <article class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    Do I pay through K@si Web?
+                    <span class="faq-plus"><i class="bx bx-plus"></i></span>
                 </button>
-                <div class="faq-answer">
-                    Check the individual salon or barber's listing for its
-                    service prices and payment arrangements. Follow the
-                    payment instructions provided by that business.
-                </div>
-            </div>
+                <div class="faq-answer"><div class="faq-answer-inner">
+                    Check the salon's profile for pricing and payment details. Payment arrangements are made according to the business's instructions.
+                </div></div></div>
+            </article>
 
-            <div class="faq-item">
-                <button class="faq-question" type="button" aria-expanded="false">
-                    Can a barber or salon join K@si Web?
-                    <span class="faq-plus">+</span>
+            <article class="faq-item">
+                <button class="faq-question" aria-expanded="false">
+                    How can my barber join?
+                    <span class="faq-plus"><i class="bx bx-plus"></i></span>
                 </button>
-                <div class="faq-answer">
-                    Yes. Barbers and salon owners can get started through
-                    the account page. Choose the appropriate account option
-                    when registering.
-                </div>
-            </div>
-
+                <div class="faq-answer"><div class="faq-answer-inner">
+                    Barbers and salon owners can register using the business option on the account page to get started with K@si Web.
+                </div></div></div>
+            </article>
         </div>
     </div>
 </section>
-
 </main>
 
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer class="site-footer">
+<!-- FOOTER -->
+<footer class="footer">
     <div class="container">
-
         <div class="footer-grid">
-
             <div class="footer-about">
                 <a href="index.html" class="brand">
                     <div class="brand-mark">K@</div>
                     <div>
                         <div class="brand-name">K<span>@</span>si Web</div>
-                        <span class="brand-caption">Your cut. Your time.</span>
+                        <div class="brand-sub">Your cut. Your time.</div>
                     </div>
                 </a>
-
-                <p>
-                    Connecting customers with local barbers and salons.
-                    Discover your next fresh look with K@si Web.
-                </p>
+                <p>Connecting you with local barbers and salons. Find your style, discover your community, and get fresh.</p>
             </div>
 
-            <div class="footer-column">
-                <h4>Explore</h4>
+            <div class="footer-col">
+                <h4>Discover</h4>
                 <a href="salons.html">Find a barber</a>
-                <a href="salons.html">Explore salons</a>
-                <a href="#styles">Discover styles</a>
-                <a href="#how-it-works">How it works</a>
+                <a href="#featured">Featured salon</a>
+                <a href="#styles">Explore styles</a>
+                <a href="#lookbook">Lookbook</a>
             </div>
 
-            <div class="footer-column">
-                <h4>Your account</h4>
+            <div class="footer-col">
+                <h4>Account</h4>
                 <a href="home.html">Sign in</a>
                 <a href="home.html">Create account</a>
-                <a href="#faq">Frequently asked questions</a>
+                <a href="#faq">Help &amp; FAQ</a>
             </div>
-
         </div>
 
         <div class="footer-bottom">
             <span>© <span id="year"></span> <strong>K@si Web.</strong> All rights reserved.</span>
-            <span>Fresh cuts. No lines. <strong>✦</strong></span>
+            <span>Built for local grooming • <strong>Fresh cuts. No lines.</strong></span>
         </div>
-
     </div>
 </footer>
 
+<button class="sound-btn" id="soundBtn" aria-label="Enable sound effects" aria-pressed="false" title="Toggle UI sounds">
+    <i class="bx bx-volume-mute" id="soundIcon"></i>
+</button>
 
 <script>
 "use strict";
 
-/* =========================
-   MOBILE NAVIGATION
-========================= */
+/* Header */
+const header=document.getElementById("header");
+function updateHeader(){
+    header?.classList.toggle("scrolled",window.scrollY>20);
+}
+window.addEventListener("scroll",updateHeader,{passive:true});
+updateHeader();
 
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
+/* Mobile navigation */
+const menuBtn=document.getElementById("menuBtn");
+const nav=document.getElementById("navLinks");
 
-menuToggle.addEventListener("click", () => {
-    const isOpen = navLinks.classList.toggle("open");
-
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-    menuToggle.setAttribute(
-        "aria-label",
-        isOpen ? "Close navigation" : "Open navigation"
-    );
-
-    menuToggle.textContent = isOpen ? "×" : "☰";
+function closeMenu(){
+    nav?.classList.remove("open");
+    document.body.classList.remove("menu-open");
+    menuBtn?.setAttribute("aria-expanded","false");
+    menuBtn?.setAttribute("aria-label","Open navigation");
+    if(menuBtn)menuBtn.innerHTML='<i class="bx bx-menu"></i>';
+}
+function toggleMenu(){
+    const open=!nav.classList.contains("open");
+    nav.classList.toggle("open",open);
+    document.body.classList.toggle("menu-open",open);
+    menuBtn.setAttribute("aria-expanded",String(open));
+    menuBtn.setAttribute("aria-label",open?"Close navigation":"Open navigation");
+    menuBtn.innerHTML=open?'<i class="bx bx-x"></i>':'<i class="bx bx-menu"></i>';
+}
+menuBtn?.addEventListener("click",toggleMenu);
+nav?.querySelectorAll("a").forEach(a=>a.addEventListener("click",closeMenu));
+document.addEventListener("click",e=>{
+    if(nav?.classList.contains("open")&&!nav.contains(e.target)&&!menuBtn.contains(e.target))closeMenu();
 });
-
-// Close the mobile menu after choosing a link.
-navLinks.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-        navLinks.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation");
-        menuToggle.textContent = "☰";
-    });
-});
-
-// Close menu when clicking outside it.
-document.addEventListener("click", event => {
-    const clickedInsideNav = navLinks.contains(event.target);
-    const clickedToggle = menuToggle.contains(event.target);
-
-    if (!clickedInsideNav && !clickedToggle) {
-        navLinks.classList.remove("open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation");
-        menuToggle.textContent = "☰";
+document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"&&nav?.classList.contains("open")){
+        closeMenu();
+        menuBtn?.focus();
     }
 });
+window.addEventListener("resize",()=>{if(window.innerWidth>760)closeMenu()});
 
+/* Typing text */
+const typingEl=document.getElementById("typingText");
+const words=["your next fade.","a barber near you.","your clean line-up.","your next appointment."];
+let wordIndex=0,charIndex=0,deleting=false,timer=null;
 
-/* =========================
-   FAQ ACCORDION
-========================= */
+function typeLoop(){
+    if(!typingEl)return;
+    const word=words[wordIndex];
+    charIndex+=deleting?-1:1;
+    typingEl.textContent=word.substring(0,charIndex);
 
-document.querySelectorAll(".faq-question").forEach(button => {
-    button.addEventListener("click", () => {
-        const currentItem = button.closest(".faq-item");
-        const wasOpen = currentItem.classList.contains("open");
+    let delay=deleting?38:72;
+    if(!deleting&&charIndex===word.length){
+        deleting=true;delay=1400;
+    }else if(deleting&&charIndex===0){
+        deleting=false;wordIndex=(wordIndex+1)%words.length;delay=350;
+    }
+    timer=setTimeout(typeLoop,delay);
+}
+if(window.matchMedia("(prefers-reduced-motion:reduce)").matches){
+    typingEl.textContent=words[0];
+}else typeLoop();
 
-        // Close other answers first.
-        document.querySelectorAll(".faq-item").forEach(item => {
-            item.classList.remove("open");
-
-            const question = item.querySelector(".faq-question");
-            question.setAttribute("aria-expanded", "false");
+/* FAQ */
+document.querySelectorAll(".faq-question").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        const item=btn.closest(".faq-item");
+        const isOpen=item.classList.contains("open");
+        document.querySelectorAll(".faq-item").forEach(el=>{
+            el.classList.remove("open");
+            el.querySelector(".faq-question")?.setAttribute("aria-expanded","false");
         });
-
-        // Toggle the selected answer.
-        if (!wasOpen) {
-            currentItem.classList.add("open");
-            button.setAttribute("aria-expanded", "true");
+        if(!isOpen){
+            item.classList.add("open");
+            btn.setAttribute("aria-expanded","true");
         }
     });
 });
 
-
-/* =========================
-   SCROLL REVEAL
-========================= */
-
-const revealElements = document.querySelectorAll(".reveal");
-
-if ("IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
+/* Scroll reveal */
+const revealEls=document.querySelectorAll(".reveal");
+if("IntersectionObserver" in window&&!window.matchMedia("(prefers-reduced-motion:reduce)").matches){
+    const revealObserver=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+            if(entry.isIntersecting){
                 entry.target.classList.add("visible");
-                observer.unobserve(entry.target);
+                revealObserver.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.12
-    });
+    },{threshold:.12});
+    revealEls.forEach(el=>revealObserver.observe(el));
+}else revealEls.forEach(el=>el.classList.add("visible"));
 
-    revealElements.forEach(element => {
-        revealObserver.observe(element);
-    });
-} else {
-    revealElements.forEach(element => {
-        element.classList.add("visible");
-    });
+/* Optional click sound */
+let audioContext=null,soundEnabled=false;
+const soundBtn=document.getElementById("soundBtn");
+const soundIcon=document.getElementById("soundIcon");
+
+function getAudio(){
+    const AudioCtor=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtor)return null;
+    if(!audioContext)audioContext=new AudioCtor();
+    if(audioContext.state==="suspended")audioContext.resume().catch(()=>{});
+    return audioContext;
 }
+function clickSound(){
+    if(!soundEnabled)return;
+    const ctx=getAudio();if(!ctx)return;
+    const oscillator=ctx.createOscillator(),gain=ctx.createGain();
+    oscillator.type="sine";
+    oscillator.frequency.setValueAtTime(540,ctx.currentTime);
+    gain.gain.setValueAtTime(.0001,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.025,ctx.currentTime+.01);
+    gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.07);
+    oscillator.connect(gain);gain.connect(ctx.destination);
+    oscillator.start();oscillator.stop(ctx.currentTime+.075);
+}
+soundBtn?.addEventListener("click",()=>{
+    if(!getAudio())return;
+    soundEnabled=!soundEnabled;
+    soundBtn.setAttribute("aria-pressed",String(soundEnabled));
+    soundBtn.setAttribute("aria-label",soundEnabled?"Mute sound effects":"Enable sound effects");
+    soundIcon.className=soundEnabled?"bx bx-volume-full":"bx bx-volume-mute";
+    if(soundEnabled)clickSound();
+});
+document.querySelectorAll(".btn,.text-link").forEach(el=>el.addEventListener("click",clickSound));
 
+/* Footer year */
+const year=document.getElementById("year");
+if(year)year.textContent=new Date().getFullYear();
 
-/* =========================
-   FOOTER YEAR
-========================= */
-
-document.getElementById("year").textContent =
-    new Date().getFullYear();
-
+/* Cleanup */
+window.addEventListener("pagehide",()=>{
+    if(timer)clearTimeout(timer);
+    if(audioContext&&audioContext.close)audioContext.close().catch(()=>{});
+});
 </script>
-
 </body>
-   </html>
+</html>
